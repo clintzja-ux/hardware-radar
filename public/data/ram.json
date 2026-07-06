@@ -1,0 +1,55 @@
+ [
+  {
+    "id": 1,
+    "category": "Best Overall Value",
+    "brand": "Corsair",
+    "model": "Vengeance DDR5",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 74.99,
+    "store": "Amazon",
+    "verified": "Today",
+    "score": 94,
+    "reasons": [
+      "Excellent value",
+      "Trusted retailer",
+      "Great reliability"
+    ]
+  },
+
+  {
+    "id": 2,
+    "category": "Cheapest DDR4",
+    "brand": "Kingston",
+    "model": "FURY Beast DDR4",
+    "capacity": "16GB",
+    "speed": "3200 MT/s",
+    "price": 39.99,
+    "store": "Newegg",
+    "verified": "Today",
+    "score": 90,
+    "reasons": [
+      "Lowest verified price",
+      "Excellent budget choice",
+      "Reliable brand"
+    ]
+  },
+
+  {
+    "id": 3,
+    "category": "Best DDR5",
+    "brand": "G.Skill",
+    "model": "Trident Z5",
+    "capacity": "32GB",
+    "speed": "6400 MT/s",
+    "price": 94.99,
+    "store": "Amazon",
+    "verified": "Today",
+    "score": 97,
+    "reasons": [
+      "Outstanding performance",
+      "Excellent overclocking",
+      "Premium build quality"
+    ]
+  }
+]

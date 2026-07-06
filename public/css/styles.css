@@ -1,3 +1,42 @@
+ :root {
+
+    /* Colors */
+
+    --background: #FAFAFA;
+    --surface: #FFFFFF;
+
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+
+    --primary: #2563EB;
+    --primary-hover: #1D4ED8;
+
+    --success: #10B981;
+    --warning: #F59E0B;
+
+    --border: #E5E7EB;
+
+    /* Shadows */
+
+    --shadow-sm: 0 4px 12px rgba(0,0,0,.05);
+    --shadow-md: 0 12px 24px rgba(0,0,0,.08);
+
+    /* Radius */
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+
+    /* Spacing */
+
+    --space-1:8px;
+    --space-2:16px;
+    --space-3:24px;
+    --space-4:32px;
+    --space-5:48px;
+    --space-6:64px;
+
+}
  *{
     margin:0;
     padding:0;
@@ -6,7 +45,7 @@
 
 body{
 
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:'Inter', sans-serif;
 
     background:#fafafa;
 
@@ -24,40 +63,69 @@ body{
 
 .hero h1{
 
-    font-size:3rem;
+    font-size:4rem;
 
-    margin-bottom:20px;
+    font-weight:700;
+
+    letter-spacing:-2px;
+
+    margin-bottom:24px;
+
 }
 
 .tagline{
 
-    font-size:1.3rem;
+    color:var(--primary);
 
-    color:#2563eb;
+    font-size:1.4rem;
 
-    margin-bottom:15px;
+    font-weight:600;
+
+    margin-bottom:16px;
+
 }
 
 .subtitle{
 
-    margin-bottom:40px;
-}
+    color:var(--text-secondary);
 
+    font-size:1.1rem;
+
+    max-width:700px;
+
+    margin:auto;
+
+    margin-bottom:48px;
+
+}
 button{
 
-    background:#2563eb;
+    background:var(--primary);
 
     color:white;
 
     border:none;
 
-    padding:16px 32px;
+    padding:18px 36px;
 
-    border-radius:8px;
+    border-radius:var(--radius-sm);
 
     cursor:pointer;
 
     font-size:1rem;
+
+    font-weight:600;
+
+    transition:.25s ease;
+
+}
+
+button:hover{
+
+    background:var(--primary-hover);
+
+    transform:translateY(-2px);
+
 }
 
 .cards{
@@ -77,13 +145,26 @@ button{
 
 .card{
 
-    background:white;
+    background:var(--surface);
 
-    padding:30px;
+    padding:32px;
 
-    border-radius:12px;
+    border-radius:var(--radius-md);
 
-    box-shadow:0 8px 20px rgba(0,0,0,.06);
+    border:1px solid var(--border);
+
+    box-shadow:var(--shadow-sm);
+
+    transition:.25s ease;
+
+}
+
+.card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:var(--shadow-md);
+
 }
 
 .trust{
