@@ -1,0 +1,1 @@
+ console.log("Hardware Radar initialized.");
