@@ -1,55 +1,69 @@
  [
   {
     "id": 1,
-    "category": "Best Overall Value",
+    "section": "overall",
+
+    "title": "Today's Cheapest RAM",
+
     "brand": "Corsair",
     "model": "Vengeance DDR5",
+
     "capacity": "32GB",
+
+    "memoryType": "DDR5",
+
     "speed": "6000 MT/s",
+
     "price": 74.99,
-    "store": "Amazon",
+
+    "currency": "USD",
+
+    "retailer": "Amazon",
+
+    "affiliateUrl": "#",
+
     "verified": "Today",
-    "score": 94,
-    "reasons": [
-      "Excellent value",
+
+    "hardwareRadarVerified": true,
+
+    "headline": "Lowest verified RAM price today.",
+
+    "summary": "Excellent balance of price and performance.",
+
+    "why": [
+      "Lowest verified price",
       "Trusted retailer",
-      "Great reliability"
+      "Excellent value per GB"
     ]
   },
 
   {
     "id": 2,
-    "category": "Cheapest DDR4",
-    "brand": "Kingston",
-    "model": "FURY Beast DDR4",
-    "capacity": "16GB",
-    "speed": "3200 MT/s",
-    "price": 39.99,
-    "store": "Newegg",
-    "verified": "Today",
-    "score": 90,
-    "reasons": [
-      "Lowest verified price",
-      "Excellent budget choice",
-      "Reliable brand"
-    ]
+    "section": "ddr5",
+
+    "title": "Cheapest DDR5",
+
+    ...
   },
 
   {
     "id": 3,
-    "category": "Best DDR5",
-    "brand": "G.Skill",
-    "model": "Trident Z5",
-    "capacity": "32GB",
-    "speed": "6400 MT/s",
-    "price": 94.99,
-    "store": "Amazon",
-    "verified": "Today",
-    "score": 97,
-    "reasons": [
-      "Outstanding performance",
-      "Excellent overclocking",
-      "Premium build quality"
-    ]
+    "section": "ddr4",
+
+    ...
+  },
+
+  {
+    "id": 4,
+    "section": "sodimm",
+
+    ...
+  },
+
+  {
+    "id": 5,
+    "section": "ecc",
+
+    ...
   }
 ]
