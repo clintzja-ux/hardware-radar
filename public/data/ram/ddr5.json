@@ -1,0 +1,23 @@
+ [
+  {
+    "id": 1,
+    "rank": 1,
+    "brand": "Corsair",
+    "model": "Vengeance DDR5",
+    "capacity": "32GB",
+    "memoryType": "DDR5",
+    "speed": "6000 MT/s",
+    "bestFor": "Most gaming and productivity PCs",
+    "price": 74.99,
+    "currency": "USD",
+    "retailer": "Amazon",
+    "verified": "Today",
+    "affiliateUrl": "#",
+    "insight": "🔥 Lowest verified price in the last 90 days",
+    "why": [
+      "Lowest verified DDR5 price today",
+      "Strong price-to-performance balance",
+      "Good fit for modern gaming and productivity builds"
+    ]
+  }
+]
