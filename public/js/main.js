@@ -1,49 +1,23 @@
- async function loadRecommendations() {
+ import { loadRAMData } from "./modules/data.js";
+import { renderOverall } from "./modules/renderOverall.js";
+import { renderCategory } from "./modules/renderCategory.js";
+import { renderTrust } from "./modules/renderTrust.js";
 
-    const response = await fetch("data/ram.json");
+async function init() {
+    try {
+        const ramData = await loadRAMData();
 
-    const recommendations = await response.json();
+        renderOverall(ramData);
 
-    const container = document.getElementById("recommendationCards");
+        renderCategory(ramData, "ddr5", "ddr5Section", "More DDR5 Deals");
+        renderCategory(ramData, "ddr4", "ddr4Section", "More DDR4 Deals");
+        renderCategory(ramData, "sodimm", "sodimmSection", "More Laptop RAM Deals");
+        renderCategory(ramData, "ecc", "eccSection", "More Server RAM Deals");
 
-    recommendations.forEach(item => {
-
-        const card = document.createElement("article");
-
-        card.className = "card";
-
-        card.innerHTML = `
-
-            <h2>${item.category}</h2>
-
-            <h3>${item.brand} ${item.model}</h3>
-
-            <p>${item.capacity}</p>
-
-            <p>${item.speed}</p>
-
-            <p><strong>$${item.price}</strong></p>
-
-            <p>${item.store}</p>
-
-            <p>Verified: ${item.verified}</p>
-
-            <p><strong>Hardware Radar Score:</strong> ${item.score}</p>
-
-            <ul>
-
-                ${item.reasons.map(reason => `<li>✓ ${reason}</li>`).join("")}
-
-            </ul>
-
-            <button>View Deal</button>
-
-        `;
-
-        container.appendChild(card);
-
-    });
-
+        renderTrust();
+    } catch (error) {
+        console.error(error);
+    }
 }
 
-loadRecommendations();
+init();

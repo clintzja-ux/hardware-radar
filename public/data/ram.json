@@ -2,68 +2,125 @@
   {
     "id": 1,
     "section": "overall",
-
-    "title": "Today's Cheapest RAM",
-
+    "title": "TODAY'S CHEAPEST RAM",
     "brand": "Corsair",
     "model": "Vengeance DDR5",
-
     "capacity": "32GB",
-
     "memoryType": "DDR5",
-
     "speed": "6000 MT/s",
-
+    "bestFor": "Most gaming and productivity PCs",
     "price": 74.99,
-
     "currency": "USD",
-
     "retailer": "Amazon",
-
     "affiliateUrl": "#",
-
     "verified": "Today",
-
     "hardwareRadarVerified": true,
-
     "headline": "Lowest verified RAM price today.",
-
     "summary": "Excellent balance of price and performance.",
-
+    "pricesChecked": 247,
+    "retailersMonitored": 8,
+    "lastVerifiedTime": "11:42 UTC",
+    "insight": "🔥 Lowest price in the last 90 days",
     "why": [
       "Lowest verified price",
       "Trusted retailer",
       "Excellent value per GB"
     ]
   },
-
   {
     "id": 2,
     "section": "ddr5",
-
     "title": "Cheapest DDR5",
-
-    ...
+    "brand": "Corsair",
+    "model": "Vengeance DDR5",
+    "capacity": "32GB",
+    "memoryType": "DDR5",
+    "speed": "6000 MT/s",
+    "bestFor": "Most gaming and productivity PCs",
+    "price": 74.99,
+    "currency": "USD",
+    "retailer": "Amazon",
+    "affiliateUrl": "#",
+    "verified": "Today",
+    "hardwareRadarVerified": true,
+    "headline": "Lowest verified DDR5 price today.",
+    "summary": "Best current DDR5 value from a trusted retailer.",
+    "why": [
+      "Lowest verified DDR5 price",
+      "Trusted retailer",
+      "Strong upgrade choice"
+    ]
   },
-
   {
     "id": 3,
     "section": "ddr4",
-
-    ...
+    "title": "Cheapest DDR4",
+    "brand": "Kingston",
+    "model": "FURY DDR4",
+    "capacity": "16GB",
+    "memoryType": "DDR4",
+    "speed": "3200 MT/s",
+    "bestFor": "Most gaming and productivity PCs",
+    "price": 39.99,
+    "currency": "USD",
+    "retailer": "Newegg",
+    "affiliateUrl": "#",
+    "verified": "Today",
+    "hardwareRadarVerified": true,
+    "headline": "Lowest verified DDR4 price today.",
+    "summary": "A strong budget-friendly DDR4 option.",
+    "why": [
+      "Lowest verified DDR4 price",
+      "Good budget value",
+      "Reliable brand"
+    ]
   },
-
   {
     "id": 4,
     "section": "sodimm",
-
-    ...
+    "title": "Cheapest SODIMM",
+    "brand": "Crucial",
+    "model": "DDR4 SODIMM",
+    "capacity": "16GB",
+    "memoryType": "DDR4 SODIMM",
+    "speed": "3200 MT/s",
+    "bestFor": "Laptop memory upgrades",
+    "price": 32.99,
+    "currency": "USD",
+    "retailer": "Amazon",
+    "affiliateUrl": "#",
+    "verified": "Today",
+    "hardwareRadarVerified": true,
+    "headline": "Lowest verified laptop RAM price today.",
+    "summary": "Affordable laptop memory upgrade for compatible systems.",
+    "why": [
+      "Lowest verified laptop RAM price",
+      "Common upgrade capacity",
+      "Trusted memory brand"
+    ]
   },
-
   {
     "id": 5,
     "section": "ecc",
-
-    ...
+    "title": "Cheapest ECC RAM",
+    "brand": "Samsung",
+    "model": "ECC RDIMM",
+    "capacity": "32GB",
+    "memoryType": "DDR4 ECC",
+    "speed": "2666 MT/s",
+    "bestFor": "Servers and homelabs",
+    "price": 29.99,
+    "currency": "USD",
+    "retailer": "eBay",
+    "affiliateUrl": "#",
+    "verified": "Today",
+    "hardwareRadarVerified": true,
+    "headline": "Lowest verified server RAM price today.",
+    "summary": "Budget-friendly ECC option for compatible servers and workstations.",
+    "why": [
+      "Lowest verified ECC price",
+      "Useful for servers and homelabs",
+      "Strong capacity for the price"
+    ]
   }
 ]
