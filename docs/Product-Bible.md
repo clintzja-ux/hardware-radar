@@ -117,3 +117,8 @@ Version 3:
 Filters (Amazon only, Newegg only, etc.)
 Sort options
 Historical low indicators
+
+
+HR-P004 — Ship complete workflows, not isolated features.
+
+Hardware Radar grows by finishing one user journey at a time. A complete, polished workflow is more valuable than many partially implemented features.
