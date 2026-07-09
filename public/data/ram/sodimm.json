@@ -1,0 +1,123 @@
+ [
+  {
+    "id": 1,
+    "rank": 1,
+    "brand": "Corsair",
+    "model": "Vengeance DDR5 SODIMM",
+    "capacity": "32GB",
+    "memoryType": "DDR5",
+    "speed": "6000 MT/s",
+    "bestFor": "Most gaming and productivity PCs",
+    "price": 74.99,
+    "currency": "USD",
+    "retailer": "Amazon",
+    "verified": "Today",
+    "affiliateUrl": "#",
+    "insight": "🔥 Lowest verified price in the last 90 days",
+    "why": [
+      "Lowest verified DDR5 price today",
+      "Strong price-to-performance balance",
+      "Good fit for modern gaming and productivity builds"
+    ]
+  },
+  {
+    "rank": 1,
+    "brand": "Silicon Power",
+    "model": "DDR5 SODIMM",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 75.99,
+    "retailer": "Amazon",
+    "verified": "Today"
+  },
+  {
+    "rank": 2,
+    "brand": "TeamGroup",
+    "model": "Elite",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 76.49,
+    "retailer": "Newegg",
+    "verified": "Today"
+  },
+  {
+    "rank": 3,
+    "brand": "Silicon Power",
+    "model": "DDR5 SODIMM",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 75.99,
+    "retailer": "Amazon",
+    "verified": "Today"
+  },
+  {
+    "rank": 4,
+    "brand": "TeamGroup",
+    "model": "Elite",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 76.49,
+    "retailer": "Newegg",
+    "verified": "Today"
+  },
+  {
+    "rank": 5,
+    "brand": "Silicon Power",
+    "model": "DDR5 SODIMM",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 75.99,
+    "retailer": "Amazon",
+    "verified": "Today"
+  },
+  {
+    "rank": 6,
+    "brand": "TeamGroup",
+    "model": "Elite",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 76.49,
+    "retailer": "Newegg",
+    "verified": "Today"
+  },
+  {
+    "rank": 7,
+    "brand": "Silicon Power",
+    "model": "DDR5 SODIMM",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 75.99,
+    "retailer": "Amazon",
+    "verified": "Today"
+  },
+  {
+    "rank": 8,
+    "brand": "TeamGroup",
+    "model": "Elite",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 76.49,
+    "retailer": "Newegg",
+    "verified": "Today"
+  },
+  {
+    "rank": 9,
+    "brand": "TeamGroup",
+    "model": "Elite",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 76.49,
+    "retailer": "Newegg",
+    "verified": "Today"
+  },
+  {
+    "rank": 10,
+    "brand": "TeamGroup",
+    "model": "Elite",
+    "capacity": "32GB",
+    "speed": "6000 MT/s",
+    "price": 76.49,
+    "retailer": "Newegg",
+    "verified": "Today"
+  }
+]

@@ -140,3 +140,83 @@ Trust over clicks.
 Real prices over marketing.
 Finish workflows before adding features.
 Recommend only when there's a good reason.
+
+
+Category	Decision Cards
+DDR5	Gaming • RGB • Workstation
+DDR4	Gaming • RGB • Workstation
+Laptop (SODIMM)	Upgrade • Gaming • Business
+ECC	Home Lab • Enterprise • High Capacity
+
+
+✅ Hardware Radar Decision Card Framework v1.0
+DDR5 Desktop
+🏆 Hero
+
+Today's Cheapest DDR5
+
+Secondary paths:
+
+🎮 Need maximum gaming performance?
+
+Low-latency DDR5 kits selected for high-FPS gaming.
+
+✨ Building a showcase PC?
+
+The best RGB memory available today.
+
+💼 Need reliability for work?
+
+High-capacity memory for creators and professionals.
+
+DDR4 Desktop
+
+Exactly the same buying mindset.
+
+🎮 Gaming
+
+✨ RGB
+
+💼 Workstation
+
+💻 Laptop (SODIMM)
+🏆 Hero
+
+Today's Cheapest Laptop RAM
+
+Secondary paths:
+
+💻 Need a laptop upgrade?
+
+Reliable, affordable memory upgrades for everyday laptops.
+
+🎮 Gaming on a laptop?
+
+High-performance SODIMM memory selected for gaming laptops.
+
+💼 Buying for work?
+
+Stable, dependable memory for productivity and business laptops.
+
+I particularly like "Gaming on a laptop?" because it immediately tells the visitor:
+
+"Yes, you're in the right place."
+
+🖥 ECC Memory
+🏆 Hero
+
+Today's Cheapest ECC Memory
+
+Secondary paths:
+
+🧪 Building a home lab?
+
+Affordable ECC memory for servers and homelabs.
+
+🏢 Buying for enterprise?
+
+Trusted ECC memory for business-critical systems.
+
+📈 Need maximum capacity?
+
+High-density ECC kits for demanding workloads.
