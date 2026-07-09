@@ -122,3 +122,21 @@ Historical low indicators
 HR-P004 — Ship complete workflows, not isolated features.
 
 Hardware Radar grows by finishing one user journey at a time. A complete, polished workflow is more valuable than many partially implemented features.
+
+Hardware Radar Mission
+
+Help people make confident hardware buying decisions as quickly as possible.
+
+Every feature must support that mission.
+
+Core Promise
+
+Find today's cheapest verified hardware from trusted retailers in under 30 seconds.
+
+Product Values
+Clarity over complexity.
+Facts over hype.
+Trust over clicks.
+Real prices over marketing.
+Finish workflows before adding features.
+Recommend only when there's a good reason.
