@@ -5,6 +5,7 @@
  import { renderDecisionPaths } from "../renderDecisionPaths.js";
  import { renderBuyingAdvice } from "../renderBuyingAdvice.js";
  import { renderFAQ } from "../renderFAQ.js";
+import { renderFooter } from "../renderFooter.js";
  
  async function init() {
  
@@ -97,6 +98,8 @@
          faq,
          "faqSection"
      );
+
+     renderFooter("footerContainer");
  
  
  }

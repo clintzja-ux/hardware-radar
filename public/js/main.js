@@ -2,6 +2,7 @@
 import { renderOverall } from "./modules/renderOverall.js";
 import { renderCategory } from "./modules/renderCategory.js";
 import { renderTrust } from "./modules/renderTrust.js";
+import { renderFooter } from "./modules/renderFooter.js";
 
 async function init() {
     try {
@@ -18,6 +19,7 @@ async function init() {
     } catch (error) {
         console.error(error);
     }
+    renderFooter("footerContainer");
 }
 
 init();
