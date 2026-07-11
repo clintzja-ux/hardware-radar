@@ -6,6 +6,7 @@
  import { renderBuyingAdvice } from "../renderBuyingAdvice.js";
  import { renderFAQ } from "../renderFAQ.js";
 import { renderFooter } from "../renderFooter.js";
+import { renderHeader } from "../renderHeader.js";
  
  async function init() {
  
@@ -99,7 +100,9 @@ import { renderFooter } from "../renderFooter.js";
          "faqSection"
      );
 
+     renderHeader("headerContainer");
      renderFooter("footerContainer");
+
  
  
  }
