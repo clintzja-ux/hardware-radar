@@ -4,6 +4,7 @@ import { renderCategory } from "./modules/renderCategory.js";
 import { renderTrust } from "./modules/renderTrust.js";
 import { renderFooter } from "./modules/renderFooter.js";
 
+import { renderHeader } from "./modules/renderHeader.js";
 async function init() {
     try {
         const ramData = await loadRAMData();
@@ -19,6 +20,7 @@ async function init() {
     } catch (error) {
         console.error(error);
     }
+    renderHeader("headerContainer");
     renderFooter("footerContainer");
 }
 

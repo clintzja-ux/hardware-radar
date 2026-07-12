@@ -8,9 +8,12 @@
             <div class="header-inner">
 
                 <a class="header-brand" href="index.html">
-                    <span class="header-logo-mark" aria-hidden="true">
-                        ◔
-                    </span>
+                   <img
+                    class="header-logo-image"
+                    src="images/branding/hardware-radar-icon.svg"
+                     alt=""
+                    aria-hidden="true"
+                   >
 
                     <span class="header-brand-text">
                         Hardware Radar

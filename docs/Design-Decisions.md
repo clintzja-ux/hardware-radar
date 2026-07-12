@@ -39,3 +39,35 @@ Phase D — FAQ
 AI-optimized.
 Human-friendly.
 Data-driven so every category can reuse the component.
+
+
+Colors
+
+Let's officially define the palette.
+
+Purpose	Color
+Primary Blue	#2563EB
+Hover Blue	#1D4ED8
+Text	#111827
+Secondary Text	#6B7280
+Border	#E5E7EB
+Background	#FFFFFF
+Surface	#F9FAFB
+Success	#10B981
+
+Icon System
+
+Right now we mostly use emojis.
+
+Eventually I'd replace them with a consistent SVG icon set.
+
+Examples:
+
+Radar
+Trophy
+Fire
+Price Tag
+Shield
+Checkmark
+
+Everything would share the same visual style.

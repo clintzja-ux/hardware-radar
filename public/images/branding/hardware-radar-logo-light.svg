@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96" role="img" aria-labelledby="title desc">
+  <title id="title">Hardware Radar logo</title>
+  <desc id="desc">Hardware Radar wordmark with a minimalist radar sweep icon.</desc>
+  <rect width="360" height="96" rx="18" fill="#172033"/>
+  <g transform="translate(12 16)">
+    <g fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 39.5A22 22 0 0 1 43.5 25"/>
+      <path d="M11.5 39.5A14.5 14.5 0 0 1 37 29"/>
+      <path d="M24 40L39.5 20.5"/>
+    </g>
+    <circle cx="24" cy="40" r="4.8" fill="#FFFFFF"/>
+    <circle cx="38.5" cy="28.5" r="3.2" fill="#FFFFFF"/>
+  </g>
+  <text x="78" y="51" fill="#FFFFFF" font-family="Inter, Manrope, Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="-0.5">Hardware Radar</text>
+  <text x="79" y="72" fill="#FFFFFF" opacity="0.72" font-family="Inter, Manrope, Arial, sans-serif" font-size="12.5" font-weight="600">Independent RAM price tracking.</text>
+</svg>
