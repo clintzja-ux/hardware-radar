@@ -1,26 +1,27 @@
 # Changelog
 
-## [1.0.0] - 2026-07
+## Version 1.0.0
 
 ### Added
 
 - Homepage
-- DDR5 recommendations
-- DDR4 recommendations
-- Laptop RAM recommendations
-- About page
-- Contact page
+- DDR5 Recommendation Page
+- DDR4 Recommendation Page
+- Laptop RAM Recommendation Page
+- About
+- Contact
+- How We Choose
+- Affiliate Disclosure
 - Privacy Policy
 - Terms of Use
-- Affiliate Disclosure
-- Shared navigation
-- Shared footer
-- Branded 404 page
+- Branded 404 Page
 
 ### Technical
 
-- Modular JavaScript architecture
-- Responsive layout
-- SEO metadata
+- Shared Header
+- Shared Footer
+- Modular JavaScript
+- Responsive Layout
+- SEO Foundation
 - robots.txt
 - sitemap.xml
