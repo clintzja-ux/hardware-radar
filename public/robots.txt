@@ -1,0 +1,8 @@
+# Hardware Radar
+# https://cheapestram.com
+
+User-agent: *
+
+Allow: /
+
+Sitemap: https://cheapestram.com/sitemap.xml
