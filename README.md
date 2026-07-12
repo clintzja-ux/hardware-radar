@@ -1,55 +1,67 @@
-# Hardware Radar
+# 📡 Hardware Radar
 
-> Helping people make smarter hardware buying decisions.
+> **Find Today's Cheapest Verified RAM Prices**
 
----
+Hardware Radar helps PC builders, gamers, students, professionals, and everyday users quickly find today's best verified RAM prices from trusted retailers.
 
-## Overview
-
-Hardware Radar is a decision platform designed to help people quickly find the best computer hardware for their needs.
-
-Version 1 focuses on one simple question:
-
-> **Where can I find the cheapest RAM online?**
-
-As the platform evolves, Hardware Radar will expand into a trusted destination for hardware pricing, value comparisons, buying guides, and transparent recommendations.
+Built with transparency, simplicity, and trust as the core principles.
 
 ---
 
-## Vision
+## 🌐 Live Website
 
-Become the internet's most trusted hardware buying companion.
-
----
-
-## Mission
-
-Help people make the smartest hardware purchase in under 60 seconds.
+**https://cheapestram.com**
 
 ---
 
-## Core Principles
+## Features
 
-- Trust before revenue.
-- Every feature must earn its complexity.
-- Build for humans, search engines, and AI.
-- Simplicity scales.
-- Documentation is institutional memory.
+- 🔍 Independent RAM recommendations
+- 💰 Verified pricing from trusted retailers
+- ⚡ DDR5 recommendations
+- 💾 DDR4 recommendations
+- 💻 Laptop (SO-DIMM) RAM recommendations
+- 📖 Plain-language buying advice
+- 📱 Fully responsive design
+- 🔒 Transparent affiliate disclosure
+- 🚀 SEO optimized
 
 ---
 
-## Current Status
+## Why Hardware Radar?
 
-Project Stage:
+Buying RAM shouldn't require opening ten browser tabs.
 
-Foundation & MVP Development
+Hardware Radar simplifies the buying process by comparing trusted retailers and highlighting the best value products.
 
-Current Focus:
+Our recommendations are based on:
 
-- Project architecture
-- Product documentation
-- Homepage development
-- Initial RAM comparison engine
+- Value
+- Suitability
+- Verified pricing
+- Transparency
+
+—not advertising payments.
+
+---
+
+## Project Philosophy
+
+Hardware Radar follows a simple philosophy:
+
+> Help people make confident buying decisions through honest recommendations.
+
+Every recommendation is made with long-term user trust in mind.
+
+---
+
+## Technology
+
+- HTML5
+- CSS3
+- Modern JavaScript (ES Modules)
+- Responsive Design
+- Static Website Architecture
 
 ---
 
@@ -57,53 +69,85 @@ Current Focus:
 
 ```
 hardware-radar/
-
-docs/
-public/
-scripts/
-assets/
-archive/
-
-README.md
-CHANGELOG.md
-CONTRIBUTING.md
+│
+├── public/
+│   ├── css/
+│   ├── images/
+│   ├── js/
+│   ├── data/
+│   └── *.html
+│
+├── docs/
+│
+├── README.md
+├── CHANGELOG.md
+├── ROADMAP.md
+├── RELEASE_NOTES.md
+├── VERSION
+└── LICENSE
 ```
+
+---
+
+## Roadmap
+
+### Version 1.0 ✅
+
+- Homepage
+- DDR5
+- DDR4
+- Laptop RAM
+- Shared Components
+- SEO Foundation
+- Trust Pages
+- Branded 404 Page
+
+### Version 1.1
+
+- Historical price tracking
+- Better filtering
+- Additional retailers
+- Expanded FAQs
+
+### Version 2.0
+
+- SSD recommendations
+- CPU recommendations
+- GPU recommendations
+- Motherboards
+- Power Supplies
 
 ---
 
 ## Documentation
 
-The `/docs` folder contains the living documentation for the project.
-
-- Product Bible
-- Roadmap
-- Decision Log
-- Project Journal
-- Brand Guide
-- AI Strategy
-- SEO Strategy
-- Monetization Strategy
+Additional documentation can be found in the **docs/** directory.
 
 ---
 
-## Development Philosophy
+## Contributing
 
-Hardware Radar follows the Clinton Labs development philosophy.
-
-Build deliberately.
-
-Ship confidently.
-
-Improve continuously.
-
----
-
-## Long-Term Goal
-
-Create a trusted decision platform that helps people confidently purchase computer hardware through transparent recommendations, data-driven comparisons, and AI-ready content.
+Please read **CONTRIBUTING.md** before submitting changes or pull requests.
 
 ---
 
 ## License
 
-MIT License
+This project is licensed under the MIT License.
+
+---
+
+# Built by Mirabelle Labs
+
+Building software that is:
+
+- Simple
+- Trustworthy
+- Useful
+
+---
+
+### Hardware Radar
+
+**Version 1.0.0**
+
