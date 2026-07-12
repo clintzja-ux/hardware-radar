@@ -62,3 +62,119 @@ Improve clarity.
 Otherwise…
 
 Backlog.
+
+
+
+# Hardware Radar v1.0.0 Launch Checklist
+
+## Website
+
+### Homepage
+
+- [ ] Header displays correctly
+- [ ] Logo links to homepage
+- [ ] Hero section displays correctly
+- [ ] Recommendation card displays correctly
+- [ ] Comparison section works
+- [ ] FAQ expands/collapses
+- [ ] Footer displays correctly
+
+---
+
+### DDR5
+
+- [ ] Hero
+- [ ] Recommendation cards
+- [ ] Explore Other Picks
+- [ ] FAQ
+- [ ] Footer
+
+---
+
+### DDR4
+
+- [ ] Hero
+- [ ] Recommendation cards
+- [ ] Explore Other Picks
+- [ ] FAQ
+- [ ] Footer
+
+---
+
+### Laptop RAM
+
+- [ ] Hero
+- [ ] Recommendation cards
+- [ ] Explore Other Picks
+- [ ] FAQ
+- [ ] Footer
+
+---
+
+### Trust Pages
+
+- [ ] About
+- [ ] How We Choose
+- [ ] Affiliate Disclosure
+- [ ] Contact
+- [ ] Privacy Policy
+- [ ] Terms of Use
+- [ ] 404 Page
+
+---
+
+## Technical
+
+- [ ] No console errors
+- [ ] All images load
+- [ ] No broken links
+- [ ] robots.txt works
+- [ ] sitemap.xml works
+
+---
+
+## SEO
+
+- [ ] Unique title on every page
+- [ ] Meta description on every page
+- [ ] Canonical tag
+- [ ] Open Graph tags
+- [ ] Twitter Card tags
+
+---
+
+## Branding
+
+- [ ] Logo
+- [ ] Favicon
+- [ ] Open Graph image
+- [ ] Footer branding
+- [ ] Consistent colors
+
+---
+
+## Repository
+
+- [ ] README
+- [ ] CHANGELOG
+- [ ] RELEASE_NOTES
+- [ ] ROADMAP
+- [ ] VERSION
+
+---
+
+## Deployment
+
+- [ ] Upload website
+- [ ] Test live website
+- [ ] Submit sitemap
+- [ ] Verify Search Console
+- [ ] Verify Bing Webmaster Tools
+
+---
+
+## Launch
+
+- [ ] Git Tag v1.0.0
+- [ ] GitHub Release
+- [ ] Announce Launch

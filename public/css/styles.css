@@ -878,23 +878,26 @@ footer{
 
     color:var(--text-primary);
     text-decoration:none;
-    font-weight:800;
 }
 
-.header-logo-mark{
-    display:grid;
-    place-items:center;
-
+.header-logo-image{
+    display:block;
     width:34px;
     height:34px;
-
-    color:var(--primary);
-    font-size:1.7rem;
-    line-height:1;
+    flex-shrink:0;
 }
 
 .header-brand-text{
+    display:inline-block;
+
+    font-family:"Inter", Arial, sans-serif;
     font-size:1.05rem;
+    font-weight:800;
+    font-style:normal;
+    font-stretch:normal;
+    line-height:1.2;
+    letter-spacing:0;
+    white-space:nowrap;
 }
 
 .header-nav{
