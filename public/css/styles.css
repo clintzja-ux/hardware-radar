@@ -125,7 +125,9 @@ button{
 
     text-decoration:none;
 
-    transition:.25s ease;
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
 
 }
 

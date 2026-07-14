@@ -21,7 +21,7 @@
     const pageUrl = categoryPages[sectionName];
 
     container.innerHTML = `
-        <article class="category-card">
+        <article class="card category-card">
             <p class="category-title">${product.title}</p>
 
             <h3>${product.brand} ${product.model}</h3>

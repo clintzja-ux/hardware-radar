@@ -108,3 +108,17 @@ UX
 🔹 Additional accessibility refinements
 
 Nothing here is required for launch.
+
+
+Then comes Version 1.1
+
+We've already identified a solid backlog:
+
+🔹 Server/ECC RAM category.
+🔹 Price history graphs.
+🔹 Retailer badges.
+🔹 "Updated X minutes ago."
+🔹 RAM buying guides.
+🔹 AI comparison assistant.
+🔹 Automatic price updates.
+🔹 Additional hardware categories.
