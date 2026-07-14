@@ -25,3 +25,5 @@
 - SEO Foundation
 - robots.txt
 - sitemap.xml
+
+- 
