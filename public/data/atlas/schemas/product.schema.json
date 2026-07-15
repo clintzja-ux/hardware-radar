@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cheapestram.com/data/atlas/schemas/product.schema.json",
+  "title": "Hardware Radar Product",
+  "description": "Canonical schema for stable hardware product facts stored by Atlas.",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "id",
+    "category",
+    "subcategory",
+    "brandId",
+    "name",
+    "model",
+    "status",
+    "specifications",
+    "metadata"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^HR-[A-Z0-9]+-[A-Z0-9]+-[0-9]{6}$",
+      "description": "Permanent Hardware Radar product identifier."
+    },
+
+    "category": {
+      "type": "string",
+      "enum": [
+        "RAM",
+        "SSD",
+        "CPU",
+        "GPU",
+        "MOTHERBOARD",
+        "PSU",
+        "COOLING",
+        "CASE",
+        "MONITOR",
+        "NETWORKING",
+        "PERIPHERAL"
+      ]
+    },
+
+    "subcategory": {
+      "type": "string",
+      "minLength": 1
+    },
+
+    "brandId": {
+      "type": "string",
+      "pattern": "^BRAND-[0-9]{4}$"
+    },
+
+    "series": {
+      "type": ["string", "null"]
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+
+    "manufacturerPartNumber": {
+      "type": ["string", "null"]
+    },
+
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "discontinued",
+        "announced",
+        "unknown"
+      ]
+    },
+
+    "specifications": {
+      "type": "object",
+      "description": "Category-specific stable technical facts.",
+      "additionalProperties": true
+    },
+
+    "compatibility": {
+      "type": "object",
+      "description": "Stable compatibility facts and supported standards.",
+      "additionalProperties": true
+    },
+
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+
+    "bestFor": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "url",
+          "alt"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "gallery",
+              "thumbnail"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1
+          },
+          "alt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+
+    "officialProductUrl": {
+      "type": ["string", "null"],
+      "format": "uri"
+    },
+
+    "releaseDate": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "dataConfidence",
+        "sourceReferences"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "dataConfidence": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+
+        "sourceReferences": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+
+        "notes": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}
