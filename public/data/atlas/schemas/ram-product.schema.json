@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cheapestram.com/data/atlas/schemas/ram-product.schema.json",
+  "title": "Hardware Radar RAM Product",
+  "description": "RAM-specific extension of the canonical Hardware Radar product schema.",
+  "allOf": [
+    {
+      "$ref": "product.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "category": {
+          "const": "RAM"
+        },
+        "subcategory": {
+          "enum": [
+            "DDR4",
+            "DDR5",
+            "SODIMM-DDR4",
+            "SODIMM-DDR5",
+            "ECC-DDR4",
+            "ECC-DDR5"
+          ]
+        },
+        "specifications": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "memoryType",
+            "capacityGb",
+            "moduleCount",
+            "capacityPerModuleGb",
+            "speedMtS",
+            "formFactor",
+            "ecc",
+            "registered",
+            "rgb"
+          ],
+          "properties": {
+            "memoryType": {
+              "type": "string",
+              "enum": [
+                "DDR4",
+                "DDR5"
+              ]
+            },
+            "capacityGb": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "moduleCount": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "capacityPerModuleGb": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "speedMtS": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "casLatency": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            },
+            "timings": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "voltage": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "exclusiveMinimum": 0
+            },
+            "formFactor": {
+              "type": "string",
+              "enum": [
+                "UDIMM",
+                "SODIMM",
+                "RDIMM",
+                "LRDIMM"
+              ]
+            },
+            "ecc": {
+              "type": "boolean"
+            },
+            "registered": {
+              "type": "boolean"
+            },
+            "buffering": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "unbuffered",
+                "registered",
+                "load-reduced",
+                null
+              ]
+            },
+            "rgb": {
+              "type": "boolean"
+            },
+            "heatSpreader": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "xmp": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "expo": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "rank": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "single-rank",
+                "dual-rank",
+                "quad-rank",
+                "unknown",
+                null
+              ]
+            },
+            "color": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "warranty": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
