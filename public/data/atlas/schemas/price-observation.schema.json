@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cheapestram.com/data/atlas/schemas/price-observation.schema.json",
+  "title": "Hardware Radar Price Observation",
+  "description": "A time-stamped observation that a retailer offered a specific product under specific conditions.",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "id",
+    "productId",
+    "retailerId",
+    "observedAt",
+    "price",
+    "currency",
+    "availability",
+    "sourceUrl",
+    "verification",
+    "metadata"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^PRICE-[0-9]{8}-[0-9]{6}$",
+      "description": "Permanent observation ID using PRICE-YYYYMMDD-NNNNNN."
+    },
+
+    "productId": {
+      "type": "string",
+      "pattern": "^HR-[A-Z0-9]+-[A-Z0-9]+-[0-9]{6}$"
+    },
+
+    "retailerId": {
+      "type": "string",
+      "pattern": "^RETAILER-[0-9]{4}$"
+    },
+
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+
+    "price": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+
+    "availability": {
+      "type": "string",
+      "enum": [
+        "in-stock",
+        "low-stock",
+        "out-of-stock",
+        "preorder",
+        "backorder",
+        "unknown"
+      ]
+    },
+
+    "shipping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "costKnown"
+      ],
+      "properties": {
+        "costKnown": {
+          "type": "boolean"
+        },
+
+        "cost": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+
+        "currency": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Z]{3}$"
+        },
+
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+
+    "discount": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "originalPrice": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+
+        "amount": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+
+        "percentage": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+
+    "affiliate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "isAffiliateLink"
+      ],
+      "properties": {
+        "isAffiliateLink": {
+          "type": "boolean"
+        },
+
+        "network": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+
+        "trackingCodePresent": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+
+    "sourceUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "method",
+        "verifiedAt"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "verified",
+            "unverified",
+            "stale",
+            "rejected"
+          ]
+        },
+
+        "method": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "retailer-api",
+            "affiliate-feed",
+            "automated-check",
+            "import"
+          ]
+        },
+
+        "verifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "verifiedBy": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "createdAt",
+        "updatedAt"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
