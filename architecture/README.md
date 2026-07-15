@@ -1,0 +1,1 @@
+This directory contains the long-term technical architecture of Hardware Radar. These documents describe the systems that power the platform rather than the implementation details of individual features.
