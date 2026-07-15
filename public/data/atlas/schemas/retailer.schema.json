@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cheapestram.com/data/atlas/schemas/retailer.schema.json",
+  "title": "Hardware Radar Retailer",
+  "description": "Canonical schema for retailers referenced by Mercury price observations.",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": [
+    "id",
+    "name",
+    "slug",
+    "websiteUrl",
+    "status",
+    "regions",
+    "metadata"
+  ],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^RETAILER-[0-9]{4}$",
+      "description": "Permanent Hardware Radar retailer identifier."
+    },
+
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+
+    "websiteUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "restricted",
+        "unknown"
+      ]
+    },
+
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{2}$"
+      },
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "ISO 3166-1 alpha-2 country codes served by the retailer."
+    },
+
+    "supportedCurrencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z]{3}$"
+      },
+      "uniqueItems": true
+    },
+
+    "affiliateProgram": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "available",
+        "status"
+      ],
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "pending",
+            "not-enrolled",
+            "unavailable",
+            "unknown"
+          ]
+        },
+
+        "network": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+
+        "disclosureRequired": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+
+    "logo": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "alt"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1
+        },
+
+        "alt": {
+          "type": "string",
+          "minLength": 1
+        },
+
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "createdAt",
+        "updatedAt",
+        "sourceReferences"
+      ],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+
+        "sourceReferences": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
