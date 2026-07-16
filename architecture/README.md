@@ -554,3 +554,13 @@ Aurora       Planned
 Forge        Planned
 Beacon       Planned
 Gateway      Planned
+
+
+
+Sentinel
+
+Purpose:
+Protect Atlas through automated Knowledge Integrity Rules (KIRs).
+
+Status:
+Future

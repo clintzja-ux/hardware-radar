@@ -1,0 +1,28 @@
+{
+  "id": "RETAILER-0001",
+  "name": "Amazon",
+  "slug": "amazon",
+  "websiteUrl": "https://www.amazon.com",
+  "status": "active",
+
+  "regions": [
+    "US"
+  ],
+
+  "supportedCurrencies": [
+    "USD"
+  ],
+
+  "affiliateProgram": {
+    "available": true,
+    "status": "pending"
+  },
+
+  "metadata": {
+    "createdAt": "2026-07-15T00:00:00Z",
+    "updatedAt": "2026-07-15T00:00:00Z",
+    "sourceReferences": [
+      "Amazon"
+    ]
+  }
+}
