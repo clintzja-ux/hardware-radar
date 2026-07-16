@@ -1,0 +1,189 @@
+import { ForgeGenerator } from "./services/ForgeGenerator.js";
+import { copyToClipboard } from "./utils/clipboard.js";
+
+const forge = new ForgeGenerator();
+
+const form = document.getElementById("forgeForm");
+
+const atlasOutput = document.getElementById("atlasOutput");
+const mercuryOutput = document.getElementById("mercuryOutput");
+
+const atlasFilename = document.getElementById("atlasFilename");
+const mercuryFilename = document.getElementById("mercuryFilename");
+
+const validationList = document.getElementById("validationList");
+
+const copyAtlasButton =
+    document.getElementById("copyAtlasButton");
+
+const copyMercuryButton =
+    document.getElementById("copyMercuryButton");
+
+let latestAtlasJson = "";
+let latestMercuryJson = "";
+
+form.addEventListener("submit", handleGenerate);
+
+copyAtlasButton.addEventListener("click", async () => {
+    await handleCopy(
+        latestAtlasJson,
+        copyAtlasButton,
+        "Atlas copied"
+    );
+});
+
+copyMercuryButton.addEventListener("click", async () => {
+    await handleCopy(
+        latestMercuryJson,
+        copyMercuryButton,
+        "Mercury copied"
+    );
+});
+
+function handleGenerate(event) {
+    event.preventDefault();
+
+    const input = readFormInput();
+    const result = forge.generateProduct(input);
+
+    renderValidation(result.validation);
+
+    if (!result.atlasProduct || !result.mercuryObservation) {
+        clearOutputs();
+        return;
+    }
+
+    latestAtlasJson = JSON.stringify(
+        result.atlasProduct,
+        null,
+        2
+    );
+
+    latestMercuryJson = JSON.stringify(
+        result.mercuryObservation,
+        null,
+        2
+    );
+
+    atlasOutput.textContent = latestAtlasJson;
+    mercuryOutput.textContent = latestMercuryJson;
+
+    atlasFilename.textContent = result.atlasFilename;
+    mercuryFilename.textContent = result.mercuryFilename;
+
+    copyAtlasButton.disabled = false;
+    copyMercuryButton.disabled = false;
+}
+
+function readFormInput() {
+    return {
+        manufacturerUrl:
+            document.getElementById("manufacturerUrl").value.trim(),
+
+        retailerUrl:
+            document.getElementById("retailerUrl").value.trim(),
+
+        brandId:
+            document.getElementById("brandId").value,
+
+        category:
+            document.getElementById("category").value,
+
+        subcategory:
+            document.getElementById("subcategory").value,
+
+        retailerId:
+            document.getElementById("retailerId").value,
+
+        manufacturerPartNumber:
+            document
+                .getElementById("manufacturerPartNumber")
+                .value
+                .trim(),
+
+        productName:
+            document.getElementById("productName").value.trim(),
+
+        productNumber:
+            Number(document.getElementById("productNumber").value),
+
+        observationNumber:
+            Number(
+                document.getElementById("observationNumber").value
+            ),
+
+        price:
+            Number(document.getElementById("price").value),
+
+        currency:
+            document.getElementById("currency").value,
+
+        availability:
+            document.getElementById("availability").value,
+
+        condition:
+            document.getElementById("condition").value,
+
+        sellerType:
+            document.getElementById("sellerType").value
+    };
+}
+
+function renderValidation(validation) {
+    validationList.innerHTML = "";
+
+    if (validation.valid) {
+        appendValidationItem(
+            "Forge pipeline completed successfully.",
+            "success"
+        );
+    }
+
+    validation.errors.forEach(error => {
+        appendValidationItem(error, "error");
+    });
+
+    validation.warnings.forEach(warning => {
+        appendValidationItem(warning, "warning");
+    });
+}
+
+function appendValidationItem(message, type) {
+    const item = document.createElement("li");
+
+    item.textContent = message;
+    item.className = `validation-${type}`;
+
+    validationList.appendChild(item);
+}
+
+function clearOutputs() {
+    latestAtlasJson = "";
+    latestMercuryJson = "";
+
+    atlasOutput.textContent = "{}";
+    mercuryOutput.textContent = "{}";
+
+    atlasFilename.textContent = "No file generated.";
+    mercuryFilename.textContent = "No file generated.";
+
+    copyAtlasButton.disabled = true;
+    copyMercuryButton.disabled = true;
+}
+
+async function handleCopy(value, button, successText) {
+    const originalText = button.textContent;
+
+    try {
+        await copyToClipboard(value);
+
+        button.textContent = successText;
+
+        window.setTimeout(() => {
+            button.textContent = originalText;
+        }, 1500);
+    } catch (error) {
+        console.error(error);
+        window.alert(error.message);
+    }
+}

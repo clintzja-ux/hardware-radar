@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Hardware Radar Forge</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="../images/branding/favicon.svg">
+    <link rel="alternate icon" href="../images/branding/favicon.ico">
+</head>
+
+<body>
+    <main class="forge-shell">
+        <header class="forge-header">
+            <p class="eyebrow">MIRABELLE LABS INTERNAL TOOL</p>
+            <h1>Hardware Radar Forge</h1>
+            <p>
+                Generate consistent Atlas products and Mercury observations.
+            </p>
+        </header>
+
+        <section class="forge-card">
+            <h2>Product Intake</h2>
+
+            <form id="forgeForm">
+                <div class="form-grid">
+                    <label>
+                        Manufacturer URL
+                        <input
+                            id="manufacturerUrl"
+                            type="url"
+                            placeholder="https://manufacturer.com/product"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Retailer URL
+                        <input
+                            id="retailerUrl"
+                            type="url"
+                            placeholder="https://www.amazon.com/dp/ASIN"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Brand
+                        <select id="brandId" required>
+                            <option value="">Select brand</option>
+                            <option value="BRAND-0001">Corsair</option>
+                            <option value="BRAND-0002">G.SKILL</option>
+                            <option value="BRAND-0003">Kingston</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Category
+                        <select id="category" required>
+                            <option value="RAM">RAM</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Subcategory
+                        <select id="subcategory" required>
+                            <option value="DDR5">DDR5</option>
+                            <option value="DDR4">DDR4</option>
+                            <option value="SODIMM-DDR5">SODIMM DDR5</option>
+                            <option value="SODIMM-DDR4">SODIMM DDR4</option>
+                            <option value="ECC-DDR5">ECC DDR5</option>
+                            <option value="ECC-DDR4">ECC DDR4</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Retailer
+                        <select id="retailerId" required>
+                            <option value="RETAILER-0001">Amazon</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Manufacturer Part Number
+                        <input
+                            id="manufacturerPartNumber"
+                            type="text"
+                            placeholder="Example: KF552C40BBK2-32"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Product Name
+                        <input
+                            id="productName"
+                            type="text"
+                            placeholder="Full canonical product name"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Product Sequence Number
+                        <input
+                            id="productNumber"
+                            type="number"
+                            min="1"
+                            value="4"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Observation Sequence Number
+                        <input
+                            id="observationNumber"
+                            type="number"
+                            min="1"
+                            value="4"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Observed Price
+                        <input
+                            id="price"
+                            type="number"
+                            min="0.01"
+                            step="0.01"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        Currency
+                        <select id="currency" required>
+                            <option value="USD">USD</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Availability
+                        <select id="availability" required>
+                            <option value="in-stock">In stock</option>
+                            <option value="low-stock">Low stock</option>
+                            <option value="out-of-stock">Out of stock</option>
+                            <option value="preorder">Preorder</option>
+                            <option value="backorder">Backorder</option>
+                            <option value="unknown">Unknown</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Condition
+                        <select id="condition" required>
+                            <option value="new">New</option>
+                            <option value="open-box">Open box</option>
+                            <option value="manufacturer-refurbished">
+                                Manufacturer refurbished
+                            </option>
+                            <option value="seller-refurbished">
+                                Seller refurbished
+                            </option>
+                            <option value="used">Used</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Seller Type
+                        <select id="sellerType" required>
+                            <option value="retailer">Retailer</option>
+                            <option value="marketplace">Marketplace</option>
+                            <option value="manufacturer">Manufacturer</option>
+                            <option value="authorized-reseller">
+                                Authorized reseller
+                            </option>
+                            <option value="unknown">Unknown</option>
+                        </select>
+                    </label>
+                </div>
+
+                <button class="primary-button" type="submit">
+                    Generate Records
+                </button>
+            </form>
+        </section>
+
+        <section class="forge-card">
+            <h2>Validation</h2>
+            <ul id="validationList" class="validation-list">
+                <li>Forge is ready.</li>
+            </ul>
+        </section>
+
+        <section class="output-grid">
+            <article class="forge-card output-card">
+                <div class="output-header">
+                    <h2>Atlas Product JSON</h2>
+                    <button
+                        id="copyAtlasButton"
+                        class="secondary-button"
+                        type="button"
+                        disabled
+                    >
+                        Copy Atlas
+                    </button>
+                </div>
+
+                <p id="atlasFilename" class="filename">
+                    No file generated.
+                </p>
+
+                <pre id="atlasOutput">{}</pre>
+            </article>
+
+            <article class="forge-card output-card">
+                <div class="output-header">
+                    <h2>Mercury Observation JSON</h2>
+                    <button
+                        id="copyMercuryButton"
+                        class="secondary-button"
+                        type="button"
+                        disabled
+                    >
+                        Copy Mercury
+                    </button>
+                </div>
+
+                <p id="mercuryFilename" class="filename">
+                    No file generated.
+                </p>
+
+                <pre id="mercuryOutput">{}</pre>
+            </article>
+        </section>
+    </main>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
