@@ -1,4 +1,6 @@
- import { loadRAMData } from "./modules/data.js";
+import { loadAtlasOverallProduct } from "./atlasAdapter.js";
+
+import { loadRAMData } from "./modules/data.js";
 import { renderOverall } from "./modules/renderOverall.js";
 import { renderCategory } from "./modules/renderCategory.js";
 import { renderTrust } from "./modules/renderTrust.js";
@@ -15,6 +17,9 @@ async function init() {
         renderCategory(ramData, "ddr4", "ddr4Section", "More DDR4 Deals");
         renderCategory(ramData, "sodimm", "sodimmSection", "More Laptop RAM Deals");
         renderCategory(ramData, "ecc", "eccSection", "More Server RAM Deals");
+
+        const atlasOverallProduct = await loadAtlasOverallProduct();
+        renderOverall([atlasOverallProduct]);
 
         renderTrust();
     } catch (error) {

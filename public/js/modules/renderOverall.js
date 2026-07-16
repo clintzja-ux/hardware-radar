@@ -1,3 +1,5 @@
+ import { pluralize } from "../utils/text.js";
+ 
  export function renderOverall(items) {
     const product = items.find(item => item.section === "overall");
     const container = document.getElementById("overallSection");
@@ -18,10 +20,10 @@
                          ✓ Verified ${product.lastVerifiedTime || product.verified}
                     </p>
 
-                     <p class="verification-details">
-                         ${product.pricesChecked} prices checked •
-                        ${product.retailersMonitored} trusted retailers
-                     </p>
+                    <p class="verification-details">
+                        ${pluralize(product.pricesChecked, "price")} checked •
+                         ${pluralize(product.retailersMonitored, "trusted retailer")}
+                    </p>
 
                  </div>
 
