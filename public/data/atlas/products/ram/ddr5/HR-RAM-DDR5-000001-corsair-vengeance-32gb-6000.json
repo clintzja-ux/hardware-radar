@@ -1,0 +1,77 @@
+{
+  "id": "HR-RAM-DDR5-000001",
+  "category": "RAM",
+  "subcategory": "DDR5",
+  "brandId": "BRAND-0001",
+  "series": "Vengeance",
+  "name": "Corsair Vengeance 32GB (2x16GB) DDR5-6000 CL30",
+  "model": "CMK32GX5M2B6000Z30",
+  "manufacturerPartNumber": "CMK32GX5M2B6000Z30",
+  "status": "active",
+
+  "specifications": {
+    "memoryType": "DDR5",
+    "capacityGb": 32,
+    "moduleCount": 2,
+    "capacityPerModuleGb": 16,
+    "speedMtS": 6000,
+    "casLatency": 30,
+    "timings": "30-36-36-76",
+    "voltage": 1.4,
+    "formFactor": "UDIMM",
+    "ecc": false,
+    "registered": false,
+    "buffering": "unbuffered",
+    "rgb": false,
+    "heatSpreader": true,
+    "xmp": true,
+    "expo": true,
+    "rank": "unknown",
+    "color": "Grey",
+    "warranty": "Limited lifetime"
+  },
+
+  "compatibility": {
+    "platforms": [
+      "AMD 600 Series",
+      "AMD 800 Series",
+      "Intel 600 Series",
+      "Intel 700 Series",
+      "Intel 800 Series"
+    ],
+    "supportedProfiles": [
+      "AMD EXPO",
+      "Intel XMP 3.0"
+    ],
+    "desktopMemory": true
+  },
+
+  "features": [
+    "Aluminum heat spreader",
+    "Onboard voltage regulation",
+    "Onboard PMIC",
+    "Dual AMD EXPO and Intel XMP profile support"
+  ],
+
+  "bestFor": [
+    "Gaming",
+    "Productivity",
+    "AMD AM5 systems",
+    "Intel DDR5 desktop systems"
+  ],
+
+  "officialProductUrl": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+
+  "releaseDate": null,
+
+  "metadata": {
+    "createdAt": "2026-07-16T00:57:53Z",
+    "updatedAt": "2026-07-16T00:57:53Z",
+    "dataConfidence": "verified",
+    "sourceReferences": [
+      "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+      "https://www.amazon.com/dp/B0CBRJ63RT"
+    ],
+    "notes": "Specifications verified against the official Corsair technical specifications. Amazon confirms ASIN B0CBRJ63RT, UPC 840006673293, GTIN 00840006673293, and the same manufacturer part number. These identifiers are not yet represented as dedicated fields in product.schema.json."
+  }
+}
