@@ -1,0 +1,46 @@
+{
+  "id": "PRICE-20260715-000001",
+
+  "productId": "HR-RAM-DDR5-000001",
+
+  "retailerId": "RETAILER-0001",
+
+  "observedAt": "2026-07-15T20:30:00Z",
+
+  "price": 509.99,
+
+  "currency": "USD",
+
+  "availability": "in-stock",
+
+  "shipping": {
+    "costKnown": false,
+    "cost": null,
+    "currency": null,
+    "notes": "Prime shipping available."
+  },
+
+  "discount": null,
+
+  "affiliate": {
+    "isAffiliateLink": false,
+    "network": null,
+    "trackingCodePresent": null
+  },
+
+  "sourceUrl": "https://www.amazon.com/dp/B0CBRJ63RT",
+
+  "verification": {
+    "status": "verified",
+    "method": "manual",
+    "verifiedAt": "2026-07-15T20:30:00Z",
+    "verifiedBy": "Mirabelle Labs",
+    "notes": "Observed directly from Amazon product page."
+  },
+
+  "metadata": {
+    "createdAt": "2026-07-15T20:30:00Z",
+    "updatedAt": "2026-07-15T20:30:00Z",
+    "notes": "First canonical Mercury observation."
+  }
+}
