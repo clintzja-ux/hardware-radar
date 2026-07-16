@@ -1,0 +1,16 @@
+{
+  "id": "BRAND-0003",
+  "name": "Kingston",
+  "slug": "kingston",
+  "country": "United States",
+  "website": "https://www.kingston.com",
+  "founded": 1987,
+  "status": "active",
+  "metadata": {
+    "createdAt": "2026-07-16T00:00:00Z",
+    "updatedAt": "2026-07-16T00:00:00Z",
+    "sourceReferences": [
+      "https://www.kingston.com/en/company/the-history-of-kingston"
+    ]
+  }
+}

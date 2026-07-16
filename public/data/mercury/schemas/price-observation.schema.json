@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cheapestram.com/data/atlas/schemas/price-observation.schema.json",
+  "$id": "https://cheapestram.com/data/mercury/schemas/price-observation.schema.json",
   "title": "Hardware Radar Price Observation",
   "description": "A time-stamped observation that a retailer offered a specific product under specific conditions.",
   "type": "object",
@@ -14,6 +14,8 @@
     "price",
     "currency",
     "availability",
+    "condition",
+    "sellerType",
     "sourceUrl",
     "verification",
     "metadata"
@@ -59,8 +61,33 @@
         "out-of-stock",
         "preorder",
         "backorder",
+        "discontinued",
         "unknown"
       ]
+    },
+
+    "condition": {
+      "type": "string",
+      "enum": [
+        "new",
+        "open-box",
+        "manufacturer-refurbished",
+        "seller-refurbished",
+        "used"
+      ],
+      "description": "Physical sales condition of the specific retailer offer."
+    },
+
+    "sellerType": {
+      "type": "string",
+      "enum": [
+        "manufacturer",
+        "authorized-reseller",
+        "retailer",
+        "marketplace",
+        "unknown"
+      ],
+      "description": "Classification of the seller responsible for the offer."
     },
 
     "shipping": {

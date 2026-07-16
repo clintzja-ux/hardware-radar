@@ -1,0 +1,67 @@
+{
+  "id": "HR-RAM-DDR5-000003",
+  "category": "RAM",
+  "subcategory": "DDR5",
+  "brandId": "BRAND-0003",
+  "series": "FURY Beast",
+  "name": "Kingston FURY Beast 32GB (2x16GB) DDR5-5200 CL40",
+  "model": "KF552C40BBK2-32",
+  "manufacturerPartNumber": "KF552C40BBK2-32",
+  "status": "active",
+
+  "specifications": {
+    "memoryType": "DDR5",
+    "capacityGb": 32,
+    "moduleCount": 2,
+    "capacityPerModuleGb": 16,
+    "speedMtS": 5200,
+    "casLatency": 40,
+    "timings": "40-40-40",
+    "voltage": 1.25,
+    "formFactor": "UDIMM",
+    "ecc": false,
+    "registered": false,
+    "buffering": "unbuffered",
+    "rgb": false,
+    "heatSpreader": true,
+    "xmp": true,
+    "expo": false,
+    "rank": "single-rank",
+    "color": "Black",
+    "warranty": null
+  },
+
+  "compatibility": {
+    "supportedProfiles": [
+      "Intel XMP 3.0"
+    ],
+    "desktopMemory": true,
+    "pinCount": 288
+  },
+
+  "features": [
+    "Black aluminum heat spreader",
+    "Intel XMP 3.0 profiles",
+    "DDR5 on-die ECC"
+  ],
+
+  "bestFor": [
+    "Mainstream desktop upgrades",
+    "Intel DDR5 desktop systems"
+  ],
+
+  "officialProductUrl": "https://www.kingston.com/datasheets/KF552C40BBK2-32.pdf",
+
+  "releaseDate": null,
+
+  "metadata": {
+    "createdAt": "2026-07-16T00:00:00Z",
+    "updatedAt": "2026-07-16T00:00:00Z",
+    "dataConfidence": "verified",
+    "sourceReferences": [
+      "https://www.kingston.com/datasheets/KF552C40BBK2-32.pdf",
+      "https://www.amazon.com/dp/B09KCLP63B"
+    ],
+    "notes": "Official Kingston specifications confirm a 32GB kit composed of two 16GB, single-rank DDR5-5200 CL40 modules. Default JEDEC operation is DDR5-4800 CL40-39-39 at 1.1V. XMP Profile 1 is DDR5-5200 CL40-40-40 at 1.25V. DDR5 on-die ECC does not make this system-level ECC memory."
+  }
+}

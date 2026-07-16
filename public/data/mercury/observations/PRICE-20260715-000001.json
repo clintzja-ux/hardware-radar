@@ -1,31 +1,33 @@
 {
   "id": "PRICE-20260715-000001",
-
   "productId": "HR-RAM-DDR5-000001",
-
   "retailerId": "RETAILER-0001",
-
   "observedAt": "2026-07-15T20:30:00Z",
 
   "price": 509.99,
-
   "currency": "USD",
-
   "availability": "in-stock",
+  "condition": "new",
+  "sellerType": "retailer",
 
   "shipping": {
-    "costKnown": false,
-    "cost": null,
-    "currency": null,
-    "notes": "Prime shipping available."
+    "costKnown": true,
+    "cost": 0,
+    "currency": "USD",
+    "notes": "Free Amazon Prime delivery displayed. Amazon.com was both shipper and seller."
   },
 
-  "discount": null,
+  "discount": {
+    "originalPrice": 588.99,
+    "amount": 79,
+    "percentage": 13,
+    "label": "13% off"
+  },
 
   "affiliate": {
     "isAffiliateLink": false,
     "network": null,
-    "trackingCodePresent": null
+    "trackingCodePresent": false
   },
 
   "sourceUrl": "https://www.amazon.com/dp/B0CBRJ63RT",
@@ -35,12 +37,12 @@
     "method": "manual",
     "verifiedAt": "2026-07-15T20:30:00Z",
     "verifiedBy": "Mirabelle Labs",
-    "notes": "Observed directly from Amazon product page."
+    "notes": "Observed directly on Amazon. The listing matched manufacturer part number CMK32GX5M2B6000Z30. Amazon.com was displayed as the shipper and seller."
   },
 
   "metadata": {
     "createdAt": "2026-07-15T20:30:00Z",
     "updatedAt": "2026-07-15T20:30:00Z",
-    "notes": "First canonical Mercury observation."
+    "notes": "First canonical Mercury price observation."
   }
 }
