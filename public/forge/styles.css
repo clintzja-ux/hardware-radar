@@ -1,17 +1,59 @@
 :root {
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
 
     color: #172033;
-    background: #f4f6f9;
+    background: #eef1f6;
+
+    --surface: #ffffff;
+    --surface-muted: #f7f8fb;
+    --surface-dark: #101725;
+
+    --border: #d9dee8;
+    --border-strong: #c5ccd9;
+
+    --text: #172033;
+    --text-muted: #626c7e;
+    --text-subtle: #7b8494;
+
+    --accent: #315f9f;
+    --accent-dark: #172033;
+    --accent-soft: #e9f0fb;
+
+    --success: #17633b;
+    --warning: #866000;
+    --error: #a12424;
+
+    --radius-small: 8px;
+    --radius-medium: 12px;
+    --radius-large: 16px;
+
+    --shadow:
+        0 12px 34px rgb(23 32 51 / 7%);
 }
 
 * {
     box-sizing: border-box;
 }
 
+html {
+    min-width: 320px;
+}
+
 body {
+    min-height: 100vh;
     margin: 0;
+    background:
+        linear-gradient(
+            180deg,
+            #f8f9fc 0,
+            #eef1f6 260px
+        );
 }
 
 button,
@@ -20,158 +62,548 @@ select {
     font: inherit;
 }
 
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
 .forge-shell {
-    width: min(1200px, calc(100% - 32px));
+    width: min(1500px, calc(100% - 40px));
     margin: 0 auto;
-    padding: 48px 0 80px;
+    padding: 32px 0 48px;
 }
 
 .forge-header {
-    margin-bottom: 32px;
-}
-
-.forge-header h1 {
-    margin: 4px 0 8px;
-    font-size: clamp(2rem, 5vw, 3.25rem);
-}
-
-.forge-header p {
-    margin: 0;
-    color: #586174;
-}
-
-.eyebrow {
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-}
-
-.forge-card {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
     margin-bottom: 24px;
-    padding: 24px;
-    border: 1px solid #d9dee8;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 8px 24px rgb(24 33 52 / 6%);
 }
 
-.forge-card h2 {
-    margin-top: 0;
+.forge-brand {
+    min-width: 0;
+}
+
+.eyebrow,
+.pane-kicker {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 850;
+    letter-spacing: 0.13em;
+}
+
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 5px;
+}
+
+.title-row h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+}
+
+.forge-description {
+    max-width: 680px;
+    margin: 9px 0 0;
+    color: var(--text-muted);
+    line-height: 1.55;
+}
+
+.version-badge {
+    flex: 0 0 auto;
+    padding: 5px 9px;
+    border: 1px solid #cdd8e9;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 850;
+}
+
+.header-status {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 75%);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 750;
+    box-shadow: 0 5px 20px rgb(23 32 51 / 4%);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #2c9c5d;
+    box-shadow: 0 0 0 4px rgb(44 156 93 / 12%);
+}
+
+.forge-workspace {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.05fr)
+        minmax(440px, 0.95fr);
+    align-items: start;
+    gap: 24px;
+}
+
+.authoring-pane,
+.inspection-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+.authoring-pane {
+    overflow: hidden;
+    border-radius: var(--radius-large);
+}
+
+.pane-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 24px 26px;
+    border-bottom: 1px solid var(--border);
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f8faff
+        );
+}
+
+.pane-heading h2,
+.inspection-heading h2,
+.output-header h2 {
+    margin: 4px 0 0;
+    color: var(--text);
+}
+
+.pane-heading h2 {
+    font-size: 1.45rem;
+}
+
+.pane-heading > p {
+    max-width: 390px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.55;
+    text-align: right;
+}
+
+.form-section {
+    padding: 26px;
+    border-bottom: 1px solid var(--border);
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin-bottom: 22px;
+}
+
+.section-heading h3 {
+    margin: 0;
+    font-size: 1.08rem;
+}
+
+.section-heading p {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    line-height: 1.45;
+}
+
+.section-number {
+    display: grid;
+    flex: 0 0 auto;
+    width: 31px;
+    height: 31px;
+    place-items: center;
+    border: 1px solid #ccd7e9;
+    border-radius: 9px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 900;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
-    margin-bottom: 24px;
+}
+
+.field-full {
+    grid-column: 1 / -1;
 }
 
 label {
     display: grid;
+    align-content: start;
     gap: 8px;
-    font-weight: 700;
+    min-width: 0;
+}
+
+label > span {
+    color: #313b4e;
+    font-size: 0.84rem;
+    font-weight: 780;
 }
 
 input,
 select {
     width: 100%;
-    min-height: 44px;
+    min-height: 45px;
     padding: 10px 12px;
-    border: 1px solid #cbd2df;
-    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-small);
+    outline: none;
     background: #ffffff;
+    color: var(--text);
+    transition:
+        border-color 140ms ease,
+        box-shadow 140ms ease,
+        background-color 140ms ease;
+}
+
+input::placeholder {
+    color: #9aa2b0;
+}
+
+input:hover,
+select:hover {
+    border-color: #aeb8c8;
 }
 
 input:focus,
 select:focus {
-    outline: 2px solid #7892bc;
-    outline-offset: 1px;
+    border-color: #6f8dbb;
+    box-shadow: 0 0 0 3px rgb(49 95 159 / 13%);
+}
+
+input:invalid:not(:placeholder-shown) {
+    border-color: #c98b8b;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 26px;
+    background: var(--surface-muted);
+}
+
+.form-actions p {
+    max-width: 430px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
 }
 
 .primary-button,
 .secondary-button {
     min-height: 42px;
     padding: 10px 16px;
-    border: 0;
-    border-radius: 8px;
-    font-weight: 800;
+    border-radius: var(--radius-small);
+    font-weight: 820;
     cursor: pointer;
+    transition:
+        transform 120ms ease,
+        border-color 120ms ease,
+        background-color 120ms ease,
+        box-shadow 120ms ease;
 }
 
 .primary-button {
-    background: #172033;
+    border: 1px solid var(--accent-dark);
+    background: var(--accent-dark);
     color: #ffffff;
+    box-shadow: 0 7px 18px rgb(23 32 51 / 16%);
+}
+
+.primary-button:hover {
+    background: #26334b;
+    transform: translateY(-1px);
+}
+
+.primary-button:active,
+.secondary-button:active {
+    transform: translateY(0);
 }
 
 .secondary-button {
-    border: 1px solid #cbd2df;
+    border: 1px solid var(--border-strong);
     background: #ffffff;
-    color: #172033;
+    color: var(--text);
+}
+
+.secondary-button:hover:not(:disabled) {
+    border-color: #9ba8bc;
+    background: #f7f9fc;
 }
 
 .secondary-button:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.45;
 }
 
-.output-grid {
+.inspection-pane {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-}
-
-.output-card {
+    gap: 18px;
     min-width: 0;
 }
 
+.inspection-card {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: var(--radius-medium);
+}
+
+.inspection-heading,
 .output-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 18px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
 }
 
-.filename {
-    overflow-wrap: anywhere;
-    color: #586174;
-    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-    font-size: 0.85rem;
+.inspection-heading h2,
+.output-header h2 {
+    font-size: 1.08rem;
 }
 
-pre {
-    max-height: 520px;
-    overflow: auto;
-    padding: 16px;
-    border-radius: 8px;
-    background: #101725;
-    color: #dbe6ff;
-    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-    font-size: 0.82rem;
-    line-height: 1.55;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
+.inspection-state {
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #eaf6ef;
+    color: var(--success);
+    font-size: 0.73rem;
+    font-weight: 850;
 }
 
 .validation-list {
-    margin-bottom: 0;
-    padding-left: 22px;
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 18px 20px 20px 39px;
+    color: var(--text-muted);
+    font-size: 0.86rem;
+    line-height: 1.45;
 }
 
 .validation-success {
-    color: #17633b;
+    color: var(--success);
 }
 
 .validation-warning {
-    color: #866000;
+    color: var(--warning);
 }
 
 .validation-error {
-    color: #a12424;
+    color: var(--error);
 }
 
-@media (max-width: 800px) {
-    .form-grid,
-    .output-grid {
+.filename {
+    min-height: 19px;
+    margin: 0;
+    padding: 13px 20px;
+    border-bottom: 1px solid #202a3b;
+    background: var(--surface-dark);
+    color: #94a5c3;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+    font-size: 0.76rem;
+    overflow-wrap: anywhere;
+}
+
+pre {
+    min-height: 230px;
+    max-height: 390px;
+    margin: 0;
+    overflow: auto;
+    padding: 18px 20px;
+    background: var(--surface-dark);
+    color: #dbe6ff;
+    font-family:
+        ui-monospace,
+        SFMono-Regular,
+        Consolas,
+        monospace;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    white-space: pre;
+    tab-size: 4;
+}
+
+pre::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+}
+
+pre::-webkit-scrollbar-track {
+    background: #101725;
+}
+
+pre::-webkit-scrollbar-thumb {
+    border: 3px solid #101725;
+    border-radius: 999px;
+    background: #39465c;
+}
+
+.forge-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 20px;
+    padding: 11px 15px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small);
+    background: rgb(255 255 255 / 82%);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    box-shadow: 0 7px 24px rgb(23 32 51 / 5%);
+}
+
+.status-group {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.status-group-end {
+    margin-left: auto;
+}
+
+.status-label {
+    color: var(--text-subtle);
+    font-weight: 750;
+}
+
+.status-value {
+    color: var(--text);
+    font-weight: 750;
+}
+
+@media (max-width: 1120px) {
+    .forge-workspace {
         grid-template-columns: 1fr;
+    }
+
+    .inspection-pane {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .validation-card {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 760px) {
+    .forge-shell {
+        width: min(100% - 24px, 1500px);
+        padding-top: 22px;
+    }
+
+    .forge-header,
+    .pane-heading,
+    .form-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .forge-header {
+        gap: 16px;
+    }
+
+    .header-status {
+        align-self: flex-start;
+    }
+
+    .pane-heading {
+        gap: 12px;
+    }
+
+    .pane-heading > p {
+        max-width: none;
+        text-align: left;
+    }
+
+    .form-grid,
+    .inspection-pane {
+        grid-template-columns: 1fr;
+    }
+
+    .validation-card {
+        grid-column: auto;
+    }
+
+    .field-full {
+        grid-column: auto;
+    }
+
+    .form-actions {
+        gap: 16px;
+    }
+
+    .primary-button {
+        width: 100%;
+    }
+
+    .forge-status-bar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 9px;
+    }
+
+    .status-group-end {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .title-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .form-section,
+    .pane-heading {
+        padding: 20px;
+    }
+
+    .form-actions {
+        padding: 18px 20px;
+    }
+
+    .inspection-heading,
+    .output-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .secondary-button {
+        width: 100%;
     }
 }
