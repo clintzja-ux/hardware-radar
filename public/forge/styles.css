@@ -486,6 +486,62 @@ pre::-webkit-scrollbar-thumb {
     box-shadow: 0 7px 24px rgb(23 32 51 / 5%);
 }
 
+/* ==========================================
+   RAM SPECIFICATION GROUPS
+========================================== */
+
+.specification-group {
+    margin-top: 24px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    background: var(--surface-muted);
+}
+
+.specification-group:first-of-type {
+    margin-top: 0;
+}
+
+.specification-group-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+.specification-group-heading h4 {
+    margin: 0;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.specification-group-heading p {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.specification-group-number {
+    display: grid;
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+/* ==========================================
+   INPUTS WITH UNITS
+========================================== */
+
 .input-with-unit {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -493,6 +549,7 @@ pre::-webkit-scrollbar-thumb {
 }
 
 .input-with-unit input {
+    min-width: 0;
     border-radius:
         var(--radius-small)
         0
@@ -522,17 +579,132 @@ pre::-webkit-scrollbar-thumb {
     border-color: #6f8dbb;
 }
 
+/* ==========================================
+   DERIVED FIELDS
+========================================== */
+
 input[readonly] {
     background: #f2f4f8;
     color: var(--text-muted);
     cursor: not-allowed;
 }
 
+/* ==========================================
+   TIMINGS
+========================================== */
+
+.timings-fieldset {
+    margin: 0;
+    padding: 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-small);
+    background: var(--surface);
+}
+
+.timings-fieldset legend {
+    padding: 0 8px;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.timings-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.timings-grid label {
+    min-width: 0;
+}
+
+/* ==========================================
+   TECHNOLOGY AND BOOLEAN CONTROLS
+========================================== */
+
+.technology-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.technology-card {
+    display: grid;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small);
+    background: var(--surface);
+}
+
+.toggle-card {
+    display: flex;
+    min-height: 74px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small);
+    background: var(--surface);
+    cursor: pointer;
+}
+
+.toggle-card:hover {
+    border-color: var(--border-strong);
+}
+
+.toggle-copy {
+    display: grid;
+    gap: 4px;
+}
+
+.toggle-copy strong {
+    color: var(--text);
+    font-size: 0.82rem;
+}
+
+.toggle-copy small {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.toggle-card input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: #315f9d;
+}
+
+/* ==========================================
+   FIELD HELP
+========================================== */
+
 .field-help {
+    display: block;
+    margin-top: 8px;
     color: var(--text-subtle);
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1.4;
+}
+
+/* ==========================================
+   RAM SPECIFICATION RESPONSIVENESS
+========================================== */
+
+@media (max-width: 760px) {
+    .timings-grid,
+    .technology-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .specification-group {
+        padding: 16px;
+    }
 }
 
 .status-group {

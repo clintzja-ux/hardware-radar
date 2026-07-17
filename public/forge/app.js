@@ -1,9 +1,11 @@
+import { ProductForm } from "./components/ProductForm.js";
 import { ForgeGenerator } from "./services/ForgeGenerator.js";
 import { copyToClipboard } from "./utils/clipboard.js";
 
 const forge = new ForgeGenerator();
 
 const form = document.getElementById("forgeForm");
+const productForm = new ProductForm(form);
 
 const atlasOutput = document.getElementById("atlasOutput");
 const mercuryOutput = document.getElementById("mercuryOutput");
@@ -43,7 +45,8 @@ copyMercuryButton.addEventListener("click", async () => {
 function handleGenerate(event) {
     event.preventDefault();
 
-    const input = readFormInput();
+    const input = productForm.read();
+    console.debug("Forge form input:", input);
     const result = forge.generateProduct(input);
 
     renderValidation(result.validation);
@@ -75,59 +78,6 @@ function handleGenerate(event) {
     copyMercuryButton.disabled = false;
 }
 
-function readFormInput() {
-    return {
-        manufacturerUrl:
-            document.getElementById("manufacturerUrl").value.trim(),
-
-        retailerUrl:
-            document.getElementById("retailerUrl").value.trim(),
-
-        brandId:
-            document.getElementById("brandId").value,
-
-        category:
-            document.getElementById("category").value,
-
-        subcategory:
-            document.getElementById("subcategory").value,
-
-        retailerId:
-            document.getElementById("retailerId").value,
-
-        manufacturerPartNumber:
-            document
-                .getElementById("manufacturerPartNumber")
-                .value
-                .trim(),
-
-        productName:
-            document.getElementById("productName").value.trim(),
-
-        productNumber:
-            Number(document.getElementById("productNumber").value),
-
-        observationNumber:
-            Number(
-                document.getElementById("observationNumber").value
-            ),
-
-        price:
-            Number(document.getElementById("price").value),
-
-        currency:
-            document.getElementById("currency").value,
-
-        availability:
-            document.getElementById("availability").value,
-
-        condition:
-            document.getElementById("condition").value,
-
-        sellerType:
-            document.getElementById("sellerType").value
-    };
-}
 
 function renderValidation(validation) {
     validationList.innerHTML = "";

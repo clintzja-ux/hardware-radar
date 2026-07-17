@@ -185,177 +185,415 @@
                         </div>
                     </section>
 
-                    <section class="form-section">
+                   <section class="form-section">
     <div class="section-heading">
         <span class="section-number">02</span>
 
         <div>
             <h3>RAM Specifications</h3>
             <p>
-                Structured product specifications owned by Atlas.
+                Structured memory, performance, physical, and technology data
+                owned by Atlas.
             </p>
         </div>
     </div>
 
-    <div class="form-grid">
-        <label>
-            <span>Series</span>
+    <!-- Memory -->
+    <div class="specification-group">
+        <div class="specification-group-heading">
+            <span class="specification-group-number">01</span>
 
-            <input
-                id="series"
-                type="text"
-                placeholder="Example: Vengeance"
-            >
-        </label>
+            <div>
+                <h4>Memory</h4>
+                <p>Core product configuration and module structure.</p>
+            </div>
+        </div>
 
-        <label>
-            <span>Total Capacity</span>
+        <div class="form-grid">
+            <label>
+                <span>Series</span>
 
-            <select id="capacityGB" required>
-                <option value="">Select capacity</option>
-                <option value="4">4 GB</option>
-                <option value="8">8 GB</option>
-                <option value="16">16 GB</option>
-                <option value="24">24 GB</option>
-                <option value="32">32 GB</option>
-                <option value="48">48 GB</option>
-                <option value="64">64 GB</option>
-                <option value="96">96 GB</option>
-                <option value="128">128 GB</option>
-                <option value="192">192 GB</option>
-                <option value="256">256 GB</option>
-            </select>
-        </label>
-
-        <label>
-            <span>Module Count</span>
-
-            <select id="moduleCount" required>
-                <option value="">Select modules</option>
-                <option value="1">1 module</option>
-                <option value="2">2 modules</option>
-                <option value="4">4 modules</option>
-                <option value="8">8 modules</option>
-            </select>
-        </label>
-
-        <label>
-            <span>Capacity Per Module</span>
-
-            <input
-                id="capacityPerModuleGB"
-                type="text"
-                placeholder="Calculated automatically"
-                readonly
-                aria-readonly="true"
-            >
-        </label>
-
-        <label>
-            <span>Memory Generation</span>
-
-            <input
-                id="memoryGeneration"
-                type="text"
-                placeholder="Derived from subcategory"
-                readonly
-                aria-readonly="true"
-            >
-        </label>
-
-        <label>
-            <span>Form Factor</span>
-
-            <select id="formFactor" required>
-                <option value="">Select form factor</option>
-                <option value="DIMM">DIMM</option>
-                <option value="SODIMM">SODIMM</option>
-                <option value="UDIMM">UDIMM</option>
-                <option value="RDIMM">RDIMM</option>
-                <option value="LRDIMM">LRDIMM</option>
-            </select>
-        </label>
-
-        <label>
-            <span>Rated Speed</span>
-
-            <div class="input-with-unit">
                 <input
-                    id="speedMTs"
+                    id="series"
+                    type="text"
+                    placeholder="Example: Vengeance"
+                >
+            </label>
+
+            <label>
+                <span>Memory Generation</span>
+
+                <input
+                    id="memoryGeneration"
+                    type="text"
+                    placeholder="Derived from subcategory"
+                    readonly
+                    aria-readonly="true"
+                >
+            </label>
+
+            <label>
+                <span>Form Factor</span>
+
+                <select id="formFactor" required>
+                    <option value="">Select form factor</option>
+                    <option value="DIMM">DIMM</option>
+                    <option value="SODIMM">SODIMM</option>
+                    <option value="UDIMM">UDIMM</option>
+                    <option value="RDIMM">RDIMM</option>
+                    <option value="LRDIMM">LRDIMM</option>
+                </select>
+            </label>
+
+            <label>
+                <span>Total Capacity</span>
+
+                <div class="input-with-unit">
+                    <input
+                        id="capacityGB"
+                        type="number"
+                        min="1"
+                        step="1"
+                        placeholder="32"
+                        required
+                    >
+
+                    <span class="unit-label">GB</span>
+                </div>
+            </label>
+
+            <label>
+                <span>Module Count</span>
+
+                <select id="moduleCount" required>
+                    <option value="">Select modules</option>
+                    <option value="1">1 module</option>
+                    <option value="2">2 modules</option>
+                    <option value="4">4 modules</option>
+                    <option value="8">8 modules</option>
+                </select>
+            </label>
+
+            <label>
+                <span>Capacity Per Module</span>
+
+                <div class="input-with-unit">
+                    <input
+                        id="capacityPerModuleGB"
+                        type="text"
+                        placeholder="Calculated automatically"
+                        readonly
+                        aria-readonly="true"
+                    >
+
+                    <span class="unit-label">GB</span>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <!-- Performance -->
+    <div class="specification-group">
+        <div class="specification-group-heading">
+            <span class="specification-group-number">02</span>
+
+            <div>
+                <h4>Performance</h4>
+                <p>Rated speed, primary timings, and tested voltage.</p>
+            </div>
+        </div>
+
+        <div class="form-grid">
+            <label>
+                <span>Rated Speed</span>
+
+                <div class="input-with-unit">
+                    <input
+                        id="speedMTs"
+                        type="number"
+                        min="1"
+                        step="1"
+                        placeholder="6000"
+                        required
+                    >
+
+                    <span class="unit-label">MT/s</span>
+                </div>
+            </label>
+
+            <label>
+                <span>CAS Latency</span>
+
+                <input
+                    id="casLatency"
                     type="number"
                     min="1"
                     step="1"
-                    placeholder="6000"
+                    placeholder="36"
                     required
                 >
+            </label>
 
-                <span class="unit-label">MT/s</span>
+            <fieldset class="timings-fieldset field-full">
+                <legend>Primary Timings</legend>
+
+                <div class="timings-grid">
+                    <label>
+                        <span>tCL</span>
+
+                        <input
+                            id="timingTCL"
+                            type="number"
+                            min="1"
+                            step="1"
+                            placeholder="36"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        <span>tRCD</span>
+
+                        <input
+                            id="timingTRCD"
+                            type="number"
+                            min="1"
+                            step="1"
+                            placeholder="44"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        <span>tRP</span>
+
+                        <input
+                            id="timingTRP"
+                            type="number"
+                            min="1"
+                            step="1"
+                            placeholder="44"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        <span>tRAS</span>
+
+                        <input
+                            id="timingTRAS"
+                            type="number"
+                            min="1"
+                            step="1"
+                            placeholder="96"
+                            required
+                        >
+                    </label>
+                </div>
+
+                <small class="field-help">
+                    Enter the manufacturer-rated primary timing values.
+                </small>
+            </fieldset>
+
+            <label>
+                <span>Tested Voltage</span>
+
+                <div class="input-with-unit">
+                    <input
+                        id="testedVoltage"
+                        type="number"
+                        min="0.1"
+                        max="5"
+                        step="0.01"
+                        placeholder="1.35"
+                        required
+                    >
+
+                    <span class="unit-label">V</span>
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <!-- Physical -->
+    <div class="specification-group">
+        <div class="specification-group-heading">
+            <span class="specification-group-number">03</span>
+
+            <div>
+                <h4>Physical</h4>
+                <p>Module dimensions, cooling, and visual characteristics.</p>
             </div>
-        </label>
+        </div>
 
-        <label>
-            <span>CAS Latency</span>
+        <div class="form-grid">
+            <label>
+                <span>Module Height</span>
 
-            <input
-                id="casLatency"
-                type="number"
-                min="1"
-                step="1"
-                placeholder="36"
-                required
-            >
-        </label>
+                <div class="input-with-unit">
+                    <input
+                        id="moduleHeightMM"
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        placeholder="35"
+                    >
 
-        <label class="field field-full">
-            <span>Primary Timings</span>
+                    <span class="unit-label">mm</span>
+                </div>
+            </label>
 
-            <input
-                id="primaryTimings"
-                type="text"
-                placeholder="Example: 36-44-44-96"
-                pattern="[0-9]+-[0-9]+-[0-9]+-[0-9]+"
-                title="Enter four timing values separated by hyphens, such as 36-44-44-96."
-                required
-            >
+            <label>
+                <span>Color</span>
 
-            <small class="field-help">
-                Enter tCL-tRCD-tRP-tRAS.
-            </small>
-        </label>
+                <select id="moduleColor">
+                    <option value="">Select color</option>
+                    <option value="black">Black</option>
+                    <option value="white">White</option>
+                    <option value="gray">Gray</option>
+                    <option value="silver">Silver</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="gold">Gold</option>
+                    <option value="other">Other</option>
+                </select>
+            </label>
 
-        <label>
-            <span>Tested Voltage</span>
+            <label class="toggle-card">
+                <span class="toggle-copy">
+                    <strong>Heat Spreader</strong>
+                    <small>Module includes an external heat spreader.</small>
+                </span>
 
-            <div class="input-with-unit">
                 <input
-                    id="testedVoltage"
-                    type="number"
-                    min="0.1"
-                    max="5"
-                    step="0.01"
-                    placeholder="1.35"
-                    required
+                    id="heatSpreader"
+                    type="checkbox"
                 >
+            </label>
+        </div>
+    </div>
 
-                <span class="unit-label">V</span>
+    <!-- Technology -->
+    <div class="specification-group">
+        <div class="specification-group-heading">
+            <span class="specification-group-number">04</span>
+
+            <div>
+                <h4>Technology</h4>
+                <p>
+                    Memory profiles, error correction, and buffering
+                    capabilities.
+                </p>
             </div>
-        </label>
+        </div>
 
-        <label>
-            <span>Module Height</span>
+        <div class="technology-grid">
+            <div class="technology-card">
+                <label class="toggle-card">
+                    <span class="toggle-copy">
+                        <strong>Intel XMP</strong>
+                        <small>Supports an Intel Extreme Memory Profile.</small>
+                    </span>
 
-            <div class="input-with-unit">
+                    <input
+                        id="xmpSupported"
+                        type="checkbox"
+                    >
+                </label>
+
+                <label>
+                    <span>XMP Version</span>
+
+                    <select id="xmpVersion">
+                        <option value="">Not specified</option>
+                        <option value="2.0">2.0</option>
+                        <option value="3.0">3.0</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="technology-card">
+                <label class="toggle-card">
+                    <span class="toggle-copy">
+                        <strong>AMD EXPO</strong>
+                        <small>
+                            Supports an AMD Extended Profile for Overclocking.
+                        </small>
+                    </span>
+
+                    <input
+                        id="expoSupported"
+                        type="checkbox"
+                    >
+                </label>
+
+                <label>
+                    <span>EXPO Version</span>
+
+                    <select id="expoVersion">
+                        <option value="">Not specified</option>
+                        <option value="1.0">1.0</option>
+                    </select>
+                </label>
+            </div>
+
+            <label class="toggle-card">
+                <span class="toggle-copy">
+                    <strong>ECC</strong>
+                    <small>
+                        Provides system-level error-correcting code support.
+                    </small>
+                </span>
+
                 <input
-                    id="moduleHeightMM"
-                    type="number"
-                    min="0"
-                    step="0.1"
-                    placeholder="35"
+                    id="ecc"
+                    type="checkbox"
                 >
+            </label>
 
-                <span class="unit-label">mm</span>
-            </div>
-        </label>
+            <label class="toggle-card">
+                <span class="toggle-copy">
+                    <strong>On-Die ECC</strong>
+                    <small>
+                        Includes internal memory-chip error correction.
+                    </small>
+                </span>
+
+                <input
+                    id="onDieEcc"
+                    type="checkbox"
+                >
+            </label>
+
+            <label class="toggle-card">
+                <span class="toggle-copy">
+                    <strong>Registered</strong>
+                    <small>
+                        Uses a register between the memory controller and DRAM.
+                    </small>
+                </span>
+
+                <input
+                    id="registered"
+                    type="checkbox"
+                >
+            </label>
+
+            <label class="toggle-card">
+                <span class="toggle-copy">
+                    <strong>Buffered</strong>
+                    <small>
+                        Uses buffering to reduce memory-controller load.
+                    </small>
+                </span>
+
+                <input
+                    id="buffered"
+                    type="checkbox"
+                >
+            </label>
+        </div>
     </div>
 </section>
 
