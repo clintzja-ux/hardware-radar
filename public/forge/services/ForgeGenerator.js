@@ -4,73 +4,99 @@ import { DerivedFieldService } from "./DerivedFieldService.js";
 import { AtlasProductBuilder } from "./AtlasProductBuilder.js";
 import { ForgeIdGenerator } from "./ForgeIdGenerator.js";
 import { ForgeValidator } from "./ForgeValidator.js";
+import {PublicationReadinessEngine} from "./PublicationReadinessEngine.js";
+
 
 export class ForgeGenerator {
     constructor() {
         this.idGenerator = new ForgeIdGenerator();
         this.validator = new ForgeValidator();
         this.atlasBuilder = new AtlasProductBuilder();
+
         this.derivedFieldService =
-             new DerivedFieldService();
+        new DerivedFieldService();
+
+        this.publicationReadinessEngine =
+            new PublicationReadinessEngine();
     }
 
     generateProduct(input) {
-        const validation =
-            this.validator.validateInput(input);
+    const derivedInput =
+        this.derivedFieldService.apply(input);
 
-        if (!validation.valid) {
-            return this.createFailedResult(validation);
-        }
+    const validation =
+        this.validator.validateInput(
+            derivedInput
+        );
 
-        input =
-            this.derivedFieldService.apply(input);
+    const publication =
+        this.publicationReadinessEngine.evaluate(
+            validation
+        );
 
-        const now = new Date().toISOString();
-        const dateOnly = now.slice(0, 10);
+    if (
+        publication.status ===
+        PublicationReadinessEngine.STATUS.BLOCKED
+    ) {
+        return this.createFailedResult({
+            validation,
+            publication
+        });
+    }
 
-        const productId =
-            this.idGenerator.generateProductId(
-                input.category,
-                input.subcategory,
-                input.productNumber
-            );
+    const now = new Date().toISOString();
+    const dateOnly = now.slice(0, 10);
 
-        const observationId =
-            this.idGenerator.generatePriceObservationId(
-                dateOnly,
-                input.observationNumber
-            );
+    const productId =
+        this.idGenerator.generateProductId(
+            derivedInput.category,
+            derivedInput.subcategory,
+            derivedInput.productNumber
+        );
 
-        const atlasProduct = this.atlasBuilder.build({
-            input,
+    const observationId =
+        this.idGenerator.generatePriceObservationId(
+            dateOnly,
+            derivedInput.observationNumber
+        );
+
+    const atlasProduct =
+        this.atlasBuilder.build({
+            input: derivedInput,
             productId,
             timestamp: now
         });
 
-        const mercuryObservation =
-            this.createMercuryObservation({
-                input,
-                productId,
-                observationId,
-                timestamp: now
-            });
+    const mercuryObservation =
+        this.createMercuryObservation({
+            input: derivedInput,
+            productId,
+            observationId,
+            timestamp: now
+        });
 
-        const slug = this.createSlug(input.productName);
+    const slug =
+        this.createSlug(
+            derivedInput.productName
+        );
 
-        return {
-            atlasProduct,
-            mercuryObservation,
+    return {
+        atlasProduct,
+        mercuryObservation,
 
-            atlasFilename:
-                `${productId}-${slug}.json`,
+        atlasFilename:
+            `${productId}-${slug}.json`,
 
-            mercuryFilename:
-                `${observationId}.json`,
+        mercuryFilename:
+            `${observationId}.json`,
 
-            validation,
-            warnings: validation.warnings
-        };
-    }
+        validation,
+        publication,
+
+        warnings:
+            validation.warnings
+    };
+}
 
     createMercuryObservation({
         input,
@@ -115,14 +141,21 @@ export class ForgeGenerator {
         return mercuryObservation;
     }
 
-    createFailedResult(validation) {
+    createFailedResult({
+        validation,
+        publication
+    }) {
         return {
             atlasProduct: null,
             mercuryObservation: null,
             atlasFilename: null,
             mercuryFilename: null,
+
             validation,
-            warnings: validation.warnings
+            publication,
+
+            warnings:
+                validation?.warnings ?? []
         };
     }
 
