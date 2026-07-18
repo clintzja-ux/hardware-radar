@@ -48,6 +48,7 @@ function handleGenerate(event) {
     const input = productForm.read();
     console.debug("Forge form input:", input);
     const result = forge.generateProduct(input);
+    
 
     renderValidation(result.validation);
 
