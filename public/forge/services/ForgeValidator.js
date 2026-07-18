@@ -1,44 +1,42 @@
+import {
+    RequiredFieldValidator
+} from "./RequiredFieldValidator.js";
+
 export class ForgeValidator {
+    constructor() {
+        this.requiredFieldValidator =
+            new RequiredFieldValidator();
+    }
+
     validateInput(input) {
-        const errors = [];
+        const required =
+            this.requiredFieldValidator.validate(input);
+
+        const warnings =
+            this.createWarnings(input);
+
+        return {
+            valid: required.valid,
+            errors: required.errors,
+            warnings
+        };
+    }
+
+    createWarnings(input) {
         const warnings = [];
 
-        if (!input.manufacturerUrl) {
-            errors.push("Manufacturer URL is required.");
-        }
-
-        if (!input.retailerUrl) {
-            errors.push("Retailer URL is required.");
-        }
-
-        if (!input.brandId) {
-            errors.push("Brand is required.");
-        }
-
-        if (!input.manufacturerPartNumber) {
-            errors.push("Manufacturer part number is required.");
-        }
-
-        if (!input.productName) {
-            errors.push("Product name is required.");
-        }
-
-        if (!Number.isFinite(input.price) || input.price <= 0) {
-            errors.push("Price must be greater than zero.");
-        }
-
         if (input.sellerType === "unknown") {
-            warnings.push("Seller type has not been classified.");
+            warnings.push(
+                "Seller type has not been classified."
+            );
         }
 
         if (input.availability === "unknown") {
-            warnings.push("Availability is unknown.");
+            warnings.push(
+                "Availability is unknown."
+            );
         }
 
-        return {
-            valid: errors.length === 0,
-            errors,
-            warnings
-        };
+        return warnings;
     }
 }

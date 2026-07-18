@@ -1,4 +1,5 @@
 import { createMercuryTemplate } from "./ForgeTemplates.js";
+import { DerivedFieldService } from "./DerivedFieldService.js";
 
 import { AtlasProductBuilder } from "./AtlasProductBuilder.js";
 import { ForgeIdGenerator } from "./ForgeIdGenerator.js";
@@ -9,6 +10,8 @@ export class ForgeGenerator {
         this.idGenerator = new ForgeIdGenerator();
         this.validator = new ForgeValidator();
         this.atlasBuilder = new AtlasProductBuilder();
+        this.derivedFieldService =
+             new DerivedFieldService();
     }
 
     generateProduct(input) {
@@ -18,6 +21,9 @@ export class ForgeGenerator {
         if (!validation.valid) {
             return this.createFailedResult(validation);
         }
+
+        input =
+            this.derivedFieldService.apply(input);
 
         const now = new Date().toISOString();
         const dateOnly = now.slice(0, 10);
