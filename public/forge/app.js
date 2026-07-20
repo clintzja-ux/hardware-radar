@@ -14,6 +14,14 @@ const atlasFilename = document.getElementById("atlasFilename");
 const mercuryFilename = document.getElementById("mercuryFilename");
 
 const validationList = document.getElementById("validationList");
+const publicationStatusBadge =
+    document.getElementById("publicationStatusBadge");
+
+const publicationScore =
+    document.getElementById("publicationScore");
+
+const publicationConfidence =
+    document.getElementById("publicationConfidence");
 
 const copyAtlasButton =
     document.getElementById("copyAtlasButton");
@@ -25,6 +33,9 @@ let latestAtlasJson = "";
 let latestMercuryJson = "";
 
 form.addEventListener("submit", handleGenerate);
+
+form.addEventListener("input", resetPublication);
+form.addEventListener("change", resetPublication);
 
 copyAtlasButton.addEventListener("click", async () => {
     await handleCopy(
@@ -46,10 +57,9 @@ function handleGenerate(event) {
     event.preventDefault();
 
     const input = productForm.read();
-    console.debug("Forge form input:", input);
     const result = forge.generateProduct(input);
 
-    
+    renderPublication(result.publication);
 
     renderValidation(result.validation);
 
@@ -79,6 +89,32 @@ function handleGenerate(event) {
     copyAtlasButton.disabled = false;
     copyMercuryButton.disabled = false;
 }
+
+function renderPublication(publication) {
+
+    publicationStatusBadge.textContent =
+        publication.status;
+
+    publicationStatusBadge.className =
+        `status-badge ${publication.status.toLowerCase()}`;
+
+    publicationScore.textContent =
+        publication.score;
+
+    publicationConfidence.textContent =
+        publication.confidence;
+
+}
+function resetPublication() {
+    publicationStatusBadge.textContent = "PENDING";
+
+    publicationStatusBadge.className =
+        "status-badge pending";
+
+    publicationScore.textContent = "—";
+    publicationConfidence.textContent = "AWAITING";
+}
+
 
 
 function renderValidation(validation) {
@@ -110,6 +146,7 @@ function appendValidationItem(message, type) {
 }
 
 function clearOutputs() {
+    resetPublication();
     latestAtlasJson = "";
     latestMercuryJson = "";
 
