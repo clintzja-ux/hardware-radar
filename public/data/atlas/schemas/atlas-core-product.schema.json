@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cheapestram.com/data/atlas/schemas/atlas-core-product.schema.json",
+  "title": "Atlas Core Product",
+  "description": "Hardware-independent canonical contract shared by every Atlas product. Hardware-specific facts belong beneath extension.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "identity",
+    "governance",
+    "provenance",
+    "validation",
+    "extension"
+  ],
+  "properties": {
+    "identity": {
+      "$ref": "#/$defs/identity"
+    },
+    "governance": {
+      "$ref": "#/$defs/governance"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "validation": {
+      "$ref": "#/$defs/validation"
+    },
+    "extension": {
+      "$ref": "#/$defs/extensionEnvelope"
+    }
+  },
+  "$defs": {
+    "nullableNonEmptyString": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "actorId": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human or system actor identifier, for example human:clinton or system:forge."
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "atlasProductId",
+        "schemaVersion",
+        "productType",
+        "recordRevision",
+        "createdAt",
+        "updatedAt",
+        "createdBy",
+        "updatedBy",
+        "brand",
+        "manufacturer",
+        "modelName",
+        "manufacturerPartNumber",
+        "displayName",
+        "slug"
+      ],
+      "properties": {
+        "atlasProductId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$",
+          "description": "Stable Mirabelle Labs identifier. It must not depend on a retailer, URL, price, or mutable display name."
+        },
+        "schemaVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"
+        },
+        "productType": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "Registered Atlas Product Extension type, for example ram or ssd."
+        },
+        "recordRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdBy": {
+          "$ref": "#/$defs/actorId"
+        },
+        "updatedBy": {
+          "$ref": "#/$defs/actorId"
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1
+        },
+        "manufacturer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "productFamily": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        },
+        "series": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        },
+        "modelName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "manufacturerPartNumber": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alternatePartNumbers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "gtin": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9]{8}|[0-9]{12}|[0-9]{13}|[0-9]{14}$"
+        },
+        "upc": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9]{12}$"
+        },
+        "ean": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9]{8}|[0-9]{13}$"
+        },
+        "countryOfOrigin": {
+          "type": ["string", "null"],
+          "pattern": "^[A-Z]{2}$",
+          "description": "ISO 3166-1 alpha-2 country code when verified."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publicationStatus",
+        "lifecycleStatus",
+        "engineeringValidationStatus",
+        "humanReviewRequired"
+      ],
+      "properties": {
+        "publicationStatus": {
+          "type": "string",
+          "enum": ["PENDING", "READY", "REVIEW", "BLOCKED"]
+        },
+        "lifecycleStatus": {
+          "type": "string",
+          "enum": ["DRAFT", "VERIFIED", "ACTIVE", "ARCHIVED"]
+        },
+        "manufacturerStatus": {
+          "type": ["string", "null"],
+          "enum": ["ANNOUNCED", "CURRENT", "DISCONTINUED", "LEGACY", "UNKNOWN", null]
+        },
+        "engineeringValidationStatus": {
+          "type": "string",
+          "enum": ["PENDING", "PASS", "WARN", "FAIL"]
+        },
+        "humanReviewRequired": {
+          "type": "boolean"
+        },
+        "reviewedBy": {
+          "anyOf": [
+            { "$ref": "#/$defs/actorId" },
+            { "type": "null" }
+          ]
+        },
+        "reviewedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "changeReason": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        },
+        "supersedesRevision": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "archivalReason": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        },
+        "launchDate": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "discontinuedDate": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "replacementAtlasProductId": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        },
+        "predecessorAtlasProductId": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        },
+        "warranty": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["LIMITED_LIFETIME", "FIXED_TERM", "NONE", "UNKNOWN"]
+            },
+            "years": {
+              "type": ["number", "null"],
+              "exclusiveMinimum": 0
+            },
+            "notes": {
+              "$ref": "#/$defs/nullableNonEmptyString"
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fieldSources"],
+      "properties": {
+        "fieldSources": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1
+          },
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/sourceReference"
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "sourceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "sourceType",
+        "sourceLocator",
+        "retrievedAt",
+        "verifiedBy",
+        "verificationStatus"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceType": {
+          "type": "string",
+          "enum": [
+            "MANUFACTURER_PRODUCT_PAGE",
+            "MANUFACTURER_DATASHEET",
+            "MANUFACTURER_SUPPORT_DOCUMENT",
+            "STANDARDS_DOCUMENT",
+            "REGULATORY_DATABASE",
+            "AUTHORIZED_DISTRIBUTOR_DOCUMENT",
+            "RETAILER_PAGE_REFERENCE_ONLY",
+            "INTERNAL_RESEARCH",
+            "OTHER"
+          ]
+        },
+        "sourceLocator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publisher": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        },
+        "publishedDate": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verifiedBy": {
+          "$ref": "#/$defs/actorId"
+        },
+        "verificationStatus": {
+          "type": "string",
+          "enum": ["UNVERIFIED", "PARTIALLY_VERIFIED", "VERIFIED", "CONFLICTING", "DEPRECATED"]
+        },
+        "notes": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["errors", "warnings", "validatedAt", "validatorVersion"],
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/validationObservation"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/validationObservation"
+          }
+        },
+        "validatedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "validatorVersion": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "validationObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ruleId", "severity", "message"],
+      "properties": {
+        "ruleId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "$ref": "#/$defs/nullableNonEmptyString"
+        }
+      }
+    },
+    "extensionEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["extensionType", "schemaVersion", "data"],
+      "properties": {
+        "extensionType": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "schemaVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"
+        },
+        "data": {
+          "type": "object",
+          "description": "Hardware-specific payload validated by the registered Product Extension schema."
+        }
+      }
+    }
+  }
+}

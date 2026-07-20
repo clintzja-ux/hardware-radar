@@ -64,6 +64,15 @@ export class ForgeGenerator {
         this.atlasBuilder.build({
             input: derivedInput,
             productId,
+            timestamp: now,
+            validation,
+            publication
+        });
+
+    const legacyAtlasProduct =
+        this.atlasBuilder.buildLegacy({
+            input: derivedInput,
+            productId,
             timestamp: now
         });
 
@@ -82,6 +91,7 @@ export class ForgeGenerator {
 
     return {
         atlasProduct,
+        legacyAtlasProduct,
         mercuryObservation,
 
         atlasFilename:
@@ -147,6 +157,7 @@ export class ForgeGenerator {
     }) {
         return {
             atlasProduct: null,
+            legacyAtlasProduct: null,
             mercuryObservation: null,
             atlasFilename: null,
             mercuryFilename: null,

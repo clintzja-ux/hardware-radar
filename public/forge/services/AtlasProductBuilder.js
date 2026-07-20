@@ -1,215 +1,305 @@
-import { createAtlasTemplate } from "./ForgeTemplates.js";
+import {
+    createAtlasTemplate,
+    createLegacyAtlasTemplate
+} from "./ForgeTemplates.js";
+
+const BRAND_NAMES = Object.freeze({
+    "BRAND-0001": "Corsair",
+    "BRAND-0002": "G.SKILL",
+    "BRAND-0003": "Kingston"
+});
 
 export class AtlasProductBuilder {
-    build({
-        input,
-        productId,
-        timestamp
-    }) {
-        this.assertBuildContext({
-            input,
-            productId,
-            timestamp
-        });
+    build({ input, productId, timestamp, validation, publication }) {
+        this.assertBuildContext({ input, productId, timestamp });
 
         const atlasProduct = createAtlasTemplate();
+        const brand = BRAND_NAMES[input.brandId] || input.brandId;
+        const slug = this.createSlug(input.productName);
+        const memory = input.ram?.memory ?? {};
+        const performance = input.ram?.performance ?? {};
+        const physical = input.ram?.physical ?? {};
+        const technology = input.ram?.technology ?? {};
 
-        this.populateIdentity({
-            atlasProduct,
-            input,
-            productId
-        });
+        atlasProduct.identity = {
+            ...atlasProduct.identity,
+            atlasProductId: this.createAtlasProductId(productId),
+            createdAt: timestamp,
+            updatedAt: timestamp,
+            brand,
+            manufacturer: brand,
+            productFamily: memory.series || null,
+            series: memory.series || null,
+            modelName: input.productName,
+            manufacturerPartNumber: input.manufacturerPartNumber,
+            displayName: input.productName,
+            slug
+        };
 
-        this.populateRamSpecifications({
-            atlasProduct,
-            input
-        });
+        atlasProduct.provenance.fieldSources =
+            this.createFieldSources(input, timestamp);
 
-        this.populateMetadata({
+        this.populateWorkflowState({
             atlasProduct,
-            input,
+            validation,
+            publication,
             timestamp
         });
+
+        atlasProduct.extension.data = {
+            classification: this.buildClassification(memory, technology),
+            capacity: this.buildCapacity(memory),
+            performance: this.buildPerformance(memory, performance, technology),
+            electrical: this.buildElectrical(performance, memory),
+            physical: this.buildPhysical(physical),
+            compatibility: this.buildCompatibility(memory)
+        };
 
         return atlasProduct;
     }
 
-    populateIdentity({
+    populateWorkflowState({
         atlasProduct,
-        input,
-        productId
+        validation = {},
+        publication = {},
+        timestamp
     }) {
-        atlasProduct.id = productId;
-        atlasProduct.category = input.category;
-        atlasProduct.subcategory = input.subcategory;
-        atlasProduct.brandId = input.brandId;
+        const publicationStatus = publication.status || "PENDING";
+        const engineeringWarnings = validation.engineering?.warnings ?? [];
+        const engineeringStatus = validation.valid !== true
+            ? "FAIL"
+            : engineeringWarnings.length > 0
+                ? "WARN"
+                : "PASS";
 
-        atlasProduct.series =
-            input.ram?.memory?.series || null;
+        atlasProduct.governance.publicationStatus = publicationStatus;
+        atlasProduct.governance.lifecycleStatus =
+            publicationStatus === "READY" ? "ACTIVE" : "DRAFT";
+        atlasProduct.governance.engineeringValidationStatus = engineeringStatus;
+        atlasProduct.governance.humanReviewRequired = publicationStatus !== "READY";
 
-        atlasProduct.name = input.productName;
-        atlasProduct.model =
-            input.manufacturerPartNumber;
-
-        atlasProduct.manufacturerPartNumber =
-            input.manufacturerPartNumber;
-
-        atlasProduct.officialProductUrl =
-            input.manufacturerUrl;
+        atlasProduct.validation.errors = (validation.errors ?? []).map(
+            message => ({ code: "FORGE_REQUIRED", message })
+        );
+        atlasProduct.validation.warnings = (validation.warnings ?? []).map(
+            message => ({ code: "FORGE_WARNING", message })
+        );
+        atlasProduct.validation.validatedAt = timestamp;
     }
 
-    populateRamSpecifications({
-        atlasProduct,
-        input
-    }) {
-        const ram = input.ram;
+    buildLegacy({ input, productId, timestamp }) {
+        this.assertBuildContext({ input, productId, timestamp });
 
-        if (!ram) {
-            return;
-        }
+        const legacy = createLegacyAtlasTemplate();
+        const ram = input.ram ?? {};
 
-        atlasProduct.specifications = {
-            memory: this.buildMemorySpecifications(
-                ram.memory
-            ),
+        legacy.id = productId;
+        legacy.category = input.category;
+        legacy.subcategory = input.subcategory;
+        legacy.brandId = input.brandId;
+        legacy.series = ram.memory?.series || null;
+        legacy.name = input.productName;
+        legacy.model = input.manufacturerPartNumber;
+        legacy.manufacturerPartNumber = input.manufacturerPartNumber;
+        legacy.officialProductUrl = input.manufacturerUrl;
+        legacy.specifications = {
+            memory: {
+                generation: ram.memory?.generation || null,
+                capacityGB: ram.memory?.capacityGB,
+                moduleCount: ram.memory?.moduleCount,
+                capacityPerModuleGB: ram.memory?.capacityPerModuleGB,
+                formFactor: ram.memory?.formFactor || null
+            },
+            performance: {
+                speedMTs: ram.performance?.speedMTs,
+                casLatency: ram.performance?.casLatency,
+                timings: { ...ram.performance?.timings },
+                testedVoltage: ram.performance?.testedVoltage
+            },
+            physical: {
+                moduleHeightMM: ram.physical?.moduleHeightMM,
+                heatSpreader: Boolean(ram.physical?.heatSpreader),
+                color: ram.physical?.color || null
+            },
+            technology: {
+                xmp: { ...ram.technology?.xmp },
+                expo: { ...ram.technology?.expo },
+                ecc: Boolean(ram.technology?.ecc),
+                registered: Boolean(ram.technology?.registered),
+                buffered: Boolean(ram.technology?.buffered),
+                onDieEcc: Boolean(ram.technology?.onDieEcc)
+            }
+        };
+        legacy.metadata.createdAt = timestamp;
+        legacy.metadata.updatedAt = timestamp;
+        legacy.metadata.sourceReferences = [input.manufacturerUrl].filter(Boolean);
 
-            performance:
-                this.buildPerformanceSpecifications(
-                    ram.performance
-                ),
+        return legacy;
+    }
 
-            physical: this.buildPhysicalSpecifications(
-                ram.physical
-            ),
+    buildClassification(memory, technology) {
+        const moduleType = this.normalizeModuleType(memory.formFactor);
+        const applicationClass = moduleType === "SO_DIMM" ? "LAPTOP" :
+            ["RDIMM", "LRDIMM"].includes(moduleType) ? "SERVER" : "DESKTOP";
 
-            technology:
-                this.buildTechnologySpecifications(
-                    ram.technology
-                )
+        return {
+            memoryType: memory.generation || "OTHER",
+            formFactor: moduleType === "SO_DIMM" ? "SO_DIMM" : "DIMM",
+            applicationClass,
+            moduleType,
+            buffering: this.normalizeBuffering(moduleType, technology),
+            eccType: this.normalizeEccType(technology),
+            isKit: Number(memory.moduleCount) > 1,
+            gamingPositioning: null,
+            workstationPositioning: null,
+            serverPositioning: applicationClass === "SERVER"
         };
     }
 
-    buildMemorySpecifications(memory = {}) {
+    buildCapacity(memory) {
         return {
-            generation: memory.generation || null,
-            capacityGB: memory.capacityGB,
+            capacityGb: memory.capacityGB,
             moduleCount: memory.moduleCount,
-            capacityPerModuleGB:
-                memory.capacityPerModuleGB,
-            formFactor: memory.formFactor || null
+            capacityPerModuleGb: memory.capacityPerModuleGB,
+            rankConfiguration: "UNKNOWN",
+            chipDensityGb: null,
+            organization: null
         };
     }
 
-    buildPerformanceSpecifications(
-        performance = {}
-    ) {
-        return {
-            speedMTs: performance.speedMTs,
-            casLatency: performance.casLatency,
-
-            timings: {
-                tCL: performance.timings?.tCL,
-                tRCD: performance.timings?.tRCD,
-                tRP: performance.timings?.tRP,
-                tRAS: performance.timings?.tRAS
-            },
-
-            testedVoltage:
-                performance.testedVoltage
-        };
-    }
-
-    buildPhysicalSpecifications(physical = {}) {
-        return {
-            moduleHeightMM:
-                physical.moduleHeightMM,
-
-            heatSpreader:
-                Boolean(physical.heatSpreader),
-
-            color: physical.color || null
-        };
-    }
-
-    buildTechnologySpecifications(
-        technology = {}
-    ) {
-        const xmpSupported =
-            Boolean(technology.xmp?.supported);
-
-        const expoSupported =
-            Boolean(technology.expo?.supported);
+    buildPerformance(memory, performance, technology) {
+        const timings = performance.timings ?? {};
+        const primaryTimings = [timings.tCL, timings.tRCD, timings.tRP, timings.tRAS]
+            .every(value => Number(value) > 0)
+            ? `${timings.tCL}-${timings.tRCD}-${timings.tRP}-${timings.tRAS}`
+            : null;
 
         return {
-            xmp: {
-                supported: xmpSupported,
-
-                version: xmpSupported
-                    ? technology.xmp?.version || null
-                    : null
-            },
-
-            expo: {
-                supported: expoSupported,
-
-                version: expoSupported
-                    ? technology.expo?.version || null
-                    : null
-            },
-
-            ecc: Boolean(technology.ecc),
-
-            registered:
-                Boolean(technology.registered),
-
-            buffered:
-                Boolean(technology.buffered),
-
-            onDieEcc:
-                Boolean(technology.onDieEcc)
+            dataRateMtps: performance.speedMTs,
+            baseJedecDataRateMtps: null,
+            speedLabel: `${memory.generation}-${performance.speedMTs}`,
+            casLatency: performance.casLatency || null,
+            tRcd: timings.tRCD || null,
+            tRp: timings.tRP || null,
+            tRas: timings.tRAS || null,
+            primaryTimings,
+            xmpSupport: technology.xmp?.supported ? "PROFILE_INCLUDED" : "NONE",
+            expoSupport: technology.expo?.supported ? "PROFILE_INCLUDED" : "NONE",
+            jedecProfiles: [],
+            overclockProfiles: [],
+            testedSpeedMtps: performance.speedMTs || null,
+            testedLatencyCl: performance.casLatency || null,
+            bandwidthGbps: Number.isFinite(performance.speedMTs)
+                ? performance.speedMTs * 8 / 1000
+                : null
         };
     }
 
-    populateMetadata({
-        atlasProduct,
-        input,
-        timestamp
-    }) {
-        atlasProduct.metadata.createdAt = timestamp;
-        atlasProduct.metadata.updatedAt = timestamp;
-
-        atlasProduct.metadata.sourceReferences =
-            this.createSourceReferences(input);
+    buildElectrical(performance, memory) {
+        return {
+            ratedVoltage: performance.testedVoltage || null,
+            baseVoltage: null,
+            pmicLocation: "UNKNOWN",
+            powerManagementNotes: null
+        };
     }
 
-    createSourceReferences(input) {
-        return [
-            input.manufacturerUrl,
-            input.retailerUrl
-        ].filter(Boolean);
+    buildPhysical(physical) {
+        return {
+            heatSpreader: Boolean(physical.heatSpreader),
+            heatSpreaderMaterial: null,
+            heightMm: physical.moduleHeightMM,
+            lengthMm: null,
+            widthMm: null,
+            color: physical.color || null,
+            rgbLighting: false,
+            lightingEcosystem: [],
+            lowProfile: null,
+            moduleWeightGrams: null,
+            kitWeightGrams: null
+        };
     }
 
-    assertBuildContext({
-        input,
-        productId,
-        timestamp
-    }) {
+    buildCompatibility(memory) {
+        const platform = memory.formFactor === "SODIMM"
+            ? `LAPTOP_${memory.generation}`
+            : `DESKTOP_${memory.generation}`;
+
+        return {
+            platformCompatibility: [platform],
+            chipsetCompatibility: [],
+            cpuGenerationCompatibility: [],
+            qvlReferences: [],
+            requiresBiosSupport: null,
+            compatibilityNotes: null
+        };
+    }
+
+    createFieldSources(input, timestamp) {
+        if (!input.manufacturerUrl) {
+            return {};
+        }
+
+        const source = {
+            sourceId: `SRC-MFG-${input.manufacturerPartNumber}`,
+            sourceType: "MANUFACTURER_PRODUCT_PAGE",
+            sourceLocator: input.manufacturerUrl,
+            publisher: BRAND_NAMES[input.brandId] || input.brandId || null,
+            publishedDate: null,
+            retrievedAt: timestamp,
+            verifiedBy: "human:clinton",
+            verificationStatus: "VERIFIED",
+            notes: null
+        };
+
+        return {
+            "identity.manufacturerPartNumber": [source],
+            "identity.displayName": [{ ...source }],
+            "extension.data": [{ ...source }]
+        };
+    }
+
+    createAtlasProductId(productId) {
+        return `ram_${String(productId).toLowerCase().replaceAll(/[^a-z0-9]+/g, "_")}`;
+    }
+
+    createSlug(value) {
+        return String(value)
+            .trim()
+            .toLowerCase()
+            .replaceAll(/[^a-z0-9]+/g, "-")
+            .replaceAll(/^-+|-+$/g, "");
+    }
+
+    normalizeModuleType(formFactor) {
+        const value = String(formFactor || "").toUpperCase().replace("SODIMM", "SO_DIMM");
+        return ["UDIMM", "SO_DIMM", "RDIMM", "LRDIMM", "CUDIMM", "CSODIMM"].includes(value)
+            ? value
+            : "OTHER";
+    }
+
+    normalizeBuffering(moduleType, technology) {
+        if (moduleType === "LRDIMM") return "LOAD_REDUCED";
+        if (moduleType === "RDIMM" || technology.registered) return "REGISTERED";
+        if (technology.buffered) return "UNKNOWN";
+        return "UNBUFFERED";
+    }
+
+    normalizeEccType(technology) {
+        if (technology.ecc) return "SIDEBAND_ECC";
+        if (technology.onDieEcc) return "ON_DIE_ONLY";
+        return "NONE";
+    }
+
+    assertBuildContext({ input, productId, timestamp }) {
         if (!input || typeof input !== "object") {
-            throw new TypeError(
-                "AtlasProductBuilder requires valid Forge input."
-            );
+            throw new TypeError("AtlasProductBuilder requires valid Forge input.");
         }
-
         if (!productId) {
-            throw new Error(
-                "AtlasProductBuilder requires a product ID."
-            );
+            throw new Error("AtlasProductBuilder requires a product ID.");
         }
-
         if (!timestamp) {
-            throw new Error(
-                "AtlasProductBuilder requires a timestamp."
-            );
+            throw new Error("AtlasProductBuilder requires a timestamp.");
         }
     }
 }

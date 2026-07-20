@@ -1,162 +1,292 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://cheapestram.com/data/atlas/schemas/ram-product.schema.json",
-  "title": "Hardware Radar RAM Product",
-  "description": "RAM-specific extension of the canonical Hardware Radar product schema.",
+  "title": "Atlas Product — RAM Extension",
+  "description": "Canonical Atlas product composed from the hardware-independent Atlas Core Product schema and the Consumer RAM Product Extension.",
   "allOf": [
     {
-      "$ref": "product.schema.json"
+      "$ref": "atlas-core-product.schema.json"
     },
     {
       "type": "object",
       "properties": {
-        "category": {
-          "const": "RAM"
-        },
-        "subcategory": {
-          "enum": [
-            "DDR4",
-            "DDR5",
-            "SODIMM-DDR4",
-            "SODIMM-DDR5",
-            "ECC-DDR4",
-            "ECC-DDR5"
-          ]
-        },
-        "specifications": {
+        "identity": {
           "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "memoryType",
-            "capacityGb",
-            "moduleCount",
-            "capacityPerModuleGb",
-            "speedMtS",
-            "formFactor",
-            "ecc",
-            "registered",
-            "rgb"
-          ],
           "properties": {
-            "memoryType": {
-              "type": "string",
-              "enum": [
-                "DDR4",
-                "DDR5"
-              ]
+            "productType": {
+              "const": "ram"
+            }
+          }
+        },
+        "extension": {
+          "type": "object",
+          "properties": {
+            "extensionType": {
+              "const": "ram"
             },
-            "capacityGb": {
-              "type": "integer",
-              "minimum": 1
+            "schemaVersion": {
+              "const": "1.0"
             },
-            "moduleCount": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "capacityPerModuleGb": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "speedMtS": {
-              "type": "integer",
-              "minimum": 1
-            },
-            "casLatency": {
-              "type": [
-                "integer",
-                "null"
-              ],
-              "minimum": 1
-            },
-            "timings": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "voltage": {
-              "type": [
-                "number",
-                "null"
-              ],
-              "exclusiveMinimum": 0
-            },
-            "formFactor": {
-              "type": "string",
-              "enum": [
-                "UDIMM",
-                "SODIMM",
-                "RDIMM",
-                "LRDIMM"
-              ]
-            },
-            "ecc": {
-              "type": "boolean"
-            },
-            "registered": {
-              "type": "boolean"
-            },
-            "buffering": {
-              "type": [
-                "string",
-                "null"
-              ],
-              "enum": [
-                "unbuffered",
-                "registered",
-                "load-reduced",
-                null
-              ]
-            },
-            "rgb": {
-              "type": "boolean"
-            },
-            "heatSpreader": {
-              "type": [
-                "boolean",
-                "null"
-              ]
-            },
-            "xmp": {
-              "type": [
-                "boolean",
-                "null"
-              ]
-            },
-            "expo": {
-              "type": [
-                "boolean",
-                "null"
-              ]
-            },
-            "rank": {
-              "type": [
-                "string",
-                "null"
-              ],
-              "enum": [
-                "single-rank",
-                "dual-rank",
-                "quad-rank",
-                "unknown",
-                null
-              ]
-            },
-            "color": {
-              "type": [
-                "string",
-                "null"
-              ]
-            },
-            "warranty": {
-              "type": [
-                "string",
-                "null"
-              ]
+            "data": {
+              "$ref": "#/$defs/ramExtensionData"
             }
           }
         }
       }
     }
-  ]
+  ],
+  "$defs": {
+    "nullableString": {
+      "type": ["string", "null"]
+    },
+    "ramExtensionData": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "capacity",
+        "performance",
+        "electrical",
+        "physical",
+        "compatibility"
+      ],
+      "properties": {
+        "classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "capacity": {
+          "$ref": "#/$defs/capacity"
+        },
+        "performance": {
+          "$ref": "#/$defs/performance"
+        },
+        "electrical": {
+          "$ref": "#/$defs/electrical"
+        },
+        "physical": {
+          "$ref": "#/$defs/physical"
+        },
+        "compatibility": {
+          "$ref": "#/$defs/compatibility"
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "memoryType",
+        "formFactor",
+        "applicationClass",
+        "moduleType",
+        "buffering",
+        "eccType",
+        "isKit"
+      ],
+      "properties": {
+        "memoryType": {
+          "type": "string",
+          "enum": ["DDR3", "DDR4", "DDR5", "LPDDR4", "LPDDR4X", "LPDDR5", "LPDDR5X", "OTHER"]
+        },
+        "formFactor": {
+          "type": "string",
+          "enum": ["DIMM", "SO_DIMM", "CAMM2", "SOLDERED", "OTHER"]
+        },
+        "applicationClass": {
+          "type": "string",
+          "enum": ["DESKTOP", "LAPTOP", "WORKSTATION", "SERVER", "EMBEDDED", "OTHER"]
+        },
+        "moduleType": {
+          "type": "string",
+          "enum": ["UDIMM", "SO_DIMM", "RDIMM", "LRDIMM", "CUDIMM", "CSODIMM", "OTHER"]
+        },
+        "buffering": {
+          "type": "string",
+          "enum": ["UNBUFFERED", "REGISTERED", "LOAD_REDUCED", "CLOCKED_UNBUFFERED", "UNKNOWN"]
+        },
+        "eccType": {
+          "type": "string",
+          "enum": ["NONE", "ON_DIE_ONLY", "SIDEBAND_ECC", "CHIPKILL_OR_ADVANCED", "UNKNOWN"]
+        },
+        "isKit": {
+          "type": "boolean"
+        },
+        "gamingPositioning": {
+          "type": ["boolean", "null"]
+        },
+        "workstationPositioning": {
+          "type": ["boolean", "null"]
+        },
+        "serverPositioning": {
+          "type": ["boolean", "null"]
+        }
+      }
+    },
+    "capacity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capacityGb", "moduleCount", "capacityPerModuleGb"],
+      "properties": {
+        "capacityGb": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "moduleCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "capacityPerModuleGb": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rankConfiguration": {
+          "type": ["string", "null"],
+          "enum": ["SINGLE_RANK", "DUAL_RANK", "QUAD_RANK", "MIXED", "UNKNOWN", null]
+        },
+        "chipDensityGb": {
+          "type": ["number", "null"],
+          "exclusiveMinimum": 0
+        },
+        "organization": {
+          "$ref": "#/$defs/nullableString"
+        }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataRateMtps", "speedLabel", "xmpSupport", "expoSupport"],
+      "properties": {
+        "dataRateMtps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "baseJedecDataRateMtps": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "speedLabel": {
+          "type": "string",
+          "pattern": "^[A-Z0-9]+-[0-9]+$"
+        },
+        "casLatency": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "tRcd": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "tRp": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "tRas": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "primaryTimings": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "xmpSupport": {
+          "type": "string",
+          "enum": ["NONE", "SUPPORTED", "PROFILE_INCLUDED", "UNKNOWN"]
+        },
+        "expoSupport": {
+          "type": "string",
+          "enum": ["NONE", "SUPPORTED", "PROFILE_INCLUDED", "UNKNOWN"]
+        },
+        "jedecProfiles": {
+          "type": "array",
+          "items": {"type": "object"}
+        },
+        "overclockProfiles": {
+          "type": "array",
+          "items": {"type": "object"}
+        },
+        "testedSpeedMtps": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "testedLatencyCl": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "bandwidthGbps": {
+          "type": ["number", "null"],
+          "minimum": 0
+        }
+      }
+    },
+    "electrical": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ratedVoltage": {
+          "type": ["number", "null"],
+          "exclusiveMinimum": 0
+        },
+        "baseVoltage": {
+          "type": ["number", "null"],
+          "exclusiveMinimum": 0
+        },
+        "pmicLocation": {
+          "type": ["string", "null"],
+          "enum": ["ON_MODULE", "ON_MOTHERBOARD", "INTEGRATED", "UNKNOWN", null]
+        },
+        "powerManagementNotes": {
+          "$ref": "#/$defs/nullableString"
+        }
+      }
+    },
+    "physical": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["heatSpreader", "rgbLighting"],
+      "properties": {
+        "heatSpreader": {"type": "boolean"},
+        "heatSpreaderMaterial": {"$ref": "#/$defs/nullableString"},
+        "heightMm": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "lengthMm": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "widthMm": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "color": {"$ref": "#/$defs/nullableString"},
+        "rgbLighting": {"type": "boolean"},
+        "lightingEcosystem": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "lowProfile": {"type": ["boolean", "null"]},
+        "moduleWeightGrams": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "kitWeightGrams": {"type": ["number", "null"], "exclusiveMinimum": 0}
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "platformCompatibility": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "chipsetCompatibility": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "cpuGenerationCompatibility": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "qvlReferences": {
+          "type": "array",
+          "items": {"type": "object"}
+        },
+        "requiresBiosSupport": {"type": ["boolean", "null"]},
+        "compatibilityNotes": {"$ref": "#/$defs/nullableString"}
+      }
+    }
+  }
 }
