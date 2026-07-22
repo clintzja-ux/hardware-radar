@@ -280,3 +280,21 @@ Commit
 Push
 
 I think this workflow is sustainable for the remainder of the project and will scale well as Atlas, Mercury, Sentinel, and Forge continue to grow.
+
+
+Sentinel Engine
+
+Implemented:
+
+types/
+    ✅ ValidationResult
+    ✅ ValidationRun
+
+core/
+    ✅ DecisionAggregator
+    ⏳ RuleRegistry
+    ⏳ ValidationRunner
+
+validators/
+    ⏳ CoreValidator
+    ⏳ ExtensionValidator

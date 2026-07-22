@@ -110,6 +110,83 @@ computed summaries, completion controls, JSON serialization, and immutability
 after completion.
 
 
+Engineering Session 006 complete
+
+Implemented:
+
+public/data/sentinel/core/DecisionAggregator.js
+
+Added tests:
+
+public/data/sentinel/tests/DecisionAggregator.test.mjs
+
+The aggregator now:
+
+converts ValidationRun results into READY, READY_WITH_WARNINGS, REVIEW, or BLOCKED;
+treats CRITICAL and HIGH failures/errors as blocking;
+treats MEDIUM failures/errors as review-required;
+treats explicit warnings and LOW/INFO issues as non-blocking warnings;
+returns immutable summaries and rule-ID collections;
+remains pure and does not mutate or complete the supplied ValidationRun;
+produces deterministic output for repeated aggregation of the same run.
+
+All planned tests passed, including mixed severities, immutability, deterministic output, and invalid input handling.
+
+Engineering Session 007 complete
+
+Implemented:
+
+public/data/sentinel/core/RuleRegistry.js
+
+Added tests:
+
+public/data/sentinel/tests/RuleRegistry.test.mjs
+
+The registry now:
+
+registers rule sets using a Map;
+rejects duplicate rule-set IDs;
+validates the minimum id, version, rules, and metadata contract;
+preserves registration order;
+retrieves registrations by ID;
+filters registrations by extension;
+supports single or multiple extension metadata values;
+stores deeply frozen defensive copies;
+prevents external mutation of registered rule definitions;
+safely unregisters individual rule sets;
+clears the registry and reports how many registrations were removed.
+
+The extension lookup supports these forms:
+
+{
+    extension: "ram"
+}
+{
+    metadata: {
+        extension: "ram"
+    }
+}
+{
+    metadata: {
+        extensions: ["ram", "cpu"]
+    }
+}
+
+All tests passed, including malformed contracts, duplicate registration, insertion order, defensive copying, deep immutability, filtering, unregistering, and clearing.
+
+Engineering Session 007 — RuleRegistry
+
+Implemented the canonical Sentinel rule-set registry.
+
+Added rule-set contract validation, duplicate prevention, deterministic
+registration order, ID and extension lookup, unregister and clear operations,
+and deeply immutable defensive storage.
+
+Added RuleRegistry tests covering valid registration, malformed contracts,
+duplicate IDs, retrieval, extension filtering, defensive copies, deep
+immutability, removal, and registry clearing.
+
+
 
 Foundation ✅
 Product Constitution
