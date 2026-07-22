@@ -187,6 +187,19 @@ duplicate IDs, retrieval, extension filtering, defensive copies, deep
 immutability, removal, and registry clearing.
 
 
+Engineering Session 008 — ValidationRunner
+
+Implemented the canonical Sentinel validation orchestrator.
+
+ValidationRunner now creates validation runs, discovers registered rule sets,
+coordinates core and extension validator stages, collects canonical results,
+converts validator exceptions into blocking execution errors, aggregates the
+Forge decision, and completes immutable validation runs.
+
+Added ValidationRunner tests, a unified Sentinel test runner, and root npm test
+scripts. All Sentinel tests pass locally.
+
+
 
 Foundation ✅
 Product Constitution
