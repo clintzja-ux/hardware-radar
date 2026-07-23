@@ -31,3 +31,10 @@ Session	Component	Status
 011	RamRuleSet Integration	Planned
 012	RamValidators	Planned
 013	End-to-End Sentinel Pipeline	Planned
+
+Current Sentinel Core status
+✅ ValidationResult
+✅ ValidationRun
+✅ DecisionAggregator
+✅ RuleRegistry
+✅ ValidationRunner

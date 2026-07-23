@@ -1,7 +1,8 @@
 const testModules = [
     "./DecisionAggregator.test.mjs",
     "./RuleRegistry.test.mjs",
-    "./ValidationRunner.test.mjs"
+    "./ValidationRunner.test.mjs",
+    "./CoreValidator.test.mjs"
 ];
 
 console.log("Running Sentinel test suite...\n");

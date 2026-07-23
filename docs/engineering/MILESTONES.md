@@ -14,3 +14,9 @@ Milestone A — Sentinel Core
 ⬜ ValidationRunner
 
 We're now 80% complete with the Sentinel Core milestone.
+
+Milestone A — Sentinel Core
+Status: COMPLETE ✅
+
+Milestone B — Sentinel Validation
+Status: IN PROGRESS
