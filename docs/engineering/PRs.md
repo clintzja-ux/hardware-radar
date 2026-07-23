@@ -24,3 +24,11 @@ Risk: Medium
 Breaking changes: None
 
 Verification: Local Sentinel test suite passed successfully.
+
+PR-009
+
+Title: Implement Sentinel CoreValidator
+Milestone: Sentinel Validation
+Risk: Medium
+Breaking changes: None
+Verification: Full local Sentinel test suite passed.

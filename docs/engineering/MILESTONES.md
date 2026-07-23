@@ -20,3 +20,46 @@ Status: COMPLETE ✅
 
 Milestone B — Sentinel Validation
 Status: IN PROGRESS
+
+
+Milestone B Progress
+
+Current status:
+
+Milestone B — Sentinel Validation
+
+✓ CoreValidator
+⬜ ExtensionValidator
+⬜ RamRuleSet Integration
+⬜ RamValidators
+⬜ End-to-End Pipeline
+
+We're about 20% through Milestone B.
+
+Architectural milestone
+
+This is another important point.
+
+Once ExtensionValidator is complete...
+
+The Sentinel engine itself is finished.
+
+At that point we have:
+
+ValidationRunner
+        │
+        ▼
+CoreValidator
+        │
+        ▼
+ExtensionValidator
+        │
+        ▼
+DecisionAggregator
+        │
+        ▼
+ValidationRun
+
+After that, every remaining session is about adding knowledge, not infrastructure.
+
+That's a major shift.

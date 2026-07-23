@@ -199,6 +199,18 @@ Forge decision, and completes immutable validation runs.
 Added ValidationRunner tests, a unified Sentinel test runner, and root npm test
 scripts. All Sentinel tests pass locally.
 
+Engineering Session 009 — CoreValidator
+
+Implemented the canonical product-agnostic Sentinel core validator.
+
+CoreValidator now executes core rules in deterministic order, excludes
+extension rule sets, normalizes boolean and structured outcomes into canonical
+ValidationResult objects, converts malformed definitions and rule exceptions
+into ERROR results, and continues validation after individual rule failures.
+
+Added CoreValidator tests and updated the unified Sentinel test suite. All four
+Sentinel test files pass locally.
+
 
 
 Foundation ✅

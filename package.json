@@ -9,6 +9,7 @@
     "test:aggregator": "node public/data/sentinel/tests/DecisionAggregator.test.mjs",
     "test:registry": "node public/data/sentinel/tests/RuleRegistry.test.mjs",
     "test:runner": "node public/data/sentinel/tests/ValidationRunner.test.mjs",
-    "test:core-validator": "node public/data/sentinel/tests/CoreValidator.test.mjs"
+    "test:core-validator": "node public/data/sentinel/tests/CoreValidator.test.mjs",
+    "test:extension-validator": "node public/data/sentinel/tests/ExtensionValidator.test.mjs"
   }
 }
