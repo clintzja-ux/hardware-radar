@@ -241,3 +241,17 @@ GPU
 CPU
 
 Motherboards
+
+
+One small refinement
+
+As I reviewed the Sentinel framework, I noticed it already has a mature separation of concerns. I'd like to preserve that by applying one simple rule across the project:
+
+Types define structure.
+Messages define language.
+Validators define logic.
+Rule sets define configuration.
+Core defines orchestration.
+DecisionAggregator defines policy.
+
+If we consistently maintain those boundaries, each file will have a single, well-defined reason to change. That will make the platform significantly easier to maintain as SSD, GPU, CPU, and future hardware extensions are added.
