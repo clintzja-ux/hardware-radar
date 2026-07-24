@@ -32,3 +32,12 @@ Milestone: Sentinel Validation
 Risk: Medium
 Breaking changes: None
 Verification: Full local Sentinel test suite passed.
+
+
+PR-010
+
+Title: Implement Sentinel ExtensionValidator
+Milestone: Sentinel Validation
+Risk: Medium
+Breaking changes: None
+Verification: Full local Sentinel test suite passed.

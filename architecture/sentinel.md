@@ -38,3 +38,24 @@ Current Sentinel Core status
 ✅ DecisionAggregator
 ✅ RuleRegistry
 ✅ ValidationRunner
+
+
+Sentinel's role becomes even clearer
+
+Sentinel answers a single question:
+
+"Can the platform trust this information?"
+
+Not:
+
+"Is this good RAM?"
+
+Not:
+
+"Should we recommend it?"
+
+Only:
+
+"Is the information internally consistent and valid?"
+
+That's a beautifully narrow responsibility.

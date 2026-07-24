@@ -1,0 +1,301 @@
+Overall result
+
+PASS — the generic Sentinel framework is implemented and operational.
+
+The current test suite runs successfully:
+
+DecisionAggregator tests passed.
+RuleRegistry tests passed.
+ValidationRunner tests passed.
+CoreValidator tests passed.
+ExtensionValidator tests passed.
+
+Sentinel test suite passed: 5 files.
+
+The missing work is specifically the RAM extension, not Sentinel’s core infrastructure.
+
+What already exists
+1. ValidationRunner
+
+This is the orchestration layer.
+
+It already:
+
+creates a ValidationRun;
+retrieves registered rule sets;
+executes the core validation stage;
+executes the extension validation stage;
+collects canonical ValidationResult instances;
+invokes DecisionAggregator;
+completes and freezes the run.
+
+The flow is already essentially:
+
+Subject
+   ↓
+ValidationRun created
+   ↓
+CoreValidator
+   ↓
+ExtensionValidator
+   ↓
+DecisionAggregator
+   ↓
+Completed ValidationRun
+
+No redesign is required.
+
+2. CoreValidator
+
+CoreValidator is not a product validator containing hard-coded Atlas rules.
+
+It is a generic rule executor for product-agnostic rule sets.
+
+It:
+
+selects rule sets without extension metadata;
+executes every rule synchronously;
+accepts boolean, structured-object, or ValidationResult outcomes;
+normalizes them into canonical ValidationResult objects;
+converts rule exceptions into blocking execution errors.
+
+That is the correct abstraction.
+
+3. ExtensionValidator
+
+ExtensionValidator performs the corresponding role for extension rule sets.
+
+It:
+
+executes the rule sets passed to it;
+does not contain RAM knowledge;
+normalizes extension results;
+preserves rule metadata;
+safely converts exceptions into canonical error results.
+
+Therefore, ExtensionValidator should remain generic. RAM logic belongs in the RAM extension files.
+
+4. RuleRegistry
+
+The registry already owns rule-set discovery and lifecycle.
+
+It supports:
+
+registration;
+duplicate prevention;
+immutable defensive copies;
+retrieval by ID;
+extension-based discovery;
+deterministic insertion order.
+
+The RAM extension will need to export a valid rule-set object that can be registered here.
+
+5. Canonical result types
+
+The repository already contains the result structures we previously discussed conceptually:
+
+types/
+├── ValidationResult.js
+└── ValidationRun.js
+
+ValidationResult already models:
+
+rule ID;
+result;
+severity;
+failure code;
+message;
+evidence;
+Forge effect;
+remediation;
+metadata.
+
+ValidationRun already models:
+
+run identity;
+object identity and revision;
+rule-set and configuration versions;
+timestamps;
+results;
+final Sentinel decision.
+
+We should use these types as they are rather than introduce another validation-result model.
+
+6. DecisionAggregator
+
+The decision model is already implemented:
+
+Result condition	Decision
+Critical or high failure	BLOCKED
+Medium failure	REVIEW
+Warning or low/info failure	READY_WITH_WARNINGS
+No applicable problems	READY
+
+This aligns with the intended Forge workflow.
+
+RAM extension status
+
+These three files are confirmed empty:
+
+extensions/ram/
+├── RamMessages.js
+├── RamRuleSet.js
+└── RamValidators.js
+
+They are placeholders only.
+
+So the precise current state is:
+
+Sentinel component	Status
+Validation result model	Complete
+Validation run model	Complete
+Rule registry	Complete
+Core rule execution	Complete
+Extension rule execution	Complete
+Decision aggregation	Complete
+Generic tests	Passing
+RAM messages	Not implemented
+RAM rule definitions	Not implemented
+RAM validator functions	Not implemented
+RAM extension tests	Not implemented
+RAM registration/bootstrap	Not yet confirmed
+One important naming issue
+
+The two canonical documents currently use slightly different RAM rule prefixes.
+
+The Sentinel specification uses:
+
+ATL-RAM-001
+
+The Atlas RAM model’s catalog uses:
+
+ATLAS-RAM-001
+
+We should not allow both forms into executable code.
+
+Because the dedicated Sentinel Rule Specification explicitly defines ATL-RAM-*, I recommend treating that as the executable Sentinel identifier convention:
+
+ATL-RAM-001
+ATL-RAM-002
+...
+ATL-RAM-014
+
+The Atlas RAM document should later be aligned so documentation, tests, logs, and Forge all use the same IDs. This is a documentation normalization issue, not an architectural defect.
+
+Revised Session 012 implementation scope
+Stage 1 — RAM validator primitives
+
+Implement pure RAM validation functions in RamValidators.js.
+
+The first tranche should cover deterministic single-record rules:
+
+ATL-RAM-001 — Capacity invariant
+ATL-RAM-004 — Speed-label consistency
+ATL-RAM-005 — Kit-state consistency
+ATL-RAM-007 — Retailer-field exclusion
+ATL-RAM-009 — Unknown-value integrity
+ATL-RAM-011 — Timing-value integrity
+ATL-RAM-012 — Unit normalization
+
+These can be evaluated from one Atlas RAM record without repository-wide lookups.
+
+Stage 2 — Messages
+
+Implement RamMessages.js as the centralized message and remediation catalog.
+
+It should contain stable text for:
+
+pass messages;
+failure messages;
+failure codes;
+remediation guidance.
+
+This prevents rule definitions and validator functions from duplicating user-facing text.
+
+Stage 3 — Rule set
+
+Implement RamRuleSet.js as the declarative bridge between Sentinel and the RAM validator functions.
+
+Conceptually:
+
+{
+    id: "sentinel-ram",
+    version: "1.0.0",
+    metadata: {
+        extension: "ram"
+    },
+    rules: [
+        {
+            id: "ATL-RAM-001",
+            severity: "CRITICAL",
+            validate: RamValidators.validateCapacityInvariant,
+            ...
+        }
+    ]
+}
+
+The exact field names will follow the contracts already enforced by RuleRegistry and ExtensionValidator.
+
+Stage 4 — Context-dependent rules
+
+Some catalog rules require external context rather than only the current record:
+
+ATL-RAM-002 — Canonical MPN uniqueness
+ATL-RAM-003 — Stable product identifier
+ATL-RAM-006 — ECC classification evidence
+ATL-RAM-008 — Required provenance
+ATL-RAM-010 — Lifecycle consistency
+ATL-RAM-013 — Overclock-profile evidence
+ATL-RAM-014 — Source-conflict resolution
+
+These will use the existing context argument where appropriate—for example, repository indexes, previous revisions, provenance requirements, or conflict-resolution state.
+
+We should not fake these checks using only the current object.
+
+Stage 5 — RAM tests
+
+Add:
+
+tests/
+└── RamExtension.test.mjs
+
+At minimum, it should implement the specification’s first three RAM-related canonical cases:
+
+SEN-TC-001
+Valid 2×16 GB kit recorded as 32 GB
+→ ATL-RAM-001 PASS
+
+SEN-TC-002
+2×16 GB kit recorded as 64 GB
+→ ATL-RAM-001 FAIL
+
+SEN-TC-003
+Atlas record contains retailer price
+→ ATL-RAM-007 FAIL
+
+We should also test:
+
+a single-module record with isKit: true;
+zero or negative capacity values;
+malformed timings;
+unsupported units;
+explicit unknown values;
+validator exceptions;
+full ValidationRunner decision output.
+Engineering decision
+
+The existing Sentinel framework should be treated as stable.
+
+We should not create:
+
+another validator interface;
+another result model;
+another decision layer;
+RAM-specific behavior inside ExtensionValidator;
+publication decisions inside RAM validators.
+
+The immediate task is now narrow and concrete:
+
+Implement the RAM domain rules inside the framework that already exists.
+
+That is the correct next step.

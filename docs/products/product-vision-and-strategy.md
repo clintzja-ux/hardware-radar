@@ -9,8 +9,136 @@ Hardware Radar exists to help people make confident hardware buying decisions th
 
 Our long-term ambition is not to become the largest hardware affiliate website.
 
-Our ambition is to become **the world's most trustworthy hardware intelligence platform.**
+Our ambition is to become **the world's most trustworthy hardware intelligence platform by transforming fragmented hardware information into verified, explainable, and actionable knowledge. **
 
+
+Vision
+
+We believe hardware decisions should not depend on scattered specifications, outdated reviews, inconsistent retailer listings, or opaque recommendations.
+
+Instead, every hardware recommendation should be:
+
+Correct
+Verifiable
+Explainable
+Current
+Repeatable
+
+Our platform exists to make that possible.
+
+Philosophy
+
+We do not build pages.
+
+We build knowledge.
+
+We do not collect data.
+
+We validate facts.
+
+We do not rank products.
+
+We explain decisions.
+
+We do not chase clicks.
+
+We earn trust.
+
+The Four Pillars
+
+I think every future feature should strengthen one of these.
+
+1. Knowledge
+
+Atlas
+
+Knows what hardware is.
+
+Examples:
+
+specifications
+compatibility
+relationships
+taxonomies
+canonical identities
+2. Trust
+
+Sentinel
+
+Knows whether information is correct.
+
+Examples:
+
+validation
+consistency
+compliance
+auditing
+provenance
+3. Intelligence
+
+Mercury + Aurora
+
+Knows what information means.
+
+Examples:
+
+pricing
+trends
+recommendations
+forecasting
+reasoning
+4. Experience
+
+Forge
+
+Knows how to communicate intelligence.
+
+Examples:
+
+websites
+buying guides
+comparisons
+APIs
+reports
+The Platform Equation
+
+I'd actually like to put this in the documentation.
+
+Knowledge
+
++
+
+Trust
+
++
+
+Intelligence
+
++
+
+Experience
+
+=
+
+Hardware Intelligence Platform
+
+Everything we've designed fits into this equation.
+
+What makes us different?
+
+If someone asked:
+
+"How is Hardware Radar different from PCPartPicker, CamelCamelCamel, or TechPowerUp?"
+
+I wouldn't answer with features.
+
+I'd answer with architecture.
+
+They are excellent products in their own right, but our aspiration is different:
+
+We want every answer to be traceable back to validated knowledge.
+
+That means a recommendation isn't just "the best"—it's backed by facts, validation, market context, and a clear explanation.
 ---
 
 # Mission
@@ -231,3 +359,40 @@ If "no" to most questions, defer it.
 Hardware Radar should become the place people visit when they want an answer they can trust—not merely another price comparison site.
 
 Every engineering decision should reinforce that promise.
+
+One thing I'd suggest we preserve
+
+I recommend we add another guiding statement to the Design Bible:
+
+The Hardware Intelligence Platform should become more valuable every time a new hardware category is added.
+
+That's a high bar, but it's a powerful one. If adding CPUs, GPUs, SSDs, or networking equipment only requires new knowledge and rules—not engine rewrites—then we've succeeded.
+
+I have a strong feeling that a few years from now, we'll look back and realize the biggest milestone wasn't launching Hardware Radar. It was the moment we decided we weren't building a website—we were building a platform that could power many products. Given everything we've built so far, I think that vision is not only achievable, it's now the most natural direction for the project.
+
+
+A long-term vision
+
+I could imagine a future where someone asks:
+
+"Build me the best workstation for video editing with a budget of $2,500."
+
+Aurora could:
+
+Query Atlas for compatible components.
+Use Mercury to find the best current prices.
+Ask Sentinel to validate every configuration.
+Use Forge to produce a complete buying guide.
+Present the result through Hardware Radar.
+
+That's no longer just a comparison website. It's an intelligent decision-support system built on a trusted knowledge foundation.
+
+I think we've identified the platform's north star
+
+If I were to summarize everything we've built into a single sentence, it would be:
+
+Build the world's most trusted hardware knowledge platform—one that can understand, validate, explain, and recommend computer hardware through transparent, data-driven intelligence.
+
+Notice that this statement doesn't mention RAM, websites, or affiliate links. Those are important products and business models, but they're expressions of the platform, not its purpose.
+
+From an engineering perspective, that's a healthy place to be. It gives us a stable long-term direction while leaving room for Hardware Radar, future applications, APIs, enterprise offerings, and AI experiences to evolve naturally on top of the same trusted foundation.

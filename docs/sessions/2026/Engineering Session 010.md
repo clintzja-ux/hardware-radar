@@ -295,3 +295,40 @@ EDR Recommendation
 
 I think this session deserves another architectural decision.
 
+Engineering Session 010 complete
+
+Implemented:
+
+public/data/sentinel/validators/ExtensionValidator.js
+
+Added:
+
+public/data/sentinel/tests/ExtensionValidator.test.mjs
+
+Updated:
+
+public/data/sentinel/tests/run-all-tests.mjs
+package.json
+
+The validator now:
+
+executes supplied extension rule sets in deterministic order;
+remains domain-independent;
+accepts boolean, structured, or canonical ValidationResult outcomes;
+converts malformed rules and exceptions into ERROR results;
+continues processing after failures and exceptions;
+preserves canonical Forge effects by severity;
+does not mutate subjects, rule sets, or validation runs;
+does not aggregate decisions.
+
+All five Sentinel test files passed:
+
+Running Sentinel test suite...
+
+DecisionAggregator tests passed.
+RuleRegistry tests passed.
+ValidationRunner tests passed.
+CoreValidator tests passed.
+ExtensionValidator tests passed.
+
+Sentinel test suite passed: 5 files.

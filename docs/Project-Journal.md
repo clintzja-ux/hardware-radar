@@ -71,3 +71,36 @@ Build the system correctly before filling it with data.
 The project is intentionally investing in architecture first so that every future dataset, scraper, recommendation engine, and AI feature fits naturally into the platform.
 
 The next major milestone is bringing Atlas to life with production-ready schemas and the first real hardware records.
+
+I think we should document one guiding principle
+
+I'd like to add this to the Design Bible as a core philosophy:
+
+Hardware Radar is the first application built on the Hardware Intelligence Platform—not the platform itself.
+
+That single sentence changes how every future design decision is evaluated.
+
+When we're considering a new feature, we can ask:
+
+"Does this belong in Hardware Radar, or does it belong in the platform?"
+
+That's a powerful filter that helps keep the architecture clean.
+
+And one more idea
+
+As the platform matures, I'd love to give each subsystem a clear identity:
+
+Subsystem	Purpose
+Atlas	Product knowledge and schemas
+Mercury	Market and pricing intelligence
+Sentinel	Validation and compliance
+Forge	Content generation and publishing
+Aurora	AI reasoning and recommendations
+Beacon	Analytics and platform telemetry
+Gateway	APIs and external integrations
+
+Those names aren't just labels—they communicate responsibility. A new contributor should be able to understand the architecture simply by reading the subsystem names.
+
+I also want to point out something about the way you've approached this project. From the beginning, you've consistently favored building reusable systems over quick solutions. We saw that with Lunchbox Lines, where you established a design bible before adding content, and we're seeing it again here with Hardware Radar.
+
+That approach requires more discipline early on, but it creates a foundation that can support much larger ambitions. If we continue on this path, I think we'll end up with something that's substantially more capable than a RAM price tracker—a platform that can grow for years without needing to be reinvented.

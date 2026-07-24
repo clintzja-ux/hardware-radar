@@ -212,6 +212,20 @@ Added CoreValidator tests and updated the unified Sentinel test suite. All four
 Sentinel test files pass locally.
 
 
+Engineering Session 010 — ExtensionValidator
+
+Implemented the canonical domain-independent Sentinel extension validator.
+
+ExtensionValidator now executes supplied extension rule sets in deterministic
+order, normalizes boolean and structured outcomes into canonical
+ValidationResult objects, converts malformed definitions and rule exceptions
+into ERROR results, continues validation after individual failures, and
+preserves input immutability.
+
+Added ExtensionValidator tests and updated the unified Sentinel test suite.
+All five Sentinel test files pass locally.
+
+
 
 Foundation ✅
 Product Constitution

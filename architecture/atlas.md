@@ -65,3 +65,23 @@ After that...
 ## Validation
 - [ ] JSON Validates
 - [ ] Adapter Loads
+
+Atlas is the canonical hardware knowledge graph for the Hardware Intelligence Platform.
+
+Eventually Atlas won't just know that a RAM kit exists.
+
+It will know relationships like:
+
+Ryzen 9800X3D
+    │
+    ├── supports DDR5
+    │
+    ├── optimal around 6000 MT/s
+    │
+    └── compatible with
+            │
+            ├── Motherboard A
+            ├── Motherboard B
+            └── Motherboard C
+
+Those relationships become invaluable for recommendations and compatibility reasoning.
