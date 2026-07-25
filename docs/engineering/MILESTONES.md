@@ -82,3 +82,5 @@ Next:
 • RamRuleSet
 • RamValidators
 • End-to-End Validation
+
+Sentinel has reached stable milestone

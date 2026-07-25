@@ -467,3 +467,87 @@ previous revisions
 That means we can thoroughly test the validator framework before introducing more complex, context-dependent rules like duplicate MPN detection or provenance validation.
 
 By building from pure, deterministic rules outward, we reduce debugging complexity and create a solid reference implementation that future SSD, GPU, and CPU validators can follow.
+
+Next milestone
+
+I would formally define the next work as:
+
+Sprint 7 – Work Item 7.2: Implement RamValidators.js
+
+Once that file is complete, I'll perform another engineering review focusing on:
+
+compliance with the Engineering Handbook;
+compliance with the Engineering Execution Standard;
+compliance with the Atlas RAM Product Model;
+compliance with the Sentinel Rule Specification;
+deterministic behavior;
+immutability;
+testability;
+future extension compatibility.
+
+If it passes, we'll move directly into Work Item 7.3 (RamRuleSet.js).
+
+
+Sprint 7 — Work Item 7.3
+Implement RamRuleSet.js
+
+This is intentionally much simpler than RamValidators.js.
+
+Its responsibility is not to perform validation.
+
+Its job is to describe the rules so Sentinel knows:
+
+what rule exists
+which validator executes it
+severity
+category
+message IDs
+failure codes
+Forge implications
+
+Think of it as the metadata registry for RAM rules.
+
+Responsibilities
+
+RamRuleSet.js should export something similar to
+
+export const RamRuleSet = [
+    ...
+];
+
+Each entry should contain the metadata for exactly one rule.
+
+Recommended next sprint
+
+I recommend we move to:
+
+Sprint 8 — Atlas Repository Completion
+
+The next logical objective is to start validating real RAM records against the Sentinel framework.
+
+A suggested sequence is:
+
+Work Item 8.1
+
+Implement repository loading for RAM products.
+
+Work Item 8.2
+
+Create a canonical sample RAM catalog (20–50 representative records).
+
+Work Item 8.3
+
+Run Sentinel validation across the entire catalog and generate validation reports.
+
+Work Item 8.4
+
+Produce a "repository health" summary showing:
+
+total products
+passed
+failed
+warnings
+rules triggered
+publication eligibility
+
+This will move Sentinel from validating isolated objects to validating the actual Atlas repository.

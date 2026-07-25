@@ -612,6 +612,9 @@ An Atlas RAM record may become `READY` only when:
 
 ## 15. Validation Rule Catalog
 
+> **Implementation status note:** This catalog defines the canonical engineering rules. Sentinel may implement these rules incrementally. Implementation status is tracked independently from this specification.
+
+
 | Rule ID | Rule | Severity | Failure behavior |
 |---|---|---|---|
 | ATL-RAM-001 | `capacityGb = moduleCount × capacityPerModuleGb` | Critical | BLOCKED |

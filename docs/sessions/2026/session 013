@@ -63,3 +63,64 @@ should instead display
 Only one file changes.
 
 That is exactly what we want.
+Work Item 7.3 implementation plan
+
+We'll complete the following in order:
+
+Implement RamRuleSet.js
+Register the five canonical rules:
+ATL-RAM-001
+ATL-RAM-005
+ATL-RAM-009
+ATL-RAM-011
+ATL-RAM-012
+Bind each rule to:
+validator function
+severity
+category
+message key
+failure code
+publication behavior
+Create RamRuleSet.test.mjs
+Verify:
+exactly five rules
+unique IDs
+validator references are functions
+valid message keys
+valid severity values
+valid categories
+no duplicate registration
+Update run-all-tests.mjs
+Add the Rule Set test to the suite.
+Run the full Sentinel suite
+Confirm all existing tests still pass.
+
+Expected result:
+
+DecisionAggregator tests passed.
+RuleRegistry tests passed.
+ValidationRunner tests passed.
+CoreValidator tests passed.
+ExtensionValidator tests passed.
+RAM validator tests passed.
+RAM rule set tests passed.
+
+Sentinel test suite passed: 7 files.
+Engineering review
+Ensure the implementation conforms to the Engineering Execution Standard and keeps the Sentinel core unchanged.
+
+Once this work item is complete, the Sentinel extension architecture will be effectively finished. Adding future hardware families (SSDs, GPUs, CPUs, motherboards, etc.) will primarily consist of creating new validators and rule sets that plug into the same framework rather than modifying the core engine.
+
+I would now consider the Sentinel Core API frozen.
+
+That means these components should be treated as stable interfaces:
+
+ValidationRunner
+DecisionAggregator
+RuleRegistry
+CoreValidator
+ExtensionValidator
+ValidationResult
+ValidationRun
+
+Future work should extend the system through new rule sets and validators, not by changing these core modules, unless we discover a genuine defect.

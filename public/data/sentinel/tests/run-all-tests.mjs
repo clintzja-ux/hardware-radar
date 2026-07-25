@@ -3,7 +3,9 @@ const testModules = [
     "./RuleRegistry.test.mjs",
     "./ValidationRunner.test.mjs",
     "./CoreValidator.test.mjs",
-    "./ExtensionValidator.test.mjs"
+    "./ExtensionValidator.test.mjs",
+    "./RamValidators.test.mjs",
+    "./RamRuleSet.test.mjs"
 ];
 
 console.log("Running Sentinel test suite...\n");
