@@ -6,7 +6,12 @@
 **Owner:** Mirabelle Labs  
 **Applies To:** Atlas, Forge, Sentinel, Mercury, Hardware Radar  
 **Product Extension** Consumer RAM  
-**Last Updated:** 2026-07-19
+**Last Updated:** 2026-07-24
+This catalog defines the canonical engineering rules.
+
+Sentinel may implement these rules incrementally.
+
+Implementation status is tracked independently.
 
 ---
 
@@ -609,24 +614,24 @@ An Atlas RAM record may become `READY` only when:
 
 | Rule ID | Rule | Severity | Failure behavior |
 |---|---|---|---|
-| ATLAS-RAM-001 | `capacityGb = moduleCount × capacityPerModuleGb` | Critical | BLOCKED |
-| ATLAS-RAM-002 | MPN unique within manufacturer | Critical | BLOCKED or REVIEW |
-| ATLAS-RAM-003 | `atlasProductId` globally unique | Critical | BLOCKED |
-| ATLAS-RAM-004 | `speedLabel` matches memory type and data rate | High | BLOCKED |
-| ATLAS-RAM-005 | Multi-module product has `isKit = true` | High | BLOCKED |
-| ATLAS-RAM-006 | Single-module product has `isKit = false` | High | BLOCKED |
-| ATLAS-RAM-007 | Side-band ECC must be explicitly verified | Critical | BLOCKED |
-| ATLAS-RAM-008 | Retailer fields prohibited | Critical | BLOCKED |
-| ATLAS-RAM-009 | Required field provenance exists | High | BLOCKED |
-| ATLAS-RAM-010 | Unknown values are not guessed | High | REVIEW/BLOCKED |
-| ATLAS-RAM-011 | Product lifecycle dates are logically ordered | Medium | REVIEW |
-| ATLAS-RAM-012 | Timings are positive integers | High | BLOCKED |
-| ATLAS-RAM-013 | Dimensions use millimetres | Medium | BLOCKED |
-| ATLAS-RAM-014 | Voltages use volts | Medium | BLOCKED |
-| ATLAS-RAM-015 | Duplicate slug prohibited | High | BLOCKED |
-| ATLAS-RAM-016 | XMP/EXPO claims require evidence | High | BLOCKED |
-| ATLAS-RAM-017 | Retailer title not used as canonical display name | Medium | REVIEW |
-| ATLAS-RAM-018 | Conflicting source evidence is unresolved | Critical | BLOCKED |
+| ATL-RAM-001 | `capacityGb = moduleCount × capacityPerModuleGb` | Critical | BLOCKED |
+| ATL-RAM-002 | MPN unique within manufacturer | Critical | BLOCKED or REVIEW |
+| ATL-RAM-003 | `atlasProductId` globally unique | Critical | BLOCKED |
+| ATL-RAM-004 | `speedLabel` matches memory type and data rate | High | BLOCKED |
+| ATL-RAM-005 | Multi-module product has `isKit = true` | High | BLOCKED |
+| ATL-RAM-006 | Single-module product has `isKit = false` | High | BLOCKED |
+| ATL-RAM-007 | Side-band ECC must be explicitly verified | Critical | BLOCKED |
+| ATL-RAM-008 | Retailer fields prohibited | Critical | BLOCKED |
+| ATL-RAM-009 | Required field provenance exists | High | BLOCKED |
+| ATL-RAM-010 | Unknown values are not guessed | High | REVIEW/BLOCKED |
+| ATL-RAM-011 | Product lifecycle dates are logically ordered | Medium | REVIEW |
+| ATL-RAM-012 | Timings are positive integers | High | BLOCKED |
+| ATL-RAM-013 | Dimensions use millimetres | Medium | BLOCKED |
+| ATL-RAM-014 | Voltages use volts | Medium | BLOCKED |
+| ATL-RAM-015 | Duplicate slug prohibited | High | BLOCKED |
+| ATL-RAM-016 | XMP/EXPO claims require evidence | High | BLOCKED |
+| ATL-RAM-017 | Retailer title not used as canonical display name | Medium | REVIEW |
+| ATL-RAM-018 | Conflicting source evidence is unresolved | Critical | BLOCKED |
 
 ---
 

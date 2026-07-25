@@ -311,3 +311,159 @@ API responses
 Future localization
 
 without any duplication.
+
+
+Sprint Status
+Sprint 7
+
+✔ Repository Audit
+✔ Architecture Audit
+✔ Documentation Audit
+✔ Engineering Standards
+✔ RamMessages
+
+⬜ RamValidators
+⬜ RamRuleSet
+⬜ Registration
+⬜ Tests
+Work Item 7.2
+
+Now we move to the heart of Sentinel.
+
+RamValidators.js
+
+This file deserves considerably more thought than the message catalog.
+
+I recommend we establish a standard validator contract that every future hardware validator must follow.
+
+Proposed Validator Signature
+
+Rather than:
+
+validateCapacity(record)
+
+I'd like every validator to follow:
+
+validateCapacity(subject, context)
+
+where:
+
+subject
+
+The Atlas object currently being validated.
+
+context
+
+Everything external.
+
+For example:
+
+canonical repository
+previous revision
+manufacturer index
+provenance
+rule configuration
+Mercury lookup
+duplicate lookup
+
+etc.
+
+Even if a validator doesn't need context today, keeping it in the signature means we never have to refactor the interface when a future rule does.
+
+Standard Return Value
+
+I also recommend that validators return structured data, not booleans.
+
+Instead of:
+
+return true;
+
+or
+
+return false;
+
+return a canonical object that the framework can normalize into a ValidationResult.
+
+For example:
+
+{
+    passed: true
+}
+
+or
+
+{
+    passed: false,
+
+    evidence: {
+        expected: 32,
+        actual: 64
+    }
+}
+
+This makes diagnostics far richer while keeping validators focused on determining correctness.
+
+First Validators
+
+I suggest we implement these in order:
+
+ATL-RAM-001
+
+Capacity Invariant
+
+capacityGb ==
+moduleCount × capacityPerModuleGb
+ATL-RAM-005
+
+Kit Consistency
+
+Checks:
+
+single module
+multi-module
+kit flag
+ATL-RAM-011
+
+Timing Integrity
+
+Basic structural validation.
+
+ATL-RAM-012
+
+Unit Normalization
+
+Checks:
+
+GB
+
+MT/s
+
+V
+
+ns
+
+etc.
+
+ATL-RAM-009
+
+Unknown Value Integrity
+
+Canonical unknown handling.
+
+These are deterministic and self-contained, making them ideal for establishing the validator framework.
+
+Why this order?
+
+Notice something interesting.
+
+These first validators do not require:
+
+repository lookups
+duplicate detection
+Mercury
+manufacturer APIs
+previous revisions
+
+That means we can thoroughly test the validator framework before introducing more complex, context-dependent rules like duplicate MPN detection or provenance validation.
+
+By building from pure, deterministic rules outward, we reduce debugging complexity and create a solid reference implementation that future SSD, GPU, and CPU validators can follow.

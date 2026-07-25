@@ -5,7 +5,7 @@
 **Status:** Canonical Draft  
 **Owner:** Mirabelle Labs  
 **Applies To:** Sentinel, Atlas, Mercury, Forge, Hardware Radar  
-**Last Updated:** 2026-07-18
+**Last Updated:** 2026-07-24
 
 ---
 
@@ -390,7 +390,7 @@ moduleCount = 1  → isKit = false
 ## ATL-RAM-009 — Unknown-value integrity
 
 **Severity:** HIGH  
-**Condition:** Unknown values are represented as `null`, `UNKNOWN`, or an approved equivalent, not inferred from another variant.
+**Condition:** Unknown values are represented as `null`,  not inferred from another variant.
 
 **Failure code:** `UNSUPPORTED_INFERENCE_DETECTED`
 
