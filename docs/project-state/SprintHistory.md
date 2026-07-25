@@ -551,3 +551,158 @@ rules triggered
 publication eligibility
 
 This will move Sentinel from validating isolated objects to validating the actual Atlas repository.
+
+Sprint 8 — Work Item 8.1 (Revised)
+Goal
+
+Create the first canonical Atlas RAM product.
+
+Not five.
+
+Just one.
+
+That one record becomes the engineering reference for every future RAM product.
+
+Deliverables
+1. Canonical Product Template
+
+Create:
+
+docs/data/
+    atlas-ram-reference-product.md
+
+This document defines:
+
+required fields
+optional fields
+field ordering
+naming conventions
+null handling
+provenance requirements
+lifecycle expectations
+
+It becomes the human-readable specification.
+
+2. Canonical JSON
+
+Create exactly one product.
+
+I recommend:
+
+Corsair Vengeance DDR5
+32 GB (2×16 GB)
+6000 MT/s
+CL30
+
+Why?
+
+Because it exercises most of the RAM model:
+
+DDR5
+kit
+XMP
+timings
+voltage
+dimensions
+multiple modules
+standard consumer product
+3. Repository Loader
+
+Now that we have one perfect record, complete:
+
+ProductRepository.js
+
+so it can:
+
+locate products
+load JSON
+parse
+return immutable objects
+
+No indexing yet.
+
+4. ProductValidator
+
+Complete:
+
+ProductValidator.js
+
+Its responsibilities should remain limited to:
+
+schema validation
+repository integrity
+
+It should not execute Sentinel engineering rules.
+
+That boundary is important:
+
+Schema
+      ↓
+ProductValidator
+      ↓
+Sentinel
+Then comes Sprint 8.2
+
+Once the first product validates perfectly:
+
+Product #1
+        ↓
+Sentinel PASS
+        ↓
+clone
+        ↓
+Product #2
+        ↓
+PASS
+        ↓
+clone
+        ↓
+Product #3
+
+Instead of inventing each file, we'll be specializing a proven template.
+
+That will dramatically reduce mistakes.
+
+Naming convention
+
+I would formally freeze the filename convention now:
+
+HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json
+
+General pattern:
+
+HR-
+<Product Family>-
+<Subtype>-
+<Atlas ID>-
+<brand>-
+<series>-
+<capacity>-
+<speed>-
+<timing>.json
+
+The filename should never change after creation.
+
+Repository Philosophy
+
+This is the principle I'd like us to adopt:
+
+Atlas stores engineered knowledge, not scraped data.
+
+That means every product enters Atlas only after it has:
+
+been normalized,
+
+been validated,
+been reviewed,
+satisfied Sentinel.
+
+Mercury may collect thousands of observations, but Atlas only admits products that meet the engineering standard.
+
+That philosophy reinforces the roles we've already established:
+
+Mercury discovers information.
+Atlas defines the canonical product.
+Sentinel verifies engineering correctness.
+Forge manages publication.
+Hardware Radar presents trusted information.
