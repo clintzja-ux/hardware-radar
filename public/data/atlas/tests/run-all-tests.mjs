@@ -1,4 +1,7 @@
 const testModules = [
+    "./BrandValidator.test.mjs",
+    "./BrandRepository.test.mjs",
+    "./CanonicalBrandRecord.test.mjs",
     "./ProductValidator.test.mjs",
     "./ProductRepository.test.mjs",
     "./CanonicalRamProduct.test.mjs"

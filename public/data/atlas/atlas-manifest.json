@@ -12,7 +12,13 @@
   ],
   "counts": {
     "products": 1,
-    "brands": 3,
+    "brands": 1,
     "retailers": 1
-  }
+  },
+  "brands": [
+    {
+      "brandId": "BRAND-CORSAIR",
+      "path": "brands/corsair.json"
+    }
+  ]
 }

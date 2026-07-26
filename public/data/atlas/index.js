@@ -1,5 +1,16 @@
 export { default as Atlas } from "./Atlas.js";
 export {
+    BrandRepository,
+    listBrandEntries,
+    loadAllBrands,
+    loadBrand
+} from "./BrandRepository.js";
+export {
+    BRAND_VALIDATOR_VERSION,
+    validateBrand,
+    validateBrandRepository
+} from "./BrandValidator.js";
+export {
     ProductRepository,
     loadAllProducts,
     loadProduct,
