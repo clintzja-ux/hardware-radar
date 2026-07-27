@@ -706,3 +706,28 @@ Atlas defines the canonical product.
 Sentinel verifies engineering correctness.
 Forge manages publication.
 Hardware Radar presents trusted information.
+
+## Immediate Priority (Sprint 0)
+
+The Google Search Console notifications have moved one task ahead of Atlas because they affect the live production site.
+
+We'll treat this as:
+
+HOTFIX-001 — Merchant Structured Data Compliance
+
+This is not a change in roadmap. It's a production hotfix before continuing Atlas.
+
+Deliverables
+Identify where Product JSON-LD is generated.
+Add:
+image
+description
+brand
+availability
+shipping details (where appropriate)
+return policy (where appropriate)
+Validate against Google's Rich Results Test.
+Deploy.
+Request validation in Search Console.
+
+Hotfix → Atlas → Mercury → Forge → Full Hardware Radar platform.
