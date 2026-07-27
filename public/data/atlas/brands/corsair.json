@@ -9,7 +9,9 @@
   "manufacturerType": "HARDWARE_MANUFACTURER",
   "status": "ACTIVE",
   "aliases": [],
-  "supportedCategories": [],
+  "supportedCategories": [
+    "CAT-RAM"
+  ],
   "provenance": {
     "sourceUrl": "https://www.corsair.com/",
     "retrievedAt": "2026-07-25T00:00:00Z",
@@ -18,6 +20,6 @@
   },
   "metadata": {
     "createdAt": "2026-07-25T00:00:00Z",
-    "updatedAt": "2026-07-25T00:00:00Z"
+    "updatedAt": "2026-07-27T00:00:00Z"
   }
 }

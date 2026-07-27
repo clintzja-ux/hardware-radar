@@ -4,23 +4,21 @@
   "slug": "amazon",
   "websiteUrl": "https://www.amazon.com",
   "status": "active",
-
   "regions": [
     "US"
   ],
-
   "supportedCurrencies": [
     "USD"
   ],
-
   "affiliateProgram": {
     "available": true,
-    "status": "pending"
+    "status": "pending",
+    "network": "Amazon Associates",
+    "disclosureRequired": true
   },
-
   "metadata": {
     "createdAt": "2026-07-15T00:00:00Z",
-    "updatedAt": "2026-07-15T00:00:00Z",
+    "updatedAt": "2026-07-27T00:00:00Z",
     "sourceReferences": [
       "Amazon"
     ]

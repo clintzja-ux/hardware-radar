@@ -2,7 +2,7 @@
   "atlasVersion": "1.0.0",
   "coreSchemaVersion": "1.0",
   "repositoryStatus": "development",
-  "generatedAt": "2026-07-25T00:00:00Z",
+  "generatedAt": "2026-07-27T00:00:00Z",
   "products": [
     {
       "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
@@ -13,12 +13,25 @@
   "counts": {
     "products": 1,
     "brands": 1,
+    "categories": 1,
     "retailers": 1
   },
   "brands": [
     {
       "brandId": "BRAND-CORSAIR",
       "path": "brands/corsair.json"
+    }
+  ],
+  "categories": [
+    {
+      "categoryId": "CAT-RAM",
+      "path": "categories/ram.json"
+    }
+  ],
+  "retailers": [
+    {
+      "retailerId": "RETAILER-0001",
+      "path": "retailers/RETAILER-0001-amazon.json"
     }
   ]
 }

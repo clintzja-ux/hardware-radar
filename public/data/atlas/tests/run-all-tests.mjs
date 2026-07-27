@@ -2,6 +2,10 @@ const testModules = [
     "./BrandValidator.test.mjs",
     "./BrandRepository.test.mjs",
     "./CanonicalBrandRecord.test.mjs",
+    "./CategoryValidator.test.mjs",
+    "./CategoryRepository.test.mjs",
+    "./RetailerValidator.test.mjs",
+    "./RetailerRepository.test.mjs",
     "./ProductValidator.test.mjs",
     "./ProductRepository.test.mjs",
     "./CanonicalRamProduct.test.mjs"

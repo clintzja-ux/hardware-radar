@@ -7,7 +7,7 @@
     if (!product || !container) return;
 
     container.innerHTML = `
-        <article class="overall-answer" itemscope itemtype="https://schema.org/Product">
+        <article class="overall-answer">
             <div class="overall-topline">
 
                 <p class="eyebrow">
@@ -29,16 +29,15 @@
 
             </div>
 
-            <h2 itemprop="name">${product.brand} ${product.model} ${product.capacity}</h2>
+            <h2>${product.brand} ${product.model} ${product.capacity}</h2>
 
             <p class="best-for">Best for: ${product.bestFor}</p>
 
             <p class="specs">${product.memoryType} • ${product.speed}</p>
 
-            <div class="price-row" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                <span class="price" itemprop="price" content="${product.price}">$${product.price}</span>
+            <div class="price-row">
+                <span class="price">$${product.price}</span>
                 <span class="retailer">${product.retailer}</span>
-                <meta itemprop="priceCurrency" content="${product.currency}">
             </div>
 
             ${product.insight ? `<p class="insight-badge">${product.insight}</p>` : ""}

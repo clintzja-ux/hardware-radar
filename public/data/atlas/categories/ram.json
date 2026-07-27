@@ -1,0 +1,28 @@
+{
+  "categoryId": "CAT-RAM",
+  "schemaVersion": "1.0.0",
+  "slug": "ram",
+  "displayName": "Memory (RAM)",
+  "shortName": "RAM",
+  "description": "Volatile system memory modules used by desktop, laptop, workstation, and server computers.",
+  "parentCategoryId": null,
+  "status": "ACTIVE",
+  "aliases": [
+    "Memory",
+    "Computer Memory",
+    "System Memory"
+  ],
+  "productTypes": [
+    "ram"
+  ],
+  "provenance": {
+    "sourceUrl": "https://cheapestram.com/",
+    "retrievedAt": "2026-07-27T00:00:00Z",
+    "verifiedBy": "Mirabelle Labs",
+    "verificationStatus": "VERIFIED"
+  },
+  "metadata": {
+    "createdAt": "2026-07-27T00:00:00Z",
+    "updatedAt": "2026-07-27T00:00:00Z"
+  }
+}
