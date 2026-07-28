@@ -731,3 +731,177 @@ Deploy.
 Request validation in Search Console.
 
 Hotfix → Atlas → Mercury → Forge → Full Hardware Radar platform.
+
+## Sprint 8 — Atlas Completion
+IC-ATLAS-003
+Repository Completion
+
+Instead of focusing solely on Product, this sprint becomes:
+
+ProductRepository completion
+CategoryRepository completion
+RetailerRepository completion
+Manifest completion
+Repository API standardization
+
+Sprint 8 Approved
+
+Sprint Name
+
+Atlas Repository Completion
+
+Implementation Contract
+
+IC-ATLAS-003
+
+The objective is no longer to create repositories—they now exist. The objective is to make Atlas behave like a cohesive, production-grade knowledge repository.
+
+Engineering Objectives
+
+I'll begin with a full repository audit of the current Atlas implementation.
+
+Phase 1 — Repository Audit
+
+I'll compare all four repositories side by side:
+
+BrandRepository
+ProductRepository
+CategoryRepository
+RetailerRepository
+
+Looking for consistency in:
+
+Public API
+Naming conventions
+Error handling
+Validation integration
+Manifest registration
+Canonical record loading
+Search functions
+Lookup functions
+Export structure
+Phase 2 — Manifest Completion
+
+We'll verify:
+
+every repository registers correctly
+repository counts are accurate
+metadata is complete
+canonical collections are deterministic
+Phase 3 — Repository API Standardization
+
+Today the repositories were written over several engineering sessions.
+
+I'll ensure they all expose a common interface, for example:
+
+load()
+loadById()
+list()
+search()
+validate()
+exists()
+
+(or whatever is most appropriate based on the current implementation—we'll standardize without breaking compatibility.)
+
+Phase 4 — Repository Consistency
+
+We'll eliminate differences such as:
+
+inconsistent return types
+inconsistent error messages
+inconsistent validation flow
+duplicated helper logic
+duplicated manifest logic
+Phase 5 — Repository Documentation
+
+Each repository should document:
+
+purpose
+canonical record format
+public API
+validation expectations
+extension points
+
+This becomes part of the Engineering Handbook.
+
+What We Are Not Doing Yet
+
+We'll deliberately defer these to the following sprint:
+
+Cross-repository referential validation
+Broken-reference detection
+Duplicate detection
+Canonical cleanup
+Legacy migration
+
+Those belong to IC-ATLAS-004 because they span multiple repositories rather than improving each repository individually.
+
+Deliverables
+
+By the end of Sprint 8 I expect:
+
+✅ Atlas repositories follow a consistent design.
+✅ Manifest is complete and accurate.
+✅ Repository APIs are standardized.
+✅ Tests remain green.
+✅ Forge compatibility is preserved.
+✅ Sentinel compatibility is preserved.
+✅ Documentation is updated.
+Why this order?
+
+Sprint 8 implementation is complete.
+
+Verification
+Sentinel: 7/7 test files passed
+Atlas: 13/13 test files passed
+Repository branch audited: sprint-8-atlas
+Existing documentation was preserved
+No .git directory is included in the returned repository ZIP, so copying it cannot alter your Git branch history
+Implemented
+Completed ProductRepository API parity
+Added product lookup by ID, slug, and manufacturer part number
+Added product search, existence checks, repository validation, caching, reload, and case-insensitive lookup
+Added ManifestValidator
+Added manifest count, duplicate ID, and duplicate path validation
+Expanded Atlas.js into a complete facade for products, brands, categories, and retailers
+Added repository-contract tests
+Added Atlas facade tests
+Added Sprint 8 implementation and session documentation
+
+Sprint 8 Status
+
+IC-ATLAS-003 — Atlas Repository Completion
+
+Verification Results
+Verification	Result
+Sentinel Tests	✅ Pass
+Atlas Tests	✅ Pass
+Forge	✅ Operational
+Public Website	✅ Operational
+Hardware Radar Pages	✅ Operational
+Regression Check	✅ None detected
+
+This means Sprint 8 is accepted.
+
+
+## Sprint 9
+
+IC-ATLAS-004
+Referential Integrity
+
+Brand ↔ Product
+Product ↔ Category
+Product ↔ Retailer
+Broken reference detection
+Duplicate detection
+Repository-wide integrity validation
+
+## Sprint 10
+
+IC-ATLAS-005
+Canonical Cleanup
+
+Legacy migration
+Canonical record verification
+Atlas documentation completion
+Exit review

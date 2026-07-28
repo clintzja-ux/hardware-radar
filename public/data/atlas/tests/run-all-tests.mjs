@@ -8,7 +8,10 @@ const testModules = [
     "./RetailerRepository.test.mjs",
     "./ProductValidator.test.mjs",
     "./ProductRepository.test.mjs",
-    "./CanonicalRamProduct.test.mjs"
+    "./CanonicalRamProduct.test.mjs",
+    "./ManifestValidator.test.mjs",
+    "./RepositoryContract.test.mjs",
+    "./AtlasFacade.test.mjs"
 ];
 
 console.log("Running Atlas test suite...\n");

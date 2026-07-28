@@ -43,3 +43,8 @@ export {
     validateRetailer,
     validateRetailerRepository
 } from "./RetailerValidator.js";
+
+export {
+    MANIFEST_VALIDATOR_VERSION,
+    validateManifest
+} from "./ManifestValidator.js";
