@@ -84,3 +84,5 @@ Next:
 • End-to-End Validation
 
 Sentinel has reached stable milestone
+
+Atlas Milestone M3 — Repository Integrity Complete

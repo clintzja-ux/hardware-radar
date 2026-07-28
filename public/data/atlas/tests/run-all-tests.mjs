@@ -11,7 +11,8 @@ const testModules = [
     "./CanonicalRamProduct.test.mjs",
     "./ManifestValidator.test.mjs",
     "./RepositoryContract.test.mjs",
-    "./AtlasFacade.test.mjs"
+    "./AtlasFacade.test.mjs",
+    "./AtlasIntegrityValidator.test.mjs"
 ];
 
 console.log("Running Atlas test suite...\n");

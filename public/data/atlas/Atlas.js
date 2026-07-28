@@ -3,6 +3,7 @@ import categoryRepository from "./CategoryRepository.js";
 import productRepository from "./ProductRepository.js";
 import retailerRepository from "./RetailerRepository.js";
 import { validateManifest } from "./ManifestValidator.js";
+import { formatAtlasHealthReport, validateAtlasIntegrity } from "./AtlasIntegrityValidator.js";
 
 class Atlas {
     constructor({
@@ -39,6 +40,18 @@ class Atlas {
 
     async validateManifest() {
         return validateManifest(await this.getManifest());
+    }
+
+    async validateIntegrity() {
+        const [manifest, repositories] = await Promise.all([
+            this.getManifest(),
+            this.loadRepositories()
+        ]);
+        return validateAtlasIntegrity({ manifest, ...repositories });
+    }
+
+    async getHealthReport() {
+        return formatAtlasHealthReport(await this.validateIntegrity());
     }
 
     async loadRepositories() {

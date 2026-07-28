@@ -48,3 +48,9 @@ export {
     MANIFEST_VALIDATOR_VERSION,
     validateManifest
 } from "./ManifestValidator.js";
+
+export {
+    ATLAS_INTEGRITY_VALIDATOR_VERSION,
+    formatAtlasHealthReport,
+    validateAtlasIntegrity
+} from "./AtlasIntegrityValidator.js";

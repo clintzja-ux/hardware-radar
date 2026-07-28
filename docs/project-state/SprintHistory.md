@@ -896,6 +896,258 @@ Broken reference detection
 Duplicate detection
 Repository-wide integrity validation
 
+Sprint 9 Approved
+Implementation Contract
+
+IC-ATLAS-004
+
+Title
+
+Atlas Repository Integrity
+
+This is, in my opinion, the most important engineering sprint for Atlas. Up to now we've focused on making each repository correct in isolation. Now we'll make the relationships between them correct.
+
+Objective
+
+Transform Atlas from a collection of validated repositories into a validated knowledge graph.
+
+Instead of validating a single Brand or Product, Sentinel will validate the integrity of the entire Atlas repository.
+
+Sprint 9 Work Breakdown
+Phase 1 — Referential Integrity Engine
+
+We'll implement validation rules such as:
+
+Brand References
+
+Every Product must reference an existing Brand.
+
+Example:
+
+Product
+BrandId = BRAND-CORSAIR
+
+↓
+
+BrandRepository.exists(BRAND-CORSAIR)
+
+↓
+
+PASS
+Category References
+
+Every Product must belong to a valid Category.
+
+Product
+
+↓
+
+Category exists?
+
+↓
+
+PASS
+Retailer References
+
+Every Observation (when Mercury begins) must reference a valid Retailer.
+
+The framework will be designed now so Mercury can plug into it later.
+
+Phase 2 — Repository Graph Validation
+
+Sentinel will validate Atlas as a whole.
+
+Examples:
+
+orphaned products
+orphaned brands
+missing categories
+broken references
+duplicate identifiers
+invalid manifest registrations
+circular references (if applicable)
+Phase 3 — Deterministic Identity Verification
+
+We'll verify:
+
+IDs follow canonical format
+IDs are unique
+IDs remain deterministic
+no collisions
+manifest agrees with repository
+Phase 4 — Repository Health Report
+
+One thing I'd like to add that wasn't in the original roadmap is a Repository Health Report.
+
+Instead of just saying:
+
+PASS
+
+Sentinel should produce something like:
+
+Atlas Repository Health
+=======================
+
+Brands
+✔ 14 valid
+
+Products
+✔ 286 valid
+
+Categories
+✔ 7 valid
+
+Retailers
+✔ 8 valid
+
+Broken references
+✔ 0
+
+Duplicate IDs
+✔ 0
+
+Missing canonical records
+✔ 0
+
+Manifest mismatches
+✔ 0
+
+Repository Status
+
+PASS
+
+This becomes extremely valuable as Atlas grows to thousands of records. It gives us a quick, human-readable summary of repository health in addition to the automated tests.
+
+Phase 5 — Documentation
+
+We'll update:
+
+Engineering Handbook
+Atlas architecture documentation
+Sentinel documentation
+Sprint documentation
+Repository validation documentation
+Exit Criteria
+
+Sprint 9 is complete when:
+
+All repository relationships validate successfully.
+No orphaned records exist.
+No duplicate identifiers exist.
+Manifest integrity passes.
+Repository Health Report passes.
+Sentinel tests pass.
+Atlas tests pass.
+Forge remains operational.
+Hardware Radar remains operational.
+
+Sprint 9 is now officially underway
+Objective
+
+This sprint shifts our focus from validating individual records to validating the integrity of Atlas as a whole.
+
+The key deliverables are:
+
+Referential integrity
+Every Product references a valid Brand.
+Every Product references a valid Category.
+Existing and future Retailer references can be validated consistently.
+Repository graph validation
+Detect orphaned records.
+Detect broken references.
+Detect duplicate identifiers.
+Verify manifest consistency.
+Repository Health Report
+Produce a concise summary of Atlas health that complements the automated tests.
+Expanded automated tests
+Add repository-wide integrity checks while preserving compatibility with Forge and Hardware Radar.
+Documentation
+Update the Engineering Handbook and sprint documentation to reflect the new validation layer.
+Success Criteria
+
+Before Sprint 9 is complete, we'll verify:
+
+✅ Sentinel tests pass.
+✅ Atlas tests pass.
+✅ Repository integrity checks pass.
+✅ Forge remains operational.
+✅ Hardware Radar remains operational.
+✅ No regressions are introduced.
+
+Sprint 9 Official Kickoff
+
+Implementation Contract: IC-ATLAS-004
+Title: Atlas Repository Integrity
+
+Current Baseline
+
+The repository you uploaded (hardware-radar(19).zip) is now the official Sprint 9 baseline. I'll treat it as the canonical implementation for all work in this sprint.
+
+Engineering Plan
+
+I'll work through the sprint in the following sequence:
+
+1. Integrity Audit
+
+Review every relationship across Atlas to identify any inconsistencies before implementing new validation.
+
+2. Referential Integrity Engine
+
+Implement validation rules for:
+
+Product → Brand
+Product → Category
+Product → Retailer (where applicable now and in preparation for Mercury)
+
+The design will also allow future entities (CPUs, GPUs, SSDs, etc.) to participate without requiring the validator to be rewritten.
+
+3. Repository Health System
+
+Develop a health-report mechanism that summarizes:
+
+repository counts
+broken references
+duplicate identifiers
+manifest consistency
+validation status
+
+This should become the first thing we look at before every release.
+
+4. Expanded Test Suite
+
+Add repository-wide integrity tests while preserving the existing Sentinel and Atlas test suites.
+
+5. Documentation
+
+Update the Engineering Handbook and sprint documentation so the implementation and documentation remain aligned.
+
+One refinement I'd like to make
+
+As Atlas grows beyond RAM, I think we should avoid hard-coding validation rules around specific entity types. Instead, I'd like the integrity engine to be repository-driven.
+
+For example, instead of logic like:
+
+validateProductBrand()
+validateProductCategory()
+
+the engine can work more generically:
+
+validateRelationship(sourceRepository, targetRepository, relationshipType)
+
+That would let us add future repositories—such as CPUs, GPUs, or Motherboards—by configuration rather than by writing new validation logic each time. It fits well with the platform-first philosophy you've established and should reduce maintenance as the Hardware Intelligence Platform expands.
+
+If the repository structure supports it cleanly, I'll take that approach while maintaining compatibility with the current implementation.
+
+Deliverables
+
+As with the previous sprint, you'll receive:
+
+Sprint 9 patch ZIP (preferred for integration)
+Complete repository snapshot
+Integration notes
+Verification checklist
+Sprint completion report
+
 ## Sprint 10
 
 IC-ATLAS-005
@@ -905,3 +1157,23 @@ Legacy migration
 Canonical record verification
 Atlas documentation completion
 Exit review
+
+Looking Ahead: Sprint 10
+
+This is where I think you'll notice the payoff from the disciplined approach we've taken.
+
+Sprint 10 (IC-ATLAS-005 — Canonical Cleanup & Atlas Exit Review) isn't about adding lots of new functionality. Instead, it's about ensuring Atlas is clean, deterministic, and ready to serve as the long-term foundation for Mercury.
+
+The work will focus on:
+
+Removing remaining legacy structures.
+Eliminating deprecated code paths.
+Simplifying canonical loading.
+Verifying there is exactly one canonical source of truth.
+Performing the Atlas Exit Review against the criteria you originally defined.
+
+Once Sprint 10 is complete, we can confidently declare Atlas v1.0.
+
+At that point, we'll shift our attention from what hardware exists (Atlas) to what the market is doing (Mercury), which is where Hardware Radar will begin to evolve from a static catalog into a true hardware intelligence platform.
+
+I have to say, the engineering discipline you've adopted—branch isolation, implementation contracts, verification, and preserving documentation—has paid off. Each sprint has integrated cleanly, with no regressions, and that's exactly the kind of foundation that makes larger platforms sustainable.
