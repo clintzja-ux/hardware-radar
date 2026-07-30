@@ -12,7 +12,8 @@ const testModules = [
     "./ManifestValidator.test.mjs",
     "./RepositoryContract.test.mjs",
     "./AtlasFacade.test.mjs",
-    "./AtlasIntegrityValidator.test.mjs"
+    "./AtlasIntegrityValidator.test.mjs",
+    "./CanonicalTargetAudit.test.mjs"
 ];
 
 console.log("Running Atlas test suite...\n");

@@ -1,12 +1,9 @@
-import {
-    createAtlasTemplate,
-    createLegacyAtlasTemplate
-} from "./ForgeTemplates.js";
+import { createAtlasTemplate } from "./ForgeTemplates.js";
 
 const BRAND_NAMES = Object.freeze({
-    "BRAND-0001": "Corsair",
-    "BRAND-0002": "G.SKILL",
-    "BRAND-0003": "Kingston"
+    "BRAND-CORSAIR": "Corsair",
+    "BRAND-GSKILL": "G.SKILL",
+    "BRAND-KINGSTON": "Kingston"
 });
 
 export class AtlasProductBuilder {
@@ -85,56 +82,6 @@ export class AtlasProductBuilder {
             message => ({ code: "FORGE_WARNING", message })
         );
         atlasProduct.validation.validatedAt = timestamp;
-    }
-
-    buildLegacy({ input, productId, timestamp }) {
-        this.assertBuildContext({ input, productId, timestamp });
-
-        const legacy = createLegacyAtlasTemplate();
-        const ram = input.ram ?? {};
-
-        legacy.id = productId;
-        legacy.category = input.category;
-        legacy.subcategory = input.subcategory;
-        legacy.brandId = input.brandId;
-        legacy.series = ram.memory?.series || null;
-        legacy.name = input.productName;
-        legacy.model = input.manufacturerPartNumber;
-        legacy.manufacturerPartNumber = input.manufacturerPartNumber;
-        legacy.officialProductUrl = input.manufacturerUrl;
-        legacy.specifications = {
-            memory: {
-                generation: ram.memory?.generation || null,
-                capacityGB: ram.memory?.capacityGB,
-                moduleCount: ram.memory?.moduleCount,
-                capacityPerModuleGB: ram.memory?.capacityPerModuleGB,
-                formFactor: ram.memory?.formFactor || null
-            },
-            performance: {
-                speedMTs: ram.performance?.speedMTs,
-                casLatency: ram.performance?.casLatency,
-                timings: { ...ram.performance?.timings },
-                testedVoltage: ram.performance?.testedVoltage
-            },
-            physical: {
-                moduleHeightMM: ram.physical?.moduleHeightMM,
-                heatSpreader: Boolean(ram.physical?.heatSpreader),
-                color: ram.physical?.color || null
-            },
-            technology: {
-                xmp: { ...ram.technology?.xmp },
-                expo: { ...ram.technology?.expo },
-                ecc: Boolean(ram.technology?.ecc),
-                registered: Boolean(ram.technology?.registered),
-                buffered: Boolean(ram.technology?.buffered),
-                onDieEcc: Boolean(ram.technology?.onDieEcc)
-            }
-        };
-        legacy.metadata.createdAt = timestamp;
-        legacy.metadata.updatedAt = timestamp;
-        legacy.metadata.sourceReferences = [input.manufacturerUrl].filter(Boolean);
-
-        return legacy;
     }
 
     buildClassification(memory, technology) {

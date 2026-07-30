@@ -1,8 +1,8 @@
 {
   "atlasVersion": "1.0.0",
   "coreSchemaVersion": "1.0",
-  "repositoryStatus": "development",
-  "generatedAt": "2026-07-27T00:00:00Z",
+  "repositoryStatus": "stable",
+  "generatedAt": "2026-07-30T00:00:00Z",
   "products": [
     {
       "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",

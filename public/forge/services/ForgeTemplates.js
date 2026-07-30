@@ -64,33 +64,6 @@ export function createAtlasTemplate() {
     };
 }
 
-export function createLegacyAtlasTemplate() {
-    return {
-        id: "",
-        category: "",
-        subcategory: "",
-        brandId: "",
-        series: null,
-        name: "",
-        model: "",
-        manufacturerPartNumber: "",
-        status: "active",
-        specifications: {},
-        compatibility: {},
-        features: [],
-        bestFor: [],
-        officialProductUrl: null,
-        releaseDate: null,
-        metadata: {
-            createdAt: "",
-            updatedAt: "",
-            dataConfidence: "medium",
-            sourceReferences: [],
-            notes: null
-        }
-    };
-}
-
 export function createMercuryTemplate() {
     return {
         id: "",
