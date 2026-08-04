@@ -1,5 +1,4 @@
-Hardware Intelligence Platform
-Design Bible
+## Hardware Intelligence Platform Design Bible
 
 Document ID: HIPCP-VOL-VIII
 Version: 1.0
