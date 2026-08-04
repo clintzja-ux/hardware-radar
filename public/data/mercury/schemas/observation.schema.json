@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cheapestram.com/data/mercury/schemas/observation.schema.json",
+  "title": "Hardware Radar Mercury Observation",
+  "description": "An immutable retailer or market observation referencing one canonical Atlas product.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "observationId",
+    "schemaVersion",
+    "atlasProductId",
+    "retailerId",
+    "marketplace",
+    "observationTime",
+    "sourceMethod",
+    "lifecycleStatus",
+    "validationStatus",
+    "supersedesObservationId",
+    "expiresAt",
+    "offer",
+    "provenance",
+    "compliance",
+    "metadata"
+  ],
+  "properties": {
+    "observationId": {
+      "type": "string",
+      "pattern": "^mer_obs_[0-9]{9}$"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?$"
+    },
+    "atlasProductId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$"
+    },
+    "retailerId": {
+      "type": "string",
+      "pattern": "^RETAILER-[0-9]{4}$"
+    },
+    "marketplace": {
+      "type": "string",
+      "pattern": "^[a-z0-9.-]+$"
+    },
+    "observationTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sourceMethod": {
+      "type": "string",
+      "enum": ["API", "MANUAL", "FEED", "IMPORT", "AUTOMATED_CHECK"]
+    },
+    "lifecycleStatus": {
+      "type": "string",
+      "enum": ["DISCOVERED", "RETRIEVED", "VALIDATED", "PUBLISHABLE", "PUBLISHED", "SUPERSEDED", "ARCHIVED"]
+    },
+    "validationStatus": {
+      "type": "string",
+      "enum": ["PASS", "WARN", "FAIL"]
+    },
+    "supersedesObservationId": {
+      "type": ["string", "null"],
+      "pattern": "^mer_obs_[0-9]{9}$"
+    },
+    "expiresAt": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "offer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["price", "currency", "availability", "condition", "sellerType", "sourceUrl", "shipping", "discount", "affiliate"],
+      "properties": {
+        "price": { "type": "number", "exclusiveMinimum": 0 },
+        "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+        "availability": {
+          "type": "string",
+          "enum": ["IN_STOCK", "LOW_STOCK", "OUT_OF_STOCK", "PREORDER", "BACKORDER", "DISCONTINUED", "UNKNOWN"]
+        },
+        "condition": {
+          "type": "string",
+          "enum": ["NEW", "OPEN_BOX", "MANUFACTURER_REFURBISHED", "SELLER_REFURBISHED", "USED"]
+        },
+        "sellerType": {
+          "type": "string",
+          "enum": ["MANUFACTURER", "AUTHORIZED_RESELLER", "RETAILER", "MARKETPLACE", "UNKNOWN"]
+        },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "shipping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["costKnown", "cost", "currency", "notes"],
+          "properties": {
+            "costKnown": { "type": "boolean" },
+            "cost": { "type": ["number", "null"], "minimum": 0 },
+            "currency": { "type": ["string", "null"], "pattern": "^[A-Z]{3}$" },
+            "notes": { "type": ["string", "null"] }
+          }
+        },
+        "discount": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["originalPrice", "amount", "percentage", "label"],
+          "properties": {
+            "originalPrice": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+            "amount": { "type": ["number", "null"], "minimum": 0 },
+            "percentage": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+            "label": { "type": ["string", "null"] }
+          }
+        },
+        "affiliate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["isAffiliateLink", "network", "trackingCodePresent"],
+          "properties": {
+            "isAffiliateLink": { "type": "boolean" },
+            "network": { "type": ["string", "null"] },
+            "trackingCodePresent": { "type": ["boolean", "null"] }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["retrievalSource", "retrievedAt", "retrievedBy", "adapterVersion", "validatorVersion", "complianceRuleSetVersion", "requestId", "rawPayloadReference"],
+      "properties": {
+        "retrievalSource": { "type": "string", "minLength": 1 },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "retrievedBy": { "type": "string", "minLength": 1 },
+        "adapterVersion": { "type": "string", "minLength": 1 },
+        "validatorVersion": { "type": "string", "minLength": 1 },
+        "complianceRuleSetVersion": { "type": "string", "minLength": 1 },
+        "requestId": { "type": ["string", "null"] },
+        "rawPayloadReference": { "type": ["string", "null"] }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["licenseContext", "requiredDisclosureShown", "requiredPriceDisclaimerShown", "retailerContentDisclaimerShown"],
+      "properties": {
+        "licenseContext": { "type": "string", "minLength": 1 },
+        "requiredDisclosureShown": { "type": "boolean" },
+        "requiredPriceDisclaimerShown": { "type": "boolean" },
+        "retailerContentDisclaimerShown": { "type": "boolean" }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdAt", "createdBy", "observationHash", "notes"],
+      "properties": {
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string", "minLength": 1 },
+        "observationHash": { "type": ["string", "null"] },
+        "notes": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

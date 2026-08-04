@@ -595,8 +595,8 @@ Sentinel ................ ██████████ 100%
 
 Forge ................... ████████░░ 80%
 
-Mercury ................. ██░░░░░░░░ 20%
-(Architecture complete)
+Mercury ................. ██░░░░░░░░ 35%
+Observation Foundation Complete)
 
 Aurora ................. ░░░░░░░░░░ 0%
 

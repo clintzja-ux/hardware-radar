@@ -126,3 +126,43 @@ Stage 5 — Ecosystem
 
 The platform expands beyond Hardware Radar to support additional applications powered by the same certified core, reusing Atlas, Mercury, Sentinel, Aurora, Beacon, and Gateway. Hardware Radar remains the flagship application rather than the platform itself.
 
+
+Now that Atlas is certified, I think our engineering cadence has become very clear:
+
+Architecture
+
+↓
+
+Implementation Contract
+
+↓
+
+Implementation
+
+↓
+
+Testing
+
+↓
+
+Exit Review
+
+↓
+
+Certification
+
+↓
+
+Platform Status Update
+
+↓
+
+Engineering Log
+
+↓
+
+Commit
+
+↓
+
+Next Sprint
