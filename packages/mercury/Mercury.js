@@ -1,12 +1,15 @@
 import defaultObservationRepository, { ObservationRepository } from "./ObservationRepository.js";
 import defaultAdapterRegistry from "./adapters/index.js";
 import defaultFreshnessEngine from "./FreshnessEngine.js";
+import defaultConfidenceEngine from "./ConfidenceEngine.js";
+import { deriveConfidenceEvidence } from "./ConfidenceEvidence.js";
 
 class Mercury {
-    constructor({ observations = defaultObservationRepository, adapters = defaultAdapterRegistry, freshness = defaultFreshnessEngine } = {}) {
+    constructor({ observations = defaultObservationRepository, adapters = defaultAdapterRegistry, freshness = defaultFreshnessEngine, confidence = defaultConfidenceEngine } = {}) {
         this.observations = observations;
         this.adapters = adapters;
         this.freshness = freshness;
+        this.confidence = confidence;
     }
 
     async getObservation(observationId) {
@@ -45,6 +48,18 @@ class Mercury {
         const observation = await this.getObservation(observationId);
         if (!observation) return null;
         return this.evaluateFreshness(observation, options);
+    }
+
+    evaluateConfidence(observation, { evaluatedAt, freshnessPolicy, confidencePolicy } = {}) {
+        const freshnessResult = this.evaluateFreshness(observation, { evaluatedAt, policy: freshnessPolicy });
+        const evidence = deriveConfidenceEvidence(observation, { freshnessResult, adapterRegistry: this.adapters });
+        return this.confidence.evaluate(evidence, { policy: confidencePolicy });
+    }
+
+    async evaluateObservationConfidence(observationId, options) {
+        const observation = await this.getObservation(observationId);
+        if (!observation) return null;
+        return this.evaluateConfidence(observation, options);
     }
 
     async validate() {

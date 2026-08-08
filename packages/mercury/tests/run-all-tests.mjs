@@ -16,7 +16,12 @@ const testModules = [
     "./FreshnessPolicy.test.mjs",
     "./FreshnessValidator.test.mjs",
     "./FreshnessEngine.test.mjs",
-    "./FreshnessIntegration.test.mjs"
+    "./FreshnessIntegration.test.mjs",
+    "./ConfidencePolicy.test.mjs",
+    "./ConfidenceValidator.test.mjs",
+    "./ConfidenceEvidence.test.mjs",
+    "./ConfidenceEngine.test.mjs",
+    "./ConfidenceIntegration.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

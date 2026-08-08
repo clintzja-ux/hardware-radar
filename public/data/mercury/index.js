@@ -11,3 +11,9 @@ export { validateFreshnessPolicy, validateFreshnessEvaluation, FRESHNESS_VALIDAT
 export { defaultFreshnessPolicy } from "./freshness/policies/default-policy.js";
 
 export * from "./adapters/index.js";
+
+export { ConfidenceEngine, CONFIDENCE_ENGINE_VERSION } from "./ConfidenceEngine.js";
+export { createConfidencePolicy, CONFIDENCE_POLICY_SCHEMA_VERSION } from "./ConfidencePolicy.js";
+export { deriveConfidenceEvidence, CONFIDENCE_EVIDENCE_SCHEMA_VERSION } from "./ConfidenceEvidence.js";
+export { validateConfidencePolicy, validateConfidenceEvidence, validateConfidenceEvaluation, CONFIDENCE_VALIDATOR_VERSION, CONFIDENCE_STATUSES } from "./ConfidenceValidator.js";
+export { defaultConfidencePolicy } from "./confidence/policies/default-policy.js";
