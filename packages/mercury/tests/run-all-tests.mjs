@@ -12,7 +12,11 @@ const testModules = [
     "./AdapterIsolation.test.mjs",
     "./ProvenanceModel.test.mjs",
     "./ProvenanceValidator.test.mjs",
-    "./ProvenanceIntegration.test.mjs"
+    "./ProvenanceIntegration.test.mjs",
+    "./FreshnessPolicy.test.mjs",
+    "./FreshnessValidator.test.mjs",
+    "./FreshnessEngine.test.mjs",
+    "./FreshnessIntegration.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

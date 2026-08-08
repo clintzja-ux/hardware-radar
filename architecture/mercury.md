@@ -636,11 +636,11 @@ Retailer Adapter Foundation
 
 Next Sprint
 
-M003
+✅ M003
 
 Provenance Foundation
 
-M004
+✅ M004
 
 Freshness Engine
 
