@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hardware-radar.local/schemas/Brand.schema.json",
+  "title": "Atlas Brand",
+  "description": "Canonical manufacturer identity record owned by Atlas.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "brandId",
+    "schemaVersion",
+    "slug",
+    "displayName",
+    "legalName",
+    "country",
+    "website",
+    "manufacturerType",
+    "status",
+    "aliases",
+    "supportedCategories",
+    "provenance",
+    "metadata"
+  ],
+  "properties": {
+    "brandId": {
+      "type": "string",
+      "pattern": "^BRAND-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "legalName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "country": {
+      "type": "string",
+      "minLength": 1
+    },
+    "website": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "manufacturerType": {
+      "type": "string",
+      "enum": [
+        "HARDWARE_MANUFACTURER",
+        "COMPONENT_MANUFACTURER",
+        "OEM",
+        "BRAND_OWNER",
+        "OTHER"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "INACTIVE", "ARCHIVED"]
+    },
+    "aliases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "supportedCategories": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^CAT-[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceUrl",
+        "retrievedAt",
+        "verifiedBy",
+        "verificationStatus"
+      ],
+      "properties": {
+        "sourceUrl": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        },
+        "retrievedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verifiedBy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verificationStatus": {
+          "type": "string",
+          "enum": ["VERIFIED", "PENDING", "REJECTED"]
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdAt", "updatedAt"],
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

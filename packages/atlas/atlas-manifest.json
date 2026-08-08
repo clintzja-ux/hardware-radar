@@ -1,0 +1,37 @@
+{
+  "atlasVersion": "1.0.0",
+  "coreSchemaVersion": "1.0",
+  "repositoryStatus": "stable",
+  "generatedAt": "2026-07-30T00:00:00Z",
+  "products": [
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json"
+    }
+  ],
+  "counts": {
+    "products": 1,
+    "brands": 1,
+    "categories": 1,
+    "retailers": 1
+  },
+  "brands": [
+    {
+      "brandId": "BRAND-CORSAIR",
+      "path": "brands/corsair.json"
+    }
+  ],
+  "categories": [
+    {
+      "categoryId": "CAT-RAM",
+      "path": "categories/ram.json"
+    }
+  ],
+  "retailers": [
+    {
+      "retailerId": "RETAILER-0001",
+      "path": "retailers/RETAILER-0001-amazon.json"
+    }
+  ]
+}

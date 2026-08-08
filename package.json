@@ -4,14 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node public/data/sentinel/tests/run-all-tests.mjs && node public/data/atlas/tests/run-all-tests.mjs && node public/data/mercury/tests/run-all-tests.mjs",
-    "test:sentinel": "node public/data/sentinel/tests/run-all-tests.mjs",
-    "test:aggregator": "node public/data/sentinel/tests/DecisionAggregator.test.mjs",
-    "test:registry": "node public/data/sentinel/tests/RuleRegistry.test.mjs",
-    "test:runner": "node public/data/sentinel/tests/ValidationRunner.test.mjs",
-    "test:core-validator": "node public/data/sentinel/tests/CoreValidator.test.mjs",
-    "test:extension-validator": "node public/data/sentinel/tests/ExtensionValidator.test.mjs",
-    "test:atlas": "node public/data/atlas/tests/run-all-tests.mjs",
-    "test:mercury": "node public/data/mercury/tests/run-all-tests.mjs"
+    "build:public": "node scripts/build-public.mjs",
+    "verify:public": "node scripts/verify-public-build.mjs",
+    "test": "node packages/sentinel/tests/run-all-tests.mjs && node packages/atlas/tests/run-all-tests.mjs && node packages/mercury/tests/run-all-tests.mjs && node scripts/repository-layout.test.mjs && node scripts/verify-public-build.mjs",
+    "test:sentinel": "node packages/sentinel/tests/run-all-tests.mjs",
+    "test:aggregator": "node packages/sentinel/tests/DecisionAggregator.test.mjs",
+    "test:registry": "node packages/sentinel/tests/RuleRegistry.test.mjs",
+    "test:runner": "node packages/sentinel/tests/ValidationRunner.test.mjs",
+    "test:core-validator": "node packages/sentinel/tests/CoreValidator.test.mjs",
+    "test:extension-validator": "node packages/sentinel/tests/ExtensionValidator.test.mjs",
+    "test:atlas": "node packages/atlas/tests/run-all-tests.mjs",
+    "test:mercury": "node packages/mercury/tests/run-all-tests.mjs",
+    "test:layout": "node scripts/repository-layout.test.mjs"
   }
 }

@@ -1,0 +1,18 @@
+{
+  "mercuryVersion": "0.1.0",
+  "schemaVersion": "1.0",
+  "repositoryStatus": "foundation",
+  "generatedAt": "2026-08-03T00:00:00Z",
+  "observationType": "retailer-offer",
+  "observations": [
+    {
+      "observationId": "mer_obs_000000001",
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+      "retailerId": "RETAILER-0001",
+      "path": "observations/mer_obs_000000001.json"
+    }
+  ],
+  "counts": {
+    "observations": 1
+  }
+}

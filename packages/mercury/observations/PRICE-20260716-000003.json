@@ -1,0 +1,43 @@
+{
+  "id": "PRICE-20260716-000003",
+  "productId": "HR-RAM-DDR5-000003",
+  "retailerId": "RETAILER-0001",
+  "observedAt": "2026-07-16T01:22:00Z",
+
+  "price": 424.15,
+  "currency": "USD",
+  "availability": "low-stock",
+  "condition": "new",
+  "sellerType": "marketplace",
+
+  "shipping": {
+    "costKnown": true,
+    "cost": 0,
+    "currency": "USD",
+    "notes": "Free Amazon Prime delivery displayed. The item shipped from Amazon."
+  },
+
+  "discount": null,
+
+  "affiliate": {
+    "isAffiliateLink": false,
+    "network": null,
+    "trackingCodePresent": false
+  },
+
+  "sourceUrl": "https://www.amazon.com/dp/B09KCLP63B",
+
+  "verification": {
+    "status": "verified",
+    "method": "manual",
+    "verifiedAt": "2026-07-16T01:22:00Z",
+    "verifiedBy": "Mirabelle Labs",
+    "notes": "Observed directly on Amazon. The listing matched manufacturer part number KF552C40BBK2-32. The page stated that only one unit remained. Sold by Hyperdealz, LLC and shipped by Amazon."
+  },
+
+  "metadata": {
+    "createdAt": "2026-07-16T01:22:00Z",
+    "updatedAt": "2026-07-16T01:22:00Z",
+    "notes": "Third canonical Mercury price observation."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "BRAND-0002",
+  "name": "G.SKILL",
+  "slug": "gskill",
+  "country": "Taiwan",
+  "website": "https://www.gskill.com",
+  "founded": 1989,
+  "status": "active",
+  "metadata": {
+    "createdAt": "2026-07-16T00:00:00Z",
+    "updatedAt": "2026-07-16T00:00:00Z",
+    "sourceReferences": [
+      "https://www.gskill.com/about"
+    ]
+  }
+}

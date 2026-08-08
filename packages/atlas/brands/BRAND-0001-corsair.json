@@ -1,0 +1,17 @@
+{
+  "id": "BRAND-0001",
+  "name": "Corsair",
+  "slug": "corsair",
+  "country": "United States",
+  "website": "https://www.corsair.com",
+  "founded": 1994,
+  "status": "active",
+
+  "metadata": {
+    "createdAt": "2026-07-15T00:00:00Z",
+    "updatedAt": "2026-07-15T00:00:00Z",
+    "sourceReferences": [
+      "Official Corsair website"
+    ]
+  }
+}

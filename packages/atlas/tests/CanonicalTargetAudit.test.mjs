@@ -5,12 +5,12 @@ const root = new URL("../../../", import.meta.url);
 const read = (path) => readFile(new URL(path, root), "utf8");
 
 const [builder, generator, templates, forgeHtml, adapter, manifest] = await Promise.all([
-    read("forge/services/AtlasProductBuilder.js"),
-    read("forge/services/ForgeGenerator.js"),
-    read("forge/services/ForgeTemplates.js"),
-    read("forge/index.html"),
-    read("js/atlasAdapter.js"),
-    read("data/atlas/atlas-manifest.json").then(JSON.parse)
+    read("apps/forge/services/AtlasProductBuilder.js"),
+    read("apps/forge/services/ForgeGenerator.js"),
+    read("apps/forge/services/ForgeTemplates.js"),
+    read("apps/forge/index.html"),
+    read("public/js/atlasAdapter.js"),
+    read("packages/atlas/atlas-manifest.json").then(JSON.parse)
 ]);
 
 assert.equal(builder.includes("buildLegacy"), false, "Forge must not generate legacy Atlas records.");

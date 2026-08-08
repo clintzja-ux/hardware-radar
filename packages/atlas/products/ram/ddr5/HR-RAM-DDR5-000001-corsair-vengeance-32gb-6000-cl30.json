@@ -1,0 +1,290 @@
+{
+  "identity": {
+    "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-07-25T00:00:00Z",
+    "updatedAt": "2026-07-25T00:00:00Z",
+    "createdBy": "human:clinton",
+    "updatedBy": "human:clinton",
+    "brand": "Corsair",
+    "manufacturer": "Corsair Memory, Inc.",
+    "productFamily": "Vengeance",
+    "series": null,
+    "modelName": "Vengeance DDR5 32GB 6000 MT/s CL30 AMD EXPO and Intel XMP Memory",
+    "manufacturerPartNumber": "CMK32GX5M2B6000Z30",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Corsair Vengeance DDR5 32GB (2×16GB) 6000 MT/s CL30",
+    "slug": "corsair-vengeance-ddr5-32gb-6000-cl30-grey"
+  },
+  "governance": {
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": false,
+    "reviewedBy": "human:clinton",
+    "reviewedAt": "2026-07-25T00:00:00Z",
+    "changeReason": "Created as the first canonical Atlas RAM reference product.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": {
+      "type": "LIMITED_LIFETIME",
+      "years": null,
+      "notes": "Manufacturer describes the product as covered by a limited lifetime warranty. Regional terms may vary."
+    }
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.brand": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Primary authoritative product source."
+        }
+      ],
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Corsair identifies the SKU as CMK32GX5M2B6000Z30."
+        },
+        {
+          "sourceId": "SRC-RTL-AMAZON-B0CBRJ63RT-001",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "https://www.amazon.com/CORSAIR-Vengeance-6000MHz-Compatible-Computer/dp/B0CBRJ63RT",
+          "publisher": "Amazon",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Secondary corroboration only; retailer evidence does not override the manufacturer."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer specifies DDR5, UDIMM, 288-pin package format and a two-module kit."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer specifies 32GB total capacity as two 16GB modules."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer specifies tested 6000 MT/s, 30-36-36-76, SPD 4800 and 40-40-40-77, with AMD EXPO and Intel XMP profiles."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer specifies 1.40V tested voltage, 1.1V SPD voltage and onboard voltage regulation."
+        }
+      ],
+      "extension.data.physical": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer specifies an aluminum heat spreader, no fan, no RGB indication, grey color and 0.115kg product weight. The page URL contains the word black, but the explicit technical specification and retailer title identify this SKU as grey; the explicit specification governs."
+        },
+        {
+          "sourceId": "SRC-RTL-AMAZON-B0CBRJ63RT-001",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "https://www.amazon.com/CORSAIR-Vengeance-6000MHz-Compatible-Computer/dp/B0CBRJ63RT",
+          "publisher": "Amazon",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Retailer title corroborates the grey color and exact MPN."
+        }
+      ],
+      "extension.data.compatibility": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer lists AMD 600/800 and Intel 600/700/800 series compatibility and states that rated speed may require BIOS adjustments."
+        }
+      ],
+      "governance.warranty": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK32GX5M2B6000Z30-001",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmk32gx5m2b6000z30/vengeance-32gb-2x16gb-ddr5-dram-6000mt-s-cl30-amd-expo-memory-black-cmk32gx5m2b6000z30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-07-25T00:00:00Z",
+          "verifiedBy": "human:clinton",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer states limited lifetime warranty."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-07-25T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true,
+        "gamingPositioning": true,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 6000,
+        "baseJedecDataRateMtps": 4800,
+        "speedLabel": "DDR5-6000",
+        "casLatency": 30,
+        "tRcd": 36,
+        "tRp": 36,
+        "tRas": 76,
+        "primaryTimings": "30-36-36-76",
+        "xmpSupport": "PROFILE_INCLUDED",
+        "expoSupport": "PROFILE_INCLUDED",
+        "jedecProfiles": [
+          {
+            "dataRateMtps": 4800,
+            "primaryTimings": "40-40-40-77",
+            "voltage": 1.1
+          }
+        ],
+        "overclockProfiles": [
+          {
+            "profileTypes": [
+              "AMD_EXPO",
+              "INTEL_XMP"
+            ],
+            "dataRateMtps": 6000,
+            "primaryTimings": "30-36-36-76",
+            "voltage": 1.4
+          }
+        ],
+        "testedSpeedMtps": 6000,
+        "testedLatencyCl": 30,
+        "bandwidthGbps": 48
+      },
+      "electrical": {
+        "ratedVoltage": 1.4,
+        "baseVoltage": 1.1,
+        "pmicLocation": "ON_MODULE",
+        "powerManagementNotes": "The manufacturer describes onboard voltage regulation."
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": "Aluminum",
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": "GREY",
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": true,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": 115
+      },
+      "compatibility": {
+        "platformCompatibility": [
+          "AMD DDR5 desktop platforms",
+          "Intel DDR5 desktop platforms"
+        ],
+        "chipsetCompatibility": [
+          "AMD 600 Series",
+          "AMD 800 Series",
+          "Intel 600 Series",
+          "Intel 700 Series",
+          "Intel 800 Series"
+        ],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": true,
+        "compatibilityNotes": "The rated 6000 MT/s profile requires overclocking or BIOS configuration, and maximum performance depends on the motherboard and CPU."
+      }
+    }
+  }
+}
