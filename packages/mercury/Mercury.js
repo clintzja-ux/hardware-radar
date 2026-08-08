@@ -1,8 +1,10 @@
 import defaultObservationRepository, { ObservationRepository } from "./ObservationRepository.js";
+import defaultAdapterRegistry from "./adapters/index.js";
 
 class Mercury {
-    constructor({ observations = defaultObservationRepository } = {}) {
+    constructor({ observations = defaultObservationRepository, adapters = defaultAdapterRegistry } = {}) {
         this.observations = observations;
+        this.adapters = adapters;
     }
 
     async getObservation(observationId) {
@@ -23,6 +25,14 @@ class Mercury {
 
     async getManifest() {
         return this.observations.getManifest();
+    }
+
+    getAdapter(adapterId) {
+        return this.adapters.get(adapterId);
+    }
+
+    getAdapters() {
+        return this.adapters.getAll();
     }
 
     async validate() {

@@ -630,7 +630,7 @@ Observation Foundation
 
 Certified
 
-🚧 M002
+✅ M002
 
 Retailer Adapter Foundation
 
