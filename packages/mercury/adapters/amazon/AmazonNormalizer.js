@@ -1,3 +1,4 @@
+import { createProvenance } from "../../Provenance.js";
 function required(value, field) {
     if (value === undefined || value === null || value === "") throw new TypeError(`Amazon input requires ${field}.`);
     return value;
@@ -20,7 +21,7 @@ export function normalizeAmazonOffer(input, context) {
 
     return {
         observationId: required(context.observationId, "context.observationId"),
-        schemaVersion: "1.0",
+        schemaVersion: "1.1",
         atlasProductId: required(context.atlasProductId, "context.atlasProductId"),
         retailerId: "RETAILER-0001",
         marketplace: "amazon.com",
@@ -55,16 +56,29 @@ export function normalizeAmazonOffer(input, context) {
                 trackingCodePresent: optional(input.affiliate?.trackingCodePresent)
             }
         },
-        provenance: {
-            retrievalSource: optional(context.retrievalSource, "Amazon normalized input"),
-            retrievedAt: observationTime,
-            retrievedBy: required(context.retrievedBy, "context.retrievedBy"),
-            adapterVersion: "mer_adapter_amazon_us@1.0.0",
-            validatorVersion: optional(context.validatorVersion, "mercury-observation-validator-1.0.0"),
-            complianceRuleSetVersion: optional(context.complianceRuleSetVersion, "sentinel-mercury-draft-0.1"),
-            requestId: optional(context.requestId),
-            rawPayloadReference: optional(context.rawPayloadReference)
-        },
+        provenance: createProvenance({
+            source: {
+                name: optional(context.retrievalSource, "Amazon normalized input"),
+                uri: optional(context.sourceUri, input.sourceUrl),
+                marketplace: "amazon.com"
+            },
+            acquisition: {
+                method: sourceMethod,
+                retrievedAt: observationTime,
+                retrievedBy: required(context.retrievedBy, "context.retrievedBy"),
+                requestId: optional(context.requestId),
+                rawPayloadReference: optional(context.rawPayloadReference)
+            },
+            transformation: {
+                adapterId: "mer_adapter_amazon_us",
+                adapterVersion: "mer_adapter_amazon_us@1.0.0",
+                normalizedAt: optional(context.normalizedAt, observationTime)
+            },
+            validation: {
+                validatorVersion: optional(context.validatorVersion, "mercury-observation-validator-1.0.0"),
+                complianceRuleSetVersion: optional(context.complianceRuleSetVersion, "sentinel-mercury-draft-0.1")
+            }
+        }),
         compliance: {
             licenseContext: optional(context.licenseContext, "MANUAL_PUBLIC_PAGE_OBSERVATION"),
             requiredDisclosureShown: optional(context.requiredDisclosureShown, false),

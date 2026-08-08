@@ -1,3 +1,4 @@
+import { validateProvenance as validateCanonicalProvenance } from "./ProvenanceValidator.js";
 const OBSERVATION_VALIDATOR_VERSION = "mercury-observation-validator-1.0.0";
 
 const TOP_LEVEL_KEYS = Object.freeze([
@@ -154,16 +155,12 @@ function validateOffer(observation, errors) {
 }
 
 function validateProvenance(observation, errors) {
-    const provenance = requireObject(observation, "provenance", "$", errors);
-    if (!provenance) return;
-    for (const key of ["retrievalSource", "retrievedBy", "adapterVersion", "validatorVersion", "complianceRuleSetVersion"]) {
-        requireString(provenance, key, "provenance", errors);
-    }
-    if (!isIsoDateTime(provenance.retrievedAt)) errors.push(issue("INVALID_DATETIME", "provenance.retrievedAt", "Expected an ISO 8601 date-time."));
-    if (isIsoDateTime(observation.observationTime) && isIsoDateTime(provenance.retrievedAt) &&
-        Date.parse(provenance.retrievedAt) !== Date.parse(observation.observationTime)) {
-        errors.push(issue("PROVENANCE_TIME_MISMATCH", "provenance.retrievedAt", "retrievedAt must equal observationTime in the foundation contract."));
-    }
+    const report = validateCanonicalProvenance(observation.provenance, {
+        observationTime: observation.observationTime,
+        sourceMethod: observation.sourceMethod,
+        marketplace: observation.marketplace
+    });
+    for (const entry of report.errors) errors.push(issue(entry.code, entry.path, entry.message));
 }
 
 function validateCompliance(observation, errors) {

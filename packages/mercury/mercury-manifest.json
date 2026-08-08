@@ -1,7 +1,7 @@
 {
-  "mercuryVersion": "0.1.0",
-  "schemaVersion": "1.0",
-  "repositoryStatus": "foundation",
+  "mercuryVersion": "0.2.0",
+  "schemaVersion": "1.1",
+  "repositoryStatus": "provenance-foundation",
   "generatedAt": "2026-08-03T00:00:00Z",
   "observationType": "retailer-offer",
   "observations": [

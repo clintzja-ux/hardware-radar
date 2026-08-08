@@ -5,7 +5,14 @@ const testModules = [
     "./ManifestValidator.test.mjs",
     "./ObservationRepository.test.mjs",
     "./MercuryFacade.test.mjs",
-    "./LegacyIsolation.test.mjs"
+    "./LegacyIsolation.test.mjs",
+    "./AdapterValidator.test.mjs",
+    "./AdapterRegistry.test.mjs",
+    "./AmazonAdapter.test.mjs",
+    "./AdapterIsolation.test.mjs",
+    "./ProvenanceModel.test.mjs",
+    "./ProvenanceValidator.test.mjs",
+    "./ProvenanceIntegration.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
