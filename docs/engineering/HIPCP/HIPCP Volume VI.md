@@ -38,7 +38,7 @@ Platform Maturity Matrix
 Subsystem	Version	Status	Certification
 Atlas	v1.0	✅ Complete	Certified
 Sentinel	v1.0	✅ Complete	Certified
-Forge	v0.2	🟢 Stable	Operational
+Forge	v0.3	🟢 Stable	Operational
 Mercury	v1.0 Architecture	🚧 Ready to Build	Architecture Certified
 Hardware Radar	MVP	🟢 Operational	Atlas Integrated
 Aurora	Planned	⚪ Not Started	—
@@ -261,7 +261,7 @@ Sentinel ................ ██████████ 100%
 
 Forge ................... ████████░░ 80%
 
-Mercury ................. ██░░░░░░░░ 20%
+Mercury ................. ██░░░░░░░░ 35%
 (Architecture complete)
 
 Aurora ................. ░░░░░░░░░░ 0%

@@ -86,3 +86,18 @@ Next:
 Sentinel has reached stable milestone
 
 Atlas Milestone M3 — Repository Integrity Complete
+
+
+## Platform Milestone
+
+HIP-M006
+
+Title
+
+Platform Repository Modernized
+
+Outcome
+Platform packages established
+Canonical subsystem locations defined
+Public deployment separated from engineering sources
+Repository structure aligned with platform architecture

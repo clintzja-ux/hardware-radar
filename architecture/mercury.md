@@ -621,3 +621,41 @@ Hardware Radar
 Forge remains an orchestration tool, not a data transformation engine.
 
 That's perfectly aligned with the architecture we've been building.
+
+
+## Revised Mercury Roadmap
+✅ M001
+
+Observation Foundation
+
+Certified
+
+🚧 M002
+
+Retailer Adapter Foundation
+
+Next Sprint
+
+M003
+
+Provenance Foundation
+
+M004
+
+Freshness Engine
+
+M005
+
+Confidence Engine
+
+M006
+
+Historical Intelligence
+
+M007
+
+Hardware Radar Integration
+
+M008
+
+Mercury Certification
