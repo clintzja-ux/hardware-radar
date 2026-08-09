@@ -31,6 +31,8 @@ await copyDirectory(path.join(root, "apps", "forge"), path.join(root, "public", 
 // Mercury is an internal platform package. Only its application-facing publication artifact is public.
 await rm(path.join(root, "public", "data", "mercury"), { recursive: true, force: true });
 await rm(path.join(root, "public", "data", "sentinel"), { recursive: true, force: true });
+await rm(path.join(root, "public", "js", "atlasAdapter.js"), { force: true });
+await rm(path.join(root, "public", "js", "atlasSmokeTest.js"), { force: true });
 
 const atlasRoot = path.join(root, "packages", "atlas");
 const mercuryRoot = path.join(root, "packages", "mercury");

@@ -7,7 +7,7 @@ export class ForgeIdGenerator {
         return `HR-${normalizedCategory}-${normalizedSubcategory}-${sequence}`;
     }
 
-    generatePriceObservationId(date, number) {
+    generateLegacyPriceObservationId(date, number) {
         const normalizedDate = date.replaceAll("-", "");
         const sequence = String(number).padStart(6, "0");
 

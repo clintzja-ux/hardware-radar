@@ -15,6 +15,7 @@
     "test:extension-validator": "node packages/sentinel/tests/ExtensionValidator.test.mjs",
     "test:atlas": "node packages/atlas/tests/run-all-tests.mjs",
     "test:mercury": "node packages/mercury/tests/run-all-tests.mjs",
-    "test:layout": "node scripts/repository-layout.test.mjs"
+    "test:layout": "node scripts/repository-layout.test.mjs",
+    "certify:mercury:cleanup": "node scripts/mercury-certification-cleanup.mjs"
   }
 }

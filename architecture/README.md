@@ -1,566 +1,70 @@
-# Hardware Radar Architecture
+# Hardware Intelligence Platform Architecture
 
-This directory contains the long-term architectural design of Hardware Radar.
-
-Unlike implementation code, these documents describe the systems, data models, and engineering decisions that define the platform.
-
-The goal is to preserve architectural intent as Hardware Radar evolves.
-
-Code changes frequently.
-
-Architecture should change deliberately.
-
----
+**Document ID:** HR-ARCH-000  
+**Version:** 2.0  
+**Status:** Canonical Architecture Index
 
 ## Purpose
 
-Hardware Radar is being designed as a long-term hardware intelligence platform.
-
-These documents explain how the platform works, why major decisions were made, and how future systems should integrate with one another.
-
-Every major subsystem should have its own architecture document.
-
----
-
-## Current Architecture Documents
-
-- Hardware Database Specification
-- Recommendation Engine
-- Pricing Engine
-- Search Engine
-- AI Assistant
-
-Additional documents may be added as the platform grows.
-
----
-
-## Engineering Philosophy
-
-The user interface is temporary.
-
-The data model is permanent.
-
-Build systems that survive technology changes.
-
-Optimize for clarity before complexity.
-
-Document decisions before they are forgotten.
-
-Always protect the integrity of the data.
-
----
-
-## Mirabelle Labs
-
-Hardware Radar is developed using the Mirabelle Labs Product Framework.
-
-Architecture exists to ensure that every future feature strengthens the platform rather than increasing technical debt.
-
-
-
-
-
-# Hardware Radar Architecture
-
-**Document ID:** HR-ARCH-000
-
-**Version:** 1.0
-
-**Status:** Canonical Architecture Index
-
----
-
-# Purpose
-
-This document is the architectural map of Hardware Radar.
-
-It defines every major subsystem, its responsibility, and how those subsystems interact.
-
-Individual architecture documents describe each subsystem in detail.
-
-This document describes how the platform fits together.
-
----
-
-# Architecture Philosophy
-
-Hardware Radar is not a website.
-
-Hardware Radar is a collection of independent systems working together to help people make better hardware purchasing decisions.
-
-Each subsystem has one clear responsibility.
-
-Subsystems communicate through well-defined interfaces.
-
-The website is simply one consumer of these systems.
-
----
-
-# Core Architecture
-
-                        Hardware Radar
-
-                               │
-
-        ┌──────────────────────┼──────────────────────┐
-
-        ▼                      ▼                      ▼
-
-      Atlas                Mercury                 Echo
-
- Hardware Database      Pricing Engine        Search Engine
-
-        ▼                      ▼                      ▼
-
-      Compass             Aurora               Beacon
-
- Recommendation         AI Assistant          Analytics
-
-        ▼                      ▼                      ▼
-
-       Forge               Gateway
-
- Administration          Public API
-
----
-
-# Core Subsystems
-
-## Atlas
-
-Document
-
-HR-ARCH-001
-
-Purpose
-
-Understand hardware.
-
-Responsibilities
-
-• Products
-
-• Brands
-
-• Specifications
-
-• Compatibility
-
-• Categories
-
-• Images
-
-Owns
-
-Hardware knowledge.
-
-Does NOT own
-
-Prices.
-
-Recommendations.
-
-Analytics.
-
-Status
-
-In Development
-
----
-
-## Mercury
-
-Document
-
-HR-ARCH-002
-
-Purpose
-
-Observe retailers.
-
-Responsibilities
-
-• Prices
-
-• Availability
-
-• Shipping
-
-• Verification
-
-• Historical observations
-
-Owns
-
-Price observations.
-
-Does NOT own
-
-Products.
-
-Status
-
-Planned
-
----
-
-## Compass
-
-Document
-
-HR-ARCH-003
-
-Purpose
-
-Generate recommendations.
-
-Consumes
-
-Atlas
-
-Mercury
-
-Produces
-
-Best Value
-
-Best Gaming
-
-Best Budget
-
-Best Overall
-
-Status
-
-Planned
-
----
-
-## Echo
-
-Document
-
-HR-ARCH-004
-
-Purpose
-
-Search and discovery.
-
-Consumes
-
-Atlas
-
-Indexes
-
-Products
-
-Brands
-
-Categories
-
-Status
-
-Planned
-
----
-
-## Aurora
-
-Document
-
-HR-ARCH-005
-
-Purpose
-
-Explain.
-
-Consumes
-
-Atlas
-
-Mercury
-
-Compass
-
-Produces
-
-Natural language explanations.
-
-Buying guidance.
-
-Comparison summaries.
-
-Status
-
-Planned
-
----
-
-## Forge
-
-Document
-
-HR-ARCH-006
-
-Purpose
-
-Administration.
-
-Used By
-
-Mirabelle Labs.
-
-Responsibilities
-
-Product management.
-
-Price verification.
-
-Retailer management.
-
-Content moderation.
-
-Status
-
-Planned
-
----
-
-## Beacon
-
-Document
-
-HR-ARCH-007
-
-Purpose
-
-Understand users.
-
-Sources
-
-Google Analytics
-
-Microsoft Clarity
-
-Search Console
-
-Bing Webmaster Tools
-
-Produces
-
-Insights.
-
-Growth recommendations.
-
-Behavior analysis.
-
-Status
-
-Foundation Complete
-
----
-
-## Gateway
-
-Document
-
-HR-ARCH-008
-
-Purpose
-
-Expose Hardware Radar.
-
-Consumers
-
-Website
-
-Future mobile apps
-
-Browser extensions
-
-Public APIs
-
-Future integrations
-
-Status
-
-Future
-
----
-
-# Architectural Rules
-
-Every subsystem owns exactly one responsibility.
-
-Subsystems communicate through data rather than direct coupling.
-
-Historical information is append-only.
-
-The UI never owns business logic.
-
-Knowledge belongs to Atlas.
-
-Prices belong to Mercury.
-
-Recommendations belong to Compass.
-
-AI belongs to Aurora.
-
-Analytics belong to Beacon.
-
-Administration belongs to Forge.
-
-External consumers interact through Gateway.
-
----
-
-# Current Development Order
-
-HR-ARCH-001
-
-Atlas
-
-↓
-
-HR-ARCH-002
-
-Mercury
-
-↓
-
-HR-ARCH-003
-
-Compass
-
-↓
-
-HR-ARCH-004
-
-Echo
-
-↓
-
-HR-ARCH-005
-
-Aurora
-
-↓
-
-HR-ARCH-006
-
-Forge
-
-↓
-
-HR-ARCH-007
-
-Beacon
-
-↓
-
-HR-ARCH-008
-
-Gateway
-
----
-
-# Long-Term Vision
-
-Hardware Radar should evolve through capabilities rather than pages.
-
-Every new subsystem should increase the intelligence of the platform without increasing architectural complexity.
-
-The architecture should remain understandable years after its creation.
-
----
-
-# Closing Statement
-
-Architecture exists to protect the future.
-
-Every subsystem should make the platform easier to expand, easier to maintain, and easier to trust.
-
-The purpose of this architecture is not to build software.
-
-The purpose is to build understanding.
-
-
-
-
-
-
-ADR-001
-
-Why Atlas separates Facts from Observations.
-
-Decision:
-Separate immutable product knowledge from time-varying retailer observations.
-
-Status:
-Accepted.
-
-Reason:
-Improves scalability, simplifies price history, enables future storage migration.
-
-
-
-
-
-ADR-002
-
-Why Product IDs are immutable.
-
-Status:
-Accepted.
-
-Reason:
-Allows stable references across history, analytics, APIs, and AI.
-
-
-ADR-003
-
-Why Recommendations are generated instead of manually maintained.
-
-Status:
-Accepted.
-
-Reason:
-Reduces bias, improves consistency, enables explainability.
-
-
-
-Architecture Version
-
-v1.0
-
-Current Components
-
-✓ Atlas
-✓ Mercury
-✓ Compass
-✓ Echo
-✓ Aurora
-✓ Forge
-✓ Beacon
-✓ Gateway
-
-Status
-
-Atlas        Planned
-Mercury      Planned
-Compass      Planned
-Echo         Planned
-Aurora       Planned
-Forge        Planned
-Beacon       Planned
-Gateway      Planned
-
-
-
-Sentinel
-
-Purpose:
-Protect Atlas through automated Knowledge Integrity Rules (KIRs).
-
-Status:
-Future
+This directory records the long-lived architectural structure of the Hardware Intelligence Platform. Code may change frequently; subsystem ownership and dependency boundaries change only through deliberate architectural decisions.
+
+Hardware Radar is the first application of the platform, not the platform itself.
+
+## Canonical subsystem map
+
+```text
+Atlas          Canonical hardware knowledge
+Mercury        Market observations and market intelligence
+Sentinel       Deterministic validation and publication eligibility evidence
+Forge          Internal administration, authoring, review and publishing workflow
+Aurora         AI-assisted reasoning and explanations
+Beacon         Analytics and platform measurement
+Gateway        External APIs and integrations
+Observatory    Hardware-ecosystem change intelligence
+
+Applications
+└── Hardware Radar
+```
+
+## Current maturity
+
+| Subsystem | Responsibility | Status |
+|---|---|---|
+| Atlas | What exists? | Certified v1.0 |
+| Sentinel | Can it be trusted? | Certified foundation |
+| Mercury | What is happening in the market? | v1.0 certification candidate (M008) |
+| Forge | Internal administration and publishing workflow | Operational v0.2; canonical Mercury orchestration pending |
+| Hardware Radar | Public presentation | Operational; consumes published Mercury market snapshots |
+| Aurora | What does it mean? | Planned |
+| Beacon | How is the platform performing? | Planned/foundation work |
+| Gateway | How do external consumers access it? | Planned |
+| Observatory | What changed in the hardware ecosystem? | Planned |
+
+## Architectural rules
+
+1. Every subsystem owns one primary class of responsibility.
+2. Atlas is the canonical source of hardware knowledge.
+3. Mercury owns time-varying market observations and derived market intelligence.
+4. Sentinel validates; it does not mutate canonical data or publish content.
+5. Forge orchestrates authoring, review and publication; it does not redefine platform truth.
+6. Applications consume published intelligence artifacts rather than platform internals.
+7. Historical observations are preserved rather than overwritten.
+8. Unknown facts remain unknown; evidence takes precedence over assumption.
+9. Major ownership or dependency changes require an Architecture Decision Record.
+
+## Architecture records
+
+Subsystem architecture documents live in this directory. Accepted architectural decisions live under `architecture/adr/`.
+
+The repository structure should reinforce the architecture:
+
+```text
+apps/       applications and internal tools
+packages/   canonical platform subsystems
+public/     deployable Hardware Radar presentation and published artifacts
+docs/       engineering, governance and execution records
+```
+
+## Long-term principle
+
+The user interface is replaceable. The platform's knowledge, observations, validation contracts, provenance and architectural boundaries are long-lived assets.

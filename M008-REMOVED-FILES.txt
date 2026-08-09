@@ -1,0 +1,11 @@
+architecture/adr/ADR-009 #U2014 Freshness Is Derived Temporal State.md
+architecture/adr/ADR-010 #U2014 Confidence Is Explainable Derived State.md
+docs/engineering/EDRs/EDR-016 #U2014 Mercury Confidence Engine Completed.md
+docs/governance/ADR-008 Adapter-Based Ingestion Architecture.md
+docs/governance/ADR-009 Freshness Is Derived Temporal State.md
+packages/mercury/observations/PRICE-20260715-000001.json
+packages/mercury/observations/PRICE-20260716-000002.json
+packages/mercury/observations/PRICE-20260716-000003.json
+packages/mercury/schemas/price-observation.schema.json
+public/js/atlasAdapter.js
+public/js/atlasSmokeTest.js

@@ -31,7 +31,8 @@ const testModules = [
     "./MarketPublicationService.test.mjs",
     "./PublicationInsufficientData.test.mjs",
     "./PublicationTraceability.test.mjs",
-    "./PublicationIsolation.test.mjs"
+    "./PublicationIsolation.test.mjs",
+    "./CertificationContract.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
