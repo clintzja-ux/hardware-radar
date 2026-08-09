@@ -1,0 +1,16 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { Mercury } from "../Mercury.js";
+import { MarketPublicationService } from "../publication/MarketPublicationService.js";
+const read = async (url) => JSON.parse(await readFile(fileURLToPath(url), "utf8"));
+const observation = await read(new URL("../observations/mer_obs_000000001.json", import.meta.url));
+const product = await read(new URL("../../atlas/products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json", import.meta.url));
+const retailer = await read(new URL("../../atlas/retailers/RETAILER-0001-amazon.json", import.meta.url));
+const snapshot = await new MarketPublicationService({ mercury: new Mercury() }).createSnapshot({ observations:[observation], products:[product], retailers:[retailer], generatedAt:"2026-07-15T20:45:00Z" });
+const item = snapshot.scopes.overall.cheapest;
+assert.equal(item.atlasProductId, observation.atlasProductId);
+assert.equal(item.observationId, observation.observationId);
+assert.equal(item.retailerId, observation.retailerId);
+assert.equal(item.sourceUrl, observation.offer.sourceUrl);
+console.log("Publication traceability tests passed.");

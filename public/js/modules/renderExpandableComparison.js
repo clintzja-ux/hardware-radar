@@ -3,6 +3,10 @@
     const container = document.getElementById(containerId);
 
     if (!container) return;
+    if (!Array.isArray(products) || products.length === 0) {
+        container.innerHTML = `<section class="comparison"><p class="best-for">Price comparisons will appear when qualifying observations are available.</p></section>`;
+        return;
+    }
 
     const comparisonRows = products
         .slice(1)   // Skip today's winner

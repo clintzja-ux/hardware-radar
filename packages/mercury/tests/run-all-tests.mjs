@@ -26,7 +26,12 @@ const testModules = [
     "./HistoricalValidator.test.mjs",
     "./HistoricalIntelligence.test.mjs",
     "./HistoricalComparability.test.mjs",
-    "./HistoricalIntegration.test.mjs"
+    "./HistoricalIntegration.test.mjs",
+    "./PublicationEligibility.test.mjs",
+    "./MarketPublicationService.test.mjs",
+    "./PublicationInsufficientData.test.mjs",
+    "./PublicationTraceability.test.mjs",
+    "./PublicationIsolation.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

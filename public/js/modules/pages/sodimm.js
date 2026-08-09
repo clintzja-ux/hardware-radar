@@ -36,7 +36,7 @@
 ];
  
      const buyingAdvice = {
-         title: "Should you buy today's cheapest Laptop RAM?",
+         title: "Should you buy the cheapest qualifying Laptop RAM?",
          summary: "For most people, yes. Today's cheapest verified Laptop RAM pick offers strong everyday performance at the lowest price we found from trusted retailers.",
          points: [
           "Choose the cheapest pick if you want the best value today.",
@@ -49,8 +49,8 @@
      const faq = [
  
          {
-             question: "Is today's cheapest Laptop RAM good enough?",
-             answer: "Yes. For most people, today's cheapest verified Laptop RAM delivers excellent value and performance for everyday use, gaming, and productivity."
+             question: "Is the cheapest qualifying Laptop RAM good enough?",
+             answer: "Yes. For most people, the cheapest qualifying Laptop RAM delivers excellent value and performance for everyday use, gaming, and productivity."
          },
  
          {
@@ -70,7 +70,7 @@
  
          {
               question: "How often does Hardware Radar update prices?",
-             answer: "Hardware Radar regularly checks trusted retailers to help you find today's cheapest verified prices."
+             answer: "Hardware Radar publishes retailer observations only when they meet the platform's validation, freshness, and confidence requirements."
          }
  
  ];

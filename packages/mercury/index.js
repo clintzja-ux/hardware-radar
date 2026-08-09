@@ -21,3 +21,7 @@ export { defaultConfidencePolicy } from "./confidence/policies/default-policy.js
 export { HistoricalIntelligence } from "./HistoricalIntelligence.js";
 export { evaluateHistoricalEligibility, HISTORICAL_ELIGIBILITY_POLICY_VERSION } from "./HistoricalEligibility.js";
 export { validateHistoricalQuery, HISTORICAL_VALIDATOR_VERSION } from "./HistoricalValidator.js";
+
+export { MarketPublicationService, SNAPSHOT_SCHEMA_VERSION, SCOPES } from "./publication/MarketPublicationService.js";
+export { createPublicationPolicy, PUBLICATION_POLICY_SCHEMA_VERSION } from "./publication/PublicationPolicy.js";
+export { evaluatePublicationEligibility } from "./publication/PublicationEligibility.js";

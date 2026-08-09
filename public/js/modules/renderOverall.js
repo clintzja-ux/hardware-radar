@@ -48,3 +48,14 @@
         </article>
     `;
 }
+export function renderOverallUnavailable(containerId = "overallSection") {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = `
+        <article class="overall-answer market-unavailable">
+            <p class="eyebrow">TODAY'S CHEAPEST RAM</p>
+            <h2>Current verified pricing is temporarily unavailable.</h2>
+            <p class="best-for">Hardware Radar only publishes prices that satisfy the platform's validation, freshness, and confidence requirements.</p>
+            <p class="specs">No qualifying current market observation is available right now.</p>
+        </article>`;
+}

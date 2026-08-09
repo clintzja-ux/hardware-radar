@@ -11,15 +11,17 @@ for (const requiredPath of [
     "packages/sentinel/core/ValidationRunner.js",
     "apps/forge/index.html",
     "public/data/atlas/Atlas.js",
-    "public/data/mercury/Mercury.js",
+    "public/data/market-snapshot.json",
     "public/forge/index.html"
 ]) {
     await access(path.join(root, requiredPath));
 }
 
-await assert.rejects(
-    access(path.join(root, "public", "data", "sentinel")),
-    { code: "ENOENT" }
-);
+for (const internalPackage of ["sentinel", "mercury"]) {
+    await assert.rejects(
+        access(path.join(root, "public", "data", internalPackage)),
+        { code: "ENOENT" }
+    );
+}
 
 console.log("Repository modernization layout contract passed.");

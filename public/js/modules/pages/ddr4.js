@@ -40,7 +40,7 @@ import { renderHeader } from "../renderHeader.js";
      ];
  
      const buyingAdvice = {
-         title: "Should you buy today's cheapest DDR4?",
+         title: "Should you buy the cheapest qualifying DDR4?",
          summary: "For most people, yes. Today's cheapest verified DDR4 pick offers strong everyday performance at the lowest price we found from trusted retailers.",
          points: [
           "Choose the cheapest pick if you want the best value today.",
@@ -53,8 +53,8 @@ import { renderHeader } from "../renderHeader.js";
      const faq = [
  
          {
-             question: "Is today's cheapest DDR4 RAM good enough?",
-             answer: "Yes. For most people, today's cheapest verified DDR4 delivers excellent value and performance for everyday use, gaming, and productivity."
+             question: "Is the cheapest qualifying DDR4 RAM good enough?",
+             answer: "Yes. For most people, the cheapest qualifying DDR4 delivers excellent value and performance for everyday use, gaming, and productivity."
          },
  
          {
@@ -74,7 +74,7 @@ import { renderHeader } from "../renderHeader.js";
  
          {
               question: "How often does Hardware Radar update prices?",
-             answer: "Hardware Radar regularly checks trusted retailers to help you find today's cheapest verified prices."
+             answer: "Hardware Radar publishes retailer observations only when they meet the platform's validation, freshness, and confidence requirements."
          }
  
  ];

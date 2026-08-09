@@ -40,8 +40,8 @@ async function init() {
     ];
 
     const buyingAdvice = {
-        title: "Should you buy today's cheapest DDR5?",
-        summary: "For most people, yes. Today's cheapest verified DDR5 pick offers strong everyday performance at the lowest price we found from trusted retailers.",
+        title: "Should you buy the cheapest qualifying DDR5?",
+        summary: "When qualifying current pricing is available, Hardware Radar highlights the lowest eligible offer from trusted retailers. Compare capacity, compatibility, and performance before buying.",
         points: [
          "Choose the cheapest pick if you want the best value today.",
          "Choose Gaming DDR5 if low latency matters more than lowest price.",
@@ -53,8 +53,8 @@ async function init() {
     const faq = [
 
         {
-            question: "Is today's cheapest DDR5 RAM good enough?",
-            answer: "Yes. For most people, today's cheapest verified DDR5 delivers excellent value and performance for everyday use, gaming, and productivity."
+            question: "Is the cheapest qualifying DDR5 RAM good enough?",
+            answer: "The cheapest qualifying DDR5 option can be a strong value, provided its capacity, speed, and compatibility fit your system."
         },
 
         {
@@ -74,7 +74,7 @@ async function init() {
 
         {
              question: "How often does Hardware Radar update prices?",
-            answer: "Hardware Radar regularly checks trusted retailers to help you find today's cheapest verified prices."
+            answer: "Hardware Radar publishes retailer observations only when they meet the platform's validation, freshness, and confidence requirements."
         }
 
 ];
