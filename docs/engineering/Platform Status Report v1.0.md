@@ -615,6 +615,8 @@ HIP-M002	Sentinel Certified	✅
 HIP-M003	Mercury Architecture Certified	✅
 HIP-M004	Platform Ready for Intelligence Engineering	✅
 HIP-M005	Platform Certification Program Established	✅
+HIP-M007 — Hardware Radar Connected to Certified Platform Intelligence✅
+
 Immediate Priorities
 Complete the remaining certification volumes.
 Finalize the Platform Design Bible.
