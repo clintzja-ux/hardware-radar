@@ -3,13 +3,15 @@ import defaultAdapterRegistry from "./adapters/index.js";
 import defaultFreshnessEngine from "./FreshnessEngine.js";
 import defaultConfidenceEngine from "./ConfidenceEngine.js";
 import { deriveConfidenceEvidence } from "./ConfidenceEvidence.js";
+import defaultHistoricalIntelligence from "./HistoricalIntelligence.js";
 
 class Mercury {
-    constructor({ observations = defaultObservationRepository, adapters = defaultAdapterRegistry, freshness = defaultFreshnessEngine, confidence = defaultConfidenceEngine } = {}) {
+    constructor({ observations = defaultObservationRepository, adapters = defaultAdapterRegistry, freshness = defaultFreshnessEngine, confidence = defaultConfidenceEngine, history = defaultHistoricalIntelligence } = {}) {
         this.observations = observations;
         this.adapters = adapters;
         this.freshness = freshness;
         this.confidence = confidence;
+        this.history = history;
     }
 
     async getObservation(observationId) {
@@ -61,6 +63,12 @@ class Mercury {
         if (!observation) return null;
         return this.evaluateConfidence(observation, options);
     }
+
+    async getPriceTimeline(query) { return this.history.getTimeline(await this.getObservations(), query); }
+    async getHistoricalPriceRange(query) { return this.history.getPriceRange(await this.getObservations(), query); }
+    async getHistoricalAveragePrice(query) { return this.history.getAveragePrice(await this.getObservations(), query); }
+    async getPriceMovement(query) { return this.history.getPriceMovement(await this.getObservations(), query); }
+    async getHistoricalSummary(query) { return this.history.getSummary(await this.getObservations(), query); }
 
     async validate() {
         return this.observations.validate();

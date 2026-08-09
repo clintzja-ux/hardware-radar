@@ -17,3 +17,7 @@ export { createConfidencePolicy, CONFIDENCE_POLICY_SCHEMA_VERSION } from "./Conf
 export { deriveConfidenceEvidence, CONFIDENCE_EVIDENCE_SCHEMA_VERSION } from "./ConfidenceEvidence.js";
 export { validateConfidencePolicy, validateConfidenceEvidence, validateConfidenceEvaluation, CONFIDENCE_VALIDATOR_VERSION, CONFIDENCE_STATUSES } from "./ConfidenceValidator.js";
 export { defaultConfidencePolicy } from "./confidence/policies/default-policy.js";
+
+export { HistoricalIntelligence } from "./HistoricalIntelligence.js";
+export { evaluateHistoricalEligibility, HISTORICAL_ELIGIBILITY_POLICY_VERSION } from "./HistoricalEligibility.js";
+export { validateHistoricalQuery, HISTORICAL_VALIDATOR_VERSION } from "./HistoricalValidator.js";

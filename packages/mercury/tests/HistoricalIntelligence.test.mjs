@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import { HistoricalIntelligence } from "../HistoricalIntelligence.js";
+const base={schemaVersion:"1.1",atlasProductId:"ram_x",retailerId:"RETAILER-0001",marketplace:"amazon.com",sourceMethod:"MANUAL",lifecycleStatus:"RETRIEVED",validationStatus:"PASS",expiresAt:null};
+const o=(id,time,price,extra={})=>({...base,observationId:id,observationTime:time,offer:{price,currency:"USD",condition:"NEW"},...extra});
+const rows=[o("mer_obs_000000003","2026-01-03T00:00:00Z",95),o("mer_obs_000000001","2026-01-01T00:00:00Z",100),o("mer_obs_000000002","2026-01-02T00:00:00Z",90)];
+const h=new HistoricalIntelligence(); const q={atlasProductId:"ram_x",currency:"USD",condition:"NEW"};
+const t=h.getTimeline(rows,q); assert.deepEqual(t.map(x=>x.price),[100,90,95]); assert.ok(Object.isFrozen(t));
+assert.equal(h.getPriceRange(rows,q).lowest.price,90); assert.equal(h.getPriceRange(rows,q).highest.price,100);
+assert.equal(h.getAveragePrice(rows,q),95); const m=h.getPriceMovement(rows,q); assert.equal(m.absolute,-5); assert.equal(m.percentage,-5);
+assert.equal(h.getSummary(rows,q).count,3);
+console.log("Historical intelligence tests passed.");

@@ -21,7 +21,12 @@ const testModules = [
     "./ConfidenceValidator.test.mjs",
     "./ConfidenceEvidence.test.mjs",
     "./ConfidenceEngine.test.mjs",
-    "./ConfidenceIntegration.test.mjs"
+    "./ConfidenceIntegration.test.mjs",
+    "./HistoricalEligibility.test.mjs",
+    "./HistoricalValidator.test.mjs",
+    "./HistoricalIntelligence.test.mjs",
+    "./HistoricalComparability.test.mjs",
+    "./HistoricalIntegration.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
