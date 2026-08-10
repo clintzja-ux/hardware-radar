@@ -1,8 +1,11 @@
 import { ProductForm } from "./components/ProductForm.js";
 import { ForgeGenerator } from "./services/ForgeGenerator.js";
 import { copyToClipboard } from "./utils/clipboard.js";
+import { ObservationReviewPanel } from "./components/ObservationReviewPanel.js";
 
 const forge = new ForgeGenerator();
+const reviewPanelRoot = document.getElementById("observationReviewPanel");
+if (reviewPanelRoot) new ObservationReviewPanel(reviewPanelRoot, { copyToClipboard });
 
 const form = document.getElementById("forgeForm");
 const productForm = new ProductForm(form);

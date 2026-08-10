@@ -16,6 +16,7 @@
     "test:atlas": "node packages/atlas/tests/run-all-tests.mjs",
     "test:mercury": "node packages/mercury/tests/run-all-tests.mjs",
     "test:layout": "node scripts/repository-layout.test.mjs",
-    "certify:mercury:cleanup": "node scripts/mercury-certification-cleanup.mjs"
+    "certify:mercury:cleanup": "node scripts/mercury-certification-cleanup.mjs",
+    "review:export": "node scripts/export-observation-review.mjs"
   }
 }

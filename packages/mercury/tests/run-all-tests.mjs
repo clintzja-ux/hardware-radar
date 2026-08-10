@@ -43,7 +43,12 @@ const testModules = [
     "./DurableRetention.test.mjs",
     "./DurableFixtureIsolation.test.mjs",
     "./DurablePublicationIsolation.test.mjs",
-    "./DurableFailureRecovery.test.mjs"
+    "./DurableFailureRecovery.test.mjs",
+    "./ObservationReviewService.test.mjs",
+    "./ObservationReviewRetention.test.mjs",
+    "./ObservationReviewDecision.test.mjs",
+    "./ObservationReviewIsolation.test.mjs",
+    "./ObservationReviewExportContract.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

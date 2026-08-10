@@ -33,3 +33,5 @@ export { InMemoryObservationAcceptanceStore } from "./ingestion/InMemoryObservat
 export { ObservationAcceptanceRepository } from "./persistence/ObservationAcceptanceRepository.js";
 export { FileObservationAcceptanceRepository } from "./persistence/FileObservationAcceptanceRepository.js";
 export { classifyObservationStorage, STORAGE_CLASSES, PAYLOAD_STATUSES } from "./retention/RetentionPolicy.js";
+export { ObservationReviewService, REVIEW_ITEM_STATUSES } from "./review/ObservationReviewService.js";
+export { REVIEW_DECISIONS, createReviewDecision, validateReviewDecision } from "./review/ObservationReviewDecision.js";

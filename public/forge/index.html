@@ -819,6 +819,60 @@
                         </div>
                     </section>
 
+                    <section class="inspection-card observation-review-card" id="observationReviewPanel">
+                        <div class="inspection-heading">
+                            <div>
+                                <p class="pane-kicker">MERCURY OPERATIONS</p>
+                                <h2>Observation Review</h2>
+                            </div>
+                            <span id="reviewBundleStatus" class="status-badge pending">NO BUNDLE</span>
+                        </div>
+
+                        <p id="reviewBundleSummary" class="review-workflow-summary">
+                            Load a locally exported Mercury review bundle to inspect an accepted observation.
+                        </p>
+
+                        <label class="review-file-field">
+                            <span>Review bundle</span>
+                            <input id="reviewBundleFile" type="file" accept="application/json,.json">
+                        </label>
+
+                        <div class="review-workflow-grid">
+                            <label>
+                                <span>Reviewer identifier</span>
+                                <input id="reviewedBy" type="text" placeholder="operator:name">
+                            </label>
+                            <label>
+                                <span>Review notes</span>
+                                <input id="reviewNotes" type="text" placeholder="Optional review notes">
+                            </label>
+                        </div>
+
+                        <div class="review-actions" aria-label="Review decision drafts">
+                            <button class="secondary-button" type="button" data-review-decision="REVIEWED" disabled>Mark Reviewed</button>
+                            <button class="secondary-button" type="button" data-review-decision="HOLD" disabled>Place Hold</button>
+                            <button class="secondary-button" type="button" data-review-decision="REJECTED" disabled>Reject</button>
+                        </div>
+
+                        <p class="review-workflow-note">
+                            Review decisions are separate workflow metadata. They do not modify the canonical Mercury observation and do not authorize publication.
+                        </p>
+
+                        <details class="review-details">
+                            <summary>Observation evidence</summary>
+                            <pre id="reviewBundleDetails">{}</pre>
+                        </details>
+
+                        <div class="output-header review-decision-header">
+                            <div>
+                                <p class="pane-kicker">DECISION DRAFT</p>
+                                <h3>Review Metadata</h3>
+                            </div>
+                            <button id="copyReviewDecisionButton" class="secondary-button" type="button" disabled>Copy Decision</button>
+                        </div>
+                        <pre id="reviewDecisionOutput" class="review-decision-output">{}</pre>
+                    </section>
+
                     <section class="inspection-card validation-card">
                         <div class="inspection-heading">
                             <div>
