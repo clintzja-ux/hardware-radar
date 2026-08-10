@@ -38,3 +38,9 @@ export { REVIEW_DECISIONS, createReviewDecision, validateReviewDecision } from "
 export { ReviewDecisionRepository } from "./review/persistence/ReviewDecisionRepository.js";
 export { FileReviewDecisionRepository } from "./review/persistence/FileReviewDecisionRepository.js";
 export { ReviewWorkflowService } from "./review/ReviewWorkflowService.js";
+export { PUBLICATION_ACTIONS, PUBLICATION_DECISION_SCHEMA_VERSION, createPublicationDecision, validatePublicationDecision } from "./publication/PublicationDecision.js";
+export { PublicationDecisionRepository } from "./publication/persistence/PublicationDecisionRepository.js";
+export { FilePublicationDecisionRepository } from "./publication/persistence/FilePublicationDecisionRepository.js";
+export { PublicationWorkflowService } from "./publication/PublicationWorkflowService.js";
+export { GovernedMarketPublicationService, createGovernedMarketPublicationService } from "./publication/GovernedMarketPublicationService.js";
+export { PublicationAtlasResolver } from "./publication/PublicationAtlasResolver.js";

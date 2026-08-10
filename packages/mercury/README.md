@@ -83,3 +83,7 @@ Applications consume published intelligence artifacts. They do not execute Mercu
 Pre-M001 `PRICE-*` records and the original `price-observation.schema.json` are preserved only under `legacy/` for historical engineering reference. They are not canonical repository members and cannot be loaded through the Mercury manifest.
 
 Forge v0.2 still contains a legacy Mercury preview workflow. It is explicitly non-canonical and must not be treated as a Mercury publication path. Canonical Forge-to-Mercury ingestion will use the registered adapter and validation pipeline in a later Forge integration sprint.
+
+## Governed publication workflow
+
+Canonical observations are not implicitly public. Publication proceeds through separate evidence eligibility, durable review, and durable publication authorization. `PUBLISH` and `WITHDRAW` decisions are append-only `mer_pub_*` workflow records. The public build consumes only governed published observations when durable operational state paths are supplied; otherwise it fails closed to insufficient-data output.

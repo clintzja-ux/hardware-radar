@@ -18,6 +18,7 @@
     "test:layout": "node scripts/repository-layout.test.mjs",
     "certify:mercury:cleanup": "node scripts/mercury-certification-cleanup.mjs",
     "review:export": "node scripts/export-observation-review.mjs",
-    "review:record": "node scripts/record-observation-review.mjs"
+    "review:record": "node scripts/record-observation-review.mjs",
+    "publication:record": "node scripts/record-publication-decision.mjs"
   }
 }
