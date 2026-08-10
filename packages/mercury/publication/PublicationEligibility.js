@@ -12,6 +12,7 @@ export function evaluatePublicationEligibility(observation, { product, retailer,
     });
 
     if (!observationReport.valid) reasons.push("OBSERVATION_INVALID");
+    if (observation?.compliance?.licenseContext === "TEST_FIXTURE") reasons.push("TEST_FIXTURE_NOT_PUBLISHABLE");
     if (!product || product.identity?.atlasProductId !== observation?.atlasProductId) reasons.push("ATLAS_PRODUCT_UNRESOLVED");
     if (!retailer || retailer.id !== observation?.retailerId) reasons.push("ATLAS_RETAILER_UNRESOLVED");
     if (!provenanceReport.valid) reasons.push("PROVENANCE_INVALID");

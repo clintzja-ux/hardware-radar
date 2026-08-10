@@ -25,3 +25,8 @@ export { validateHistoricalQuery, HISTORICAL_VALIDATOR_VERSION } from "./Histori
 export { MarketPublicationService, SNAPSHOT_SCHEMA_VERSION, SCOPES } from "./publication/MarketPublicationService.js";
 export { createPublicationPolicy, PUBLICATION_POLICY_SCHEMA_VERSION } from "./publication/PublicationPolicy.js";
 export { evaluatePublicationEligibility } from "./publication/PublicationEligibility.js";
+
+export { IngestionService } from "./ingestion/IngestionService.js";
+export { validateIngestionRequest, INGESTION_SOURCE_METHODS } from "./ingestion/IngestionRequestValidator.js";
+export { INGESTION_STATUSES, ingestionResult } from "./ingestion/IngestionResult.js";
+export { InMemoryObservationAcceptanceStore } from "./ingestion/InMemoryObservationAcceptanceStore.js";
