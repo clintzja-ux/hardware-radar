@@ -998,3 +998,10 @@ input[readonly] {
 .review-details pre, .review-decision-output { margin-top: 12px; max-height: 320px; overflow: auto; white-space: pre-wrap; }
 .review-decision-header { margin-top: 18px; }
 @media (max-width: 760px) { .review-workflow-grid { grid-template-columns: 1fr; } }
+
+.review-decision-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}

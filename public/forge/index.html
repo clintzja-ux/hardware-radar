@@ -855,7 +855,7 @@
                         </div>
 
                         <p class="review-workflow-note">
-                            Review decisions are separate workflow metadata. They do not modify the canonical Mercury observation and do not authorize publication.
+                            Review decisions are separate append-only workflow metadata. Drafts can be downloaded for durable recording; they do not modify the canonical Mercury observation and do not authorize publication.
                         </p>
 
                         <details class="review-details">
@@ -868,7 +868,10 @@
                                 <p class="pane-kicker">DECISION DRAFT</p>
                                 <h3>Review Metadata</h3>
                             </div>
-                            <button id="copyReviewDecisionButton" class="secondary-button" type="button" disabled>Copy Decision</button>
+                            <div class="review-decision-actions">
+                                <button id="downloadReviewDecisionButton" class="secondary-button" type="button" disabled>Download Decision</button>
+                                <button id="copyReviewDecisionButton" class="secondary-button" type="button" disabled>Copy Decision</button>
+                            </div>
                         </div>
                         <pre id="reviewDecisionOutput" class="review-decision-output">{}</pre>
                     </section>

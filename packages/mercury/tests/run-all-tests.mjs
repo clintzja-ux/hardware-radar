@@ -48,7 +48,13 @@ const testModules = [
     "./ObservationReviewRetention.test.mjs",
     "./ObservationReviewDecision.test.mjs",
     "./ObservationReviewIsolation.test.mjs",
-    "./ObservationReviewExportContract.test.mjs"
+    "./ObservationReviewExportContract.test.mjs",
+    "./DurableReviewRepository.test.mjs",
+    "./ReviewHistory.test.mjs",
+    "./ReviewReferenceIntegrity.test.mjs",
+    "./ReviewFixtureIsolation.test.mjs",
+    "./ReviewFailureRecovery.test.mjs",
+    "./ReviewWorkflowService.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

@@ -15,11 +15,13 @@ export class ObservationReviewPanel {
         this.notes = root.querySelector("#reviewNotes");
         this.decisionOutput = root.querySelector("#reviewDecisionOutput");
         this.copyButton = root.querySelector("#copyReviewDecisionButton");
+        this.downloadButton = root.querySelector("#downloadReviewDecisionButton");
         this.actionButtons = [...root.querySelectorAll("[data-review-decision]")];
 
         this.fileInput.addEventListener("change", () => this.loadSelectedFile());
         this.actionButtons.forEach((button) => button.addEventListener("click", () => this.createDecision(button.dataset.reviewDecision)));
         this.copyButton.addEventListener("click", () => this.copyDecision());
+        this.downloadButton.addEventListener("click", () => this.downloadDecision());
         this.reset();
     }
 
@@ -32,6 +34,7 @@ export class ObservationReviewPanel {
         this.details.textContent = "{}";
         this.decisionOutput.textContent = "{}";
         this.copyButton.disabled = true;
+        this.downloadButton.disabled = true;
         this.actionButtons.forEach((button) => { button.disabled = true; });
     }
 
@@ -57,6 +60,7 @@ export class ObservationReviewPanel {
         this.decision = null;
         this.decisionOutput.textContent = "{}";
         this.copyButton.disabled = true;
+        this.downloadButton.disabled = true;
 
         this.statusBadge.textContent = item.status;
         this.statusBadge.className = `status-badge ${item.reviewable ? "ready" : "blocked"}`;
@@ -95,6 +99,20 @@ export class ObservationReviewPanel {
         });
         this.decisionOutput.textContent = JSON.stringify(this.decision, null, 2);
         this.copyButton.disabled = false;
+        this.downloadButton.disabled = false;
+    }
+
+    downloadDecision() {
+        if (!this.decision) return;
+        const blob = new Blob([`${JSON.stringify(this.decision, null, 2)}\n`], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `review-${this.item.observationId}-${this.decision.decision.toLowerCase()}.json`;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(url);
     }
 
     async copyDecision() {
