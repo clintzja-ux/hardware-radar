@@ -1,0 +1,10 @@
+import assert from "node:assert/strict";
+import { evaluatePublicationEligibility } from "../publication/PublicationEligibility.js";
+import baseObservation from "../observations/mer_obs_000000001.json" with { type: "json" };
+const product={identity:{atlasProductId:baseObservation.atlasProductId}}; const retailer={id:baseObservation.retailerId};
+const common={product,retailer,freshness:{status:"CURRENT"},confidence:{status:"HIGH"}};
+let r=evaluatePublicationEligibility(baseObservation,{...common,storage:{payloadStatus:"PURGED",payloadExpiresAt:"2026-08-10T06:00:00Z"},evaluatedAt:"2026-08-10T05:00:00Z"});
+assert.equal(r.eligible,false); assert.ok(r.reasons.includes("LICENSED_PAYLOAD_PURGED"));
+r=evaluatePublicationEligibility(baseObservation,{...common,storage:{payloadStatus:"ACTIVE",payloadExpiresAt:"2026-08-10T06:00:00Z"},evaluatedAt:"2026-08-10T06:00:00Z"});
+assert.equal(r.eligible,false); assert.ok(r.reasons.includes("LICENSED_PAYLOAD_EXPIRED"));
+console.log("✓ publication eligibility fails closed for purged or expired licensed payload");

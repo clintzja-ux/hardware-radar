@@ -23,11 +23,6 @@ function idempotencyKey(request) {
   const payload = canonicalJson(request.sourcePayload);
   return createHash("sha256").update([request.retailerId, request.marketplace, request.sourceMethod, request.retrievedAt, request.requestId ?? "", payload].join("|")).digest("hex");
 }
-function nextId(existing) {
-  const max = existing.reduce((m, o) => Math.max(m, Number(String(o.observationId ?? "").match(/^mer_obs_(\d{9})$/)?.[1] ?? 0)), 0);
-  return `mer_obs_${String(max + 1).padStart(9, "0")}`;
-}
-
 export class IngestionService {
   constructor({ atlas = atlasDefault, adapterRegistry = adapterRegistryDefault, acceptanceStore = new InMemoryObservationAcceptanceStore(), now = () => new Date().toISOString() } = {}) {
     this.atlas = atlas; this.adapterRegistry = adapterRegistry; this.acceptanceStore = acceptanceStore; this.now = now;
@@ -46,8 +41,7 @@ export class IngestionService {
     const key = idempotencyKey(normalized);
     const duplicate = await this.acceptanceStore.findByIdempotencyKey(key);
     if (duplicate) return ingestionResult(INGESTION_STATUSES.DUPLICATE, { observationId: duplicate.observationId, idempotencyKey: key });
-    const existing = await this.acceptanceStore.getAll();
-    const observationId = nextId(existing);
+    const observationId = await this.acceptanceStore.allocateObservationId();
     let candidate;
     try {
       candidate = adapters[0].normalize(normalized.sourcePayload, {
@@ -62,8 +56,16 @@ export class IngestionService {
     const validation = validateObservation(candidate);
     if (!validation.valid) return ingestionResult(INGESTION_STATUSES.VALIDATION_FAILURE, { errors: validation.errors });
     const accepted = Object.freeze(structuredClone(candidate));
-    await this.acceptanceStore.accept(accepted, key);
-    return ingestionResult(INGESTION_STATUSES.ACCEPTED, { observationId, idempotencyKey: key, observation: accepted });
+    let acceptance;
+    try {
+      acceptance = await this.acceptanceStore.accept(accepted, key);
+    } catch (error) {
+      return ingestionResult(INGESTION_STATUSES.ACCEPTANCE_FAILURE, { reason: error.message });
+    }
+    if (acceptance?.status === "DUPLICATE") {
+      return ingestionResult(INGESTION_STATUSES.DUPLICATE, { observationId: acceptance.observationId, idempotencyKey: key });
+    }
+    return ingestionResult(INGESTION_STATUSES.ACCEPTED, { observationId, idempotencyKey: key, observation: accepted, storage: acceptance?.storage ?? null });
   }
 }
 export default IngestionService;

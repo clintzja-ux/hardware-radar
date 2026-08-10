@@ -2,7 +2,7 @@ import { validateObservation } from "../ObservationValidator.js";
 import { validateProvenance } from "../ProvenanceValidator.js";
 import defaultPublicationPolicy from "./PublicationPolicy.js";
 
-export function evaluatePublicationEligibility(observation, { product, retailer, freshness, confidence, policy = defaultPublicationPolicy } = {}) {
+export function evaluatePublicationEligibility(observation, { product, retailer, freshness, confidence, storage = null, evaluatedAt = null, policy = defaultPublicationPolicy } = {}) {
     const reasons = [];
     const observationReport = validateObservation(observation);
     const provenanceReport = validateProvenance(observation?.provenance, {
@@ -13,6 +13,8 @@ export function evaluatePublicationEligibility(observation, { product, retailer,
 
     if (!observationReport.valid) reasons.push("OBSERVATION_INVALID");
     if (observation?.compliance?.licenseContext === "TEST_FIXTURE") reasons.push("TEST_FIXTURE_NOT_PUBLISHABLE");
+    if (storage?.payloadStatus === "PURGED") reasons.push("LICENSED_PAYLOAD_PURGED");
+    if (storage?.payloadExpiresAt && evaluatedAt && Date.parse(storage.payloadExpiresAt) <= Date.parse(evaluatedAt)) reasons.push("LICENSED_PAYLOAD_EXPIRED");
     if (!product || product.identity?.atlasProductId !== observation?.atlasProductId) reasons.push("ATLAS_PRODUCT_UNRESOLVED");
     if (!retailer || retailer.id !== observation?.retailerId) reasons.push("ATLAS_RETAILER_UNRESOLVED");
     if (!provenanceReport.valid) reasons.push("PROVENANCE_INVALID");

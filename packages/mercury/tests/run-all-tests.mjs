@@ -37,7 +37,13 @@ const testModules = [
     "./IngestionCompliance.test.mjs",
     "./IngestionService.test.mjs",
     "./IngestionAtomicity.test.mjs",
-    "./IngestionPublicationIsolation.test.mjs"
+    "./IngestionPublicationIsolation.test.mjs",
+    "./DurableRepository.test.mjs",
+    "./DurableIdempotency.test.mjs",
+    "./DurableRetention.test.mjs",
+    "./DurableFixtureIsolation.test.mjs",
+    "./DurablePublicationIsolation.test.mjs",
+    "./DurableFailureRecovery.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

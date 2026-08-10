@@ -30,3 +30,6 @@ export { IngestionService } from "./ingestion/IngestionService.js";
 export { validateIngestionRequest, INGESTION_SOURCE_METHODS } from "./ingestion/IngestionRequestValidator.js";
 export { INGESTION_STATUSES, ingestionResult } from "./ingestion/IngestionResult.js";
 export { InMemoryObservationAcceptanceStore } from "./ingestion/InMemoryObservationAcceptanceStore.js";
+export { ObservationAcceptanceRepository } from "./persistence/ObservationAcceptanceRepository.js";
+export { FileObservationAcceptanceRepository } from "./persistence/FileObservationAcceptanceRepository.js";
+export { classifyObservationStorage, STORAGE_CLASSES, PAYLOAD_STATUSES } from "./retention/RetentionPolicy.js";
