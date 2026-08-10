@@ -1,11 +1,11 @@
 # Amazon Compliance Bible
 
 **Document ID:** AMZ-COMP-BIBLE  
-**Version:** 0.1  
+**Version:** 0.2  
 **Status:** Living Document — Verified Foundation  
 **Owner:** Mirabelle Labs  
 **Applies To:** Hardware Radar, Mercury, Sentinel, Forge  
-**Research Cut-off:** 2026-07-18  
+**Research Cut-off:** 2026-08-09  
 **Marketplace Scope:** Amazon.com / United States Associates Program
 
 > This document is an internal engineering interpretation of current official requirements. It is not legal advice and does not replace Amazon's controlling agreements, policies, specifications, or written instructions. Where a conflict exists, the applicable official Amazon document controls.
@@ -76,7 +76,7 @@ No production compliance rule should be marked `VERIFIED` without a current offi
 | SRC-003 | Associates Program Participation Requirements | Amazon | VERIFIED | 2026-07-18 |
 | SRC-004 | Associates Program IP License and Usage Requirements | Amazon; incorporated within Program Policies | VERIFIED | 2026-07-18 |
 | SRC-005 | Associates Program Trademark Guidelines | Amazon; incorporated within Program Policies | PARTIALLY VERIFIED | 2026-07-18 |
-| SRC-006 | Creators API Documentation | Amazon | PARTIALLY VERIFIED | 2026-07-18 |
+| SRC-006 | Creators API Documentation | Amazon | VERIFIED FOR CURRENT TECHNICAL BASELINE | 2026-08-09 |
 | SRC-007 | Hardware Radar Architecture Bible | Mirabelle Labs | INTERNAL | 2026-07-18 |
 | SRC-008 | Applicable advertising and endorsement law/guidance | External legal authority | PENDING | — |
 
@@ -208,11 +208,11 @@ Hardware Radar must not download and self-host Amazon API image files. Mercury m
 
 ### REQ-0019 — Non-image caching restriction
 
-**Source:** SRC-004  
-Non-image Product Advertising Content may be cached for up to 24 hours, after which it must be refreshed and immediately re-displayed from a new approved retrieval.
+**Source:** SRC-004 and SRC-006  
+The IP-license ceiling remains applicable, while the current Creators API caching guidance is more specific by resource. Current Creators API guidance specifies a **1-hour TTL for Offers** and a **1-day TTL for other listed resources** such as `BrowseNodeInfo`, `BrowseNodes`, `DetailPageURL`, `Images`, and `ItemInfo`. Customer information derived from Amazon must not be cached.
 
 **Engineering interpretation:**  
-Amazon-derived title, price, availability, and other licensed fields require `retrievedAt`, `expiresAt`, `sourceMethod`, and refresh status. Expired content cannot remain publicly displayed.
+The platform must apply the **stricter resource-specific TTL**. Amazon price and availability obtained from `OffersV2` therefore require an expiry no later than one hour after retrieval under the current Creators API guidance. Other licensed fields may use the applicable documented TTL, never exceeding the controlling license. `retrievedAt`, `expiresAt`, `sourceMethod`, resource class, and refresh status are mandatory for publication. Expired content cannot remain publicly displayed.
 
 ---
 
@@ -487,9 +487,9 @@ Price and availability may also require a third, specific disclaimer.
 
 The following remain open and must not be guessed:
 
-1. Exact Creators API eligibility and access path for the Hardware Radar account.
-2. Current production rate limits and whether they vary by account performance.
-3. Whether Amazon grants any additional retention rights through current Creators API specifications.
+1. Whether the Hardware Radar Associates account currently satisfies Creators API enrollment eligibility and has active credentials.
+2. The account-specific production TPS/TPD allocation at deployment time; Amazon documents an initial ceiling but allocation can change with shipped revenue and account state.
+3. Whether Amazon grants any additional retention or analytics rights beyond the currently documented Creators API caching guidance.
 4. Whether Hardware Radar's planned comparison and ranking presentation requires additional Amazon-specific wording.
 5. Exact operational treatment when API access is unavailable but independent Atlas content remains publishable.
 6. Whether any proposed internal historical-observation use qualifies as prohibited aggregation, analysis, extraction, or repurposing.
@@ -506,16 +506,16 @@ Until resolved, material items should produce `REVIEW` or `BLOCKED`, not `READY`
 |---|---|---|---|
 | RS-001 | 2026-07-18 | SRC-001, SRC-003 | Operating, disclosure, Special Link, and participation foundation reviewed |
 | RS-002 | 2026-07-18 | SRC-004, SRC-005 | IP-license, caching, price, image, API credential, trademark, and agent requirements extracted |
-| RS-003 | Planned | SRC-006 | Creators API operations, eligibility, authentication, limits, and migration review |
+| RS-003 | 2026-08-09 | SRC-006 | Creators API current technical baseline verified: enrollment, OAuth/LwA token model, endpoint family, operations/resources, rate model, caching TTLs, error handling, and PA-API migration status |
 | RS-004 | Planned | SRC-008 | Applicable disclosure, advertising, privacy, and cross-border legal review |
 
 ---
 
 ## 13. Next Sprint
 
-The next controlled research sprint is:
+The next controlled engineering gate is:
 
-**Creators API Technical and Operational Specification**
+**FC001 — Amazon Compliance Integration Review**
 
 Deliverables:
 

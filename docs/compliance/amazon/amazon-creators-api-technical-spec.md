@@ -1,210 +1,253 @@
 # Amazon Creators API Technical & Operational Specification
 
 **Document ID:** AMZ-CREATORS-SPEC  
-**Version:** 0.1  
-**Status:** Research Baseline  
-**Owner:** Mirabelle Labs
+**Version:** 0.2  
+**Status:** Verified Technical Baseline — Production Controls Pending  
+**Owner:** Mirabelle Labs  
+**Last verified:** 2026-08-09
 
 ---
 
 # 1. Purpose
 
-This specification defines how Hardware Radar will integrate with Amazon's approved API mechanisms.
+This specification defines the verified technical baseline for Hardware Radar's Amazon Creators API integration. It constrains later implementation in Mercury, Sentinel and Forge; it is not itself implementation code.
 
-It does **not** define implementation code.
+Amazon's controlling agreements, policies and current Creators API documentation supersede this internal specification if they conflict.
 
-It defines engineering requirements that will later be implemented in Mercury, Sentinel and Forge.
+# 2. Production acquisition decision
 
----
+Creators API is the supported Amazon catalog API and the production acquisition target for Amazon Product Advertising Content. PA-API 5.0 is deprecated.
 
-# 2. Objectives
+Manual copying from Amazon retail pages is not an approved Hardware Radar production ingestion method.
 
-The Amazon adapter shall:
-
-- Retrieve Amazon-approved Product Advertising Content.
-- Preserve compliance metadata.
-- Refresh expiring content.
-- Never expose private credentials.
-- Produce immutable Mercury observations.
-- Supply only validated data for publication.
-
----
-
-# 3. Architectural Position
+# 3. Architectural position
 
 ```text
-Amazon API
-      │
-      ▼
-Amazon Adapter
-      │
-      ▼
-Mercury
-      │
-      ▼
-Sentinel
-      │
-      ▼
-Forge
-      │
-      ▼
+Amazon Creators API
+        │
+        ▼
+Server-side Amazon Acquisition Client
+        │
+        ▼
+Amazon Adapter / Normalizer
+        │
+        ▼
+Mercury + source-aware retention controls
+        │
+        ▼
+Sentinel / Amazon compliance gates
+        │
+        ▼
+Forge review / publication orchestration
+        │
+        ▼
+Published intelligence artifact
+        │
+        ▼
 Hardware Radar
 ```
 
-The website must never call Amazon directly.
+Hardware Radar browser code must never call Amazon Creators API directly.
 
----
+# 4. Enrollment and credentials
 
-# 4. Responsibilities
+Current Amazon documentation states that Creators API registration is available to accepted Associates who have referred qualified sales. Only the primary account owner can register an application.
 
-## Amazon Adapter
+Credentials must remain server-side and outside source control, browser bundles, logs and generated pages.
 
-Responsible for:
+# 5. Authentication
 
-- Authentication
-- Request throttling
-- Response validation
-- Error handling
-- Compliance metadata
-- Retry policy
+Creators API uses Login with Amazon OAuth client-credentials authentication.
 
-Not responsible for:
+Current token behavior:
 
-- Editorial decisions
-- Product specifications
-- UI rendering
-- Compliance approval
+- grant type: `client_credentials`;
+- scope: `creatorsapi::default`;
+- token type: bearer;
+- documented access-token lifetime: 3,600 seconds;
+- token should be cached/reused until near expiry rather than fetched for every API request.
 
----
+Regional token endpoints differ, while the catalog API endpoint is common.
 
-# 5. Credential Policy
+# 6. API endpoint and marketplace
 
-Credentials shall:
+Current catalog endpoint:
 
-- remain server-side;
-- be stored in a secret manager or environment variables;
-- never be committed to source control;
-- never appear in client JavaScript;
-- never be written to logs.
+`https://creatorsapi.amazon`
 
-Credential rotation must be documented.
+Marketplace is selected through the required marketplace request context. Hardware Radar's initial scope remains Amazon.com / United States and requires the correct Partner Tag for that marketplace.
 
----
+# 7. Operations and resources
 
-# 6. Mercury Observation Contract
+Current principal operations include:
 
-Each API retrieval should create a new observation.
+- `GetItems`
+- `SearchItems`
+- `GetVariations`
+- `GetBrowseNodes`
 
-Minimum fields:
+Relevant high-level resources include:
+
+- `OffersV2`
+- `ItemInfo`
+- `Images`
+- `BrowseNodeInfo`
+- `BrowseNodes`
+- `ParentASIN`
+- `SearchRefinements`
+- `VariationSummary`
+
+`OffersV2` is the required current offer-resource family for offer listing data. It exposes price, availability, condition, merchant information and related offer fields.
+
+# 8. Rate limits
+
+Amazon documents both TPS (transactions per second) and TPD (transactions per day).
+
+The documented initial allocation is up to:
+
+- 1 TPS;
+- 8,640 TPD;
+- for the first 30-day period after credential creation.
+
+Later allocation is performance-dependent and updated based on shipped revenue. Access can also be affected by lack of qualifying referred sales.
+
+Therefore no static platform constant may be treated as the permanent account allocation. Forge/operations must record the current account allocation and the acquisition client must enforce it centrally.
+
+# 9. Caching and retention
+
+Current Creators API best-practice guidance is resource-specific:
+
+| Resource class | Current documented TTL |
+|---|---:|
+| Offers | 1 hour |
+| BrowseNodeInfo | 1 hour |
+| Other listed fields/resources such as BrowseNodes, DetailPageURL, Images, ItemInfo | 1 day |
+
+Customer information derived from Amazon must not be cached.
+
+These TTLs are operational/license constraints, not Mercury market-freshness classifications. The stricter applicable rule controls.
+
+For Hardware Radar, Amazon price and availability from `OffersV2` must therefore be treated as ephemeral offer content with an expiry no later than one hour after retrieval under the current guidance.
+
+# 10. Link and Partner Tag integrity
+
+The correct Partner Tag must be supplied. Amazon-vended links must retain their attribution parameters; Hardware Radar must not rewrite them in a way that breaks attribution.
+
+# 11. Mercury observation contract
+
+Each successful approved retrieval may create a canonical Mercury observation, but durable observation identity must be separated from ephemeral licensed payload semantics.
+
+Required durable/audit context includes, subject to controlling terms:
 
 - observationId
 - atlasProductId
+- retailerId
 - marketplace
-- asin
+- ASIN mapping
 - retrievedAt
-- expiresAt
 - sourceMethod
-- apiVersion
-- affiliateTag
+- API/adapter version
+- request/audit metadata where lawful
+- validation/compliance outcomes
+
+Ephemeral Amazon fields may include:
+
 - price
 - currency
 - availability
-- imageUrl
-- detailPageUrl
-- validationStatus
+- offer condition
+- merchant/offer data
+- Amazon text
+- image URL
+- detail/affiliate URL
 
-Observations are immutable.
+Each licensed field/resource requires a source class and expiry appropriate to its controlling TTL.
 
----
+# 12. Historical intelligence
 
-# 7. Refresh Policy
+Creators API technical availability does not grant Hardware Radar permission to retain Amazon Program Content indefinitely or use it for historical analytics.
 
-Before publication:
+Until the applicable license question is separately resolved:
 
-- check expiry;
-- refresh expired Amazon content;
-- create a new observation;
-- supersede the previous observation.
+`AMAZON_PROGRAM_CONTENT -> MERCURY_HISTORICAL_INTELLIGENCE = BLOCKED`
 
-Never overwrite an observation.
+This does not disable M006 for independent or otherwise permitted sources.
 
----
+# 13. Failure handling
 
-# 8. Failure States
+The acquisition layer must distinguish at least:
 
-Possible adapter outcomes:
+- `PASS`
+- `RETRY`
+- `RATE_LIMITED`
+- `AUTH_FAILED`
+- `INVALID_RESPONSE`
+- `LICENSE_BLOCK`
+- `UNKNOWN`
 
-PASS
+429 and retryable server errors require bounded retry/backoff behavior and respect for `Retry-After` where supplied. Token-expiry failures require token renewal rather than publication fallback.
 
-RETRY
+Only a validated `PASS` path may progress toward publication.
 
-RATE_LIMITED
+# 14. Sentinel / publication gates
 
-AUTH_FAILED
+Initial Amazon-specific gates include:
 
-INVALID_RESPONSE
+- approved Creators API source;
+- credential/Partner Tag context valid;
+- required fields/resources present;
+- resource-specific expiry valid;
+- affiliate/vended-link integrity;
+- timestamp/disclaimer rendering capability;
+- image-storage policy;
+- historical-analytics exclusion;
+- retailer kill switch;
+- required notices/disclosures available.
 
-LICENSE_BLOCK
+Failure of a critical Amazon gate blocks publication.
 
-UNKNOWN
-
-Only PASS permits publication.
-
----
-
-# 9. Sentinel Validators
-
-Initial API validators:
-
-- Approved API source
-- Credential validity
-- Required fields present
-- Expiry window valid
-- Affiliate tag valid
-- Timestamp requirement
-- Required disclaimer availability
-
----
-
-# 10. Forge Workflow
+# 15. Forge workflow
 
 ```text
-Retrieve
-   ↓
-Validate
-   ↓
-Store Observation
-   ↓
-Sentinel Checks
-   ↓
+Acquire through approved client
+        ↓
+Normalize through registered Amazon adapter
+        ↓
+Validate canonical observation
+        ↓
+Apply Amazon source/license gates
+        ↓
+Store permitted observation/audit state
+        ↓
+Forge review
+        ↓
 READY / REVIEW / BLOCKED
+        ↓
+Publication eligibility
 ```
 
----
+Forge orchestrates this process. Forge does not manufacture canonical Mercury observations or bypass source policy.
 
-# 11. Open Questions
+# 16. Remaining open operational questions
 
-Items requiring verification against current official Amazon documentation:
+The following remain deployment-specific and must not be guessed:
 
-1. Exact eligibility requirements for Creators API.
-2. Current authentication mechanism.
-3. Endpoint catalogue.
-4. Rate-limit model.
-5. Error-code catalogue.
-6. Refresh expectations.
-7. Versioning policy.
-8. Deprecation process.
+1. Whether the Hardware Radar account is currently eligible/enrolled and has active Creators API credentials.
+2. Current account-specific TPS and TPD allocation at deployment time.
+3. Exact first-operation/resource request set for FM001.
+4. Exact current Partner Tag to use for Amazon.com.
+5. Whether Amazon grants any additional retention/aggregation/history rights beyond the baseline currently documented.
+6. Final rendering placement for all required disclosures and timestamps.
 
-No engineering assumptions should be promoted to production until verified.
+# 17. Definition of done for FM001 dependency
 
----
+This specification is sufficient to begin FM001 design when:
 
-# 12. Definition of Done
-
-This specification is complete when:
-
-- every endpoint is documented;
-- every returned field has an owner;
-- every field maps to Atlas, Mercury, Sentinel, Forge or Hardware Radar;
-- every failure mode has a documented response;
-- every compliance dependency is traceable to the Compliance Bible.
+- Creators API is the only production Amazon acquisition path unless another path is expressly approved;
+- OAuth/token behavior is represented server-side;
+- resource-specific TTL is modeled separately from generic freshness;
+- source/license metadata is represented;
+- historical intelligence fails closed for Amazon Program Content;
+- publication gates fail closed;
+- credentials and Partner Tag remain operational secrets/configuration;
+- manual/test normalization cannot become production-publishable Amazon data.
