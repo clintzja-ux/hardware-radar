@@ -1,0 +1,4 @@
+import assert from "node:assert/strict"; import { AmazonCreatorsAcquisitionService } from "../acquisition/amazon/AmazonCreatorsAcquisitionService.js";
+const client={getItems:async()=>({requestId:"req-1",itemsResult:{items:[{asin:"B000000001",detailPageURL:"https://www.amazon.com/dp/B000000001?tag=x-20",offersV2:{listings:[{availability:{type:"IN_STOCK"},condition:{value:"New"},merchantInfo:{name:"Amazon.com"},price:{money:{amount:79.99,currency:"USD"}}}]}}]}})};
+const svc=new AmazonCreatorsAcquisitionService({client,now:()=>"2026-08-10T17:00:00Z"}); const r=await svc.acquire({asin:"B000000001",atlasProductId:"ram_test"}); assert.equal(r.status,"ACQUIRED"); assert.equal(r.ingestionRequest.sourceMethod,"API"); assert.equal(r.ingestionRequest.licenseContext,"AMAZON_CREATORS_API"); assert.equal(r.ingestionRequest.sourcePayload.price,79.99);
+console.log("AmazonCreatorsAcquisition tests passed.");

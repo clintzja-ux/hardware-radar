@@ -71,7 +71,7 @@ export function normalizeAmazonOffer(input, context) {
             },
             transformation: {
                 adapterId: "mer_adapter_amazon_us",
-                adapterVersion: "mer_adapter_amazon_us@1.0.0",
+                adapterVersion: "mer_adapter_amazon_us@1.1.0",
                 normalizedAt: optional(context.normalizedAt, observationTime)
             },
             validation: {

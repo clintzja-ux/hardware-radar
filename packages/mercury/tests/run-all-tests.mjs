@@ -61,7 +61,12 @@ const testModules = [
     "./PublicationWorkflowService.test.mjs",
     "./PublicationWithdrawal.test.mjs",
     "./GovernedPublicationSnapshot.test.mjs",
-    "./PublicationFailureRecovery.test.mjs"
+    "./PublicationFailureRecovery.test.mjs",
+    "./AmazonTokenProvider.test.mjs",
+    "./AmazonRateGovernor.test.mjs",
+    "./AmazonCreatorsApiClient.test.mjs",
+    "./AmazonCreatorsAcquisition.test.mjs",
+    "./AmazonAcquisitionIsolation.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
