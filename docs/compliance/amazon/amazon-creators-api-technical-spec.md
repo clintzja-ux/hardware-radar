@@ -1,10 +1,10 @@
 # Amazon Creators API Technical & Operational Specification
 
 **Document ID:** AMZ-CREATORS-SPEC  
-**Version:** 0.2  
+**Version:** 0.3  
 **Status:** Verified Technical Baseline — Production Controls Pending  
 **Owner:** Mirabelle Labs  
-**Last verified:** 2026-08-09
+**Last verified:** 2026-08-10
 
 ---
 
@@ -57,17 +57,26 @@ Credentials must remain server-side and outside source control, browser bundles,
 
 # 5. Authentication
 
-Creators API uses Login with Amazon OAuth client-credentials authentication.
+Creators API uses OAuth 2.0 client-credentials authentication, but the exact token flow depends on the credential version issued by Amazon. The acquisition client must therefore treat credential version as configuration and must not hard-code a single authentication scheme.
+
+Current documented credential families include:
+
+| Credential family | NA version | Token endpoint | Token request | API Authorization header |
+|---|---|---|---|---|
+| v2.x | 2.1 | `https://creatorsapi.auth.us-east-1.amazoncognito.com/oauth2/token` | `application/x-www-form-urlencoded`, scope `creatorsapi/default`; credentials may be supplied in body or HTTP Basic auth | `Bearer <access_token>, Version <credential_version>` |
+| v3.x | 3.1 | `https://api.amazon.com/auth/o2/token` | JSON client credentials, scope `creatorsapi::default` | `Bearer <access_token>` |
+
+Equivalent regional versions/endpoints exist for Europe and Far East credentials. Hardware Radar's initial Amazon.com integration is North America, but the implementation must select the token endpoint from the actual issued credential version rather than infer it merely from marketplace.
 
 Current token behavior:
 
 - grant type: `client_credentials`;
-- scope: `creatorsapi::default`;
-- token type: bearer;
-- documented access-token lifetime: 3,600 seconds;
-- token should be cached/reused until near expiry rather than fetched for every API request.
+- documented access-token lifetime: approximately 3,600 seconds;
+- tokens must be cached/reused until near expiry rather than fetched for every API request;
+- credentials, client secret and bearer tokens are server-side secrets and must never enter Forge browser code, public artifacts, repository history or application logs;
+- token-refresh behavior must be serialized/cached sufficiently to avoid token-endpoint throttling.
 
-Regional token endpoints differ, while the catalog API endpoint is common.
+**FM006 implementation rule:** authentication is a version-aware subsystem boundary. The first live credential must be inspected for its issued version before choosing the production token provider.
 
 # 6. API endpoint and marketplace
 
@@ -78,6 +87,23 @@ Current catalog endpoint:
 Marketplace is selected through the required marketplace request context. Hardware Radar's initial scope remains Amazon.com / United States and requires the correct Partner Tag for that marketplace.
 
 # 7. Operations and resources
+
+The first Hardware Radar production acquisition operation is **GetItems by ASIN**. SearchItems is useful for discovery later, but FM006 should not depend on Amazon search ranking to identify an already-canonical Atlas product.
+
+Current GetItems endpoint:
+
+`POST https://creatorsapi.amazon/catalog/v1/getItems`
+
+Required common request context for Amazon.com includes:
+
+- `Authorization` header appropriate to credential version;
+- `Content-Type: application/json`;
+- `x-marketplace: www.amazon.com`;
+- body `marketplace: "www.amazon.com"`;
+- body `partnerTag: <configured Amazon.com Partner Tag>`;
+- `itemIds` containing one or more ASINs (Amazon documents up to 10 ASINs per GetItems request);
+- `itemIdType: "ASIN"`;
+- an explicit minimal `resources` list.
 
 Current principal operations include:
 
@@ -98,6 +124,21 @@ Relevant high-level resources include:
 - `VariationSummary`
 
 `OffersV2` is the required current offer-resource family for offer listing data. It exposes price, availability, condition, merchant information and related offer fields.
+
+## 7.1 FM006 minimum resource set
+
+FM006 should request only the data required to create a current market observation and preserve Amazon attribution. The initial minimum resource set should be limited to:
+
+- `offersV2.listings.price`;
+- `offersV2.listings.availability`;
+- `offersV2.listings.condition`;
+- `offersV2.listings.merchantInfo`.
+
+`detailPageURL` is returned at item level and must be preserved exactly as vended for attribution. Item title or images should be requested only when a concrete application requirement exists because they introduce additional licensed content and retention handling. Atlas remains the source of independent product identity/specifications.
+
+OffersV2 returns featured listings rather than the removed legacy offer summaries. The old Offers summary concepts (including lowest/highest price and offer count) are not available in OffersV2 and must not be assumed by the acquisition implementation.
+
+The normalizer must map the returned price from `offersV2.listings[].price.money.amount` and currency from `...price.money.currency`; availability, condition and merchant fields must come from their corresponding OffersV2 listing fields. `violatesMAP` must be treated as a display/compliance signal rather than ignored.
 
 # 8. Rate limits
 
@@ -185,9 +226,11 @@ The acquisition layer must distinguish at least:
 - `LICENSE_BLOCK`
 - `UNKNOWN`
 
-429 and retryable server errors require bounded retry/backoff behavior and respect for `Retry-After` where supplied. Token-expiry failures require token renewal rather than publication fallback.
+Creators API returns structured exceptions. `ThrottleException` may include `retryAfterSeconds`; the client must honor that signal when present and otherwise use bounded backoff. Authentication failures such as `TokenExpired` require controlled token renewal, not fallback to manual data. Partial responses are possible when batched identifiers contain invalid items; each returned ASIN must therefore be matched and validated independently.
 
-Only a validated `PASS` path may progress toward publication.
+Token endpoint throttling and catalog API throttling are distinct failure domains and must be reported separately.
+
+Only a validated `PASS` path may progress toward FM001 ingestion. Acquisition failure must never trigger publication fallback to stale, legacy, manually copied or placeholder Amazon content.
 
 # 14. Sentinel / publication gates
 
@@ -233,11 +276,12 @@ Forge orchestrates this process. Forge does not manufacture canonical Mercury ob
 The following remain deployment-specific and must not be guessed:
 
 1. Whether the Hardware Radar account is currently eligible/enrolled and has active Creators API credentials.
-2. Current account-specific TPS and TPD allocation at deployment time.
-3. Exact first-operation/resource request set for FM001.
+2. The actual issued credential version (for example 2.1 or 3.1), which determines the North America token flow.
+3. Current account-specific TPS and TPD allocation at deployment time.
 4. Exact current Partner Tag to use for Amazon.com.
-5. Whether Amazon grants any additional retention/aggregation/history rights beyond the baseline currently documented.
-6. Final rendering placement for all required disclosures and timestamps.
+5. Which existing Atlas RAM products already have verified ASIN mappings suitable for first GetItems calls.
+6. Whether Amazon grants any additional retention/aggregation/history rights beyond the baseline currently documented.
+7. Final rendering placement for all required disclosures and timestamps.
 
 # 17. Definition of done for FM001 dependency
 
