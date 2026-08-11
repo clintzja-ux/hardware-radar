@@ -33,6 +33,11 @@ export { InMemoryObservationAcceptanceStore } from "./ingestion/InMemoryObservat
 export { ObservationAcceptanceRepository } from "./persistence/ObservationAcceptanceRepository.js";
 export { FileObservationAcceptanceRepository } from "./persistence/FileObservationAcceptanceRepository.js";
 export { classifyObservationStorage, STORAGE_CLASSES, PAYLOAD_STATUSES } from "./retention/RetentionPolicy.js";
+export { RIGHTS_STATES, SOURCE_RIGHTS_SCHEMA_VERSION, SOURCE_RIGHTS_CAPABILITIES, isExplicitlyAllowed, isUnresolvedRight } from "./rights/SourceRightsPolicy.js";
+export { SourceRightsRegistry, defaultSourceRightsRegistry } from "./rights/SourceRightsRegistry.js";
+export { evaluateSourceRight, evaluateAcquisitionRight } from "./rights/SourceRightsEvaluator.js";
+export { validateSourceRightsProfile } from "./rights/SourceRightsValidator.js";
+
 export { ObservationReviewService, REVIEW_ITEM_STATUSES } from "./review/ObservationReviewService.js";
 export { REVIEW_DECISIONS, createReviewDecision, validateReviewDecision } from "./review/ObservationReviewDecision.js";
 export { ReviewDecisionRepository } from "./review/persistence/ReviewDecisionRepository.js";

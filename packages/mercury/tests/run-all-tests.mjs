@@ -66,7 +66,14 @@ const testModules = [
     "./AmazonRateGovernor.test.mjs",
     "./AmazonCreatorsApiClient.test.mjs",
     "./AmazonCreatorsAcquisition.test.mjs",
-    "./AmazonAcquisitionIsolation.test.mjs"
+    "./AmazonAcquisitionIsolation.test.mjs",
+    "./SourceRightsRegistry.test.mjs",
+    "./SourceRightsFailClosed.test.mjs",
+    "./SourceRightsValidator.test.mjs",
+    "./SourceRightsHistorical.test.mjs",
+    "./SourceRightsRetention.test.mjs",
+    "./SourceRightsPublication.test.mjs",
+    "./SourceRightsAcquisition.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

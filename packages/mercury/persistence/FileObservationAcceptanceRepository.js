@@ -116,6 +116,9 @@ export class FileObservationAcceptanceRepository extends ObservationAcceptanceRe
       if (state.records[observation.observationId]) throw new Error(`Observation already exists: ${observation.observationId}`);
 
       const storage = this.retentionPolicy(observation);
+      if (storage.storageClass === STORAGE_CLASSES.RIGHTS_UNKNOWN) {
+        throw new Error("Observations with unknown source rights cannot enter the durable repository.");
+      }
       if (this.environment === "production" && storage.storageClass === STORAGE_CLASSES.TEST_ONLY) {
         throw new Error("TEST_FIXTURE observations cannot enter the production durable repository.");
       }

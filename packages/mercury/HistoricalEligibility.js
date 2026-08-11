@@ -1,5 +1,5 @@
-export const HISTORICAL_ELIGIBILITY_POLICY_VERSION = "1.0.0";
-
+import { evaluateSourceRight } from "./rights/SourceRightsEvaluator.js";
+export const HISTORICAL_ELIGIBILITY_POLICY_VERSION = "1.1.0";
 export function evaluateHistoricalEligibility(observation) {
     const reasons = [];
     if (!observation || typeof observation !== "object") reasons.push("INVALID_OBSERVATION");
@@ -10,6 +10,8 @@ export function evaluateHistoricalEligibility(observation) {
         if (typeof observation.offer?.condition !== "string" || observation.offer.condition.length === 0) reasons.push("MISSING_CONDITION");
         if (typeof observation.atlasProductId !== "string" || observation.atlasProductId.length === 0) reasons.push("MISSING_PRODUCT_ID");
         if (!Number.isFinite(Date.parse(observation.observationTime))) reasons.push("INVALID_OBSERVATION_TIME");
+        const right = evaluateSourceRight(observation, "retention.historical");
+        if (!right.allowed) reasons.push(right.reason ?? "HISTORICAL_RIGHT_NOT_ALLOWED");
     }
     return Object.freeze({ eligible: reasons.length === 0, reasons: Object.freeze(reasons), policyVersion: HISTORICAL_ELIGIBILITY_POLICY_VERSION });
 }

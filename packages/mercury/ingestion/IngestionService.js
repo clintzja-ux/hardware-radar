@@ -5,6 +5,7 @@ import { validateObservation } from "../ObservationValidator.js";
 import { validateIngestionRequest } from "./IngestionRequestValidator.js";
 import { INGESTION_STATUSES, ingestionResult } from "./IngestionResult.js";
 import InMemoryObservationAcceptanceStore from "./InMemoryObservationAcceptanceStore.js";
+import { evaluateAcquisitionRight } from "../rights/SourceRightsEvaluator.js";
 
 function norm(v) { return String(v).trim(); }
 function amazonBlocked(request) {
@@ -33,6 +34,8 @@ export class IngestionService {
     const normalized = { ...request, sourceMethod: request.sourceMethod.trim().toUpperCase() };
     const block = amazonBlocked(normalized);
     if (block) return ingestionResult(INGESTION_STATUSES.BLOCKED_SOURCE_METHOD, { reason: block });
+    const acquisitionRight = evaluateAcquisitionRight(normalized);
+    if (!acquisitionRight.allowed) return ingestionResult(INGESTION_STATUSES.BLOCKED_SOURCE_METHOD, { reason: acquisitionRight.reason, rightsState: acquisitionRight.state });
     const product = await this.atlas.getProduct(normalized.atlasProductId).catch(() => null);
     const retailer = await this.atlas.getRetailer(normalized.retailerId).catch(() => null);
     if (!product || !retailer) return ingestionResult(INGESTION_STATUSES.IDENTITY_FAILURE, { reason: !product ? "ATLAS_PRODUCT_UNRESOLVED" : "ATLAS_RETAILER_UNRESOLVED" });
