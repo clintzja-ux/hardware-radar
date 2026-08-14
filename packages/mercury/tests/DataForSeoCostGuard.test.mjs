@@ -1,0 +1,3 @@
+import assert from "node:assert/strict"; import { DataForSeoAcquisitionService } from "../index.js";
+let posts=0; const client={postProductsTask:async()=>{posts++;return {id:"t",cost:.001,status_code:20100};},getProductsResult:async()=>({}),postSellersTask:async()=>({id:"s",cost:.001,status_code:20100}),getSellersResult:async()=>({})};
+const s=new DataForSeoAcquisitionService({client}); const x=await s.createProductsTask({keyword:"ram"}); assert.equal(x.costUsd,.001); await assert.rejects(()=>s.createProductsTask({keyword:"ram"}),/DUPLICATE_PAID_TASK/); assert.equal(posts,1); console.log("DataForSEO cost guard tests passed.");

@@ -48,6 +48,15 @@ const profiles = Object.freeze({
     presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
     status: "BLOCKED_LEGACY_SOURCE"
   }),
+  DATAFORSEO_GOOGLE_SHOPPING: Object.freeze({
+    sourceId: "DATAFORSEO_GOOGLE_SHOPPING", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
+    acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },
+    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
+    retention: { storageClass: "DURABLE", contentTtlMs: null, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
+    presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
+    status: "WRITTEN_PROVIDER_AUTHORIZATION_2026_08"
+  }),
   BEST_BUY_PRODUCTS_API: Object.freeze({
     sourceId: "BEST_BUY_PRODUCTS_API", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
     acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },

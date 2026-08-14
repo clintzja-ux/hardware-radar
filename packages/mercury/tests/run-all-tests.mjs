@@ -80,7 +80,15 @@ const testModules = [
     "./LiveMarketAvailability.test.mjs",
     "./LiveMarketExpiry.test.mjs",
     "./LiveMarketRanking.test.mjs",
-    "./LiveMarketWorkflow.test.mjs"
+    "./LiveMarketWorkflow.test.mjs",
+    "./DataForSeoRights.test.mjs",
+    "./DataForSeoConfig.test.mjs",
+    "./DataForSeoClient.test.mjs",
+    "./DataForSeoRetrieval.test.mjs",
+    "./DataForSeoCostGuard.test.mjs",
+    "./DataForSeoSellers.test.mjs",
+    "./DataForSeoIsolation.test.mjs",
+    "./DataForSeoDurableLedger.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

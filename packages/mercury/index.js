@@ -54,3 +54,5 @@ export { GovernedMarketPublicationService, createGovernedMarketPublicationServic
 export { PublicationAtlasResolver } from "./publication/PublicationAtlasResolver.js";
 
 export * from "./acquisition/amazon/index.js";
+
+export * from "./acquisition/dataforseo/index.js";
