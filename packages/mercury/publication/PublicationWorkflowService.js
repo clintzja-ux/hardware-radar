@@ -1,6 +1,6 @@
 import atlasDefault from "../../atlas/Atlas.js";
 import defaultPublicationPolicy from "./PublicationPolicy.js";
-import { evaluatePublicationEligibility } from "./PublicationEligibility.js";
+import { evaluateLiveMarketEligibility } from "../live/LiveMarketEligibility.js";
 import { createPublicationDecision } from "./PublicationDecision.js";
 
 function freeze(value) { return Object.freeze(value); }
@@ -41,7 +41,7 @@ export class PublicationWorkflowService {
       try {
         freshness = this.mercury.evaluateFreshness(observation, { evaluatedAt: asOf });
         confidence = this.mercury.evaluateConfidence(observation, { evaluatedAt: asOf });
-        evidenceEligibility = evaluatePublicationEligibility(observation, { product, retailer, freshness, confidence, storage: audit?.storage ?? null, evaluatedAt: asOf, policy: this.policy, enforceSourceRights: true });
+        evidenceEligibility = evaluateLiveMarketEligibility(observation, { product, retailer, freshness, confidence, storage: audit?.storage ?? null, evaluatedAt: asOf, policy: this.policy });
         reasons.push(...evidenceEligibility.reasons);
       } catch {
         reasons.push("EVIDENCE_EVALUATION_FAILED");

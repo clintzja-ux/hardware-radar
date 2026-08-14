@@ -87,3 +87,10 @@ Forge v0.2 still contains a legacy Mercury preview workflow. It is explicitly no
 ## Governed publication workflow
 
 Canonical observations are not implicitly public. Publication proceeds through separate evidence eligibility, durable review, and durable publication authorization. `PUBLISH` and `WITHDRAW` decisions are append-only `mer_pub_*` workflow records. The public build consumes only governed published observations when durable operational state paths are supplied; otherwise it fails closed to insufficient-data output.
+
+
+## Live Market Intelligence
+
+Mercury treats current-market eligibility as a separate rights- and freshness-aware decision layer. A stored price is not automatically a live offer. Current observation, comparison, and public-display rights must be explicitly allowed; Atlas identities must resolve; evidence must validate; freshness/confidence/availability must satisfy policy; and licensed payload must remain usable.
+
+`LiveMarketIntelligence` returns `AVAILABLE` only when at least one observation passes every gate. Otherwise it returns `INSUFFICIENT_DATA`. Historical Intelligence remains independent and may remain dormant when historical-retention rights are unavailable.

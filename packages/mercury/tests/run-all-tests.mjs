@@ -73,7 +73,14 @@ const testModules = [
     "./SourceRightsHistorical.test.mjs",
     "./SourceRightsRetention.test.mjs",
     "./SourceRightsPublication.test.mjs",
-    "./SourceRightsAcquisition.test.mjs"
+    "./SourceRightsAcquisition.test.mjs",
+    "./LiveMarketPolicy.test.mjs",
+    "./LiveMarketEligibility.test.mjs",
+    "./LiveMarketRights.test.mjs",
+    "./LiveMarketAvailability.test.mjs",
+    "./LiveMarketExpiry.test.mjs",
+    "./LiveMarketRanking.test.mjs",
+    "./LiveMarketWorkflow.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { Mercury } from "../Mercury.js";
+import { LiveMarketIntelligence } from "../live/LiveMarketIntelligence.js";
+import { makeAmazonApiObservation } from "./helpers/publicationFixture.mjs";
+const product=JSON.parse(await readFile(new URL("../../atlas/products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json",import.meta.url),"utf8"));
+const retailer=JSON.parse(await readFile(new URL("../../atlas/retailers/RETAILER-0001-amazon.json",import.meta.url),"utf8"));
+const observation=makeAmazonApiObservation("mer_obs_000000701","2026-08-10T15:00:00Z"); observation.offer.availability="OUT_OF_STOCK"; observation.offer.price=1;
+const market=new LiveMarketIntelligence({mercury:new Mercury()}); const result=await market.evaluate({observations:[observation],products:[product],retailers:[retailer],asOf:"2026-08-10T15:20:00Z"});
+assert.equal(result.status,"INSUFFICIENT_DATA"); assert.equal(result.cheapest,null); assert.ok(result.excluded[0].eligibility.reasons.includes("AVAILABILITY_NOT_ELIGIBLE"));
+console.log("Live market availability tests passed.");
