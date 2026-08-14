@@ -56,3 +56,5 @@ export { PublicationAtlasResolver } from "./publication/PublicationAtlasResolver
 export * from "./acquisition/amazon/index.js";
 
 export * from "./acquisition/dataforseo/index.js";
+
+export * from "./resolution/dataforseo/index.js";

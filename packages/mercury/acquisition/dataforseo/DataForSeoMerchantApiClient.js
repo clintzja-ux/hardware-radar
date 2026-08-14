@@ -30,6 +30,15 @@ export class DataForSeoMerchantApiClient {
     const body=[{ product_id:productId.trim(), location_name:locationName, language_name:languageName, priority, ...(tag?{tag}: {}) }];
     return firstTask(await this.transport({ method:"POST", url:`${this.baseUrl}/v3/merchant/google/sellers/task_post`, headers:this.headers(), body }));
   }
+  async postProductInfoTask({ productId, locationName=DATAFORSEO_DEFAULT_LOCATION, languageName=DATAFORSEO_DEFAULT_LANGUAGE, tag, priority=DATAFORSEO_NORMAL_PRIORITY }={}) {
+    required(productId,"productId"); if (priority !== 1) throw new Error("DATAFORSEO_HIGH_PRIORITY_BLOCKED");
+    const body=[{ product_id:productId.trim(), location_name:locationName, language_name:languageName, priority, ...(tag?{tag}: {}) }];
+    return firstTask(await this.transport({ method:"POST", url:`${this.baseUrl}/v3/merchant/google/product_info/task_post`, headers:this.headers(), body }));
+  }
+  async getProductInfoResult(taskId) {
+    required(taskId,"taskId");
+    return firstTask(await this.transport({ method:"GET", url:`${this.baseUrl}/v3/merchant/google/product_info/task_get/advanced/${encodeURIComponent(taskId)}`, headers:this.headers() }));
+  }
   async getSellersResult(taskId) {
     required(taskId,"taskId");
     return firstTask(await this.transport({ method:"GET", url:`${this.baseUrl}/v3/merchant/google/sellers/task_get/advanced/${encodeURIComponent(taskId)}`, headers:this.headers() }));
