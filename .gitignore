@@ -1,2 +1,6 @@
 
 .forge-review/
+
+.env
+.env.*
+!.env.example
