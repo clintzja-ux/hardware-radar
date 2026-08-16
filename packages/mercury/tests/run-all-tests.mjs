@@ -99,7 +99,8 @@ const testModules = [
     "./DataForSeoAlternateIdentifiers.test.mjs",
     "./DataForSeoLiveProductInfoEvidence.test.mjs",
     "./DataForSeoSellerNormalizer.test.mjs",
-    "./DataForSeoMarketObservationCandidate.test.mjs"
+    "./DataForSeoMarketObservationCandidate.test.mjs",
+    "./DataForSeoMerchantIdentity.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
