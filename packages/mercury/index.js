@@ -58,3 +58,5 @@ export * from "./acquisition/amazon/index.js";
 export * from "./acquisition/dataforseo/index.js";
 
 export * from "./resolution/dataforseo/index.js";
+
+export * from "./market/dataforseo/index.js";
