@@ -42,3 +42,9 @@ Sentinel	7/7 PASS
 Forge	PASS
 Hardware Radar	PASS
 Browser console	CLEAN
+
+## One particularly important production discovery
+
+We should record this for DF002/DF003 later:
+
+A legitimate exact-MPN Google Shopping result may have no product_id or gid; data_docid must therefore be treated as a valid acquisition identifier rather than as a degraded failure state.

@@ -27,7 +27,7 @@ export function createDataForSeoProductEvidence(item = {}) {
   const moduleCapacity=first(specs,["memory size per module","capacity per module","module capacity"]);
   const speed=first(specs,["memory speed","speed","data rate"]);
   const latency=first(specs,["cas latency","latency"]);
-  const memoryType=first(specs,["memory type","ram type","technology"]);
+  const memoryType=first(specs,["memory type","memory technology","ram type","technology"]);
   const formFactor=first(specs,["form factor","memory form factor"]);
   const brand=first(specs,["brand","manufacturer"]);
   return Object.freeze({
