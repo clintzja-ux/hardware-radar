@@ -18,3 +18,4 @@ export {
 
 export const adapterRegistry = new AdapterRegistry([amazonAdapter]);
 export default adapterRegistry;
+export { normalizeDataForSeoSellerEvidence } from "./dataforseo/DataForSeoSellerNormalizer.js";

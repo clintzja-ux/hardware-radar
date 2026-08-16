@@ -97,7 +97,8 @@ const testModules = [
     "./DataForSeoAtlasCapacityInvariant.test.mjs",
     "./DataForSeoProductInfo.test.mjs",
     "./DataForSeoAlternateIdentifiers.test.mjs",
-    "./DataForSeoLiveProductInfoEvidence.test.mjs"
+    "./DataForSeoLiveProductInfoEvidence.test.mjs",
+    "./DataForSeoSellerNormalizer.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
