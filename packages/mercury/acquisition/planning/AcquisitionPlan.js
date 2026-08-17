@@ -42,7 +42,7 @@ export function createAcquisitionPlan({ candidates = [], policy, spentTodayUsd =
 
     const approved = reason == null;
     if (approved) { approvedTasks += 1; approvedSpend = money(approvedSpend + candidate.estimatedCostUsd); }
-    decisions.push({ candidateId: candidate.candidateId, priority: candidate.priority, estimatedCostUsd: candidate.estimatedCostUsd, decision: approved ? ACQUISITION_PLAN_DECISIONS.APPROVED : ACQUISITION_PLAN_DECISIONS.SKIPPED, reason, rationale: candidate.rationale ?? null });
+    decisions.push({ candidateId: candidate.candidateId, priority: candidate.priority, estimatedCostUsd: candidate.estimatedCostUsd, decision: approved ? ACQUISITION_PLAN_DECISIONS.APPROVED : ACQUISITION_PLAN_DECISIONS.SKIPPED, reason, rationale: candidate.rationale ?? null, execution: candidate.execution == null ? null : clone(candidate.execution) });
   }
   const body = { schemaVersion:"1.0", plannedAt, policy:clone(policy), spentTodayUsd:money(spentTodayUsd), approvedTaskCount:approvedTasks, estimatedApprovedSpendUsd:approvedSpend, decisions };
   return freeze({ planId: stableId(body), ...body });

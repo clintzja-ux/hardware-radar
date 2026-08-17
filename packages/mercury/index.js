@@ -63,3 +63,5 @@ export * from "./market/dataforseo/index.js";
 export * from "./runtime/index.js";
 
 export * from "./acquisition/planning/index.js";
+
+export * from "./acquisition/execution/index.js";
