@@ -65,3 +65,5 @@ export * from "./runtime/index.js";
 export * from "./acquisition/planning/index.js";
 
 export * from "./acquisition/execution/index.js";
+
+export * from "./acquisition/integration/index.js";

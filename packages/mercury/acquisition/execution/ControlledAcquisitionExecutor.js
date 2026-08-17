@@ -21,11 +21,12 @@ function validatePlan(plan){
 }
 
 export class ControlledAcquisitionExecutor {
-  constructor({ runLock, ledgerRepository, transport, now=()=>new Date().toISOString(), runId=()=>`acqrun_${crypto.randomUUID()}` }={}){
+  constructor({ runLock, ledgerRepository, transport, resultProcessor=null, now=()=>new Date().toISOString(), runId=()=>`acqrun_${crypto.randomUUID()}` }={}){
     if (!runLock?.runExclusive) throw new TypeError("runLock is required.");
     if (!ledgerRepository?.findByPlanId || !ledgerRepository?.append) throw new TypeError("ledgerRepository is required.");
     if (!transport?.execute) throw new TypeError("transport.execute is required.");
-    this.runLock=runLock; this.ledgerRepository=ledgerRepository; this.transport=transport; this.now=now; this.runIdFactory=runId;
+    if (resultProcessor != null && !resultProcessor?.process) throw new TypeError("resultProcessor.process is required when provided.");
+    this.runLock=runLock; this.ledgerRepository=ledgerRepository; this.transport=transport; this.resultProcessor=resultProcessor; this.now=now; this.runIdFactory=runId;
   }
   async execute(plan){
     const approved = validatePlan(plan);
@@ -42,11 +43,16 @@ export class ControlledAcquisitionExecutor {
           const cost=Number(response?.costUsd ?? 0);
           if(!Number.isFinite(cost)||cost<0) throw new Error("INVALID_PROVIDER_COST");
           actualSpend=money(actualSpend+cost);
-          tasks.push({candidateId:task.candidateId,outcome:"COMPLETED",reason:null,estimatedCostUsd:task.estimatedCostUsd,actualCostUsd:cost,providerTaskId:response?.providerTaskId ?? null,providerStatus:response?.status ?? null});
+          let integration=null;
+          if(this.resultProcessor){
+            try { integration=await this.resultProcessor.process({providerResponse:clone(response),execution:clone(task.execution),candidateId:task.candidateId}); }
+            catch(error){ integration={evidenceOutcome:"REJECTED_INVALID_EVIDENCE",historicalOutcome:"NOT_ELIGIBLE",canonicalObservationEligible:false,publicationEligible:false,errorCode:error?.code ?? error?.message ?? "RESULT_PROCESSING_FAILURE"}; }
+          }
+          tasks.push({candidateId:task.candidateId,outcome:"COMPLETED",acquisitionOutcome:"COMPLETED",reason:null,estimatedCostUsd:task.estimatedCostUsd,actualCostUsd:cost,providerTaskId:response?.providerTaskId ?? null,providerStatus:response?.status ?? null,integration:clone(integration)});
           if(actualSpend > plan.policy.maxSpendPerRunUsd){ stopReason="ACTUAL_RUN_BUDGET"; break; }
           if(money(plan.spentTodayUsd+actualSpend) > plan.policy.maxSpendPerDayUsd){ stopReason="ACTUAL_DAILY_BUDGET"; break; }
         } catch(error){
-          tasks.push({candidateId:task.candidateId,outcome:"FAILED",reason:"TRANSPORT_FAILURE",estimatedCostUsd:task.estimatedCostUsd,actualCostUsd:Number.isFinite(error?.costUsd)&&error.costUsd>=0?error.costUsd:0,providerTaskId:error?.providerTaskId ?? null,providerStatus:error?.providerStatus ?? null,errorCode:error?.code ?? error?.message ?? "TRANSPORT_FAILURE"});
+          tasks.push({candidateId:task.candidateId,outcome:"FAILED",acquisitionOutcome:"FAILED",reason:"TRANSPORT_FAILURE",estimatedCostUsd:task.estimatedCostUsd,actualCostUsd:Number.isFinite(error?.costUsd)&&error.costUsd>=0?error.costUsd:0,providerTaskId:error?.providerTaskId ?? null,providerStatus:error?.providerStatus ?? null,errorCode:error?.code ?? error?.message ?? "TRANSPORT_FAILURE"});
           actualSpend=money(actualSpend+tasks.at(-1).actualCostUsd); stopReason="TRANSPORT_FAILURE"; break;
         }
       }
