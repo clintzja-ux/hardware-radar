@@ -29,3 +29,6 @@ Durable review history
 The recording command is:
 
 npm run review:record -- <acceptance-state.json> <review-state.json> <decision.json>
+
+
+npm run acquisition:dry-run

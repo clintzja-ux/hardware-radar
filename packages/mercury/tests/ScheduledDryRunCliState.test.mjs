@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import { buildOperationalAcquisitionCandidates } from '../index.js';
+const product={identity:{atlasProductId:'ram_x',manufacturerPartNumber:'MPN-X'},governance:{lifecycleStatus:'ACTIVE',publicationStatus:'READY'}};
+const ignored={identity:{atlasProductId:'ram_old',manufacturerPartNumber:'OLD'},governance:{lifecycleStatus:'DISCONTINUED',publicationStatus:'READY'}};
+const atlas={products:{getAll:async()=>[product,ignored]}};
+const acceptanceRepository={getAll:async()=>[{atlasProductId:'ram_x',observationTime:'2026-08-17T10:00:00Z'}]};
+const evidenceRepository={getAll:async()=>[{candidate:{atlasResolution:{atlasProductId:'ram_x'},marketEvidence:{provenance:{observedAt:'2026-08-17T12:00:00Z'}}}}]};
+const c=await buildOperationalAcquisitionCandidates({atlas,acceptanceRepository,evidenceRepository});
+assert.equal(c.length,1);assert.equal(c[0].candidateId,'atlas:ram_x:products');assert.equal(c[0].lastObservedAt,'2026-08-17T12:00:00Z');assert.deepEqual(c[0].execution,{kind:'PRODUCTS',keyword:'MPN-X',locationName:'United States',languageName:'English'});assert(Object.isFrozen(c));
+let touched=false;const noHistory=await buildOperationalAcquisitionCandidates({atlas:{products:{getAll:async()=>[product]}}});assert.equal(noHistory[0].lastObservedAt,null);assert.equal(noHistory[0].estimatedCostUsd,.001);
+await assert.rejects(()=>buildOperationalAcquisitionCandidates({atlas:{}}),/products.getAll/);
+console.log('Scheduled dry-run operational candidate sourcing tests passed.');

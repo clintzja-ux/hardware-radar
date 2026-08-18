@@ -6,7 +6,7 @@ let paidCalls=0; const forbiddenTransport={execute(){paidCalls++;throw new Error
 const dry=new DryRunAcquisitionExecutor({now:()=> '2026-08-17T20:01:00Z'}); const result=await dry.execute(plan,forbiddenTransport);
 assert.equal(result.mode,'DRY_RUN'); assert.equal(result.attemptedPaidTasks,0); assert.equal(result.actualSpendUsd,0); assert.equal(paidCalls,0); assert.equal(result.tasks.length,1);
 const model=createAcquisitionOperatorModel({mode:'DRY_RUN',policy,spentTodayUsd:.003,plan,runs:[result]});
-assert.equal(model.killSwitchEngaged,false); assert.equal(model.budget.remainingTodayUsd,.007); assert.equal(model.plan.approved,1); assert.equal(model.plan.skipReasons.COOLDOWN,1); assert.equal(model.audit.actualSpendUsd,0);
-const disabled=createAcquisitionBudgetPolicy({enabled:false}); const disabledModel=createAcquisitionOperatorModel({mode:'PLAN',policy:disabled}); assert.equal(disabledModel.killSwitchEngaged,true);
+assert.equal(model.killSwitchEngaged,false); assert.equal(model.paidAcquisitionPolicyEnabled,true); assert.equal(model.paidTransportReachable,false); assert.equal(model.paidExecutionPossible,false); assert.equal(model.budget.remainingTodayUsd,.007); assert.equal(model.plan.approved,1); assert.equal(model.plan.skipReasons.COOLDOWN,1); assert.equal(model.audit.actualSpendUsd,0);
+const disabled=createAcquisitionBudgetPolicy({enabled:false}); const disabledModel=createAcquisitionOperatorModel({mode:'PLAN',policy:disabled}); assert.equal(disabledModel.killSwitchEngaged,true); assert.equal(disabledModel.paidAcquisitionPolicyEnabled,false); assert.equal(disabledModel.paidExecutionPossible,false);
 assert.throws(()=>createAcquisitionOperatorModel({mode:'OTHER',policy}),/invalid acquisition mode/);
 console.log('Acquisition dry-run and operator visibility tests passed.');

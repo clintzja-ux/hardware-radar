@@ -19,6 +19,7 @@
     "certify:mercury:cleanup": "node scripts/mercury-certification-cleanup.mjs",
     "review:export": "node scripts/export-observation-review.mjs",
     "review:record": "node scripts/record-observation-review.mjs",
-    "publication:record": "node scripts/record-publication-decision.mjs"
+    "publication:record": "node scripts/record-publication-decision.mjs",
+    "acquisition:dry-run": "node scripts/mercury-scheduled-dry-run.mjs"
   }
 }
