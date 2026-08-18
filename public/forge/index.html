@@ -876,6 +876,17 @@
                         <pre id="reviewDecisionOutput" class="review-decision-output">{}</pre>
                     </section>
 
+                    <section class="inspection-card observation-review-card" id="acquisitionOperationsPanel">
+                        <div class="inspection-heading">
+                            <div><p class="pane-kicker">MERCURY ACQUISITION</p><h2>Acquisition Operations</h2></div>
+                            <span id="acquisitionModeBadge" class="status-badge pending">NO AUDIT</span>
+                        </div>
+                        <p id="acquisitionSummary" class="review-workflow-summary">Load a DF004 operator/audit JSON bundle to inspect acquisition mode, budget, plan and execution history.</p>
+                        <label class="review-file-field"><span>Operator / audit bundle</span><input id="acquisitionAuditFile" type="file" accept="application/json,.json"></label>
+                        <p class="review-workflow-note">PLAN and DRY_RUN do not authorize paid transport. LIVE remains governed by the approved plan, execution-time budget controls and the single-writer lock.</p>
+                        <details class="review-details"><summary>Plan and execution audit</summary><pre id="acquisitionAuditDetails">{}</pre></details>
+                    </section>
+
                     <section class="inspection-card validation-card">
                         <div class="inspection-heading">
                             <div>

@@ -14,3 +14,17 @@ A successful paid acquisition is not equivalent to accepted market evidence. DF0
 - PROBABLE product plus DISCOVERED merchant evidence may be retained but is not historically eligible.
 - No canonical promotion or publication occurs in DF004-C.
 - Affiliate relationships are irrelevant to evidence retention and identity decisions.
+
+## DF004-C is certified.
+
+Mercury    108/108 PASS
+Atlas       15/15 PASS
+Sentinel     7/7 PASS
+Forge       PASS
+Site        PASS
+Console     CLEAN
+
+
+DF004-A     CERTIFIED
+DF004-B     CERTIFIED
+DF004-C     CERTIFIED

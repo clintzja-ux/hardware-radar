@@ -106,7 +106,8 @@ const testModules = [
     "./SingleWriterPersistence.test.mjs",
     "./AcquisitionPlanningBudget.test.mjs",
     "./ControlledAcquisitionExecutor.test.mjs",
-    "./ControlledAcquisitionDf003Integration.test.mjs"
+    "./ControlledAcquisitionDf003Integration.test.mjs",
+    "./AcquisitionDryRunOperatorVisibility.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

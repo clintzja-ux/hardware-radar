@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import { createAcquisitionBudgetPolicy, createAcquisitionPlan, DryRunAcquisitionExecutor, createAcquisitionOperatorModel } from '../index.js';
+const policy=createAcquisitionBudgetPolicy({enabled:true,maxPaidTasksPerRun:1,maxSpendPerRunUsd:.001,maxSpendPerDayUsd:.01,automaticPaidRetries:0,defaultRefreshCooldownMs:21600000});
+const plan=createAcquisitionPlan({policy,spentTodayUsd:.003,plannedAt:'2026-08-17T20:00:00Z',candidates:[{candidateId:'corsair',priority:'HIGH',estimatedCostUsd:.001,rationale:'refresh eligible',execution:{kind:'SELLERS'}},{candidateId:'kingston',priority:'NORMAL',estimatedCostUsd:.001,lastObservedAt:'2026-08-17T19:00:00Z',execution:{kind:'SELLERS'}}]});
+let paidCalls=0; const forbiddenTransport={execute(){paidCalls++;throw new Error('MUST_NOT_RUN')}};
+const dry=new DryRunAcquisitionExecutor({now:()=> '2026-08-17T20:01:00Z'}); const result=await dry.execute(plan,forbiddenTransport);
+assert.equal(result.mode,'DRY_RUN'); assert.equal(result.attemptedPaidTasks,0); assert.equal(result.actualSpendUsd,0); assert.equal(paidCalls,0); assert.equal(result.tasks.length,1);
+const model=createAcquisitionOperatorModel({mode:'DRY_RUN',policy,spentTodayUsd:.003,plan,runs:[result]});
+assert.equal(model.killSwitchEngaged,false); assert.equal(model.budget.remainingTodayUsd,.007); assert.equal(model.plan.approved,1); assert.equal(model.plan.skipReasons.COOLDOWN,1); assert.equal(model.audit.actualSpendUsd,0);
+const disabled=createAcquisitionBudgetPolicy({enabled:false}); const disabledModel=createAcquisitionOperatorModel({mode:'PLAN',policy:disabled}); assert.equal(disabledModel.killSwitchEngaged,true);
+assert.throws(()=>createAcquisitionOperatorModel({mode:'OTHER',policy}),/invalid acquisition mode/);
+console.log('Acquisition dry-run and operator visibility tests passed.');
