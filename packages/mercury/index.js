@@ -68,3 +68,5 @@ export * from "./acquisition/execution/index.js";
 
 export * from "./acquisition/integration/index.js";
 export * from "./acquisition/operator/index.js";
+
+export * from "./acquisition/scheduling/index.js";
