@@ -110,7 +110,8 @@ const testModules = [
     "./AcquisitionDryRunOperatorVisibility.test.mjs",
     "./ScheduledDryRunOperation.test.mjs",
     "./ScheduledDryRunCliState.test.mjs",
-    "./AcquisitionOperatorRuntimeCapability.test.mjs"
+    "./AcquisitionOperatorRuntimeCapability.test.mjs",
+    "./UnattendedDryRunScheduling.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
