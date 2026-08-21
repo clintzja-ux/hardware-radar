@@ -32,7 +32,7 @@ const acquisition = new DataForSeoAcquisitionService({
   client
 });
 
-const taskId = "08160208-2304-0455-0000-89fa5249cb5e";
+const taskId = "08210619-2304-0455-0000-6f9d1fa692ed";
 
 const result = await acquisition.getProductInfoResult(taskId);
 

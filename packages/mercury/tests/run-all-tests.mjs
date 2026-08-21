@@ -117,7 +117,9 @@ const testModules = [
     "./GovernedProductEnrichmentAuthorization.test.mjs",
     "./ProductEnrichmentRealEvidencePrepare.test.mjs",
     "./ProductEnrichmentCliNodeCompatibility.test.mjs",
-    "./ProductCandidateResolverEvidenceEnhancement.test.mjs"
+    "./ProductCandidateResolverEvidenceEnhancement.test.mjs",
+    "./ProductInfoEnrichmentSingleUseAuthorization.test.mjs",
+    "./ProductInfoEnrichmentPrepareEnvelope.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
