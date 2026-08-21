@@ -1,0 +1,43 @@
+function norm(v){return String(v??'').toUpperCase().replace(/[^A-Z0-9]/g,'');}
+function titleText(item){return String(item?.title??'').toUpperCase();}
+function has(re,s){return re.test(s);}
+function signal(name,matched,weight,detail){return Object.freeze({name,matched,weight,detail});}
+
+export const PRODUCT_CANDIDATE_OUTCOMES=Object.freeze({RECOMMENDED:'RECOMMENDED',AMBIGUOUS:'AMBIGUOUS',REJECTED:'REJECTED'});
+
+export function scoreDataForSeoProductCandidate({atlasProduct,item}={}){
+  if(!atlasProduct?.identity) throw new TypeError('atlasProduct is required.');
+  if(!item || typeof item!=='object') throw new TypeError('item is required.');
+  const id=atlasProduct.identity, data=atlasProduct.extension?.data??{}, title=titleText(item);
+  const mpn=norm(id.manufacturerPartNumber), brand=norm(id.brand), memory=norm(data.classification?.memoryType);
+  const capacity=Number(data.capacity?.capacityGb), modules=Number(data.capacity?.moduleCount), perModule=Number(data.capacity?.capacityPerModuleGb), speed=Number(data.performance?.dataRateMtps), cl=Number(data.performance?.casLatency);
+  const exactMpn=mpn && norm(title).includes(mpn);
+  const otherCorsairMpn=(title.match(/\bCM[A-Z0-9]{8,}\b/g)??[]).map(norm).find(x=>x!==mpn);
+  const wrongGeneration=memory==='DDR5'&&has(/\bDDR4\b/,title) || memory==='DDR4'&&has(/\bDDR5\b/,title);
+  const wrongCapacity=Number.isFinite(capacity)&&has(/\b(?:8|16|32|48|64|96|128)\s*GB\b/,title)&&!new RegExp(`\\b${capacity}\\s*GB\\b`).test(title);
+  const contradictions=[];
+  if(otherCorsairMpn) contradictions.push(`DIFFERENT_MPN:${otherCorsairMpn}`);
+  if(wrongGeneration) contradictions.push('MEMORY_GENERATION_CONFLICT');
+  if(wrongCapacity) contradictions.push('CAPACITY_CONFLICT');
+  const signals=[
+    signal('EXACT_MPN',!!exactMpn,60,mpn||null),
+    signal('BRAND',!!brand&&norm(title).includes(brand),10,id.brand??null),
+    signal('MEMORY_TYPE',!!memory&&norm(title).includes(memory),8,memory||null),
+    signal('CAPACITY',Number.isFinite(capacity)&&new RegExp(`\\b${capacity}\\s*GB\\b`).test(title),8,capacity||null),
+    signal('MODULE_CONFIGURATION',Number.isFinite(modules)&&Number.isFinite(perModule)&&new RegExp(`${modules}\\s*[X×]\\s*${perModule}\\s*GB`,'i').test(title),5,`${modules}x${perModule}GB`),
+    signal('SPEED',Number.isFinite(speed)&&new RegExp(`\\b${speed}\\s*(?:MHZ|MT/S|MTPS)?\\b`,'i').test(title),5,speed||null),
+    signal('CAS_LATENCY',Number.isFinite(cl)&&new RegExp(`\\bCL\\s*${cl}\\b`,'i').test(title),4,cl||null),
+  ];
+  const score=signals.reduce((s,x)=>s+(x.matched?x.weight:0),0)-contradictions.length*100;
+  const outcome=contradictions.length?PRODUCT_CANDIDATE_OUTCOMES.REJECTED:exactMpn&&score>=78?PRODUCT_CANDIDATE_OUTCOMES.RECOMMENDED:score>=31?PRODUCT_CANDIDATE_OUTCOMES.AMBIGUOUS:PRODUCT_CANDIDATE_OUTCOMES.REJECTED;
+  return Object.freeze({outcome,score,exactMpnMatch:!!exactMpn,contradictions:Object.freeze(contradictions),signals:Object.freeze(signals),item:Object.freeze({title:item.title??null,productId:item.product_id??null,dataDocId:item.data_docid??null,gid:item.gid??null,price:item.price??null,currency:item.currency??null,shoppingUrl:item.shopping_url??null})});
+}
+
+export function resolveDataForSeoProductCandidates({atlasProduct,items}={}){
+  if(!Array.isArray(items)) throw new TypeError('items must be an array.');
+  const candidates=items.map(item=>scoreDataForSeoProductCandidate({atlasProduct,item})).sort((a,b)=>b.score-a.score);
+  const eligible=candidates.filter(c=>c.outcome==='RECOMMENDED');
+  const top=eligible[0]??null, second=eligible[1]??null;
+  const recommendation=top && (!second || top.score>second.score || (top.item.dataDocId&&top.item.dataDocId===second.item.dataDocId)) ? top : null;
+  return Object.freeze({schemaVersion:'1.0',atlasProductId:atlasProduct.identity.atlasProductId,candidateCount:candidates.length,recommendationStatus:recommendation?'RECOMMENDED':eligible.length?'AMBIGUOUS':'NO_SAFE_CANDIDATE',recommendedCandidate:recommendation,candidates:Object.freeze(candidates)});
+}
