@@ -32,3 +32,7 @@ npm run review:record -- <acceptance-state.json> <review-state.json> <decision.j
 
 
 npm run acquisition:dry-run
+
+## Preparation: 
+
+npm run acquisition:live:prepare
