@@ -25,6 +25,17 @@ console.log('Target Atlas SKU:     ',atlasProductId);
 console.log('Candidates:           ',r.candidateCount);
 console.log('Resolution:           ',r.recommendationStatus);
 console.log('Selected docid:       ',p?.providerIdentity?.dataDocId??null);
+if(r.recommendedCandidate){
+  console.log('Selected score:       ',r.recommendedCandidate.score);
+  console.log('Identity evidence:');
+  for(const s of r.recommendedCandidate.signals) console.log(`  ${s.name.padEnd(22)} ${s.matched?'MATCH':'NO_MATCH'}${s.detail!==null&&s.detail!==undefined?` (${s.detail})`:''}`);
+  console.log('Contradictions:       ',r.recommendedCandidate.contradictions.length?r.recommendedCandidate.contradictions.join(', '):'NONE');
+}
+if(r.runnerUp){
+  console.log('Runner-up docid:      ',r.runnerUp.item.dataDocId??null);
+  console.log('Runner-up score:      ',r.runnerUp.score);
+  console.log('Score margin:         ',r.recommendedCandidate?r.recommendedCandidate.score-r.runnerUp.score:null);
+}
 console.log('Operation:            ',p?.operation??null);
 console.log('Paid task created:     NO');
 console.log('Actual spend:          $0.000');
