@@ -22,6 +22,7 @@
     "publication:record": "node scripts/record-publication-decision.mjs",
     "acquisition:dry-run": "node scripts/mercury-scheduled-dry-run.mjs",
     "acquisition:live:prepare": "node --env-file=.env scripts/mercury-live-prepare.mjs",
-    "acquisition:live:execute": "node --env-file=.env scripts/mercury-live-execute-once.mjs"
+    "acquisition:live:execute": "node --env-file=.env scripts/mercury-live-execute-once.mjs",
+    "acquisition:enrichment:prepare": "node --env-file=.env scripts/mercury-product-enrichment-prepare.mjs"
   }
 }
