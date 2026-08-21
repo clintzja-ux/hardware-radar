@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import { createAcquisitionBudgetPolicy,createAcquisitionPlan,createLiveAcquisitionAuthorization,evaluateLiveAcquisitionAuthorization,AuthorizedLiveAcquisitionExecutor } from '../index.js';
+const now='2026-08-19T12:00:00.000Z';
+const policy=createAcquisitionBudgetPolicy({enabled:true,maxPaidTasksPerRun:1,maxSpendPerRunUsd:.001,maxSpendPerDayUsd:.01,automaticPaidRetries:0,defaultRefreshCooldownMs:1});
+const plan=createAcquisitionPlan({policy,plannedAt:now,candidates:[{candidateId:'atlas:test:products',priority:'HIGH',estimatedCostUsd:.001,execution:{kind:'PRODUCTS',keyword:'TEST'}}]});
+let gate=evaluateLiveAcquisitionAuthorization({plan,authorization:null,now});assert.equal(gate.status,'LIVE_NOT_AUTHORIZED');
+const auth=createLiveAcquisitionAuthorization({authorizationId:'auth-1',authorized:true,planId:plan.planId,authorizedAt:'2026-08-19T11:59:00.000Z',expiresAt:'2026-08-19T12:05:00.000Z',maxSpendUsd:.001,maxPaidTasks:1});
+gate=evaluateLiveAcquisitionAuthorization({plan,authorization:auth,now});assert.equal(gate.status,'LIVE_AUTHORIZED');
+assert.throws(()=>createLiveAcquisitionAuthorization({authorizationId:'bad',authorized:false,planId:plan.planId,authorizedAt:now,expiresAt:'2026-08-19T12:05:00.000Z'}),/EXPLICIT_OPT_IN/);
+assert.equal(evaluateLiveAcquisitionAuthorization({plan,authorization:auth,now:'2026-08-19T12:06:00.000Z'}).status,'LIVE_BLOCKED_EXPIRED');
+const other={...auth,planId:'other'};assert.equal(evaluateLiveAcquisitionAuthorization({plan,authorization:other,now}).status,'LIVE_BLOCKED_PLAN_MISMATCH');
+const disabledPlan=createAcquisitionPlan({policy:createAcquisitionBudgetPolicy({enabled:false}),plannedAt:now,candidates:[]});assert.equal(evaluateLiveAcquisitionAuthorization({plan:disabledPlan,authorization:null,now}).status,'LIVE_BLOCKED_KILL_SWITCH');
+let calls=0;const wrapped=new AuthorizedLiveAcquisitionExecutor({executor:{execute:async()=>{calls++;return {status:'COMPLETED'}}},now:()=>now});
+let result=await wrapped.execute({plan,authorization:null});assert.equal(result.status,'LIVE_NOT_AUTHORIZED');assert.equal(calls,0);
+result=await wrapped.execute({plan,authorization:auth});assert.equal(result.status,'COMPLETED');assert.equal(result.authorized,true);assert.equal(calls,1);
+console.log('Live acquisition authorization tests passed.');

@@ -10,7 +10,10 @@ assert.equal(dry.killSwitchEngaged,false);
 
 const liveNoTransport=createAcquisitionOperatorModel({mode:'LIVE',policy:enabled,paidTransportReachable:false});
 assert.equal(liveNoTransport.paidExecutionPossible,false);
-const live=createAcquisitionOperatorModel({mode:'LIVE',policy:enabled,paidTransportReachable:true});
+const liveNotAuthorized=createAcquisitionOperatorModel({mode:'LIVE',policy:enabled,paidTransportReachable:true});
+assert.equal(liveNotAuthorized.authorizationState,'LIVE_NOT_AUTHORIZED');
+assert.equal(liveNotAuthorized.paidExecutionPossible,false);
+const live=createAcquisitionOperatorModel({mode:'LIVE',policy:enabled,paidTransportReachable:true,liveAuthorizationStatus:'LIVE_AUTHORIZED'});
 assert.equal(live.paidExecutionPossible,true);
 
 const disabled=createAcquisitionBudgetPolicy({enabled:false});
