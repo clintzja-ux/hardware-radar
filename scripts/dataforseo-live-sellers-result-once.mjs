@@ -32,8 +32,7 @@ const acquisition = new DataForSeoAcquisitionService({
   client
 });
 
-const taskId = "08160527-2304-0183-0000-1446c8b7b26b";
-
+const taskId = "08211631-2304-0183-0000-2f47e4410471";
 const result = await acquisition.getSellersResult(taskId);
 
 console.log("SELLERS RESULT RETRIEVED");
