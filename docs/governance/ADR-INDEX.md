@@ -47,6 +47,9 @@ Product IDs are immutable.
 ADR-003
 Recommendations are generated rather than manually maintained.
 
+ADR-042
+Retained evidence requires explicit promotion assessment.
+
 ---
 
 ## Naming Convention

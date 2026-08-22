@@ -29,6 +29,7 @@
     "acquisition:sellers:prepare": "node --env-file=.env scripts/mercury-sellers-enrichment-prepare.mjs",
     "acquisition:sellers:live:prepare": "node scripts/mercury-sellers-live-prepare.mjs",
     "acquisition:sellers:live:execute": "node --env-file=.env scripts/mercury-sellers-live-execute-once.mjs",
-    "acquisition:sellers:retain": "node --env-file=.env scripts/mercury-sellers-df003-retain.mjs"
+    "acquisition:sellers:retain": "node --env-file=.env scripts/mercury-sellers-df003-retain.mjs",
+    "evidence:promotion:assess": "node scripts/mercury-evidence-promotion-assess.mjs"
   }
 }
