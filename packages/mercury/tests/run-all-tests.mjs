@@ -121,7 +121,8 @@ const testModules = [
     "./ProductInfoEnrichmentSingleUseAuthorization.test.mjs",
     "./ProductInfoEnrichmentPrepareEnvelope.test.mjs",
     "./GovernedSellersEnrichmentProposal.test.mjs",
-    "./SellersEnrichmentSingleUseAuthorization.test.mjs"
+    "./SellersEnrichmentSingleUseAuthorization.test.mjs",
+    "./SellersResultDf003Retention.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

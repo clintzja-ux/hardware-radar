@@ -28,6 +28,7 @@
     "acquisition:enrichment:live:execute": "node --env-file=.env scripts/mercury-product-info-live-execute-once.mjs",
     "acquisition:sellers:prepare": "node --env-file=.env scripts/mercury-sellers-enrichment-prepare.mjs",
     "acquisition:sellers:live:prepare": "node scripts/mercury-sellers-live-prepare.mjs",
-    "acquisition:sellers:live:execute": "node --env-file=.env scripts/mercury-sellers-live-execute-once.mjs"
+    "acquisition:sellers:live:execute": "node --env-file=.env scripts/mercury-sellers-live-execute-once.mjs",
+    "acquisition:sellers:retain": "node --env-file=.env scripts/mercury-sellers-df003-retain.mjs"
   }
 }
