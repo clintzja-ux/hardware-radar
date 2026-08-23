@@ -21,5 +21,5 @@ Historical admission requires current identity-review projection, Atlas-backed r
 - Historical admission cannot manufacture canonical or publication eligibility.
 - Historical records are immutable and replay-safe per retained evidence ID.
 - Later market observations create distinct records rather than updating history.
-- Existing canonical historical intelligence remains compatible with canonical observations; consuming E2J internal records is deferred until an explicit query-integration contract.
+- Existing canonical historical intelligence remains compatible with canonical observations; E2J internal records require an explicit query-integration contract, supplied by DF004-E2K.
 - E2J performs no acquisition, publication, or spend.
