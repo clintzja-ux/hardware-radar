@@ -123,7 +123,12 @@ const testModules = [
     "./GovernedSellersEnrichmentProposal.test.mjs",
     "./SellersEnrichmentSingleUseAuthorization.test.mjs",
     "./SellersResultDf003Retention.test.mjs",
-    "./DataForSeoEvidencePromotionAssessment.test.mjs"
+    "./DataForSeoEvidencePromotionAssessment.test.mjs",
+    "./IdentityReviewGovernance.test.mjs",
+    "./IdentityReviewApprovalCommands.test.mjs",
+    "./EvidencePromotionAssessmentCliWiring.test.mjs",
+    "./IdentityReviewAuditRemediation.test.mjs",
+    "./AtlasBackedMerchantRegistration.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

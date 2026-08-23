@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import {
@@ -66,9 +66,11 @@ assert.ok(bypassAssessment.reasons.some((entry) => entry.code === "DF003_ELIGIBI
 const root = await mkdtemp(join(tmpdir(), "hardware-radar-e2g-cli-"));
 try {
     const statePath = join(root, "evidence.json");
+    const decisionStatePath = join(root, "identity-reviews.json");
     const repository = new FileDataForSeoMarketEvidenceRepository({ statePath });
     await repository.retain({ candidate:current.candidate, merchantResolution:current.merchantResolution, eligibility:current.eligibilityAtRetention });
-    const output = execFileSync(process.execPath, ["scripts/mercury-evidence-promotion-assess.mjs", `--state=${statePath}`], { cwd:process.cwd(), encoding:"utf8" });
+    await writeFile(decisionStatePath, JSON.stringify({version:"1.0",sequence:0,decisions:{},bySubject:{},idempotency:{}}), "utf8");
+    const output = execFileSync(process.execPath, ["scripts/mercury-evidence-promotion-assess.mjs", `--state=${statePath}`, `--decision-state=${decisionStatePath}`], { cwd:process.cwd(), encoding:"utf8" });
     assert.match(output, /EVIDENCE PROMOTION ASSESSMENT/);
     assert.match(output, /Promotion state:\s+REVIEW_REQUIRED/);
     assert.match(output, /Paid task created:\s+NO/);

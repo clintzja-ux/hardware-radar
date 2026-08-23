@@ -50,6 +50,9 @@ Recommendations are generated rather than manually maintained.
 ADR-042
 Retained evidence requires explicit promotion assessment.
 
+ADR-043
+Product and merchant identity reviews are independent audit records.
+
 ---
 
 ## Naming Convention

@@ -32,7 +32,7 @@ const repositories = await atlas.loadRepositories();
 assert.equal(repositories.brands.length, 1);
 assert.equal(repositories.categories.length, 1);
 assert.equal(repositories.products.length, 1);
-assert.equal(repositories.retailers.length, 1);
+assert.equal(repositories.retailers.length, 2);
 assert.equal(Object.isFrozen(repositories), true);
 
 const manifestReport = await atlas.validateManifest();

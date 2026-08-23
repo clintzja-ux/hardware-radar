@@ -1,6 +1,9 @@
 import { evaluateDataForSeoObservationEligibility } from "./DataForSeoObservationEligibility.js";
 import { DATAFORSEO_MERCHANT_RESOLUTION_OUTCOMES } from "./DataForSeoMerchantIdentity.js";
 import { DATAFORSEO_RESOLUTION_OUTCOMES } from "../../resolution/dataforseo/DataForSeoAtlasResolver.js";
+import { createDataForSeoMarketObservationCandidate } from "./DataForSeoMarketObservationCandidate.js";
+import { projectIdentityReviewState } from "../../identity-review/IdentityReviewProjection.js";
+import { canonicalEvidencePromotionPolicy, evaluateEvidencePromotionPolicy } from "../../promotion/EvidencePromotionPolicy.js";
 
 export const EVIDENCE_PROMOTION_STATES = Object.freeze({
     EVIDENCE_ONLY: "EVIDENCE_ONLY",
@@ -74,6 +77,12 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
     let productIdentity = null;
     let merchantIdentity = null;
     let allDf003Eligible = true;
+    let allPolicyEligible = true;
+    const canonicalPolicyReasons = [];
+    const identityReviewDecisions = Array.isArray(input.identityReviewDecisions) ? input.identityReviewDecisions : [];
+    const identityReviewRemediations = Array.isArray(input.identityReviewRemediations) ? input.identityReviewRemediations : [];
+    const atlasRetailers = Array.isArray(input.atlasRetailers) ? input.atlasRetailers : [];
+    const promotionPolicy = input.promotionPolicy === undefined ? canonicalEvidencePromotionPolicy : input.promotionPolicy;
 
     for (const record of records) {
         if (!record || typeof record !== "object" || Array.isArray(record)) {
@@ -97,8 +106,6 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
         if (!MERCHANT_OUTCOMES.has(merchant.outcome)) critical.push(reason("UNKNOWN_MERCHANT_IDENTITY", "merchantIdentity", merchant.outcome ?? null));
         if (identity?.outcome === "AMBIGUOUS" || identity?.outcome === "REJECTED") critical.push(reason("PRODUCT_IDENTITY_CONTRADICTION", "productIdentity", identity.outcome));
         if (merchant.outcome === "CONFLICT") critical.push(reason(merchant.reason ?? "MERCHANT_IDENTITY_CONFLICT", "merchantIdentity"));
-        if (identity?.outcome === "PROBABLE") review.push(reason("ATLAS_PRODUCT_RESOLUTION_REVIEW_REQUIRED", "productIdentity", record.evidenceId));
-        if (merchant.outcome === "DISCOVERED") review.push(reason("MERCHANT_REGISTRATION_REQUIRED", "merchantIdentity", record.evidenceId));
 
         atlasProductId ??= identity?.atlasProductId ?? null;
         productIdentity ??= identity?.outcome ?? null;
@@ -114,23 +121,34 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
                 retainedEligibility.historicalAnalyticsEligible === recomputed.historicalAnalyticsEligible &&
                 sameArray(retainedEligibility.reasons, recomputed.reasons);
             if (!retainedMatches) critical.push(reason("DF003_ELIGIBILITY_CONTRADICTION", "df003Eligibility", record.evidenceId));
-            if (recomputed.canonicalObservationEligible !== true || recomputed.historicalAnalyticsEligible !== true) {
+            const projection = projectIdentityReviewState({record,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers});
+            if (projection.product.state === "VERIFIED") productIdentity = "VERIFIED";
+            if (projection.merchant.state === "REGISTERED") merchantIdentity = "REGISTERED";
+            const projectedCandidate = projection.product.state === "VERIFIED" ? createDataForSeoMarketObservationCandidate({marketEvidence,atlasResolution:{outcome:"CONFIRMED",atlasProductId:identity.atlasProductId,externalProductId:identity.externalProductId,evidence:identity.evidence,automaticMercuryEligible:true}}) : candidate;
+            const projectedMerchant = projection.merchant.state === "REGISTERED" ? projection.merchant.atlasResolution : merchant;
+            const currentEligibility = evaluateDataForSeoObservationEligibility({candidate:projectedCandidate,merchantResolution:projectedMerchant});
+            const policyResult=evaluateEvidencePromotionPolicy({projection,df003Eligibility:currentEligibility,provenanceComplete:Boolean(provenance.sourceTaskId&&validDate(provenance.observedAt)),policy:promotionPolicy});
+            if(policyResult.blocked)critical.push(...policyResult.reasons.map(code=>reason(code,"promotionPolicy",record.evidenceId)));
+            for(const code of policyResult.canonicalReasons??[])canonicalPolicyReasons.push(reason(code,"canonicalPromotionPolicy",record.evidenceId));
+            if(!policyResult.historicalEligible){allPolicyEligible=false;for(const code of policyResult.historicalReasons??policyResult.reasons)review.push(reason(code,"promotionPolicy",record.evidenceId));}
+            if (currentEligibility.canonicalObservationEligible !== true || currentEligibility.historicalAnalyticsEligible !== true) {
                 allDf003Eligible = false;
-                for (const code of recomputed.reasons) review.push(reason(code, "df003Eligibility", record.evidenceId));
+                for (const code of currentEligibility.reasons) review.push(reason(code, "df003Eligibility", record.evidenceId));
             }
-        } catch {
-            critical.push(reason("DF003_ELIGIBILITY_INVALID", "df003Eligibility", record.evidenceId));
+        } catch (error) {
+            const atlasFailure = /^(ATLAS_|MERCHANT_REVIEW_)/.test(error?.message ?? "");
+            critical.push(reason(atlasFailure ? "ATLAS_RETAILER_RESOLUTION_INVALID" : "DF003_ELIGIBILITY_INVALID", atlasFailure ? "merchantIdentity" : "df003Eligibility", record.evidenceId));
             allDf003Eligible = false;
         }
     }
 
     if (critical.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.BLOCKED, records, reasons:critical, atlasProductId, productIdentity, merchantIdentity });
-    if (!allDf003Eligible || review.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.REVIEW_REQUIRED, records, reasons:review, atlasProductId, productIdentity, merchantIdentity });
+    if (!allDf003Eligible || !allPolicyEligible || review.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.REVIEW_REQUIRED, records, reasons:review, atlasProductId, productIdentity, merchantIdentity });
 
     return result({
-        state:EVIDENCE_PROMOTION_STATES.CANONICAL_ELIGIBLE,
+        state:EVIDENCE_PROMOTION_STATES.HISTORICAL_ELIGIBLE,
         records,
-        reasons:[reason("DF003_HISTORICAL_AND_CANONICAL_GATES_SATISFIED", "df003Eligibility"), reason("PUBLICATION_REQUIRES_CANONICAL_OBSERVATION_WORKFLOW", "publication")],
+        reasons:[reason("E2H_HISTORICAL_GATES_SATISFIED", "historicalPromotionPolicy"), ...canonicalPolicyReasons, reason("PUBLICATION_REQUIRES_SEPARATE_POLICY", "publication")],
         atlasProductId,
         productIdentity,
         merchantIdentity

@@ -14,7 +14,7 @@
     "products": 1,
     "brands": 1,
     "categories": 1,
-    "retailers": 1
+    "retailers": 2
   },
   "brands": [
     {
@@ -32,6 +32,10 @@
     {
       "retailerId": "RETAILER-0001",
       "path": "retailers/RETAILER-0001-amazon.json"
+    },
+    {
+      "retailerId": "RETAILER-0002",
+      "path": "retailers/RETAILER-0002-platinummicro.json"
     }
   ]
 }

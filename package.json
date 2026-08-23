@@ -30,6 +30,11 @@
     "acquisition:sellers:live:prepare": "node scripts/mercury-sellers-live-prepare.mjs",
     "acquisition:sellers:live:execute": "node --env-file=.env scripts/mercury-sellers-live-execute-once.mjs",
     "acquisition:sellers:retain": "node --env-file=.env scripts/mercury-sellers-df003-retain.mjs",
-    "evidence:promotion:assess": "node scripts/mercury-evidence-promotion-assess.mjs"
+    "evidence:promotion:assess": "node scripts/mercury-evidence-promotion-assess.mjs",
+    "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
+    "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",
+    "review:product-identity:approve": "node scripts/mercury-product-identity-review-approve.mjs",
+    "review:merchant-identity:approve": "node scripts/mercury-merchant-identity-review-approve.mjs",
+    "review:identity:audit-remediate": "node scripts/mercury-identity-review-audit-remediate.mjs"
   }
 }

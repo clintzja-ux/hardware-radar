@@ -76,3 +76,5 @@ export * from "./acquisition/operations/index.js";
 export * from "./acquisition/authorization/index.js";
 
 export * from "./acquisition/enrichment/index.js";
+export * from "./identity-review/index.js";
+export * from "./promotion/index.js";

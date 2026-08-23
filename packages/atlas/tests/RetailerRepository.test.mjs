@@ -13,14 +13,21 @@ const repository = new RetailerRepository({
 });
 
 const entries = await repository.listRetailerEntries();
-assert.equal(entries.length, 1);
+assert.equal(entries.length, 2);
 assert.equal(entries[0].retailerId, "RETAILER-0001");
+assert.equal(entries[1].retailerId, "RETAILER-0002");
 assert.equal(Object.isFrozen(entries), true);
 
 const retailer = await repository.loadRetailer("RETAILER-0001");
 assert.equal(retailer.name, "Amazon");
 assert.equal(Object.isFrozen(retailer), true);
 assert.equal(Object.isFrozen(retailer.affiliateProgram), true);
+
+const platinummicro = await repository.loadRetailer("RETAILER-0002");
+assert.equal(platinummicro.name, "Platinummicro");
+assert.equal(platinummicro.websiteUrl, "https://platinummicro.com");
+assert.equal(await repository.getBySlug("PLATINUMMICRO"), platinummicro);
+assert.equal(await repository.getByName("platinummicro"), platinummicro);
 
 assert.equal(await repository.getById("retailer-0001"), retailer);
 assert.equal(await repository.getBySlug("AMAZON"), retailer);
@@ -29,7 +36,7 @@ assert.equal(await repository.exists("RETAILER-0001"), true);
 assert.equal(await repository.exists("RETAILER-9999"), false);
 
 const searchResults = await repository.search("USD");
-assert.equal(searchResults.length, 1);
+assert.equal(searchResults.length, 2);
 assert.equal(searchResults[0], retailer);
 
 const validationReport = await repository.validate();

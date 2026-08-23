@@ -13,6 +13,13 @@ assert.equal(report.valid, true);
 assert.equal(report.errors.length, 0);
 assert.equal(report.validatorVersion, RETAILER_VALIDATOR_VERSION);
 
+const platinummicro = JSON.parse(await readFile(fileURLToPath(new URL("../retailers/RETAILER-0002-platinummicro.json", import.meta.url)), "utf8"));
+const platinummicroReport = validateRetailer(platinummicro);
+assert.equal(platinummicroReport.valid, true);
+assert.equal(platinummicro.id, "RETAILER-0002");
+assert.equal(platinummicro.name, "Platinummicro");
+assert.equal(new URL(platinummicro.websiteUrl).hostname, "platinummicro.com");
+
 const invalid = structuredClone(retailer);
 invalid.websiteUrl = "http://amazon.com";
 assert.equal(validateRetailer(invalid).errors.some((entry) => entry.code === "INVALID_HTTPS_URL"), true);

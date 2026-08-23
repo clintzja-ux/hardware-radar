@@ -1,15 +1,25 @@
 import path from "node:path";
-import { FileDataForSeoMarketEvidenceRepository, assessDataForSeoEvidencePromotion } from "../packages/mercury/index.js";
+import { FileDataForSeoMarketEvidenceRepository, FileIdentityReviewDecisionRepository, assessDataForSeoEvidencePromotion } from "../packages/mercury/index.js";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { RetailerRepository } from "../packages/atlas/index.js";
+
+async function readLocalJson(resource) { return JSON.parse(await readFile(fileURLToPath(resource), "utf8")); }
 
 const args = new Map(process.argv.slice(2).map((entry) => {
     const index = entry.indexOf("=");
     return index < 0 ? [entry, true] : [entry.slice(0, index), entry.slice(index + 1)];
 }));
 const statePath = path.resolve(String(args.get("--state") || process.env.HARDWARE_RADAR_DATAFORSEO_EVIDENCE_STATE || ".forge-review/acquisition/dataforseo-market-evidence.json"));
+const decisionStatePath = path.resolve(String(args.get("--decision-state") || ".forge-review/identity-review/identity-review-decisions.json"));
 const requestedProduct = String(args.get("--atlas-product") || "ram_corsair_cmk32gx5m2b6000z30");
 const repository = new FileDataForSeoMarketEvidenceRepository({ statePath });
+const decisionRepository = new FileIdentityReviewDecisionRepository({ statePath:decisionStatePath, requireExisting:true });
 const records = (await repository.getAll()).filter((record) => record.candidate?.identity?.atlasProductId === requestedProduct);
-const assessment = assessDataForSeoEvidencePromotion({ records });
+const identityReviewDecisions = await decisionRepository.getAll();
+const identityReviewRemediations = await decisionRepository.getAllRemediations();
+const atlasRetailers = await new RetailerRepository({ readJson:readLocalJson }).getAll();
+const assessment = assessDataForSeoEvidencePromotion({ records, identityReviewDecisions, identityReviewRemediations, atlasRetailers });
 
 console.log("EVIDENCE PROMOTION ASSESSMENT");
 console.log("");

@@ -1,0 +1,32 @@
+import assert from "node:assert/strict";
+import {execFileSync} from "node:child_process";
+import {mkdtemp,readFile,rm,writeFile} from "node:fs/promises";
+import {join} from "node:path";
+import {tmpdir} from "node:os";
+import {
+  FileDataForSeoMarketEvidenceRepository,FileIdentityReviewDecisionRepository,
+  createProductIdentityReviewDecision,createMerchantIdentityReviewDecision,
+  assessDataForSeoEvidencePromotion
+} from "../index.js";
+
+const candidate={candidateVersion:"1.0",candidateType:"MERCURY_MARKET_OBSERVATION",marketEvidence:{evidenceVersion:"1.0",provider:"DATAFORSEO",source:"DATAFORSEO_GOOGLE_SHOPPING",sourceMethod:"API",seller:{name:"Platinummicro",domain:"platinummicro.com",url:"https://platinummicro.com/item"},pricing:{basePrice:588.99,shippingPrice:null,tax:null,totalPrice:588.99,currency:"USD"},offer:{condition:null,details:"Corsair CMK32GX5M2B6000Z30",availability:"in_stock"},productEvidence:{title:"Corsair CMK32GX5M2B6000Z30",dataDocId:"3844868436216882408",productId:null,gid:null},provenance:{sourceTaskId:"wiring-task",observedAt:"2026-08-21T16:31:45.604Z",rawPayloadReference:"fixture:wiring"}},identity:{outcome:"PROBABLE",atlasProductId:"ram_corsair_cmk32gx5m2b6000z30",externalProductId:null,candidateAtlasProductIds:[],evidence:[]},governance:{requiresReview:true,canonicalObservationEligible:false,automaticPublicationEligible:false}};
+const merchant={resolutionVersion:"1.0",outcome:"DISCOVERED",retailerId:null,merchantKey:"domain:platinummicro.com",sellerName:"Platinummicro",canonicalDomain:"platinummicro.com",suppliedDomain:"platinummicro.com",urlDomain:"platinummicro.com",requiresRegistration:true,evidence:[],reason:"ATLAS_RETAILER_NOT_FOUND"};
+const eligibility={eligibilityVersion:"1.0",status:"REVIEW_REQUIRED",canonicalObservationEligible:false,rawEvidenceRetentionEligible:true,historicalAnalyticsEligible:false,retailerId:null,requiresReview:true,reasons:["MERCHANT_REGISTRATION_REQUIRED"]};
+const root=await mkdtemp(join(tmpdir(),"hardware-radar-assessment-wiring-"));
+try{
+  const evidencePath=join(root,"evidence.json");const evidenceRepository=new FileDataForSeoMarketEvidenceRepository({statePath:evidencePath,now:()=>"2026-08-22T10:00:00Z"});const retained=await evidenceRepository.retain({candidate,merchantResolution:merchant,eligibility});const record=await evidenceRepository.getById(retained.evidenceId);const original=structuredClone(record);
+  const baseline=assessDataForSeoEvidencePromotion({records:[record]});assert.equal(baseline.productIdentity,"PROBABLE");assert.ok(baseline.reasons.some(x=>x.code==="PRODUCT_IDENTITY_NOT_VERIFIED"));
+  const productDraft=createProductIdentityReviewDecision({atlasProductId:candidate.identity.atlasProductId,previousState:"PROBABLE",requestedState:"VERIFIED",decisionOutcome:"APPROVED",reviewedAt:"2026-08-22T10:05:00Z",reviewedBy:"operator:fixture",reason:"Fixture product verification.",supportingEvidenceReferences:[record.evidenceId],contradictionStatus:"NONE",audit:{source:"OPERATOR_REVIEW",requestId:"product-review-fixture",preparedAt:"2026-08-22T10:01:00Z"}});
+  const productState=join(root,"product-decisions.json");const productRepo=new FileIdentityReviewDecisionRepository({statePath:productState,now:()=>"2026-08-22T10:06:00Z"});const productDecision=await productRepo.recordDecision(productDraft);
+  const run=(decisionState)=>execFileSync(process.execPath,["scripts/mercury-evidence-promotion-assess.mjs",`--state=${evidencePath}`,`--decision-state=${decisionState}`,`--atlas-product=${candidate.identity.atlasProductId}`],{cwd:process.cwd(),encoding:"utf8",stdio:["ignore","pipe","pipe"]});
+  const projected=run(productState);assert.match(projected,/Product identity:\s+VERIFIED/);assert.match(projected,/Merchant identity:\s+DISCOVERED/);assert.match(projected,/Promotion state:\s+REVIEW_REQUIRED/);assert.match(projected,/Historical eligible:\s+false/);assert.match(projected,/Canonical eligible:\s+false/);assert.match(projected,/Publication eligible:\s+false/);assert.doesNotMatch(projected,/PRODUCT_IDENTITY_NOT_VERIFIED/);assert.match(projected,/MERCHANT_(IDENTITY_NOT_REGISTERED|REGISTRATION_REQUIRED)/);
+  assert.deepEqual(await evidenceRepository.getById(record.evidenceId),original);
+
+  const rejectedState=join(root,"rejected-decisions.json");const rejectedRepo=new FileIdentityReviewDecisionRepository({statePath:rejectedState});await rejectedRepo.recordDecision({...productDraft,decisionOutcome:"REJECTED",reason:"Fixture rejection."});const rejected=run(rejectedState);assert.match(rejected,/Product identity:\s+PROBABLE/);assert.match(rejected,/PRODUCT_IDENTITY_NOT_VERIFIED/);
+  const merchantState=join(root,"merchant-decisions.json");const merchantRepo=new FileIdentityReviewDecisionRepository({statePath:merchantState});await merchantRepo.recordDecision(createMerchantIdentityReviewDecision({discoveredMerchantName:"Platinummicro",canonicalMerchantName:"Platinummicro",canonicalDomain:"platinummicro.com",merchantId:"RETAILER-0002",merchantActive:true,previousState:"DISCOVERED",requestedState:"REGISTERED",decisionOutcome:"APPROVED",reviewedAt:"2026-08-22T10:07:00Z",reviewedBy:"operator:fixture",reason:"Fixture merchant registration.",supportingEvidenceReferences:[record.evidenceId],contradictionStatus:"NONE",audit:{source:"OPERATOR_REVIEW",requestId:"merchant-review-fixture",preparedAt:"2026-08-22T10:02:00Z"}}));const merchantOnly=run(merchantState);assert.match(merchantOnly,/Product identity:\s+PROBABLE/);assert.match(merchantOnly,/Merchant identity:\s+REGISTERED/);
+
+  assert.throws(()=>run(join(root,"missing.json")),/IDENTITY_REVIEW_STATE_MISSING/);
+  const malformed=join(root,"malformed.json");await writeFile(malformed,"{not-json","utf8");assert.throws(()=>run(malformed));
+  const conflicting=join(root,"conflicting.json");const state=JSON.parse(await readFile(productState,"utf8"));const duplicate=structuredClone(productDecision);duplicate.identityReviewDecisionId="mer_idrev_000000002";duplicate.sequence=2;duplicate.recordedAt="2026-08-22T10:07:00Z";state.sequence=2;state.decisions[duplicate.identityReviewDecisionId]=duplicate;state.bySubject[`PRODUCT_IDENTITY:${candidate.identity.atlasProductId}`].push(duplicate.identityReviewDecisionId);await writeFile(conflicting,JSON.stringify(state),"utf8");assert.throws(()=>run(conflicting),/conflicting approvals/);
+}finally{await rm(root,{recursive:true,force:true});}
+console.log("Evidence promotion assessment CLI wiring tests passed.");
