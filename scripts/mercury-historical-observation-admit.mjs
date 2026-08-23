@@ -1,0 +1,21 @@
+import {readFile} from "node:fs/promises";
+import {fileURLToPath} from "node:url";
+import path from "node:path";
+import {ProductRepository,RetailerRepository} from "../packages/atlas/index.js";
+import {FileDataForSeoMarketEvidenceRepository,FileHistoricalObservationRepository,FileIdentityReviewDecisionRepository,HistoricalObservationAdmissionService} from "../packages/mercury/index.js";
+
+const args=new Map(process.argv.slice(2).map(x=>{const i=x.indexOf("=");return i<0?[x,true]:[x.slice(0,i),x.slice(i+1)];}));
+const required=name=>{const value=args.get(name);if(typeof value!=="string"||value.trim()==="")throw new Error(`${name.slice(2).replaceAll("-","_").toUpperCase()}_REQUIRED`);return value.trim();};
+const evidenceId=required("--evidence-id");const admittedBy=required("--admitted-by");
+const evidenceState=path.resolve(String(args.get("--evidence-state")||".forge-review/acquisition/dataforseo-market-evidence.json"));const decisionState=path.resolve(String(args.get("--decision-state")||".forge-review/identity-review/identity-review-decisions.json"));const historicalState=path.resolve(String(args.get("--historical-state")||".forge-review/mercury/historical-observations.json"));
+const readJson=async resource=>JSON.parse(await readFile(resource instanceof URL?fileURLToPath(resource):resource,"utf8"));
+async function resolveChain(record){
+  if(args.has("--chain-state"))return readJson(path.resolve(String(args.get("--chain-state"))));
+  const retention=await readJson(path.resolve(String(args.get("--retention-state")||".forge-review/acquisition/sellers-df003-retention-latest.json")));const proposalEnvelope=await readJson(path.resolve(String(args.get("--sellers-proposal")||".forge-review/acquisition/sellers-enrichment-proposal.json")));const proposal=proposalEnvelope.proposal;
+  if(!retention.integrations?.some(x=>x.evidenceId===record.evidenceId))throw new Error("HISTORICAL_EVIDENCE_NOT_BOUND_TO_RETENTION_AUDIT");
+  if(retention.productInfoTaskId!==proposal?.sourceProductInfoTaskId||proposal?.atlasProductId!==record.candidate?.identity?.atlasProductId)throw new Error("HISTORICAL_ACQUISITION_CHAIN_MISMATCH");
+  return {productsTaskId:proposal.sourceProductsTaskId,productInfoTaskId:retention.productInfoTaskId,sellersTaskId:retention.sellersTaskId};
+}
+const evidenceRepository=new FileDataForSeoMarketEvidenceRepository({statePath:evidenceState});const decisionRepository=new FileIdentityReviewDecisionRepository({statePath:decisionState,requireExisting:true});const historicalRepository=new FileHistoricalObservationRepository({statePath:historicalState});const productRepository=new ProductRepository({readJson});const retailerRepository=new RetailerRepository({readJson});
+const service=new HistoricalObservationAdmissionService({evidenceRepository,decisionRepository,productRepository,retailerRepository,historicalRepository,acquisitionChainResolver:resolveChain});const result=await service.admit({evidenceId,admittedBy});const observation=result.observation;
+console.log("HISTORICAL OBSERVATION ADMISSION");console.log("");console.log("Evidence ID:             ",result.evidenceId);console.log("Observation ID:          ",result.observationId);console.log("Atlas product:           ",observation.atlasProductId);console.log("Retailer:                ",observation.retailerId);console.log("Merchant:                ",observation.market.sellerName);console.log("");console.log("Base price:              ",`$${observation.market.basePrice.toFixed(2)}`);console.log("Total price:             ",`$${observation.market.totalPrice.toFixed(2)}`);console.log("Currency:                ",observation.market.currency);console.log("");console.log("Promotion state:         ",result.assessment.state);console.log("Historical admission:    ",result.status);console.log("Canonical eligible:      ",result.assessment.canonicalEligible);console.log("Publication eligible:    ",result.assessment.publicationEligible);console.log("");console.log("Paid task created:       NO");console.log("Actual spend:            $0.000");

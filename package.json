@@ -31,6 +31,7 @@
     "acquisition:sellers:live:execute": "node --env-file=.env scripts/mercury-sellers-live-execute-once.mjs",
     "acquisition:sellers:retain": "node --env-file=.env scripts/mercury-sellers-df003-retain.mjs",
     "evidence:promotion:assess": "node scripts/mercury-evidence-promotion-assess.mjs",
+    "evidence:historical:admit": "node scripts/mercury-historical-observation-admit.mjs",
     "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
     "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",
     "review:product-identity:approve": "node scripts/mercury-product-identity-review-approve.mjs",

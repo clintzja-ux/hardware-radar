@@ -53,6 +53,9 @@ Retained evidence requires explicit promotion assessment.
 ADR-043
 Product and merchant identity reviews are independent audit records.
 
+ADR-044
+Historical admission is separate from canonical observation promotion.
+
 ---
 
 ## Naming Convention
