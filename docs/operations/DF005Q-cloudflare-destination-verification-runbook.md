@@ -2,23 +2,23 @@
 
 **Status:** Future operator procedure; no step is authorized or executed by DF005-Q.
 
-DF005-R now supplies controlled PREPARE/EXECUTE software, but the production target remains unavailable. Do not run EXECUTE until PREPARE can produce an authorization after a separately approved Worker/runtime target, Cloudflare account identifier binding, and least-privilege API token binding exist.
+DF005-R now supplies controlled PREPARE/EXECUTE software, but production runtime configuration remains unavailable. The account-level destination operation does not require a Worker. Do not run EXECUTE until PREPARE can produce an authorization from the approved recipient, Cloudflare account identifier, and least-privilege API token.
 
 ## Preconditions
 
 - Confirm the source-controlled approval is `OPERATOR_APPROVED` and production sending remains disabled.
 - Obtain the approved destination from the operator through the approved secure channel. Do not copy it into source control, tickets, logs, diagnostics, browser configuration, or command history.
-- Do not proceed until a deployable Worker composition root and secure deployment configuration have been separately approved.
+- Keep destination verification separate from later Worker, D1, email-binding, monitoring, sender/domain, and delivery approvals.
 
 ## A. Supply server-side runtime configuration
 
 Supply `BEACON_ALERT_RECIPIENT=<OPERATOR_APPROVED_ADDRESS>` through the approved Cloudflare Worker server-side secret-compatible deployment mechanism. Pass only that extracted binding to Gateway. Do not use public browser configuration or a committed Wrangler `vars` value. Runtime presence must assess as `PENDING_VERIFICATION`, not `VERIFIED`.
 
-Run the zero-network readiness step only after that target exists:
+Run the zero-network readiness step only after the three verification values are securely supplied:
 
 `npm run gateway:alert-recipient:verification:prepare`
 
-Today it must report `RUNTIME_CONFIGURATION_TARGET_NOT_AVAILABLE` and create no authorization.
+Without injected values it must report the recipient, account identifier, and API token as not configured and create no authorization.
 
 ## B. Perform Cloudflare destination verification
 
