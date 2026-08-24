@@ -50,6 +50,10 @@ The execution result `VERIFICATION_EMAIL_REQUESTED` is not verification evidence
 
 ## D. Configure provider and sender/domain separately
 
+DF005-V leaves the sender identity and binding name unresolved. Do not reuse the recipient as sender by inference. Before onboarding `cheapestram.com` or another domain for Email Sending, obtain a separate operator approval covering the exact sender address, domain authority, DNS impact, and binding name.
+
+Cloudflare Email Sending onboarding may create managed bounce MX, SPF, DKIM, and DMARC records. That is an external DNS/provider mutation and is outside DF005-V. A later PREPARE/EXECUTE increment must inventory current DNS and stop for explicit confirmation before any onboarding.
+
 Email sending requires separate domain onboarding and DNS validation under **Compute → Email Service → Email Sending**. The sender must belong to an onboarded Email Service domain. Do not infer a sender from the recipient or domain name. Follow Cloudflare's [domain configuration procedure](https://developers.cloudflare.com/email-service/configuration/domains/) only after a separate authorization.
 
 ## E. Configure deployment and enable sending separately

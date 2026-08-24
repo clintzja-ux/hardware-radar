@@ -46,3 +46,5 @@ export * from "./CloudflareEmailRoutingDestinationObservationClient.js";
 export * from "./FileCloudflareRecipientVerificationObservationRepository.js";
 export * from "./FileCloudflareDestinationVerificationEvidenceRepository.js";
 export * from "./CloudflareRecipientVerificationEvidenceAdmissionService.js";
+export * from "./GatewayAlertSenderDomainGovernance.js";
+export * from "./GatewayAlertSenderDomainReadiness.js";

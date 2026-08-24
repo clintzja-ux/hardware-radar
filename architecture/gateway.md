@@ -48,4 +48,6 @@ DF005-T supplies those three values through a local hidden-prompt wrapper and ep
 
 DF005-U adds a GET-only Cloudflare destination observation followed by a separate explicit evidence-admission boundary. Private in-memory matching yields a digest-only candidate; admission revalidates approval and binding before persisting DF005-Q evidence. Governed evidence survives deliberate clearing of ephemeral credentials and may project `VERIFIED`, but it cannot deploy the provider, configure sender/domain or email binding, enable sending, connect transport, or connect browser behavior.
 
+DF005-V models sender identity, Email Sending domain approval/provider verification, and the Workers email binding as independent gates. No sender or binding name is selected. Future binding configuration must retain one explicit verified destination and restrict allowed senders to the separately approved sender. Cloudflare Email Sending domain onboarding is DNS-affecting and requires a later controlled operator decision; recipient verification alone never authorizes it.
+
 Transient network identifiers may be used by infrastructure for rate limiting but must never enter Beacon evidence. Operational metrics are categorical counts and latency/error health; raw bodies, IPs, user agents, and analytics records are not diagnostic output.

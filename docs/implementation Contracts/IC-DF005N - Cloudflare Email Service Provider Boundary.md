@@ -13,3 +13,5 @@ Readiness recognizes provider and transport selection while leaving provider dep
 DF005-P reserves `BEACON_ALERT_RECIPIENT` as a server-side secret-compatible runtime key. Runtime presence alone is `PENDING_VERIFICATION` and the adapter returns `RECIPIENT_NOT_VERIFIED` without calling the `send_email` binding. Provider deployment and all delivery gates remain unchanged.
 
 DF005-Q adds no provider resource. Even governed `VERIFIED` fixture state returns `PROVIDER_NOT_DEPLOYED` because provider deployment, sender/domain onboarding, destination-restricted binding configuration, and sending remain false.
+
+DF005-V makes the earlier sender/domain placeholder explicit. A verified recipient with missing sender identity or unverified Email Sending domain now fails closed as `SENDER_NOT_CONFIGURED`. Any future binding must preserve the single destination restriction and add an approved-sender restriction. No binding name has been approved.
