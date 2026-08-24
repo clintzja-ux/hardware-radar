@@ -47,3 +47,9 @@ AI Strategy
 Monetization
 NOT_NOW
 Lessons Learned
+
+07 Continuity
+--------------------
+handoff/HARDWARE-RADAR-HANDOFF.md — stable project orientation
+handoff/CURRENT-STATE.md — living implementation and operational state
+handoff/HANDOFF-PROTOCOL.md — maintenance and new-session bootstrap rules
