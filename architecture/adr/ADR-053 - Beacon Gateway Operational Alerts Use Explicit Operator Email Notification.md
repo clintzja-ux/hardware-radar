@@ -29,6 +29,8 @@ DF005-P establishes `BEACON_ALERT_RECIPIENT` as the future Worker server-side se
 
 DF005-Q records operator approval without storing the address. Approval is not configuration or verification. Only narrow Cloudflare destination evidence bound to the configured runtime value may produce `VERIFIED`; even verified state does not configure the sender/domain, deploy the provider, or enable sending.
 
+DF005-R applies Hardware Radar's expiring single-use authorization convention to the destination-verification request. Exact confirmation precedes credentials and network construction. Requesting Cloudflare verification is distinct from completed verification and grants no delivery authority.
+
 ## Related documents
 
 - ADR-052 — Beacon Gateway Alerts Are Derived From Privacy-Safe Operational Metrics

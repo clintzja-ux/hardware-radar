@@ -45,6 +45,8 @@
     "product:interest:alert-notifications:status": "node scripts/beacon-gateway-alert-notification-status.mjs",
     "product:interest:email-provider:status": "node scripts/beacon-gateway-email-provider-status.mjs",
     "product:interest:alert-recipient:status": "node scripts/beacon-gateway-alert-recipient-status.mjs",
+    "gateway:alert-recipient:verification:prepare": "node scripts/beacon-gateway-alert-recipient-verification-prepare.mjs",
+    "gateway:alert-recipient:verification:execute": "node scripts/beacon-gateway-alert-recipient-verification-execute.mjs",
     "acquisition:history-refresh:prepare": "node scripts/mercury-history-refresh-prepare.mjs",
     "acquisition:history-refresh:status": "node scripts/mercury-history-refresh-status.mjs",
     "acquisition:history-refresh:due": "node scripts/mercury-history-refresh-due.mjs",

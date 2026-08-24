@@ -23,6 +23,8 @@ The adapter keeps the value private and projects it through the existing DF005-O
 
 DF005-Q records approval separately without committing the approved address. It defines private runtime matching against narrow Cloudflare destination evidence; production still supplies neither runtime value nor evidence. A verified fixture remains unable to send until all provider, sender/domain, deployment, and explicit sending gates are independently satisfied.
 
+DF005-R binds any future verification authorization to a digest of the private runtime value. The production preparation path remains blocked until a real server-side runtime target exists; no source-controlled recipient fallback is introduced.
+
 ## Related documents
 
 - ADR-053 — Beacon Gateway Operational Alerts Use Explicit Operator Email Notification

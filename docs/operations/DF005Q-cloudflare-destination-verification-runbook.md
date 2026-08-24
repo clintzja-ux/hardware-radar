@@ -2,6 +2,8 @@
 
 **Status:** Future operator procedure; no step is authorized or executed by DF005-Q.
 
+DF005-R now supplies controlled PREPARE/EXECUTE software, but the production target remains unavailable. Do not run EXECUTE until PREPARE can produce an authorization after a separately approved Worker/runtime target, Cloudflare account identifier binding, and least-privilege API token binding exist.
+
 ## Preconditions
 
 - Confirm the source-controlled approval is `OPERATOR_APPROVED` and production sending remains disabled.
@@ -12,13 +14,27 @@
 
 Supply `BEACON_ALERT_RECIPIENT=<OPERATOR_APPROVED_ADDRESS>` through the approved Cloudflare Worker server-side secret-compatible deployment mechanism. Pass only that extracted binding to Gateway. Do not use public browser configuration or a committed Wrangler `vars` value. Runtime presence must assess as `PENDING_VERIFICATION`, not `VERIFIED`.
 
+Run the zero-network readiness step only after that target exists:
+
+`npm run gateway:alert-recipient:verification:prepare`
+
+Today it must report `RUNTIME_CONFIGURATION_TARGET_NOT_AVAILABLE` and create no authorization.
+
 ## B. Perform Cloudflare destination verification
 
 In the Cloudflare dashboard, select the account, then **Compute → Email Service → Email Routing → Destination Addresses**. Add the same operator-approved destination. Cloudflare sends a verification message; the operator controlling that mailbox must open it and select **Verify email address**. Until this succeeds, the destination remains pending and no Gateway verification evidence may be recorded. See Cloudflare's [destination-address procedure](https://developers.cloudflare.com/email-service/configuration/email-routing-addresses/).
 
+After a successful PREPARE and separate operator review, the controlled API equivalent is:
+
+`npm run gateway:alert-recipient:verification:execute -- --authorization-id=<AUTHORIZATION_ID> --confirm=VERIFY-ALERT-RECIPIENT`
+
+The command creates the account-level Email Routing destination request only. It does not deploy a Worker, configure a sender, or enable alert sending. Cloudflare's [destination-address API](https://developers.cloudflare.com/api/resources/email_routing/subresources/addresses/methods/create/) requires an account identifier and authorized API token supplied only at execution time.
+
 ## C. Record governed evidence
 
 After the dashboard reports the exact destination as verified, capture only the opaque destination reference and Cloudflare-reported verification time through the future secure evidence repository. Bind that evidence to the server-side configured address and `BEACON_ALERT_RECIPIENT`. Do not retain the verification email, token, account identifier, API response, or unrelated provider payload. A missing `verified` time means verification has not occurred. DF005-Q defines the validator but creates no production evidence repository or record.
+
+The execution result `VERIFICATION_EMAIL_REQUESTED` is not verification evidence and must never be converted into `VERIFIED`. A failed reserved execution receives no automatic retry; prepare a new authorization only after operator review of provider state.
 
 ## D. Configure provider and sender/domain separately
 
