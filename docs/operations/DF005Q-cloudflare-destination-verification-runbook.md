@@ -38,7 +38,11 @@ After a successful PREPARE and separate operator review, the controlled API equi
 
 The command creates the account-level Email Routing destination request only. It does not deploy a Worker, configure a sender, or enable alert sending. Cloudflare's [destination-address API](https://developers.cloudflare.com/api/resources/email_routing/subresources/addresses/methods/create/) requires an account identifier and authorized API token supplied only at execution time.
 
-## C. Record governed evidence
+## C. Observe and record governed evidence
+
+After mailbox verification, DF005-U provides a separate GET-only observation command: `npm run gateway:alert-recipient:verification:observe`. It uses hidden local prompts, lists destination addresses, privately matches the approved recipient, writes only a digest-bound candidate, and performs no provider mutation. Do not run it from chat or expose the token.
+
+Review the candidate, then admit it separately with `npm run gateway:alert-recipient:verification:evidence:admit -- -ObservedBy operator:<label>`. Admission performs no network request. It is replay-safe and leaves provider deployment and sending disabled.
 
 After the dashboard reports the exact destination as verified, capture only the opaque destination reference and Cloudflare-reported verification time through the future secure evidence repository. Bind that evidence to the server-side configured address and `BEACON_ALERT_RECIPIENT`. Do not retain the verification email, token, account identifier, API response, or unrelated provider payload. A missing `verified` time means verification has not occurred. DF005-Q defines the validator but creates no production evidence repository or record.
 

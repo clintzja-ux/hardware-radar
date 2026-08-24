@@ -41,3 +41,8 @@ export * from "./GatewayCloudflareWorkerTarget.js";
 export * from "./GatewayCloudflareRuntimeConfiguration.js";
 export * from "./GatewayCloudflareRuntimeReadiness.js";
 export * from "./GatewayCloudflareVerificationOperatorInput.js";
+export * from "./CloudflareRecipientVerificationObservation.js";
+export * from "./CloudflareEmailRoutingDestinationObservationClient.js";
+export * from "./FileCloudflareRecipientVerificationObservationRepository.js";
+export * from "./FileCloudflareDestinationVerificationEvidenceRepository.js";
+export * from "./CloudflareRecipientVerificationEvidenceAdmissionService.js";

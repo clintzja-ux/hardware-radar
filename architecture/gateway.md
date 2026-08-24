@@ -46,4 +46,6 @@ DF005-S defines one strict, injected Cloudflare runtime-configuration boundary f
 
 DF005-T supplies those three values through a local hidden-prompt wrapper and ephemeral child-process environment, never CLI secret arguments or `.env`. PREPARE binds recipient and account digests but no token representation; EXECUTE remains separately confirmed and single-use. This provisions a safe operator path only—it performs neither PREPARE nor provider execution during certification and grants no sending or deployment authority.
 
+DF005-U adds a GET-only Cloudflare destination observation followed by a separate explicit evidence-admission boundary. Private in-memory matching yields a digest-only candidate; admission revalidates approval and binding before persisting DF005-Q evidence. Governed evidence survives deliberate clearing of ephemeral credentials and may project `VERIFIED`, but it cannot deploy the provider, configure sender/domain or email binding, enable sending, connect transport, or connect browser behavior.
+
 Transient network identifiers may be used by infrastructure for rate limiting but must never enter Beacon evidence. Operational metrics are categorical counts and latency/error health; raw bodies, IPs, user agents, and analytics records are not diagnostic output.

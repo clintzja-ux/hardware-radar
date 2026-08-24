@@ -50,6 +50,8 @@
     "gateway:cloudflare:runtime:status": "node scripts/beacon-gateway-cloudflare-runtime-status.mjs",
     "gateway:cloudflare:verification-credentials:status": "node scripts/beacon-gateway-cloudflare-verification-credential-status.mjs",
     "gateway:alert-recipient:verification:operator": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/beacon-gateway-alert-recipient-verification-operator.ps1",
+    "gateway:alert-recipient:verification:observe": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/beacon-gateway-alert-recipient-verification-observe.ps1",
+    "gateway:alert-recipient:verification:evidence:admit": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/beacon-gateway-alert-recipient-verification-evidence-admit.ps1",
     "acquisition:history-refresh:prepare": "node scripts/mercury-history-refresh-prepare.mjs",
     "acquisition:history-refresh:status": "node scripts/mercury-history-refresh-status.mjs",
     "acquisition:history-refresh:due": "node scripts/mercury-history-refresh-due.mjs",
