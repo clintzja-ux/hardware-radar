@@ -9,3 +9,7 @@ The source-controlled production record contains no personal address. Future rea
 The `send_email` binding remains `EXPLICIT_DESTINATION_ONLY`; notification objects have no recipient, CC, BCC, reply-to, sender, or binding override authority. Missing production configuration returns `RECIPIENT_NOT_CONFIGURED`; pending, failed, or revoked verification returns `RECIPIENT_NOT_VERIFIED`. Controlled results never expose the address.
 
 Readiness exposes recipient governance available while production configured and verified states remain false. Sender/domain, provider deployment, and sending remain false. Production transport stays `NOT_CONNECTED`; no verification request, email, Cloudflare call, DNS change, browser connection, or spend occurs.
+
+DF005-P implements the approved secure input boundary. `BEACON_ALERT_RECIPIENT` may be supplied only through explicitly extracted server-side Worker runtime configuration. A present valid value projects this unchanged governance model to `PENDING_VERIFICATION`, never `VERIFIED`; production still supplies no value. The runtime adapter does not redefine verification authority, provider, channel, binding restriction, retry, remediation, or sending authority.
+
+DF005-Q records operator approval outside this resolution state and defines the controlled evidence path. Approval alone leaves this model `NOT_CONFIGURED`; runtime presence alone produces `PENDING_VERIFICATION`. Only matching validated Cloudflare destination evidence may produce `VERIFIED`, while `emailSendingEnabled` remains false.

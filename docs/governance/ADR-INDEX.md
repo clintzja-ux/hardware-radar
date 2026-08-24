@@ -83,6 +83,9 @@ Beacon Gateway alerts are derived from privacy-safe operational metrics.
 ADR-053
 Beacon Gateway operational alerts use explicit operator email notification.
 
+ADR-054
+Operator alert recipient is supplied only through server-side runtime configuration.
+
 ---
 
 ## Naming Convention

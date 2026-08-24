@@ -1,0 +1,11 @@
+# IC-DF005P — Secure Server-Side Alert Recipient Configuration Boundary
+
+`BEACON_ALERT_RECIPIENT` is the stable non-secret key for the future operator alert address. Its production source is a Cloudflare Worker server-side secret-compatible runtime binding. The value is not source controlled, public configuration, `.env` authority, browser input, Git-derived identity, or behavioral/monitoring evidence. DF005-P supplies no value and creates no live binding.
+
+`GatewayOperatorRecipientRuntimeConfiguration` accepts an explicitly narrowed configuration object containing at most that one key. Missing input projects the source-controlled DF005-O record unchanged as `NOT_CONFIGURED`. One syntactically valid address projects through `createGatewayAlertOperatorRecipientConfiguration` as `PENDING_VERIFICATION`, with `enabled` and `emailSendingEnabled` false. Unknown keys, blank values, lists, display names, multiple-address syntax, malformed addresses, or projection over non-pristine governance state fail closed as `RECIPIENT_CONFIGURATION_INVALID`.
+
+The address is held in a private adapter field and is absent from adapter serialization, readiness, diagnostics, notification identity, monitoring, Beacon, Mercury, Atlas, and generated public assets. `GatewayAlertOperatorRecipientConfigurationRepository` composes the source-controlled DF005-O rules with an injected runtime map; it never reads the developer environment. A future Worker composition root must explicitly pass `{BEACON_ALERT_RECIPIENT: env.BEACON_ALERT_RECIPIENT}` rather than expose its complete runtime environment.
+
+Cloudflare destination verification remains the only verification authority. Runtime presence alone returns `RECIPIENT_NOT_VERIFIED` at delivery and cannot call the binding. Provider deployment, explicit destination binding agreement, sender/domain configuration, verified evidence, and explicit sending enablement remain independent gates. Production stays `NOT_CONFIGURED`, `RUNTIME_SELECTED`, transport `NOT_CONNECTED`, browser disconnected, and spend `$0.000`.
+
+DF005-Q does not persist the operator-approved value. The same private runtime adapter may accept separately governed Cloudflare evidence after configuration; absent evidence continues to project `PENDING_VERIFICATION`, and mismatched evidence fails closed. Production passes an empty map and no evidence.

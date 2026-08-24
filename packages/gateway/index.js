@@ -25,3 +25,8 @@ export * from "./CloudflareEmailServiceProviderConfigurationRepository.js";
 export * from "./CloudflareEmailServiceNotificationAdapter.js";
 export * from "./GatewayAlertOperatorRecipientConfiguration.js";
 export * from "./GatewayAlertOperatorRecipientConfigurationRepository.js";
+export * from "./GatewayOperatorRecipientRuntimeConfiguration.js";
+export * from "./GatewayAlertOperatorRecipientApproval.js";
+export * from "./GatewayAlertOperatorRecipientApprovalRepository.js";
+export * from "./CloudflareDestinationVerificationEvidence.js";
+export * from "./GatewayAlertRecipientReadiness.js";

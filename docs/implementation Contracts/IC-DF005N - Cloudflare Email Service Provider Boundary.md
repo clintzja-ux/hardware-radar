@@ -9,3 +9,7 @@ Cloudflare supports destination restrictions on `send_email` bindings. Hardware 
 The Gateway sender propagates that controlled undeployed result without exposing raw errors. Provider delivery remains downstream and cannot mutate alert truth, Beacon evidence, summaries, Atlas, history, ranking, publication, WAF, Mercury cadence, acquisition, automatic execution, or unattended LIVE.
 
 Readiness recognizes provider and transport selection while leaving provider deployment, recipient configuration, email sending, monitoring deployment, production transport, and browser connection false. Future gates are explicit recipient governance, verified-destination setup, sender/domain governance, binding-name approval, deployment review, and controlled delivery verification.
+
+DF005-P reserves `BEACON_ALERT_RECIPIENT` as a server-side secret-compatible runtime key. Runtime presence alone is `PENDING_VERIFICATION` and the adapter returns `RECIPIENT_NOT_VERIFIED` without calling the `send_email` binding. Provider deployment and all delivery gates remain unchanged.
+
+DF005-Q adds no provider resource. Even governed `VERIFIED` fixture state returns `PROVIDER_NOT_DEPLOYED` because provider deployment, sender/domain onboarding, destination-restricted binding configuration, and sending remain false.

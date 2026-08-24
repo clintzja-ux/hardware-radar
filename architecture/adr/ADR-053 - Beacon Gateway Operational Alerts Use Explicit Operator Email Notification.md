@@ -25,6 +25,10 @@ DF005-N selects Cloudflare Email Service through a Workers `send_email` binding 
 
 DF005-O makes the operator recipient a separate Gateway configuration with Cloudflare destination verification as authority. Production stores no address and remains `NOT_CONFIGURED`; a future verified configuration must contain exactly one syntactically valid operator-supplied address and explicit verification evidence. Recipient identity never enters notification intent identity, behavioral evidence, monitoring, alerts, or public output.
 
+DF005-P establishes `BEACON_ALERT_RECIPIENT` as the future Worker server-side secret-compatible runtime key. Supplying a value projects only `PENDING_VERIFICATION`; it does not create verification evidence, deployment, sender/domain configuration, or sending authority.
+
+DF005-Q records operator approval without storing the address. Approval is not configuration or verification. Only narrow Cloudflare destination evidence bound to the configured runtime value may produce `VERIFIED`; even verified state does not configure the sender/domain, deploy the provider, or enable sending.
+
 ## Related documents
 
 - ADR-052 — Beacon Gateway Alerts Are Derived From Privacy-Safe Operational Metrics
