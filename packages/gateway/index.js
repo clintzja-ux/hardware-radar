@@ -40,3 +40,4 @@ export * from "./GatewayCloudflareRuntimeConfigurationRequirements.js";
 export * from "./GatewayCloudflareWorkerTarget.js";
 export * from "./GatewayCloudflareRuntimeConfiguration.js";
 export * from "./GatewayCloudflareRuntimeReadiness.js";
+export * from "./GatewayCloudflareVerificationOperatorInput.js";

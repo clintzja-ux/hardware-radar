@@ -9,3 +9,7 @@ The minimum token permission family for the DF005-R account-level destination op
 ## Consequences
 
 Missing, malformed, or unsupported configuration fails closed. DF005-S does not choose a Worker name or email-binding name, create resources, deploy code, store secrets, send email, enable browser transport, or authorize production behavior. Production therefore remains `RUNTIME_SELECTED` and `NOT_CONNECTED`.
+
+DF005-T implements this decision through a local PowerShell secure-prompt wrapper. Account ID, API token, and recipient are entered without echo, inherited only by the PREPARE child process, and removed from the wrapper environment in `finally`. Secret-bearing command-line arguments and `.env` files are prohibited. The API token must never be shared in chat.
+
+PREPARE persists only SHA-256 digests of the recipient and account identifier alongside existing governance bindings. The API token is never persisted or hashed into authorization. EXECUTE independently requires the short-lived authorization and exact confirmation before reading ephemeral environment input or constructing a provider client. PREPARE and EXECUTE remain distinct operator actions.

@@ -2,6 +2,8 @@
 
 **Status:** Future operator procedure; no step is authorized or executed by DF005-Q.
 
+**Secret handling:** THE API TOKEN MUST NOT BE SHARED IN CHAT. Do not paste it into ChatGPT, Codex, tickets, source files, command arguments, or `.env`. Perform credential entry locally through the DF005-T secure operator wrapper.
+
 DF005-R now supplies controlled PREPARE/EXECUTE software, but production runtime configuration remains unavailable. The account-level destination operation does not require a Worker. Do not run EXECUTE until PREPARE can produce an authorization from the approved recipient, Cloudflare account identifier, and least-privilege API token.
 
 ## Preconditions
@@ -12,9 +14,15 @@ DF005-R now supplies controlled PREPARE/EXECUTE software, but production runtime
 
 ## A. Supply server-side runtime configuration
 
-Supply `BEACON_ALERT_RECIPIENT=<OPERATOR_APPROVED_ADDRESS>` through the approved Cloudflare Worker server-side secret-compatible deployment mechanism. Pass only that extracted binding to Gateway. Do not use public browser configuration or a committed Wrangler `vars` value. Runtime presence must assess as `PENDING_VERIFICATION`, not `VERIFIED`.
+In the Cloudflare dashboard, obtain the account identifier from the account overview without copying it into project files or notes. Create a custom API token using the current token-management interface and grant only the account-level **Email Routing Addresses: Edit** permission corresponding to the documented `Email Routing Addresses Write` API permission family. Scope it to the intended account. Do not create or disclose these values during implementation or review.
 
-Run the zero-network readiness step only after the three verification values are securely supplied:
+Locally run `npm run gateway:alert-recipient:verification:operator`. The wrapper prompts without echo for the account ID, API token, and operator-approved recipient, passes them ephemerally to PREPARE, clears its environment, prints only redacted status and authorization metadata, and stops. It does not call Cloudflare. Runtime presence assesses as `PENDING_VERIFICATION`, not `VERIFIED`.
+
+The non-interactive zero-value diagnostic is:
+
+`npm run gateway:cloudflare:verification-credentials:status`
+
+The secure wrapper performs the zero-network PREPARE. Review the resulting authorization before considering a separate execution command.
 
 `npm run gateway:alert-recipient:verification:prepare`
 
