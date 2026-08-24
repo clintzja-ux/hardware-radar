@@ -36,6 +36,7 @@
     "history:query": "node scripts/mercury-history-query.mjs",
     "history:portfolio": "node scripts/mercury-history-portfolio.mjs",
     "product:interest": "node scripts/beacon-product-interest.mjs",
+    "product:interest:collection:status": "node scripts/beacon-interest-collection-status.mjs",
     "acquisition:history-refresh:prepare": "node scripts/mercury-history-refresh-prepare.mjs",
     "acquisition:history-refresh:status": "node scripts/mercury-history-refresh-status.mjs",
     "acquisition:history-refresh:due": "node scripts/mercury-history-refresh-due.mjs",
