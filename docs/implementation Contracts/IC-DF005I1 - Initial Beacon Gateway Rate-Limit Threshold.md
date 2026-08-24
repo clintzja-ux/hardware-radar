@@ -18,6 +18,6 @@ Requests below the threshold remain untrusted behavioral evidence. They are not 
 
 Network identity remains transient edge-security input. It cannot enter event IDs, replay fingerprints, ProductInterestSignal, raw evidence, D1, summaries, or analytics. Operational monitoring remains restricted to evaluated, allowed, rate-limited, configuration-present/missing, and endpoint-health categories.
 
-Runtime, storage, retention, mechanism, and threshold are now configured. Readiness remains `RUNTIME_SELECTED` because monitoring, Atlas packaging, Worker implementation/testing, D1 creation/migration, backup/export verification, deployment configuration, deployment, and browser approval remain incomplete. Production transport remains `NOT_CONNECTED` and browser instrumentation remains disabled.
+Runtime, storage, retention, mechanism, threshold, and the DF005-J privacy-safe monitoring policy are now configured. Readiness remains `RUNTIME_SELECTED` because the monitoring destination and alert policy, Atlas packaging, Worker implementation/testing, D1 creation/migration, backup/export verification, deployment configuration, deployment, and browser approval remain incomplete. Production transport remains `NOT_CONNECTED` and browser instrumentation remains disabled.
 
 This increment grants no Mercury cadence, acquisition, automatic execution, unattended LIVE, popularity, ranking, publication, or spend authority.

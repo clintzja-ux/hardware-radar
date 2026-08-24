@@ -40,6 +40,7 @@
     "product:interest:collection:status": "node scripts/beacon-interest-collection-status.mjs",
     "product:interest:retention": "node scripts/beacon-interest-retention-status.mjs",
     "gateway:beacon:abuse-control": "node scripts/beacon-gateway-abuse-control-status.mjs",
+    "product:interest:monitoring:status": "node scripts/beacon-gateway-monitoring-status.mjs",
     "acquisition:history-refresh:prepare": "node scripts/mercury-history-refresh-prepare.mjs",
     "acquisition:history-refresh:status": "node scripts/mercury-history-refresh-status.mjs",
     "acquisition:history-refresh:due": "node scripts/mercury-history-refresh-due.mjs",

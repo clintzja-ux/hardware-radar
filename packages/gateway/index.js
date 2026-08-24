@@ -6,3 +6,7 @@ export * from "./TransactionalFirstPartyProductInterestCollectionRepository.js";
 export * from "./CloudflareBeaconDeploymentPlan.js";
 export * from "./BeaconGatewayAbuseControlPolicy.js";
 export * from "./BeaconGatewayAbuseControlPolicyRepository.js";
+export * from "./GatewayOperationalMonitoringPolicy.js";
+export * from "./GatewayOperationalMonitoringPolicyRepository.js";
+export * from "./GatewayOperationalMonitoringRecord.js";
+export * from "./GatewayOperationalMonitoringSink.js";

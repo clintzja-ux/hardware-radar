@@ -74,6 +74,9 @@ Beacon first-party interest evidence is retained for 90 days.
 ADR-050
 Beacon product-interest ingestion is rate limited at the Cloudflare edge.
 
+ADR-051
+Beacon Gateway monitoring stores operational categories, not behavioral payloads.
+
 ---
 
 ## Naming Convention
