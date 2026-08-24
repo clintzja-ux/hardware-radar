@@ -48,3 +48,8 @@ export * from "./FileCloudflareDestinationVerificationEvidenceRepository.js";
 export * from "./CloudflareRecipientVerificationEvidenceAdmissionService.js";
 export * from "./GatewayAlertSenderDomainGovernance.js";
 export * from "./GatewayAlertSenderDomainReadiness.js";
+export * from "./GatewayAlertSenderDomainOnboardingApproval.js";
+export * from "./GatewayAlertSenderDomainOnboardingAuthorization.js";
+export * from "./FileGatewayAlertSenderDomainOnboardingAuthorizationRepository.js";
+export * from "./GatewayAlertSenderDomainOnboardingPrepareService.js";
+export * from "./GatewayAlertSenderDomainOnboardingReadiness.js";

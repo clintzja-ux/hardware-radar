@@ -50,11 +50,11 @@ The execution result `VERIFICATION_EMAIL_REQUESTED` is not verification evidence
 
 ## D. Configure provider and sender/domain separately
 
-DF005-V leaves the sender identity and binding name unresolved. Do not reuse the recipient as sender by inference. Before onboarding `cheapestram.com` or another domain for Email Sending, obtain a separate operator approval covering the exact sender address, domain authority, DNS impact, and binding name.
+DF005-W provides the local approval/PREPARE boundary while leaving the sender and binding undeployed. Do not reuse the recipient as sender by inference. When the operator is ready to create review material, run `npm run gateway:alert-sender-domain:onboarding:prepare`. Its PowerShell wrapper prompts invisibly for the exact sender, requests explicit approval of the `cheapestram.com` domain proposal, inventories and acknowledges Bounce/MX, SPF, DKIM, DMARC, and other provider-required DNS impact, and separately offers approval of the proposed `BEACON_ALERT_EMAIL` binding name. It stores only digests and an opaque authorization ID under `.forge-review`.
 
-Cloudflare Email Sending onboarding may create managed bounce MX, SPF, DKIM, and DMARC records. That is an external DNS/provider mutation and is outside DF005-V. A later PREPARE/EXECUTE increment must inventory current DNS and stop for explicit confirmation before any onboarding.
+Cloudflare Email Sending onboarding may create managed bounce MX, SPF, DKIM, and DMARC records. That is an external DNS/provider mutation and remains outside DF005-W. PREPARE records DNS-impact review but explicitly sets DNS mutation approval and execution to false. There is no onboarding EXECUTE command in DF005-W.
 
-Email sending requires separate domain onboarding and DNS validation under **Compute → Email Service → Email Sending**. The sender must belong to an onboarded Email Service domain. Do not infer a sender from the recipient or domain name. Follow Cloudflare's [domain configuration procedure](https://developers.cloudflare.com/email-service/configuration/domains/) only after a separate authorization.
+Email sending requires separate domain onboarding and DNS validation under **Compute → Email Service → Email Sending**. The sender must belong to an onboarded Email Service domain. Do not infer a sender from the recipient or domain name. A `PREPARED` DF005-W authorization permits review only; do not follow Cloudflare's [domain configuration procedure](https://developers.cloudflare.com/email-service/configuration/domains/) until a later increment supplies a separately reviewed mutation authorization.
 
 ## E. Configure deployment and enable sending separately
 

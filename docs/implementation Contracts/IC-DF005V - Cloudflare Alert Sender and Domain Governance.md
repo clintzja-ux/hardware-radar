@@ -15,3 +15,5 @@ No canonical sender mailbox, local part, display name, reply-to, binding name, o
 The model rejects CC, BCC, reply-to, alternate destination, browser sender/recipient selection, relaxed destination restriction, and relaxed sender restriction. Missing sender/domain returns controlled `SENDER_NOT_CONFIGURED / EMAIL_SENDER_DOMAIN_NOT_CONFIGURED` without invoking a binding or changing alert truth.
 
 This increment performs no DNS or Email Routing mutation, domain onboarding, Worker/D1/WAF/monitoring deployment, binding creation, provider activation, email, browser connection, DataForSEO operation, or spend. Readiness remains `RUNTIME_SELECTED` and `NOT_CONNECTED`.
+
+DF005-W subsequently adds a digest-only operator approval and zero-network PREPARE authorization for the exact sender, `cheapestram.com` domain proposal, DNS-impact review, and proposed `BEACON_ALERT_EMAIL` binding name. Those approvals do not change DF005-V's production configuration or authorize execution.
