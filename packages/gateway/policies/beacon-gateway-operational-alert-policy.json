@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "policyType": "BEACON_GATEWAY_OPERATIONAL_ALERTS",
+  "policyId": "beacon_gateway_operational_alerts_v1",
+  "enabled": true,
+  "automaticRemediation": false,
+  "operationalOnly": true,
+  "behavioralAuthority": false,
+  "cadenceAuthority": false,
+  "rules": [
+    {"ruleId":"ENDPOINT_UNHEALTHY","inputCategory":"ENDPOINT_HEALTH","aggregation":"CONSECUTIVE_FAILED","operator":"GTE","threshold":3,"windowMs":null},
+    {"ruleId":"STORAGE_FAILURE_RATE","inputCategory":"STORAGE_FAILURES","aggregation":"COUNT","operator":"GTE","threshold":5,"windowMs":300000},
+    {"ruleId":"HANDLER_ERROR_RATE","inputCategory":"HANDLER_ERRORS","aggregation":"COUNT","operator":"GTE","threshold":10,"windowMs":300000},
+    {"ruleId":"RATE_LIMIT_ACTIVITY","inputCategory":"RATE_LIMITED","aggregation":"COUNT","operator":"GTE","threshold":50,"windowMs":300000},
+    {"ruleId":"LATENCY_DEGRADATION","inputCategory":"HANDLER_LATENCY","aggregation":"NEAREST_RANK_P95","operator":"GT","threshold":1000,"windowMs":300000}
+  ]
+}

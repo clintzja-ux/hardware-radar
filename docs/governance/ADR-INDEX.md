@@ -77,6 +77,12 @@ Beacon product-interest ingestion is rate limited at the Cloudflare edge.
 ADR-051
 Beacon Gateway monitoring stores operational categories, not behavioral payloads.
 
+ADR-052
+Beacon Gateway alerts are derived from privacy-safe operational metrics.
+
+ADR-053
+Beacon Gateway operational alerts use explicit operator email notification.
+
 ---
 
 ## Naming Convention

@@ -28,4 +28,12 @@ DF005-J configures policy `beacon_gateway_operational_monitoring_30d_v1` for pro
 
 DF005-K selects `CLOUDFLARE_WORKERS_LOGS` as the future destination for validated structured operational records. Native Workers invocation logs must be disabled because they contain request and response metadata. Cloudflare's documented three-day Free and seven-day Paid retention are below the governed 30-day maximum. Destination deployment and alert policy remain unconfigured, so monitoring is not production-ready and Gateway readiness stays `RUNTIME_SELECTED`.
 
+DF005-L configures five provider-neutral operational alert rules derived from validated monitoring records: endpoint health, storage failures, handler errors, rate-limit activity, and p95 latency. Evaluation is explicit-time, immutable, identity-free, and has no remediation, WAF, behavioral, cadence, or acquisition authority. Notification destination and monitoring deployment remain unconfigured, so readiness stays `RUNTIME_SELECTED`.
+
+DF005-M selects plain-text email as the initial operational-alert notification channel. Only active alert episodes may create deterministic notification intents; clear, blocked, and recovery notifications are excluded. Provider and explicit operator recipient configuration remain unconfigured, delivery failure cannot alter alert truth, and no retry, remediation, behavioral, cadence, or deployment authority is granted.
+
+DF005-N selects Cloudflare Email Service with a Workers `send_email` binding as the future notification provider. The binding must be restricted to one separately governed verified operator destination. No address, binding name, sender domain, account, routing configuration, resource, or deployment is created; provider deployment, recipient configuration, and sending remain false.
+
+DF005-O defines the single verified-operator-recipient boundary. Production contains no address and remains `NOT_CONFIGURED`; Cloudflare destination verification is the future authority, and verified fixtures require explicit evidence. Recipient identity is server-side operational configuration excluded from notification identity, Beacon, monitoring, alerts, Mercury, Atlas, diagnostics, and public assets. Sender/domain and deployment remain unresolved.
+
 Transient network identifiers may be used by infrastructure for rate limiting but must never enter Beacon evidence. Operational metrics are categorical counts and latency/error health; raw bodies, IPs, user agents, and analytics records are not diagnostic output.
