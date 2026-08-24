@@ -1,0 +1,6 @@
+const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
+export class ProductInterestPortfolioContextService{
+ constructor({summaryService}={}){if(!summaryService?.query)throw new TypeError("PRODUCT_INTEREST_PORTFOLIO_SUMMARY_SERVICE_REQUIRED");this.summaryService=summaryService;}
+ async enrich({portfolio,asOf=portfolio?.asOf}={}){if(portfolio?.readModelType!=="HISTORICAL_OBSERVATION_PORTFOLIO"||!Array.isArray(portfolio.products)||typeof asOf!=="string"||!Number.isFinite(Date.parse(asOf)))throw new TypeError("PRODUCT_INTEREST_PORTFOLIO_INPUT_INVALID");const products=[];for(const product of portfolio.products){const summary=await this.summaryService.query({atlasProductId:product.atlasProductId,asOf});products.push({...structuredClone(product),interest:{sourceAvailable:summary.signalCount>0,signalCount:summary.signalCount,signalTypes:[...summary.signalTypes],latestSignalTime:summary.latestSignalTime,state:summary.interestState,reasons:[...summary.reasons],contextOnly:true}});}return freeze({...structuredClone(portfolio),products,interestContext:{owner:"BEACON",asOf,contextOnly:true,cadenceAuthority:false,acquisitionAuthority:false}});}
+}
+export default ProductInterestPortfolioContextService;

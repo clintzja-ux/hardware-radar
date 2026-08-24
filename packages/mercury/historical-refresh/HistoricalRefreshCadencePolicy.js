@@ -24,4 +24,5 @@ export function evaluateHistoricalRefreshCadence({atlasProductId,cycleStatus,pol
 }
 
 export class HistoricalRefreshCadencePolicyService{evaluate(input){return evaluateHistoricalRefreshCadence(input);}}
+export async function evaluateResolvedHistoricalRefreshCadence({policyRepository,...input}={}){if(!policyRepository?.resolveApplicablePolicy)throw new TypeError("HISTORICAL_REFRESH_CADENCE_POLICY_REPOSITORY_REQUIRED");const policy=await policyRepository.resolveApplicablePolicy(input.atlasProductId);return evaluateHistoricalRefreshCadence({...input,policy});}
 export default HistoricalRefreshCadencePolicyService;

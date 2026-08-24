@@ -9,3 +9,5 @@ Historical eligibility is independent of present-day freshness. Comparability is
 
 ## Consequences
 Historical results are reproducible, auditable, and cannot silently rewrite market history. Subjective deal scoring and prediction remain outside this decision.
+
+DF005-A extends this derivation across the canonical Atlas product universe as a read-only portfolio. Portfolio presence, cadence DUE status, and potential-cost summaries remain non-authoritative and grant no acquisition authority.

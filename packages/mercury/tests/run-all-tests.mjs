@@ -143,6 +143,10 @@ const testModules = [
     ,"./HistoricalRefreshCadencePolicy.test.mjs"
     ,"./HistoricalRefreshCadenceCli.test.mjs"
     ,"./InitialProductionHistoricalRefreshCadence.test.mjs"
+    ,"./HistoricalObservationPortfolio.test.mjs"
+    ,"./HistoricalObservationPortfolioCli.test.mjs"
+    ,"./MultiProductCadencePolicy.test.mjs"
+    ,"./MultiProductCadencePolicyCli.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
