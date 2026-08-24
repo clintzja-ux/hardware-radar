@@ -25,18 +25,62 @@ function requireString(value, field) {
     return value.trim();
 }
 
-function evidenceIdempotencyKey(candidate) {
+export function evidenceAcquisitionIdentity(candidate) {
     const evidence = requireObject(candidate?.marketEvidence, "candidate.marketEvidence");
     const seller = requireObject(evidence.seller, "candidate.marketEvidence.seller");
     const provenance = requireObject(evidence.provenance, "candidate.marketEvidence.provenance");
-    const product = requireObject(evidence.productEvidence, "candidate.marketEvidence.productEvidence");
     return [
         evidence.source,
         requireString(provenance.sourceTaskId, "sourceTaskId"),
-        requireString(provenance.observedAt, "observedAt"),
-        requireString(seller.url, "seller.url"),
-        product.dataDocId ?? product.productId ?? product.gid ?? product.title ?? "UNIDENTIFIED_PRODUCT"
+        provenance.rawPayloadReference ?? requireString(seller.url, "seller.url")
     ].join("|");
+}
+
+export function materialEvidenceFingerprint(candidate) {
+    const evidence = requireObject(candidate?.marketEvidence, "candidate.marketEvidence");
+    const provenance = requireObject(evidence.provenance, "candidate.marketEvidence.provenance");
+    const material = {
+        source: evidence.source,
+        sourceMethod: evidence.sourceMethod,
+        acquisition: {
+            sourceTaskId: provenance.sourceTaskId,
+            rawPayloadReference: provenance.rawPayloadReference ?? null
+        },
+        atlasProductId: candidate?.identity?.atlasProductId ?? null,
+        seller: {
+            name: evidence.seller?.name ?? null,
+            domain: evidence.seller?.domain ?? null,
+            url: evidence.seller?.url ?? null
+        },
+        pricing: {
+            basePrice: evidence.pricing?.basePrice ?? null,
+            totalPrice: evidence.pricing?.totalPrice ?? null,
+            shippingPrice: evidence.pricing?.shippingPrice ?? null,
+            tax: evidence.pricing?.tax ?? null,
+            currency: evidence.pricing?.currency ?? null
+        },
+        offer: {
+            condition: evidence.offer?.condition ?? null,
+            availability: evidence.offer?.availability ?? null
+        },
+        providerIdentity: {
+            productId: evidence.productEvidence?.productId ?? null,
+            dataDocId: evidence.productEvidence?.dataDocId ?? null,
+            gid: evidence.productEvidence?.gid ?? null
+        }
+    };
+    return crypto.createHash("sha256").update(JSON.stringify(material)).digest("hex");
+}
+
+function replayResultOrConflict(record, candidate) {
+    if (!record) throw new Error("DATAFORSEO_EVIDENCE_IDEMPOTENCY_STATE_INVALID");
+    const retainedFingerprint = record.materialEvidenceFingerprint ?? materialEvidenceFingerprint(record.candidate);
+    if (retainedFingerprint !== materialEvidenceFingerprint(candidate)) {
+        const error = new Error("ACQUISITION_EVIDENCE_CONFLICT");
+        error.code = "ACQUISITION_EVIDENCE_CONFLICT";
+        throw error;
+    }
+    return freeze({ status: "DUPLICATE", evidenceId: record.evidenceId });
 }
 
 function evidenceId(key) {
@@ -83,18 +127,24 @@ export class FileDataForSeoMarketEvidenceRepository {
         requireObject(eligibility, "eligibility");
         if (eligibility.rawEvidenceRetentionEligible !== true) throw new Error("DATAFORSEO_RAW_EVIDENCE_RETENTION_NOT_ALLOWED");
 
-        const key = evidenceIdempotencyKey(candidate);
+        const key = evidenceAcquisitionIdentity(candidate);
+        const fingerprint = materialEvidenceFingerprint(candidate);
         const id = evidenceId(key);
         return this._withLock(async () => {
             const state = await this._readState();
             const existing = state.idempotency[key];
-            if (existing) return freeze({ status: "DUPLICATE", evidenceId: existing });
+            if (existing) return replayResultOrConflict(state.records[existing], candidate);
+            const legacyExisting = Object.values(state.records).find((record) => {
+                try { return evidenceAcquisitionIdentity(record.candidate) === key; } catch { return false; }
+            });
+            if (legacyExisting) return replayResultOrConflict(legacyExisting, candidate);
 
             const record = {
                 evidenceId: id,
                 evidenceVersion: "1.0",
                 retainedAt: this.now(),
                 idempotencyKey: key,
+                materialEvidenceFingerprint: fingerprint,
                 candidate: clone(candidate),
                 merchantResolution: clone(merchantResolution),
                 eligibilityAtRetention: clone(eligibility)

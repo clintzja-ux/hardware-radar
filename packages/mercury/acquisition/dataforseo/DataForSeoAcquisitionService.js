@@ -20,8 +20,8 @@ export class DataForSeoAcquisitionService {
     return this.ledger.record(requestKey,{ kind:"PRODUCT_INFO", taskId:task.id, costUsd:Number(task.cost ?? 0), createdStatus:task.status_code, sourceId:DATAFORSEO_SOURCE_ID });
   }
   async getProductInfoResult(taskId) { assertRights(); return this.client.getProductInfoResult(taskId); }
-  async createSellersTask({ productId, dataDocId, gid, locationName="United States", languageName="English" }={}) {
-    assertRights(); const payload={productId:productId ?? null,dataDocId:dataDocId ?? null,gid:gid ?? null,locationName,languageName}; const requestKey=key("SELLERS",payload); this.ledger.requireNew(requestKey);
+  async createSellersTask({ productId, dataDocId, gid, locationName="United States", languageName="English", acquisitionCycleId=null }={}) {
+    assertRights(); const payload={productId:productId ?? null,dataDocId:dataDocId ?? null,gid:gid ?? null,locationName,languageName}; const requestKey=key("SELLERS",acquisitionCycleId==null?payload:{...payload,acquisitionCycleId}); this.ledger.requireNew(requestKey);
     const task=await this.client.postSellersTask({productId,dataDocId,gid,locationName,languageName,tag:requestKey});
     return this.ledger.record(requestKey,{ kind:"SELLERS", taskId:task.id, costUsd:Number(task.cost ?? 0), createdStatus:task.status_code, sourceId:DATAFORSEO_SOURCE_ID });
   }

@@ -56,6 +56,9 @@ Product and merchant identity reviews are independent audit records.
 ADR-044
 Historical admission is separate from canonical observation promotion.
 
+ADR-045
+Historical refresh cycles are provider-task scoped.
+
 ---
 
 ## Naming Convention

@@ -52,6 +52,7 @@ export class DataForSeoAcquisitionResultProcessor {
         publicationEligible:false
       });
     } catch(error){
+      if(error?.code === "ACQUISITION_EVIDENCE_CONFLICT" || error?.message === "ACQUISITION_EVIDENCE_CONFLICT") throw error;
       return freeze({integrationVersion:"1.0",candidateId:candidateId ?? null,evidenceOutcome:DATAFORSEO_EVIDENCE_OUTCOMES.REJECTED_INVALID_EVIDENCE,evidenceId:null,productIdentityOutcome:null,merchantIdentityOutcome:null,eligibilityStatus:null,historicalOutcome:DATAFORSEO_HISTORICAL_OUTCOMES.NOT_ELIGIBLE,canonicalObservationEligible:false,publicationEligible:false,errorCode:error?.code ?? error?.message ?? "DF003_INTEGRATION_FAILURE"});
     }
   }

@@ -13,7 +13,7 @@ Mercury has an immutable historical-admission record for retained evidence that 
 
 Admission preserves provider values losslessly, including null shipping, tax, and condition; provider total is stored without recomputation. Original observation time remains distinct from admission time. Each record references the retained evidence and governed PRODUCTS, PRODUCT_INFO, and SELLERS acquisition chain.
 
-Historical admission requires current identity-review projection, Atlas-backed retailer resolution, Atlas product existence, complete provenance, and `historicalEligible=true`. It also requires canonical and publication eligibility to remain false for this policy version.
+Historical admission requires current identity-review projection, Atlas-backed retailer resolution, Atlas product existence, complete provenance, and `historicalEligible=true`. Refresh evidence may satisfy identity gates only through its exact governed refresh-reuse binding; admission preserves that refresh plan, authorization, SELLERS task, source evidence, provider identity, and decision provenance without inventing new PRODUCTS or PRODUCT_INFO tasks. It also requires canonical and publication eligibility to remain false for this policy version.
 
 ## Consequences
 

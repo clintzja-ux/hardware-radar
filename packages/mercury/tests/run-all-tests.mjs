@@ -1,3 +1,4 @@
+process.env.HARDWARE_RADAR_TEST_MODE = "1";
 const testModules = [
     "./SchemaContract.test.mjs",
     "./CanonicalObservation.test.mjs",
@@ -130,7 +131,13 @@ const testModules = [
     "./IdentityReviewAuditRemediation.test.mjs",
     "./AtlasBackedMerchantRegistration.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
-    "./HistoricalObservationIntelligence.test.mjs"
+    "./HistoricalObservationIntelligence.test.mjs",
+    "./HistoricalRefreshAccumulation.test.mjs",
+    "./HistoricalRefreshReplayConflict.test.mjs"
+    ,"./HistoricalRefreshAuthorization.test.mjs"
+    ,"./HistoricalRefreshStateIsolation.test.mjs"
+    ,"./HistoricalRefreshResultRetrieval.test.mjs"
+    ,"./GovernedRefreshHistoricalAdmission.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

@@ -79,3 +79,4 @@ export * from "./acquisition/enrichment/index.js";
 export * from "./identity-review/index.js";
 export * from "./promotion/index.js";
 export * from "./historical-admission/index.js";
+export * from "./historical-refresh/index.js";

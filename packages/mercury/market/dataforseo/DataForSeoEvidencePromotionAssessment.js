@@ -76,12 +76,16 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
     let atlasProductId = null;
     let productIdentity = null;
     let merchantIdentity = null;
+    const effectiveProductIdentities = new Set();
+    const effectiveMerchantIdentities = new Set();
+    const effectiveRetailerIds = new Set();
     let allDf003Eligible = true;
     let allPolicyEligible = true;
     const canonicalPolicyReasons = [];
     const identityReviewDecisions = Array.isArray(input.identityReviewDecisions) ? input.identityReviewDecisions : [];
     const identityReviewRemediations = Array.isArray(input.identityReviewRemediations) ? input.identityReviewRemediations : [];
     const atlasRetailers = Array.isArray(input.atlasRetailers) ? input.atlasRetailers : [];
+    const identityReuseAssessments = Array.isArray(input.identityReuseAssessments) ? input.identityReuseAssessments : [];
     const promotionPolicy = input.promotionPolicy === undefined ? canonicalEvidencePromotionPolicy : input.promotionPolicy;
 
     for (const record of records) {
@@ -108,11 +112,7 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
         if (merchant.outcome === "CONFLICT") critical.push(reason(merchant.reason ?? "MERCHANT_IDENTITY_CONFLICT", "merchantIdentity"));
 
         atlasProductId ??= identity?.atlasProductId ?? null;
-        productIdentity ??= identity?.outcome ?? null;
-        merchantIdentity ??= merchant.outcome ?? null;
         if (atlasProductId !== (identity?.atlasProductId ?? null)) critical.push(reason("ATLAS_PRODUCT_ID_CONTRADICTION", "productIdentity"));
-        if (productIdentity !== identity?.outcome) review.push(reason("PRODUCT_IDENTITY_NOT_STABLE", "productIdentity"));
-        if (merchantIdentity !== merchant.outcome) review.push(reason("MERCHANT_IDENTITY_NOT_STABLE", "merchantIdentity"));
 
         try {
             const recomputed = evaluateDataForSeoObservationEligibility({ candidate, merchantResolution:merchant });
@@ -121,9 +121,8 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
                 retainedEligibility.historicalAnalyticsEligible === recomputed.historicalAnalyticsEligible &&
                 sameArray(retainedEligibility.reasons, recomputed.reasons);
             if (!retainedMatches) critical.push(reason("DF003_ELIGIBILITY_CONTRADICTION", "df003Eligibility", record.evidenceId));
-            const projection = projectIdentityReviewState({record,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers});
-            if (projection.product.state === "VERIFIED") productIdentity = "VERIFIED";
-            if (projection.merchant.state === "REGISTERED") merchantIdentity = "REGISTERED";
+            const projection = projectIdentityReviewState({record,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers,identityReuseAssessments});
+            effectiveProductIdentities.add(projection.product.state);effectiveMerchantIdentities.add(projection.merchant.state);if(projection.merchant.merchantId)effectiveRetailerIds.add(projection.merchant.merchantId);
             const projectedCandidate = projection.product.state === "VERIFIED" ? createDataForSeoMarketObservationCandidate({marketEvidence,atlasResolution:{outcome:"CONFIRMED",atlasProductId:identity.atlasProductId,externalProductId:identity.externalProductId,evidence:identity.evidence,automaticMercuryEligible:true}}) : candidate;
             const projectedMerchant = projection.merchant.state === "REGISTERED" ? projection.merchant.atlasResolution : merchant;
             const currentEligibility = evaluateDataForSeoObservationEligibility({candidate:projectedCandidate,merchantResolution:projectedMerchant});
@@ -141,6 +140,8 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
             allDf003Eligible = false;
         }
     }
+
+    productIdentity=effectiveProductIdentities.size===1?[...effectiveProductIdentities][0]:effectiveProductIdentities.size?"MIXED":null;merchantIdentity=effectiveMerchantIdentities.size===1?[...effectiveMerchantIdentities][0]:effectiveMerchantIdentities.size?"MIXED":null;if(effectiveProductIdentities.size>1)review.push(reason("PRODUCT_IDENTITY_NOT_STABLE","productIdentity"));if(effectiveMerchantIdentities.size>1||effectiveRetailerIds.size>1)review.push(reason("MERCHANT_IDENTITY_NOT_STABLE","merchantIdentity"));
 
     if (critical.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.BLOCKED, records, reasons:critical, atlasProductId, productIdentity, merchantIdentity });
     if (!allDf003Eligible || !allPolicyEligible || review.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.REVIEW_REQUIRED, records, reasons:review, atlasProductId, productIdentity, merchantIdentity });

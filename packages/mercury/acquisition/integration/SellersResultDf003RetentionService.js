@@ -44,7 +44,12 @@ export class SellersResultDf003RetentionService {
     if (!sellersBlock) throw new Error('SELLERS_RESULT_BLOCK_MISSING');
     if (!productInfoItem) throw new Error('PRODUCT_INFO_RESULT_ITEM_MISSING');
     const sellers = Array.isArray(sellersBlock.items) ? sellersBlock.items : [];
-    if (sellers.length === 0) throw new Error('SELLERS_RESULT_ITEMS_MISSING');
+    if (sellers.length === 0) return freeze({
+      schemaVersion:'1.0', operation:'SELLERS_RESULT_DF003_RETENTION', sellersTaskId:sourceTaskId,
+      productInfoTaskId, sellerItems:0, retained:0, duplicates:0, rejected:0,
+      acquisitionOutcome:'NO_SELLER_OBSERVATIONS', absenceDoesNotImplyOutOfStock:true,
+      actualSpendUsd:0, paidTaskCreated:false, integrations:[]
+    });
 
     const expectedDataDocId = providerIdentity.dataDocId ?? null;
     const expectedProductId = providerIdentity.productId ?? null;
