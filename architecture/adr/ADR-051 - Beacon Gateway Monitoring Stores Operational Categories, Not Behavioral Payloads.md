@@ -5,7 +5,7 @@
 
 ## Context
 
-The future Beacon Gateway requires security, availability, health, and incident-diagnosis visibility. Raw requests, product events, product identity, and transport identity would turn operational monitoring into a second behavioral store and could extend deleted Beacon evidence beyond its governed lifecycle. No Cloudflare or third-party monitoring destination has been approved.
+The future Beacon Gateway requires security, availability, health, and incident-diagnosis visibility. Raw requests, product events, product identity, and transport identity would turn operational monitoring into a second behavioral store and could extend deleted Beacon evidence beyond its governed lifecycle. When DF005-J established this boundary, no Cloudflare or third-party monitoring destination had been approved.
 
 ## Decision
 
@@ -19,9 +19,10 @@ The provider-neutral sink validates immutable records before forwarding them. Si
 
 - Monitoring is operationally secondary and has no behavioral analytics, product-interest, cadence, ranking, recommendation, acquisition, or publication authority.
 - Beacon's 90-day behavioral-evidence retention and Gateway's 30-day operational retention remain separate.
-- Monitoring deletion eligibility begins at `recordedAt + 30 days`; automatic deletion is disabled until a destination-specific governed retention mechanism exists.
-- Production monitoring policy is configured, but destination and alert thresholds remain unresolved.
-- Candidate Cloudflare runtime facilities may later implement the sink, but this ADR selects no Logpush, Analytics Engine, external SaaS, binding, or live configuration.
+- Monitoring deletion eligibility begins at `recordedAt + 30 days`; Hardware Radar automatic deletion remains disabled, while a selected provider may enforce a compatible shorter native lifecycle.
+- Production monitoring policy and destination selection are configured architecturally, but destination deployment and alert thresholds remain unresolved.
+- DF005-K selects native Cloudflare Workers Logs as the future sink destination. Only governed structured custom logs may be emitted; invocation logs must be disabled because they include request/response metadata. No Logpush, external SaaS, binding, deployment, or live configuration is created.
+- Cloudflare documents native Workers Logs retention as three days on Free and seven days on Paid. Both are within Hardware Radar's 30-day maximum, but the deployed configuration must still be verified.
 - Production remains `NOT_CONNECTED`; browser instrumentation remains disabled.
 
 ## Alternatives considered

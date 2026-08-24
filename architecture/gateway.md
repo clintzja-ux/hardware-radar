@@ -26,4 +26,6 @@ DF005-I selects Cloudflare WAF rate limiting as the primary `EDGE_TRANSPORT` abu
 
 DF005-J configures policy `beacon_gateway_operational_monitoring_30d_v1` for product-neutral security, availability, health, and incident-diagnosis categories retained for 30 days from monitoring `recordedAt`. Raw requests, event payloads, product/retailer identity, network/user identity, arbitrary headers, raw errors, and secrets are prohibited. The sink is provider-neutral; destination and alert policy remain unconfigured, so readiness remains `RUNTIME_SELECTED` and no live logging exists.
 
+DF005-K selects `CLOUDFLARE_WORKERS_LOGS` as the future destination for validated structured operational records. Native Workers invocation logs must be disabled because they contain request and response metadata. Cloudflare's documented three-day Free and seven-day Paid retention are below the governed 30-day maximum. Destination deployment and alert policy remain unconfigured, so monitoring is not production-ready and Gateway readiness stays `RUNTIME_SELECTED`.
+
 Transient network identifiers may be used by infrastructure for rate limiting but must never enter Beacon evidence. Operational metrics are categorical counts and latency/error health; raw bodies, IPs, user agents, and analytics records are not diagnostic output.

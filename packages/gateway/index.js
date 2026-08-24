@@ -10,3 +10,6 @@ export * from "./GatewayOperationalMonitoringPolicy.js";
 export * from "./GatewayOperationalMonitoringPolicyRepository.js";
 export * from "./GatewayOperationalMonitoringRecord.js";
 export * from "./GatewayOperationalMonitoringSink.js";
+export * from "./CloudflareWorkersLogsMonitoringDestination.js";
+export * from "./CloudflareWorkersLogsMonitoringDestinationRepository.js";
+export * from "./CloudflareWorkersLogsMonitoringAdapter.js";

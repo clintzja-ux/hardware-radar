@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "destinationType": "CLOUDFLARE_WORKERS_LOGS",
+  "destinationId": "beacon_gateway_cloudflare_workers_logs_v1",
+  "enabled": true,
+  "provider": "CLOUDFLARE",
+  "purpose": "SECURITY_AND_OPERATIONAL_HEALTH",
+  "structuredRecordsOnly": true,
+  "rawRequestLoggingAllowed": false,
+  "eventPayloadLoggingAllowed": false,
+  "networkIdentityPersistenceAllowed": false,
+  "invocationLogsAllowed": false,
+  "retentionPolicyId": "beacon_gateway_operational_monitoring_30d_v1",
+  "providerMaximumRetentionDays": 7,
+  "retentionCapabilityVerified": true,
+  "deploymentConfigured": false,
+  "rationale": "Cloudflare Workers Logs accepts governed structured custom records and its documented native maximum retention does not exceed Hardware Radar's 30-day maximum. Deployment must disable invocation logs and remains unconfigured."
+}
