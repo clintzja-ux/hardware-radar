@@ -59,6 +59,21 @@ Historical admission is separate from canonical observation promotion.
 ADR-045
 Historical refresh cycles are provider-task scoped.
 
+ADR-046
+Historical refresh cadence assignment is explicit and unambiguous.
+
+ADR-047
+First-party interest collection requires a governed write boundary.
+
+ADR-048
+Beacon production Gateway uses Cloudflare Workers and D1.
+
+ADR-049
+Beacon first-party interest evidence is retained for 90 days.
+
+ADR-050
+Beacon product-interest ingestion is rate limited at the Cloudflare edge.
+
 ---
 
 ## Naming Convention

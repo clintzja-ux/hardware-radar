@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0",
+  "policyType": "BEACON_GATEWAY_ABUSE_CONTROL",
+  "policyId": "beacon_gateway_product_interest_cloudflare_waf_v1",
+  "enabled": true,
+  "route": "/api/beacon/product-interest",
+  "method": "POST",
+  "mechanism": "CLOUDFLARE_WAF_RATE_LIMIT",
+  "enforcementLayer": "EDGE_TRANSPORT",
+  "applicationFallback": "FAIL_SAFE_NO_BEACON_AUTHORITY",
+  "thresholdConfigured": true,
+  "requestLimit": 20,
+  "windowMs": 60000,
+  "action": "BLOCK",
+  "burstSemantics": "NONE",
+  "transientIdentifier": "NETWORK_REQUEST_IDENTITY",
+  "persistIdentifier": false,
+  "automaticExecution": false,
+  "rationale": "Reject abusive Beacon write traffic at the Cloudflare edge without persisting transport identity or granting analytics authority."
+}

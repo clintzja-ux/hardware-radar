@@ -1,0 +1,1 @@
+const tests=["./BeaconGatewayArchitecture.test.mjs","./BeaconGatewayAbuseControl.test.mjs"];console.log("Running Gateway test suite...\n");for(const test of tests)await import(test);console.log(`\nGateway test suite passed: ${tests.length} files.`);
