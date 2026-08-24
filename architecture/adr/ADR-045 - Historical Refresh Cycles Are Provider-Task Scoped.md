@@ -25,3 +25,6 @@ Existing identity decisions are reused only through an explicit compatibility as
 - New retained evidence is reassessed by E2G/E2H and is never automatically admitted by E2J.
 - An eligible refresh enters E2J only through explicit evidence-scoped admission with the current governed reuse binding; equal prices do not collapse distinct evidence-scoped historical records.
 - No current-price, freshness, canonical, or publication policy is introduced.
+- Cycle status may be reconstructed read-only from existing artifacts to automate sequencing, never authority; recurrence remains cadence-neutral and scheduled dry runs retain no LIVE capability.
+- Any future refresh cadence is an explicit versioned policy evaluated from observation time and caller-supplied `asOf`; scheduler wake frequency is not market-refresh cadence, and missing production cadence fails closed.
+- The initial approved production cadence is 24 hours for `ram_corsair_cmk32gx5m2b6000z30` only, with automatic execution disabled; this product policy neither changes the independent six-hour dry scheduler nor defines public freshness.

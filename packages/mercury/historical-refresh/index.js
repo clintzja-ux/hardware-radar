@@ -5,3 +5,6 @@ export * from "./HistoricalRefreshPlanValidation.js";
 export * from "./RefreshStateIsolation.js";
 export * from "./HistoricalRefreshResultRetrievalService.js";
 export * from "./GovernedHistoricalRefreshIdentityReuse.js";
+export * from "./HistoricalRefreshCycleStatusService.js";
+export * from "./HistoricalRefreshCadencePolicy.js";
+export * from "./HistoricalRefreshCadencePolicyRepository.js";

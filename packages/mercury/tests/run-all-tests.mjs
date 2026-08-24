@@ -138,6 +138,11 @@ const testModules = [
     ,"./HistoricalRefreshStateIsolation.test.mjs"
     ,"./HistoricalRefreshResultRetrieval.test.mjs"
     ,"./GovernedRefreshHistoricalAdmission.test.mjs"
+    ,"./HistoricalRefreshCycleStatus.test.mjs"
+    ,"./HistoricalRefreshCycleStatusCli.test.mjs"
+    ,"./HistoricalRefreshCadencePolicy.test.mjs"
+    ,"./HistoricalRefreshCadenceCli.test.mjs"
+    ,"./InitialProductionHistoricalRefreshCadence.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
