@@ -3,10 +3,10 @@
 ```text
 Last updated:                  2026-08-24
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD:                          183840b4c1a5ef7b8af62f602aeeb55021f1139b
-Working tree:                  Clean before this handoff task; only the new handoff documents are now uncommitted
-Current implementation increment: Canonical repository-owned handoff system (documentation/governance)
-Previous completed increment:  DF005-W — Cloudflare Alert Sender/Domain Approval and Onboarding PREPARE
+HEAD:                          b5330b008bdb7e3096420722e0dab346fee4dda8
+Working tree:                  Clean before reconciliation; CURRENT-STATE.md is now intentionally modified
+Current implementation increment: DF005-W post-PREPARE certification and next-boundary assessment
+Previous completed increment:  Canonical repository-owned handoff system (documentation/governance)
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -20,7 +20,7 @@ This snapshot records repository and local governed-state evidence. It does not 
 | **Mercury** | Acquisition, retention, resolution, identity review, promotion, historical admission/query/refresh/cadence, publication, and rights boundaries | Local portfolio at `2026-08-24T23:00:00Z`: 1 Atlas product, 2 historical observations, cadence configured, cycle complete, not due, unattended LIVE count 0 |
 | **Forge** | Internal static authoring/review application and generated public projection | Legacy Mercury preview remains noncanonical; certified Mercury orchestration is future work |
 | **Beacon** | Product-interest signal, collection/write boundaries, transactional adapter, and 90-day retention policy | Application boundary ready; durable file adapter available but not production-configured; repository signals 0; automatic execution disabled |
-| **Gateway** | Runtime/storage contracts, Cloudflare deployment plan, WAF policy, monitoring, alerts, recipient verification, sender/domain governance, and DF005-W PREPARE | Runtime selected, backend not deployed, production transport `NOT_CONNECTED`, browser disconnected |
+| **Gateway** | Runtime/storage contracts, Cloudflare deployment plan, WAF policy, monitoring, alerts, recipient verification, sender/domain governance, and DF005-W PREPARE | One valid DF005-W authorization is `PREPARED`; backend remains undeployed, production transport `NOT_CONNECTED`, and browser disconnected |
 | **Public Hardware Radar** | Generated static RAM site and category/trust pages under `public/` | Build artifact exists and repository README names `cheapestram.com`; current external hosting/deployment was not queried by this task |
 
 ## Current test baseline
@@ -51,8 +51,8 @@ The root `npm test` additionally runs repository-layout and public-build verific
 | Operational alerts | Five-rule policy configured; no production notification destination/transport |
 | Email provider | `CLOUDFLARE_EMAIL_SERVICE` selected; not deployed; sending disabled |
 | Recipient | Operator approval exists; governed verification evidence exists and projects `VERIFIED`; current runtime recipient presence is `NO` |
-| Sender/domain | Not approved/configured/onboarded; no DF005-W authorization exists |
-| Email binding | Proposed name exists in DF005-W policy; approval/configuration/deployment all `NO` |
+| Sender/domain | Exact sender and `cheapestram.com` proposal are approved in one valid DF005-W authorization; neither is provider-configured or onboarded |
+| Email binding | Proposed `BEACON_ALERT_EMAIL` name is approved; binding configuration/deployment remain `NO` |
 | Alert email transmission | Disabled; none sent by this task |
 | DataForSEO | Governed manual acquisition/refresh tooling and retained evidence exist; unattended LIVE authority is disabled; no acquisition occurred in this task |
 
@@ -73,7 +73,7 @@ The root `npm test` additionally runs repository-layout and public-build verific
 | O–Q | Recipient governance | Approved and verified | Address-free approval plus digest-bound verification evidence; runtime value absent |
 | R–U | Controlled recipient verification | Implemented; evidence captured | Secure runtime/credential, provider observation, and admission boundaries; current governed evidence is `VERIFIED` |
 | V | Sender/domain governance | Implemented | Sender, domain, binding, deployment, and sending remain independent gates |
-| W | Sender/domain approval PREPARE | Implemented and committed; production PREPARE not executed | Digest-only approval/authorization model and secure local wrapper; no authorization currently available |
+| W | Sender/domain approval PREPARE | Implemented, committed, and run by the operator | One digest-only authorization is valid, `PREPARED`, unexpired at inspection, and has no mutation/deployment/sending authority |
 
 Canonical details live in `docs/implementation Contracts/IC-DF005*.md`.
 
@@ -92,47 +92,51 @@ The evidence is local operational state under `.forge-review`; the private addre
 ## Sender/domain state
 
 ```text
-Sender approved:                         NO
+Sender approved:                         YES
 Sender configured:                       NO
-Sending-domain proposal approved:        NO
+Sending-domain proposal approved:        YES
 Sending domain provider configured:      NO
 Sending domain provider verified:        NO
-DNS impact reviewed:                     NO
+DNS impact reviewed:                     YES
 DNS mutation approved:                   NO
 DNS mutation executed:                   NO
-Email-binding name approved:             NO
+Email-binding name approved:             YES
 Email binding configured:                NO
 Provider deployed:                       NO
 Sending enabled:                         NO
-DF005-W authorization available:         NO
+DF005-W authorization ID:                gw_email_onboard_6c1ab984ef84552cefc792f9
+DF005-W authorization lifecycle:         PREPARED
+DF005-W authorization available:         YES (unexpired at 2026-08-24 inspection)
+DF005-W authorization records/conflicts: 1 / 0
 ```
 
 ## Active work
 
-The current uncommitted work is this documentation/governance increment: establishing `docs/handoff/`. DF005-W itself is committed at HEAD. No DF005-W production PREPARE state file exists.
+The operator completed DF005-W PREPARE locally after the handoff commit. This reconciliation certifies that operational state and updates this living handoff. No behavior, policy, production resource, credential, provider configuration, DNS, binding, deployment, or sending state is being changed.
 
 ## Current blockers and operator decisions
 
-- Select and explicitly approve the exact alert sender through the secure DF005-W workflow.
-- Approve `cheapestram.com` only as an Email Sending onboarding proposal.
-- Review the anticipated Bounce/MX, SPF, DKIM, DMARC, and other provider-required DNS impact.
-- Decide whether to approve the proposed `BEACON_ALERT_EMAIL` binding name.
-- Separately design and approve any later Cloudflare domain onboarding, DNS mutation, Worker/binding deployment, sending activation, and browser connection. PREPARE grants none of these.
+- Design a separate, single-purpose Cloudflare Email Sending domain-onboarding authorization and execution boundary. DF005-W reviewed DNS impact but explicitly grants no Cloudflare or DNS mutation authority.
+- Define least-privilege server-only zone/account credential requirements and exact provider operation from current official Cloudflare documentation without storing credentials or private sender data.
+- Keep post-onboarding provider/DNS observation and verification separate from the mutation itself.
+- Keep Worker binding configuration, Worker/D1 deployment, sending activation, test transmission, production transport, and browser connection as later independent gates.
+- The current authorization expires; if it expires before a later authorized operation, fail closed and require a fresh DF005-W PREPARE rather than extending or rewriting it.
 
 ## Next recommended action
 
-Review and include the handoff documents in the repository. After that documentation is accepted, the next operational step is an operator-run DF005-W PREPARE:
+Start a narrowly scoped design/implementation increment for controlled Cloudflare Email Sending domain onboarding. It should first define a local PREPARE plus separately confirmed, single-use EXECUTE boundary for only the provider/domain onboarding mutation, with no automatic execution during implementation.
 
 ```text
-npm run gateway:alert-sender-domain:onboarding:prepare
+Next development action: inspect current official Cloudflare Email Sending domain-onboarding API, permissions, DNS effects, and existing Gateway authorization/executor conventions; then specify the smallest fail-closed onboarding boundary.
 ```
 
-Do **not** run it until the operator is ready to provide the exact sender and explicit decisions locally. Stop after reviewing the resulting authorization; no EXECUTE path exists in DF005-W.
+Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email as part of that design step. DF005-W itself has no EXECUTE path.
 
 ## Recent commits
 
 | Commit | Outcome |
 |---|---|
+| `b5330b0` | Canonical repository-owned handoff system |
 | `183840b` | DF005-W sender/domain onboarding PREPARE governance |
 | `c6a0d1b` | DF005-V sender/domain governance |
 | `bf04b55` | DF005-U verified-recipient observation/evidence capture |
@@ -147,9 +151,11 @@ Protected policy hashes are asserted by Gateway regression tests, especially `pa
 .forge-review/gateway-alert-recipient-verification-evidence.json
   3a21d6202ed659f7d571a23368d92bf1aabd14691e3873d66313e0d821f8f549
 
+.forge-review/gateway-alert-sender-domain-onboarding-authorizations.json
+  f5141ec9aec6f5dcc0f065cd8e6b92455dd8fe6d048842711972ec43ff13ce2a
+
 packages/gateway/GatewayAlertSenderDomainGovernance.js
   2a53fb5d028e24cebbf2a980a87a590ee45f14b47a064216e1cbd135e6f809ea
 ```
 
 The Beacon retention, WAF, monitoring, Workers Logs, alert, notification, email-provider, recipient-governance, recipient-approval, and Mercury cadence policies remained unchanged during DF005-W and this handoff task.
-
