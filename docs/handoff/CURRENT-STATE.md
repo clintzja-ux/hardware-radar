@@ -3,9 +3,9 @@
 ```text
 Last updated:                  2026-08-24
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD before increment:         47e6ff6dd499a461b4c81758aa4addf163dd7d05
-Working tree:                  Clean after restoring one incidental generated timestamp; FM008 changes intentionally uncommitted
-Current implementation increment: IC-FORGE-MERCURY-008 certified Mercury operations exporter
+HEAD before increment:         ad1e9ebe6661eb751f7b916c3e7933376a2ce924
+Working tree:                  Clean before FM008 operator certification; this CURRENT-STATE update is intentionally uncommitted
+Current implementation increment: IC-FORGE-MERCURY-008 operator export certification (fail closed on semantic mismatch)
 Previous completed increment:  IC-FORGE-MERCURY-007 certified Mercury operations projection
 ```
 
@@ -113,7 +113,9 @@ DF005-W authorization records/conflicts: 1 / 0
 
 ## Active work
 
-IC-FORGE-MERCURY-008 now materializes the FM007 read model through an explicit, local, atomic exporter. It snapshots canonical owner APIs, requires `--as-of`, writes only `.forge-review/forge/certified-mercury-operations.json`, and leaves the ordinary public build independent of private operational state. Historical values remain explicitly non-current, non-live, non-public, and non-authoritative for publication. No production export was run during implementation.
+IC-FORGE-MERCURY-008 materializes the FM007 read model through an explicit, local, atomic exporter. The operator ran it twice at the explicit cutoff `2026-08-24T23:00:00Z`; both runs produced byte-identical local artifacts at `.forge-review/forge/certified-mercury-operations.json` with SHA-256 `c7a22626fb2537a8f4020561250b99e4c7231aee6543d5ae26617178ef126a94`. Forge loaded the artifact through its local file-import boundary. Protected Mercury source-state hashes remained unchanged, and no network, provider, paid, or public-build operation occurred.
+
+FM008 certification remains fail closed. The artifact reports cadence `BLOCKED`, cycle `BLOCKED`, and `IDENTITY_REUSE_INVALID`, while the canonical governed portfolio at the same cutoff reports cadence `NOT_DUE` and cycle `COMPLETE`. The exporter path supplies the portfolio with the raw refresh-result identity-reuse envelope rather than the Atlas-governed identity-reuse assessment used by the canonical portfolio CLI. The deterministic artifact is retained as local diagnostic evidence but is not certified as the operational view until that wiring is corrected and certification is rerun.
 
 DF005-X remains independently fail closed:
 
@@ -147,10 +149,10 @@ Actual spend:                             $0.000
 
 ## Next recommended action
 
-Review and certify the FM008 diff and exporter contract. After certification, an operator may run the local zero-network exporter with an explicit `asOf` and load the resulting artifact into Forge. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Correct the narrow FM008 refresh identity-reuse wiring so its portfolio input uses the governed assessment, add production-state regression coverage for cadence/cycle parity, and rerun the local deterministic export certification. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next development action: operator review/certification of FM008; only afterward generate and inspect a local Forge operations artifact. Preserve the fail-closed DF005-X boundary.
+Next development action: correct FM008 governed refresh-result projection and rerun certification; do not treat the current local artifact as certified operational truth. Preserve the fail-closed DF005-X boundary.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
@@ -159,6 +161,7 @@ Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or se
 
 | Commit | Outcome |
 |---|---|
+| `ad1e9eb` | FM008 certified Mercury operations exporter implementation |
 | `47e6ff6` | FM007 certified Mercury operations projection for Forge |
 | `80c5ebf` | Pending Cloudflare permission clarification recorded |
 | `b5330b0` | Canonical repository-owned handoff system |
