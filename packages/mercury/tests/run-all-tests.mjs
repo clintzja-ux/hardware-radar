@@ -149,6 +149,8 @@ const testModules = [
     ,"./MultiProductCadencePolicyCli.test.mjs"
     ,"./CertifiedMercuryOperationsProjection.test.mjs"
     ,"./CertifiedMercuryOperationsPanel.test.mjs"
+    ,"./CertifiedMercuryOperationsExporter.test.mjs"
+    ,"./CertifiedMercuryOperationsExporterCli.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

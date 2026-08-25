@@ -84,6 +84,8 @@ Pre-M001 `PRICE-*` records and the original `price-observation.schema.json` are 
 
 Forge still contains a legacy Mercury preview workflow. It is explicitly non-canonical and must not be treated as a Mercury publication path. FM007 provides the certified read-only operations projection under `operations/`; it composes existing governed results and never performs ingestion, review, publication, or acquisition.
 
+FM008 exports that projection locally with an explicit `asOf` using `npm run forge:mercury:operations:export -- --as-of=<ISO_TIMESTAMP>`. The artifact remains under `.forge-review/forge/` for manual Forge loading and is never a public market snapshot.
+
 ## Governed publication workflow
 
 Canonical observations are not implicitly public. Publication proceeds through separate evidence eligibility, durable review, and durable publication authorization. `PUBLISH` and `WITHDRAW` decisions are append-only `mer_pub_*` workflow records. The public build consumes only governed published observations when durable operational state paths are supplied; otherwise it fails closed to insufficient-data output.

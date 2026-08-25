@@ -36,6 +36,7 @@
     "evidence:historical:admit": "node scripts/mercury-historical-observation-admit.mjs",
     "history:query": "node scripts/mercury-history-query.mjs",
     "history:portfolio": "node scripts/mercury-history-portfolio.mjs",
+    "forge:mercury:operations:export": "node scripts/forge-mercury-operations-export.mjs",
     "product:interest": "node scripts/beacon-product-interest.mjs",
     "product:interest:collection:status": "node scripts/beacon-interest-collection-status.mjs",
     "product:interest:retention": "node scripts/beacon-interest-retention-status.mjs",
