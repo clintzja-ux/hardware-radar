@@ -3,10 +3,10 @@
 ```text
 Last updated:                  2026-08-24
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD:                          b5330b008bdb7e3096420722e0dab346fee4dda8
-Working tree:                  Clean before reconciliation; CURRENT-STATE.md is now intentionally modified
-Current implementation increment: DF005-W post-PREPARE certification and next-boundary assessment
-Previous completed increment:  Canonical repository-owned handoff system (documentation/governance)
+HEAD:                          aaa78fe245bc83b8d5d9e416d2ab09388e0d0c5d
+Working tree:                  DF005-X implementation and documentation intentionally uncommitted
+Current implementation increment: DF005-X controlled Cloudflare Email Sending domain-onboarding boundary
+Previous completed increment:  DF005-W post-PREPARE certification and handoff reconciliation
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -20,12 +20,12 @@ This snapshot records repository and local governed-state evidence. It does not 
 | **Mercury** | Acquisition, retention, resolution, identity review, promotion, historical admission/query/refresh/cadence, publication, and rights boundaries | Local portfolio at `2026-08-24T23:00:00Z`: 1 Atlas product, 2 historical observations, cadence configured, cycle complete, not due, unattended LIVE count 0 |
 | **Forge** | Internal static authoring/review application and generated public projection | Legacy Mercury preview remains noncanonical; certified Mercury orchestration is future work |
 | **Beacon** | Product-interest signal, collection/write boundaries, transactional adapter, and 90-day retention policy | Application boundary ready; durable file adapter available but not production-configured; repository signals 0; automatic execution disabled |
-| **Gateway** | Runtime/storage contracts, Cloudflare deployment plan, WAF policy, monitoring, alerts, recipient verification, sender/domain governance, and DF005-W PREPARE | One valid DF005-W authorization is `PREPARED`; backend remains undeployed, production transport `NOT_CONNECTED`, and browser disconnected |
+| **Gateway** | Runtime/storage contracts, Cloudflare deployment plan, WAF policy, monitoring, alerts, recipient verification, sender/domain governance, DF005-W PREPARE, and fixture-verified DF005-X onboarding authorization/executor | One valid DF005-W authorization is `PREPARED`; DF005-X production PREPARE/EXECUTE are blocked by missing official least-privilege permission policy; backend remains undeployed, production transport `NOT_CONNECTED`, and browser disconnected |
 | **Public Hardware Radar** | Generated static RAM site and category/trust pages under `public/` | Build artifact exists and repository README names `cheapestram.com`; current external hosting/deployment was not queried by this task |
 
 ## Current test baseline
 
-The current runners declare **192 subsystem test files**:
+The current runners declare **193 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
@@ -33,7 +33,7 @@ The current runners declare **192 subsystem test files**:
 | Atlas | 15 |
 | Mercury | 147 |
 | Beacon | 7 |
-| Gateway | 16 |
+| Gateway | 17 |
 
 The root `npm test` additionally runs repository-layout and public-build verification. This documentation task did not rerun all 192 tests; the counts come directly from the committed runners at HEAD. DF005-W's focused and complete validation occurred before commit, but conversation history is not canonical evidence. For this handoff, use the validation results recorded below and rerun the relevant suite before changing behavior.
 
@@ -74,6 +74,7 @@ The root `npm test` additionally runs repository-layout and public-build verific
 | R–U | Controlled recipient verification | Implemented; evidence captured | Secure runtime/credential, provider observation, and admission boundaries; current governed evidence is `VERIFIED` |
 | V | Sender/domain governance | Implemented | Sender, domain, binding, deployment, and sending remain independent gates |
 | W | Sender/domain approval PREPARE | Implemented, committed, and run by the operator | One digest-only authorization is valid, `PREPARED`, unexpired at inspection, and has no mutation/deployment/sending authority |
+| X | Controlled Email Sending domain onboarding | Implemented and fixture-verified; production blocked | Separate provider/DNS approvals and single-use executor exist, but no production PREPARE/EXECUTE command exists until Cloudflare documents the exact least-privilege token permission |
 
 Canonical details live in `docs/implementation Contracts/IC-DF005*.md`.
 
@@ -112,25 +113,25 @@ DF005-W authorization records/conflicts: 1 / 0
 
 ## Active work
 
-The operator completed DF005-W PREPARE locally after the handoff commit. This reconciliation certifies that operational state and updates this living handoff. No behavior, policy, production resource, credential, provider configuration, DNS, binding, deployment, or sending state is being changed.
+DF005-X implements the next local governance boundary without executing it. Official Cloudflare documentation establishes the endpoint and automatic DNS effects but not the exact accepted least-privilege API-token permission. Production use therefore fails closed. No production resource, credential, provider configuration, DNS, binding, deployment, or sending state is changed.
 
 ## Current blockers and operator decisions
 
-- Design a separate, single-purpose Cloudflare Email Sending domain-onboarding authorization and execution boundary. DF005-W reviewed DNS impact but explicitly grants no Cloudflare or DNS mutation authority.
-- Define least-privilege server-only zone/account credential requirements and exact provider operation from current official Cloudflare documentation without storing credentials or private sender data.
+- Obtain authoritative Cloudflare documentation for the exact least-privilege API-token permission accepted by `POST /zones/{zone_id}/email/sending/subdomains`; do not infer it from adjacent permissions or use a Global API Key.
+- Keep production DF005-X PREPARE and EXECUTE unavailable until that permission is adopted into canonical permission evidence.
 - Keep post-onboarding provider/DNS observation and verification separate from the mutation itself.
 - Keep Worker binding configuration, Worker/D1 deployment, sending activation, test transmission, production transport, and browser connection as later independent gates.
 - The current authorization expires; if it expires before a later authorized operation, fail closed and require a fresh DF005-W PREPARE rather than extending or rewriting it.
 
 ## Next recommended action
 
-Start a narrowly scoped design/implementation increment for controlled Cloudflare Email Sending domain onboarding. It should first define a local PREPARE plus separately confirmed, single-use EXECUTE boundary for only the provider/domain onboarding mutation, with no automatic execution during implementation.
+Resolve the Cloudflare permission-policy blocker through authoritative provider evidence, then review a narrow policy update before exposing any production DF005-X PREPARE command.
 
 ```text
-Next development action: inspect current official Cloudflare Email Sending domain-onboarding API, permissions, DNS effects, and existing Gateway authorization/executor conventions; then specify the smallest fail-closed onboarding boundary.
+Next development action: obtain or confirm official Cloudflare support/documentation for the exact least-privilege API-token permission; preserve the implemented fail-closed boundary and do not execute onboarding.
 ```
 
-Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email as part of that design step. DF005-W itself has no EXECUTE path.
+Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
 
 ## Recent commits
 

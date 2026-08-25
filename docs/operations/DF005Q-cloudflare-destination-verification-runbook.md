@@ -54,6 +54,8 @@ DF005-W provides the local approval/PREPARE boundary while leaving the sender an
 
 Cloudflare Email Sending onboarding may create managed bounce MX, SPF, DKIM, and DMARC records. That is an external DNS/provider mutation and remains outside DF005-W. PREPARE records DNS-impact review but explicitly sets DNS mutation approval and execution to false. There is no onboarding EXECUTE command in DF005-W.
 
+DF005-X implements and fixture-verifies the separate, single-use onboarding authorization/executor boundary. Production PREPARE and EXECUTE remain unavailable because Cloudflare's official documentation does not identify the exact least-privilege API-token permission accepted by the create-sending-subdomain endpoint. Do not substitute a Global API Key or infer permission from Email Routing. The safe local diagnostic is `npm run gateway:email-sending-domain:onboarding:status`; it makes no provider request and explains the blocker.
+
 Email sending requires separate domain onboarding and DNS validation under **Compute → Email Service → Email Sending**. The sender must belong to an onboarded Email Service domain. Do not infer a sender from the recipient or domain name. A `PREPARED` DF005-W authorization permits review only; do not follow Cloudflare's [domain configuration procedure](https://developers.cloudflare.com/email-service/configuration/domains/) until a later increment supplies a separately reviewed mutation authorization.
 
 ## E. Configure deployment and enable sending separately
