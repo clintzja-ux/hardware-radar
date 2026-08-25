@@ -3,10 +3,10 @@
 ```text
 Last updated:                  2026-08-24
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD:                          a8d00a93f33b94a4f17a6af8840e54210c8b0b15
-Working tree:                  DF005-X permission-evidence investigation documentation intentionally uncommitted
-Current implementation increment: DF005-X authoritative permission-evidence investigation
-Previous completed increment:  DF005-X controlled Cloudflare Email Sending domain-onboarding boundary
+HEAD:                          d53e3a33d8f02a02847e75e6c3cdfefaf8c9561d
+Working tree:                  Clean before reconciliation; CURRENT-STATE.md is now intentionally modified
+Current implementation increment: DF005-X external clarification request reconciliation
+Previous completed increment:  DF005-X authoritative permission-evidence investigation
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -113,11 +113,29 @@ DF005-W authorization records/conflicts: 1 / 0
 
 ## Active work
 
-DF005-X implements the next local governance boundary without executing it. Official Cloudflare documentation establishes the endpoint and automatic DNS effects but not the exact accepted least-privilege API-token permission. Production use therefore fails closed. No production resource, credential, provider configuration, DNS, binding, deployment, or sending state is changed.
+DF005-X implements the local governance boundary without executing it. Official Cloudflare documentation establishes the endpoint and automatic DNS effects but not the exact accepted least-privilege API-token permission. A clarification request containing the exact question recorded in the DF005-X contract has been submitted to the official Cloudflare Community and is pending moderator approval. Submission is not authoritative permission evidence, support confirmation, policy approval, or execution authority. Production use therefore remains fail closed. No production resource, credential, provider configuration, DNS, binding, deployment, or sending state is changed.
+
+## DF005-X external clarification state
+
+```text
+Cloudflare Community clarification request: SUBMITTED
+Moderation state:                         PENDING_APPROVAL
+Authoritative permission confirmation:    NOT_RECEIVED
+Exact token permission:                   UNKNOWN
+Permission-group ID:                      UNKNOWN
+Single-zone restriction capability:       UNKNOWN
+Separate DNS permission requirement:      UNKNOWN
+DF005-X production PREPARE:               UNAVAILABLE
+DF005-X production EXECUTE:               UNAVAILABLE
+Provider mutation:                        NONE
+DNS mutation:                             NONE
+Actual spend:                             $0.000
+```
 
 ## Current blockers and operator decisions
 
-- Obtain written Cloudflare confirmation of the exact API-token permission-group name and public ID accepted by `POST /zones/{zone_id}/email/sending/subdomains`, whether it can be restricted to the specific zone, and whether automatic onboarding requires separate DNS permission; current documentation, schema-derived metadata, permission listings, and generated SDK material do not establish the mapping.
+- Wait for the submitted Cloudflare Community clarification request to receive moderator approval and a response. The pending post itself establishes no permission fact or authorization.
+- Obtain sufficiently authoritative confirmation of the exact API-token permission-group name and public ID accepted by `POST /zones/{zone_id}/email/sending/subdomains`, whether it can be restricted to the specific zone, and whether automatic onboarding requires separate DNS permission; current documentation, schema-derived metadata, permission listings, generated SDK material, and the pending community submission do not establish the mapping.
 - Keep production DF005-X PREPARE and EXECUTE unavailable until that permission is adopted into canonical permission evidence.
 - Keep post-onboarding provider/DNS observation and verification separate from the mutation itself.
 - Keep Worker binding configuration, Worker/D1 deployment, sending activation, test transmission, production transport, and browser connection as later independent gates.
@@ -125,10 +143,10 @@ DF005-X implements the next local governance boundary without executing it. Offi
 
 ## Next recommended action
 
-Ask Cloudflare Support the exact permission-mapping question recorded in the DF005-X contract. After receiving an authoritative written answer, classify and review that evidence before changing the production gate.
+Wait for the Cloudflare Community post to be approved and for a sufficiently authoritative response. Classify and review any response before changing permission governance or the production gate.
 
 ```text
-Next development action: obtain written Cloudflare confirmation of permission name, public ID, single-zone scope, and any separate DNS permission for the create-sending-subdomain endpoint; preserve the fail-closed boundary and do not execute onboarding.
+Next development action: monitor the pending clarification request; after moderation and response, classify the responder and evidence before deciding whether further Cloudflare Support confirmation is required. Preserve the fail-closed boundary and do not execute onboarding.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
