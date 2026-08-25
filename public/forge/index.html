@@ -602,9 +602,9 @@
                             <span class="section-number">03</span>
 
                             <div>
-                                <h3>Legacy Mercury Preview</h3>
+                                <h3>Legacy Mercury Preview — Noncanonical</h3>
                                 <p>
-                                    Time-sensitive retailer and offer data.
+                                    Authoring preview only. Not certified Mercury operational state.
                                 </p>
                             </div>
                         </div>
@@ -817,6 +817,18 @@
                                 </div>
                             </div>
                         </div>
+                    </section>
+
+                    <section class="inspection-card observation-review-card" id="certifiedMercuryOperationsPanel">
+                        <div class="inspection-heading">
+                            <div><p class="pane-kicker">CERTIFIED MERCURY OPERATIONS</p><h2>Canonical Read-Only View</h2></div>
+                            <span id="certifiedMercuryProjectionStatus" class="status-badge pending">NO PROJECTION</span>
+                        </div>
+                        <p id="certifiedMercuryProjectionSummary" class="review-workflow-summary">Load a local certified Mercury operations projection. No repository or provider operation is performed.</p>
+                        <label class="review-file-field"><span>Certified projection</span><input id="certifiedMercuryProjectionFile" type="file" accept="application/json,.json"></label>
+                        <p class="review-workflow-note">Historical values are labeled HISTORICAL_OBSERVATION. This panel never represents them as current, live, public, or publication-authorized prices.</p>
+                        <div id="certifiedMercuryProjectionProducts" class="certified-mercury-products"></div>
+                        <details class="review-details"><summary>Certified projection JSON</summary><pre id="certifiedMercuryProjectionDetails">{}</pre></details>
                     </section>
 
                     <section class="inspection-card observation-review-card" id="observationReviewPanel">

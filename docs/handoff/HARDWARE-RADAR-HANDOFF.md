@@ -25,7 +25,7 @@ Canonical orientation sources include [product-bible.md](../../product-bible.md)
 | **Atlas** | Canonical product, brand, category, and retailer identity and specifications | Implemented repository-owned knowledge layer |
 | **Mercury** | Retailer observations, provenance, rights, acquisition, retention, identity resolution, historical admission/intelligence, and publication eligibility | Implemented market-intelligence layer with governed production state |
 | **Sentinel** | Deterministic engineering, architecture, data, compliance, and publication-safety validation | Implemented validation/rule layer |
-| **Forge** | Internal authoring, review, readiness, and publication workflow | Implemented static internal application; legacy Mercury preview is noncanonical and future integration must use Mercury's certified boundary |
+| **Forge** | Internal authoring, review, readiness, and publication workflow | Implemented static internal application with a certified read-only Mercury operations projection; legacy Mercury preview remains explicitly noncanonical |
 | **Beacon** | Product-centric first-party interest evidence and retention | Implemented application/domain boundary; production transport is not connected |
 | **Gateway** | Server transport, storage adapter, abuse control, operational monitoring/alerts, and controlled email-delivery governance | Implemented contracts and Cloudflare target plans; production backend is not deployed or connected |
 | **Hardware Radar** | Public presentation of approved outputs, buying guidance, disclosures, accessibility, and responsive experience | Implemented generated static site under `public/` |
@@ -99,9 +99,9 @@ The repository distinguishes `implemented`, `tested`, `selected`, `configured`, 
 
 ## Roadmap
 
-- **Current:** trusted RAM catalog and public static experience; governed Mercury market/history pipeline; Beacon/Gateway product-interest and operational governance through DF005-W.
+- **Current:** trusted RAM catalog and public static experience; governed Mercury market/history pipeline with a certified Forge operations projection; Beacon/Gateway product-interest and operational governance through DF005-X (production onboarding remains fail closed).
 - **Near-term:** complete explicit alert sender/domain onboarding decisions, then design separately authorized Cloudflare/DNS/binding deployment steps; build the selected Worker/D1 backend before any browser connection.
-- **Medium-term:** connect governed first-party interest collection, expand historical-price and filtering experiences, add retailers only through rights/identity/promotion governance, and replace Forge's legacy Mercury preview with certified orchestration.
+- **Medium-term:** connect governed first-party interest collection, expand historical-price and filtering experiences, add retailers only through rights/identity/promotion governance, and continue moving Forge workflows onto certified Mercury boundaries.
 - **Long-term:** expand beyond RAM to SSDs, CPUs, GPUs, motherboards, and other hardware; develop compatibility, recommendation, explanation, API, and conversational-assistant capabilities on the same ownership boundaries.
 - **Deferred:** user accounts, social/forums, mobile apps, public AI chat, arbitrary browser-controlled email, unattended LIVE acquisition, and automation lacking explicit certified policy.
 
@@ -117,4 +117,3 @@ No roadmap item is a deployment promise or authorization.
 6. Respect every approval and PREPARE/EXECUTE gate. Never silently deploy, connect, acquire, publish, send, commit, or push.
 7. Report mutations, network/provider operations, paid tasks, actual spend, tests, protected-state impact, and Git status precisely.
 8. Do not weaken privacy, provenance, immutability, replay, or fail-closed behavior to make an increment easier.
-

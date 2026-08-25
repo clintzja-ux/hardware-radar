@@ -147,6 +147,8 @@ const testModules = [
     ,"./HistoricalObservationPortfolioCli.test.mjs"
     ,"./MultiProductCadencePolicy.test.mjs"
     ,"./MultiProductCadencePolicyCli.test.mjs"
+    ,"./CertifiedMercuryOperationsProjection.test.mjs"
+    ,"./CertifiedMercuryOperationsPanel.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

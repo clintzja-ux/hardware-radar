@@ -82,7 +82,7 @@ Applications consume published intelligence artifacts. They do not execute Mercu
 
 Pre-M001 `PRICE-*` records and the original `price-observation.schema.json` are preserved only under `legacy/` for historical engineering reference. They are not canonical repository members and cannot be loaded through the Mercury manifest.
 
-Forge v0.2 still contains a legacy Mercury preview workflow. It is explicitly non-canonical and must not be treated as a Mercury publication path. Canonical Forge-to-Mercury ingestion will use the registered adapter and validation pipeline in a later Forge integration sprint.
+Forge still contains a legacy Mercury preview workflow. It is explicitly non-canonical and must not be treated as a Mercury publication path. FM007 provides the certified read-only operations projection under `operations/`; it composes existing governed results and never performs ingestion, review, publication, or acquisition.
 
 ## Governed publication workflow
 
