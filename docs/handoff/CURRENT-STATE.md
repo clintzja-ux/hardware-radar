@@ -3,9 +3,9 @@
 ```text
 Last updated:                  2026-08-24
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD before increment:         ad1e9ebe6661eb751f7b916c3e7933376a2ce924
-Working tree:                  Clean before FM008 operator certification; this CURRENT-STATE update is intentionally uncommitted
-Current implementation increment: IC-FORGE-MERCURY-008 operator export certification (fail closed on semantic mismatch)
+HEAD before increment:         a90b5daeb456e34ae3d42b6ad9cda768bc6637d4
+Working tree:                  Clean before correction; FM008 parity correction and this CURRENT-STATE update intentionally uncommitted
+Current implementation increment: IC-FORGE-MERCURY-008 certified after governed identity-reuse parity correction
 Previous completed increment:  IC-FORGE-MERCURY-007 certified Mercury operations projection
 ```
 
@@ -113,9 +113,9 @@ DF005-W authorization records/conflicts: 1 / 0
 
 ## Active work
 
-IC-FORGE-MERCURY-008 materializes the FM007 read model through an explicit, local, atomic exporter. The operator ran it twice at the explicit cutoff `2026-08-24T23:00:00Z`; both runs produced byte-identical local artifacts at `.forge-review/forge/certified-mercury-operations.json` with SHA-256 `c7a22626fb2537a8f4020561250b99e4c7231aee6543d5ae26617178ef126a94`. Forge loaded the artifact through its local file-import boundary. Protected Mercury source-state hashes remained unchanged, and no network, provider, paid, or public-build operation occurred.
+IC-FORGE-MERCURY-008 materializes the FM007 read model through an explicit, local, atomic exporter. Its refresh context now reuses the historical-admission governance boundary that binds identity reuse to Atlas-backed identity decisions and supplies the same governed refresh envelope to `HistoricalObservationPortfolio`; FM008 does not reinterpret raw identity reuse.
 
-FM008 certification remains fail closed. The artifact reports cadence `BLOCKED`, cycle `BLOCKED`, and `IDENTITY_REUSE_INVALID`, while the canonical governed portfolio at the same cutoff reports cadence `NOT_DUE` and cycle `COMPLETE`. The exporter path supplies the portfolio with the raw refresh-result identity-reuse envelope rather than the Atlas-governed identity-reuse assessment used by the canonical portfolio CLI. The deterministic artifact is retained as local diagnostic evidence but is not certified as the operational view until that wiring is corrected and certification is rerun.
+Operator certification succeeded at the explicit cutoff `2026-08-24T23:00:00Z`. Two independent exports produced byte-identical local artifacts at `.forge-review/forge/certified-mercury-operations.json` with SHA-256 `32d0a29e35ebb101ac8d4f764a266b7912a3068c227968a2de6e559cb87d0f1a`. Both the canonical governed portfolio and FM008 report cadence `NOT_DUE`, cycle `COMPLETE`, no cycle blockers, and next action `PREPARE_NEW_REFRESH`; the false `IDENTITY_REUSE_INVALID` blocker is absent. Forge loaded the corrected artifact through its local file-import boundary. Protected Mercury source-state hashes remained unchanged, and no network, provider, paid, mutation, or publication operation occurred.
 
 DF005-X remains independently fail closed:
 
@@ -149,10 +149,10 @@ Actual spend:                             $0.000
 
 ## Next recommended action
 
-Correct the narrow FM008 refresh identity-reuse wiring so its portfolio input uses the governed assessment, add production-state regression coverage for cadence/cycle parity, and rerun the local deterministic export certification. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Operator-review the FM008 parity correction and certification evidence, then commit through the normal manual Git workflow if accepted. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next development action: correct FM008 governed refresh-result projection and rerun certification; do not treat the current local artifact as certified operational truth. Preserve the fail-closed DF005-X boundary.
+Next development action: accept the certified FM008 correction through the operator-managed Git workflow, then select the next increment explicitly. Preserve the fail-closed DF005-X boundary.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.

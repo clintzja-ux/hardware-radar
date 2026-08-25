@@ -1,6 +1,6 @@
 # IC-FORGE-MERCURY-008 — Certified Mercury Operations Exporter
 
-Status: IMPLEMENTED — AWAITING OPERATOR VERIFICATION
+Status: IMPLEMENTED — OPERATOR CERTIFIED
 
 ## Purpose
 
@@ -11,6 +11,8 @@ Materialize the FM007 `CERTIFIED_MERCURY_OPERATIONS_PROJECTION` from current cer
 The exporter loads canonical product and retailer identity through Atlas repositories; retained evidence, historical observations, identity decisions/remediations, canonical observations, effective review/publication decisions, and cadence policy through their Mercury repositories; identity semantics through E2I; promotion semantics through E2G/E2H; and portfolio/cycle semantics through `HistoricalObservationPortfolio`. Operational refresh envelopes use the established local CLI context-loading convention only where no aggregate repository API exists.
 
 Each owner is snapshotted once before derivation. FM008 does not read raw persistence when an owning repository API exists and does not select effective durable decisions itself.
+
+Refresh identity reuse is normalized through `resolveGovernedHistoricalRefreshContext`, which delegates applicable reuse to the existing historical-admission governance owner. The same governed refresh envelope is consumed by `HistoricalObservationPortfolio` and FM008; raw refresh-result identity values cannot bypass or replace the Atlas-bound assessment.
 
 ## Artifact and command
 
@@ -45,3 +47,7 @@ FM008 performs no acquisition, historical admission, Atlas/Mercury mutation, ide
 ## Tests, validation, and exit criteria
 
 Fixture-only exporter/service/CLI/panel coverage verifies successful and deterministic export, explicit time, owner use, source isolation, ordering, historical semantics, empty/malformed/conflicting/missing state, invalid projection/context, atomic write recovery, privacy, Forge consumption, legacy isolation, and zero-operation status. Exit requires focused FM007/FM008 coverage, Mercury and root suites, public build/verification, repository layout, diff validation, and privacy scan to pass.
+
+## Certification evidence
+
+At `asOf=2026-08-24T23:00:00Z`, the canonical portfolio and FM008 both produced cadence `NOT_DUE`, cycle `COMPLETE`, no cycle blockers, and next action `PREPARE_NEW_REFRESH`. Two independent exports were byte-identical with SHA-256 `32d0a29e35ebb101ac8d4f764a266b7912a3068c227968a2de6e559cb87d0f1a`; Forge loaded the artifact as `CERTIFIED READ-ONLY`. Governed source state was unchanged, network/provider operations were `NONE`, and actual spend was `$0.000`.

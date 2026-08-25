@@ -14,4 +14,23 @@ export async function resolveHistoricalRefreshAdmissionGovernance({targetRecord,
   return freeze({kind:"HISTORICAL_REFRESH",identityReuseAssessments:[governed],reuse:governed,sourceRecord});
 }
 
+export async function resolveGovernedHistoricalRefreshContext({refreshResult,refreshPlan,evidenceRepository,evidenceRecords}={}){
+  if(!refreshResult)return freeze({refreshResult:null,identityReuseAssessments:[]});
+  if(!refreshPlan||!evidenceRepository?.getById||!Array.isArray(evidenceRecords))throw new TypeError("HISTORICAL_REFRESH_CONTEXT_INPUT_INVALID");
+  if(!Array.isArray(refreshResult.identityReuse))throw new Error("HISTORICAL_REFRESH_CONTEXT_REUSE_INVALID");
+  const governedReuse=[],identityReuseAssessments=[];
+  for(const persisted of refreshResult.identityReuse){
+    if(!persisted||typeof persisted!=="object"||typeof persisted.status!=="string")throw new Error("HISTORICAL_REFRESH_CONTEXT_REUSE_INVALID");
+    if(persisted.status!=="APPLICABLE"){
+      governedReuse.push(structuredClone(persisted));
+      continue;
+    }
+    const matches=evidenceRecords.filter(record=>record?.evidenceId===persisted.targetEvidenceId);
+    if(matches.length!==1)throw new Error(matches.length?"HISTORICAL_REFRESH_CONTEXT_EVIDENCE_CONFLICT":"HISTORICAL_REFRESH_CONTEXT_EVIDENCE_MISSING");
+    const governed=await resolveHistoricalRefreshAdmissionGovernance({targetRecord:matches[0],evidenceRepository,refreshResult,refreshPlan});
+    governedReuse.push(governed.reuse);identityReuseAssessments.push(...governed.identityReuseAssessments);
+  }
+  return freeze({refreshResult:{...structuredClone(refreshResult),identityReuse:governedReuse},identityReuseAssessments});
+}
+
 export default resolveHistoricalRefreshAdmissionGovernance;
