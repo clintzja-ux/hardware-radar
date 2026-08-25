@@ -19,6 +19,23 @@ Official references:
 - [Email Sending subdomain API collection](https://developers.cloudflare.com/api/resources/email_sending/subresources/subdomains/)
 - [API token permissions](https://developers.cloudflare.com/fundamentals/api/reference/permissions/)
 
+## Permission-evidence investigation
+
+The 2026-08-24 follow-up investigation inspected the rendered endpoint security metadata, Cloudflare's public permission reference, the permission-group listing API, and Cloudflare-maintained generated SDK/API artifacts. It found no authoritative endpoint-to-permission mapping:
+
+- endpoint/OpenAPI-derived security metadata identifies only legacy API Email plus Global API Key authentication and publishes no accepted API-token permission group;
+- the public permission table contains no Email Sending permission entry;
+- `GET /user/tokens/permission_groups` is a read-only listing operation requiring `API Tokens Read` or `API Tokens Write` and can return permission names, public IDs, categories, and scopes, but does not map a permission to an API endpoint;
+- generated SDK material confirms the resource, route, parameters, and legacy authentication metadata but adds no permission mapping.
+
+The evidence classification remains `UNKNOWN` for the required endpoint-to-permission mapping. An observed permission-group name alone would be `PROVIDER_OBSERVED`, and similarly named third-party guidance is `INFERRED`; neither is sufficient to set `DOCUMENTED` or permit production execution. Hardware Radar did not call the permission-group API because the existing Cloudflare runtime credential is governed for recipient verification, does not grant `API Tokens Read`, and a listing response could not resolve the mapping in any event.
+
+Authoritative written Cloudflare confirmation is required. The exact support question is:
+
+> Which API-token permission group name and public permission-group ID authorizes `POST /zones/{zone_id}/email/sending/subdomains`, and can that permission be restricted to one specific zone? Please confirm whether any separate DNS permission is required when onboarding automatically creates or manages the Email Sending DNS records.
+
+Until Cloudflare answers this explicitly, permission state remains `NOT_DOCUMENTED`; production PREPARE and EXECUTE remain unavailable.
+
 ## Authorization model
 
 The immutable `gateway_email_sending_domain_onboarding_authorization_v1` record binds:

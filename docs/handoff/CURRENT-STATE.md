@@ -3,10 +3,10 @@
 ```text
 Last updated:                  2026-08-24
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD:                          aaa78fe245bc83b8d5d9e416d2ab09388e0d0c5d
-Working tree:                  DF005-X implementation and documentation intentionally uncommitted
-Current implementation increment: DF005-X controlled Cloudflare Email Sending domain-onboarding boundary
-Previous completed increment:  DF005-W post-PREPARE certification and handoff reconciliation
+HEAD:                          a8d00a93f33b94a4f17a6af8840e54210c8b0b15
+Working tree:                  DF005-X permission-evidence investigation documentation intentionally uncommitted
+Current implementation increment: DF005-X authoritative permission-evidence investigation
+Previous completed increment:  DF005-X controlled Cloudflare Email Sending domain-onboarding boundary
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -35,7 +35,7 @@ The current runners declare **193 subsystem test files**:
 | Beacon | 7 |
 | Gateway | 17 |
 
-The root `npm test` additionally runs repository-layout and public-build verification. This documentation task did not rerun all 192 tests; the counts come directly from the committed runners at HEAD. DF005-W's focused and complete validation occurred before commit, but conversation history is not canonical evidence. For this handoff, use the validation results recorded below and rerun the relevant suite before changing behavior.
+The root `npm test` additionally runs repository-layout and public-build verification. The counts come directly from the committed runners at HEAD; rerun the relevant suite before changing behavior.
 
 ## Current production and external state
 
@@ -117,7 +117,7 @@ DF005-X implements the next local governance boundary without executing it. Offi
 
 ## Current blockers and operator decisions
 
-- Obtain authoritative Cloudflare documentation for the exact least-privilege API-token permission accepted by `POST /zones/{zone_id}/email/sending/subdomains`; do not infer it from adjacent permissions or use a Global API Key.
+- Obtain written Cloudflare confirmation of the exact API-token permission-group name and public ID accepted by `POST /zones/{zone_id}/email/sending/subdomains`, whether it can be restricted to the specific zone, and whether automatic onboarding requires separate DNS permission; current documentation, schema-derived metadata, permission listings, and generated SDK material do not establish the mapping.
 - Keep production DF005-X PREPARE and EXECUTE unavailable until that permission is adopted into canonical permission evidence.
 - Keep post-onboarding provider/DNS observation and verification separate from the mutation itself.
 - Keep Worker binding configuration, Worker/D1 deployment, sending activation, test transmission, production transport, and browser connection as later independent gates.
@@ -125,10 +125,10 @@ DF005-X implements the next local governance boundary without executing it. Offi
 
 ## Next recommended action
 
-Resolve the Cloudflare permission-policy blocker through authoritative provider evidence, then review a narrow policy update before exposing any production DF005-X PREPARE command.
+Ask Cloudflare Support the exact permission-mapping question recorded in the DF005-X contract. After receiving an authoritative written answer, classify and review that evidence before changing the production gate.
 
 ```text
-Next development action: obtain or confirm official Cloudflare support/documentation for the exact least-privilege API-token permission; preserve the implemented fail-closed boundary and do not execute onboarding.
+Next development action: obtain written Cloudflare confirmation of permission name, public ID, single-zone scope, and any separate DNS permission for the create-sending-subdomain endpoint; preserve the fail-closed boundary and do not execute onboarding.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
