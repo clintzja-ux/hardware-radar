@@ -106,6 +106,7 @@ const testModules = [
     "./DataForSeoHistoricalPromotion.test.mjs",
     "./CanonicalObservationAdmissionGovernance.test.mjs",
     "./CanonicalAdmissionOperatorGovernance.test.mjs",
+    "./CanonicalAdmissionAuthorizationSupersession.test.mjs",
     "./SingleWriterPersistence.test.mjs",
     "./AcquisitionPlanningBudget.test.mjs",
     "./ControlledAcquisitionExecutor.test.mjs",

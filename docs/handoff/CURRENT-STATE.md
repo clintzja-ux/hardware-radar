@@ -3,10 +3,10 @@
 ```text
 Last updated:                  2026-08-30
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD at inspection:            a0e61d7ae7bab5a12575c9800d789a554989a484
-Working tree:                  Clean before expiry reconciliation
-Current implementation increment: DF004-E2Q fixture-certified controlled canonical-admission operator governance
-Previous completed increment:  DF004-E2P fixture-certified canonical observation admission
+HEAD at inspection:            0cebbe5728522fe235ba831eb8092d02478f3064
+Working tree:                  Uncommitted DF004-E2Q.1 implementation after clean baseline
+Current implementation increment: DF004-E2Q.1 fixture-certified expired-authorization supersession
+Previous completed increment:  DF004-E2Q fixture-certified controlled canonical-admission operator governance
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -25,13 +25,13 @@ This snapshot records repository and local governed-state evidence. It does not 
 
 ## Current test baseline
 
-The current runners declare **199 subsystem test files**:
+The current runners declare **200 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 15 |
-| Mercury | 153 |
+| Mercury | 154 |
 | Beacon | 7 |
 | Gateway | 17 |
 
@@ -113,7 +113,9 @@ DF005-W authorization records/conflicts: 1 / 0
 
 ## Active work
 
-DF004-E2P remains the sole canonical-eligibility and admission-policy owner. DF004-E2Q is fixture-certified. Production PREPARE executed once for evidence `dfev_4a1ca776de2706f9473653f3`, creating authorization `mer_canauth_952fbc71ad7acafe0abf0f66`; its immutable stored status is `PENDING_OPERATOR_APPROVAL`, but its effective lifecycle is `EXPIRED` at `2026-08-30T15:44:56.814Z`. It was never consumed. Production EXECUTE and canonical admission have not run, no canonical observation exists, and review/publication/current/live/public-price authority remains false. Current repository replay behavior cannot issue a fresh authorization for the same evidence: identical intent returns the expired record and changed intent conflicts, so another explicit lifecycle design is required before a future PREPARE.
+DF004-E2P remains the sole canonical-eligibility and admission-policy owner. DF004-E2Q and E2Q.1 are fixture-certified. Production PREPARE executed once for evidence `dfev_4a1ca776de2706f9473653f3`, creating authorization `mer_canauth_952fbc71ad7acafe0abf0f66`; its immutable stored status is `PENDING_OPERATOR_APPROVAL`, but its effective lifecycle is `EXPIRED` at `2026-08-30T15:44:56.814Z`. It was never consumed. Production EXECUTE and canonical admission have not run, no canonical observation exists, and review/publication/current/live/public-price authority remains false.
+
+E2Q.1 now provides a separate, explicitly confirmed, zero-network successor-PREPARE operation for an expired, unconsumed authorization. It rereads current owner state, requires a fresh canonical-eligible E2P assessment, appends a new immutable schema-1.1 authorization and a predecessor/successor event, and preserves legacy schema-1.0 state without eager migration. `byEvidence` remains the lineage-root index; `activeAuthorizationByIntent` names the current lineage tip. Exact replay is idempotent, conflicting or branching lineage fails closed, changed bindings are labeled and expose both old/new assessment and binding digests, and Mercury's file single-writer lock enforces one active authorization per admission intent. No production supersession was run.
 
 IC-FORGE-MERCURY-008 materializes the FM007 read model through an explicit, local, atomic exporter. Its refresh context now reuses the historical-admission governance boundary that binds identity reuse to Atlas-backed identity decisions and supplies the same governed refresh envelope to `HistoricalObservationPortfolio`; FM008 does not reinterpret raw identity reuse.
 
@@ -148,15 +150,15 @@ Actual spend:                             $0.000
 - Keep post-onboarding provider/DNS observation and verification separate from the mutation itself.
 - Keep Worker binding configuration, Worker/D1 deployment, sending activation, test transmission, production transport, and browser connection as later independent gates.
 - E2Q production PREPARE: `EXECUTED`; authorization created: `YES`; lifecycle: `EXPIRED`; consumed: `NO`; production EXECUTE: `NO`; canonical admission: `NO`.
-- Do not rerun E2Q PREPARE for the same evidence until an explicit expired-authorization renewal/supersession lifecycle is designed: exact replay returns the expired record and changed intent fails with `CANONICAL_AUTHORIZATION_CONFLICT`.
+- Do not rerun ordinary E2Q PREPARE for the same evidence; it intentionally retains its original replay/conflict behavior. Review E2Q.1 and require a separate explicit operator decision before running `evidence:canonical:supersede` against the expired authorization.
 - The current DF005-W authorization expires; if it expires before a later authorized operation, fail closed and require a fresh DF005-W PREPARE rather than extending or rewriting it.
 
 ## Next recommended action
 
-Design and fixture-certify the smallest append-only renewal or supersession lifecycle for expired E2Q authorizations. Do not rerun PREPARE or run EXECUTE against the expired authorization. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Review the fixture-certified E2Q.1 changes. If accepted, the next independent operator decision is whether to run the local successor-PREPARE command for the expired production authorization; do not run E2Q EXECUTE or canonical admission as part of that decision. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next development action: add an explicit fail-closed expired-authorization renewal/supersession lifecycle before another production PREPARE; keep EXECUTE as a later independent decision.
+Next operator action: review E2Q.1, then separately authorize or decline one local successor-PREPARE for the expired E2Q authorization; keep EXECUTE as a later independent decision.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
