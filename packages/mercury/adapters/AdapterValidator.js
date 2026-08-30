@@ -42,6 +42,9 @@ export function validateAdapterManifestEntry(entry, { retailerIds = null } = {})
         if (!Array.isArray(entry.sourceMethods) || entry.sourceMethods.length === 0 || entry.sourceMethods.some((value) => !isNonEmptyString(value))) {
             errors.push(issue("INVALID_SOURCE_METHODS", "sourceMethods", "Expected at least one source method."));
         }
+        if (entry.compatibleNormalizationVersions !== undefined && (!Array.isArray(entry.compatibleNormalizationVersions) || entry.compatibleNormalizationVersions.length === 0 || entry.compatibleNormalizationVersions.some((value) => !isNonEmptyString(value)))) {
+            errors.push(issue("INVALID_COMPATIBLE_NORMALIZATION_VERSIONS", "compatibleNormalizationVersions", "Expected a non-empty array of normalization versions when supplied."));
+        }
         if (!Array.isArray(entry.capabilities) || entry.capabilities.length === 0) {
             errors.push(issue("INVALID_CAPABILITIES", "capabilities", "Expected at least one declared capability."));
         } else {

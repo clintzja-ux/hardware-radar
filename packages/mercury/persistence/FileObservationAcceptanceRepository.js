@@ -165,6 +165,12 @@ export class FileObservationAcceptanceRepository extends ObservationAcceptanceRe
     return payload ? freeze(clone(payload)) : null;
   }
 
+  async getByIdReadOnly(observationId) {
+    const state = await this._readState();
+    const payload = state.records[observationId]?.payload;
+    return payload ? freeze(clone(payload)) : null;
+  }
+
   async getAuditById(observationId) {
     const state = await this._readState();
     const envelope = state.records[observationId]?.auditEnvelope;

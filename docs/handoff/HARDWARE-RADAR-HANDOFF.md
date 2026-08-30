@@ -23,7 +23,7 @@ Canonical orientation sources include [product-bible.md](../../product-bible.md)
 | Subsystem | Canonical responsibility | Current character |
 |---|---|---|
 | **Atlas** | Canonical product, brand, category, and retailer identity and specifications | Implemented repository-owned knowledge layer |
-| **Mercury** | Retailer observations, provenance, rights, acquisition, retention, identity resolution, historical admission/intelligence, and publication eligibility | Implemented market-intelligence layer with governed production state |
+| **Mercury** | Retailer observations, provenance, rights, acquisition, retention, identity resolution, historical admission/intelligence, current-market qualification, and publication eligibility | Implemented market-intelligence layer with governed production state |
 | **Sentinel** | Deterministic engineering, architecture, data, compliance, and publication-safety validation | Implemented validation/rule layer |
 | **Forge** | Internal authoring, review, readiness, and publication workflow | Implemented static internal application with a certified read-only Mercury operations projection; legacy Mercury preview remains explicitly noncanonical |
 | **Beacon** | Product-centric first-party interest evidence and retention | Implemented application/domain boundary; production transport is not connected |
@@ -73,7 +73,7 @@ Never treat `public/forge/` as canonical Forge source or raw retained provider e
 
 - ADRs explain durable architectural choices; implementation contracts define certified increment boundaries.
 - Versioned policy repositories own business and operational policy. Validators reject unknown or malformed fields.
-- Retained evidence, identity eligibility, historical eligibility/admission, canonical eligibility, publication eligibility, and publication are separate states.
+- Retained evidence, identity eligibility, historical eligibility/admission, canonical eligibility/admission, review, current-market qualification, publication eligibility, and publication are separate states.
 - Evidence and audit records are immutable or append-only. Replay is deterministic; conflicting replay fails closed.
 - PREPARE creates local, reviewable authorization only. EXECUTE is separate, explicitly confirmed, narrowly authorized, and absent when the increment does not define it.
 - Operator approval never silently implies provider configuration, deployment, publication, acquisition, or another independent approval.

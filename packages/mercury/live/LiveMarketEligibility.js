@@ -9,13 +9,14 @@ export function evaluateLiveMarketEligibility(observation, {
   confidence,
   storage = null,
   evaluatedAt = null,
-  policy = defaultLiveMarketPolicy
+  policy = defaultLiveMarketPolicy,
+  rightsRegistry
 } = {}) {
   const reasons = [];
 
   const requiredRights = policy.requiredRights ?? defaultLiveMarketPolicy.requiredRights;
   for (const capability of requiredRights) {
-    const right = evaluateSourceRight(observation, capability);
+    const right = evaluateSourceRight(observation, capability, rightsRegistry ? { registry: rightsRegistry } : undefined);
     if (!right.allowed) reasons.push(right.reason ?? `SOURCE_RIGHT_NOT_ALLOWED:${capability}`);
   }
 

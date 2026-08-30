@@ -10,7 +10,7 @@ function amazonSourceAuthorized(observation) {
 }
 
 export class PublicationWorkflowService {
-  constructor({ acceptanceRepository, reviewRepository, publicationRepository, mercury, atlas = atlasDefault, policy = defaultPublicationPolicy } = {}) {
+  constructor({ acceptanceRepository, reviewRepository, publicationRepository, mercury, atlas = atlasDefault, policy = defaultPublicationPolicy, currentMarketQualificationService = null } = {}) {
     if (!acceptanceRepository) throw new TypeError("acceptanceRepository is required.");
     if (!reviewRepository) throw new TypeError("reviewRepository is required.");
     if (!publicationRepository) throw new TypeError("publicationRepository is required.");
@@ -21,6 +21,7 @@ export class PublicationWorkflowService {
     this.mercury = mercury;
     this.atlas = atlas;
     this.policy = policy;
+    this.currentMarketQualificationService = currentMarketQualificationService;
   }
 
   async evaluate(observationId, { asOf = new Date().toISOString() } = {}) {
@@ -34,7 +35,11 @@ export class PublicationWorkflowService {
     else if (effectiveReview.decision !== "REVIEWED") reasons.push(`REVIEW_${effectiveReview.decision}`);
     if (observation && !amazonSourceAuthorized(observation)) reasons.push("SOURCE_NOT_AUTHORIZED_FOR_PUBLICATION");
 
-    let product = null, retailer = null, freshness = null, confidence = null, evidenceEligibility = null;
+    let product = null, retailer = null, freshness = null, confidence = null, evidenceEligibility = null, currentMarketQualification = null;
+    if (this.currentMarketQualificationService) {
+      currentMarketQualification = await this.currentMarketQualificationService.assess({ observationId, evaluatedAt: asOf });
+      if (currentMarketQualification.qualified !== true) reasons.push("CURRENT_MARKET_QUALIFICATION_REQUIRED", ...(currentMarketQualification.reasons ?? []));
+    }
     if (observation) {
       product = await this.atlas.getProduct(observation.atlasProductId).catch(() => null);
       retailer = await this.atlas.getRetailer(observation.retailerId).catch(() => null);
@@ -60,6 +65,7 @@ export class PublicationWorkflowService {
       freshness,
       confidence,
       evidenceEligibility,
+      currentMarketQualification,
       effectiveReviewDecision: effectiveReview
     });
   }

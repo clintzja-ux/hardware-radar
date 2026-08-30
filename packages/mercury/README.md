@@ -90,6 +90,8 @@ DF004-E2P adds record-specific canonical observation admission after E2G/E2H his
 
 DF004-E2Q adds an immutable, expiring PREPARE authorization and an exact-confirmation, single-use EXECUTE boundary in front of E2P. Execution reassesses the owner state and delegates admission back to E2P; it creates no review or publication authority.
 
+DF004-E2S adds deterministic current-market qualification after effective canonical-observation review. It requires compatible adapter registration, explicit production freshness-policy resolution, derived confidence, condition/availability eligibility, Atlas bindings, and live-market rights. Qualification is time-dependent and non-persisted; it creates no publication, Current Price, Cheapest, Pick, ranking, or recommendation authority. The production freshness-policy set intentionally remains empty until an explicit threshold is approved.
+
 ## Governed publication workflow
 
 Canonical observations are not implicitly public. Publication proceeds through separate evidence eligibility, durable review, and durable publication authorization. `PUBLISH` and `WITHDRAW` decisions are append-only `mer_pub_*` workflow records. The public build consumes only governed published observations when durable operational state paths are supplied; otherwise it fails closed to insufficient-data output.

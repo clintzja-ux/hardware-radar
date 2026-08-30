@@ -5,6 +5,7 @@ export const AMAZON_ADAPTER_MANIFEST = Object.freeze({
     retailerName: "Amazon",
     marketplaces: Object.freeze(["amazon.com"]),
     sourceMethods: Object.freeze(["MANUAL", "IMPORT", "API"]),
+    compatibleNormalizationVersions: Object.freeze(["1.1.0", "1.0.0", "manual-1.0"]),
     capabilities: Object.freeze(["NORMALIZE_OFFER"]),
     status: "ACTIVE"
 });
