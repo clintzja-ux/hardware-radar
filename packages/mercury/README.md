@@ -88,6 +88,8 @@ FM008 exports that projection locally with an explicit `asOf` using `npm run for
 
 DF004-E2P adds record-specific canonical observation admission after E2G/E2H historical eligibility and E2J historical admission. Its assessment binds retained evidence, internal history, Atlas identities, provenance, source rights, and policy version before the existing observation-acceptance repository may accept a canonical `mer_obs_*` record. Canonical admission exposes no publication authority; review and publication remain separate. The older DataForSEO historical-promotion name is only a compatibility delegate and cannot accept caller-supplied identity resolutions.
 
+DF004-E2Q adds an immutable, expiring PREPARE authorization and an exact-confirmation, single-use EXECUTE boundary in front of E2P. Execution reassesses the owner state and delegates admission back to E2P; it creates no review or publication authority.
+
 ## Governed publication workflow
 
 Canonical observations are not implicitly public. Publication proceeds through separate evidence eligibility, durable review, and durable publication authorization. `PUBLISH` and `WITHDRAW` decisions are append-only `mer_pub_*` workflow records. The public build consumes only governed published observations when durable operational state paths are supplied; otherwise it fails closed to insufficient-data output.

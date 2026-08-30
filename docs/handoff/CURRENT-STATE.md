@@ -1,12 +1,12 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-08-24
+Last updated:                  2026-08-30
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD before increment:         09180603e14942fce3483c0cd1a9ce0f7d5352f8
-Working tree:                  Clean before DF004-E2P; E2P changes intentionally uncommitted
-Current implementation increment: DF004-E2P canonical observation admission governance
-Previous completed increment:  IC-FORGE-MERCURY-008 certified Mercury operations exporter
+HEAD before increment:         7f0608a6f9c611adf0e0e360f2a5fd97a2830b7c
+Working tree:                  Clean before DF004-E2Q; E2Q changes intentionally uncommitted
+Current implementation increment: DF004-E2Q fixture-certified controlled canonical-admission operator governance
+Previous completed increment:  DF004-E2P fixture-certified canonical observation admission
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -25,13 +25,13 @@ This snapshot records repository and local governed-state evidence. It does not 
 
 ## Current test baseline
 
-The current runners declare **198 subsystem test files**:
+The current runners declare **199 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 15 |
-| Mercury | 152 |
+| Mercury | 153 |
 | Beacon | 7 |
 | Gateway | 17 |
 
@@ -113,7 +113,7 @@ DF005-W authorization records/conflicts: 1 / 0
 
 ## Active work
 
-DF004-E2P is fixture-certified. It introduces the missing record-specific canonical observation policy after historical eligibility and E2J admission. Assessment binds exact evidence/history, Atlas identities, provider provenance, canonical source rights, and policy version; canonical admission reuses the existing observation-acceptance repository and leaves review/publication independent. Certification proved the former `DataForSeoHistoricalPromotionService` cannot accept caller-supplied product, merchant, provider, or eligibility state; assessment is deterministic and immutable; exact replay is idempotent; and material product, retailer, or provider-task replay conflicts fail closed. The read-only assessment command was exercised only against temporary fixture state. No production assessment or admission occurred.
+DF004-E2P remains the sole canonical-eligibility and admission-policy owner. DF004-E2Q is fixture-certified: local PREPARE stores an immutable, expiring authorization bound to the complete E2P assessment and candidate digest; explicit single-use EXECUTE rejects caller substitutions, reloads current owner state, requires exact confirmation and binding, delegates admission to E2P, and records one append-only consumption. Exact replay is idempotent and conflicts fail closed. Neither path grants review, publication, current/live/public-price, acquisition, network, or spend authority. Production PREPARE and EXECUTE have not run, and no production canonical observation or authorization exists.
 
 IC-FORGE-MERCURY-008 materializes the FM007 read model through an explicit, local, atomic exporter. Its refresh context now reuses the historical-admission governance boundary that binds identity reuse to Atlas-backed identity decisions and supplies the same governed refresh envelope to `HistoricalObservationPortfolio`; FM008 does not reinterpret raw identity reuse.
 
@@ -147,14 +147,15 @@ Actual spend:                             $0.000
 - Keep production DF005-X PREPARE and EXECUTE unavailable until that permission is adopted into canonical permission evidence.
 - Keep post-onboarding provider/DNS observation and verification separate from the mutation itself.
 - Keep Worker binding configuration, Worker/D1 deployment, sending activation, test transmission, production transport, and browser connection as later independent gates.
-- The current authorization expires; if it expires before a later authorized operation, fail closed and require a fresh DF005-W PREPARE rather than extending or rewriting it.
+- Decide separately whether the operator will run E2Q PREPARE for a production E2P candidate. Implementation does not itself authorize or execute that operation.
+- The current DF005-W authorization expires; if it expires before a later authorized operation, fail closed and require a fresh DF005-W PREPARE rather than extending or rewriting it.
 
 ## Next recommended action
 
-Separately decide whether to authorize and design a production canonical-admission operator increment. Do not run production canonical admission; a production admission command does not exist. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Separately decide whether to run production E2Q PREPARE for a specific currently eligible candidate. PREPARE creates reviewable authorization only and does not imply authority to execute admission. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next development action: separately decide whether to authorize a production canonical-admission operator increment. Preserve the fail-closed publication and DF005-X boundaries.
+Next operator action: decide whether to run E2Q production PREPARE for a specific candidate; keep EXECUTE as a later independent decision. Preserve the fail-closed publication and DF005-X boundaries.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
@@ -163,6 +164,8 @@ Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or se
 
 | Commit | Outcome |
 |---|---|
+| `7f0608a` | DF004-E2P governed canonical observation admission |
+| `0918060` | FM008 export aligned with governed refresh context |
 | `ad1e9eb` | FM008 certified Mercury operations exporter implementation |
 | `47e6ff6` | FM007 certified Mercury operations projection for Forge |
 | `80c5ebf` | Pending Cloudflare permission clarification recorded |

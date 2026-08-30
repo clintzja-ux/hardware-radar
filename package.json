@@ -35,6 +35,8 @@
     "evidence:promotion:assess": "node scripts/mercury-evidence-promotion-assess.mjs",
     "evidence:historical:admit": "node scripts/mercury-historical-observation-admit.mjs",
     "evidence:canonical:assess": "node scripts/mercury-canonical-observation-assess.mjs",
+    "evidence:canonical:prepare": "node scripts/mercury-canonical-admission-prepare.mjs",
+    "evidence:canonical:execute": "node scripts/mercury-canonical-admission-execute.mjs",
     "history:query": "node scripts/mercury-history-query.mjs",
     "history:portfolio": "node scripts/mercury-history-portfolio.mjs",
     "forge:mercury:operations:export": "node scripts/forge-mercury-operations-export.mjs",
