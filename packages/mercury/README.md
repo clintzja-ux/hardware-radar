@@ -86,6 +86,8 @@ Forge still contains a legacy Mercury preview workflow. It is explicitly non-can
 
 FM008 exports that projection locally with an explicit `asOf` using `npm run forge:mercury:operations:export -- --as-of=<ISO_TIMESTAMP>`. The artifact remains under `.forge-review/forge/` for manual Forge loading and is never a public market snapshot.
 
+DF004-E2P adds record-specific canonical observation admission after E2G/E2H historical eligibility and E2J historical admission. Its assessment binds retained evidence, internal history, Atlas identities, provenance, source rights, and policy version before the existing observation-acceptance repository may accept a canonical `mer_obs_*` record. Canonical admission exposes no publication authority; review and publication remain separate. The older DataForSEO historical-promotion name is only a compatibility delegate and cannot accept caller-supplied identity resolutions.
+
 ## Governed publication workflow
 
 Canonical observations are not implicitly public. Publication proceeds through separate evidence eligibility, durable review, and durable publication authorization. `PUBLISH` and `WITHDRAW` decisions are append-only `mer_pub_*` workflow records. The public build consumes only governed published observations when durable operational state paths are supplied; otherwise it fails closed to insufficient-data output.

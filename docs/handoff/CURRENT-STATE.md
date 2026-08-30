@@ -3,10 +3,10 @@
 ```text
 Last updated:                  2026-08-24
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD before increment:         a90b5daeb456e34ae3d42b6ad9cda768bc6637d4
-Working tree:                  Clean before correction; FM008 parity correction and this CURRENT-STATE update intentionally uncommitted
-Current implementation increment: IC-FORGE-MERCURY-008 certified after governed identity-reuse parity correction
-Previous completed increment:  IC-FORGE-MERCURY-007 certified Mercury operations projection
+HEAD before increment:         09180603e14942fce3483c0cd1a9ce0f7d5352f8
+Working tree:                  Clean before DF004-E2P; E2P changes intentionally uncommitted
+Current implementation increment: DF004-E2P canonical observation admission governance
+Previous completed increment:  IC-FORGE-MERCURY-008 certified Mercury operations exporter
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -25,13 +25,13 @@ This snapshot records repository and local governed-state evidence. It does not 
 
 ## Current test baseline
 
-The current runners declare **197 subsystem test files**:
+The current runners declare **198 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 15 |
-| Mercury | 151 |
+| Mercury | 152 |
 | Beacon | 7 |
 | Gateway | 17 |
 
@@ -113,6 +113,8 @@ DF005-W authorization records/conflicts: 1 / 0
 
 ## Active work
 
+DF004-E2P is fixture-certified. It introduces the missing record-specific canonical observation policy after historical eligibility and E2J admission. Assessment binds exact evidence/history, Atlas identities, provider provenance, canonical source rights, and policy version; canonical admission reuses the existing observation-acceptance repository and leaves review/publication independent. Certification proved the former `DataForSeoHistoricalPromotionService` cannot accept caller-supplied product, merchant, provider, or eligibility state; assessment is deterministic and immutable; exact replay is idempotent; and material product, retailer, or provider-task replay conflicts fail closed. The read-only assessment command was exercised only against temporary fixture state. No production assessment or admission occurred.
+
 IC-FORGE-MERCURY-008 materializes the FM007 read model through an explicit, local, atomic exporter. Its refresh context now reuses the historical-admission governance boundary that binds identity reuse to Atlas-backed identity decisions and supplies the same governed refresh envelope to `HistoricalObservationPortfolio`; FM008 does not reinterpret raw identity reuse.
 
 Operator certification succeeded at the explicit cutoff `2026-08-24T23:00:00Z`. Two independent exports produced byte-identical local artifacts at `.forge-review/forge/certified-mercury-operations.json` with SHA-256 `32d0a29e35ebb101ac8d4f764a266b7912a3068c227968a2de6e559cb87d0f1a`. Both the canonical governed portfolio and FM008 report cadence `NOT_DUE`, cycle `COMPLETE`, no cycle blockers, and next action `PREPARE_NEW_REFRESH`; the false `IDENTITY_REUSE_INVALID` blocker is absent. Forge loaded the corrected artifact through its local file-import boundary. Protected Mercury source-state hashes remained unchanged, and no network, provider, paid, mutation, or publication operation occurred.
@@ -149,10 +151,10 @@ Actual spend:                             $0.000
 
 ## Next recommended action
 
-Operator-review the FM008 parity correction and certification evidence, then commit through the normal manual Git workflow if accepted. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Separately decide whether to authorize and design a production canonical-admission operator increment. Do not run production canonical admission; a production admission command does not exist. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next development action: accept the certified FM008 correction through the operator-managed Git workflow, then select the next increment explicitly. Preserve the fail-closed DF005-X boundary.
+Next development action: separately decide whether to authorize a production canonical-admission operator increment. Preserve the fail-closed publication and DF005-X boundaries.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.

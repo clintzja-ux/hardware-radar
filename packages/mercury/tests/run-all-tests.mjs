@@ -104,6 +104,7 @@ const testModules = [
     "./DataForSeoMerchantIdentity.test.mjs",
     "./DataForSeoDurableMarketEvidence.test.mjs",
     "./DataForSeoHistoricalPromotion.test.mjs",
+    "./CanonicalObservationAdmissionGovernance.test.mjs",
     "./SingleWriterPersistence.test.mjs",
     "./AcquisitionPlanningBudget.test.mjs",
     "./ControlledAcquisitionExecutor.test.mjs",
