@@ -10,13 +10,15 @@ export class ReviewWorkflowService {
     this.reviewService = reviewService;
   }
 
-  async record({ observationId, decision, reviewedBy, reviewedAt, reasonCodes = [], notes = "" } = {}) {
+  async record(input = {}) {
+    for(const key of Object.keys(input))if(!["observationId","decision","reviewedBy","reviewedAt","reasonCodes","notes","governance"].includes(key))throw new Error(`REVIEW_WORKFLOW_CALLER_SUBSTITUTION_FORBIDDEN:${key}`);
+    const { observationId, decision, reviewedBy, reviewedAt, reasonCodes = [], notes = "", governance }=input;
     const reviewItem = await this.reviewService.getReviewItem(observationId, { asOf: reviewedAt });
     if (!reviewItem.reviewable) {
       throw new Error(`Observation is not reviewable: ${reviewItem.reasons?.join(", ") || reviewItem.status}`);
     }
 
-    const draft = createReviewDecision({ observationId, decision, reviewedBy, reviewedAt, reasonCodes, notes });
+    const draft = createReviewDecision({ observationId, decision, reviewedBy, reviewedAt, reasonCodes, notes, governance });
     return this.reviewRepository.recordDecision(draft);
   }
 

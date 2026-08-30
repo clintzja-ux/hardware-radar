@@ -46,6 +46,10 @@ export { REVIEW_DECISIONS, createReviewDecision, validateReviewDecision } from "
 export { ReviewDecisionRepository } from "./review/persistence/ReviewDecisionRepository.js";
 export { FileReviewDecisionRepository } from "./review/persistence/FileReviewDecisionRepository.js";
 export { ReviewWorkflowService } from "./review/ReviewWorkflowService.js";
+export * from "./review/CanonicalObservationReviewPolicy.js";
+export * from "./review/CanonicalObservationReviewAuthorization.js";
+export * from "./review/CanonicalObservationReviewGovernanceService.js";
+export * from "./review/persistence/FileCanonicalObservationReviewAuthorizationRepository.js";
 export { PUBLICATION_ACTIONS, PUBLICATION_DECISION_SCHEMA_VERSION, createPublicationDecision, validatePublicationDecision } from "./publication/PublicationDecision.js";
 export { PublicationDecisionRepository } from "./publication/persistence/PublicationDecisionRepository.js";
 export { FilePublicationDecisionRepository } from "./publication/persistence/FilePublicationDecisionRepository.js";

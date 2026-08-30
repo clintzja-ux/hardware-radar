@@ -1,108 +1,19 @@
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import {mkdir,readFile,rename,writeFile} from "node:fs/promises";
+import {dirname,resolve} from "node:path";
 import ReviewDecisionRepository from "./ReviewDecisionRepository.js";
-import { validateReviewDecision } from "../ObservationReviewDecision.js";
-import { STORAGE_CLASSES } from "../../retention/RetentionPolicy.js";
+import {validateReviewDecision} from "../ObservationReviewDecision.js";
+import {STORAGE_CLASSES} from "../../retention/RetentionPolicy.js";
+import {FileSingleWriterRunLock,SINGLE_WRITER_LOCK_STATUSES} from "../../runtime/FileSingleWriterRunLock.js";
 
-const STATE_VERSION = "1.0";
-function initialState() { return { version: STATE_VERSION, sequence: 0, decisions: {}, byObservation: {} }; }
-function clone(value) { return structuredClone(value); }
-function freeze(value) { return Object.freeze(value); }
-
-export class FileReviewDecisionRepository extends ReviewDecisionRepository {
-  constructor({ statePath, acceptanceRepository, environment = "production", now = () => new Date().toISOString() } = {}) {
-    super();
-    if (!statePath) throw new TypeError("statePath is required.");
-    if (!acceptanceRepository) throw new TypeError("acceptanceRepository is required.");
-    this.statePath = resolve(statePath);
-    this.acceptanceRepository = acceptanceRepository;
-    this.environment = environment;
-    this.now = now;
-    this.queue = Promise.resolve();
-  }
-
-  async _withLock(fn) {
-    const task = this.queue.then(fn, fn);
-    this.queue = task.catch(() => {});
-    return task;
-  }
-
-  async _readState() {
-    try {
-      const parsed = JSON.parse(await readFile(this.statePath, "utf8"));
-      if (parsed?.version !== STATE_VERSION || !Number.isInteger(parsed.sequence) || typeof parsed.decisions !== "object" || typeof parsed.byObservation !== "object") {
-        throw new Error("Mercury durable review state is corrupt or unsupported.");
-      }
-      return parsed;
-    } catch (error) {
-      if (error?.code === "ENOENT") return initialState();
-      throw error;
-    }
-  }
-
-  async _commit(state) {
-    await mkdir(dirname(this.statePath), { recursive: true });
-    const tempPath = `${this.statePath}.tmp-${process.pid}-${Date.now()}`;
-    await writeFile(tempPath, `${JSON.stringify(state, null, 2)}\n`, "utf8");
-    await rename(tempPath, this.statePath);
-  }
-
-  async recordDecision(decision) {
-    const validation = validateReviewDecision(decision);
-    if (!validation.valid) throw new TypeError(validation.errors.join(" "));
-    if (decision.canonicalObservationModified !== false) throw new TypeError("Review decisions cannot modify canonical observations.");
-
-    return this._withLock(async () => {
-      const audit = await this.acceptanceRepository.getAuditById(decision.observationId);
-      if (!audit) throw new Error(`Observation does not exist: ${decision.observationId}`);
-      if (this.environment === "production" && audit.storage?.storageClass === STORAGE_CLASSES.TEST_ONLY) {
-        throw new Error("TEST_FIXTURE observations cannot receive production review decisions.");
-      }
-
-      const state = await this._readState();
-      const nextSequence = state.sequence + 1;
-      const reviewDecisionId = `mer_rev_${String(nextSequence).padStart(9, "0")}`;
-      const recordedAt = this.now();
-      const record = {
-        schemaVersion: "1.0",
-        reviewDecisionId,
-        sequence: nextSequence,
-        observationId: decision.observationId,
-        decision: decision.decision,
-        reviewedBy: decision.reviewedBy,
-        reviewedAt: decision.reviewedAt,
-        recordedAt,
-        reasonCodes: [...(decision.reasonCodes ?? [])],
-        notes: decision.notes ?? "",
-        canonicalObservationModified: false
-      };
-
-      state.sequence = nextSequence;
-      state.decisions[reviewDecisionId] = record;
-      state.byObservation[record.observationId] ??= [];
-      state.byObservation[record.observationId].push(reviewDecisionId);
-      await this._commit(state);
-      return freeze(clone(record));
-    });
-  }
-
-  async getById(reviewDecisionId) {
-    const state = await this._readState();
-    const record = state.decisions[reviewDecisionId];
-    return record ? freeze(clone(record)) : null;
-  }
-
-  async getHistoryForObservation(observationId) {
-    const state = await this._readState();
-    const ids = state.byObservation[observationId] ?? [];
-    const records = ids.map((id) => state.decisions[id]).filter(Boolean).sort((a, b) => a.sequence - b.sequence);
-    return freeze(records.map((record) => freeze(clone(record))));
-  }
-
-  async getEffectiveDecision(observationId) {
-    const history = await this.getHistoryForObservation(observationId);
-    return history.length ? history[history.length - 1] : null;
-  }
+const initial=()=>({version:"1.1",sequence:0,decisions:{},byObservation:{},byAuthorization:{}}),clone=structuredClone,freeze=value=>Object.freeze(value),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+export class FileReviewDecisionRepository extends ReviewDecisionRepository{
+  constructor({statePath,acceptanceRepository,environment="production",now=()=>new Date().toISOString(),runLock}={}){super();if(!statePath)throw new TypeError("statePath is required.");if(!acceptanceRepository)throw new TypeError("acceptanceRepository is required.");this.statePath=resolve(statePath);this.acceptanceRepository=acceptanceRepository;this.environment=environment;this.now=now;this.queue=Promise.resolve();this.runLock=runLock??new FileSingleWriterRunLock({lockPath:`${this.statePath}.lock`,now});}
+  async _locked(fn){const run=async()=>{const outcome=await this.runLock.runExclusive(fn);if(outcome.status!==SINGLE_WRITER_LOCK_STATUSES.COMPLETED)throw new Error("REVIEW_DECISION_REPOSITORY_BUSY");return outcome.result;},task=this.queue.then(run,run);this.queue=task.catch(()=>{});return task;}
+  async _readState(){try{const state=JSON.parse(await readFile(this.statePath,"utf8"));if(!["1.0","1.1"].includes(state?.version)||!Number.isInteger(state.sequence)||!state.decisions||!state.byObservation)throw new Error();if(state.version==="1.0")return {...state,version:"1.1",byAuthorization:{}};if(!state.byAuthorization)throw new Error();for(const [authorizationId,decisionId] of Object.entries(state.byAuthorization))if(state.decisions[decisionId]?.governance?.authorizationId!==authorizationId)throw new Error();return state;}catch(error){if(error?.code==="ENOENT")return initial();throw new Error("REVIEW_DECISION_STATE_INVALID");}}
+  async _commit(state){await mkdir(dirname(this.statePath),{recursive:true});const temp=`${this.statePath}.tmp-${process.pid}-${Date.now()}`;await writeFile(temp,`${JSON.stringify(state,null,2)}\n`,"utf8");await rename(temp,this.statePath);}
+  async recordDecision(decision){const validation=validateReviewDecision(decision);if(!validation.valid)throw new TypeError(validation.errors.join(" "));return this._locked(async()=>{const audit=await this.acceptanceRepository.getAuditById(decision.observationId);if(!audit)throw new Error(`Observation does not exist: ${decision.observationId}`);if(this.environment==="production"&&audit.storage?.storageClass===STORAGE_CLASSES.TEST_ONLY)throw new Error("TEST_FIXTURE observations cannot receive production review decisions.");const state=await this._readState(),authorizationId=decision.governance?.authorizationId??null;if(authorizationId&&state.byAuthorization[authorizationId]){const existing=state.decisions[state.byAuthorization[authorizationId]],comparable=value=>({schemaVersion:"1.0",observationId:value.observationId,decision:value.decision,reviewedBy:value.reviewedBy,reasonCodes:value.reasonCodes,notes:value.notes,canonicalObservationModified:false,governance:value.governance});if(same(comparable(existing),comparable(decision)))return freeze(clone(existing));throw new Error("REVIEW_DECISION_AUTHORIZATION_CONFLICT");}const currentIds=state.byObservation[decision.observationId]??[],current=currentIds.length?state.decisions[currentIds[currentIds.length-1]]:null;if(decision.governance&&decision.governance.predecessorReviewDecisionId!==(current?.reviewDecisionId??null))throw new Error("REVIEW_DECISION_STALE_EFFECTIVE_STATE");const sequence=state.sequence+1,record={schemaVersion:"1.0",reviewDecisionId:`mer_rev_${String(sequence).padStart(9,"0")}`,sequence,observationId:decision.observationId,decision:decision.decision,reviewedBy:decision.reviewedBy,reviewedAt:decision.reviewedAt,recordedAt:this.now(),reasonCodes:[...(decision.reasonCodes??[])],notes:decision.notes??"",canonicalObservationModified:false,...(decision.governance?{governance:clone(decision.governance)}:{})};state.sequence=sequence;state.decisions[record.reviewDecisionId]=record;state.byObservation[record.observationId]??=[];state.byObservation[record.observationId].push(record.reviewDecisionId);if(authorizationId)state.byAuthorization[authorizationId]=record.reviewDecisionId;await this._commit(state);return freeze(clone(record));});}
+  async getById(id){const value=(await this._readState()).decisions[id];return value?freeze(clone(value)):null;}
+  async getHistoryForObservation(observationId){const state=await this._readState(),records=(state.byObservation[observationId]??[]).map(id=>state.decisions[id]).filter(Boolean).sort((a,b)=>a.sequence-b.sequence);return freeze(records.map(value=>freeze(clone(value))));}
+  async getEffectiveDecision(observationId){const history=await this.getHistoryForObservation(observationId);return history.length?history[history.length-1]:null;}
 }
-
 export default FileReviewDecisionRepository;
