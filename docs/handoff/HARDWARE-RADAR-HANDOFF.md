@@ -55,6 +55,7 @@ Compass, Echo, and Aurora appear in long-term platform documentation as future r
 | `docs/implementation Contracts/` | Increment-specific implementation contracts |
 | `docs/operations/` | Operator runbooks |
 | `docs/handoff/` | Stable orientation, living state, and maintenance protocol |
+| `docs/developer-daily-routine.md` | Canonical ChatGPT/Codex operating protocol and capacity governance |
 | `packages/atlas/` | Canonical catalog and retailer registry |
 | `packages/mercury/` | Market observations, acquisition, history, promotion, rights, and review |
 | `packages/sentinel/` | Validation engines and rules |
@@ -108,6 +109,8 @@ The repository distinguishes `implemented`, `tested`, `selected`, `configured`, 
 No roadmap item is a deployment promise or authorization.
 
 ## Rules for future AI engineering sessions
+
+Follow the [Codex operating protocol](../developer-daily-routine.md): navigate progressively from this handoff, reserve Codex for bounded repository work, use ChatGPT for work that does not require repository access, and review each meaningful result before spending another run.
 
 1. Inspect Git status, HEAD, relevant source, tests, policies, contracts, ADRs, runbooks, and operational diagnostics before modifying anything.
 2. Preserve subsystem ownership and extend existing boundaries instead of creating parallel governance or persistence systems.

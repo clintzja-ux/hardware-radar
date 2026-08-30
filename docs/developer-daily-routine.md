@@ -1,118 +1,89 @@
-Level 1 — Every Chat Session (2–3 minutes)
+# Hardware Radar Codex operating protocol
 
-This is what we do almost every time we sit down to work.
+This document governs how Hardware Radar uses ChatGPT and Codex as a limited development resource. Repository documentation carries durable context; conversation history does not. The practical principle is:
 
-Quick checklist:
+> Use repository documentation to avoid rediscovery; use ChatGPT for thinking that does not require repository access; use Codex for bounded repository work; review results before spending another run.
 
-1. Read PROJECT_STATE.md (2 minutes)
+## Division of labor
 
-2. Review today's objective
+ChatGPT or other conceptual work should normally handle architecture discussion, business rules, governance doctrine, policy design, implementation-contract planning, acceptance criteria, sequencing, failure and threat analysis, Codex prompt construction, and review of Codex results.
 
-3. Identify affected subsystem(s)
+Reserve Codex for work that requires repository access: source inspection, implementation, repository-specific dependency tracing, tests, fixture certification, validation, and narrowly scoped repository diagnostics. Design hybrid work substantially before asking Codex to inspect the repository.
 
-4. Begin engineering
+## Progressive-disclosure navigation
 
-Level 2 — Every New Epic
+Start at the [canonical handoff](./handoff/HARDWARE-RADAR-HANDOFF.md), then follow this path:
 
-Whenever we begin a major piece of work, such as:
+```text
+canonical handoff and repository map
+→ CURRENT-STATE
+→ relevant contract, ADR/EDR, runbook, or canonical document
+→ relevant source and tests
+```
 
-Amazon Affiliate
-Atlas Automation
-Mercury Automation
-Sentinel
-Compass
+Do not begin each task by rediscovering the repository. Broader reconnaissance is appropriate only when a concrete ambiguity cannot be resolved through this navigation path. Do not read obsolete project history merely for orientation.
 
-then we spend about 10 minutes reviewing the foundations.
+## Task scoping and prompt efficiency
 
-Reading order:
+Prefer narrow, explicitly bounded increments. Each Codex task should state:
 
-START_HERE
+- objective and subsystem;
+- documents and source boundaries;
+- prohibited operations;
+- required tests and validation;
+- expected report;
+- handoff requirements.
 
-↓
+Do not combine unrelated exploration, implementation, certification, and production operations merely because they concern the same subsystem. Prompts should reference repository-owned canonical documents for established context and repeat only the current objective, new approved decisions not yet documented, safety constraints, validation, and reporting requirements.
 
-PRODUCT_CONSTITUTION
+## Implementation, certification, and review
 
-↓
+Implementation runs may be substantial when necessary. Certification should focus on the invariants introduced by the increment and should not repeat broad reconnaissance automatically.
 
-PROJECT_STATE
+Run focused tests first. If implementation already passed full validation and certification changes no source or tests, do not automatically repeat the full suite unless repository policy requires it. If certification changes source or tests or exposes a relevant defect, run the required full validation.
 
-↓
+After a meaningful Codex result, stop and return the report for operator/ChatGPT review before launching another substantial run. Do not automatically chain investigation, implementation, certification, and the next increment when review can determine whether another Codex run is necessary.
 
-ENGINEERING_HANDBOOK
+## Weekly capacity governance
 
-↓
+Treat weekly Codex capacity as a governed development resource. These bands guide development workflow; they are not application or business policy.
 
-Relevant subsystem docs
+| Remaining capacity | Operating guidance |
+|---|---|
+| 100–70% | Major planned implementation increments are acceptable. |
+| 70–40% | Normal implementation, with increasingly narrow scope. |
+| 40–20% | Prioritize high-value implementation and required certification. |
+| 20–10% | Preserve capacity primarily for blockers, defects, required certification, and critical inspection. |
+| Below 10% | Avoid discretionary Codex work; move architecture, product, policy, planning, and prompt design to ChatGPT. |
 
-↓
+Maintain a practical reserve rather than intentionally consuming the allocation to zero.
 
-Begin engineering
+Before substantial Codex work, maintain a prioritized implementation queue:
 
-That ensures we start from the same assumptions.
+- **P0:** current blocker or incomplete critical increment;
+- **P1:** next required implementation;
+- **P2:** required certification or integration;
+- **P3:** lower-priority improvement;
+- **Reserve:** unexpected defect or blocker.
 
+New ideas should normally enter the queue instead of consuming capacity immediately.
 
-Level 3 — Every Major Release
+## Read-only inspection and production safety
 
-This is where we ask:
+For state questions, prefer narrowly scoped read-only diagnostics. Do not run full tests, builds, or broad source inspection unless the question or repository policy requires them. Inspection must not mutate production state merely to discover it.
 
-Is our documentation still true?
+Implementation or certification authority never implies authority for production acquisition, paid operations, PREPARE or EXECUTE, canonical admission, review approval, publication, DNS or Cloudflare mutation, email sending, or another consequential external operation. Production operations require explicit, operation-specific authorization.
 
-Review:
+Where relevant, report provider/network operations, paid tasks, actual spend, and protected-state impact.
 
-Constitution
-Project State
-Handbook
-Architecture docs
+## Handoff and documentation hygiene
 
-Usually this is a 30–60 minute exercise after completing a significant milestone.
+`CURRENT-STATE.md` is a reconciled current snapshot, not an append-only log. Replace superseded state, consolidate redundancy, preserve current blockers and protected-state facts, retain the next safe action, and remove obsolete orientation when appropriate. Periodically compact it when it becomes unnecessarily verbose.
 
-For example:
+The stable handoff owns durable architecture and repository orientation. Update it only when subsystem ownership, durable architecture, canonical repository orientation, or an enduring governance or operational boundary changes. Historical implementation detail belongs in contracts, ADRs/EDRs, Git history, commit messages, or dedicated evidence records.
 
-Version 0.5
+Maintain one clear canonical entry path into major documentation. Do not create competing indexes or duplicate this complete protocol into handoffs, contracts, or prompts.
 
-↓
+## Git ownership
 
-Affiliate Layer complete
-
-↓
-
-Update documentation
-
-↓
-
-Continue engineering
-
-
-Even better, let's define "documentation triggers"
-
-Instead of asking "Should we update docs?" every time, we establish clear rules.
-
-Update PROJECT_STATE.md when:
-
-A new subsystem becomes operational.
-The technology stack changes.
-A major milestone is completed.
-Priorities shift.
-
-Update the Engineering Handbook when:
-
-An engineering principle changes.
-A workflow changes.
-Coding standards change.
-Repository strategy changes.
-
-Update the Product Constitution only when:
-
-The mission changes.
-The vision changes.
-Core product principles change.
-
-Those changes should be very rare.
-
-Update START_HERE only when:
-
-Repository structure changes.
-New canonical documents are added.
-The onboarding process changes.
-
-Again, very rare.
+Codex does not commit or push unless the operator explicitly changes this policy. The operator reviews repository changes and performs Git commit and push manually.
