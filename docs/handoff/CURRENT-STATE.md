@@ -3,10 +3,10 @@
 ```text
 Last updated:                  2026-08-30
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD at inspection:            c3bf8a57432769d4075eb93cda5beed833f7527e
-Working tree:                  Uncommitted DF004-E2S.1 policy increment and reconciled current-state documentation
-Current implementation increment: DF004-E2S.1 fixture-certified provisional production freshness policy
-Previous completed increment:  DF004-E2S fixture-certified current-market observation qualification
+HEAD at inspection:            9da643650eb72142e21dd68a2d215ba4e048109d
+Working tree:                  Uncommitted historical-refresh prior-context correctness repair
+Current implementation increment: Historical-refresh prior-context correction fixture-certified
+Previous completed increment:  DF004-E2S.1 provisional production freshness policy
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -125,6 +125,8 @@ The expired E2Q predecessor `mer_canauth_952fbc71ad7acafe0abf0f66` remains immut
 
 IC-FORGE-MERCURY-008 materializes the FM007 read model through an explicit, local, atomic exporter. Its refresh context now reuses the historical-admission governance boundary that binds identity reuse to Atlas-backed identity decisions and supplies the same governed refresh envelope to `HistoricalObservationPortfolio`; FM008 does not reinterpret raw identity reuse.
 
+Historical-refresh PREPARE now consumes that governed context for second and later generations instead of pairing the latest historical evidence with the original SELLERS enrichment task. The first generation still validates the original authorization/plan/execution lineage. Later generations require exact agreement among the latest historical observation, retained evidence, completed refresh result, prior refresh plan and authorization, provider task, Atlas product/retailer, provider identity, and governed identity-reuse target. Conflicts fail closed before plan persistence. The correction is fixture-certified; production PREPARE has not been retried, no replacement plan or authorization exists, and no provider operation or spend occurred.
+
 Operator certification succeeded at the explicit cutoff `2026-08-24T23:00:00Z`. Two independent exports produced byte-identical local artifacts at `.forge-review/forge/certified-mercury-operations.json` with SHA-256 `32d0a29e35ebb101ac8d4f764a266b7912a3068c227968a2de6e559cb87d0f1a`. Both the canonical governed portfolio and FM008 report cadence `NOT_DUE`, cycle `COMPLETE`, no cycle blockers, and next action `PREPARE_NEW_REFRESH`; the false `IDENTITY_REUSE_INVALID` blocker is absent. Forge loaded the corrected artifact through its local file-import boundary. Protected Mercury source-state hashes remained unchanged, and no network, provider, paid, mutation, or publication operation occurred.
 
 DF005-X remains independently fail closed:
@@ -162,10 +164,10 @@ Actual spend:                             $0.000
 
 ## Next recommended action
 
-Review the fixture-certified E2S.1 policy, then explicitly decide whether to run only the zero-network governed historical-refresh PREPARE for the stale product. A later paid refresh remains separately authorized and may still return no explicit condition; do not infer `UNKNOWN` as `NEW`. Only after fresh evidence traverses history, canonical admission, review, and E2S qualification should publication governance proceed. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Review the fixture-certified prior-context correction, then explicitly decide whether to retry only the zero-network governed historical-refresh PREPARE for the cadence-due stale product. A later paid refresh remains separately authorized and may still return no explicit condition; do not infer `UNKNOWN` as `NEW`. Only after fresh evidence traverses history, canonical admission, review, and E2S qualification should publication governance proceed. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next operator action: review E2S.1 certification and decide whether to run zero-network historical-refresh PREPARE only; paid execution and publication remain separate.
+Next operator action: review the prior-context correction certification and decide whether to retry zero-network historical-refresh PREPARE only; paid execution and publication remain separate.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.

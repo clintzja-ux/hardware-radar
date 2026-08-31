@@ -23,6 +23,8 @@ Recurrence output is policy-neutral. It exposes observation count, latest observ
 
 Chronology uses `Date.parse` semantics, not lexical timestamp ordering, so existing UTC serializations remain immutable and comparable. Without `asOf`, elapsed time and authorization-expiry evaluation are not silently tied to wall-clock time.
 
+Second and later `PREPARE_NEW_REFRESH` generations resolve their prior observation, retained evidence, provider task, refresh plan, authorization, result, and governed identity-reuse binding through the shared historical-refresh context owner. Only the first generation resolves the original SELLERS enrichment authorization and execution. PREPARE never selects the newest ledger task or file heuristically; any task, plan, authorization, evidence, product, retailer, provider-identity, or reuse disagreement fails closed before a plan is written.
+
 ## Operations
 
 The read-only local command is:
