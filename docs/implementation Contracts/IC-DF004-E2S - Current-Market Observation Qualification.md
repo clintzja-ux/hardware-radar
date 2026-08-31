@@ -39,7 +39,7 @@ Every result explicitly denies publication, published, Current Price, live/publi
 
 The development 30-minute/120-minute freshness policy is not production policy. E2S resolves only explicitly approved, versioned policies scoped to source, Atlas retailer, and optional Atlas products. Missing, ambiguous, mismatched, malformed, or unsupported policy state fails closed.
 
-The repository-owned production policy set is intentionally empty in E2S. Consequently, the current production observation returns `BLOCKED` with `PRODUCTION_FRESHNESS_POLICY_MISSING`; freshness and confidence are not evaluated using a silent fallback. Fixture-only policies certify CURRENT, AGING, STALE, and expiry behavior without approving a production threshold.
+E2S initially shipped with an intentionally empty production policy set. DF004-E2S.1 subsequently adds the first explicit provisional policy for DataForSEO Google Shopping at Platinummicro. Unmatched scopes still fail closed, and the development policy is never a production fallback.
 
 ## Adapter and confidence governance
 

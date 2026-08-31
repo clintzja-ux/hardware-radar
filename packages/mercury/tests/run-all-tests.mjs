@@ -109,6 +109,7 @@ const testModules = [
     "./CanonicalAdmissionAuthorizationSupersession.test.mjs",
     "./CanonicalObservationReviewGovernance.test.mjs",
     "./CurrentMarketObservationQualification.test.mjs",
+    "./InitialProductionCurrentMarketFreshnessPolicy.test.mjs",
     "./SingleWriterPersistence.test.mjs",
     "./AcquisitionPlanningBudget.test.mjs",
     "./ControlledAcquisitionExecutor.test.mjs",

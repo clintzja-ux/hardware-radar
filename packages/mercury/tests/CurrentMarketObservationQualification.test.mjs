@@ -23,7 +23,7 @@ function observation(overrides = {}) {
 }
 const reviewed = { schemaVersion: "1.0", reviewDecisionId: "mer_rev_fixture", sequence: 1, observationId, decision: "REVIEWED", reviewedBy: "operator:test", reviewedAt: evaluatedAt, recordedAt: evaluatedAt, reasonCodes: [], notes: "fixture", canonicalObservationModified: false };
 const product = { identity: { atlasProductId: "ram_corsair_cmk32gx5m2b6000z30" } }, retailer = { id: "RETAILER-0002", name: "Platinummicro" };
-const policy = (overrides = {}) => createProductionFreshnessPolicy({ policyId: "fixture-current-market", version: "1.0.0", sourceId: "DATAFORSEO_GOOGLE_SHOPPING", retailerId: "RETAILER-0002", atlasProductIds: [product.identity.atlasProductId], currentUntilMs: 30 * 60_000, staleAfterMs: 120 * 60_000, ...overrides });
+const policy = (overrides = {}) => createProductionFreshnessPolicy({ policyId: "fixture-current-market", version: "1.0.0", provider: "DATAFORSEO", sourceId: "DATAFORSEO_GOOGLE_SHOPPING", retailerId: "RETAILER-0002", marketplace: "platinummicro.com", atlasProductIds: [product.identity.atlasProductId], currentUntilMs: 30 * 60_000, staleAfterMs: 120 * 60_000, status: "PROVISIONAL", effectiveAt: "2026-08-30T00:00:00Z", approvalBasis: "FIXTURE_ONLY", ...overrides });
 
 function service({ current = observation(), review = reviewed, policies = [policy()], registry = adapterRegistry, rightsRegistry = defaultSourceRightsRegistry, productValue = product, retailerValue = retailer } = {}) {
     const acceptanceRepository = { getByIdReadOnly: async id => id === observationId ? structuredClone(current) : null, getById: async id => id === observationId ? structuredClone(current) : null, getAuditById: async id => id === observationId ? { observationId, atlasProductId: current.atlasProductId, retailerId: current.retailerId, storage: { storageClass: "DURABLE", payloadStatus: "ACTIVE", payloadExpiresAt: null } } : null };
@@ -67,7 +67,7 @@ const expired = await service({ current: expiredObservation }).assess({ observat
 const wrongRetailerObservation = observation({ retailerId: "RETAILER-0001" });
 const wrongRetailer = await service({ current: wrongRetailerObservation, policies: [policy({ retailerId: "RETAILER-0001" })], retailerValue: { id: "RETAILER-0001" } }).assess({ observationId, evaluatedAt }); has(wrongRetailer, "ADAPTER_RETAILER_MISMATCH"); equal(wrongRetailer.confidence.status, "LOW");
 const wrongMarketplaceObservation = observation({ marketplace: "other.example" });
-has(await service({ current: wrongMarketplaceObservation }).assess({ observationId, evaluatedAt }), "ADAPTER_MARKETPLACE_UNSUPPORTED");
+has(await service({ current: wrongMarketplaceObservation, policies: [policy({ marketplace: "other.example" })] }).assess({ observationId, evaluatedAt }), "ADAPTER_MARKETPLACE_UNSUPPORTED");
 const wrongMethodObservation = observation({ sourceMethod: "IMPORT" });
 has(await service({ current: wrongMethodObservation }).assess({ observationId, evaluatedAt }), "ADAPTER_SOURCE_METHOD_UNSUPPORTED");
 const wrongVersionObservation = observation(); wrongVersionObservation.provenance.transformation.adapterVersion = "2.0.0";
