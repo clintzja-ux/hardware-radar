@@ -4,9 +4,9 @@
 Last updated:                  2026-08-31
 Branch:                        dataforseo-sprint3-mercury-observation
 HEAD at inspection:            cc23d756d5b94d6c6dd73280cafcdeda4ce6c1f0
-Working tree:                  MVP-001 plus MVP-002 Increment 1 implemented and validated; uncommitted
-Current implementation increment: MVP-002 Increment 1 — Production Publication Composition Correction complete
-Previous completed increment:  MVP-001 — Public Truth & Launch-Shell Cleanup
+Working tree:                  MVP-002 Increment 2 implemented and fixture-certified; uncommitted
+Current implementation increment: MVP-002 Increment 2 — Controlled Publication Operator Governance complete
+Previous completed increment:  MVP-002 Increment 1 — Production Publication Composition Correction
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -25,13 +25,13 @@ This snapshot records repository and local governed-state evidence. It does not 
 
 ## Current test baseline
 
-The current runners declare **204 subsystem test files**:
+The current runners declare **205 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 15 |
-| Mercury | 158 |
+| Mercury | 159 |
 | Beacon | 7 |
 | Gateway | 17 |
 
@@ -119,6 +119,8 @@ MVP-001 establishes an honest fail-closed public launch shell without changing M
 
 MVP-002 Increment 1 enforces E2S as the single production current-market qualification owner consumed by publication and governed snapshot projection. Production composition injects the Atlas repositories, adapter registry, source rights, and repository-owned production freshness policy into E2S; `PublicationWorkflowService` carries the qualified assessment into `GovernedMarketPublicationService`, and `MarketPublicationService` projects that result without independently applying default freshness, confidence, or condition interpretation. An effective `PUBLISH` remains durable history but is dynamically excluded whenever E2S later becomes nonqualified. Missing E2S composition or production freshness policy fails closed. Legacy development/fixture evaluation remains explicit and cannot be selected by the production build. This increment created no publication decision or production authority.
 
+MVP-002 Increment 2 adds controlled `publication:prepare` and `publication:execute` commands inside Mercury's existing publication boundary. PREPARE assesses and binds the exact canonical observation, effective review/publication lineage, Atlas identities, provenance, rights, adapter, production freshness policy, and E2S material candidate state into a short-lived immutable authorization without creating a publication decision. PUBLISH EXECUTE reloads current owner state and reassesses E2S at execution time; WITHDRAW binds an effective predecessor PUBLISH but remains available after dynamic E2S loss. Execution requires decision-specific confirmation, is single-use and replay-safe, and appends only the authorized `mer_pub_*` decision plus authorization consumption. Production PREPARE and EXECUTE have not been run; no production publication decision or downstream price/recommendation authority was created.
+
 DF004-E2P remains the sole canonical-eligibility and admission-policy owner. DF004-E2Q and E2Q.1 are fixture-certified. The first production canonical admission completed for evidence `dfev_4a1ca776de2706f9473653f3`: successor authorization `mer_canauth_29cab41b1c73b1ca9ee364a5` was consumed exactly once and created canonical observation `mer_obs_000000001`. The canonical repository contains exactly that one valid observation under idempotency key `E2P_CANONICAL_ADMISSION:dfev_4a1ca776de2706f9473653f3`. Its product `ram_corsair_cmk32gx5m2b6000z30`, retailer `RETAILER-0002`, DataForSEO source/task/provenance, retained-evidence hash, and historical-observation hash match the certified E2P/E2Q binding.
 
 DF004-E2R is implemented and fixture-certified as the controlled Mercury-owned operator boundary for reviewing a canonical observation. Production authorization `mer_revauth_b7e6ad9d27b0bfa7c7a1a44f` was consumed exactly once and recorded `mer_rev_000000001` as the sole and effective `REVIEWED` decision for `mer_obs_000000001`. Its observation, evidence, Atlas product/retailer, provider/task, provenance/rights, E2P/E2Q lineage, E2R policy, authorization, and decision bindings validate consistently. The canonical observation remains unchanged. `REVIEWED` means acceptable to proceed only to independent publication evaluation and grants no publication or price authority.
@@ -169,16 +171,16 @@ Actual spend:                             $0.000
 - Production E2R decision `mer_rev_000000001` is effective as `REVIEWED`; it removed only the review prerequisite and did not authorize publication. The scoped E2S.1 policy now resolves, removing `PRODUCTION_FRESHNESS_POLICY_MISSING`, but the immutable observation remains blocked by stale freshness, LOW derived confidence, and condition `UNKNOWN`.
 - Evidence `dfev_35c4edb75998718c2846f90f` completed the governed recurring path through paid refresh, retrieval/retention, historical admission, canonical admission, and review. Decision `mer_rev_000000002` is effective as `REVIEWED` for `mer_obs_000000003` and removed only the review prerequisite. E2S remains blocked by `AGING` freshness, `MEDIUM` confidence, and condition `UNKNOWN`; publication and all price authorities remain false. Deliberately stop before publication and discuss the evidence strategy for explicit provider-backed condition rather than inferring `NEW`.
 - Mercury currently has no certified cross-source offer-binding policy or governed retailer-offer identifier for this Platinummicro evidence. The retained URLs contain a stable-looking `variant=44649557459027`, but it is not parsed, separately retained, or established by a retailer/source contract as authoritative; DataForSEO `dataDocId` is provider product identity, not retailer-offer identity. Cross-source condition corroboration must therefore remain unavailable until a real second source exposes an inspectable exact offer identifier and rights, adapter, and temporal policy can be designed from evidence.
-- E2S-owned production publication composition is fixture-certified, but the existing publication command remains a direct development-mode record path without production-safe PREPARE/EXECUTE authorization, immutable candidate binding, confirmation gating, or single-use consumption. Keep first production publication unavailable pending MVP-002 Increment 2.
+- E2S-owned production publication composition and the controlled publication PREPARE/EXECUTE boundary are fixture-certified. The legacy direct record command remains development-only. No production publication PREPARE or EXECUTE has run, and `mer_obs_000000003` remains E2S-nonqualified, so no current production PUBLISH candidate is available.
 - The public launch shell now consumes only the governed market snapshot and fails closed cleanly, but all scopes still have zero eligible observations. Before adding public market data, define the narrow launch catalog/retailer coverage and comparable listed-price rules, then implement the separately controlled publication bridge; do not restore placeholder data or Picks.
 - The current DF005-W authorization expires; if it expires before a later authorized operation, fail closed and require a fresh DF005-W PREPARE rather than extending or rewriting it.
 
 ## Next recommended action
 
-Implement MVP-002 Increment 2 as a controlled publication operator-governance boundary that reuses E2S, the existing publication workflow, and the existing publication repository. Keep the public snapshot fail closed and do not publish `mer_obs_000000003`, which remains E2S-nonqualified. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Review and certify MVP-002 Increment 2. Keep the public snapshot fail closed and do not run production publication PREPARE or EXECUTE while `mer_obs_000000003` remains E2S-nonqualified. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next operator action: review MVP-002 Increment 1, then authorize MVP-002 Increment 2 — controlled publication operator governance; do not run publication PREPARE/EXECUTE or create a production publication decision yet.
+Next operator action: review the fixture-certified MVP-002 Increment 2 boundary; do not run production publication PREPARE/EXECUTE or begin Increment 3.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.

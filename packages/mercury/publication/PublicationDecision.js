@@ -11,7 +11,8 @@ export function createPublicationDecision({
   authorizedAt,
   reviewDecisionId = null,
   reasonCodes = [],
-  notes = ""
+  notes = "",
+  governance = null
 } = {}) {
   const decision = {
     schemaVersion: PUBLICATION_DECISION_SCHEMA_VERSION,
@@ -23,7 +24,8 @@ export function createPublicationDecision({
     reasonCodes: [...reasonCodes],
     notes,
     canonicalObservationModified: false,
-    publicationAuthorizationExplicit: true
+    publicationAuthorizationExplicit: true,
+    ...(governance ? { governance: structuredClone(governance) } : {})
   };
   const validation = validatePublicationDecision(decision);
   if (!validation.valid) throw new TypeError(validation.errors.join(" "));
@@ -42,6 +44,7 @@ export function validatePublicationDecision(decision) {
   if (!validIso(decision.authorizedAt)) errors.push("authorizedAt must be a valid ISO date-time.");
   if (!Array.isArray(decision.reasonCodes) || decision.reasonCodes.some((code) => !nonEmpty(code))) errors.push("reasonCodes must be an array of non-empty strings.");
   if (typeof decision.notes !== "string") errors.push("notes must be a string.");
+  if (decision.governance !== null && decision.governance !== undefined && (!nonEmpty(decision.governance.authorizationId) || !nonEmpty(decision.governance.candidateBindingDigest) || !nonEmpty(decision.governance.policyVersion))) errors.push("governance must contain authorizationId, candidateBindingDigest, and policyVersion.");
   if (decision.canonicalObservationModified !== false) errors.push("Publication decisions cannot modify canonical observations.");
   if (decision.publicationAuthorizationExplicit !== true) errors.push("publicationAuthorizationExplicit must be true.");
   return Object.freeze({ valid: errors.length === 0, errors: Object.freeze(errors) });

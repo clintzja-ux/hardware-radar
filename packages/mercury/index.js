@@ -56,6 +56,10 @@ export { FilePublicationDecisionRepository } from "./publication/persistence/Fil
 export { PublicationWorkflowService } from "./publication/PublicationWorkflowService.js";
 export { GovernedMarketPublicationService, createGovernedMarketPublicationService } from "./publication/GovernedMarketPublicationService.js";
 export { PublicationAtlasResolver } from "./publication/PublicationAtlasResolver.js";
+export * from "./publication/PublicationOperatorPolicy.js";
+export * from "./publication/PublicationOperatorAuthorization.js";
+export * from "./publication/PublicationOperatorService.js";
+export * from "./publication/persistence/FilePublicationAuthorizationRepository.js";
 
 export * from "./acquisition/amazon/index.js";
 

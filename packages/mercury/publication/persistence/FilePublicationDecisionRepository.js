@@ -69,6 +69,13 @@ export class FilePublicationDecisionRepository extends PublicationDecisionReposi
       }
 
       const state = await this._readState();
+      if (decision.governance?.authorizationId) {
+        const existing = Object.values(state.decisions).find(record => record.governance?.authorizationId === decision.governance.authorizationId);
+        if (existing) {
+          if (existing.observationId === decision.observationId && existing.action === decision.action && existing.governance.candidateBindingDigest === decision.governance.candidateBindingDigest) return freeze(clone(existing));
+          throw new Error("PUBLICATION_AUTHORIZATION_DECISION_CONFLICT");
+        }
+      }
       const nextSequence = state.sequence + 1;
       const publicationDecisionId = `mer_pub_${String(nextSequence).padStart(9, "0")}`;
       const recordedAt = this.now();
@@ -85,7 +92,8 @@ export class FilePublicationDecisionRepository extends PublicationDecisionReposi
         reasonCodes: [...(decision.reasonCodes ?? [])],
         notes: decision.notes ?? "",
         canonicalObservationModified: false,
-        publicationAuthorizationExplicit: true
+        publicationAuthorizationExplicit: true,
+        ...(decision.governance ? { governance: clone(decision.governance) } : {})
       };
       state.sequence = nextSequence;
       state.decisions[publicationDecisionId] = record;

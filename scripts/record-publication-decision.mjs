@@ -7,6 +7,8 @@ import { PublicationWorkflowService } from "../packages/mercury/publication/Publ
 import { PublicationAtlasResolver } from "../packages/mercury/publication/PublicationAtlasResolver.js";
 import { Mercury } from "../packages/mercury/Mercury.js";
 
+console.error("DEPRECATED FOR PRODUCTION: use publication:prepare and publication:execute. This command is development/fixture-only.");
+
 const [acceptanceStatePath, reviewStatePath, publicationStatePath, action, observationId, actor, at, ...noteParts] = process.argv.slice(2);
 if (!acceptanceStatePath || !reviewStatePath || !publicationStatePath || !action || !observationId || !actor || !at) {
   console.error("Usage: npm run publication:record -- <acceptance-state.json> <review-state.json> <publication-state.json> <PUBLISH|WITHDRAW> <observationId> <actor> <ISO-time> [notes]");

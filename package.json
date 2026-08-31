@@ -25,6 +25,8 @@
     "review:canonical:prepare": "node scripts/mercury-canonical-review-prepare.mjs",
     "review:canonical:execute": "node scripts/mercury-canonical-review-execute.mjs",
     "publication:record": "node scripts/record-publication-decision.mjs",
+    "publication:prepare": "node scripts/mercury-publication-prepare.mjs",
+    "publication:execute": "node scripts/mercury-publication-execute.mjs",
     "market:current:qualify": "node scripts/mercury-current-market-qualify.mjs",
     "acquisition:dry-run": "node scripts/mercury-scheduled-dry-run.mjs",
     "acquisition:live:prepare": "node --env-file=.env scripts/mercury-live-prepare.mjs",

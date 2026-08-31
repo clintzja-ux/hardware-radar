@@ -86,16 +86,16 @@ export class PublicationWorkflowService {
     });
   }
 
-  async authorizePublish({ observationId, authorizedBy, authorizedAt, reasonCodes = [], notes = "" } = {}) {
+  async authorizePublish({ observationId, authorizedBy, authorizedAt, reasonCodes = [], notes = "", governance = null } = {}) {
     const result = await this.evaluate(observationId, { asOf: authorizedAt });
     if (!result.eligible) throw new Error(`Observation is not publication eligible: ${result.reasons.join(", ")}`);
-    const draft = createPublicationDecision({ observationId, action: "PUBLISH", reviewDecisionId: result.effectiveReviewDecision.reviewDecisionId, authorizedBy, authorizedAt, reasonCodes, notes });
+    const draft = createPublicationDecision({ observationId, action: "PUBLISH", reviewDecisionId: result.effectiveReviewDecision.reviewDecisionId, authorizedBy, authorizedAt, reasonCodes, notes, governance });
     return this.publicationRepository.recordDecision(draft);
   }
 
-  async withdraw({ observationId, authorizedBy, authorizedAt, reasonCodes = [], notes = "" } = {}) {
+  async withdraw({ observationId, authorizedBy, authorizedAt, reasonCodes = [], notes = "", governance = null } = {}) {
     const effectiveReview = await this.reviewRepository.getEffectiveDecision(observationId);
-    const draft = createPublicationDecision({ observationId, action: "WITHDRAW", reviewDecisionId: effectiveReview?.reviewDecisionId ?? null, authorizedBy, authorizedAt, reasonCodes, notes });
+    const draft = createPublicationDecision({ observationId, action: "WITHDRAW", reviewDecisionId: effectiveReview?.reviewDecisionId ?? null, authorizedBy, authorizedAt, reasonCodes, notes, governance });
     return this.publicationRepository.recordDecision(draft);
   }
 
