@@ -2,7 +2,7 @@ import {CANONICAL_ADMISSION_SUPERSESSION_CONFIRMATION,CanonicalAdmissionSuperses
 import {assertAllowedArgs,createCanonicalOperatorRuntime,parseArgs} from "./mercury-canonical-admission-runtime.mjs";
 
 const args=parseArgs(process.argv.slice(2));
-assertAllowedArgs(args,["--authorization-id","--confirm","--requested-by","--reason","--ttl-minutes","--evidence-state","--historical-state","--decision-state","--observation-state","--authorization-state"]);
+assertAllowedArgs(args,["--authorization-id","--confirm","--requested-by","--reason","--ttl-minutes","--evidence-state","--historical-state","--decision-state","--observation-state","--authorization-state","--refresh-result-state","--refresh-plan-state"]);
 const result=await new CanonicalAdmissionSupersessionService(createCanonicalOperatorRuntime(args)).supersede({authorizationId:args.get("--authorization-id"),confirmation:args.get("--confirm"),requestedBy:args.get("--requested-by"),reason:args.get("--reason"),ttlMinutes:args.has("--ttl-minutes")?Number(args.get("--ttl-minutes")):15});
 const authorization=result.authorization;
 console.log("EXPIRED CANONICAL ADMISSION AUTHORIZATION SUPERSESSION");

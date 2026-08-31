@@ -29,6 +29,8 @@ Policy `DF004-E2P-1.0` is restricted to `DATAFORSEO_GOOGLE_SHOPPING` and binds t
 
 The assessment binds the exact retained evidence, matching `mer_hist_*` admission, Atlas product, Atlas retailer, provider/source, SELLERS task, raw-payload reference, canonical rights profile, evidence hash, historical-record hash, and policy version. Missing, malformed, substituted, conflicting, aggregate, or caller-supplied identity state fails closed. There is no ambient-time or freshness policy.
 
+Second-and-later historical-refresh generations consume the same governed identity projection produced by E2G/E2J. E2P delegates chained identity reuse to the shared Mercury lineage owner and requires the complete retained-evidence and historical-observation chain; it does not reinterpret review decisions locally. Missing intermediate history, cycles, branches, substituted decisions/remediations/merchant or retailer bindings, provider drift, and ineffective identity state remain fail-closed. Direct-reviewed and one-hop evidence retain the same policy semantics.
+
 ## Admission and replay
 
 `CanonicalObservationAdmissionService` recomputes E2G/E2H and E2P from owner repositories, constructs through the existing DataForSEO canonical builder, validates the observation, and writes through the existing `ObservationAcceptanceRepository` implementation. It creates no parallel canonical repository.
