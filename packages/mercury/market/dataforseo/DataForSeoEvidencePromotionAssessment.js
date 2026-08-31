@@ -3,6 +3,7 @@ import { DATAFORSEO_MERCHANT_RESOLUTION_OUTCOMES } from "./DataForSeoMerchantIde
 import { DATAFORSEO_RESOLUTION_OUTCOMES } from "../../resolution/dataforseo/DataForSeoAtlasResolver.js";
 import { createDataForSeoMarketObservationCandidate } from "./DataForSeoMarketObservationCandidate.js";
 import { projectIdentityReviewState } from "../../identity-review/IdentityReviewProjection.js";
+import { resolveGovernedIdentityReuseLineage } from "../../identity-review/GovernedIdentityReuseLineage.js";
 import { canonicalEvidencePromotionPolicy, evaluateEvidencePromotionPolicy } from "../../promotion/EvidencePromotionPolicy.js";
 
 export const EVIDENCE_PROMOTION_STATES = Object.freeze({
@@ -30,7 +31,7 @@ function sameArray(left, right) {
     return JSON.stringify(left ?? []) === JSON.stringify(right ?? []);
 }
 
-function result({ state, records, reasons, productIdentity = null, merchantIdentity = null, atlasProductId = null }) {
+function result({ state, records, reasons, productIdentity = null, merchantIdentity = null, atlasProductId = null, identityProjections = [] }) {
     const evidence = records.filter((record) => record && typeof record === "object").map((record) => ({
         evidenceId: record.evidenceId ?? null,
         provider: record.candidate?.marketEvidence?.provider ?? null,
@@ -56,7 +57,8 @@ function result({ state, records, reasons, productIdentity = null, merchantIdent
         canonicalEligible: state === EVIDENCE_PROMOTION_STATES.CANONICAL_ELIGIBLE || state === EVIDENCE_PROMOTION_STATES.PUBLICATION_ELIGIBLE,
         publicationEligible: state === EVIDENCE_PROMOTION_STATES.PUBLICATION_ELIGIBLE,
         reasons,
-        evidence
+        evidence,
+        identityProjections
     });
 }
 
@@ -86,6 +88,9 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
     const identityReviewRemediations = Array.isArray(input.identityReviewRemediations) ? input.identityReviewRemediations : [];
     const atlasRetailers = Array.isArray(input.atlasRetailers) ? input.atlasRetailers : [];
     const identityReuseAssessments = Array.isArray(input.identityReuseAssessments) ? input.identityReuseAssessments : [];
+    const identityLineageEvidenceRecords = Array.isArray(input.identityLineageEvidenceRecords) ? input.identityLineageEvidenceRecords : records;
+    const historicalObservations = Array.isArray(input.historicalObservations) ? input.historicalObservations : [];
+    const identityProjections = [];
     const promotionPolicy = input.promotionPolicy === undefined ? canonicalEvidencePromotionPolicy : input.promotionPolicy;
 
     for (const record of records) {
@@ -121,7 +126,7 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
                 retainedEligibility.historicalAnalyticsEligible === recomputed.historicalAnalyticsEligible &&
                 sameArray(retainedEligibility.reasons, recomputed.reasons);
             if (!retainedMatches) critical.push(reason("DF003_ELIGIBILITY_CONTRADICTION", "df003Eligibility", record.evidenceId));
-            const projection = projectIdentityReviewState({record,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers,identityReuseAssessments});
+            let projection;try{projection=projectIdentityReviewState({record,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers,identityReuseAssessments});}catch(error){const matches=identityReuseAssessments.filter(value=>value?.targetEvidenceId===record.evidenceId);if(error?.message!=="IDENTITY_REUSE_PRODUCT_DECISION_BINDING_INVALID"||matches.length!==1)throw error;projection=resolveGovernedIdentityReuseLineage({record,reuse:matches[0],historicalObservations,evidenceRecords:identityLineageEvidenceRecords,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers}).projection;}identityProjections.push(projection);
             effectiveProductIdentities.add(projection.product.state);effectiveMerchantIdentities.add(projection.merchant.state);if(projection.merchant.merchantId)effectiveRetailerIds.add(projection.merchant.merchantId);
             const projectedCandidate = projection.product.state === "VERIFIED" ? createDataForSeoMarketObservationCandidate({marketEvidence,atlasResolution:{outcome:"CONFIRMED",atlasProductId:identity.atlasProductId,externalProductId:identity.externalProductId,evidence:identity.evidence,automaticMercuryEligible:true}}) : candidate;
             const projectedMerchant = projection.merchant.state === "REGISTERED" ? projection.merchant.atlasResolution : merchant;
@@ -143,8 +148,8 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
 
     productIdentity=effectiveProductIdentities.size===1?[...effectiveProductIdentities][0]:effectiveProductIdentities.size?"MIXED":null;merchantIdentity=effectiveMerchantIdentities.size===1?[...effectiveMerchantIdentities][0]:effectiveMerchantIdentities.size?"MIXED":null;if(effectiveProductIdentities.size>1)review.push(reason("PRODUCT_IDENTITY_NOT_STABLE","productIdentity"));if(effectiveMerchantIdentities.size>1||effectiveRetailerIds.size>1)review.push(reason("MERCHANT_IDENTITY_NOT_STABLE","merchantIdentity"));
 
-    if (critical.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.BLOCKED, records, reasons:critical, atlasProductId, productIdentity, merchantIdentity });
-    if (!allDf003Eligible || !allPolicyEligible || review.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.REVIEW_REQUIRED, records, reasons:review, atlasProductId, productIdentity, merchantIdentity });
+    if (critical.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.BLOCKED, records, reasons:critical, atlasProductId, productIdentity, merchantIdentity, identityProjections });
+    if (!allDf003Eligible || !allPolicyEligible || review.length > 0) return result({ state:EVIDENCE_PROMOTION_STATES.REVIEW_REQUIRED, records, reasons:review, atlasProductId, productIdentity, merchantIdentity, identityProjections });
 
     return result({
         state:EVIDENCE_PROMOTION_STATES.HISTORICAL_ELIGIBLE,
@@ -152,7 +157,8 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
         reasons:[reason("E2H_HISTORICAL_GATES_SATISFIED", "historicalPromotionPolicy"), ...canonicalPolicyReasons, reason("PUBLICATION_REQUIRES_SEPARATE_POLICY", "publication")],
         atlasProductId,
         productIdentity,
-        merchantIdentity
+        merchantIdentity,
+        identityProjections
     });
 }
 
