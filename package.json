@@ -6,7 +6,8 @@
   "scripts": {
     "build:public": "node scripts/build-public.mjs",
     "verify:public": "node scripts/verify-public-build.mjs",
-    "test": "node packages/sentinel/tests/run-all-tests.mjs && node packages/atlas/tests/run-all-tests.mjs && node packages/mercury/tests/run-all-tests.mjs && node packages/beacon/tests/run-all-tests.mjs && node packages/gateway/tests/run-all-tests.mjs && node scripts/repository-layout.test.mjs && node scripts/verify-public-build.mjs",
+    "test": "node packages/sentinel/tests/run-all-tests.mjs && node packages/atlas/tests/run-all-tests.mjs && node packages/mercury/tests/run-all-tests.mjs && node packages/beacon/tests/run-all-tests.mjs && node packages/gateway/tests/run-all-tests.mjs && node scripts/repository-layout.test.mjs && node scripts/public-launch-shell.test.mjs && node scripts/verify-public-build.mjs",
+    "test:public-shell": "node scripts/public-launch-shell.test.mjs",
     "test:sentinel": "node packages/sentinel/tests/run-all-tests.mjs",
     "test:aggregator": "node packages/sentinel/tests/DecisionAggregator.test.mjs",
     "test:registry": "node packages/sentinel/tests/RuleRegistry.test.mjs",

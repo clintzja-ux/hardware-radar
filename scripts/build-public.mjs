@@ -9,6 +9,11 @@ import { FileObservationAcceptanceRepository } from "../packages/mercury/persist
 import { FileReviewDecisionRepository } from "../packages/mercury/review/persistence/FileReviewDecisionRepository.js";
 import { FilePublicationDecisionRepository } from "../packages/mercury/publication/persistence/FilePublicationDecisionRepository.js";
 import { PublicationAtlasResolver } from "../packages/mercury/publication/PublicationAtlasResolver.js";
+import { CurrentMarketObservationQualificationService } from "../packages/mercury/current-market/CurrentMarketObservationQualificationService.js";
+import { FileProductionFreshnessPolicyRepository } from "../packages/mercury/current-market/FileProductionFreshnessPolicyRepository.js";
+import { adapterRegistry } from "../packages/mercury/adapters/index.js";
+import { ProductRepository } from "../packages/atlas/ProductRepository.js";
+import { RetailerRepository } from "../packages/atlas/RetailerRepository.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -48,13 +53,23 @@ let snapshot;
 const acceptanceStatePath = process.env.HARDWARE_RADAR_ACCEPTANCE_STATE;
 const reviewStatePath = process.env.HARDWARE_RADAR_REVIEW_STATE;
 const publicationStatePath = process.env.HARDWARE_RADAR_PUBLICATION_STATE;
+const freshnessPolicyStatePath = process.env.HARDWARE_RADAR_FRESHNESS_POLICY_STATE || path.join(root, "packages", "mercury", "current-market", "policies", "production-policies.json");
 
 if (acceptanceStatePath && reviewStatePath && publicationStatePath) {
     const acceptanceRepository = new FileObservationAcceptanceRepository({ statePath: path.resolve(acceptanceStatePath), environment: "production" });
     const reviewRepository = new FileReviewDecisionRepository({ statePath: path.resolve(reviewStatePath), acceptanceRepository, environment: "production" });
     const publicationRepository = new FilePublicationDecisionRepository({ statePath: path.resolve(publicationStatePath), acceptanceRepository, reviewRepository, environment: "production" });
-    const workflowService = new PublicationWorkflowService({ acceptanceRepository, reviewRepository, publicationRepository, mercury, atlas: new PublicationAtlasResolver({ products, retailers }) });
-    const governed = new GovernedMarketPublicationService({ workflowService, marketPublicationService: new MarketPublicationService({ mercury }) });
+    const currentMarketQualificationService = new CurrentMarketObservationQualificationService({
+        acceptanceRepository,
+        reviewRepository,
+        productRepository: new ProductRepository({ readJson: json }),
+        retailerRepository: new RetailerRepository({ readJson: json }),
+        mercury,
+        adapterRegistry,
+        freshnessPolicyRepository: new FileProductionFreshnessPolicyRepository({ statePath: path.resolve(freshnessPolicyStatePath) })
+    });
+    const workflowService = new PublicationWorkflowService({ acceptanceRepository, reviewRepository, publicationRepository, mercury, atlas: new PublicationAtlasResolver({ products, retailers }), currentMarketQualificationService, requireCurrentMarketQualification: true });
+    const governed = new GovernedMarketPublicationService({ workflowService, marketPublicationService: new MarketPublicationService({ mercury }), requireCurrentMarketQualification: true });
     snapshot = await governed.createSnapshot({ products, retailers, generatedAt });
 } else {
     // Fail closed: canonical manifest observations are not implicitly publication-authorized.

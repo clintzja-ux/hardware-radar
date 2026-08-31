@@ -21,6 +21,8 @@ export function scopeToDisplayProduct(scope, section, title) {
         bestFor: "Verified current market candidate",
         price: item.price.toFixed(2),
         currency: item.currency,
+        priceBasis: "Listed price",
+        shippingMessage: "Shipping not verified",
         retailer: item.retailer,
         affiliateUrl: item.sourceUrl,
         verified: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",

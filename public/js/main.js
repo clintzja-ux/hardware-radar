@@ -26,6 +26,10 @@ async function init() {
     } catch (error) {
         console.error(error);
         renderOverallUnavailable("overallSection");
+        renderCategoryUnavailable("ddr5Section", "DDR5");
+        renderCategoryUnavailable("ddr4Section", "DDR4");
+        renderCategoryUnavailable("sodimmSection", "Laptop RAM");
+        renderCategoryUnavailable("eccSection", "Server / ECC RAM");
     }
     renderHeader("headerContainer");
     renderFooter("footerContainer");

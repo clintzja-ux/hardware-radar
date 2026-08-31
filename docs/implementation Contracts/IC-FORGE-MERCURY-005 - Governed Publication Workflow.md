@@ -36,6 +36,10 @@ Establish an explicit, durable, auditable publication workflow between reviewed 
 
 The public build fails closed. Unless durable acceptance, review, and publication state paths are explicitly supplied, the generated market snapshot contains `INSUFFICIENT_DATA` states. Canonical Mercury manifest observations are no longer implicitly publication-authorized.
 
+Production build composition also requires the certified E2S current-market qualification owner. `PUBLISH` remains durable publication authorization, but it cannot override a current E2S failure. Snapshot generation reassesses E2S at the explicit build time and projects only candidates that remain qualified; it does not independently apply the development/default freshness, confidence, or condition interpretation. Missing or invalid E2S dependencies or production freshness policy fail closed to no published candidate.
+
+The lower-level publication workflow retains an explicit legacy development/fixture mode for existing tests. That mode is not production composition and cannot be selected implicitly by the governed public build.
+
 Operational state paths are supplied through:
 
 - `HARDWARE_RADAR_ACCEPTANCE_STATE`

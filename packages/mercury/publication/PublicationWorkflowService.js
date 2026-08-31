@@ -10,7 +10,7 @@ function amazonSourceAuthorized(observation) {
 }
 
 export class PublicationWorkflowService {
-  constructor({ acceptanceRepository, reviewRepository, publicationRepository, mercury, atlas = atlasDefault, policy = defaultPublicationPolicy, currentMarketQualificationService = null } = {}) {
+  constructor({ acceptanceRepository, reviewRepository, publicationRepository, mercury, atlas = atlasDefault, policy = defaultPublicationPolicy, currentMarketQualificationService = null, requireCurrentMarketQualification = false } = {}) {
     if (!acceptanceRepository) throw new TypeError("acceptanceRepository is required.");
     if (!reviewRepository) throw new TypeError("reviewRepository is required.");
     if (!publicationRepository) throw new TypeError("publicationRepository is required.");
@@ -22,6 +22,11 @@ export class PublicationWorkflowService {
     this.atlas = atlas;
     this.policy = policy;
     this.currentMarketQualificationService = currentMarketQualificationService;
+    this.requireCurrentMarketQualification = requireCurrentMarketQualification === true;
+  }
+
+  usesCurrentMarketQualification() {
+    return Boolean(this.currentMarketQualificationService?.assess);
   }
 
   async evaluate(observationId, { asOf = new Date().toISOString() } = {}) {
@@ -39,17 +44,28 @@ export class PublicationWorkflowService {
     if (this.currentMarketQualificationService) {
       currentMarketQualification = await this.currentMarketQualificationService.assess({ observationId, evaluatedAt: asOf });
       if (currentMarketQualification.qualified !== true) reasons.push("CURRENT_MARKET_QUALIFICATION_REQUIRED", ...(currentMarketQualification.reasons ?? []));
+      freshness = currentMarketQualification.freshness;
+      confidence = currentMarketQualification.confidence;
+      evidenceEligibility = freeze({
+        eligible: currentMarketQualification.qualified === true,
+        reasons: freeze([...(currentMarketQualification.reasons ?? [])]),
+        policy: currentMarketQualification.liveMarketPolicy ?? null
+      });
+    } else if (this.requireCurrentMarketQualification) {
+      reasons.push("CURRENT_MARKET_QUALIFICATION_SERVICE_REQUIRED");
     }
     if (observation) {
       product = await this.atlas.getProduct(observation.atlasProductId).catch(() => null);
       retailer = await this.atlas.getRetailer(observation.retailerId).catch(() => null);
-      try {
-        freshness = this.mercury.evaluateFreshness(observation, { evaluatedAt: asOf });
-        confidence = this.mercury.evaluateConfidence(observation, { evaluatedAt: asOf });
-        evidenceEligibility = evaluateLiveMarketEligibility(observation, { product, retailer, freshness, confidence, storage: audit?.storage ?? null, evaluatedAt: asOf, policy: this.policy });
-        reasons.push(...evidenceEligibility.reasons);
-      } catch {
-        reasons.push("EVIDENCE_EVALUATION_FAILED");
+      if (!this.currentMarketQualificationService && !this.requireCurrentMarketQualification) {
+        try {
+          freshness = this.mercury.evaluateFreshness(observation, { evaluatedAt: asOf });
+          confidence = this.mercury.evaluateConfidence(observation, { evaluatedAt: asOf });
+          evidenceEligibility = evaluateLiveMarketEligibility(observation, { product, retailer, freshness, confidence, storage: audit?.storage ?? null, evaluatedAt: asOf, policy: this.policy });
+          reasons.push(...evidenceEligibility.reasons);
+        } catch {
+          reasons.push("EVIDENCE_EVALUATION_FAILED");
+        }
       }
     }
 
@@ -91,13 +107,23 @@ export class PublicationWorkflowService {
   }
 
   async getGovernedPublishedObservations({ asOf = new Date().toISOString() } = {}) {
+    return freeze((await this.getGovernedPublishedCandidates({ asOf })).map((candidate) => candidate.observation));
+  }
+
+  async getGovernedPublishedCandidates({ asOf = new Date().toISOString() } = {}) {
     const observations = await this.acceptanceRepository.getAll({ asOf });
     const published = [];
     for (const observation of observations) {
       const effectiveDecision = await this.publicationRepository.getEffectiveDecision(observation.observationId);
       if (!effectiveDecision || effectiveDecision.action !== "PUBLISH") continue;
       const eligibility = await this.evaluate(observation.observationId, { asOf });
-      if (eligibility.eligible) published.push(observation);
+      if (eligibility.eligible) published.push(freeze({
+        observation,
+        product: eligibility.product,
+        retailer: eligibility.retailer,
+        currentMarketQualification: eligibility.currentMarketQualification,
+        publicationDecision: effectiveDecision
+      }));
     }
     return freeze(published);
   }

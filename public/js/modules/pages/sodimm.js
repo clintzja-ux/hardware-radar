@@ -1,8 +1,7 @@
  import { loadCategory } from "../loadCategory.js";
- import { renderRecommendation } from "../renderRecommendation.js";
+ import { renderRecommendation, renderRecommendationError } from "../renderRecommendation.js";
  
  import { renderExpandableComparison } from "../renderExpandableComparison.js";
- import { renderDecisionPaths } from "../renderDecisionPaths.js";
  import { renderBuyingAdvice } from "../renderBuyingAdvice.js";
  import { renderFAQ } from "../renderFAQ.js";
  import { renderFooter } from "../renderFooter.js";
@@ -10,39 +9,13 @@
  
  async function init() {
  
-     const deals = await loadCategory("data/ram/sodimm.json");
-      const decisionPaths = [
-    {
-        icon: "💻",
-        title: "Need a laptop upgrade?",
-        description: "Reliable, affordable memory upgrades for everyday laptops.",
-        cta: "Explore Upgrade Picks",
-        link: "#"
-    },
-    {
-        icon: "🎮",
-        title: "Gaming on a laptop?",
-        description: "High-performance SODIMM memory selected for gaming laptops.",
-        cta: "Explore Gaming Picks",
-        link: "#"
-    },
-    {
-        icon: "💼",
-        title: "Buying for work?",
-        description: "Stable, dependable memory for productivity and business laptops.",
-        cta: "Explore Business Picks",
-        link: "#"
-    }
-];
- 
      const buyingAdvice = {
          title: "Should you buy the cheapest qualifying Laptop RAM?",
-         summary: "For most people, yes. Today's cheapest verified Laptop RAM pick offers strong everyday performance at the lowest price we found from trusted retailers.",
+         summary: "A qualifying listed price can be a useful starting point. Confirm laptop compatibility and the retailer's final checkout amount before buying.",
          points: [
-          "Choose the cheapest pick if you want the best value today.",
-          "Choose Gaming DDR5 if low latency matters more than lowest price.",
-          "Choose RGB DDR5 if appearance matters for your build.",
-          "Choose Workstation DDR5 if capacity and stability matter most."
+          "Confirm the memory generation, form factor, capacity limit, and slot availability for your laptop.",
+          "Treat the displayed amount as a listed price unless shipping and fees are explicitly verified.",
+          "Compare the retailer's final checkout amount before buying."
          ]
      };
  
@@ -75,18 +48,15 @@
  
  ];
  
-     renderRecommendation(
-         deals[0],
-         "recommendationSection"
-     );
-     renderExpandableComparison(
-     deals,
-     "comparisonSection"
-     );
-      renderDecisionPaths(
-         decisionPaths,
-         "decisionPaths"
-     );
+     try {
+         const deals = await loadCategory("sodimm");
+         renderRecommendation(deals[0], "recommendationSection");
+         renderExpandableComparison(deals, "comparisonSection");
+     } catch (error) {
+         console.error(error);
+         renderRecommendationError("recommendationSection");
+         renderExpandableComparison([], "comparisonSection");
+     }
      renderBuyingAdvice(
          buyingAdvice,
           "buyingAdviceSection"

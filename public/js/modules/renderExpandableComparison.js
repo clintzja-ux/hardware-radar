@@ -3,8 +3,13 @@
     const container = document.getElementById(containerId);
 
     if (!container) return;
+    container.setAttribute("aria-live", "polite");
     if (!Array.isArray(products) || products.length === 0) {
-        container.innerHTML = `<section class="comparison"><p class="best-for">Price comparisons will appear when qualifying observations are available.</p></section>`;
+        container.innerHTML = `<section class="comparison" role="status"><p class="best-for">Comparable monitored offers will appear when qualifying observations are available.</p></section>`;
+        return;
+    }
+    if (products.length === 1) {
+        container.innerHTML = `<section class="comparison" role="status"><p class="best-for">No additional qualifying monitored offers are available for comparison right now.</p></section>`;
         return;
     }
 
@@ -59,7 +64,7 @@
            <button class="comparison-toggle">
 
              <span>
-             🔍 Compare today's winner with the next 10 cheapest
+             🔍 Compare qualifying monitored offers
             </span>
 
             <span class="comparison-arrow">

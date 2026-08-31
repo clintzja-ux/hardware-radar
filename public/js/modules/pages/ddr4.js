@@ -1,8 +1,7 @@
  import { loadCategory } from "../loadCategory.js";
- import { renderRecommendation } from "../renderRecommendation.js";
+ import { renderRecommendation, renderRecommendationError } from "../renderRecommendation.js";
  
  import { renderExpandableComparison } from "../renderExpandableComparison.js";
- import { renderDecisionPaths } from "../renderDecisionPaths.js";
  import { renderBuyingAdvice } from "../renderBuyingAdvice.js";
  import { renderFAQ } from "../renderFAQ.js";
 import { renderFooter } from "../renderFooter.js";
@@ -10,43 +9,13 @@ import { renderHeader } from "../renderHeader.js";
  
  async function init() {
  
-     const deals = await loadCategory("data/ram/ddr4.json");
-      const decisionPaths = [
- 
-         {
-             icon: "🎮",
-             title: "Need maximum gaming performance?",
-             description: "Lowest-latency DDR4 kits selected for high-FPS gaming.",
-             cta: "Explore Gaming Picks",
-             link: "#"
-         },
- 
-         {
-             icon: "✨",
-             title: "Building a showcase PC?",
-             description: "The best RGB memory available today.",
-             cta: "Explore RGB Picks",
-             link: "#"
-         },
- 
-         {
-             icon: "🖥️",
-             title: "Need reliability for work?",
-             description: "High-capacity memory for creators and professionals.",
-             cta: "Explore Workstation Picks",
-             link: "#"
-         }
- 
-     ];
- 
      const buyingAdvice = {
          title: "Should you buy the cheapest qualifying DDR4?",
-         summary: "For most people, yes. Today's cheapest verified DDR4 pick offers strong everyday performance at the lowest price we found from trusted retailers.",
+         summary: "A qualifying listed price can be a useful starting point. Confirm compatibility and the retailer's final checkout amount before buying.",
          points: [
-          "Choose the cheapest pick if you want the best value today.",
-          "Choose Gaming DDR4 if low latency matters more than lowest price.",
-          "Choose RGB DDR4 if appearance matters for your build.",
-          "Choose Workstation DDR4 if capacity and stability matter most."
+          "Check that capacity, speed, and motherboard compatibility fit your system.",
+          "Treat the displayed amount as a listed price unless shipping and fees are explicitly verified.",
+          "Compare the retailer's final checkout amount before buying."
          ]
      };
  
@@ -79,18 +48,15 @@ import { renderHeader } from "../renderHeader.js";
  
  ];
  
-     renderRecommendation(
-         deals[0],
-         "recommendationSection"
-     );
-     renderExpandableComparison(
-     deals,
-     "comparisonSection"
-     );
-      renderDecisionPaths(
-         decisionPaths,
-         "decisionPaths"
-     );
+     try {
+         const deals = await loadCategory("ddr4");
+         renderRecommendation(deals[0], "recommendationSection");
+         renderExpandableComparison(deals, "comparisonSection");
+     } catch (error) {
+         console.error(error);
+         renderRecommendationError("recommendationSection");
+         renderExpandableComparison([], "comparisonSection");
+     }
      renderBuyingAdvice(
          buyingAdvice,
           "buyingAdviceSection"

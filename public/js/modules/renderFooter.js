@@ -13,8 +13,8 @@ export function renderFooter(containerId) {
 
                     <p>
                         Independent hardware price tracking.
-                        Find today's best verified computer hardware deals
-                        from trusted retailers.
+                        Compare qualifying listed RAM prices from
+                        the retailers and products we monitor.
                     </p>
                 </div>
 

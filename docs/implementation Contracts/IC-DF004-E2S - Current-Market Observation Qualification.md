@@ -55,7 +55,9 @@ Existing source-rights policy independently requires current-observation, compar
 
 ## Publication integration and expiry
 
-`PublicationWorkflowService` accepts an optional E2S qualification service and fails closed when its result is not qualified. This is an evaluation seam only, not publication PREPARE/EXECUTE governance. Existing append-only `PUBLISH`/`WITHDRAW` history and dynamic snapshot reevaluation remain unchanged: a previously authorized observation that becomes stale is excluded without rewriting its publication history.
+`PublicationWorkflowService` accepts the E2S qualification service through dependency injection and fails closed when its result is not qualified. Production publication composition requires that dependency explicitly; missing production E2S composition cannot fall back to the development freshness/confidence evaluator. Legacy fixture/development use may select the older evaluator only through the explicit non-required mode.
+
+The governed public projection consumes the E2S-qualified candidate and its derived freshness/confidence result. It does not independently reinterpret production freshness, confidence, condition, adapter, or rights policy. This is an evaluation seam only, not publication PREPARE/EXECUTE governance. Existing append-only `PUBLISH`/`WITHDRAW` history and dynamic snapshot reevaluation remain unchanged: a previously authorized observation that becomes stale or otherwise ceases to qualify is excluded without rewriting its publication history.
 
 ## Diagnostic
 

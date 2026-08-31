@@ -44,15 +44,25 @@ export class MarketPublicationService {
         this.policy = policy;
     }
 
-    async createSnapshot({ observations, products, retailers, generatedAt }) {
+    async createSnapshot({ observations, qualifiedCandidates = null, products, retailers, generatedAt }) {
         if (!Array.isArray(observations) || !Array.isArray(products) || !Array.isArray(retailers)) throw new TypeError("Publication inputs must be arrays.");
+        if (qualifiedCandidates !== null && !Array.isArray(qualifiedCandidates)) throw new TypeError("qualifiedCandidates must be null or an array.");
         if (!Number.isFinite(Date.parse(generatedAt))) throw new TypeError("generatedAt must be a valid ISO 8601 date-time.");
 
         const productsById = new Map(products.map((product) => [product.identity.atlasProductId, product]));
         const retailersById = new Map(retailers.map((retailer) => [retailer.id, retailer]));
         const eligible = [];
 
-        for (const observation of observations) {
+        if (qualifiedCandidates !== null) for (const candidate of qualifiedCandidates) {
+            const observation = candidate?.observation;
+            const qualification = candidate?.currentMarketQualification;
+            const product = productsById.get(observation?.atlasProductId) ?? null;
+            const retailer = retailersById.get(observation?.retailerId) ?? null;
+            if (qualification?.qualified !== true || qualification.observationId !== observation?.observationId || !product || !retailer) continue;
+            eligible.push({ observation, product, retailer, freshness: qualification.freshness, confidence: qualification.confidence });
+        }
+
+        if (qualifiedCandidates === null) for (const observation of observations) {
             const product = productsById.get(observation.atlasProductId) ?? null;
             const retailer = retailersById.get(observation.retailerId) ?? null;
             let freshness = null;
