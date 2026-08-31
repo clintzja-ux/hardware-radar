@@ -1,8 +1,53 @@
 import {resolveGovernedHistoricalRefreshContext} from "../historical-admission/HistoricalRefreshAdmissionGovernance.js";
+import {resolveHistoricalRefreshAdmissionGovernance} from "../historical-admission/HistoricalRefreshAdmissionGovernance.js";
+import {projectIdentityReviewState} from "../identity-review/IdentityReviewProjection.js";
 
 const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
 const identity=value=>({productId:value?.productId??null,dataDocId:value?.dataDocId??null,gid:value?.gid??null});
 const same=(left,right)=>JSON.stringify(left)===JSON.stringify(right);
+
+function requirePlanPreviousBinding({refreshPlan,observation,evidence}){
+ if(refreshPlan?.previous?.observationId!==observation.observationId)throw new Error("HISTORICAL_REFRESH_PRIOR_OBSERVATION_BINDING_INVALID");
+ if(refreshPlan.previous.evidenceId!==evidence.evidenceId||observation.provenance?.retainedEvidenceId!==evidence.evidenceId)throw new Error("HISTORICAL_REFRESH_PRIOR_EVIDENCE_BINDING_INVALID");
+ const taskId=evidence.candidate?.marketEvidence?.provenance?.sourceTaskId;if(refreshPlan.previous.providerTaskId!==taskId||observation.provenance?.acquisition?.sellersTaskId!==taskId)throw new Error("HISTORICAL_REFRESH_PRIOR_TASK_BINDING_INVALID");
+ if(refreshPlan.atlasProductId!==observation.atlasProductId||evidence.candidate?.identity?.atlasProductId!==observation.atlasProductId)throw new Error("HISTORICAL_REFRESH_PRIOR_PRODUCT_BINDING_INVALID");
+ if(refreshPlan.existingIdentity?.retailerId!==observation.retailerId)throw new Error("HISTORICAL_REFRESH_PRIOR_RETAILER_BINDING_INVALID");
+ const providerIdentity=identity(evidence.candidate?.marketEvidence?.productEvidence);if(!same(providerIdentity,identity(refreshPlan.providerIdentity)))throw new Error("HISTORICAL_REFRESH_PROVIDER_IDENTITY_DRIFT");
+ return {taskId,providerIdentity};
+}
+
+function requireProjectionBinding({projection,refreshPlan,observation,reuse=null}){
+ if(projection.product?.state!=="VERIFIED"||projection.product?.atlasProductId!==refreshPlan.atlasProductId)throw new Error("REFRESH_PRODUCT_IDENTITY_NO_LONGER_VERIFIED");
+ if(projection.merchant?.state!=="REGISTERED"||projection.merchant?.merchantId!==refreshPlan.existingIdentity?.retailerId)throw new Error("REFRESH_MERCHANT_IDENTITY_NO_LONGER_REGISTERED");
+ if(refreshPlan.existingIdentity?.productState!=="VERIFIED"||refreshPlan.existingIdentity?.productDecisionId!==projection.product.decisionId)throw new Error("HISTORICAL_REFRESH_PRODUCT_DECISION_BINDING_INVALID");
+ if(refreshPlan.existingIdentity?.merchantState!=="REGISTERED"||refreshPlan.existingIdentity?.merchantDecisionId!==projection.merchant.decisionId)throw new Error("HISTORICAL_REFRESH_MERCHANT_DECISION_BINDING_INVALID");
+ const review=observation.provenance?.identityReview??{};if(review.productDecisionId!==projection.product.decisionId||review.productRemediationId!==(projection.product.remediationId??null))throw new Error("HISTORICAL_REFRESH_PRODUCT_REVIEW_LINEAGE_INVALID");
+ if(review.merchantDecisionId!==projection.merchant.decisionId||review.merchantRemediationId!==(projection.merchant.remediationId??null))throw new Error("HISTORICAL_REFRESH_MERCHANT_REVIEW_LINEAGE_INVALID");
+ if(reuse&&(reuse.product?.decisionId!==projection.product.decisionId||(reuse.product?.remediationId??null)!==(projection.product.remediationId??null)||reuse.merchant?.decisionId!==projection.merchant.decisionId||reuse.merchant?.retailerId!==projection.merchant.merchantId))throw new Error("HISTORICAL_REFRESH_IDENTITY_REUSE_PROJECTION_INVALID");
+}
+
+function resolveInheritedProjection({record,reuse,historicalObservations,evidenceRecords,decisions,remediations,atlasRetailers}){
+ const visited=new Set();let sourceEvidenceId=reuse.sourceEvidenceId;
+ while(sourceEvidenceId){if(visited.has(sourceEvidenceId))throw new Error("HISTORICAL_REFRESH_IDENTITY_REUSE_LINEAGE_CONFLICT");visited.add(sourceEvidenceId);const matches=evidenceRecords.filter(value=>value?.evidenceId===sourceEvidenceId);if(matches.length!==1)throw new Error(matches.length?"HISTORICAL_REFRESH_IDENTITY_REUSE_SOURCE_CONFLICT":"HISTORICAL_REFRESH_IDENTITY_REUSE_SOURCE_MISSING");const source=matches[0],direct=projectIdentityReviewState({record:source,decisions,remediations,atlasRetailers});if(direct.product?.state==="VERIFIED"&&direct.merchant?.state==="REGISTERED"){
+   if(direct.product.decisionId!==reuse.product?.decisionId||(direct.product.remediationId??null)!==(reuse.product?.remediationId??null))throw new Error("HISTORICAL_REFRESH_PRODUCT_REVIEW_LINEAGE_INVALID");if(direct.merchant.decisionId!==reuse.merchant?.decisionId||direct.merchant.merchantId!==reuse.merchant?.retailerId)throw new Error("HISTORICAL_REFRESH_MERCHANT_REVIEW_LINEAGE_INVALID");return freeze({projectionVersion:"1.0",evidenceId:record.evidenceId,product:{...direct.product,atlasProductId:record.candidate?.identity?.atlasProductId},merchant:{...direct.merchant,atlasResolution:reuse.merchant.atlasResolution},retainedEvidenceModified:false});
+  }
+  const observations=historicalObservations.filter(value=>value?.provenance?.retainedEvidenceId===sourceEvidenceId);if(observations.length!==1)throw new Error(observations.length?"HISTORICAL_REFRESH_IDENTITY_REUSE_HISTORY_CONFLICT":"REFRESH_PRODUCT_IDENTITY_NO_LONGER_VERIFIED");const lineage=observations[0],acquisition=lineage.provenance?.acquisition,review=lineage.provenance?.identityReview??{};if(acquisition?.type!=="HISTORICAL_REFRESH"){if(direct.product?.state!=="VERIFIED")throw new Error("REFRESH_PRODUCT_IDENTITY_NO_LONGER_VERIFIED");if(direct.merchant?.state!=="REGISTERED")throw new Error("REFRESH_MERCHANT_IDENTITY_NO_LONGER_REGISTERED");throw new Error("HISTORICAL_REFRESH_IDENTITY_REUSE_LINEAGE_INVALID");}if(!acquisition.sourceEvidenceId||lineage.atlasProductId!==record.candidate?.identity?.atlasProductId||lineage.retailerId!==reuse.merchant?.retailerId)throw new Error("HISTORICAL_REFRESH_IDENTITY_REUSE_LINEAGE_INVALID");if(review.productDecisionId!==reuse.product?.decisionId||(review.productRemediationId??null)!==(reuse.product?.remediationId??null)||review.merchantDecisionId!==reuse.merchant?.decisionId)throw new Error("HISTORICAL_REFRESH_IDENTITY_REUSE_LINEAGE_INVALID");sourceEvidenceId=acquisition.sourceEvidenceId;
+ }
+ throw new Error("REFRESH_PRODUCT_IDENTITY_NO_LONGER_VERIFIED");
+}
+
+export async function resolveHistoricalRefreshPreviousIdentityContext({refreshPlan,historicalObservations=[],evidenceRecords=[],evidenceRepository,decisions=[],remediations=[],atlasRetailers=[],priorRefreshResult=null}={}){
+ if(!refreshPlan?.previous||!Array.isArray(historicalObservations)||!Array.isArray(evidenceRecords)||!evidenceRepository?.getById||!Array.isArray(decisions)||!Array.isArray(remediations)||!Array.isArray(atlasRetailers))throw new TypeError("HISTORICAL_REFRESH_PREVIOUS_IDENTITY_CONTEXT_INPUT_INVALID");
+ const observations=historicalObservations.filter(value=>value?.observationId===refreshPlan.previous.observationId);if(observations.length!==1)throw new Error(observations.length?"HISTORICAL_REFRESH_PRIOR_OBSERVATION_CONFLICT":"HISTORICAL_REFRESH_PRIOR_OBSERVATION_REQUIRED");const observation=observations[0];
+ const evidenceMatches=evidenceRecords.filter(value=>value?.evidenceId===refreshPlan.previous.evidenceId);if(evidenceMatches.length!==1)throw new Error(evidenceMatches.length?"HISTORICAL_REFRESH_PRIOR_EVIDENCE_CONFLICT":"HISTORICAL_REFRESH_PRIOR_EVIDENCE_MISSING");const evidence=evidenceMatches[0];const {providerIdentity}=requirePlanPreviousBinding({refreshPlan,observation,evidence});
+ let identityReuseAssessments=[],reuse=null;if(observation.provenance?.acquisition?.type==="HISTORICAL_REFRESH"){
+  const acquisition=observation.provenance.acquisition,review=observation.provenance?.identityReview??{};if(!priorRefreshResult||priorRefreshResult.refreshPlanId!==acquisition.refreshPlanId||priorRefreshResult.authorizationId!==acquisition.authorizationId||priorRefreshResult.providerTaskId!==acquisition.sellersTaskId)throw new Error("HISTORICAL_REFRESH_PRIOR_RESULT_BINDING_INVALID");
+  if(!same(identity(acquisition.providerIdentity),providerIdentity))throw new Error("HISTORICAL_REFRESH_PROVIDER_IDENTITY_DRIFT");
+  const priorPlan={schemaVersion:"1.0",refreshPlanId:acquisition.refreshPlanId,operation:"SELLERS",atlasProductId:observation.atlasProductId,providerIdentity,previous:{evidenceId:acquisition.sourceEvidenceId},existingIdentity:{productDecisionId:review.productDecisionId,merchantDecisionId:review.merchantDecisionId,retailerId:observation.retailerId}};
+  const governed=await resolveHistoricalRefreshAdmissionGovernance({targetRecord:evidence,evidenceRepository,refreshResult:priorRefreshResult,refreshPlan:priorPlan});reuse=governed.reuse;if(reuse.reuseAssessmentId!==acquisition.identityReuseAssessmentId||reuse.sourceEvidenceId!==acquisition.sourceEvidenceId||reuse.targetEvidenceId!==evidence.evidenceId)throw new Error("HISTORICAL_REFRESH_IDENTITY_REUSE_LINEAGE_INVALID");identityReuseAssessments=governed.identityReuseAssessments;
+ }
+ let projection;try{projection=projectIdentityReviewState({record:evidence,decisions,remediations,atlasRetailers,identityReuseAssessments});}catch(error){if(error?.message==="IDENTITY_REUSE_PRODUCT_DECISION_BINDING_INVALID"&&reuse)projection=resolveInheritedProjection({record:evidence,reuse,historicalObservations,evidenceRecords,decisions,remediations,atlasRetailers});else if(error?.message==="IDENTITY_REUSE_PRODUCT_DECISION_BINDING_INVALID")throw new Error("REFRESH_PRODUCT_IDENTITY_NO_LONGER_VERIFIED");else if(error?.message==="IDENTITY_REUSE_MERCHANT_DECISION_BINDING_INVALID")throw new Error("REFRESH_MERCHANT_IDENTITY_NO_LONGER_REGISTERED");else throw error;}requireProjectionBinding({projection,refreshPlan,observation,reuse});return freeze({observation,evidence,providerIdentity,projection,identityReuseAssessments,reuse});
+}
 
 function latestForProduct({atlasProductId,historicalObservations,evidenceRecords}){
  const history=historicalObservations.filter(value=>value?.atlasProductId===atlasProductId).sort((a,b)=>Date.parse(a.observationTime)-Date.parse(b.observationTime)||a.observationId.localeCompare(b.observationId));

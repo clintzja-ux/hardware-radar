@@ -3,10 +3,10 @@
 ```text
 Last updated:                  2026-08-31
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD at inspection:            5415185bef2eeeb875e462abe422c699febf2f11
-Working tree:                  Current-state reconciliation after production historical-refresh PREPARE
-Current implementation increment: Historical-refresh later-generation context composition fixture-certified
-Previous completed increment:  Historical-refresh prior-context correction fixture-certified
+HEAD at inspection:            db7b157d3d079a9620f549e67a8ef325925bf8f0
+Working tree:                  Current-state reconciliation after production historical-refresh execution
+Current implementation increment: Historical-refresh retrieval identity-context correction fixture-certified
+Previous completed increment:  Historical-refresh later-generation context composition fixture-certified
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -127,7 +127,7 @@ IC-FORGE-MERCURY-008 materializes the FM007 read model through an explicit, loca
 
 Historical-refresh PREPARE now consumes that governed context for second and later generations instead of pairing the latest historical evidence with the original SELLERS enrichment task. The first generation still validates the original authorization/plan/execution lineage. Later generations require exact agreement among the latest historical observation, retained evidence, completed refresh result, prior refresh plan and authorization, provider task, Atlas product/retailer, provider identity, and governed identity-reuse target. Conflicts fail closed before plan persistence. The correction is fixture-certified, and the production retry succeeded with plan `histrefresh_5aa749345b1e27cce2424819`, status `PENDING_OPERATOR_REVIEW`, correctly bound to prior task `08240007-2304-0183-0000-83e8dcdb3c6e`. It created no paid task, authorization, provider operation, or spend.
 
-The shared later-generation cycle composer is fixture-certified for LIVE PREPARE, status, and cadence. LIVE PREPARE now revalidates the active plan against the separately composed prior plan/authorization/result lineage. Status reports `PLAN_PREPARED` with next action `PREPARE_AUTHORIZATION`; cadence reports `BLOCKED` for another refresh intent while that plan is pending. Production LIVE PREPARE and LIVE EXECUTE have not run, and no provider operation or spend occurred.
+The shared later-generation cycle composer is fixture-certified for LIVE PREPARE, status, and cadence. LIVE PREPARE revalidated plan `histrefresh_5aa749345b1e27cce2424819`, and the separately authorized LIVE EXECUTE created exactly one completed SELLERS task, `08310644-2304-0183-0000-4c9506a57d97`, at actual spend `$0.001`. Provider-result retrieval and DF003 retention have not yet been performed. The combined retrieval boundary now uses a fixture-certified shared prior-identity resolver that validates the exact historical observation/evidence/task/product/retailer/provider lineage, direct review state for the original generation, and governed identity reuse for later generations before any provider GET. Missing, ineffective, malformed, or substituted identity state still fails closed.
 
 Operator certification succeeded at the explicit cutoff `2026-08-24T23:00:00Z`. Two independent exports produced byte-identical local artifacts at `.forge-review/forge/certified-mercury-operations.json` with SHA-256 `32d0a29e35ebb101ac8d4f764a266b7912a3068c227968a2de6e559cb87d0f1a`. Both the canonical governed portfolio and FM008 report cadence `NOT_DUE`, cycle `COMPLETE`, no cycle blockers, and next action `PREPARE_NEW_REFRESH`; the false `IDENTITY_REUSE_INVALID` blocker is absent. Forge loaded the corrected artifact through its local file-import boundary. Protected Mercury source-state hashes remained unchanged, and no network, provider, paid, mutation, or publication operation occurred.
 
@@ -166,10 +166,10 @@ Actual spend:                             $0.000
 
 ## Next recommended action
 
-Review the fixture-certified later-generation context correction, then explicitly decide whether to run only the zero-network LIVE PREPARE authorization boundary for plan `histrefresh_5aa749345b1e27cce2424819`. Paid LIVE EXECUTE remains a separate explicit action. A later paid refresh may still return no explicit condition; do not infer `UNKNOWN` as `NEW`. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Review the fixture-certified historical-refresh result-retrieval identity-context correction, then separately authorize a retry of the existing combined retrieval and DF003-retention command for task `08310644-2304-0183-0000-4c9506a57d97`. The provider result may still return no explicit condition; do not infer `UNKNOWN` as `NEW`. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next operator action: review this certification and decide whether to run LIVE PREPARE only for `histrefresh_5aa749345b1e27cce2424819`; do not run LIVE EXECUTE.
+Next operator action: review this fixture certification, then separately authorize retry of the existing retrieval+DF003-retention command for `08310644-2304-0183-0000-4c9506a57d97`.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
