@@ -11,6 +11,12 @@ function requiredString(value, field) {
     if (typeof value !== "string" || value.trim() === "") throw new TypeError(`${field} must be a non-empty string.`);
     return value.trim();
 }
+function canonicalDateTime(value, field) {
+    const source = requiredString(value, field);
+    const instant = Date.parse(source);
+    if (!Number.isFinite(instant)) throw new TypeError(`${field} must identify a valid date-time instant.`);
+    return new Date(instant).toISOString();
+}
 function normalizeAvailability(value) {
     const normalized = typeof value === "string" ? value.trim().toLowerCase() : "";
     if (normalized === "in_stock") return "IN_STOCK";
@@ -49,7 +55,7 @@ export function createDataForSeoCanonicalObservation({
         throw new Error("DATAFORSEO_MERCHANT_IDENTITY_NOT_RESOLVED");
     }
 
-    const observedAt = requiredString(evidence.provenance?.observedAt, "marketEvidence.provenance.observedAt");
+    const observedAt = canonicalDateTime(evidence.provenance?.observedAt, "marketEvidence.provenance.observedAt");
     const marketplace = requiredString(merchantResolution.canonicalDomain, "merchantResolution.canonicalDomain");
     const sourceUrl = requiredString(evidence.seller?.url, "marketEvidence.seller.url");
     const currency = requiredString(evidence.pricing?.currency, "marketEvidence.pricing.currency");

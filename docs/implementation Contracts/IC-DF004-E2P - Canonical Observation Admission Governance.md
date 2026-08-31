@@ -35,7 +35,9 @@ Second-and-later historical-refresh generations consume the same governed identi
 
 `CanonicalObservationAdmissionService` recomputes E2G/E2H and E2P from owner repositories, constructs through the existing DataForSEO canonical builder, validates the observation, and writes through the existing `ObservationAcceptanceRepository` implementation. It creates no parallel canonical repository.
 
-Idempotency key `E2P_CANONICAL_ADMISSION:<evidenceId>` permits one exact admission. Exact replay returns `DUPLICATE`; conflicting product, retailer, or provider-task material fails closed. Assessment is non-mutating and deeply immutable.
+Provider date-time strings are immutable evidence, not canonical serialization. The DataForSEO canonical builder parses the governed observation instant and emits canonical UTC ISO-8601 (`toISOString()`) for both `observationTime` and acquisition `retrievedAt`; retained evidence and historical records keep their original provider representation unchanged. Unparseable date-time input fails closed. Admission constructs and validates a provisional observation before allocating a durable `mer_obs_*` identifier, so validation failure creates neither an observation, idempotency entry, nor avoidable sequence advancement.
+
+Idempotency key `E2P_CANONICAL_ADMISSION:<evidenceId>` permits one exact admission. Exact replay compares the observation instant semantically after parsing, so a valid provider representation and its canonical ISO serialization are equivalent. Exact replay returns `DUPLICATE`; conflicting product, retailer, provider task, provenance, or market material fails closed without allocating another identifier. Assessment is non-mutating and deeply immutable.
 
 The older `DataForSeoHistoricalPromotionService` is retained only as a compatibility delegate. It requires an E2P admission service and rejects caller-supplied product resolution, merchant resolution, provider identity, or eligibility, closing its former DF003-only canonical bypass.
 
