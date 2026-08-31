@@ -25,6 +25,8 @@ Chronology uses `Date.parse` semantics, not lexical timestamp ordering, so exist
 
 Second and later `PREPARE_NEW_REFRESH` generations resolve their prior observation, retained evidence, provider task, refresh plan, authorization, result, and governed identity-reuse binding through the shared historical-refresh context owner. Only the first generation resolves the original SELLERS enrichment authorization and execution. PREPARE never selects the newest ledger task or file heuristically; any task, plan, authorization, evidence, product, retailer, provider-identity, or reuse disagreement fails closed before a plan is written.
 
+When a newer pending plan coexists with the immediately prior completed result, the cycle-context composer treats them as separate generations. LIVE PREPARE revalidates the active plan against the governed prior cycle, while status and cadence evaluate the active plan without attaching the prior authorization/result to it. A valid pending plan therefore reports `PLAN_PREPARED` / `PREPARE_AUTHORIZATION`; cadence fails closed for another refresh intent instead of recommending duplicate PREPARE.
+
 ## Operations
 
 The read-only local command is:
