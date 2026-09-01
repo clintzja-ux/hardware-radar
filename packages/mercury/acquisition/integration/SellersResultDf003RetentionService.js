@@ -28,7 +28,7 @@ export class SellersResultDf003RetentionService {
     this.resultProcessor = resultProcessor;
   }
 
-  async retain({ sellersResult, productInfoResult, sellersTaskId, productInfoTaskId, observedAt, providerIdentity, candidateId = null } = {}) {
+  async retain({ sellersResult, productInfoResult, sellersTaskId, productInfoTaskId, observedAt, providerIdentity, candidateId = null, governedAcquisition = null } = {}) {
     requireObject(sellersResult, 'sellersResult');
     requireObject(productInfoResult, 'productInfoResult');
     const sourceTaskId = requireString(sellersTaskId, 'sellersTaskId');
@@ -63,6 +63,8 @@ export class SellersResultDf003RetentionService {
 
     const integrations = [];
     for (const [index, sellerItem] of sellers.entries()) {
+      const rawPayloadReference = `dataforseo:sellers:${sourceTaskId}:item:${index}`;
+      const governedIdentityProjection = governedAcquisition ? governedAcquisition.createProjection({ sellerItem, rawPayloadReference }) : null;
       const integration = await this.resultProcessor.process({
         providerResponse: {
           payload: {
@@ -75,7 +77,7 @@ export class SellersResultDf003RetentionService {
               dataDocId: expectedDataDocId,
               productId: expectedProductId,
               gid: expectedGid,
-              rawPayloadReference: `dataforseo:sellers:${sourceTaskId}:item:${index}`
+              rawPayloadReference
             }
           }
         },
@@ -85,7 +87,8 @@ export class SellersResultDf003RetentionService {
           productInfoTaskId,
           ...providerIdentity
         },
-        candidateId: candidateId ?? `retention:${sourceTaskId}:${index}`
+        candidateId: candidateId ?? `retention:${sourceTaskId}:${index}`,
+        governedIdentityProjection
       });
       integrations.push(integration);
     }

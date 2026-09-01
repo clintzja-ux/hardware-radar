@@ -23,6 +23,16 @@ Retrieved result envelopes must identify the exact governed SELLERS and PRODUCT_
 
 The existing DF003 boundary remains authoritative after validation. It preserves exact-replay idempotency, conflicting-replay rejection, provenance, product and merchant resolution, and null/unknown condition and shipping. Its audit summary includes the validated lineage, Atlas product, provider identity, merchant outcomes, knownness flags, and retention counts. Retention creates no Atlas mutation, retailer approval, history, canonical observation, review, current-market qualification, publication, Current Price, Cheapest, Pick, recommendation, or affiliate authority.
 
+## B-009A governed initial-acquisition identity projection
+
+A contradiction-free, exactly bound Atlas → PRODUCTS → PRODUCT_INFO → SELLERS chain may participate in DF003 as `GOVERNED_INITIAL_ACQUISITION_BINDING` evidence. Applicability requires an existing `ACTIVE/READY` Atlas product, exact source-task and provider-identity continuity, a digest-valid B-007A Product Info validation with `MATCH` or `COMPATIBLE_WITH_UNKNOWNS` and no contradictions, and validated B-008A retention governance. Hardware Radar's governed binding is the authority; provider assertion alone never creates an Atlas mapping.
+
+An applicable projection produces DF003 outcome `CONFIRMED` and effective E2G/E2H product state `VERIFIED`. It creates no E2I human decision. Explicit seller MPN, capacity, memory-generation, or module-configuration contradictions take precedence and fail closed; sparse seller evidence remains unknown. Without a valid projection, the generic `DataForSeoAtlasResolver` remains authoritative.
+
+Existing records remain immutable. A deterministic projection bound to evidence ID, raw reference, acquisition tasks, provider identity, validation digests, and Atlas product may be supplied to read-only promotion assessment without replacement evidence or reacquisition. Product projection does not register a merchant, admit history, establish condition/shipping, or grant downstream authority.
+
+Earlier Corsair observations and ten Crucial offers across ten merchants have absent condition. This demonstrates a material DataForSEO coverage limitation, not universal absence. Supplemental condition evidence remains a future increment requiring exact offer binding, rights, provenance, temporal compatibility, and no inference of `NEW`.
+
 ## Expected first real outcome
 Platinummicro / $588.99 is retained; product resolution remains PROBABLE; merchant resolution remains DISCOVERED; historical/canonical/publication eligibility remains false; additional spend remains $0.000.
 

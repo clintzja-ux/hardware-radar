@@ -2,6 +2,7 @@ import { normalizeDataForSeoSellerEvidence } from "../../adapters/dataforseo/Dat
 import { createDataForSeoMarketObservationCandidate } from "../../market/dataforseo/DataForSeoMarketObservationCandidate.js";
 import { resolveDataForSeoMerchantIdentity } from "../../market/dataforseo/DataForSeoMerchantIdentity.js";
 import { evaluateDataForSeoObservationEligibility } from "../../market/dataforseo/DataForSeoObservationEligibility.js";
+import { validateGovernedInitialAcquisitionIdentityProjection } from "../../identity-review/GovernedInitialAcquisitionIdentityProjection.js";
 
 function clone(value){ return value == null ? value : structuredClone(value); }
 function freeze(value){ if(value && typeof value === "object" && !Object.isFrozen(value)){ Object.freeze(value); for(const child of Object.values(value)) freeze(child); } return value; }
@@ -23,7 +24,7 @@ export class DataForSeoAcquisitionResultProcessor {
     this.atlasResolver=atlasResolver; this.evidenceRepository=evidenceRepository; this.retailers=retailers;
   }
 
-  async process({ providerResponse, execution, candidateId } = {}){
+  async process({ providerResponse, execution, candidateId, governedIdentityProjection = null } = {}){
     requireObject(providerResponse,"providerResponse");
     requireObject(execution,"execution");
     const payload=requireObject(providerResponse.payload,"providerResponse.payload");
@@ -32,7 +33,7 @@ export class DataForSeoAcquisitionResultProcessor {
       const productItem=requireObject(payload.productItem,"providerResponse.payload.productItem");
       const context=requireObject(payload.context,"providerResponse.payload.context");
       const marketEvidence=normalizeDataForSeoSellerEvidence(sellerItem,context);
-      const atlasResolution=await this.atlasResolver.resolve(productItem);
+      let atlasResolution;if(governedIdentityProjection){const report=validateGovernedInitialAcquisitionIdentityProjection(governedIdentityProjection);if(!report.valid||governedIdentityProjection.rawPayloadReference!==context.rawPayloadReference)throw new Error("GOVERNED_INITIAL_ACQUISITION_PROJECTION_INVALID");atlasResolution=governedIdentityProjection.atlasResolution;}else atlasResolution=await this.atlasResolver.resolve(productItem);
       const candidate=createDataForSeoMarketObservationCandidate({marketEvidence,atlasResolution});
       const retailers=typeof this.retailers === "function" ? await this.retailers() : this.retailers;
       if(!Array.isArray(retailers)) throw new TypeError("retailers resolver must return an array.");

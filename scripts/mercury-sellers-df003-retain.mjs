@@ -16,7 +16,8 @@ import {
   SellersResultDf003RetentionService,
   loadDataForSeoCredentials,
   validateSellersRetentionLineage,
-  validateSellersRetentionResults
+  validateSellersRetentionResults,
+  createGovernedInitialAcquisitionIdentityProjection
 } from '../packages/mercury/index.js';
 
 const args = new Map(process.argv.slice(2).map((x) => {
@@ -57,6 +58,7 @@ const readLocalJson = async (resource) => JSON.parse(await readFile(resource, 'u
 const productRepository = new ProductRepository({ readJson: readLocalJson });
 const retailerRepository = new RetailerRepository({ readJson: readLocalJson });
 const atlasResolver = new DataForSeoAtlasResolver({ productRepository });
+const atlasProduct = await productRepository.loadProduct(lineage.atlasProductId);
 const evidencePath = process.env.HARDWARE_RADAR_DATAFORSEO_EVIDENCE_STATE
   ? path.resolve(process.env.HARDWARE_RADAR_DATAFORSEO_EVIDENCE_STATE)
   : path.join(stateRoot, 'dataforseo-market-evidence.json');
@@ -74,7 +76,8 @@ const result = await retention.retain({
   productInfoTaskId,
   observedAt: (await executionRepository.getAll()).find(run => run.runId === lineage.sellersExecutionRunId).finishedAt,
   providerIdentity: sellersAuthorization.providerIdentity,
-  candidateId: sellersAuthorization.plan.decisions.find(entry => entry.decision === 'APPROVED').candidateId
+  candidateId: sellersAuthorization.plan.decisions.find(entry => entry.decision === 'APPROVED').candidateId,
+  governedAcquisition: { createProjection: ({ sellerItem, rawPayloadReference }) => createGovernedInitialAcquisitionIdentityProjection({ governance, sellersProposal, atlasProduct, sellerItem, rawPayloadReference }) }
 });
 
 const out = path.join(stateRoot, 'sellers-df003-retention-latest.json');

@@ -79,6 +79,7 @@ Never treat `public/forge/` as canonical Forge source or raw retained provider e
 - Versioned policy repositories own business and operational policy. Validators reject unknown or malformed fields.
 - Retained evidence, identity eligibility, historical eligibility/admission, canonical eligibility/admission, review, current-market qualification, publication eligibility, and publication are separate states.
 - Evidence and audit records are immutable or append-only. Replay is deterministic; conflicting replay fails closed.
+- Exact, contradiction-free acquisition lineage may project governed product identity only through a certified binding to an active/ready Atlas product, source tasks, provider identity, and validation digests. Provider assertion alone is never an Atlas mapping; explicit downstream contradictions take precedence, and merchant/downstream authority remains separate.
 - PREPARE creates local, reviewable authorization only. EXECUTE is separate, explicitly confirmed, narrowly authorized, and absent when the increment does not define it.
 - Operator approval never silently implies provider configuration, deployment, publication, acquisition, or another independent approval.
 - Protected production state is isolated from fixtures. `.forge-review` is operational state, not public/source-controlled configuration.

@@ -4,6 +4,7 @@ import { validateIdentityReviewDecision, isValidIdentityReviewer } from "./Ident
 import { validateIdentityReviewAuditRemediation } from "./IdentityReviewAuditRemediation.js";
 import { resolveAtlasBackedMerchantRegistration } from "./AtlasBackedMerchantRegistration.js";
 import { validateGovernedHistoricalRefreshIdentityReuse } from "../historical-refresh/GovernedHistoricalRefreshIdentityReuse.js";
+import { validateGovernedInitialAcquisitionIdentityProjection } from "./GovernedInitialAcquisitionIdentityProjection.js";
 
 function remediationFor(decision,remediations){return remediations.find(x=>x.originalDecisionId===decision.identityReviewDecisionId)??null;}
 function reviewerEffective(decision,remediations){if(isValidIdentityReviewer(decision.reviewedBy))return true;const remediation=remediationFor(decision,remediations);return Boolean(remediation&&remediation.subjectType===decision.subjectType&&remediation.originalReviewedBy===decision.reviewedBy&&remediation.originalDecisionHash===crypto.createHash("sha256").update(JSON.stringify(decision)).digest("hex")&&JSON.stringify(remediation.supportingEvidenceReferences)===JSON.stringify(decision.supportingEvidenceReferences));}
@@ -11,12 +12,13 @@ function latestApproved(decisions,remediations,predicate) {
   return [...decisions].filter(d=>d.decisionOutcome==="APPROVED"&&reviewerEffective(d,remediations)&&predicate(d)).sort((a,b)=>(a.sequence??0)-(b.sequence??0)).at(-1)??null;
 }
 
-export function projectIdentityReviewState({record,decisions=[],remediations=[],atlasRetailers=[],identityReuseAssessments=[]}={}) {
-  if(!record||typeof record!=="object"||!Array.isArray(decisions)||!Array.isArray(remediations)||!Array.isArray(atlasRetailers)||!Array.isArray(identityReuseAssessments)) throw new TypeError("record, decisions, remediations, atlasRetailers, and identityReuseAssessments are required.");
+export function projectIdentityReviewState({record,decisions=[],remediations=[],atlasRetailers=[],identityReuseAssessments=[],initialAcquisitionIdentityProjections=[]}={}) {
+  if(!record||typeof record!=="object"||!Array.isArray(decisions)||!Array.isArray(remediations)||!Array.isArray(atlasRetailers)||!Array.isArray(identityReuseAssessments)||!Array.isArray(initialAcquisitionIdentityProjections)) throw new TypeError("record and identity governance collections are required.");
   for(const decision of decisions){const report=validateIdentityReviewDecision(decision,{allowInvalidReviewer:true});if(!report.valid)throw new TypeError(`INVALID_IDENTITY_REVIEW_DECISION:${report.errors.join(" ")}`);}
   const decisionsById=new Map(decisions.map(x=>[x.identityReviewDecisionId,x]));const seenRemediations=new Set();for(const remediation of remediations){const report=validateIdentityReviewAuditRemediation(remediation);if(!report.valid)throw new TypeError(`INVALID_IDENTITY_REVIEW_REMEDIATION:${report.errors.join(" ")}`);if(seenRemediations.has(remediation.originalDecisionId))throw new Error("CONFLICTING_IDENTITY_REVIEW_REMEDIATIONS");const original=decisionsById.get(remediation.originalDecisionId);if(!original||!reviewerEffective(original,[remediation]))throw new Error("IDENTITY_REVIEW_REMEDIATION_BINDING_INVALID");seenRemediations.add(remediation.originalDecisionId);}
   const evidenceId=record.evidenceId;
-  const atlasProductId=record.candidate?.identity?.atlasProductId;
+  const acquisitionMatches=initialAcquisitionIdentityProjections.filter(value=>value?.evidenceId===evidenceId);if(acquisitionMatches.length>1)throw new Error("CONFLICTING_INITIAL_ACQUISITION_IDENTITY_PROJECTIONS");const acquisitionProjection=acquisitionMatches[0]??null;if(acquisitionProjection){const report=validateGovernedInitialAcquisitionIdentityProjection(acquisitionProjection);if(!report.valid||acquisitionProjection.rawPayloadReference!==record.candidate?.marketEvidence?.provenance?.rawPayloadReference||acquisitionProjection.sellersTaskId!==record.candidate?.marketEvidence?.provenance?.sourceTaskId)throw new Error("INITIAL_ACQUISITION_IDENTITY_PROJECTION_INVALID");}
+  const atlasProductId=acquisitionProjection?.atlasProductId??record.candidate?.identity?.atlasProductId;
   const domain=canonicalizeMerchantDomain(record.candidate?.marketEvidence?.seller?.domain);
   const supports=d=>d.supportingEvidenceReferences.includes(evidenceId);
   let product=latestApproved(decisions,remediations,d=>d.subjectType==="PRODUCT_IDENTITY"&&d.atlasProductId===atlasProductId&&supports(d));
@@ -25,7 +27,7 @@ export function projectIdentityReviewState({record,decisions=[],remediations=[],
   let atlasMerchant=null;if(merchant){if(record.merchantResolution?.outcome==="DISCOVERED")atlasMerchant=resolveAtlasBackedMerchantRegistration({decision:merchant,record,retailers:atlasRetailers});else if(reuse?.status==="APPLICABLE"){atlasMerchant=resolveDataForSeoMerchantIdentity({marketEvidence:record.candidate?.marketEvidence,retailers:atlasRetailers});if(atlasMerchant.outcome!=="RESOLVED"||atlasMerchant.retailerId!==merchant.merchantId||atlasMerchant.canonicalDomain!==canonicalizeMerchantDomain(merchant.canonicalDomain)||merchant.merchantActive!==true)throw new Error("ATLAS_RETAILER_REUSE_RESOLUTION_INVALID");}else throw new Error("MERCHANT_REVIEW_EVIDENCE_NOT_DISCOVERED");}
   return Object.freeze({
     projectionVersion:"1.0",evidenceId,
-    product:Object.freeze({state:product?"VERIFIED":record.candidate?.identity?.outcome??null,decisionId:product?.identityReviewDecisionId??null,remediationId:product?remediationFor(product,remediations)?.identityReviewRemediationId??null:null,atlasProductId}),
+    product:Object.freeze({state:product||acquisitionProjection?"VERIFIED":record.candidate?.identity?.outcome??null,decisionId:product?.identityReviewDecisionId??null,remediationId:product?remediationFor(product,remediations)?.identityReviewRemediationId??null:null,governedAcquisitionProjectionId:acquisitionProjection?.projectionId??null,atlasProductId}),
     merchant:Object.freeze({state:atlasMerchant?"REGISTERED":record.merchantResolution?.outcome??null,decisionId:merchant?.identityReviewDecisionId??null,remediationId:merchant?remediationFor(merchant,remediations)?.identityReviewRemediationId??null:null,merchantId:atlasMerchant?.retailerId??null,canonicalMerchantName:merchant?.canonicalMerchantName??atlasMerchant?.sellerName??null,canonicalDomain:atlasMerchant?.canonicalDomain??domain,active:atlasMerchant?true:null,atlasResolution:atlasMerchant}),
     retainedEvidenceModified:false
   });

@@ -88,6 +88,7 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
     const identityReviewRemediations = Array.isArray(input.identityReviewRemediations) ? input.identityReviewRemediations : [];
     const atlasRetailers = Array.isArray(input.atlasRetailers) ? input.atlasRetailers : [];
     const identityReuseAssessments = Array.isArray(input.identityReuseAssessments) ? input.identityReuseAssessments : [];
+    const initialAcquisitionIdentityProjections = Array.isArray(input.initialAcquisitionIdentityProjections) ? input.initialAcquisitionIdentityProjections : [];
     const identityLineageEvidenceRecords = Array.isArray(input.identityLineageEvidenceRecords) ? input.identityLineageEvidenceRecords : records;
     const historicalObservations = Array.isArray(input.historicalObservations) ? input.historicalObservations : [];
     const identityProjections = [];
@@ -113,11 +114,12 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
         }
         if (!PRODUCT_OUTCOMES.has(identity?.outcome)) critical.push(reason("UNKNOWN_PRODUCT_IDENTITY", "productIdentity", identity?.outcome ?? null));
         if (!MERCHANT_OUTCOMES.has(merchant.outcome)) critical.push(reason("UNKNOWN_MERCHANT_IDENTITY", "merchantIdentity", merchant.outcome ?? null));
-        if (identity?.outcome === "AMBIGUOUS" || identity?.outcome === "REJECTED") critical.push(reason("PRODUCT_IDENTITY_CONTRADICTION", "productIdentity", identity.outcome));
+        const acquisitionProjection=initialAcquisitionIdentityProjections.find(value=>value?.evidenceId===record.evidenceId)??null;
+        if ((identity?.outcome === "AMBIGUOUS" || identity?.outcome === "REJECTED")&&!acquisitionProjection) critical.push(reason("PRODUCT_IDENTITY_CONTRADICTION", "productIdentity", identity.outcome));
         if (merchant.outcome === "CONFLICT") critical.push(reason(merchant.reason ?? "MERCHANT_IDENTITY_CONFLICT", "merchantIdentity"));
 
-        atlasProductId ??= identity?.atlasProductId ?? null;
-        if (atlasProductId !== (identity?.atlasProductId ?? null)) critical.push(reason("ATLAS_PRODUCT_ID_CONTRADICTION", "productIdentity"));
+        const effectiveAtlasProductId=acquisitionProjection?.atlasProductId??identity?.atlasProductId??null;atlasProductId ??= effectiveAtlasProductId;
+        if (atlasProductId !== effectiveAtlasProductId) critical.push(reason("ATLAS_PRODUCT_ID_CONTRADICTION", "productIdentity"));
 
         try {
             const recomputed = evaluateDataForSeoObservationEligibility({ candidate, merchantResolution:merchant });
@@ -126,9 +128,9 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
                 retainedEligibility.historicalAnalyticsEligible === recomputed.historicalAnalyticsEligible &&
                 sameArray(retainedEligibility.reasons, recomputed.reasons);
             if (!retainedMatches) critical.push(reason("DF003_ELIGIBILITY_CONTRADICTION", "df003Eligibility", record.evidenceId));
-            let projection;try{projection=projectIdentityReviewState({record,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers,identityReuseAssessments});}catch(error){const matches=identityReuseAssessments.filter(value=>value?.targetEvidenceId===record.evidenceId);if(error?.message!=="IDENTITY_REUSE_PRODUCT_DECISION_BINDING_INVALID"||matches.length!==1)throw error;projection=resolveGovernedIdentityReuseLineage({record,reuse:matches[0],historicalObservations,evidenceRecords:identityLineageEvidenceRecords,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers}).projection;}identityProjections.push(projection);
+            let projection;try{projection=projectIdentityReviewState({record,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers,identityReuseAssessments,initialAcquisitionIdentityProjections});}catch(error){const matches=identityReuseAssessments.filter(value=>value?.targetEvidenceId===record.evidenceId);if(error?.message!=="IDENTITY_REUSE_PRODUCT_DECISION_BINDING_INVALID"||matches.length!==1)throw error;projection=resolveGovernedIdentityReuseLineage({record,reuse:matches[0],historicalObservations,evidenceRecords:identityLineageEvidenceRecords,decisions:identityReviewDecisions,remediations:identityReviewRemediations,atlasRetailers}).projection;}identityProjections.push(projection);
             effectiveProductIdentities.add(projection.product.state);effectiveMerchantIdentities.add(projection.merchant.state);if(projection.merchant.merchantId)effectiveRetailerIds.add(projection.merchant.merchantId);
-            const projectedCandidate = projection.product.state === "VERIFIED" ? createDataForSeoMarketObservationCandidate({marketEvidence,atlasResolution:{outcome:"CONFIRMED",atlasProductId:identity.atlasProductId,externalProductId:identity.externalProductId,evidence:identity.evidence,automaticMercuryEligible:true}}) : candidate;
+            const projectedCandidate = projection.product.state === "VERIFIED" ? createDataForSeoMarketObservationCandidate({marketEvidence,atlasResolution:{outcome:"CONFIRMED",atlasProductId:projection.product.atlasProductId,externalProductId:identity.externalProductId,evidence:acquisitionProjection?.atlasResolution?.evidence??identity.evidence,automaticMercuryEligible:true}}) : candidate;
             const projectedMerchant = projection.merchant.state === "REGISTERED" ? projection.merchant.atlasResolution : merchant;
             const currentEligibility = evaluateDataForSeoObservationEligibility({candidate:projectedCandidate,merchantResolution:projectedMerchant});
             const policyResult=evaluateEvidencePromotionPolicy({projection,df003Eligibility:currentEligibility,provenanceComplete:Boolean(provenance.sourceTaskId&&validDate(provenance.observedAt)),policy:promotionPolicy});
