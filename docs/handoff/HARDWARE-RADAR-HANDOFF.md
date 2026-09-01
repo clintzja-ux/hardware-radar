@@ -6,7 +6,7 @@ This is the stable orientation layer for new Hardware Radar engineering sessions
 
 Hardware Radar is a Mirabelle Labs hardware decision-support product. Its current public scope is a static, RAM-focused experience for finding and understanding verified DDR4, DDR5, and laptop-memory options. Its mission is to help people make better hardware purchasing decisions and buy with confidence. The long-term direction is a traceable hardware-intelligence platform spanning broader component knowledge, market intelligence, validation, recommendations, and buying assistance.
 
-Canonical orientation sources include [product-bible.md](../../product-bible.md), [product vision and strategy](../products/product-vision-and-strategy.md), the [product evolution and scope doctrine](../products/HARDWARE-RADAR-PRODUCT-EVOLUTION.md), [architecture-bible.md](../architecture-bible.md), and [DATA-PHILOSOPHY.md](../DATA-PHILOSOPHY.md).
+Canonical orientation sources include [product-bible.md](../../product-bible.md), [product vision and strategy](../products/product-vision-and-strategy.md), the [product evolution and scope doctrine](../products/HARDWARE-RADAR-PRODUCT-EVOLUTION.md), the [RAM launch catalog and minimum useful coverage definition](../products/RAM-LAUNCH-CATALOG-AND-COVERAGE.md), the [RAM launch retailer portfolio](../products/RAM-LAUNCH-RETAILER-PORTFOLIO.md), [architecture-bible.md](../architecture-bible.md), and [DATA-PHILOSOPHY.md](../DATA-PHILOSOPHY.md).
 
 ## Product evolution and scope interpretation
 

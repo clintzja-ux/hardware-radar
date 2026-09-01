@@ -154,6 +154,8 @@ Smaller or specialist retailers can be disproportionately useful to Mercury when
 
 The curated bridge bootstraps useful coverage but is not the target architecture. It may be retired progressively per source/product/retailer path after automated Mercury acquisition reaches governed parity. Curated history and provenance must never be rewritten as automated evidence. DataForSEO addresses part of acquisition; it does not eliminate direct relationships. Affiliate relationships address part of commerce; they grant no market-evidence authority. Keep `OBSERVED`, `PUBLICLY COMPARABLE`, `RECOMMENDABLE`, and `AFFILIATE ENABLED` distinct.
 
+The current finite Track C launch portfolio and relationship approach is maintained in the [RAM Launch Retailer Portfolio](./RAM-LAUNCH-RETAILER-PORTFOLIO.md); it is strategy and operator planning, not retailer identity, rights, or publication authority.
+
 ### Track status and future-agent interpretation
 
 Each track may be described as `ACTIVE`, `READY`, `BLOCKED`, `DEFERRED`, or `COMPLETE FOR CURRENT INCREMENT`. A blocked track should state what is blocked, its exact dependency, and which other tracks can proceed independently. This is operating language only, not a runtime project-management system.

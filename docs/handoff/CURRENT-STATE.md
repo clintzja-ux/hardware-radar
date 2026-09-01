@@ -4,9 +4,12 @@
 Last updated:                  2026-09-01
 Branch:                        dataforseo-sprint3-mercury-observation
 HEAD at inspection:            cf86a6a91df72da8f4aaa17eef0608fc53e33a01
-Working tree at inspection:    clean
+Working tree at inspection:    A-001/C-001 documentation uncommitted; preserved during C-001A
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
+Current product-definition increment: A-001 — RAM Launch Catalog and Minimum Useful Coverage complete
+Current retailer-strategy increment: C-001 — RAM Launch Retailer Portfolio and Relationship Strategy complete
+Current outreach reconciliation: C-001A — MemoryC and Adorama outreach recorded
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -16,6 +19,10 @@ This snapshot records repository and local governed-state evidence. It does not 
 Hardware Radar now operates through parallel, coordinated tracks rather than one serial engineering chain. Current emphasis is **primary/high** for A — Public Product / Launch, B — Mercury / Market Data, and C — Retailer & Commercial; **supporting/demand-driven** for D — Atlas / Intelligence Foundation; and **guardrail/as-needed** for E — Governance / Platform Evolution. Public-product work may proceed while Mercury coverage expands, and retailer/commercial work may proceed independently of Mercury engineering until either reaches an owner boundary that requires a governed artifact or explicit action.
 
 Mercury automated acquisition remains the durable target; curated ingestion remains transitional bootstrap infrastructure. Production publication remains governed by E2S and the separate publication boundary. No documented future-stage capability is implementation authority, and this parallel posture changes none of the operational facts below.
+
+A-001 defines a 24-product target across 9 DDR5 desktop, 7 DDR4 desktop, and 8 laptop/SODIMM slots, with a launch floor of 18 publication-ready Atlas products and at least 6 per category. Minimum public coverage requires every category to be available with at least 3 qualifying offers spanning at least 2 products and 2 retailers, and at least 3 retailers overall. Current status is `BLOCKED` for launch data: Atlas has one target product and the governed snapshot has zero qualifying offers. Track B now owns finite observation/public-coverage requirements, Track C owns retailer-portfolio/commercial development, and Track D owns resolution of the remaining product slots. A-001 created no production state.
+
+C-001 defines a finite proposed portfolio of Newegg, MemoryC, B&H Photo Video, Best Buy, Adorama, Micro Center, and Provantage. The target is 5–7 monitored launch retailers, including at least 3 meaningful US hardware/electronics retailers, at least 1 specialist/smaller retailer, and at least 3 with meaningful A-001 overlap; Track C should pursue at least one structured feed/API relationship and explicit rights clarification where useful. Prior Newegg and Best Buy rights outreach received no response; silence grants no permission and does not block governed DataForSEO acquisition. C-001A records MemoryC and Adorama as `CONTACTED`, with no response received and every commercial, affiliate, feed/API, data-rights, comparison/display, retention, data-quality, recommendation, publication, Cheapest, and Pick outcome still unknown or absent. Their outreach and prior Jason correspondence demonstrate outbound human sending from `support@cheapestram.com`; inbound reliability, general deliverability, authentication quality, automated sending, and long-term mailbox health remain unverified. No retailer identity or production state changed; curated evidence remains transitional and automated Mercury acquisition remains the durable direction.
 
 ## Current platform status
 
@@ -188,9 +195,9 @@ Actual spend:                             $0.000
 ## Next recommended actions by track
 
 - **A — Public Product / Launch:** continue truthful UX, mobile, SEO, methodology, comparison, and empty-state work using governed outputs; do not manufacture prices, Picks, or publication authority.
-- **B — Mercury / Market Data:** define the narrow launch catalog/source-retailer coverage, authoritative rights profiles, and matching freshness policy before any separately authorized production curated PREPARE; continue automated coverage and condition-evidence work independently.
-- **C — Retailer & Commercial:** pursue retailer, affiliate, rights, feed/API, and data-quality relationships without making them dependencies for lawful governed Mercury acquisition or inputs to Cheapest/Pick authority.
-- **D — Atlas / Intelligence Foundation:** add product/retailer knowledge only when an approved launch or Mercury path requires it; do not populate speculative catalogs.
+- **B — Mercury / Market Data:** plan governed observation coverage against the finite A-001 slots and public-coverage floors; continue automated coverage and condition-evidence work independently, and do not run curated production operations without their separate approvals.
+- **C — Retailer & Commercial:** await MemoryC and Adorama responses without inferring an outcome; reconcile any future response separately by relationship dimension and keep outreach independent from market authority.
+- **D — Atlas / Intelligence Foundation:** research and deliberately resolve the unfilled A-001 product slots from authoritative evidence; do not populate Atlas automatically or inflate cosmetic variants.
 - **E — Governance / Platform Evolution:** keep established boundaries as guardrails, address demonstrated defects, and wait for sufficiently authoritative Cloudflare permission evidence before changing DF005-X governance.
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
