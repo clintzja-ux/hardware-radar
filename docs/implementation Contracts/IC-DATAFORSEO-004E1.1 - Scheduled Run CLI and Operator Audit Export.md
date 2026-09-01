@@ -6,6 +6,12 @@ Operationalize the certified DF004-E1 dry-run boundary with a manual CLI before 
 ## Command
 `npm run acquisition:dry-run`
 
+An explicit zero-network, cadence-independent inspection may narrow the same candidate/planner boundary to one initial-acquisition product:
+
+`npm run acquisition:dry-run -- --atlas-product=<ATLAS_PRODUCT_ID>`
+
+The selector is narrowing only. It loads the exact canonical Atlas record, requires `ACTIVE/READY`, preserves the exact manufacturer part number, requires exactly one matching `PRODUCTS` candidate, and excludes all other products from the plan. Malformed, missing, substituted, ambiguous, or already-observed products fail closed. Already-observed products remain owned by the governed historical-refresh `SELLERS` path.
+
 ## Inputs
 - Canonical ACTIVE/READY Atlas products.
 - Optional `HARDWARE_RADAR_ACCEPTANCE_STATE` for canonical Mercury freshness.
@@ -16,6 +22,14 @@ Operationalize the certified DF004-E1 dry-run boundary with a manual CLI before 
 ## Outputs
 - `.forge-review/acquisition/scheduled-dry-runs.json`
 - `.forge-review/acquisition/operator-latest.json`
+
+Scoped inspection creates neither scheduled-run audit nor authorization. Ordinary unscoped execution retains the six-hour scheduler cadence. Its console distinguishes current candidate count from decisions loaded from the last persisted plan when a run is `SKIPPED_NOT_DUE`.
+
+The existing manual PREPARE accepts the same required selector:
+
+`npm run acquisition:live:prepare -- --atlas-product=<ATLAS_PRODUCT_ID>`
+
+PREPARE remains zero-network and binds exactly one Atlas product, exact MPN, `DATAFORSEO` / `DATAFORSEO_GOOGLE_SHOPPING`, `PRODUCTS`, United States, English, the existing one-task/`$0.001` ceiling, plan digest, and zero-retry policy. It creates only a pending authorization request; execution remains separate.
 - concise terminal summary
 
 ## Safety invariants

@@ -118,6 +118,7 @@ const testModules = [
     "./AcquisitionDryRunOperatorVisibility.test.mjs",
     "./ScheduledDryRunOperation.test.mjs",
     "./ScheduledDryRunCliState.test.mjs",
+    "./ProductScopedInitialAcquisition.test.mjs",
     "./AcquisitionOperatorRuntimeCapability.test.mjs",
     "./UnattendedDryRunScheduling.test.mjs",
     "./LiveAcquisitionAuthorization.test.mjs",
