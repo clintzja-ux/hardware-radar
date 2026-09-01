@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { SINGLE_WRITER_LOCK_STATUSES } from "../../runtime/FileSingleWriterRunLock.js";
+import { readGovernedSpendForUtcDay } from "../planning/GovernedDailySpend.js";
 
 export const ACQUISITION_EXECUTION_STATUSES = Object.freeze({ COMPLETED:"COMPLETED", PARTIAL:"PARTIAL", FAILED:"FAILED", DUPLICATE:"DUPLICATE", SKIPPED_LOCKED:"SKIPPED_LOCKED" });
 export const ACQUISITION_EXECUTION_STOP_REASONS = Object.freeze({ ACTUAL_RUN_BUDGET:"ACTUAL_RUN_BUDGET", ACTUAL_DAILY_BUDGET:"ACTUAL_DAILY_BUDGET", NEXT_TASK_RUN_BUDGET:"NEXT_TASK_RUN_BUDGET", NEXT_TASK_DAILY_BUDGET:"NEXT_TASK_DAILY_BUDGET", TRANSPORT_FAILURE:"TRANSPORT_FAILURE" });
@@ -21,12 +22,13 @@ function validatePlan(plan){
 }
 
 export class ControlledAcquisitionExecutor {
-  constructor({ runLock, ledgerRepository, transport, resultProcessor=null, now=()=>new Date().toISOString(), runId=()=>`acqrun_${crypto.randomUUID()}` }={}){
+  constructor({ runLock, ledgerRepository, transport, resultProcessor=null, currentDaySpendResolver=null, now=()=>new Date().toISOString(), runId=()=>`acqrun_${crypto.randomUUID()}` }={}){
     if (!runLock?.runExclusive) throw new TypeError("runLock is required.");
     if (!ledgerRepository?.findByPlanId || !ledgerRepository?.append) throw new TypeError("ledgerRepository is required.");
     if (!transport?.execute) throw new TypeError("transport.execute is required.");
     if (resultProcessor != null && !resultProcessor?.process) throw new TypeError("resultProcessor.process is required when provided.");
-    this.runLock=runLock; this.ledgerRepository=ledgerRepository; this.transport=transport; this.resultProcessor=resultProcessor; this.now=now; this.runIdFactory=runId;
+    if(currentDaySpendResolver!=null&&typeof currentDaySpendResolver!=="function")throw new TypeError("currentDaySpendResolver must be a function.");
+    this.runLock=runLock; this.ledgerRepository=ledgerRepository; this.transport=transport; this.resultProcessor=resultProcessor;this.currentDaySpendResolver=currentDaySpendResolver??(ledgerRepository.getAll?evaluationTime=>readGovernedSpendForUtcDay({executionRepository:ledgerRepository,evaluationTime}):null); this.now=now; this.runIdFactory=runId;
   }
   async execute(plan){
     const approved = validatePlan(plan);
@@ -34,6 +36,7 @@ export class ControlledAcquisitionExecutor {
       const prior = await this.ledgerRepository.findByPlanId(plan.planId);
       if (prior) return { duplicate:true, prior };
       const startedAt=this.now(); if(!validIso(startedAt)) throw new TypeError("now() must return ISO timestamps.");
+      if(this.currentDaySpendResolver){const current=money(await this.currentDaySpendResolver(startedAt));if(current!==money(plan.spentTodayUsd))throw new Error("ACQUISITION_DAILY_SPEND_SNAPSHOT_DRIFT");if(money(current+plan.estimatedApprovedSpendUsd)>money(plan.policy.maxSpendPerDayUsd))throw new Error("ACQUISITION_DAILY_BUDGET_EXCEEDED");}
       const tasks=[]; let actualSpend=0; let stopReason=null;
       for(const task of approved){
         if (money(actualSpend + task.estimatedCostUsd) > plan.policy.maxSpendPerRunUsd){ stopReason="NEXT_TASK_RUN_BUDGET"; tasks.push({candidateId:task.candidateId,outcome:"SKIPPED",reason:stopReason,estimatedCostUsd:task.estimatedCostUsd,actualCostUsd:0}); break; }

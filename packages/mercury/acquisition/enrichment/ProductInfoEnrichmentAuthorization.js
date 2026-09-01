@@ -8,6 +8,8 @@ export function createProductInfoEnrichmentAuthorizationRequest({proposal,create
   if(proposal.maxPaidTasks!==1||proposal.automaticPaidRetries!==0||Number(proposal.estimatedCostUsd)>0.001) throw new Error('PRODUCT_INFO_PROPOSAL_EXCEEDS_GOVERNANCE');
   const providerIdentity={productId:proposal.providerIdentity?.productId??null,dataDocId:proposal.providerIdentity?.dataDocId??null,gid:proposal.providerIdentity?.gid??null};
   if(!providerIdentity.productId&&!providerIdentity.dataDocId&&!providerIdentity.gid) throw new Error('PRODUCT_INFO_PROVIDER_IDENTITY_REQUIRED');
+  if(!Number.isFinite(spentTodayUsd)||spentTodayUsd<0) throw new Error('PRODUCT_INFO_CURRENT_DAY_SPEND_INVALID');
+  if(Math.round((spentTodayUsd+.001+Number.EPSILON)*1e9)/1e9>.01) throw new Error('PRODUCT_INFO_DAILY_BUDGET_EXCEEDED');
   const binding={proposalId:proposal.proposalId,sourceTaskId:proposal.sourceTaskId,atlasProductId:proposal.atlasProductId,operation:'PRODUCT_INFO',providerIdentity};
   const proposalDigest=hash(binding);
   const planId=`enrichplan_${hash([proposalDigest,createdAt]).slice(0,24)}`;

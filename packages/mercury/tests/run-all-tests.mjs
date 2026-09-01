@@ -113,6 +113,7 @@ const testModules = [
     "./InitialProductionCurrentMarketFreshnessPolicy.test.mjs",
     "./SingleWriterPersistence.test.mjs",
     "./AcquisitionPlanningBudget.test.mjs",
+    "./SharedCurrentDaySpendGovernance.test.mjs",
     "./ControlledAcquisitionExecutor.test.mjs",
     "./ControlledAcquisitionDf003Integration.test.mjs",
     "./AcquisitionDryRunOperatorVisibility.test.mjs",

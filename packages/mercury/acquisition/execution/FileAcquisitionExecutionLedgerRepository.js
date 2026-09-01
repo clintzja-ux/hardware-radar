@@ -25,6 +25,9 @@ export class FileAcquisitionExecutionLedgerRepository {
     const found = state.runs.find((run) => run.planId === planId) ?? null;
     return freeze(clone(found));
   }
+  async getAll() {
+    return freeze(clone((await this._read()).runs));
+  }
   async append(run) {
     if (!run?.runId || !run?.planId) throw new TypeError("runId and planId are required.");
     const state = await this._read();

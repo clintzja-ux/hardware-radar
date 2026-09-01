@@ -7,6 +7,8 @@ export function createSellersEnrichmentAuthorizationRequest({proposal,createdAt=
  if(proposal?.status!=='PENDING_OPERATOR_REVIEW'||proposal?.operation!=='SELLERS') throw new Error('SELLERS_AUTHORIZATION_REQUIRES_REVIEWED_PROPOSAL');
  if(proposal.maxPaidTasks!==1||proposal.automaticPaidRetries!==0||Number(proposal.estimatedCostUsd)>0.001) throw new Error('SELLERS_PROPOSAL_EXCEEDS_GOVERNANCE');
  const providerIdentity=identity(proposal); if(!providerIdentity.productId&&!providerIdentity.dataDocId&&!providerIdentity.gid) throw new Error('SELLERS_PROVIDER_IDENTITY_REQUIRED');
+ if(!Number.isFinite(spentTodayUsd)||spentTodayUsd<0) throw new Error('SELLERS_CURRENT_DAY_SPEND_INVALID');
+ if(Math.round((spentTodayUsd+.001+Number.EPSILON)*1e9)/1e9>.01) throw new Error('SELLERS_DAILY_BUDGET_EXCEEDED');
  const proposalDigest=hash(binding(proposal)); const planId=`sellerplan_${hash([proposalDigest,createdAt]).slice(0,24)}`;
  const execution={kind:'SELLERS',...providerIdentity,locationName:'United States',languageName:'English'};
  const plan=freeze({schemaVersion:'1.0',planId,plannedAt:createdAt,policy:{schemaVersion:'1.0',enabled:true,maxPaidTasksPerRun:1,maxSpendPerRunUsd:.001,maxSpendPerDayUsd:.01,automaticPaidRetries:0},spentTodayUsd,approvedTaskCount:1,estimatedApprovedSpendUsd:.001,decisions:[{candidateId:`sellers:${proposal.atlasProductId}:${proposal.proposalId}`,priority:'NORMAL',estimatedCostUsd:.001,decision:'APPROVED',reason:null,rationale:'Operator-reviewed governed Product Info identity.',execution}]});
