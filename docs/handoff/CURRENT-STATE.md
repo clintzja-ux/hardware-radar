@@ -3,8 +3,8 @@
 ```text
 Last updated:                  2026-09-01
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD at inspection:            5e7cd66123b70ccaac7d776868870158f01f22d1
-Working tree at inspection:    Clean baseline before D-001 documentation
+HEAD at inspection:            ca7ae7b2ffa5623b3e182139f239beecf8e1ad63
+Working tree at inspection:    Clean baseline before D-002 fixture certification
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 Current product-definition increment: A-001 — RAM Launch Catalog and Minimum Useful Coverage complete
@@ -12,6 +12,7 @@ Current retailer-strategy increment: C-001 — RAM Launch Retailer Portfolio and
 Current outreach reconciliation: C-001A — MemoryC and Adorama outreach recorded
 Current catalog-resolution increment: D-001 — 24 RAM launch candidates resolved for operator review
 Current catalog-balance review: D-001A — brand and retailer relevance reviewed; 22 ready, 2 need evidence
+Current Atlas-admission increment: D-002 — 21-record batch fixture-certified; production admission not authorized
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -27,6 +28,8 @@ A-001 defines a 24-product target across 9 DDR5 desktop, 7 DDR4 desktop, and 8 l
 D-001 now represents all 24 A-001 slots with 24 unique exact MPN candidates supported by manufacturer-controlled product pages or datasheets: 24 are `READY_FOR_OPERATOR_REVIEW`, 0 `NEEDS_MORE_EVIDENCE`, 0 `REJECTED`, and 0 slots remain unresolved. The existing Corsair Atlas product remains the authoritative candidate for its mainstream DDR5 slot and was not changed or duplicated. Candidate resolution is research only: exact Track C retailer stocking remains unverified, Atlas still contains one target product, and no Atlas admission, Mercury evidence, rights, publication, Current Price, Cheapest, or Pick authority was created.
 
 D-001A proposes a consumer-relevance rebalance from Kingston 21 / Corsair 2 / G.SKILL 1 to Kingston 6 / Corsair 4 / G.SKILL 6 / Crucial 7 / TeamGroup 1. The fixed 9 DDR5 desktop / 7 DDR4 desktop / 8 SODIMM model and all capacity invariants remain intact. Exact-MPN target-retailer research leaves 22 candidates `READY_FOR_OPERATOR_REVIEW`, 2 `NEEDS_MORE_EVIDENCE`, 0 rejected, and 0 unresolved; retailer evidence remains launch-relevance evidence only. No Atlas or market authority changed.
+
+D-002 fixture-certifies the 21 proposed new READY Atlas product records as a single batch against the current Atlas product validator and active Sentinel RAM rules. The existing Corsair anchor remains byte-for-byte unchanged; `F4-3200C16D-64GVK` and `CT32G4SFD832A` remain excluded. Production Atlas remains one product because this increment does not have the required separate operator authorization to write source-controlled canonical records, and repository integrity additionally requires reviewed canonical brand records for Crucial, G.SKILL, Kingston, and TeamGroup. No retailer, Mercury, publication, Current Price, Cheapest, or Pick authority changed.
 
 C-001 defines a finite proposed portfolio of Newegg, MemoryC, B&H Photo Video, Best Buy, Adorama, Micro Center, and Provantage. The target is 5–7 monitored launch retailers, including at least 3 meaningful US hardware/electronics retailers, at least 1 specialist/smaller retailer, and at least 3 with meaningful A-001 overlap; Track C should pursue at least one structured feed/API relationship and explicit rights clarification where useful. Prior Newegg and Best Buy rights outreach received no response; silence grants no permission and does not block governed DataForSEO acquisition. C-001A records MemoryC and Adorama as `CONTACTED`, with no response received and every commercial, affiliate, feed/API, data-rights, comparison/display, retention, data-quality, recommendation, publication, Cheapest, and Pick outcome still unknown or absent. Their outreach and prior Jason correspondence demonstrate outbound human sending from `support@cheapestram.com`; inbound reliability, general deliverability, authentication quality, automated sending, and long-term mailbox health remain unverified. No retailer identity or production state changed; curated evidence remains transitional and automated Mercury acquisition remains the durable direction.
 
