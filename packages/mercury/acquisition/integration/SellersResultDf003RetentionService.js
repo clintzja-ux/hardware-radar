@@ -54,11 +54,12 @@ export class SellersResultDf003RetentionService {
     const expectedDataDocId = providerIdentity.dataDocId ?? null;
     const expectedProductId = providerIdentity.productId ?? null;
     const expectedGid = providerIdentity.gid ?? null;
-    const identityMatches =
-      (expectedDataDocId && productInfoItem.data_docid === expectedDataDocId) ||
-      (expectedProductId && productInfoItem.product_id === expectedProductId) ||
-      (expectedGid && productInfoItem.gid === expectedGid);
-    if (!identityMatches) throw new Error('DF003_PRODUCT_INFO_IDENTITY_MISMATCH');
+    const comparisons = [
+      [expectedProductId, productInfoItem.product_id ?? null],
+      [expectedDataDocId, productInfoItem.data_docid ?? null],
+      [expectedGid, productInfoItem.gid ?? null]
+    ].filter(([expected, actual]) => expected != null && actual != null);
+    if (comparisons.length === 0 || comparisons.some(([expected, actual]) => String(expected) !== String(actual))) throw new Error('DF003_PRODUCT_INFO_IDENTITY_MISMATCH');
 
     const integrations = [];
     for (const [index, sellerItem] of sellers.entries()) {
