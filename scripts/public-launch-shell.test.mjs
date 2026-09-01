@@ -29,6 +29,7 @@ const loader = await readPublic("js/modules/loadCategory.js");
 assert.match(loader, /loadMarketSnapshot\(\)/);
 assert.doesNotMatch(loader, /fetch\(path\)/);
 assert.match(loader, /Unsupported governed market scope/);
+assert.match(loader, /scopeToDisplayProducts/);
 
 for (const file of categoryModules) {
     assert.doesNotMatch(await readPublic(file), /data\/ram\//);
@@ -88,6 +89,18 @@ renderRecommendation({
 assert.match(containers.get("recommendation").innerHTML, /target="_blank"/);
 assert.match(containers.get("recommendation").innerHTML, /rel="noopener noreferrer"/);
 assert.match(containers.get("recommendation").innerHTML, /Shipping not verified/);
+
+const { scopeToDisplayProducts } = await import(pathToFileURL(path.join(publicRoot, "js/modules/marketData.js")));
+const projected = scopeToDisplayProducts({ status: "AVAILABLE", cheapest: { atlasProductId: "ram_one", observationId: "mer_obs_000000001", brand: "Example", modelName: "Winner", capacityGb: 32, memoryType: "DDR5", dataRateMtps: 6000, price: 99, currency: "USD", priceBasis: "LISTED_PRICE", shipping: { known: false, amount: null, currency: null }, retailer: "Retailer A", sourceUrl: "https://retailer.example/a", observedAt: "2026-08-31T12:00:00Z", freshness: "CURRENT", confidence: "HIGH" }, alternatives: [{ atlasProductId: "ram_two", observationId: "mer_obs_000000002", brand: "Example", modelName: "Alternative", capacityGb: 32, memoryType: "DDR5", dataRateMtps: 5600, price: 109, currency: "USD", priceBasis: "LISTED_PRICE", shipping: { known: true, amount: 0, currency: "USD" }, retailer: "Retailer B", sourceUrl: "https://retailer.example/b", observedAt: "2026-08-31T12:01:00Z", freshness: "CURRENT", confidence: "HIGH" }], coverage: { eligibleObservations: 2, retailersRepresented: 2 } }, "ddr5", "Qualifying DDR5 listed price");
+assert.equal(projected.length, 2);
+assert.equal(projected[0].rank, 1);
+assert.equal(projected[1].rank, 2);
+assert.equal(projected[0].shippingMessage, "Shipping not verified");
+assert.equal(projected[1].shippingMessage, "Shipping verified as free");
+assert.deepEqual(scopeToDisplayProducts({ status: "INSUFFICIENT_DATA", cheapest: null, alternatives: [] }, "ddr5", "DDR5"), []);
+const comparisonSource = await readPublic("js/modules/renderExpandableComparison.js");
+assert.match(comparisonSource, /shippingMessage/);
+assert.match(comparisonSource, /target="_blank" rel="noopener noreferrer"/);
 
 const privacy = await readPublic("privacy-policy.html");
 assert.match(privacy, /Google Analytics/);

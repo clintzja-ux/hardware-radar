@@ -92,3 +92,4 @@ export * from "./historical-refresh/index.js";
 export * from "./portfolio/index.js";
 export * from "./operations/index.js";
 export * from "./current-market/index.js";
+export * from "./curated-offer/index.js";

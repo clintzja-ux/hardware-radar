@@ -25,6 +25,10 @@ Make source rights a first-class Mercury policy so the platform knows not only w
 
 ## Initial profiles
 
+### Operator-curated RAM offers
+
+MVP-002 Increment 4 adds the code boundary but no production rights profile. A curated source must have a specifically approved profile whose manual acquisition, current observation, comparison, public display, historical retention, and durable audit metadata capabilities are all `ALLOWED`. Missing, blocked, conditional, clarification-required, or generic operator assertions fail closed. Synthetic fixture profiles certify behavior without granting real retailer/source rights.
+
 ### AMAZON_CREATORS_API
 - API acquisition: ALLOWED
 - manual/import acquisition: BLOCKED

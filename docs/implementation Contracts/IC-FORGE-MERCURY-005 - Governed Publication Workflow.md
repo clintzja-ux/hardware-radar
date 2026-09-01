@@ -1,6 +1,6 @@
 # IC-FORGE-MERCURY-005 — Governed Publication Workflow
 
-**Status:** Implemented — MVP-002 Increment 2 fixture-certified
+**Status:** Implemented — MVP-002 Increment 3 fixture-certified
 **Subsystems:** Forge / Mercury / Hardware Radar
 
 ## Objective
@@ -53,6 +53,20 @@ Confirmation tokens are:
 Authorizations and consumptions are stored separately from publication decisions. Exact EXECUTE replay returns `ALREADY_CONSUMED`; authorization-bound publication recording is idempotent, while conflicting intent, binding, lineage, operator, confirmation, expiry, or consumption fails closed. Validation precedes publication sequence allocation.
 
 This boundary authorizes only the durable PUBLISH/WITHDRAW transition. It creates no Current Price, live/public-price, Cheapest, Pick, ranking, Compass, recommendation, affiliate-preference, provider, or network authority. Snapshot visibility remains a derived projection requiring both effective PUBLISH and current E2S qualification at build time.
+
+## RAM Comparison Snapshot Projection
+
+MVP-002 Increment 3 extends each governed RAM scope additively: `cheapest` remains the first deterministically ordered qualifying offer, while `alternatives` exposes up to four subsequent offers. The maximum public comparison set is five offers total. Sparse coverage is valid: one candidate produces a winner with an empty alternatives array, and zero candidates remains `INSUFFICIENT_DATA`.
+
+Ordering remains qualifying listed price ascending, observation time descending, then observation ID ascending. Duplicate observation IDs are removed before projection. Affiliate metadata does not affect eligibility or ordering.
+
+Public offers identify their basis as `LISTED_PRICE` and expose shipping as `{ known, amount, currency }`. Explicit zero is known-free shipping; a known positive amount is preserved; unknown shipping remains `known: false` with null amount and currency. The projection makes no landed-cost, tax, or mandatory-fee claim.
+
+RAM scope classification uses canonical Atlas values. Desktop DDR4/DDR5 requires `formFactor: DIMM` and `applicationClass: DESKTOP`. Laptop scope requires `formFactor: SO_DIMM`, `applicationClass: LAPTOP`, and DDR4 or DDR5. The public spelling `sodimm` does not alter Atlas schema values.
+
+Comparison additionally requires an existing active Atlas retailer, launch region `US`, a retailer-supported observation currency, a structurally valid positive listed price, and a supported RAM classification. Recommendable or affiliate-enabled status is not required. Known explicit bundle or conditional-price flags fail closed. The current canonical observation schema does not yet own a complete bundle or conditional-price state, so absence is not inferred as evidence about coupons, membership, or basket composition; broader comparability governance remains deferred.
+
+The projection consumes only currently E2S-qualified, effectively published governed candidates. It grants no publication, Current Price, Cheapest, Pick, ranking, recommendation, or Compass authority and leaks no review, authorization, rights, or operator metadata.
 
 ## Public Build Behavior
 

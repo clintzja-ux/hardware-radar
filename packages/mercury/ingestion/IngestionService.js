@@ -6,6 +6,7 @@ import { validateIngestionRequest } from "./IngestionRequestValidator.js";
 import { INGESTION_STATUSES, ingestionResult } from "./IngestionResult.js";
 import InMemoryObservationAcceptanceStore from "./InMemoryObservationAcceptanceStore.js";
 import { evaluateAcquisitionRight } from "../rights/SourceRightsEvaluator.js";
+import defaultSourceRightsRegistry from "../rights/SourceRightsRegistry.js";
 
 function norm(v) { return String(v).trim(); }
 function amazonBlocked(request) {
@@ -25,8 +26,8 @@ function idempotencyKey(request) {
   return createHash("sha256").update([request.retailerId, request.marketplace, request.sourceMethod, request.retrievedAt, request.requestId ?? "", payload].join("|")).digest("hex");
 }
 export class IngestionService {
-  constructor({ atlas = atlasDefault, adapterRegistry = adapterRegistryDefault, acceptanceStore = new InMemoryObservationAcceptanceStore(), now = () => new Date().toISOString() } = {}) {
-    this.atlas = atlas; this.adapterRegistry = adapterRegistry; this.acceptanceStore = acceptanceStore; this.now = now;
+  constructor({ atlas = atlasDefault, adapterRegistry = adapterRegistryDefault, acceptanceStore = new InMemoryObservationAcceptanceStore(), rightsRegistry = defaultSourceRightsRegistry, now = () => new Date().toISOString() } = {}) {
+    this.atlas = atlas; this.adapterRegistry = adapterRegistry; this.acceptanceStore = acceptanceStore; this.rightsRegistry = rightsRegistry; this.now = now;
   }
   async ingest(request) {
     const report = validateIngestionRequest(request);
@@ -34,7 +35,7 @@ export class IngestionService {
     const normalized = { ...request, sourceMethod: request.sourceMethod.trim().toUpperCase() };
     const block = amazonBlocked(normalized);
     if (block) return ingestionResult(INGESTION_STATUSES.BLOCKED_SOURCE_METHOD, { reason: block });
-    const acquisitionRight = evaluateAcquisitionRight(normalized);
+    const acquisitionRight = evaluateAcquisitionRight(normalized, { registry: this.rightsRegistry });
     if (!acquisitionRight.allowed) return ingestionResult(INGESTION_STATUSES.BLOCKED_SOURCE_METHOD, { reason: acquisitionRight.reason, rightsState: acquisitionRight.state });
     const product = await this.atlas.getProduct(normalized.atlasProductId).catch(() => null);
     const retailer = await this.atlas.getRetailer(normalized.retailerId).catch(() => null);

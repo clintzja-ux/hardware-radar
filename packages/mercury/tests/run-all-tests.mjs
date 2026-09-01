@@ -159,6 +159,8 @@ const testModules = [
     ,"./CertifiedMercuryOperationsExporter.test.mjs"
     ,"./CertifiedMercuryOperationsExporterCli.test.mjs"
     ,"./PublicationOperatorGovernance.test.mjs"
+    ,"./RamComparisonSnapshotProjection.test.mjs"
+    ,"./CuratedRamOfferGovernance.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

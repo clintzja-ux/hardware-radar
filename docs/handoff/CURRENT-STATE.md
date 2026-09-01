@@ -4,9 +4,9 @@
 Last updated:                  2026-08-31
 Branch:                        dataforseo-sprint3-mercury-observation
 HEAD at inspection:            cc23d756d5b94d6c6dd73280cafcdeda4ce6c1f0
-Working tree:                  MVP-002 Increment 2 implemented and fixture-certified; uncommitted
-Current implementation increment: MVP-002 Increment 2 — Controlled Publication Operator Governance complete
-Previous completed increment:  MVP-002 Increment 1 — Production Publication Composition Correction
+Working tree:                  MVP-002 Increments 3–4 implemented and fixture-certified; uncommitted
+Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
+Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -21,17 +21,17 @@ This snapshot records repository and local governed-state evidence. It does not 
 | **Forge** | Internal static authoring/review application, generated public projection, certified read-only Mercury operations panel, and local FM008 exporter | Explicit local export materializes governed Atlas/Mercury state under `.forge-review/forge/`; legacy preview remains isolated and noncanonical |
 | **Beacon** | Product-interest signal, collection/write boundaries, transactional adapter, and 90-day retention policy | Application boundary ready; durable file adapter available but not production-configured; repository signals 0; automatic execution disabled |
 | **Gateway** | Runtime/storage contracts, Cloudflare deployment plan, WAF policy, monitoring, alerts, recipient verification, sender/domain governance, DF005-W PREPARE, and fixture-verified DF005-X onboarding authorization/executor | One valid DF005-W authorization is `PREPARED`; DF005-X production PREPARE/EXECUTE are blocked by missing official least-privilege permission policy; backend remains undeployed, production transport `NOT_CONNECTED`, and browser disconnected |
-| **Public Hardware Radar** | Generated static RAM site and category/trust pages under `public/`; MVP-001 removes placeholder Picks and fake market fixtures, uses only the governed snapshot, presents listed-price limits, handles empty/error states fail closed, and names deployed analytics in privacy copy | Launch shell is truthful and fixture-tested but still has zero eligible public observations; catalog breadth, comparison-list output, and a controlled publication bridge remain later work; current external hosting/deployment was not queried by this task |
+| **Public Hardware Radar** | Generated static RAM site and category/trust pages under `public/`; consumes a governed winner plus bounded alternatives, preserves listed-price and shipping-knownness semantics, and remains fail closed without qualifying published observations | Launch shell and comparison projection are truthful and fixture-tested but still have zero eligible public observations; catalog breadth and production publication remain later controlled work; current external hosting/deployment was not queried by this task |
 
 ## Current test baseline
 
-The current runners declare **205 subsystem test files**:
+The current runners declare **207 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 15 |
-| Mercury | 159 |
+| Mercury | 161 |
 | Beacon | 7 |
 | Gateway | 17 |
 
@@ -121,6 +121,10 @@ MVP-002 Increment 1 enforces E2S as the single production current-market qualifi
 
 MVP-002 Increment 2 adds controlled `publication:prepare` and `publication:execute` commands inside Mercury's existing publication boundary. PREPARE assesses and binds the exact canonical observation, effective review/publication lineage, Atlas identities, provenance, rights, adapter, production freshness policy, and E2S material candidate state into a short-lived immutable authorization without creating a publication decision. PUBLISH EXECUTE reloads current owner state and reassesses E2S at execution time; WITHDRAW binds an effective predecessor PUBLISH but remains available after dynamic E2S loss. Execution requires decision-specific confirmation, is single-use and replay-safe, and appends only the authorized `mer_pub_*` decision plus authorization consumption. Production PREPARE and EXECUTE have not been run; no production publication decision or downstream price/recommendation authority was created.
 
+MVP-002 Increment 3 adds an additive RAM comparison projection: every available scope retains its existing `cheapest` winner and can expose up to four ordered alternatives from the same governed E2S-qualified and effectively published candidate set. Ordering remains listed price, newest observation, then observation ID; duplicates are removed. Atlas `SO_DIMM` plus `LAPTOP` now maps correctly to the public SODIMM scope and is excluded from desktop DDR4/DDR5. Projected offers distinguish listed price from total cost and preserve known-free, known-paid, and unknown shipping states. Active retailer, US region, supported currency, positive price, and supported RAM classification are required; affiliate state has no effect. The public snapshot remains empty because no production observation currently passes all upstream gates.
+
+MVP-002 Increment 4 adds fixture-certified `curated-offer:prepare` and `curated-offer:execute` commands around Mercury's existing canonical ingestion service. Structured RAM candidates require explicit Atlas product/retailer identities, approved source-rights profile, retailer-consistent source URL/domain, observation time, listed price/currency, availability, condition, shipping knownness, standalone/bundle state, unconditional/conditional-price state, and operator reference. Missing condition becomes `UNKNOWN`, never `NEW`; unknown shipping remains null. PREPARE creates only a short-lived immutable authorization, while confirmed single-use EXECUTE revalidates current Atlas/rights state and delegates idempotent acceptance to Mercury. No production curated rights profile, freshness policy, authorization, or observation was created, so production use remains unavailable and all downstream authority remains absent.
+
 DF004-E2P remains the sole canonical-eligibility and admission-policy owner. DF004-E2Q and E2Q.1 are fixture-certified. The first production canonical admission completed for evidence `dfev_4a1ca776de2706f9473653f3`: successor authorization `mer_canauth_29cab41b1c73b1ca9ee364a5` was consumed exactly once and created canonical observation `mer_obs_000000001`. The canonical repository contains exactly that one valid observation under idempotency key `E2P_CANONICAL_ADMISSION:dfev_4a1ca776de2706f9473653f3`. Its product `ram_corsair_cmk32gx5m2b6000z30`, retailer `RETAILER-0002`, DataForSEO source/task/provenance, retained-evidence hash, and historical-observation hash match the certified E2P/E2Q binding.
 
 DF004-E2R is implemented and fixture-certified as the controlled Mercury-owned operator boundary for reviewing a canonical observation. Production authorization `mer_revauth_b7e6ad9d27b0bfa7c7a1a44f` was consumed exactly once and recorded `mer_rev_000000001` as the sole and effective `REVIEWED` decision for `mer_obs_000000001`. Its observation, evidence, Atlas product/retailer, provider/task, provenance/rights, E2P/E2Q lineage, E2R policy, authorization, and decision bindings validate consistently. The canonical observation remains unchanged. `REVIEWED` means acceptable to proceed only to independent publication evaluation and grants no publication or price authority.
@@ -177,10 +181,10 @@ Actual spend:                             $0.000
 
 ## Next recommended action
 
-Review and certify MVP-002 Increment 2. Keep the public snapshot fail closed and do not run production publication PREPARE or EXECUTE while `mer_obs_000000003` remains E2S-nonqualified. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
+Review and certify MVP-002 Increment 4. Before any production curated PREPARE, separately approve the narrow launch catalog/source-retailer pairs, provide authoritative source-rights evidence and a repository-owned rights profile, and approve a matching production freshness policy. Keep the public snapshot fail closed and do not create launch observations automatically. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
 
 ```text
-Next operator action: review the fixture-certified MVP-002 Increment 2 boundary; do not run production publication PREPARE/EXECUTE or begin Increment 3.
+Next operator action: review the fixture-certified MVP-002 Increment 4 boundary, then make a separate source-rights and launch-catalog decision; do not run production curated-offer PREPARE/EXECUTE or populate Atlas automatically.
 ```
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.

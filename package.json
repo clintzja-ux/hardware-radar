@@ -27,6 +27,8 @@
     "publication:record": "node scripts/record-publication-decision.mjs",
     "publication:prepare": "node scripts/mercury-publication-prepare.mjs",
     "publication:execute": "node scripts/mercury-publication-execute.mjs",
+    "curated-offer:prepare": "node scripts/mercury-curated-ram-offer-prepare.mjs",
+    "curated-offer:execute": "node scripts/mercury-curated-ram-offer-execute.mjs",
     "market:current:qualify": "node scripts/mercury-current-market-qualify.mjs",
     "acquisition:dry-run": "node scripts/mercury-scheduled-dry-run.mjs",
     "acquisition:live:prepare": "node --env-file=.env scripts/mercury-live-prepare.mjs",

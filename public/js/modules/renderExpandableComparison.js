@@ -50,7 +50,13 @@
                             +$${difference}
                         </span>
 
+                        <span>
+                            ${product.shippingMessage}
+                        </span>
+
                     </div>
+
+                    <a href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer">View retailer listing →</a>
 
                 </div>
             `;

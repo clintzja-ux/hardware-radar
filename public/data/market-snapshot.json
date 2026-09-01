@@ -9,33 +9,41 @@
     "overall": {
       "status": "INSUFFICIENT_DATA",
       "cheapest": null,
+      "alternatives": [],
       "coverage": {
         "eligibleObservations": 0,
-        "retailersRepresented": 0
+        "retailersRepresented": 0,
+        "displayedOffers": 0
       }
     },
     "ddr5": {
       "status": "INSUFFICIENT_DATA",
       "cheapest": null,
+      "alternatives": [],
       "coverage": {
         "eligibleObservations": 0,
-        "retailersRepresented": 0
+        "retailersRepresented": 0,
+        "displayedOffers": 0
       }
     },
     "ddr4": {
       "status": "INSUFFICIENT_DATA",
       "cheapest": null,
+      "alternatives": [],
       "coverage": {
         "eligibleObservations": 0,
-        "retailersRepresented": 0
+        "retailersRepresented": 0,
+        "displayedOffers": 0
       }
     },
     "sodimm": {
       "status": "INSUFFICIENT_DATA",
       "cheapest": null,
+      "alternatives": [],
       "coverage": {
         "eligibleObservations": 0,
-        "retailersRepresented": 0
+        "retailersRepresented": 0,
+        "displayedOffers": 0
       }
     }
   }

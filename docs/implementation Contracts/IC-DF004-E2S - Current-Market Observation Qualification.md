@@ -23,6 +23,8 @@ retained evidence
 
 No earlier stage grants authority owned by a later stage.
 
+Operator-curated RAM observations introduced by MVP-002 Increment 4 gain no E2S status during ingestion. Before E2S can qualify one, its retailer-specific curated adapter must be registered in the evaluated composition, an approved source-rights profile must resolve, and a separately approved production freshness policy must match the exact source/retailer context. Absence of any owner continues to fail closed.
+
 ## Assessment semantics
 
 The immutable semantic result is one of:
