@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { validateRepository } from "../ProductValidator.js";
 import RamRuleSet from "../../sentinel/extensions/ram/RamRuleSet.js";
@@ -16,14 +16,28 @@ const manifest = JSON.parse(await readFile(fileURLToPath(manifestUrl), "utf8"));
 const anchorBytes = await readFile(fileURLToPath(anchorUrl));
 const anchor = JSON.parse(anchorBytes.toString("utf8"));
 const records = D002_RAM_LAUNCH_CANDIDATES.map(({ record }) => record);
+const canonicalRecords = await Promise.all(manifest.products.map(async ({ path }) =>
+    JSON.parse(await readFile(fileURLToPath(new URL(`../${path}`, import.meta.url)), "utf8"))
+));
+const canonicalProductFiles = (await readdir(
+    fileURLToPath(new URL("../products/ram/", import.meta.url)),
+    { recursive: true }
+)).filter((path) => path.endsWith(".json"));
 const requiredBrands = new Set(records.map(({ identity }) => identity.brand));
 const registeredBrandIds = new Set(manifest.brands.map(({ brandId }) => brandId));
 
 assert.equal(records.length, 21, "D-002 fixture batch must contain exactly 21 new READY candidates.");
-assert.equal(manifest.counts.products, 1, "Fixture certification must not mutate production Atlas.");
-assert.deepEqual(manifest.products.map(({ atlasProductId }) => atlasProductId), [
-    "ram_corsair_cmk32gx5m2b6000z30"
-]);
+assert.equal(manifest.counts.products, 22, "D-002B must admit exactly the anchor plus 21 certified products.");
+assert.equal(canonicalRecords.length, 22);
+assert.equal(canonicalProductFiles.length, 22, "Every canonical RAM product file must be registered exactly once.");
+assert.equal(canonicalRecords[0].identity.atlasProductId, "ram_corsair_cmk32gx5m2b6000z30");
+for (const fixture of records) {
+    const canonical = canonicalRecords.find(
+        ({ identity }) => identity.atlasProductId === fixture.identity.atlasProductId
+    );
+    assert.ok(canonical, `Missing admitted product ${fixture.identity.atlasProductId}.`);
+    assert.deepEqual(canonical, fixture, `${fixture.identity.manufacturerPartNumber} differs from its certified fixture.`);
+}
 assert.equal(anchor.identity.manufacturerPartNumber, D002_EXISTING_ANCHOR_MPN);
 assert.deepEqual(
     [...requiredBrands].filter((brand) => brand !== "Corsair").sort(),
@@ -48,7 +62,7 @@ assert.equal(
     "The existing Corsair anchor must remain byte-for-byte unchanged."
 );
 
-const report = validateRepository([anchor, ...records]);
+const report = validateRepository(canonicalRecords);
 assert.equal(report.valid, true, JSON.stringify(report.errors, null, 2));
 
 const ids = records.map(({ identity }) => identity.atlasProductId);
@@ -127,6 +141,6 @@ function assertNoMarketAuthority(value, path = "$") {
         assertNoMarketAuthority(child, `${path}.${key}`);
     }
 }
-records.forEach((record) => assertNoMarketAuthority(record));
+canonicalRecords.forEach((record) => assertNoMarketAuthority(record));
 
 console.log("D-002 RAM launch catalog fixture certification tests passed.");

@@ -31,7 +31,7 @@ assert.equal((await atlas.getRetailer("retailer-0001")).name, "Amazon");
 const repositories = await atlas.loadRepositories();
 assert.equal(repositories.brands.length, 5);
 assert.equal(repositories.categories.length, 1);
-assert.equal(repositories.products.length, 1);
+assert.equal(repositories.products.length, 22);
 assert.equal(repositories.retailers.length, 2);
 assert.equal(Object.isFrozen(repositories), true);
 

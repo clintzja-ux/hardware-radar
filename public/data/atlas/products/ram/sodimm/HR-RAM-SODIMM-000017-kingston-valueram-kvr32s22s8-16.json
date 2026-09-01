@@ -1,0 +1,175 @@
+{
+  "identity": {
+    "atlasProductId": "ram_kingston_kvr32s22s8_16",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-09-01T00:00:00Z",
+    "updatedAt": "2026-09-01T00:00:00Z",
+    "createdBy": "system:d002-fixture-certification",
+    "updatedBy": "system:d002-fixture-certification",
+    "brand": "Kingston",
+    "manufacturer": "Kingston",
+    "productFamily": "ValueRAM",
+    "series": null,
+    "modelName": "ValueRAM KVR32S22S8/16",
+    "manufacturerPartNumber": "KVR32S22S8/16",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Kingston ValueRAM DDR4 16GB (1×16GB) 3200 MT/s",
+    "slug": "kingston-valueram-kvr32s22s8-16"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "UNKNOWN",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "D-002 fixture candidate; production Atlas admission requires separate operator review.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KVR32S22S8-16-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.kingston.com/en/memory/search?partid=KVR32S22S8%2F16",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KVR32S22S8-16-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.kingston.com/en/memory/search?partid=KVR32S22S8%2F16",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KVR32S22S8-16-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.kingston.com/en/memory/search?partid=KVR32S22S8%2F16",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KVR32S22S8-16-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.kingston.com/en/memory/search?partid=KVR32S22S8%2F16",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-09-01T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": false,
+        "gamingPositioning": null,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3200,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3200",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "NONE",
+        "expoSupport": "NONE",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 25.6
+      },
+      "electrical": {
+        "ratedVoltage": 1.2,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": false,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}
+

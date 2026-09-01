@@ -8,10 +8,115 @@
       "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
       "productType": "ram",
       "path": "products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g56c46u5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000002-crucial-crucial-pro-cp2k16g56c46u5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3038f16gx2_fx5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000003-g-skill-flare-x5-f5-6000j3038f16gx2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf572c38rsk2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000004-kingston-fury-renegade-kf572c38rsk2-32.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ctced532g6000hc30dc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000005-teamgroup-t-create-expert-ctced532g6000hc30dc01.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k32g56c46u5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000006-crucial-crucial-pro-cp2k32g56c46u5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3040g32gx2_tz5n",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000007-g-skill-trident-z5-neo-f5-6000j3040g32gx2-tz5n.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk96gx5m2b6000c30",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000008-corsair-vengeance-cmk96gx5m2b6000c30.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct32g56c46u5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000009-crucial-crucial-ct32g56c46u5.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf432c16bbk2_16",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000010-kingston-fury-beast-kf432c16bbk2-16.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c16d_32gvk",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000011-g-skill-ripjaws-v-f4-3200c16d-32gvk.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf436c16rb12k2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000012-kingston-fury-renegade-kf436c16rb12k2-32.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk32gx4m2e3200c16",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000013-corsair-vengeance-lpx-cmk32gx4m2e3200c16.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct16g4dfra32a",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000014-crucial-crucial-ct16g4dfra32a.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kvr32n22d8_32",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000015-kingston-valueram-kvr32n22d8-32.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct8g4sfra32a",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000016-crucial-crucial-ct8g4sfra32a.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kvr32s22s8_16",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000017-kingston-valueram-kvr32s22s8-16.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c22d_32grs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000018-g-skill-ripjaws-f4-3200c22d-32grs.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct16g56c46s5",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000019-crucial-crucial-ct16g56c46s5.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx32gx5m1a5600c48",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000020-corsair-vengeance-cmsx32gx5m1a5600c48.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600s4040a16gx2_rs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000021-g-skill-ripjaws-f5-5600s4040a16gx2-rs.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf556s40ibk2_64",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000022-kingston-fury-impact-kf556s40ibk2-64.json"
     }
   ],
   "counts": {
-    "products": 1,
+    "products": 22,
     "brands": 5,
     "categories": 1,
     "retailers": 2

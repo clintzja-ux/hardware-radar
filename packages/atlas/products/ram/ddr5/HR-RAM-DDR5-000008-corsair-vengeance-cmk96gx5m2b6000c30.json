@@ -1,0 +1,175 @@
+{
+  "identity": {
+    "atlasProductId": "ram_corsair_cmk96gx5m2b6000c30",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-09-01T00:00:00Z",
+    "updatedAt": "2026-09-01T00:00:00Z",
+    "createdBy": "system:d002-fixture-certification",
+    "updatedBy": "system:d002-fixture-certification",
+    "brand": "Corsair",
+    "manufacturer": "Corsair",
+    "productFamily": "Vengeance",
+    "series": null,
+    "modelName": "Vengeance CMK96GX5M2B6000C30",
+    "manufacturerPartNumber": "CMK96GX5M2B6000C30",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Corsair Vengeance DDR5 96GB (2×48GB) 6000 MT/s",
+    "slug": "corsair-vengeance-cmk96gx5m2b6000c30"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "UNKNOWN",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "D-002 fixture candidate; production Atlas admission requires separate operator review.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK96GX5M2B6000C30-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/de/de/p/memory/CMK96GX5M2B6000C30/vengeance-96gb-2x48gb-ddr5-dram-6000mt-s-cl30-memory-kit-black-cmk96gx5m2b6000c30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK96GX5M2B6000C30-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/de/de/p/memory/CMK96GX5M2B6000C30/vengeance-96gb-2x48gb-ddr5-dram-6000mt-s-cl30-memory-kit-black-cmk96gx5m2b6000c30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK96GX5M2B6000C30-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/de/de/p/memory/CMK96GX5M2B6000C30/vengeance-96gb-2x48gb-ddr5-dram-6000mt-s-cl30-memory-kit-black-cmk96gx5m2b6000c30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMK96GX5M2B6000C30-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/de/de/p/memory/CMK96GX5M2B6000C30/vengeance-96gb-2x48gb-ddr5-dram-6000mt-s-cl30-memory-kit-black-cmk96gx5m2b6000c30",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-09-01T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true,
+        "gamingPositioning": null,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 96,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 48,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 6000,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR5-6000",
+        "casLatency": 30,
+        "tRcd": 36,
+        "tRp": 36,
+        "tRas": 76,
+        "primaryTimings": "30-36-36-76",
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 48
+      },
+      "electrical": {
+        "ratedVoltage": 1.4,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": false,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}
+
