@@ -9,3 +9,4 @@ export * from './ProductEnrichmentProposalEnvelope.js';
 
 export * from './SellersEnrichmentProposal.js';
 export * from './SellersEnrichmentAuthorization.js';
+export * from './ProductInfoResultBoundary.js';

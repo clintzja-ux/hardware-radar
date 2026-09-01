@@ -131,6 +131,7 @@ const testModules = [
     "./ProductInfoEnrichmentSingleUseAuthorization.test.mjs",
     "./ProductInfoEnrichmentPrepareEnvelope.test.mjs",
     "./GovernedSellersEnrichmentProposal.test.mjs",
+    "./ProductInfoResultBoundaryGovernance.test.mjs",
     "./SellersEnrichmentSingleUseAuthorization.test.mjs",
     "./SellersResultDf003Retention.test.mjs",
     "./DataForSeoEvidencePromotionAssessment.test.mjs",

@@ -21,6 +21,15 @@ function assess(e,p){ const x=expected(p), ev=[]; let deterministic=false, confl
   const title=textNorm(e.title); const titleSupport=[x.brand,x.family,x.mpn].filter(Boolean).filter(v=>title.includes(textNorm(v))).length;
   return {product:p,evidence:ev,deterministic,conflict,structuredMatches,structuredKnown,titleSupport};
 }
+const contradictionCode=field=>({manufacturerPartNumber:"MPN_CONFLICT",gtin:"GTIN_CONFLICT",upc:"UPC_CONFLICT",brand:"BRAND_CONFLICT",capacityGb:"CAPACITY_CONFLICT",moduleCount:"MODULE_CONFIGURATION_CONFLICT",capacityPerModuleGb:"MODULE_CONFIGURATION_CONFLICT",memoryType:"MEMORY_GENERATION_CONFLICT",dataRateMtps:"SPEED_CONFLICT",casLatency:"CAS_LATENCY_CONFLICT",formFactor:"FORM_FACTOR_CONFLICT",capacityInvariant:"MODULE_CONFIGURATION_CONFLICT"}[field]??`${String(field).toUpperCase()}_CONFLICT`);
+export function assessDataForSeoProductEvidenceAgainstAtlas(rawItem,atlasProduct){
+  if(!atlasProduct?.identity?.atlasProductId)throw new TypeError("atlasProduct is required.");
+  if(!rawItem||typeof rawItem!=="object")throw new TypeError("rawItem is required.");
+  const external=createDataForSeoProductEvidence(rawItem),assessment=assess(external,atlasProduct),contradictions=[...new Set(assessment.evidence.filter(entry=>entry.status==="CONFLICT").map(entry=>contradictionCode(entry.field)))];
+  const fields=["manufacturerPartNumber","brand","memoryType","capacityGb","moduleCount","capacityPerModuleGb","dataRateMtps","casLatency","formFactor"];
+  const evidence=fields.map(field=>assessment.evidence.find(entry=>entry.field===field)??Object.freeze({field,status:"UNKNOWN",external:null,atlas:expected(atlasProduct)[field==="manufacturerPartNumber"?"mpn":field]??null}));
+  return Object.freeze({schemaVersion:"1.0",atlasProductId:atlasProduct.identity.atlasProductId,status:contradictions.length?"CONTRADICTION":evidence.some(entry=>entry.status==="UNKNOWN")?"COMPATIBLE_WITH_UNKNOWNS":"MATCH",contradictions:Object.freeze(contradictions),evidence:Object.freeze(evidence),priceUsedForIdentity:false});
+}
 export class DataForSeoAtlasResolver {
   constructor({productRepository}={}){ if(!productRepository?.getAll) throw new TypeError("productRepository with getAll() is required."); this.productRepository=productRepository; }
   async resolve(rawItem){ const external=createDataForSeoProductEvidence(rawItem); const products=await this.productRepository.getAll({productType:"ram"}); const assessments=products.map(p=>assess(external,p));

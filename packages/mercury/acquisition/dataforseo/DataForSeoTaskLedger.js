@@ -11,4 +11,5 @@ export class DataForSeoTaskLedger {
     return entry;
   }
   get(requestKey) { return this.entries.get(requestKey) ?? null; }
+  getAll() { return Object.freeze([...this.entries.values()].map(entry=>structuredClone(entry))); }
 }
