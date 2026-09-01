@@ -2,7 +2,7 @@
   "atlasVersion": "1.0.0",
   "coreSchemaVersion": "1.0",
   "repositoryStatus": "stable",
-  "generatedAt": "2026-07-30T00:00:00Z",
+  "generatedAt": "2026-09-01T00:00:00Z",
   "products": [
     {
       "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
@@ -12,7 +12,7 @@
   ],
   "counts": {
     "products": 1,
-    "brands": 1,
+    "brands": 5,
     "categories": 1,
     "retailers": 2
   },
@@ -20,6 +20,22 @@
     {
       "brandId": "BRAND-CORSAIR",
       "path": "brands/corsair.json"
+    },
+    {
+      "brandId": "BRAND-CRUCIAL",
+      "path": "brands/crucial.json"
+    },
+    {
+      "brandId": "BRAND-GSKILL",
+      "path": "brands/gskill.json"
+    },
+    {
+      "brandId": "BRAND-KINGSTON",
+      "path": "brands/kingston.json"
+    },
+    {
+      "brandId": "BRAND-TEAMGROUP",
+      "path": "brands/teamgroup.json"
     }
   ],
   "categories": [

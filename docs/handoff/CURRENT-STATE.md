@@ -3,8 +3,8 @@
 ```text
 Last updated:                  2026-09-01
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD at inspection:            ca7ae7b2ffa5623b3e182139f239beecf8e1ad63
-Working tree at inspection:    Clean baseline before D-002 fixture certification
+HEAD at inspection:            30ca907bf37ae355b25a1f8ad9d34a9c564ee9cd
+Working tree at inspection:    Clean baseline before D-002A brand registration
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 Current product-definition increment: A-001 — RAM Launch Catalog and Minimum Useful Coverage complete
@@ -13,6 +13,7 @@ Current outreach reconciliation: C-001A — MemoryC and Adorama outreach recorde
 Current catalog-resolution increment: D-001 — 24 RAM launch candidates resolved for operator review
 Current catalog-balance review: D-001A — brand and retailer relevance reviewed; 22 ready, 2 need evidence
 Current Atlas-admission increment: D-002 — 21-record batch fixture-certified; production admission not authorized
+Current brand-registration increment: D-002A — four launch brand prerequisites canonically registered
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
@@ -29,7 +30,7 @@ D-001 now represents all 24 A-001 slots with 24 unique exact MPN candidates supp
 
 D-001A proposes a consumer-relevance rebalance from Kingston 21 / Corsair 2 / G.SKILL 1 to Kingston 6 / Corsair 4 / G.SKILL 6 / Crucial 7 / TeamGroup 1. The fixed 9 DDR5 desktop / 7 DDR4 desktop / 8 SODIMM model and all capacity invariants remain intact. Exact-MPN target-retailer research leaves 22 candidates `READY_FOR_OPERATOR_REVIEW`, 2 `NEEDS_MORE_EVIDENCE`, 0 rejected, and 0 unresolved; retailer evidence remains launch-relevance evidence only. No Atlas or market authority changed.
 
-D-002 fixture-certifies the 21 proposed new READY Atlas product records as a single batch against the current Atlas product validator and active Sentinel RAM rules. The existing Corsair anchor remains byte-for-byte unchanged; `F4-3200C16D-64GVK` and `CT32G4SFD832A` remain excluded. Production Atlas remains one product because this increment does not have the required separate operator authorization to write source-controlled canonical records, and repository integrity additionally requires reviewed canonical brand records for Crucial, G.SKILL, Kingston, and TeamGroup. No retailer, Mercury, publication, Current Price, Cheapest, or Pick authority changed.
+D-002 fixture-certifies the 21 proposed new READY Atlas product records as a single batch against the current Atlas product validator and active Sentinel RAM rules. D-002A canonically registers Crucial, G.SKILL, Kingston, and TeamGroup beside the unchanged Corsair brand, removing the brand-reference prerequisite for that fixture batch. The existing Corsair product anchor remains byte-for-byte unchanged; `F4-3200C16D-64GVK` and `CT32G4SFD832A` remain excluded. Production Atlas remains one product because separate operator authorization is still required to write the 21 source-controlled canonical product records. No retailer, Mercury, publication, Current Price, Cheapest, or Pick authority changed.
 
 C-001 defines a finite proposed portfolio of Newegg, MemoryC, B&H Photo Video, Best Buy, Adorama, Micro Center, and Provantage. The target is 5–7 monitored launch retailers, including at least 3 meaningful US hardware/electronics retailers, at least 1 specialist/smaller retailer, and at least 3 with meaningful A-001 overlap; Track C should pursue at least one structured feed/API relationship and explicit rights clarification where useful. Prior Newegg and Best Buy rights outreach received no response; silence grants no permission and does not block governed DataForSEO acquisition. C-001A records MemoryC and Adorama as `CONTACTED`, with no response received and every commercial, affiliate, feed/API, data-rights, comparison/display, retention, data-quality, recommendation, publication, Cheapest, and Pick outcome still unknown or absent. Their outreach and prior Jason correspondence demonstrate outbound human sending from `support@cheapestram.com`; inbound reliability, general deliverability, authentication quality, automated sending, and long-term mailbox health remain unverified. No retailer identity or production state changed; curated evidence remains transitional and automated Mercury acquisition remains the durable direction.
 
@@ -38,7 +39,7 @@ C-001 defines a finite proposed portfolio of Newegg, MemoryC, B&H Photo Video, B
 | Subsystem | Implemented/tested | Configured/production state |
 |---|---|---|
 | **Sentinel** | Deterministic rule/validation suites for architecture, Atlas, Mercury, and publication safety | Library/rule layer; no independent external deployment represented |
-| **Atlas** | Canonical repositories/validators with one RAM product and retailers `RETAILER-0001` Amazon and `RETAILER-0002` Platinummicro | Repository-owned canonical state; public projection generated by build |
+| **Atlas** | Canonical repositories/validators with one RAM product, five RAM launch brands, and retailers `RETAILER-0001` Amazon and `RETAILER-0002` Platinummicro | Repository-owned canonical state; public projection generated by build |
 | **Mercury** | Acquisition, retention, resolution, identity review, promotion, historical admission/query/refresh/cadence, canonical admission/review, current-market qualification, publication, and rights boundaries | Production publication/build composition now requires certified E2S and projects its qualification without default freshness/confidence reinterpretation; local governed state remains 1 Atlas product, 3 historical observations, and 2 reviewed canonical observations; `mer_obs_000000003` remains current-market-ineligible with no publication or price authority |
 | **Forge** | Internal static authoring/review application, generated public projection, certified read-only Mercury operations panel, and local FM008 exporter | Explicit local export materializes governed Atlas/Mercury state under `.forge-review/forge/`; legacy preview remains isolated and noncanonical |
 | **Beacon** | Product-interest signal, collection/write boundaries, transactional adapter, and 90-day retention policy | Application boundary ready; durable file adapter available but not production-configured; repository signals 0; automatic execution disabled |
@@ -47,12 +48,12 @@ C-001 defines a finite proposed portfolio of Newegg, MemoryC, B&H Photo Video, B
 
 ## Current test baseline
 
-The current runners declare **207 subsystem test files**:
+The current runners declare **209 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
-| Atlas | 15 |
+| Atlas | 17 |
 | Mercury | 161 |
 | Beacon | 7 |
 | Gateway | 17 |

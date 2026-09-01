@@ -1,0 +1,25 @@
+{
+  "brandId": "BRAND-CRUCIAL",
+  "schemaVersion": "1.0.0",
+  "slug": "crucial",
+  "displayName": "Crucial",
+  "legalName": "Micron Technology, Inc.",
+  "country": "United States",
+  "website": "https://www.crucial.com/",
+  "manufacturerType": "BRAND_OWNER",
+  "status": "ACTIVE",
+  "aliases": [],
+  "supportedCategories": [
+    "CAT-RAM"
+  ],
+  "provenance": {
+    "sourceUrl": "https://www.crucial.com/about-us",
+    "retrievedAt": "2026-09-01T00:00:00Z",
+    "verifiedBy": "Mirabelle Labs",
+    "verificationStatus": "VERIFIED"
+  },
+  "metadata": {
+    "createdAt": "2026-09-01T00:00:00Z",
+    "updatedAt": "2026-09-01T00:00:00Z"
+  }
+}

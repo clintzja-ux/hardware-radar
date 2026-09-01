@@ -181,11 +181,12 @@ D-001 creates no Atlas product, retailer identity, Mercury evidence, acquisition
 
 D-002 fixture certification validates the 21 new `READY_FOR_OPERATOR_REVIEW` candidates as one proposed Atlas batch. The existing Corsair anchor is excluded from creation, and `F4-3200C16D-64GVK` plus `CT32G4SFD832A` remain excluded pending evidence. The fixture batch passes the current Atlas product validator and all active Sentinel RAM rules, including capacity, kit-state, unknown-value, timing, and unit normalization checks. Exact MPN punctuation is preserved, deterministic candidate IDs are unique, DDR5 consumer records use `ON_DIE_ONLY` rather than system-level ECC, and no retailer or market-authority fields are present.
 
-Fixture certification is not Atlas admission. The production manifest remains at one RAM product. Atlas currently has only the Corsair brand record, so a production batch must also establish reviewed canonical brand records for Crucial, G.SKILL, Kingston, and TeamGroup before repository integrity can pass. D-002 does not invent their legal identity metadata and does not write product or brand records without the separate operator review required by this increment.
+Fixture certification is not Atlas admission. The production manifest remains at one RAM product. D-002A establishes reviewed canonical brand records for Crucial, G.SKILL, Kingston, and TeamGroup alongside the unchanged Corsair record, so every fixture brand now resolves through the Atlas brand registry. The 21 product records still require separate operator authorization before source-controlled Atlas admission.
 
 | State | Count |
 |---|---:|
 | Existing Atlas launch anchor | 1 |
+| Canonical launch brands registered | 5 |
 | New product records fixture-certified | 21 |
 | Production product records admitted by D-002 | 0 |
 | Candidates still pending evidence | 2 |

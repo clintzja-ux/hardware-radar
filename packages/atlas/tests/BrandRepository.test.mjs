@@ -13,8 +13,14 @@ const repository = new BrandRepository({
 });
 
 const entries = await repository.listBrandEntries();
-assert.equal(entries.length, 1);
-assert.equal(entries[0].brandId, "BRAND-CORSAIR");
+assert.equal(entries.length, 5);
+assert.deepEqual(entries.map(({ brandId }) => brandId), [
+    "BRAND-CORSAIR",
+    "BRAND-CRUCIAL",
+    "BRAND-GSKILL",
+    "BRAND-KINGSTON",
+    "BRAND-TEAMGROUP"
+]);
 assert.equal(Object.isFrozen(entries), true);
 assert.equal(Object.isFrozen(entries[0]), true);
 
@@ -28,7 +34,7 @@ const sameBrand = await repository.getById("BRAND-CORSAIR");
 assert.equal(sameBrand, brand);
 
 const allBrands = await repository.load();
-assert.equal(allBrands.length, 1);
+assert.equal(allBrands.length, 5);
 assert.equal(allBrands[0], brand);
 assert.equal(Object.isFrozen(allBrands), true);
 
@@ -46,7 +52,7 @@ const validationReport = await repository.validate();
 assert.equal(validationReport.valid, true);
 
 const reloadedBrands = await repository.reload();
-assert.equal(reloadedBrands.length, 1);
+assert.equal(reloadedBrands.length, 5);
 assert.notEqual(reloadedBrands, allBrands);
 
 await assert.rejects(

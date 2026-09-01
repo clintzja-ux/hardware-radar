@@ -1,0 +1,25 @@
+{
+  "brandId": "BRAND-TEAMGROUP",
+  "schemaVersion": "1.0.0",
+  "slug": "teamgroup",
+  "displayName": "TeamGroup",
+  "legalName": "Team Group Inc.",
+  "country": "Taiwan",
+  "website": "https://www.teamgroupinc.com/",
+  "manufacturerType": "HARDWARE_MANUFACTURER",
+  "status": "ACTIVE",
+  "aliases": [],
+  "supportedCategories": [
+    "CAT-RAM"
+  ],
+  "provenance": {
+    "sourceUrl": "https://www.teamgroupinc.com/en/about/",
+    "retrievedAt": "2026-09-01T00:00:00Z",
+    "verifiedBy": "Mirabelle Labs",
+    "verificationStatus": "VERIFIED"
+  },
+  "metadata": {
+    "createdAt": "2026-09-01T00:00:00Z",
+    "updatedAt": "2026-09-01T00:00:00Z"
+  }
+}

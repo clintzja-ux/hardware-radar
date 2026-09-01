@@ -30,7 +30,18 @@ assert.deepEqual(
     ["Crucial", "G.SKILL", "Kingston", "TeamGroup"],
     "Production admission must register the four non-Corsair brands through Atlas governance."
 );
-assert.deepEqual([...registeredBrandIds], ["BRAND-CORSAIR"]);
+assert.deepEqual([...registeredBrandIds], [
+    "BRAND-CORSAIR",
+    "BRAND-CRUCIAL",
+    "BRAND-GSKILL",
+    "BRAND-KINGSTON",
+    "BRAND-TEAMGROUP"
+]);
+assert.deepEqual(
+    [...requiredBrands].filter((brand) => !registeredBrandIds.has(`BRAND-${brand.replaceAll(/[^A-Za-z0-9]+/g, "").toUpperCase()}`)),
+    [],
+    "Every D-002 fixture brand prerequisite must resolve canonically."
+);
 assert.equal(
     createHash("sha256").update(anchorBytes).digest("hex"),
     "566c05fe7481db350bf4be26e21489734d3245408f1c4aca08c2a9bb18628f99",
