@@ -1,15 +1,21 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-08-31
+Last updated:                  2026-09-01
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD at inspection:            cc23d756d5b94d6c6dd73280cafcdeda4ce6c1f0
-Working tree:                  MVP-002 Increments 3–4 implemented and fixture-certified; uncommitted
+HEAD at inspection:            cf86a6a91df72da8f4aaa17eef0608fc53e33a01
+Working tree at inspection:    clean
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 ```
 
 This snapshot records repository and local governed-state evidence. It does not infer external provider state. Underlying source, tests, policies, contracts, ADRs, and Git win if a conflict is found.
+
+## Current product-program posture
+
+Hardware Radar now operates through parallel, coordinated tracks rather than one serial engineering chain. Current emphasis is **primary/high** for A — Public Product / Launch, B — Mercury / Market Data, and C — Retailer & Commercial; **supporting/demand-driven** for D — Atlas / Intelligence Foundation; and **guardrail/as-needed** for E — Governance / Platform Evolution. Public-product work may proceed while Mercury coverage expands, and retailer/commercial work may proceed independently of Mercury engineering until either reaches an owner boundary that requires a governed artifact or explicit action.
+
+Mercury automated acquisition remains the durable target; curated ingestion remains transitional bootstrap infrastructure. Production publication remains governed by E2S and the separate publication boundary. No documented future-stage capability is implementation authority, and this parallel posture changes none of the operational facts below.
 
 ## Current platform status
 
@@ -179,13 +185,13 @@ Actual spend:                             $0.000
 - The public launch shell now consumes only the governed market snapshot and fails closed cleanly, but all scopes still have zero eligible observations. Before adding public market data, define the narrow launch catalog/retailer coverage and comparable listed-price rules, then implement the separately controlled publication bridge; do not restore placeholder data or Picks.
 - The current DF005-W authorization expires; if it expires before a later authorized operation, fail closed and require a fresh DF005-W PREPARE rather than extending or rewriting it.
 
-## Next recommended action
+## Next recommended actions by track
 
-Review and certify MVP-002 Increment 4. Before any production curated PREPARE, separately approve the narrow launch catalog/source-retailer pairs, provide authoritative source-rights evidence and a repository-owned rights profile, and approve a matching production freshness policy. Keep the public snapshot fail closed and do not create launch observations automatically. Independently, wait for a sufficiently authoritative Cloudflare response before changing DF005-X governance.
-
-```text
-Next operator action: review the fixture-certified MVP-002 Increment 4 boundary, then make a separate source-rights and launch-catalog decision; do not run production curated-offer PREPARE/EXECUTE or populate Atlas automatically.
-```
+- **A — Public Product / Launch:** continue truthful UX, mobile, SEO, methodology, comparison, and empty-state work using governed outputs; do not manufacture prices, Picks, or publication authority.
+- **B — Mercury / Market Data:** define the narrow launch catalog/source-retailer coverage, authoritative rights profiles, and matching freshness policy before any separately authorized production curated PREPARE; continue automated coverage and condition-evidence work independently.
+- **C — Retailer & Commercial:** pursue retailer, affiliate, rights, feed/API, and data-quality relationships without making them dependencies for lawful governed Mercury acquisition or inputs to Cheapest/Pick authority.
+- **D — Atlas / Intelligence Foundation:** add product/retailer knowledge only when an approved launch or Mercury path requires it; do not populate speculative catalogs.
+- **E — Governance / Platform Evolution:** keep established boundaries as guardrails, address demonstrated defects, and wait for sufficiently authoritative Cloudflare permission evidence before changing DF005-X governance.
 
 Do not onboard the domain, mutate DNS, configure a Worker binding, deploy, or send email while the permission policy is unresolved. DF005-W itself has no EXECUTE path and DF005-X exposes no production execution command.
 

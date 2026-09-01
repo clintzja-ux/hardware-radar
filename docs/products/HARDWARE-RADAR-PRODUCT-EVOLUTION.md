@@ -113,7 +113,54 @@ Atlas, Mercury, Compass, Echo, and Aurora may ultimately support grounded questi
 
 Answers should be grounded in governed Hardware Radar knowledge and market evidence rather than unsupported model assertions.
 
-## 4. Complexity-control doctrine
+## 4. Parallel execution doctrine
+
+Hardware Radar is now developed as a small product program with multiple independent but coordinated execution tracks, not as one serial chain through every subsystem. A blocker in one track should not unnecessarily halt another independent track. Parallel work must preserve subsystem ownership, governance, provenance, authority boundaries, audit truth, and fail-closed behavior.
+
+> A track may proceed independently until it reaches a boundary owned by another track. Crossing that boundary requires the owning subsystem's governed artifact, contract, decision, or explicit operator action.
+
+No track may manufacture an artifact owned by another track or bypass another subsystem's authority to unblock itself. Cross-track dependencies must be explicit. In particular:
+
+- Commercial or affiliate status must not silently alter recommendation, retailer-trust, or market-evidence authority and must not determine Cheapest or Pick eligibility.
+- Public UX must consume governed outputs; it must not manufacture prices, Picks, evidence, retailer eligibility, publication authority, or recommendations.
+- Atlas catalog presence does not imply historical, canonical, review, current-market, or publication eligibility.
+- Mercury evidence does not imply Compass recommendation authority.
+- Historical evidence remains historically truthful when acquisition strategies change.
+- Temporary or bootstrap infrastructure must not silently become permanent architecture.
+
+### Current operating tracks
+
+| Track | Purpose and representative work | Current emphasis |
+|---|---|---|
+| **A — Public Product / Launch** | Make Hardware Radar useful through public UX, RAM category and comparison presentation, mobile QA, SEO, methodology/content, analytics alignment, truthful empty/error states, launch-catalog presentation, and user-facing clarity. It consumes governed market output and creates none of the upstream authority it displays. | **PRIMARY / HIGH** |
+| **B — Mercury / Market Data** | Build scalable governed acquisition: DataForSEO recurrence, historical refresh, source coverage, condition and shipping evidence, offer classification, reliability, retention, replay/idempotency, E2S qualification, publication composition, and eventual replacement of transitional curated acquisition. Mercury automated provider/source paths remain the durable owner. | **PRIMARY / HIGH** |
+| **C — Retailer & Commercial** | Develop affiliate and retailer relationships, specialist-retailer outreach, rights clarification, authorized feeds/APIs, deep links, commerce-data partnerships, and data-quality collaboration. Commercial capability remains separate from trust, evidence, recommendation, Cheapest, and Pick authority. | **PRIMARY / HIGH** |
+| **D — Atlas / Intelligence Foundation** | Expand RAM catalog completeness, product and retailer identities, specifications, relationships, and validation when approved product or Mercury work requires it. Preserve `capacityGb = moduleCount × capacityPerModuleGb`. Avoid speculative catalog population. | **SUPPORTING / DEMAND-DRIVEN** |
+| **E — Governance / Platform Evolution** | Maintain contracts, ADRs, publication governance, ownership, Forge/operator boundaries, Beacon/Gateway boundaries, and justified future seams for Compass, Echo, or Aurora. | **GUARDRAIL / AS NEEDED** |
+
+This emphasis is current program posture, not a permanent architectural hierarchy. A future `CURRENT-STATE` reconciliation may change priorities without narrowing the accepted product vision or changing subsystem ownership.
+
+### Commercial and data strategy
+
+Hardware Radar should pursue three complementary paths in parallel:
+
+1. independent market evidence through governed sources such as DataForSEO where rights permit;
+2. direct retailer relationships that provide useful feeds, APIs, data-quality cooperation, attribution, affiliate economics, or other legitimate value; and
+3. transitional operator-curated evidence for explicitly approved launch paths where automation is not yet sufficient.
+
+Earlier outreach to large retailers including Newegg and Best Buy for data-rights clarification did not receive responses. DataForSEO work was pursued partly because direct retailer response could not remain an acquisition dependency. Retailer relationships and Mercury acquisition should therefore proceed in parallel; lawful, governed independent acquisition need not wait for major-retailer replies.
+
+Smaller or specialist retailers can be disproportionately useful to Mercury when they offer accessible feeds, clearer identity, responsive communication, or cooperative data relationships. Their value to Hardware Radar is a separate assessment that also considers consumer relevance, retailer trust, useful selection, geography, competitive pricing, and sustainable commercial potential. The desired portfolio mixes major and useful specialist retailers rather than optimizing exclusively for either.
+
+The curated bridge bootstraps useful coverage but is not the target architecture. It may be retired progressively per source/product/retailer path after automated Mercury acquisition reaches governed parity. Curated history and provenance must never be rewritten as automated evidence. DataForSEO addresses part of acquisition; it does not eliminate direct relationships. Affiliate relationships address part of commerce; they grant no market-evidence authority. Keep `OBSERVED`, `PUBLICLY COMPARABLE`, `RECOMMENDABLE`, and `AFFILIATE ENABLED` distinct.
+
+### Track status and future-agent interpretation
+
+Each track may be described as `ACTIVE`, `READY`, `BLOCKED`, `DEFERRED`, or `COMPLETE FOR CURRENT INCREMENT`. A blocked track should state what is blocked, its exact dependency, and which other tracks can proceed independently. This is operating language only, not a runtime project-management system.
+
+Future agents must not assume the project has one next step. When reading `CURRENT-STATE`, identify active and blocked tracks, independent work that can continue, cross-track dependencies, and whether the requested work has explicit authority. Do not automatically begin another increment when one finishes. Do not stop useful work because an independent subsystem is unfinished, reinterpret an MVP deferral as a permanent limitation, or treat long-term vision as current implementation authorization.
+
+## 5. Complexity-control doctrine
 
 Apply **Protect the architecture; defer the capability** by classifying proposed work:
 
@@ -133,13 +180,21 @@ Category D work should normally remain outside the current increment.
 - Correctness and governance work remain justified where they protect truthful market claims, provenance, identity, retailer trust, recommendation integrity, publication integrity, or another currently exercised boundary.
 - Correctness must not become an excuse to implement unrelated future capabilities.
 
-## 5. Commercial and product learning
+Ask of proposed work:
+
+> Does this materially improve launch usefulness, market coverage, automation, commercial viability, or protect a demonstrated architectural risk?
+
+If not, it should normally be deferred. **Protect the architecture; then build the product.** Engineering discipline remains essential, but architecture and governance must not indefinitely delay the useful product they exist to support.
+
+Governance effort should be proportional to current product risk. Once a boundary is sufficiently protected and fixture-certified, engineering effort should return to user-facing capability, market coverage, automation, or commercial progress unless new evidence exposes a material governance defect. Do not create governance increments merely because additional theoretical states can be imagined.
+
+## 6. Commercial and product learning
 
 Hardware Radar should reach real users before attempting to complete the entire hardware-intelligence vision. The RAM product should become useful, launchable, and capable of producing real-world user and market learning.
 
 Actual usage, market evidence, economics, and observed user needs should increasingly influence which advanced capabilities are built next. This is not permission to weaken accepted governance merely to launch faster.
 
-## 6. Interpretation rule for future agents
+## 7. Interpretation rule for future agents
 
 Future ChatGPT, Codex, and engineering agents must interpret phrases such as “MVP only,” “do not generalize,” “do not build Compass yet,” “defer Aurora,” “defer basket optimization,” “limit retailer coverage,” “defer this capability,” and “not needed for launch” as:
 

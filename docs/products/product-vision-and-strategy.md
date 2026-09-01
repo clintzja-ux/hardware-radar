@@ -3,7 +3,7 @@
 **Version:** 1.0 (Foundational)
 **Owner:** Mirabelle Labs
 
-This document remains the canonical high-level product vision. The accepted [Hardware Radar Product Evolution and Scope Doctrine](./HARDWARE-RADAR-PRODUCT-EVOLUTION.md) governs staged product evolution, interpretation of MVP scope versus long-term direction, complexity control, and future-agent scope interpretation.
+This document remains the canonical high-level product vision. The accepted [Hardware Radar Product Evolution and Scope Doctrine](./HARDWARE-RADAR-PRODUCT-EVOLUTION.md) governs staged product evolution, parallel product-program execution, interpretation of MVP scope versus long-term direction, complexity control, and future-agent scope interpretation.
 
 # Executive Vision
 
