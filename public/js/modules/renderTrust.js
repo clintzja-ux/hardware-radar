@@ -8,7 +8,7 @@
             <h2>Why Trust Hardware Radar?</h2>
 
             <div class="trust-grid">
-                <p>✓ Independent recommendations</p>
+                <p>✓ Commission-independent comparison ordering</p>
                 <p>✓ Transparent methodology</p>
                 <p>✓ Only qualifying monitored offers are shown</p>
                 <p>✓ Trusted retailers only</p>

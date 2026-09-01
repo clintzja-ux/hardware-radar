@@ -19,7 +19,7 @@ function offerToDisplayProduct(item, scope, section, title, rank) {
         capacity: `${item.capacityGb}GB`,
         memoryType: item.memoryType,
         speed: `${item.dataRateMtps} MT/s`,
-        bestFor: "Verified current market candidate",
+        bestFor: "Qualifying monitored listed-price offer",
         price: item.price.toFixed(2),
         currency: item.currency,
         priceBasis: item.priceBasis === "LISTED_PRICE" ? "Listed price" : "Price basis unavailable",
@@ -31,7 +31,6 @@ function offerToDisplayProduct(item, scope, section, title, rank) {
         pricesChecked: scope.coverage.eligibleObservations,
         retailersMonitored: scope.coverage.retailersRepresented,
         insight: `✓ ${item.freshness} • ${item.confidence} confidence`,
-        hardwareRadarVerified: true,
         rank
     };
 }

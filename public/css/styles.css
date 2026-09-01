@@ -472,6 +472,12 @@ footer{
     background:#fafafa;
 }
 
+.comparison-toggle:focus-visible,
+.comparison-item a:focus-visible{
+    outline:3px solid var(--primary);
+    outline-offset:3px;
+}
+
 .comparison-content{
 
     margin-top:16px;
@@ -512,6 +518,10 @@ footer{
 
     gap:4px;
 
+    min-width:0;
+
+    overflow-wrap:anywhere;
+
 }
 
 .comparison-price{
@@ -522,6 +532,43 @@ footer{
 
     align-items:flex-end;
 
+    text-align:right;
+
+}
+
+@media(max-width:600px){
+    .comparison{
+        padding:0 12px;
+    }
+
+    .comparison-toggle{
+        min-height:48px;
+        padding:14px 16px;
+        text-align:left;
+    }
+
+    .comparison-content{
+        overflow:visible;
+    }
+
+    .comparison-item{
+        align-items:flex-start;
+        flex-direction:column;
+        gap:12px;
+        padding:16px;
+    }
+
+    .comparison-price{
+        align-items:flex-start;
+        text-align:left;
+    }
+
+    .comparison-item a{
+        display:inline-flex;
+        align-items:center;
+        min-height:44px;
+        overflow-wrap:anywhere;
+    }
 }
 
 .comparison-arrow{

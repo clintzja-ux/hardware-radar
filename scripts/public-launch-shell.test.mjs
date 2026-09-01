@@ -14,6 +14,32 @@ const categoryModules = [
     "js/modules/pages/sodimm.js"
 ];
 
+const pageIdentity = new Map([
+    ["index.html", ["Compare RAM Prices | Hardware Radar", "Compare RAM Prices", "https://cheapestram.com/"]],
+    ["ddr5.html", ["Compare DDR5 RAM Prices | Hardware Radar", "Compare DDR5 RAM Prices", "https://cheapestram.com/ddr5.html"]],
+    ["ddr4.html", ["Compare DDR4 RAM Prices | Hardware Radar", "Compare DDR4 RAM Prices", "https://cheapestram.com/ddr4.html"]],
+    ["sodimm.html", ["Compare Laptop RAM Prices | Hardware Radar", "Compare Laptop RAM Prices", "https://cheapestram.com/sodimm.html"]],
+    ["about.html", ["About Hardware Radar", "About Hardware Radar", "https://cheapestram.com/about.html"]],
+    ["how-we-choose.html", ["How We Compare RAM Prices | Hardware Radar", "How We Choose", "https://cheapestram.com/how-we-choose.html"]],
+    ["contact.html", ["Contact | Hardware Radar", "Contact", "https://cheapestram.com/contact.html"]],
+    ["affiliate-disclosure.html", ["Affiliate Disclosure | Hardware Radar", "Affiliate Disclosure", "https://cheapestram.com/affiliate-disclosure.html"]],
+    ["privacy-policy.html", ["Privacy Policy | Hardware Radar", "Privacy Policy", "https://cheapestram.com/privacy-policy.html"]],
+    ["terms.html", ["Terms of Use | Hardware Radar", "Terms of Use", "https://cheapestram.com/terms.html"]]
+]);
+
+for (const [file, [title, heading, url]] of pageIdentity) {
+    const source = await readPublic(file);
+    assert.match(source, new RegExp(`<title>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</title>`));
+    assert.match(source, new RegExp(`<h1>${heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</h1>`));
+    assert.match(source, new RegExp(`<link rel="canonical" href="${url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}">`));
+    assert.match(source, new RegExp(`property="og:url"[\\s\\S]{0,80}content="${url.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
+    assert.equal((source.match(/<main(?:\s|>)/g) ?? []).length, 1, `${file} must contain one main landmark.`);
+    assert.equal((source.match(/<\/main>/g) ?? []).length, 1, `${file} must close its main landmark.`);
+    assert.equal((source.match(/<section(?:\s|>)/g) ?? []).length, (source.match(/<\/section>/g) ?? []).length, `${file} section markup must be balanced.`);
+    if (/<h3>/.test(source)) assert.match(source, /<h2>/, `${file} must not skip directly from h1 to h3.`);
+    assert.doesNotMatch(source, /Controller\s*$/);
+}
+
 for (const obsoletePath of [
     "data/ram.json",
     "data/ram/ddr5.json",
@@ -58,6 +84,8 @@ const productionCopy = await Promise.all([
     ...categoryPages,
     "how-we-choose.html",
     "js/modules/renderTrust.js",
+    "js/modules/renderOverall.js",
+    "js/modules/renderCategory.js",
     "js/modules/renderFooter.js"
 ].map(readPublic));
 for (const source of productionCopy) {
@@ -101,9 +129,33 @@ assert.deepEqual(scopeToDisplayProducts({ status: "INSUFFICIENT_DATA", cheapest:
 const comparisonSource = await readPublic("js/modules/renderExpandableComparison.js");
 assert.match(comparisonSource, /shippingMessage/);
 assert.match(comparisonSource, /target="_blank" rel="noopener noreferrer"/);
+assert.match(comparisonSource, /type="button" class="comparison-toggle" aria-expanded="false" aria-controls=/);
+assert.match(comparisonSource, /class="comparison-content" id="\$\{contentId\}" hidden/);
+assert.match(comparisonSource, /setAttribute\("aria-expanded", String\(!isOpen\)\)/);
+assert.match(comparisonSource, /aria-label="View \$\{product\.brand\} \$\{product\.model\} at \$\{product\.retailer\}"/);
+
+const styles = await readPublic("css/styles.css");
+assert.match(styles, /\.comparison-toggle:focus-visible/);
+assert.match(styles, /@media\(max-width:600px\)[\s\S]*?\.comparison-item\{[\s\S]*?flex-direction:column/);
+assert.match(styles, /\.comparison-item a\{[\s\S]*?min-height:44px/);
+
+for (const file of ["about.html", "how-we-choose.html", "affiliate-disclosure.html", "terms.html"]) {
+    assert.doesNotMatch(await readPublic(file), /recommendation|verified pricing|today['’]s best/i);
+}
+
+const contact = await readPublic("contact.html");
+assert.match(contact, /human correspondence, including outbound retailer outreach/);
+assert.match(contact, /Inbound delivery remains a separate launch QA check/);
 
 const privacy = await readPublic("privacy-policy.html");
 assert.match(privacy, /Google Analytics/);
 assert.match(privacy, /Microsoft Clarity/);
+
+const marketSnapshot = JSON.parse(await readPublic("data/market-snapshot.json"));
+for (const scope of ["overall", "ddr5", "ddr4", "sodimm"]) {
+    assert.equal(marketSnapshot.scopes[scope].status, "INSUFFICIENT_DATA");
+    assert.equal(marketSnapshot.scopes[scope].cheapest, null);
+    assert.deepEqual(marketSnapshot.scopes[scope].alternatives, []);
+}
 
 console.log("Public launch-shell truth and safety contract passed.");

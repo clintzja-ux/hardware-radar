@@ -23,7 +23,7 @@ import { renderHeader } from "../renderHeader.js";
  
          {
              question: "Is the cheapest qualifying DDR4 RAM good enough?",
-             answer: "Yes. For most people, the cheapest qualifying DDR4 delivers excellent value and performance for everyday use, gaming, and productivity."
+             answer: "It can be, provided its capacity, speed, and compatibility fit your system. Compare the qualifying listed offers and product specifications before buying."
          },
  
          {
@@ -33,7 +33,7 @@ import { renderHeader } from "../renderHeader.js";
  
          {
              question: "Does RAM speed matter?",
-             answer: "It can, but for most users capacity matters more than small speed differences. Start with the best value kit before paying extra for faster speeds."
+             answer: "It can, but for most users capacity matters more than small speed differences. Compare capacity, compatibility, timings, and the qualifying listed prices before paying extra for speed."
          },
  
          {

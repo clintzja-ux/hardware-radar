@@ -33,7 +33,7 @@ async function init() {
 
         {
             question: "Does RAM speed matter?",
-            answer: "It can, but for most users capacity matters more than small speed differences. Start with the best value kit before paying extra for faster speeds."
+            answer: "It can, but for most users capacity matters more than small speed differences. Compare capacity, compatibility, timings, and the qualifying listed prices before paying extra for speed."
         },
 
         {

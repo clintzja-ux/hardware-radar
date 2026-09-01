@@ -23,7 +23,7 @@
  
          {
              question: "Is the cheapest qualifying Laptop RAM good enough?",
-             answer: "Yes. For most people, the cheapest qualifying Laptop RAM delivers excellent value and performance for everyday use, gaming, and productivity."
+             answer: "It can be, provided its generation, capacity, module layout, and compatibility fit the laptop. Compare the qualifying listed offers and specifications before buying."
          },
  
          {
@@ -33,7 +33,7 @@
  
          {
              question: "Does RAM speed matter?",
-             answer: "It can, but for most users capacity matters more than small speed differences. Start with the best value kit before paying extra for faster speeds."
+             answer: "It can, but capacity and compatibility usually matter more than small speed differences. Compare the qualifying listed prices and specifications before paying extra for speed."
          },
  
          {

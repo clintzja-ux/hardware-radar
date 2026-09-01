@@ -27,7 +27,7 @@
             <h3>${product.brand} ${product.model}</h3>
 
             <p class="best-for">
-                Best for: ${product.bestFor}
+                Comparison note: ${product.bestFor}
             </p>
 
             <p class="category-specs">
@@ -41,7 +41,7 @@
                 </div>
 
                 <p class="mini-verified">
-                    ✓ Verified ${product.verified}
+                    Observed ${product.verified}
                 </p>
 
                 ${
@@ -61,7 +61,7 @@ export function renderCategoryUnavailable(containerId, title) {
     container.innerHTML = `
         <article class="card category-card market-unavailable">
             <p class="category-title">${title}</p>
-            <h3>Verified pricing unavailable</h3>
+            <h3>Qualifying pricing unavailable</h3>
             <p class="best-for">No current observation meets Hardware Radar's publication requirements.</p>
             <div class="category-footer"><p class="mini-verified">Awaiting qualifying market data</p></div>
         </article>`;

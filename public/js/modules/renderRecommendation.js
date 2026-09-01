@@ -19,7 +19,7 @@
             <h2>${product.brand} ${product.model}</h2>
 
             <p class="best-for">
-                Best for: ${product.bestFor}
+                Comparison note: ${product.bestFor}
             </p>
 
             <p class="specs">

@@ -18,7 +18,7 @@
                  <div class="verification-block">
 
                     <p class="verified-time">
-                         ✓ Verified ${product.lastVerifiedTime || product.verified}
+                         Observed ${product.lastVerifiedTime || product.verified}
                     </p>
 
                     <p class="verification-details">
@@ -32,7 +32,7 @@
 
             <h2>${product.brand} ${product.model} ${product.capacity}</h2>
 
-            <p class="best-for">Best for: ${product.bestFor}</p>
+            <p class="best-for">Comparison note: ${product.bestFor}</p>
 
             <p class="specs">${product.memoryType} • ${product.speed}</p>
 
