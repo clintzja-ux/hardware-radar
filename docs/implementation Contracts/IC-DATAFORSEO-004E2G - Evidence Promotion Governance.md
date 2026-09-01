@@ -19,6 +19,10 @@ Add a Mercury-owned, deterministic, fail-closed assessment between retained DF00
 
 `npm run evidence:promotion:assess` reads the local DataForSEO market-evidence repository and prints an operator assessment. It contains no acquisition client, credential loader, paid-task creator, or network operation. Actual spend is `$0.000`.
 
+For governed initial acquisition, the command selects evidence through the validated SELLERS retention audit rather than relying on the stored product-resolution result. It loads the exact SELLERS proposal and Atlas product, delegates projection construction to the certified `GOVERNED_INITIAL_ACQUISITION_BINDING` owner, and passes the resulting evidence-bound projections to E2G/E2H. A governed cohort with missing, contradictory, duplicated, or drifted lineage fails closed; genuinely unbound or legacy evidence retains the generic selection and assessment path.
+
+Operator output identifies each evidence record, identity source, stored/projected/effective product state, merchant state and reason, assessment state, and blockers. This composition remains read-only and creates no identity decision, retailer registration, historical admission, canonical observation, review, current-market qualification, or publication authority.
+
 Unattended LIVE acquisition, scheduler LIVE authority, automatic identity override, and operational promotion are outside this increment.
 
 ## Certified real case
