@@ -27,6 +27,26 @@ Missing or blank condition normalizes to `UNKNOWN`; it never defaults to `NEW`. 
 
 Curated ingestion creates no historical-admission event, canonical-admission authorization, review decision, E2S qualification, publication decision, Current Price, Cheapest, Pick, or recommendation authority. Those remain independent downstream stages.
 
+### Transitional lifecycle and retirement
+
+`mer_adapter_operator_curated_ram_offer` is transitional launch infrastructure. It bootstraps trustworthy MVP coverage while Mercury's automated provider/source acquisition paths are incomplete; it is not a permanent peer acquisition system. Mercury remains the durable owner of market acquisition. This applies **Protect the architecture; defer the capability**: the curated bridge accelerates launch without changing long-term subsystem ownership.
+
+Curated bootstrap is permitted only for explicitly approved product, retailer, and source paths. Retirement is progressive and may occur per product/retailer/source scope:
+
+```text
+curated bootstrap
+→ automated Mercury path certified
+→ overlapping curated path disabled
+→ automated path observed and validated
+→ curated path retired
+```
+
+Automation parity means governed lifecycle parity, not merely the ability to fetch a price. Before an overlapping curated path is disabled, the automated Mercury path must provide the applicable governed equivalents for source/acquisition rights, Atlas product identity, Atlas retailer identity, provider/source provenance, condition handling, shipping knownness, bundle and conditional-offer handling, reliable acquisition, retention and provenance, replay/idempotency, and compatibility with downstream historical, canonical, review, E2S, and publication governance.
+
+For the MVP, the existing authorization boundary is the retirement control. New curated inputs stop when the applicable scoped rights/configuration is absent, removed, or disabled: PREPARE then fails closed, and EXECUTE revalidates current rights and Atlas bindings before accepting anything. No separate lifecycle engine is required. Once automated coverage is sufficient, the adapter may remain completely dormant and may later be removed from active composition without migrating or rewriting accepted observations.
+
+Retirement never deletes historical curated evidence, rewrites curated provenance, converts curated observations into automated observations, or alters historical, canonical, review, or publication audit history. The adapter/source identity remains explicit in retained audit history forever, including after its input path is disabled or its active composition is removed.
+
 ## Deferred
 - Amazon Creators API HTTP client and authentication.
 - Credentials/token lifecycle and rate limiting.
