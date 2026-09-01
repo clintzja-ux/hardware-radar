@@ -1,7 +1,7 @@
 # IC-ATLAS-006 — RAM Launch Cohort Lifecycle Activation Readiness
 
 **Increment:** B-002  
-**Status:** Fixture-certified; production activation not performed  
+**Status:** Fixture-certified and operator-authorized production activation completed in B-002A
 **Owner:** Atlas lifecycle governance
 
 ## Boundary
@@ -31,7 +31,7 @@ Activation readiness requires the source record to remain exactly `DRAFT/PENDING
 
 `ACTIVE/READY` makes a canonical Atlas product eligible for existing operational candidate construction. It establishes no retailer availability, market evidence, provider identity, acquisition or spend authorization, rights, freshness policy, historical/canonical observation, review, E2S qualification, publication, Current Price, Cheapest, Pick, or recommendation authority.
 
-B-002 defines no production mutation command and performs no lifecycle transition. Production activation remains a separate explicit Atlas authoring/operator action against only the certified batch.
+B-002 defined no production mutation command. In B-002A, the operator explicitly authorized the existing source-controlled Atlas authoring model to apply only the certified batch. The six records now carry revision `2`, reviewer `human:Clinton_Ramsook`, review timestamp `2026-09-01T16:18:29.377Z`, and `ACTIVE/READY` lifecycle metadata. No parallel PREPARE/EXECUTE subsystem was created.
 
 ## Verification
 

@@ -3,11 +3,11 @@
     "atlasProductId": "ram_g_skill_f5_5600s4040a16gx2_rs",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 1,
+    "recordRevision": 2,
     "createdAt": "2026-09-01T00:00:00Z",
-    "updatedAt": "2026-09-01T00:00:00Z",
+    "updatedAt": "2026-09-01T16:18:29.377Z",
     "createdBy": "system:d002-fixture-certification",
-    "updatedBy": "system:d002-fixture-certification",
+    "updatedBy": "human:Clinton_Ramsook",
     "brand": "G.SKILL",
     "manufacturer": "G.SKILL",
     "productFamily": "Ripjaws",
@@ -23,14 +23,14 @@
     "slug": "g-skill-ripjaws-f5-5600s4040a16gx2-rs"
   },
   "governance": {
-    "publicationStatus": "PENDING",
-    "lifecycleStatus": "DRAFT",
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
     "manufacturerStatus": "UNKNOWN",
     "engineeringValidationStatus": "PASS",
-    "humanReviewRequired": true,
-    "reviewedBy": null,
-    "reviewedAt": null,
-    "changeReason": "D-002 fixture candidate; production Atlas admission requires separate operator review.",
+    "humanReviewRequired": false,
+    "reviewedBy": "human:Clinton_Ramsook",
+    "reviewedAt": "2026-09-01T16:18:29.377Z",
+    "changeReason": "B-002A authorized lifecycle activation for the representative Mercury launch cohort; no market or publication authority implied.",
     "supersedesRevision": null,
     "archivalReason": null,
     "launchDate": null,
@@ -172,4 +172,3 @@
     }
   }
 }
-

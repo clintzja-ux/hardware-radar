@@ -7,14 +7,14 @@
     container.setAttribute("aria-live", "polite");
 
     if (!product) {
-        container.innerHTML = `<article class="overall-answer market-unavailable" role="status"><p class="eyebrow">CURRENT MARKET STATUS</p><h2>No qualifying listed price is available</h2><p class="best-for">No monitored offer currently meets Hardware Radar's publication requirements for this category.</p><p class="specs">Unavailable or stale observations remain hidden rather than being replaced with estimates.</p></article>`;
+        container.innerHTML = `<article class="overall-answer market-unavailable" role="status"><p class="eyebrow">CURRENT MARKET STATUS</p><h2>No tracked price is available right now</h2><p class="best-for">We don't currently have an offer that qualifies for this category.</p><p class="specs">Unavailable or stale prices stay hidden rather than being replaced with estimates. Check again later.</p></article>`;
         return;
     }
 
     container.innerHTML = `
         <article class="overall-answer">
 
-            <p class="eyebrow">LOWEST QUALIFYING LISTED PRICE</p>
+            <p class="eyebrow">CHEAPEST TRACKED OFFER</p>
 
             <h2>${product.brand} ${product.model}</h2>
 

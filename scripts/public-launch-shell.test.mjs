@@ -90,7 +90,22 @@ const productionCopy = await Promise.all([
 ].map(readPublic));
 for (const source of productionCopy) {
     assert.doesNotMatch(source, /updated throughout the day|prices verified throughout the day|today['’]s best verified|next-lowest verified/i);
+    assert.doesNotMatch(source, /cheapest (?:on )?(?:the )?(?:entire )?internet|cheapest everywhere|market-wide cheapest|final delivered price/i);
 }
+
+const homepage = await readPublic("index.html");
+assert.match(homepage, /<h1>Compare RAM Prices<\/h1>/);
+assert.match(homepage, /Find the cheapest RAM from the retailers we track\./);
+assert.match(homepage, /Compare current RAM prices across DDR5, DDR4 and laptop memory\./);
+assert.equal((homepage.match(/id="(?:ddr5|ddr4|sodimm)Section"/g) ?? []).length, 3);
+assert.doesNotMatch(homepage, /eccSection|Server\s*\/\s*ECC/i);
+
+const homepageRuntime = await readPublic("js/main.js");
+assert.match(homepageRuntime, /Cheapest RAM we're tracking/);
+assert.match(homepageRuntime, /Cheapest DDR5 we're tracking/);
+assert.match(homepageRuntime, /Cheapest DDR4 we're tracking/);
+assert.match(homepageRuntime, /Cheapest Laptop RAM we're tracking/);
+assert.doesNotMatch(homepageRuntime, /eccSection|Server\s*\/\s*ECC/i);
 
 const containers = new Map();
 globalThis.document = {
@@ -117,6 +132,18 @@ renderRecommendation({
 assert.match(containers.get("recommendation").innerHTML, /target="_blank"/);
 assert.match(containers.get("recommendation").innerHTML, /rel="noopener noreferrer"/);
 assert.match(containers.get("recommendation").innerHTML, /Shipping not verified/);
+assert.match(containers.get("recommendation").innerHTML, /CHEAPEST TRACKED OFFER/);
+
+const { renderOverallUnavailable } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderOverall.js")));
+renderOverallUnavailable("overallSection");
+assert.match(containers.get("overallSection").innerHTML, /No tracked RAM price is available right now/);
+assert.match(containers.get("overallSection").innerHTML, /stay hidden rather than being replaced with estimates/);
+assert.doesNotMatch(containers.get("overallSection").innerHTML, /publication requirements|governed candidates|E2S/i);
+
+const { renderCategoryUnavailable } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderCategory.js")));
+renderCategoryUnavailable("ddr5Section", "Cheapest DDR5 we're tracking");
+assert.match(containers.get("ddr5Section").innerHTML, /Price unavailable right now/);
+assert.match(containers.get("ddr5Section").innerHTML, /Check again later/);
 
 const { scopeToDisplayProducts } = await import(pathToFileURL(path.join(publicRoot, "js/modules/marketData.js")));
 const projected = scopeToDisplayProducts({ status: "AVAILABLE", cheapest: { atlasProductId: "ram_one", observationId: "mer_obs_000000001", brand: "Example", modelName: "Winner", capacityGb: 32, memoryType: "DDR5", dataRateMtps: 6000, price: 99, currency: "USD", priceBasis: "LISTED_PRICE", shipping: { known: false, amount: null, currency: null }, retailer: "Retailer A", sourceUrl: "https://retailer.example/a", observedAt: "2026-08-31T12:00:00Z", freshness: "CURRENT", confidence: "HIGH" }, alternatives: [{ atlasProductId: "ram_two", observationId: "mer_obs_000000002", brand: "Example", modelName: "Alternative", capacityGb: 32, memoryType: "DDR5", dataRateMtps: 5600, price: 109, currency: "USD", priceBasis: "LISTED_PRICE", shipping: { known: true, amount: 0, currency: "USD" }, retailer: "Retailer B", sourceUrl: "https://retailer.example/b", observedAt: "2026-08-31T12:01:00Z", freshness: "CURRENT", confidence: "HIGH" }], coverage: { eligibleObservations: 2, retailersRepresented: 2 } }, "ddr5", "Qualifying DDR5 listed price");
@@ -138,6 +165,12 @@ const styles = await readPublic("css/styles.css");
 assert.match(styles, /\.comparison-toggle:focus-visible/);
 assert.match(styles, /@media\(max-width:600px\)[\s\S]*?\.comparison-item\{[\s\S]*?flex-direction:column/);
 assert.match(styles, /\.comparison-item a\{[\s\S]*?min-height:44px/);
+assert.match(styles, /\.category-grid\{[\s\S]*?grid-template-columns:repeat\(3,1fr\)/);
+
+const methodology = await readPublic("how-we-choose.html");
+assert.match(methodology, /lowest qualifying listed price within its monitored coverage/);
+assert.match(methodology, /may not include shipping, tax, or other mandatory charges/);
+assert.match(methodology, /Affiliate relationships do not determine/i);
 
 for (const file of ["about.html", "how-we-choose.html", "affiliate-disclosure.html", "terms.html"]) {
     assert.doesNotMatch(await readPublic(file), /recommendation|verified pricing|today['’]s best/i);

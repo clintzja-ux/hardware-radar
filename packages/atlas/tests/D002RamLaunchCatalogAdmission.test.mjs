@@ -9,6 +9,10 @@ import {
     D002_EXISTING_ANCHOR_MPN,
     D002_RAM_LAUNCH_CANDIDATES
 } from "./fixtures/D002RamLaunchCatalogFixtures.mjs";
+import {
+    B002_ACTIVATION_PRODUCT_IDS,
+    createB002ActivationFixture
+} from "./fixtures/B002RamLaunchCohortActivationFixtures.mjs";
 
 const manifestUrl = new URL("../atlas-manifest.json", import.meta.url);
 const anchorUrl = new URL("../products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json", import.meta.url);
@@ -36,7 +40,10 @@ for (const fixture of records) {
         ({ identity }) => identity.atlasProductId === fixture.identity.atlasProductId
     );
     assert.ok(canonical, `Missing admitted product ${fixture.identity.atlasProductId}.`);
-    assert.deepEqual(canonical, fixture, `${fixture.identity.manufacturerPartNumber} differs from its certified fixture.`);
+    const expected = B002_ACTIVATION_PRODUCT_IDS.includes(fixture.identity.atlasProductId)
+        ? createB002ActivationFixture(fixture)
+        : fixture;
+    assert.deepEqual(canonical, expected, `${fixture.identity.manufacturerPartNumber} differs from its certified lifecycle fixture.`);
 }
 assert.equal(anchor.identity.manufacturerPartNumber, D002_EXISTING_ANCHOR_MPN);
 assert.deepEqual(

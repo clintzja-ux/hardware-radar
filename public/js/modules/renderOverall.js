@@ -12,7 +12,7 @@
             <div class="overall-topline">
 
                 <p class="eyebrow">
-                    🏆 TODAY'S CHEAPEST RAM
+                    🏆 CHEAPEST RAM WE'RE TRACKING
                 </p>
 
                  <div class="verification-block">
@@ -58,8 +58,8 @@ export function renderOverallUnavailable(containerId = "overallSection") {
     container.innerHTML = `
         <article class="overall-answer market-unavailable" role="status">
             <p class="eyebrow">CURRENT MARKET STATUS</p>
-            <h2>No qualifying listed price is available</h2>
-            <p class="best-for">Hardware Radar shows only monitored offers that satisfy its publication requirements.</p>
-            <p class="specs">Unavailable or stale observations remain hidden rather than being replaced with estimates.</p>
+            <h2>No tracked RAM price is available right now</h2>
+            <p class="best-for">We don't currently have an offer that qualifies for comparison.</p>
+            <p class="specs">Unavailable or stale prices stay hidden rather than being replaced with estimates. Check again later.</p>
         </article>`;
 }

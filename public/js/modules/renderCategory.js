@@ -61,8 +61,8 @@ export function renderCategoryUnavailable(containerId, title) {
     container.innerHTML = `
         <article class="card category-card market-unavailable">
             <p class="category-title">${title}</p>
-            <h3>Qualifying pricing unavailable</h3>
-            <p class="best-for">No current observation meets Hardware Radar's publication requirements.</p>
-            <div class="category-footer"><p class="mini-verified">Awaiting qualifying market data</p></div>
+            <h3>Price unavailable right now</h3>
+            <p class="best-for">We don't currently have a tracked offer that qualifies for this category.</p>
+            <div class="category-footer"><p class="mini-verified">Check again later</p></div>
         </article>`;
 }

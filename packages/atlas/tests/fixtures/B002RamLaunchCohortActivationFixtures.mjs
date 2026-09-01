@@ -1,5 +1,5 @@
-export const B002_ACTIVATION_REVIEWED_AT = "2026-09-01T12:00:00Z";
-export const B002_ACTIVATION_REVIEWER = "system:b002-fixture-certification";
+export const B002_ACTIVATION_REVIEWED_AT = "2026-09-01T16:18:29.377Z";
+export const B002_ACTIVATION_REVIEWER = "human:Clinton_Ramsook";
 
 export const B002_ACTIVATION_PRODUCT_IDS = Object.freeze([
     "ram_crucial_cp2k16g56c46u5",
@@ -36,7 +36,7 @@ export function createB002ActivationFixture(product) {
             humanReviewRequired: false,
             reviewedBy: B002_ACTIVATION_REVIEWER,
             reviewedAt: B002_ACTIVATION_REVIEWED_AT,
-            changeReason: "B-002 fixture-certified activation for the representative Mercury launch cohort; no market or publication authority implied."
+            changeReason: "B-002A authorized lifecycle activation for the representative Mercury launch cohort; no market or publication authority implied."
         }
     });
 }
