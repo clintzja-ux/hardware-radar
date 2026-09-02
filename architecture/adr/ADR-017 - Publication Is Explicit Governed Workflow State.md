@@ -1,8 +1,10 @@
 # ADR-017 — Publication Is Explicit Governed Workflow State
 
-**Status:** Proposed  
-**Subsystem:** Mercury / Forge  
+**Status:** Accepted
+**Subsystem:** Mercury / Forge
 **Related Contract:** IC-FORGE-MERCURY-005
+
+**Implementation evidence:** The append-only review/publication repositories, explicit `PUBLISH`/`WITHDRAW` workflow, controlled publication operator boundary, E2S composition, and fail-closed public snapshot are implemented and fixture-certified.
 
 ## Context
 

@@ -1,7 +1,7 @@
 # IC-DATAFORSEO-004E2I.3 — Atlas-Backed Merchant Registration
 
-**Status:** Implemented  
-**Increment:** DF004-E2I.3  
+**Status:** Implemented
+**Increment:** DF004-E2I.3
 **Owner:** Atlas / Mercury
 
 ## Ownership boundary

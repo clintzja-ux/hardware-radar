@@ -1,7 +1,7 @@
 # FM006 — Amazon Creators API Technical Verification Pass
 
-**Status:** VERIFIED IMPLEMENTATION BASELINE — LIVE CREDENTIALS NOT YET EXERCISED  
-**Date:** 2026-08-10  
+**Status:** VERIFIED IMPLEMENTATION BASELINE — LIVE CREDENTIALS NOT YET EXERCISED
+**Date:** 2026-08-10
 **Scope:** Pre-implementation verification for `forge-mercury-sprint6-amazon-acquisition`
 
 ## 1. Decision
@@ -126,8 +126,8 @@ A real API request may be attempted only after all of these are confirmed outsid
 
 ## 6. Verification outcome
 
-**Technical documentation:** VERIFIED WITH AUTHENTICATION CORRECTION  
-**FM006 architecture:** CLEARED FOR IMPLEMENTATION  
-**Live Amazon call:** BLOCKED UNTIL OPERATIONAL GATE IS SATISFIED  
-**FC001 compliance controls:** REMAIN IN FORCE  
+**Technical documentation:** VERIFIED WITH AUTHENTICATION CORRECTION
+**FM006 architecture:** CLEARED FOR IMPLEMENTATION
+**Live Amazon call:** BLOCKED UNTIL OPERATIONAL GATE IS SATISFIED
+**FC001 compliance controls:** REMAIN IN FORCE
 **Historical Amazon analytics:** REMAIN BLOCKED BY DEFAULT

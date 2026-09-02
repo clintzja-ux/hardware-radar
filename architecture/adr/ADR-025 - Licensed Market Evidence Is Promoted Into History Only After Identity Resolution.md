@@ -1,7 +1,9 @@
 # ADR-025 — Licensed Market Evidence Is Promoted Into History Only After Identity Resolution
 
-**Status:** PROPOSED — DF003-D implemented, pending certification  
+**Status:** Accepted — refined by ADR-042 and ADR-044
 **Owner:** Mercury
+
+**Implementation evidence:** DF003 durable retention and the certified E2G/E2H promotion assessment implement the fail-closed identity gate. ADR-042 makes promotion assessment explicit, while ADR-044 refines the admission representation by separating immutable historical admission from later canonical-observation promotion. Those later decisions govern wherever this ADR's original use of “canonical history” is ambiguous.
 
 ## Context
 

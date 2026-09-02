@@ -1,9 +1,9 @@
 # Amazon Creators API Technical & Operational Specification
 
-**Document ID:** AMZ-CREATORS-SPEC  
-**Version:** 0.3  
-**Status:** Verified Technical Baseline — Production Controls Pending  
-**Owner:** Mirabelle Labs  
+**Document ID:** AMZ-CREATORS-SPEC
+**Version:** 0.3
+**Status:** Verified Technical Baseline — Production Controls Pending
+**Owner:** Mirabelle Labs
 **Last verified:** 2026-08-10
 
 ---

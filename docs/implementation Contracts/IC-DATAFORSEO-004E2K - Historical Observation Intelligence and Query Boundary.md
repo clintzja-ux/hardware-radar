@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2K — Historical Observation Intelligence & Query Boundary
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2K
 
 ## Ownership and scope

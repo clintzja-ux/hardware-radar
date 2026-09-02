@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2L — Governed Historical Refresh & Accumulation
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2L
 
 ## Minimum safe acquisition path

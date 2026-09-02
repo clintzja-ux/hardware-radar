@@ -1,6 +1,6 @@
 # IC-DF004-E2Q.1 — Expired Canonical Admission Authorization Supersession
 
-**Status:** Implemented — fixture-certified  
+**Status:** Implemented — fixture-certified
 **Increment:** DF004-E2Q.1
 
 ## Purpose

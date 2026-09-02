@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2O.1 — Initial Production Historical Refresh Cadence
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2O.1
 
 ## Approved policy

@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -40,6 +42,26 @@ assert.equal(new Set(indexIds).size, indexIds.length, "Every ADR identifier must
 assert.deepEqual([...indexIds].sort(), [...fileIds].sort(), "The ADR index must cover every canonical ADR file and no nonexistent ADR.");
 assert.match(adrIndex, /ADR-005 through ADR-007 are intentionally unused/);
 
+for (const id of ["014", "017", "019", "025"]) {
+    const name = adrFiles.find((candidate) => candidate.startsWith(`ADR-${id}`));
+    assert.ok(name, `ADR-${id} must have one canonical file.`);
+    assert.match(await text(path.join("architecture", "adr", name)), /^\*\*Status:\*\* Accepted\b/m, `ADR-${id} must retain its reconciled accepted status.`);
+}
+
+assert.equal(existsSync(path.join(root, "docs", "test cmds.md")), false, "Operator-local command scratch documentation must not enter a release candidate.");
+
+const currentState = await text(path.join("docs", "handoff", "CURRENT-STATE.md"));
+assert.doesNotMatch(currentState, /HEAD at inspection:/, "CURRENT-STATE must not encode a commit hash that becomes stale on its own reconciliation commit.");
+assert.doesNotMatch(currentState, /clean committed baseline before MAIN-PROMOTION-R1/, "CURRENT-STATE must not describe R1 as uncommitted after certification.");
+assert.match(currentState, /\*\*219 subsystem test files\*\*/);
+assert.match(currentState, /MAIN_BRANCH_CONTINUOUS_DEPLOYMENT_TO_CLOUDFLARE_CONFIRMED/);
+
+const gitProbe = spawnSync("git", ["rev-parse", "--verify", "origin/main"], { cwd: root, encoding: "utf8" });
+if (gitProbe.status === 0) {
+    const promotionWhitespace = spawnSync("git", ["diff", "--check", "origin/main", "--"], { cwd: root, encoding: "utf8" });
+    assert.equal(promotionWhitespace.status, 0, promotionWhitespace.stdout || promotionWhitespace.stderr || "Promotion range contains whitespace errors.");
+}
+
 const atlasFiles = [
     ...await jsonFiles(path.join("packages", "atlas", "brands")),
     ...await jsonFiles(path.join("packages", "atlas", "products")),
@@ -58,5 +80,12 @@ for (const relativePath of atlasFiles) {
     }
 }
 assert.ok(newlineBearingAtlasFiles > 0, "Atlas integrity coverage requires newline-bearing canonical records.");
+
+for (const relativePath of [
+    path.join("public", "data", "atlas", "brands", "corsair.json"),
+    path.join("public", "data", "atlas", "products", "ram", "ddr5", "HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json")
+]) {
+    assert.doesNotMatch(await text(relativePath), /\r\n/, `${relativePath} is generated public text and must remain LF-governed.`);
+}
 
 console.log(`Release governance contract passed (${adrFiles.length} ADRs, ${atlasFiles.length} Atlas records).`);

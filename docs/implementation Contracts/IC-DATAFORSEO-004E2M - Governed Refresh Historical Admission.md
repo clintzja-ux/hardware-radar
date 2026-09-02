@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2M — Governed Refresh Historical Admission
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2M
 
 ## Admission boundary

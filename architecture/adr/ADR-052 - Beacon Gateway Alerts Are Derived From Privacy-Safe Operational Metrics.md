@@ -1,6 +1,6 @@
 # ADR-052 — Beacon Gateway Alerts Are Derived From Privacy-Safe Operational Metrics
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-24
 
 ## Context

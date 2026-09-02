@@ -1,6 +1,6 @@
 # ADR-053 — Beacon Gateway Operational Alerts Use Explicit Operator Email Notification
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-24
 
 ## Context

@@ -1,7 +1,9 @@
 # ADR-014 — Durable Observation Persistence Preserves Source Retention Boundaries
 
-**Status:** Proposed  
+**Status:** Accepted
 **Scope:** Mercury / Forge ingestion persistence
+
+**Implementation evidence:** The filesystem-backed `ObservationAcceptanceRepository`, source-retention enforcement, restart/idempotency coverage, fixture isolation, and failure-recovery behavior are implemented and relied upon by the certified Mercury ingestion and publication boundaries.
 
 ## Context
 Mercury observations are immutable evidence, but source licenses may restrict how long retailer-provided content may be retained. Immutability must not be interpreted as permission to retain licensed payload indefinitely.

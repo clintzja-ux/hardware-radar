@@ -1,8 +1,8 @@
 # Hardware Radar Content Foundation
 
-**Program increment:** CONTENT-001  
-**Status:** ACCEPTED EDITORIAL DOCTRINE AND INFORMATION ARCHITECTURE  
-**Owner:** Hardware Radar public/editorial product  
+**Program increment:** CONTENT-001
+**Status:** ACCEPTED EDITORIAL DOCTRINE AND INFORMATION ARCHITECTURE
+**Owner:** Hardware Radar public/editorial product
 **Scope:** Durable editorial mission, evidence rules, content structure, and staged implementation direction
 
 ## 1. Mission and boundary

@@ -1,9 +1,9 @@
 # Hardware Radar — RAM Launch Catalog and Minimum Useful Coverage
 
-**Program increment:** A-001  
-**Track:** A — Public Product / Launch  
-**Status:** ACCEPTED PRODUCT DEFINITION  
-**Owner:** Hardware Radar product  
+**Program increment:** A-001
+**Track:** A — Public Product / Launch
+**Status:** ACCEPTED PRODUCT DEFINITION
+**Owner:** Hardware Radar product
 **Scope:** First useful US RAM discovery/comparison launch
 
 ## 1. Purpose and boundary

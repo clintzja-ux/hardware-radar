@@ -1,6 +1,6 @@
 # IC-B-017 — Supplemental Offer Condition Evidence Governance
 
-**Status:** B-017A runtime implemented and fixture-certified; no production supplemental evidence configured  
+**Status:** B-017A runtime implemented and fixture-certified; no production supplemental evidence configured
 **Increment:** B-017 / B-017A
 
 ## Purpose

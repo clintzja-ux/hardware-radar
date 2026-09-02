@@ -1,6 +1,6 @@
 # ADR-048 — Beacon Production Gateway Uses Cloudflare Workers and D1
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-24
 
 ## Context

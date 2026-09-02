@@ -1,8 +1,8 @@
 # Hardware Radar — RAM Launch Catalog Candidates
 
-**Program increment:** D-001  
+**Program increment:** D-001
 **Status:** D-002B ATLAS ADMISSION COMPLETE / 2 PENDING EVIDENCE
-**Owner:** Atlas / Intelligence Foundation (Track D)  
+**Owner:** Atlas / Intelligence Foundation (Track D)
 **Scope:** Research resolution of the 24 A-001 RAM launch slots
 
 ## 1. Purpose and authority limits

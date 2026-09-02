@@ -1,6 +1,6 @@
 # ADR-045 — Historical Refresh Cycles Are Provider-Task Scoped
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-23
 
 ## Context

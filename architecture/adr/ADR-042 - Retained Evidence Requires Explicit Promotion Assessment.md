@@ -1,6 +1,6 @@
 # ADR-042 — Retained Evidence Requires Explicit Promotion Assessment
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-22
 
 ## Context

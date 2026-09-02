@@ -1,6 +1,6 @@
 # IC-FORGE-MERCURY-002 — Durable Observation Repository
 
-**Status:** Implemented — Pending Exit Review  
+**Status:** Implemented — Pending Exit Review
 **Subsystems:** Mercury / Forge integration
 
 ## Objective

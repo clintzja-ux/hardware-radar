@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2L.3 — Governed Historical Refresh Result Retrieval and Evidence Retention
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2L.3
 
 ## Retrieval binding

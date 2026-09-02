@@ -1,7 +1,7 @@
 # Hardware Radar — Product Evolution and Scope Doctrine
 
-**Status:** ACCEPTED  
-**Owner:** Mirabelle Labs  
+**Status:** ACCEPTED
+**Owner:** Mirabelle Labs
 **Scope:** Durable product evolution, MVP scope interpretation, and complexity control
 
 ## Governing principle

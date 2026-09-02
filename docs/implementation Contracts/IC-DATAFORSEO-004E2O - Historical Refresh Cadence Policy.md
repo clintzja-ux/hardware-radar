@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2O — Historical Refresh Cadence Policy
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2O
 
 ## Boundary

@@ -1,6 +1,6 @@
 # ADR-050 — Beacon Product-Interest Ingestion Is Rate Limited at the Cloudflare Edge
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-24
 
 ## Context

@@ -1,9 +1,9 @@
 # Hardware Radar — RAM Launch Retailer Portfolio and Relationship Strategy
 
-**Program increment:** C-001  
-**Track:** C — Retailer & Commercial  
-**Status:** ACCEPTED STRATEGY DEFINITION  
-**Owner:** Hardware Radar retailer/commercial development  
+**Program increment:** C-001
+**Track:** C — Retailer & Commercial
+**Status:** ACCEPTED STRATEGY DEFINITION
+**Owner:** Hardware Radar retailer/commercial development
 **Scope:** Initial US RAM launch portfolio and relationship work
 
 ## 1. Purpose and boundary

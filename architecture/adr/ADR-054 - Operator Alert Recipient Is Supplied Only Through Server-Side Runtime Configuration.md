@@ -1,6 +1,6 @@
 # ADR-054 — Operator Alert Recipient Is Supplied Only Through Server-Side Runtime Configuration
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-24
 
 ## Context

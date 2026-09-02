@@ -1,6 +1,6 @@
 # IC-MERCURY-RIGHTS-001 — Source Rights & Data Lifecycle Architecture
 
-**Implementation status:** COMPLETE — pending external verification/certification  
+**Implementation status:** COMPLETE — pending external verification/certification
 **Branch:** `mercury-rights-sprint1-source-rights`
 
 ## Objective

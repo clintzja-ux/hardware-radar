@@ -1,6 +1,6 @@
 # ADR-047 — First-Party Interest Collection Requires a Governed Write Boundary
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-24
 
 ## Context

@@ -1,6 +1,6 @@
 # IC-DF004-E2Q — Controlled Canonical Admission Operator Governance
 
-**Status:** Implemented — fixture-certified  
+**Status:** Implemented — fixture-certified
 **Increment:** DF004-E2Q
 
 ## Purpose

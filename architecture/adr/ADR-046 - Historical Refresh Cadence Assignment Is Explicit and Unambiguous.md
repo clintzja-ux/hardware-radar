@@ -1,6 +1,6 @@
 # ADR-046 — Historical Refresh Cadence Assignment Is Explicit and Unambiguous
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-23
 
 ## Context

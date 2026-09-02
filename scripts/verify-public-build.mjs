@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { generateSitemap, parseEditorialSource, renderArticle, renderGuidesIndex, validateArticleMetadata } from "./editorial-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const canonicalText = (contents) => contents.toString("utf8").replaceAll("\r\n", "\n");
 async function snapshot(directory, { exclude = [] } = {}, prefix = "") {
     const result = new Map();
     for (const entry of (await readdir(directory)).sort()) {
@@ -21,7 +22,7 @@ async function verifyProjection(label, source, destination, options) {
     const errors = [];
     for (const [file, contents] of expected) {
         if (!actual.has(file)) errors.push(`${label}: missing public artifact ${file}`);
-        else if (!contents.equals(actual.get(file))) errors.push(`${label}: stale public artifact ${file}`);
+        else if (canonicalText(contents) !== canonicalText(actual.get(file))) errors.push(`${label}: stale public artifact ${file}`);
     }
     for (const file of actual.keys()) if (!expected.has(file)) errors.push(`${label}: unexpected public artifact ${file}`);
     return errors;

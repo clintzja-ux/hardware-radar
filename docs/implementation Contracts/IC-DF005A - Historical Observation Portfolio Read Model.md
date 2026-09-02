@@ -1,6 +1,6 @@
 # IC-DF005A — Historical Observation Portfolio Read Model
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF005-A
 
 ## Boundary

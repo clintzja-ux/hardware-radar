@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2L.4 — Refresh Identity Reuse Integration Into Promotion Assessment
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2L.4
 
 ## Durable reuse governance

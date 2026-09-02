@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2L.1 — Refresh Authorization & Single-Use Execution
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2L.1
 
 ## Authorization boundary

@@ -1,7 +1,7 @@
 # ADR-024 — Merchant Identity Is Independent of Affiliate Relationships
 
-**Status:** ACCEPTED  
-**Date:** 2026-08-16  
+**Status:** ACCEPTED
+**Date:** 2026-08-16
 **Owner:** Mirabelle Labs / Hardware Radar
 
 ## Context

@@ -1,6 +1,6 @@
 # IC-ATLAS-006 — RAM Launch Cohort Lifecycle Activation Readiness
 
-**Increment:** B-002  
+**Increment:** B-002
 **Status:** Fixture-certified and operator-authorized production activation completed in B-002A
 **Owner:** Atlas lifecycle governance
 

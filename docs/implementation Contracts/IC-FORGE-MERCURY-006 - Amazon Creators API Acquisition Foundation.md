@@ -38,5 +38,3 @@ Final verification:
 | Browser console            |                **CLEAN** |
 | Amazon credentials exposed |                 **None** |
 | Live Amazon calls          | **None — intentionally** |
-
-

@@ -1,6 +1,6 @@
 # ADR-044 — Historical Admission Is Separate From Canonical Observation Promotion
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-23
 
 ## Context

@@ -1,7 +1,9 @@
 # ADR-019 — Source Rights Are First-Class Mercury Policy
 
-**Status:** PROPOSED / MR001 implementation complete pending user verification  
+**Status:** Accepted
 **Date:** 2026-08-10
+
+**Implementation evidence:** MR001/EDR-026 completed the source-rights architecture, and the registry, validation, acquisition, retention, historical, publication, and fail-closed rights suites now enforce this decision across Mercury.
 
 ## Context
 
@@ -25,5 +27,3 @@ Retailer-specific facts belong in source-rights profiles, not Sentinel invariant
 - Unknown future sources no longer default to durable storage.
 - Historical Intelligence remains available for sources that explicitly permit historical retention.
 - Future retailer audits can update policy profiles without redesigning Mercury.
-
-## promote ADR-019 to ACCEPTED.

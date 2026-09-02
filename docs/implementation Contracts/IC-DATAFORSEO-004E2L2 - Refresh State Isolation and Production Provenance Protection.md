@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-004E2L.2 — Refresh State Isolation and Production Provenance Protection
 
-**Status:** Implemented  
+**Status:** Implemented
 **Increment:** DF004-E2L.2
 
 ## State isolation

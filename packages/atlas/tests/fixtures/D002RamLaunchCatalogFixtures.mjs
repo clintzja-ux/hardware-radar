@@ -187,4 +187,3 @@ function buildCandidate([slotId, brand, family, mpn, sourceLocator, memoryType, 
 export const D002_BLOCKED_MPNS = Object.freeze(["F4-3200C16D-64GVK", "CT32G4SFD832A"]);
 export const D002_EXISTING_ANCHOR_MPN = "CMK32GX5M2B6000Z30";
 export const D002_RAM_LAUNCH_CANDIDATES = Object.freeze(candidates.map(buildCandidate));
-

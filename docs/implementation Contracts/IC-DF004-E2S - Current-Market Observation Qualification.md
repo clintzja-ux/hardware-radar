@@ -1,7 +1,7 @@
 # IC-DF004-E2S — Current-Market Observation Qualification
 
-**Status:** Implemented — fixture-certified  
-**Increment:** DF004-E2S  
+**Status:** Implemented — fixture-certified
+**Increment:** DF004-E2S
 **Policy version:** `DF004-E2S-1.0`
 
 ## Purpose

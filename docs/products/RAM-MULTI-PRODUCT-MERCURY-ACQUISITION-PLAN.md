@@ -1,8 +1,8 @@
 # B-001 — Multi-Product Mercury Launch Acquisition Plan
 
-**Status:** READ-ONLY PLAN — no acquisition authorized  
-**Owner:** Track B / Mercury market-data planning  
-**Catalog basis:** 22 canonical Atlas RAM products at repository HEAD `20902418af766d5a1f3eda4e017c8e0ca4a45a1a`  
+**Status:** READ-ONLY PLAN — no acquisition authorized
+**Owner:** Track B / Mercury market-data planning
+**Catalog basis:** 22 canonical Atlas RAM products at repository HEAD `20902418af766d5a1f3eda4e017c8e0ca4a45a1a`
 **Actual spend in B-001:** `$0.000`
 
 This plan translates the [RAM launch catalog](./RAM-LAUNCH-CATALOG-AND-COVERAGE.md) into a finite Mercury acquisition progression. It does not create a DataForSEO task, rights profile, cadence or freshness policy, identity decision, observation, review, publication decision, Current Price, Cheapest, Pick, or recommendation authority.

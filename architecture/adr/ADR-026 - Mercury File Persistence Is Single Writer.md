@@ -1,6 +1,6 @@
 # ADR-026 — Mercury File Persistence Is Single Writer
 
-**Status:** ACCEPTED  
+**Status:** ACCEPTED
 **Scope:** Mercury file-backed repositories and recurring acquisition execution
 
 ## Decision

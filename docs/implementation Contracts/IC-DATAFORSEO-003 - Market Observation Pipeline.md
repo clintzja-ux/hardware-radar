@@ -1,7 +1,7 @@
 # IC-DATAFORSEO-003 — DataForSEO Market Observation Pipeline
 
-**Status:** IN PROGRESS  
-**Owner:** Mercury  
+**Status:** IN PROGRESS
+**Owner:** Mercury
 **Source:** DATAFORSEO_GOOGLE_SHOPPING
 
 ## Objective

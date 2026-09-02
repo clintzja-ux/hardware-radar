@@ -49,7 +49,7 @@ Compass, Echo, and Aurora appear in long-term platform documentation as future r
 - Cloudflare Workers and D1 are the selected future Gateway runtime/storage architecture. A draft D1 migration exists, but neither Worker nor D1 is configured or deployed.
 - Cloudflare WAF rate limiting, Workers Logs, and Cloudflare Email Service are selected future provider boundaries. Selection and policy configuration do not mean deployment.
 - DataForSEO acquisition is governed through Mercury rights, planning, budget, authorization, execution, retention, replay, and promotion boundaries. LIVE commands are operator-controlled and never implicit.
-- Git owns version history. Repository evidence does not establish a currently configured GitHub workflow, even though historical documents mention GitHub continuous deployment.
+- Git owns version history. Operator inspection of the Cloudflare dashboard confirmed that Cloudflare Pages project `hardware-radar` continuously deploys connected repository `clintzja-ux/hardware-radar`, with `main` as production and non-main branches as Preview deployments. Repository inspection alone did not establish this external configuration.
 - Local operational tooling is Node-based, with PowerShell wrappers for sensitive ephemeral operator input. Secrets must not be passed as command arguments or written into source, public artifacts, logs, chat, or handoff documents.
 
 ## Repository map
@@ -106,7 +106,7 @@ Release certification uses the committed lockfile and `npm ci`, and must reprodu
 
 ## Deployment philosophy
 
-The repository distinguishes `implemented`, `tested`, `selected`, `configured`, `approved`, `prepared`, `deployed`, `connected`, and `enabled`. None implies the next. Cloudflare Workers/D1, WAF, Workers Logs, and Email Service are target architecture with governed policies, but current backend transport remains `NOT_CONNECTED`. Browser instrumentation is separately gated and absent. Static-site files and historical references to a live domain do not prove current external provider configuration; verify provider state through an explicitly authorized operator process.
+The repository distinguishes `implemented`, `tested`, `selected`, `configured`, `approved`, `prepared`, `deployed`, `connected`, and `enabled`. None implies the next. Cloudflare Workers/D1, WAF, Workers Logs, and Email Service are target architecture with governed policies, but current backend transport remains `NOT_CONNECTED`. Browser instrumentation is separately gated and absent. Static-site files and historical references to a live domain do not prove current external provider configuration; verify provider state through an explicitly authorized operator process. The operator-verified static-site coupling means updating or merging `main` triggers a Cloudflare Pages production deployment and therefore requires explicit production deployment authorization; non-main branches remain Preview-only.
 
 ## Roadmap
 

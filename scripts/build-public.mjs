@@ -39,10 +39,23 @@ async function copyDirectory(source, destination, { exclude = [] } = {}) {
     }
 }
 
+async function normalizeGeneratedText(directory) {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+        const target = path.join(directory, entry.name);
+        if (entry.isDirectory()) await normalizeGeneratedText(target);
+        else {
+            const value = await readFile(target, "utf8");
+            const normalized = value.replaceAll("\r\n", "\n");
+            if (normalized !== value) await writeFile(target, normalized, "utf8");
+        }
+    }
+}
+
 async function json(file) { return JSON.parse(await readFile(file, "utf8")); }
 async function loadManifestRecords(packageRoot, entries) { return Promise.all(entries.map((entry) => json(path.resolve(packageRoot, entry.path)))); }
 
 await copyDirectory(path.join(root, "packages", "atlas"), path.join(root, "public", "data", "atlas"), { exclude: ["tests", "README.md"] });
+await normalizeGeneratedText(path.join(root, "public", "data", "atlas"));
 await copyDirectory(path.join(root, "apps", "forge"), path.join(root, "public", "forge"), { exclude: ["README.md"] });
 await rm(path.join(root, "public", "data", "mercury"), { recursive: true, force: true });
 await rm(path.join(root, "public", "data", "sentinel"), { recursive: true, force: true });

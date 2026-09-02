@@ -1,6 +1,6 @@
 # ADR-051 — Beacon Gateway Monitoring Stores Operational Categories, Not Behavioral Payloads
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-24
 
 ## Context

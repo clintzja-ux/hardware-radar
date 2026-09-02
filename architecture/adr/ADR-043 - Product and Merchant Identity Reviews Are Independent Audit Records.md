@@ -1,6 +1,6 @@
 # ADR-043 — Product and Merchant Identity Reviews Are Independent Audit Records
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-22
 
 ## Context

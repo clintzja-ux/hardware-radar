@@ -1,7 +1,7 @@
 # FC001 — Amazon Compliance Integration Review
 
-**Status:** APPROVED BASELINE — IMPLEMENTATION BLOCKED UNTIL GAPS BELOW ARE CLOSED  
-**Date:** 2026-08-09  
+**Status:** APPROVED BASELINE — IMPLEMENTATION BLOCKED UNTIL GAPS BELOW ARE CLOSED
+**Date:** 2026-08-09
 **Scope:** Forge–Mercury canonical ingestion of Amazon.com Product Advertising Content
 
 ## 1. Decision
@@ -126,8 +126,7 @@ The following are not architecture questions and must be resolved before a live 
 
 ## 7. FC001 outcome
 
-**Architecture:** PASS WITH REQUIRED SOURCE-SPECIFIC CONTROLS  
-**Current Amazon adapter as production ingestion path:** BLOCKED  
-**Mercury v1.0 retailer-neutral certification:** UNAFFECTED  
+**Architecture:** PASS WITH REQUIRED SOURCE-SPECIFIC CONTROLS
+**Current Amazon adapter as production ingestion path:** BLOCKED
+**Mercury v1.0 retailer-neutral certification:** UNAFFECTED
 **FM001:** MAY PROCEED TO DESIGN/IMPLEMENTATION ONLY UNDER THE MANDATORY GATES ABOVE
-

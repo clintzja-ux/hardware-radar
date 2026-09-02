@@ -86,4 +86,3 @@ Use the more authoritative underlying artifact, stop if the conflict is safety-r
 - Keep the handoff concise and link to canonical contracts, ADRs, policies, tests, and runbooks rather than reproducing them.
 - Update `Last updated`, branch, HEAD, working-tree description, active increment, previous increment, test baseline, blockers, and next action together when applicable.
 - Include handoff changes with the meaningful increment they describe unless the handoff correction is a separate documentation-only change.
-

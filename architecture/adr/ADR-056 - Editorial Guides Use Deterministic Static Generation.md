@@ -1,6 +1,6 @@
 # ADR-056 — Editorial Guides Use Deterministic Static Generation
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-09-02
 
 ## Context

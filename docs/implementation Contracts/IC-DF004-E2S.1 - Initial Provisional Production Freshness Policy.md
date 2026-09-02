@@ -1,7 +1,7 @@
 # IC-DF004-E2S.1 — Initial Provisional Production Freshness Policy
 
-**Status:** Implemented — fixture-certified  
-**Increment:** DF004-E2S.1  
+**Status:** Implemented — fixture-certified
+**Increment:** DF004-E2S.1
 **Policy:** `mer_current_market_dataforseo_platinummicro_v1` version `1.0.0`
 
 ## Approved scope

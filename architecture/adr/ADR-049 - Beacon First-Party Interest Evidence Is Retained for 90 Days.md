@@ -1,6 +1,6 @@
 # ADR-049 — Beacon First-Party Interest Evidence Is Retained for 90 Days
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-08-24
 
 ## Context
