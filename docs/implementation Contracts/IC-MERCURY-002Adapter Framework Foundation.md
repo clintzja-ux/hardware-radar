@@ -189,6 +189,17 @@ MERCURY-PRINCIPLE-001 — Adapter Isolation
 
 All external retailer-specific behavior shall be isolated behind the canonical RetailerAdapter interface. No other Mercury subsystem may depend directly on retailer-specific implementations.
 
+### Governed DataForSEO retailer registrations
+
+The DataForSEO Google Shopping normalizer is provider/source behavior and is shared. Compatibility remains an explicit retailer/marketplace registration, not global support for every seller returned by Google Shopping. The registry may therefore contain multiple retailer-scoped registrations for the same adapter implementation and adapter identity, and resolves the applicable registration from the canonical observation's Atlas retailer and marketplace.
+
+Approved registrations are:
+
+- `RETAILER-0002` / `platinummicro.com` / API / normalization `1.0.0`;
+- `RETAILER-0003` / `memoryc.com` / API / normalization `1.0.0`.
+
+`memoryc.com` is exact and case-normalized. `www.memoryc.com`, arbitrary subdomains, lookalikes, unrelated retailers, and unregistered marketplaces remain unsupported. Retailer adapter registration is not retailer identity, source rights, publication eligibility, publication authority, or affiliate status.
+
 This principle reinforces the architecture we've been shaping.
 
 Architecture Decision Record

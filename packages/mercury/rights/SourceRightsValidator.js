@@ -1,6 +1,6 @@
 import { RIGHTS_STATES } from "./SourceRightsPolicy.js";
 const allowed = new Set(Object.values(RIGHTS_STATES));
-const required = ["acquisition.api","acquisition.manual","acquisition.import","live.currentObservation","live.publicDisplay","live.comparison","retention.historical","retention.durableAuditMetadata","derivation.analytics","derivation.historicalAnalytics","presentation.attribution"];
+const required = ["acquisition.api","acquisition.manual","acquisition.import","live.currentObservation","live.publicDisplay","live.comparison","retention.historical","retention.durableAuditMetadata","derivation.analytics","derivation.offerCondition","derivation.historicalAnalytics","presentation.attribution"];
 function at(o,p){return p.split(".").reduce((v,k)=>v?.[k],o);}
 export function validateSourceRightsProfile(profile) {
   const errors=[];

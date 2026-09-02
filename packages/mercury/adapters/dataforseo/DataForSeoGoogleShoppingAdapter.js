@@ -1,18 +1,23 @@
 import RetailerAdapter from "../interfaces/RetailerAdapter.js";
 import { normalizeDataForSeoSellerEvidence } from "./DataForSeoSellerNormalizer.js";
-import DATAFORSEO_GOOGLE_SHOPPING_ADAPTER_MANIFEST from "./manifest.js";
+import DATAFORSEO_GOOGLE_SHOPPING_ADAPTER_MANIFEST, { DATAFORSEO_GOOGLE_SHOPPING_MEMORYC_ADAPTER_MANIFEST } from "./manifest.js";
 
 export class DataForSeoGoogleShoppingAdapter extends RetailerAdapter {
+    constructor({ manifest = DATAFORSEO_GOOGLE_SHOPPING_ADAPTER_MANIFEST } = {}) {
+        super();
+        this.manifest = manifest;
+    }
+
     getMetadata() {
-        return DATAFORSEO_GOOGLE_SHOPPING_ADAPTER_MANIFEST;
+        return this.manifest;
     }
 
     supportsMarketplace(marketplace) {
-        return typeof marketplace === "string" && DATAFORSEO_GOOGLE_SHOPPING_ADAPTER_MANIFEST.marketplaces.includes(marketplace.trim().toLowerCase());
+        return typeof marketplace === "string" && this.manifest.marketplaces.includes(marketplace.trim().toLowerCase());
     }
 
     supportsSourceMethod(sourceMethod) {
-        return typeof sourceMethod === "string" && DATAFORSEO_GOOGLE_SHOPPING_ADAPTER_MANIFEST.sourceMethods.includes(sourceMethod.trim().toUpperCase());
+        return typeof sourceMethod === "string" && this.manifest.sourceMethods.includes(sourceMethod.trim().toUpperCase());
     }
 
     normalize(input, context = {}) {
@@ -22,4 +27,6 @@ export class DataForSeoGoogleShoppingAdapter extends RetailerAdapter {
     }
 }
 
-export default new DataForSeoGoogleShoppingAdapter();
+export const dataForSeoGoogleShoppingAdapter = new DataForSeoGoogleShoppingAdapter();
+export const memoryCDataForSeoGoogleShoppingAdapter = new DataForSeoGoogleShoppingAdapter({ manifest: DATAFORSEO_GOOGLE_SHOPPING_MEMORYC_ADAPTER_MANIFEST });
+export default dataForSeoGoogleShoppingAdapter;

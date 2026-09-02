@@ -13,4 +13,5 @@ export { createDataForSeoCanonicalObservation } from "./DataForSeoCanonicalObser
 export { DataForSeoHistoricalPromotionService } from "./DataForSeoHistoricalPromotionService.js";
 export { EVIDENCE_PROMOTION_STATES, assessDataForSeoEvidencePromotion } from "./DataForSeoEvidencePromotionAssessment.js";
 export { composeInitialAcquisitionPromotionAssessment } from "./InitialAcquisitionPromotionComposition.js";
+export { resolveGovernedInitialAcquisitionPromotionContext } from "./InitialAcquisitionPromotionContext.js";
 export { FileDataForSeoMarketEvidenceRepository, evidenceAcquisitionIdentity, materialEvidenceFingerprint } from "./persistence/FileDataForSeoMarketEvidenceRepository.js";

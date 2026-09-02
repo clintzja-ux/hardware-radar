@@ -15,6 +15,8 @@ The first E2S production freshness policy is explicitly approved and narrowly bo
 
 The policy status is `PROVISIONAL`, effective `2026-08-30T00:00:00.000Z`, with approval basis `EXPLICIT_OPERATOR_APPROVAL_DF004_E2S.1`. Other providers, sources, retailers, marketplaces, or malformed/ambiguous policies fail closed. There is no universal production fallback.
 
+B-016A adds a second explicit provisional policy, `mer_current_market_dataforseo_memoryc_v1` version `1.0.0`, bound to provider `DATAFORSEO`, source `DATAFORSEO_GOOGLE_SHOPPING`, `RETAILER-0003`, and `memoryc.com`. Its approval basis is `EXPLICIT_OPERATOR_APPROVAL_B-016A`. This is an additional retailer-scoped policy, not a universal DataForSEO fallback.
+
 ## Classification
 
 Using immutable market `observationTime` and an explicit evaluation time:
@@ -27,6 +29,8 @@ The exact thresholds are `currentUntilMs=21600000` and `staleAfterMs=86400000`. 
 
 Six hours is a maximum eligibility age, not a refresh cadence, scheduler interval, acquisition promise, or guarantee of continuous coverage. The independently governed historical-refresh cadence remains unchanged.
 
+MemoryC uses the same six-hour CURRENT and 24-hour STALE thresholds because it is the same governed DataForSEO Google Shopping source class operating under the same six-hour scheduler context. The choice was not derived from the age of the current observation. The policy remains independently retailer-bound and provisional so real Mercury and Beacon evidence may justify later retailer-specific revision.
+
 ## Rationale
 
 Independent market evidence must be sufficiently recent to participate in current-market evaluation. The former 30-minute development threshold was never approved production policy. Six hours provides a provisional balance between shopper usefulness and paid independent-acquisition economics; the 24-hour boundary preserves an aging period without presenting day-old evidence as current. Hardware Radar does not require continuous current coverage, and observations may age out rather than forcing acquisition. Real Mercury and Beacon evidence should later inform reassessment.
@@ -36,6 +40,8 @@ Independent market evidence must be sufficiently recent to participate in curren
 Freshness does not override condition, confidence, adapter, rights, review, or publication policy. `UNKNOWN` condition remains ineligible and is never inferred as `NEW`. Confidence remains derived and requires every governed signal, including CURRENT freshness and compatible adapter evidence.
 
 E2S qualification continues to grant no publication, published, Current Price, live/public-price, Cheapest, Pick, ranking, or recommendation authority. This increment performs no refresh, provider call, paid task, canonical/review/publication mutation, or public-snapshot mutation.
+
+Freshness policy establishes temporal currentness rules only. It does not establish adapter compatibility, condition, confidence by itself, publication eligibility, or any downstream authority.
 
 ## Production diagnostic
 

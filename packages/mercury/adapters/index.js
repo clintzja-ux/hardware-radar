@@ -1,6 +1,6 @@
 import AdapterRegistry from "./registry/AdapterRegistry.js";
 import amazonAdapter, { AmazonAdapter } from "./amazon/AmazonAdapter.js";
-import dataForSeoGoogleShoppingAdapter, { DataForSeoGoogleShoppingAdapter } from "./dataforseo/DataForSeoGoogleShoppingAdapter.js";
+import dataForSeoGoogleShoppingAdapter, { DataForSeoGoogleShoppingAdapter, memoryCDataForSeoGoogleShoppingAdapter } from "./dataforseo/DataForSeoGoogleShoppingAdapter.js";
 
 export { RetailerAdapter, RETAILER_ADAPTER_REQUIRED_METHODS } from "./interfaces/RetailerAdapter.js";
 export { AdapterRegistry } from "./registry/AdapterRegistry.js";
@@ -17,8 +17,8 @@ export {
     validateAdapterManifestEntry
 } from "./AdapterValidator.js";
 
-export const adapterRegistry = new AdapterRegistry([amazonAdapter, dataForSeoGoogleShoppingAdapter]);
+export const adapterRegistry = new AdapterRegistry([amazonAdapter, dataForSeoGoogleShoppingAdapter, memoryCDataForSeoGoogleShoppingAdapter]);
 export default adapterRegistry;
 export { normalizeDataForSeoSellerEvidence } from "./dataforseo/DataForSeoSellerNormalizer.js";
-export { DataForSeoGoogleShoppingAdapter, dataForSeoGoogleShoppingAdapter };
-export { DATAFORSEO_GOOGLE_SHOPPING_ADAPTER_MANIFEST } from "./dataforseo/manifest.js";
+export { DataForSeoGoogleShoppingAdapter, dataForSeoGoogleShoppingAdapter, memoryCDataForSeoGoogleShoppingAdapter };
+export { DATAFORSEO_GOOGLE_SHOPPING_ADAPTER_MANIFEST, DATAFORSEO_GOOGLE_SHOPPING_MEMORYC_ADAPTER_MANIFEST } from "./dataforseo/manifest.js";

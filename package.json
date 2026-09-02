@@ -42,6 +42,8 @@
     "acquisition:sellers:retain": "node --env-file=.env scripts/mercury-sellers-df003-retain.mjs",
     "evidence:promotion:assess": "node scripts/mercury-evidence-promotion-assess.mjs",
     "evidence:historical:admit": "node scripts/mercury-historical-observation-admit.mjs",
+    "evidence:historical:prepare": "node scripts/mercury-historical-admission-prepare.mjs",
+    "evidence:historical:execute": "node scripts/mercury-historical-admission-execute.mjs",
     "evidence:canonical:assess": "node scripts/mercury-canonical-observation-assess.mjs",
     "evidence:canonical:prepare": "node scripts/mercury-canonical-admission-prepare.mjs",
     "evidence:canonical:supersede": "node scripts/mercury-canonical-admission-supersede.mjs",

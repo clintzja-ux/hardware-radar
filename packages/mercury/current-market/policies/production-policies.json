@@ -30,6 +30,36 @@
         "staleAfterMs": 86400000,
         "description": "Provisional production freshness policy for DataForSEO Google Shopping observations from Platinummicro."
       }
+    },
+    {
+      "schemaVersion": "1.0",
+      "policyType": "CURRENT_MARKET_PRODUCTION_FRESHNESS",
+      "policyId": "mer_current_market_dataforseo_memoryc_v1",
+      "version": "1.0.0",
+      "provider": "DATAFORSEO",
+      "sourceId": "DATAFORSEO_GOOGLE_SHOPPING",
+      "retailerId": "RETAILER-0003",
+      "marketplace": "memoryc.com",
+      "atlasProductIds": null,
+      "status": "PROVISIONAL",
+      "effectiveAt": "2026-09-02T00:00:00.000Z",
+      "approvedForProduction": true,
+      "approvalBasis": "EXPLICIT_OPERATOR_APPROVAL_B-016A",
+      "metadata": {
+        "economicRationale": "The existing six-hour DataForSEO Google Shopping currentness window aligns with the governed six-hour acquisition scheduler context without requiring continuous paid acquisition.",
+        "shopperClaimRationale": "MemoryC RAM offers use the same provider/source class and must not be described as current after the source-class currentness window.",
+        "coverageRationale": "The policy is explicitly retailer-scoped and does not enable arbitrary Google Shopping merchants.",
+        "reassessmentBasis": "Provisional until real Mercury and Beacon evidence supports retailer-specific threshold review.",
+        "refreshCadenceIndependent": true
+      },
+      "freshnessPolicy": {
+        "schemaVersion": "1.0",
+        "policyId": "mer_current_market_dataforseo_memoryc_v1",
+        "version": "1.0.0",
+        "currentUntilMs": 21600000,
+        "staleAfterMs": 86400000,
+        "description": "Provisional production freshness policy for DataForSEO Google Shopping observations from MemoryC."
+      }
     }
   ]
 }

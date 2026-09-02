@@ -1,6 +1,6 @@
 # IC-DF004-E2P — Canonical Observation Admission Governance
 
-**Status:** Implemented — fixture-certified  
+**Status:** Implemented — B-014A fixture-certified
 **Increment:** DF004-E2P
 
 ## Purpose
@@ -30,6 +30,10 @@ Policy `DF004-E2P-1.0` is restricted to `DATAFORSEO_GOOGLE_SHOPPING` and binds t
 The assessment binds the exact retained evidence, matching `mer_hist_*` admission, Atlas product, Atlas retailer, provider/source, SELLERS task, raw-payload reference, canonical rights profile, evidence hash, historical-record hash, and policy version. Missing, malformed, substituted, conflicting, aggregate, or caller-supplied identity state fails closed. There is no ambient-time or freshness policy.
 
 Second-and-later historical-refresh generations consume the same governed identity projection produced by E2G/E2J. E2P delegates chained identity reuse to the shared Mercury lineage owner and requires the complete retained-evidence and historical-observation chain; it does not reinterpret review decisions locally. Missing intermediate history, cycles, branches, substituted decisions/remediations/merchant or retailer bindings, provider drift, and ineffective identity state remain fail-closed. Direct-reviewed and one-hop evidence retain the same policy semantics.
+
+Governed initial-acquisition history consumes the certified B-009A/B-010A `GOVERNED_INITIAL_ACQUISITION_BINDING` through the shared read-only initial-acquisition context owner also used by E2J. Detection comes from the exact retained-evidence membership in validated SELLERS retention lineage, not product, retailer, provider, or operator assertion. E2P reconstructs and supplies the same projection to E2G/E2H, while the retained record's stored identity remains immutable. Evidence that claims governed initial-acquisition lineage cannot fall back to generic identity semantics when the retention audit, proposal, Product Info validation, task chain, provider identity, Atlas lifecycle, or seller evidence is missing, contradictory, or substituted.
+
+For this path, the E2P candidate binding additionally preserves the governed projection ID and merchant decision ID. Historical product/retailer, merchant-decision, raw-reference, and PRODUCTS/PRODUCT_INFO/SELLERS lineage must agree with the current projection. E2Q delegates to the E2P owner and therefore reconstructs this same context during both PREPARE and execution-time reassessment; it has no independent initial-acquisition resolver.
 
 ## Admission and replay
 

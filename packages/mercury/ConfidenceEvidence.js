@@ -17,7 +17,7 @@ export function assessAdapterCompatibility(observation, adapterRegistry) {
     let adapter = null, metadata = null;
     if (!adapterRegistry || typeof adapterRegistry.get !== "function" || typeof adapterId !== "string" || adapterId.trim() === "") reasons.push("ADAPTER_NOT_REGISTERED");
     else {
-        try { adapter = adapterRegistry.get(adapterId); } catch { adapter = null; }
+        try { adapter = adapterRegistry.get(adapterId, { retailerId: observation?.retailerId, marketplace: observation?.marketplace }); } catch { adapter = null; }
         if (!adapter) reasons.push("ADAPTER_NOT_REGISTERED");
     }
     if (adapter) {

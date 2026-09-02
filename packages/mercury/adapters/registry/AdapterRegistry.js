@@ -16,13 +16,24 @@ export class AdapterRegistry {
         if (!report.valid) throw new TypeError(`Invalid retailer adapter: ${report.errors.map((error) => error.code).join(", ")}`);
         const metadata = adapter.getMetadata();
         const key = normalize(metadata.adapterId, "adapterId");
-        if (this.adapters.has(key)) throw new Error(`Duplicate adapter registration: ${metadata.adapterId}`);
-        this.adapters.set(key, adapter);
+        const registrations = this.adapters.get(key) ?? [];
+        if (registrations.some((registered) => {
+            const current = registered.getMetadata();
+            return current.retailerId === metadata.retailerId && current.marketplaces.some((marketplace) => metadata.marketplaces.includes(marketplace));
+        })) throw new Error(`Duplicate adapter registration: ${metadata.adapterId}`);
+        this.adapters.set(key, [...registrations, adapter]);
         return adapter;
     }
 
-    get(adapterId) {
-        return this.adapters.get(normalize(adapterId, "adapterId")) ?? null;
+    get(adapterId, { retailerId = null, marketplace = null } = {}) {
+        const registrations = this.adapters.get(normalize(adapterId, "adapterId")) ?? [];
+        if (!registrations.length) return null;
+        if (typeof retailerId === "string" && retailerId.trim()) {
+            const retailerRegistrations = registrations.filter((adapter) => adapter.getMetadata().retailerId.toLowerCase() === retailerId.trim().toLowerCase());
+            if (retailerRegistrations.length) return retailerRegistrations.find((adapter) => typeof marketplace === "string" && adapter.supportsMarketplace(marketplace)) ?? retailerRegistrations[0];
+        }
+        if (typeof marketplace === "string" && marketplace.trim()) return registrations.find((adapter) => adapter.supportsMarketplace(marketplace)) ?? registrations[0];
+        return registrations[0];
     }
 
     has(adapterId) {
@@ -30,7 +41,7 @@ export class AdapterRegistry {
     }
 
     getAll() {
-        return Object.freeze([...this.adapters.values()]);
+        return Object.freeze([...this.adapters.values()].flat());
     }
 
     getByRetailerId(retailerId) {

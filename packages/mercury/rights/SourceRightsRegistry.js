@@ -8,7 +8,7 @@ const profiles = Object.freeze({
     acquisition: { api: RIGHTS_STATES.NOT_APPLICABLE, manual: RIGHTS_STATES.ALLOWED, import: RIGHTS_STATES.ALLOWED },
     live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.BLOCKED, comparison: RIGHTS_STATES.ALLOWED },
     retention: { storageClass: "TEST_ONLY", contentTtlMs: null, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
-    derivation: { analytics: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.ALLOWED, offerCondition: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
     presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
     status: "TEST_ONLY"
   }),
@@ -17,7 +17,7 @@ const profiles = Object.freeze({
     acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.ALLOWED, import: RIGHTS_STATES.ALLOWED },
     live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
     retention: { storageClass: "DURABLE", contentTtlMs: null, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
-    derivation: { analytics: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.ALLOWED, offerCondition: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
     presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
     status: "INTERNAL_TEST_BASELINE"
   }),
@@ -26,7 +26,7 @@ const profiles = Object.freeze({
     acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.ALLOWED, import: RIGHTS_STATES.ALLOWED },
     live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
     retention: { storageClass: "DURABLE", contentTtlMs: null, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
-    derivation: { analytics: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.ALLOWED, offerCondition: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
     presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
     status: "SYNTHETIC_TEST_POLICY"
   }),
@@ -35,7 +35,7 @@ const profiles = Object.freeze({
     acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },
     live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
     retention: { storageClass: "LICENSE_CONTROLLED", contentTtlMs: HOUR, historical: RIGHTS_STATES.BLOCKED, durableAuditMetadata: RIGHTS_STATES.CONDITIONAL },
-    derivation: { analytics: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.BLOCKED },
+    derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.BLOCKED },
     presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
     status: "VERIFIED_BASELINE"
   }),
@@ -44,7 +44,7 @@ const profiles = Object.freeze({
     acquisition: { api: RIGHTS_STATES.NOT_APPLICABLE, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },
     live: { currentObservation: RIGHTS_STATES.BLOCKED, publicDisplay: RIGHTS_STATES.BLOCKED, comparison: RIGHTS_STATES.BLOCKED },
     retention: { storageClass: "LICENSE_CONTROLLED", contentTtlMs: 0, historical: RIGHTS_STATES.BLOCKED, durableAuditMetadata: RIGHTS_STATES.CONDITIONAL },
-    derivation: { analytics: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.BLOCKED },
+    derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.BLOCKED },
     presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
     status: "BLOCKED_LEGACY_SOURCE"
   }),
@@ -53,7 +53,7 @@ const profiles = Object.freeze({
     acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },
     live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
     retention: { storageClass: "DURABLE", contentTtlMs: null, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
-    derivation: { analytics: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.ALLOWED, offerCondition: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
     presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
     status: "WRITTEN_PROVIDER_AUTHORIZATION_2026_08"
   }),
@@ -62,7 +62,7 @@ const profiles = Object.freeze({
     acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },
     live: { currentObservation: RIGHTS_STATES.CONDITIONAL, publicDisplay: RIGHTS_STATES.CONDITIONAL, comparison: RIGHTS_STATES.CLARIFICATION_REQUIRED },
     retention: { storageClass: "LICENSE_CONTROLLED", contentTtlMs: 72 * HOUR, historical: RIGHTS_STATES.BLOCKED, durableAuditMetadata: RIGHTS_STATES.CLARIFICATION_REQUIRED },
-    derivation: { analytics: RIGHTS_STATES.CLARIFICATION_REQUIRED, historicalAnalytics: RIGHTS_STATES.BLOCKED },
+    derivation: { analytics: RIGHTS_STATES.CLARIFICATION_REQUIRED, offerCondition: RIGHTS_STATES.CLARIFICATION_REQUIRED, historicalAnalytics: RIGHTS_STATES.BLOCKED },
     presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
     status: "PROVISIONAL_AWAITING_CLARIFICATION"
   })

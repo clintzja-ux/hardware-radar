@@ -17,6 +17,7 @@ export const SOURCE_RIGHTS_CAPABILITIES = Object.freeze({
   COMPARISON: "live.comparison",
   HISTORICAL_RETENTION: "retention.historical",
   DERIVED_ANALYTICS: "derivation.analytics",
+  OFFER_CONDITION: "derivation.offerCondition",
   HISTORICAL_ANALYTICS: "derivation.historicalAnalytics"
 });
 
