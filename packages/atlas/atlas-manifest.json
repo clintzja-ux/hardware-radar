@@ -119,7 +119,7 @@
     "products": 22,
     "brands": 5,
     "categories": 1,
-    "retailers": 2
+    "retailers": 3
   },
   "brands": [
     {
@@ -157,6 +157,10 @@
     {
       "retailerId": "RETAILER-0002",
       "path": "retailers/RETAILER-0002-platinummicro.json"
+    },
+    {
+      "retailerId": "RETAILER-0003",
+      "path": "retailers/RETAILER-0003-memoryc.json"
     }
   ]
 }

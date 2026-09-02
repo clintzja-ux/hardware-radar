@@ -1,0 +1,28 @@
+{
+  "id": "RETAILER-0003",
+  "name": "MemoryC",
+  "slug": "memoryc",
+  "websiteUrl": "https://www.memoryc.com",
+  "status": "active",
+  "regions": [
+    "US"
+  ],
+  "supportedCurrencies": [
+    "USD"
+  ],
+  "affiliateProgram": {
+    "available": false,
+    "status": "unknown",
+    "network": null,
+    "disclosureRequired": true
+  },
+  "metadata": {
+    "createdAt": "2026-09-01T00:00:00Z",
+    "updatedAt": "2026-09-01T00:00:00Z",
+    "sourceReferences": [
+      "https://www.memoryc.com/help/company_info.html",
+      "https://www.memoryc.com/contact.html",
+      "https://www.memoryc.com/help/conditions.html"
+    ]
+  }
+}
