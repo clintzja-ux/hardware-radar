@@ -44,6 +44,22 @@ Run focused tests first. If implementation already passed full validation and ce
 
 After a meaningful Codex result, stop and return the report for operator/ChatGPT review before launching another substantial run. Do not automatically chain investigation, implementation, certification, and the next increment when review can determine whether another Codex run is necessary.
 
+## Reproducible checkout and release validation
+
+Use the committed `package-lock.json` and `npm ci` for a fresh checkout. Repository text is checked out with LF on every supported operating system regardless of a contributor's global `core.autocrlf`. Two legacy Atlas anchors retain explicit CRLF checkout because accepted tests certify their raw-byte digests; new byte contracts must declare any such representation explicitly. Other text-based integrity checks should normalize only CRLF/LF representation before hashing, leaving structure, ordering, whitespace, and values protected. Text-semantic readers, including the editorial Markdown parser, must likewise treat LF and CRLF input as equivalent without weakening malformed-input validation.
+
+Before a release or protected-branch promotion, validate both the reviewed working tree and a fresh checkout of the exact candidate commit:
+
+```text
+npm ci
+npm run build:public
+npm test
+npm run verify:public
+git diff --check
+```
+
+Reconcile generated artifacts after validation and restore timestamp-only drift. A successful local working-tree run does not substitute for the clean-checkout run.
+
 ## Weekly capacity governance
 
 Treat weekly Codex capacity as a governed development resource. These bands guide development workflow; they are not application or business policy.

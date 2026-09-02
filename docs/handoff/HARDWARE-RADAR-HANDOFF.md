@@ -102,6 +102,8 @@ git diff --check
 
 Focused runners are `npm run test:sentinel`, `test:atlas`, `test:mercury`, `test:beacon`, `test:gateway`, and `test:layout`. Never weaken or skip existing tests merely to pass an increment. Generated public timestamps or other incidental build changes must be restored when they are not part of the change.
 
+Release certification uses the committed lockfile and `npm ci`, and must reproduce from a fresh checkout of the exact candidate commit on the target operating system. Repository-controlled text checkout is LF across operating systems, except for two explicitly declared legacy Atlas anchors whose accepted tests certify CRLF raw bytes. New byte contracts must declare representation explicitly; other text-based integrity checks should canonicalize only CRLF/LF before hashing, and text-content readers must accept both deterministically. Passing in an existing working tree does not replace clean-checkout certification.
+
 ## Deployment philosophy
 
 The repository distinguishes `implemented`, `tested`, `selected`, `configured`, `approved`, `prepared`, `deployed`, `connected`, and `enabled`. None implies the next. Cloudflare Workers/D1, WAF, Workers Logs, and Email Service are target architecture with governed policies, but current backend transport remains `NOT_CONNECTED`. Browser instrumentation is separately gated and absent. Static-site files and historical references to a live domain do not prove current external provider configuration; verify provider state through an explicitly authorized operator process.

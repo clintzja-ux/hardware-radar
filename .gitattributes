@@ -1,2 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Repository text uses deterministic LF checkout bytes on every supported OS.
+* text=auto eol=lf
+
+# Legacy Atlas anchors have certified raw-byte digests in CRLF representation.
+/packages/atlas/brands/corsair.json text eol=crlf
+/packages/atlas/products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json text eol=crlf

@@ -3,8 +3,10 @@
 ```text
 Last updated:                  2026-09-02
 Branch:                        dataforseo-sprint3-mercury-observation
-HEAD at inspection:            3bedcd9d1191dced6ad098baf7e5ce1a5de2a648
-Working tree at inspection:    CONTENT-001–006 work preserved; CONTENT-006A removes the optional homepage editorial-discovery block from that uncommitted baseline
+HEAD at inspection:            6a3ea82f1aae1e7ebd980a26a0a5a1513134a5fb
+Working tree at inspection:    clean committed baseline before MAIN-PROMOTION-R1 release-hardening changes
+Current release-hardening increment: MAIN-PROMOTION-R1 — clean-checkout reproducibility and release governance fixture-certified
+Main promotion:                BLOCKED until R1 certification and a repeat promotion audit succeed
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
@@ -49,14 +51,14 @@ C-001's portfolio follows the durable Commercial-First, Capability-Separated Par
 
 CONTENT-001 establishes Hardware Radar's durable content direction as **hardware buying intelligence with a price engine**. CONTENT-002 supplies the fixture-certified Markdown/front-matter validator, deterministic static generator, reusable article shell, structured data, and sitemap merge defined by ADR-056. CONTENT-003 publishes `/guides/` and the RAM hub with one shared `Guides` navigation entry. CONTENT-004 publishes the evidence-backed cornerstone RAM Buying Guide. CONTENT-005 completes the initial cluster with four focused spokes. CONTENT-006 completes launch QA: the Guides index lists all five validated RAM articles and the hub links all spokes. CONTENT-006A removes the optional homepage editorial-discovery block after operator visual review. Editorial discovery remains intentionally owned by the primary and footer `Guides` links, `/guides/`, and article internal linking; the homepage retains its price-first proposition, governed answer, category access, trust, and footer sequence. Six editorial routes remain published. Metadata, schema, sitemap, mobile layout, accessibility contracts, factual consistency, commercial independence, and existing public-page compatibility are validated. No price, Pick, recommendation, market, or downstream authority changed. The initial content-foundation rollout remains launch-ready; the next product/content action should be chosen from measured user needs rather than adding articles by quota.
 
-B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A registered exactly `RETAILER-0003` in Atlas, and merchant decision `mer_idrev_000000003` approved `DISCOVERED → REGISTERED` for evidence `dfev_bb40abbb467a6497b88a3e2d`. B-012 production reassessment confirms `CONFIRMED → VERIFIED`, merchant `REGISTERED`, and `HISTORICAL_ELIGIBLE`. B-013A production authorization `mer_histauth_fac171e6e6bb5db6d7dc7d09` was consumed exactly once and admitted immutable history `mer_hist_c4f418b1e82a5cf6`; condition, shipping, and tax remain unknown. B-014 exposed missing governed initial-acquisition composition in E2P. B-014A now fixture-certifies one shared durable-lineage context owner across E2J, E2P, and E2Q: exact retention membership reconstructs the certified B-009A/B-010A projection, E2P derives `VERIFIED` product, `REGISTERED` merchant, historical eligibility, satisfied canonical rights, and canonical eligibility without changing policy, and E2Q inherits the same owner for PREPARE and execution-time reassessment. Projection, merchant-decision, historical, product, retailer, provider, task, validation-digest, and contradiction drift fail closed. Production E2P has not been reassessed after this correction; no MemoryC canonical observation or E2Q authorization exists. Review, E2S, publication, Current Price, Cheapest, Pick, recommendation, and affiliate authority remain absent. The next safe action is a separately authorized read-only production E2P reassessment for the exact MemoryC evidence.
+B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A registered exactly `RETAILER-0003` in Atlas, and merchant decision `mer_idrev_000000003` approved `DISCOVERED → REGISTERED` for evidence `dfev_bb40abbb467a6497b88a3e2d`. The governed path subsequently admitted immutable history, canonical observation `mer_obs_000000004`, and effective review `mer_rev_000000003 = REVIEWED`. B-014A fixture-certifies one shared durable-lineage context owner across E2J, E2P, and E2Q. Condition remains `UNKNOWN`; publication, Current Price, Cheapest, Pick, recommendation, and affiliate authority remain absent. The next safe MemoryC action is the separately authorized read-only E2S reassessment already identified below.
 
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
 |---|---|---|
 | **Sentinel** | Deterministic rule/validation suites for architecture, Atlas, Mercury, and publication safety | Library/rule layer; no independent external deployment represented |
-| **Atlas** | Canonical repositories/validators with 22 RAM products, five RAM launch brands, and retailers `RETAILER-0001` Amazon and `RETAILER-0002` Platinummicro | Repository-owned canonical state; public projection generated by build |
+| **Atlas** | Canonical repositories/validators with 22 RAM products, five RAM launch brands, and retailers `RETAILER-0001` Amazon, `RETAILER-0002` Platinummicro, and `RETAILER-0003` MemoryC | Repository-owned canonical state; public projection generated by build |
 | **Mercury** | Acquisition, retention, resolution, identity review, promotion, historical admission/query/refresh/cadence, canonical admission/review, current-market qualification, publication, and rights boundaries | Production publication/build composition now requires certified E2S and projects its qualification without default freshness/confidence reinterpretation; local governed state remains 1 Atlas product, 3 historical observations, and 2 reviewed canonical observations; `mer_obs_000000003` remains current-market-ineligible with no publication or price authority |
 | **Forge** | Internal static authoring/review application, generated public projection, certified read-only Mercury operations panel, and local FM008 exporter | Explicit local export materializes governed Atlas/Mercury state under `.forge-review/forge/`; legacy preview remains isolated and noncanonical |
 | **Beacon** | Product-interest signal, collection/write boundaries, transactional adapter, and 90-day retention policy | Application boundary ready; durable file adapter available but not production-configured; repository signals 0; automatic execution disabled |
@@ -65,22 +67,23 @@ B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A regi
 
 ## Current test baseline
 
-The current runners declare **214 subsystem test files**:
+The current runners declare **219 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 18 |
-| Mercury | 165 |
+| Mercury | 170 |
 | Beacon | 7 |
 | Gateway | 17 |
 
-The root `npm test` additionally runs repository-layout, MVP-001 public launch-shell, and public-build verification. The counts come directly from the current working-tree runners; rerun the relevant suite before changing behavior.
+The root `npm test` additionally runs repository-layout, release-governance, public launch-shell, editorial publishing/route/launch QA, and public-build verification. The counts come directly from the current working-tree runners; rerun the relevant suite before changing behavior.
 
 ## Current production and external state
 
 | Capability | Current governed state |
 |---|---|
+| Main deployment trigger | `DEPLOYMENT_TRIGGER_EXTERNAL_VERIFICATION_REQUIRED`; repository evidence does not establish whether merging `main` deploys production |
 | Production Gateway transport | `NOT_CONNECTED` |
 | Browser instrumentation/connection | `NO` |
 | Cloudflare Worker | Target selected; not configured or deployed |

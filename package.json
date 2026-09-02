@@ -6,7 +6,7 @@
   "scripts": {
     "build:public": "node scripts/build-public.mjs",
     "verify:public": "node scripts/verify-public-build.mjs",
-    "test": "node packages/sentinel/tests/run-all-tests.mjs && node packages/atlas/tests/run-all-tests.mjs && node packages/mercury/tests/run-all-tests.mjs && node packages/beacon/tests/run-all-tests.mjs && node packages/gateway/tests/run-all-tests.mjs && node scripts/repository-layout.test.mjs && node scripts/public-launch-shell.test.mjs && node scripts/editorial-publishing.test.mjs && node scripts/guides-surface.test.mjs && node scripts/ram-buying-guide.test.mjs && node scripts/ram-spoke-guides.test.mjs && node scripts/editorial-launch-qa.test.mjs && node scripts/verify-public-build.mjs",
+    "test": "node packages/sentinel/tests/run-all-tests.mjs && node packages/atlas/tests/run-all-tests.mjs && node packages/mercury/tests/run-all-tests.mjs && node packages/beacon/tests/run-all-tests.mjs && node packages/gateway/tests/run-all-tests.mjs && node scripts/repository-layout.test.mjs && node scripts/release-governance.test.mjs && node scripts/public-launch-shell.test.mjs && node scripts/editorial-publishing.test.mjs && node scripts/guides-surface.test.mjs && node scripts/ram-buying-guide.test.mjs && node scripts/ram-spoke-guides.test.mjs && node scripts/editorial-launch-qa.test.mjs && node scripts/verify-public-build.mjs",
     "test:public-shell": "node scripts/public-launch-shell.test.mjs",
     "test:editorial": "node scripts/editorial-publishing.test.mjs",
     "test:guides": "node scripts/guides-surface.test.mjs",
@@ -24,6 +24,7 @@
     "test:beacon": "node packages/beacon/tests/run-all-tests.mjs",
     "test:gateway": "node packages/gateway/tests/run-all-tests.mjs",
     "test:layout": "node scripts/repository-layout.test.mjs",
+    "test:release-governance": "node scripts/release-governance.test.mjs",
     "certify:mercury:cleanup": "node scripts/mercury-certification-cleanup.mjs",
     "review:export": "node scripts/export-observation-review.mjs",
     "review:record": "node scripts/record-observation-review.mjs",

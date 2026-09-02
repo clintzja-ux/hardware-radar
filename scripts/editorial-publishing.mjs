@@ -28,18 +28,21 @@ function parseValue(value) {
 }
 
 export function parseEditorialSource(source, sourceName = "article.md") {
-    if (!source.startsWith("---\n")) fail("EDITORIAL_FRONT_MATTER_MISSING", `${sourceName} must begin with front matter.`);
-    const end = source.indexOf("\n---\n", 4);
-    if (end < 0) fail("EDITORIAL_FRONT_MATTER_INVALID", `${sourceName} front matter is not closed.`);
+    const opening = source.match(/^---(?:\r\n|\n)/);
+    if (!opening) fail("EDITORIAL_FRONT_MATTER_MISSING", `${sourceName} must begin with front matter.`);
+    const closingPattern = /\r?\n---(?:\r\n|\n)/g;
+    closingPattern.lastIndex = opening[0].length;
+    const closing = closingPattern.exec(source);
+    if (!closing) fail("EDITORIAL_FRONT_MATTER_INVALID", `${sourceName} front matter is not closed.`);
     const metadata = {};
-    for (const line of source.slice(4, end).split("\n")) {
+    for (const line of source.slice(opening[0].length, closing.index).split(/\r?\n/)) {
         if (!line.trim() || line.trimStart().startsWith("#")) continue;
         const match = line.match(/^([A-Za-z][A-Za-z0-9]*):\s*(.*)$/);
         if (!match) fail("EDITORIAL_FRONT_MATTER_INVALID", `${sourceName} contains unsupported front matter syntax.`);
         if (Object.hasOwn(metadata, match[1])) fail("EDITORIAL_FRONT_MATTER_DUPLICATE_FIELD", `${match[1]} is duplicated.`);
         metadata[match[1]] = parseValue(match[2]);
     }
-    return { metadata, markdown: source.slice(end + 5).trim() };
+    return { metadata, markdown: source.slice(closing.index + closing[0].length).trim() };
 }
 
 function validPath(value, { article = false } = {}) {

@@ -8,8 +8,21 @@ import { generateEditorialSite, generateSitemap, parseEditorialSource, renderArt
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const fixtureSource = await readFile(path.join(root, "scripts", "fixtures", "editorial", "fixture-guide.md"), "utf8");
 const parsed = parseEditorialSource(fixtureSource);
+const lfFixture = fixtureSource.replaceAll("\r\n", "\n");
+const crlfFixture = lfFixture.replaceAll("\n", "\r\n");
+const parsedLf = parseEditorialSource(lfFixture, "fixture-lf.md");
+const parsedCrlf = parseEditorialSource(crlfFixture, "fixture-crlf.md");
 const knownRoutes = ["/", "/ddr5.html", "/guides/", "/guides/ram/", parsed.metadata.canonicalPath];
 const metadata = validateArticleMetadata(parsed.metadata, { knownRoutes });
+
+assert.deepEqual(parsedCrlf.metadata, parsedLf.metadata, "LF and CRLF front matter must be semantically identical.");
+assert.equal(
+    renderArticle({ metadata: validateArticleMetadata(parsedCrlf.metadata, { knownRoutes }), markdown: parsedCrlf.markdown }),
+    renderArticle({ metadata: validateArticleMetadata(parsedLf.metadata, { knownRoutes }), markdown: parsedLf.markdown }),
+    "LF and CRLF editorial sources must render byte-identical output."
+);
+assert.throws(() => parseEditorialSource("title: missing-delimiter\r\n", "missing.md"), /EDITORIAL_FRONT_MATTER_MISSING/);
+assert.throws(() => parseEditorialSource("---\r\ntitle: unclosed\r\n", "unclosed.md"), /EDITORIAL_FRONT_MATTER_INVALID/);
 
 assert.equal(metadata.author, "Hardware Radar Editorial");
 assert.throws(() => validateArticleMetadata({ ...parsed.metadata, title: undefined }, { knownRoutes }), /EDITORIAL_METADATA_UNSAFE|EDITORIAL_REQUIRED_FIELD_MISSING/);
@@ -91,4 +104,4 @@ assert.match(styles, /\.article-shell/);
 assert.match(styles, /@media\(max-width:600px\)[\s\S]*\.article-price-cta/);
 assert.match(styles, /focus-visible/);
 
-console.log("Editorial publishing foundation fixture contract passed (28 assertions/groups).");
+console.log("Editorial publishing foundation fixture contract passed (32 assertions/groups).");
