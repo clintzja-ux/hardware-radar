@@ -16,6 +16,7 @@ The RAM MVP is Hardware Radar's first product surface within a long-term hardwar
 
 - Optimize for purchasing-decision usefulness, confidence, simplicity, and trust before revenue.
 - Keep recommendations retailer-independent; affiliate economics must not determine ranking.
+- Apply the Commercial-First, Capability-Separated Partnership Doctrine: pursue independently valuable retailer/affiliate relationships without requiring ideal Mercury capability first, then classify feeds, APIs, retention, comparison, and other data rights separately. Commercial approval grants no evidence, publication, Cheapest, Pick, or recommendation authority.
 - Show evidence and provenance. Never invent production facts, identity, verification, configuration, or eligibility.
 - Separate canonical facts, observations, policy decisions, workflow, behavioral evidence, transport, and presentation by owner.
 - Treat privacy as an architectural boundary: collect the minimum required data, keep private values server-side, and prohibit behavioral evidence from becoming identity or market truth.

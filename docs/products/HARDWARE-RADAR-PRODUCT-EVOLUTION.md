@@ -142,6 +142,23 @@ This emphasis is current program posture, not a permanent architectural hierarch
 
 ### Commercial and data strategy
 
+#### Commercial-First, Capability-Separated Partnership Doctrine
+
+Hardware Radar's business and user value lead; its internal systems exist to support that mission. In practical shorthand, **the dog wags the tail, not the other way around**. A retailer, affiliate program, distribution relationship, or commercial partnership may be worth pursuing because it improves retailer coverage, consumer utility, monetization, product/category reach, commercial resilience, diversification, or another legitimate Hardware Radar objective even when it does not yet provide ideal Mercury data rights.
+
+The normal relationship sequence is:
+
+```text
+commercially valuable retailer or partner
+→ pursue or apply for the relationship
+→ establish commercial/affiliate access if approved
+→ inspect the actual tools, feeds, APIs, catalogs, terms, and permissions
+→ separately classify capabilities available to Mercury and other owners
+→ request expanded data rights later when strategically worthwhile
+```
+
+Affiliate/commercial onboarding and data-rights qualification are separate decisions. Missing Mercury-compatible feed, API, comparison, retention, historical-analysis, or AI rights does not by itself disqualify an otherwise useful commercial relationship. Conversely, affiliation grants none of those capabilities: Mercury may use only rights actually established, and terms that conflict with Hardware Radar's core operation may still justify rejecting or limiting a program.
+
 Hardware Radar should pursue three complementary paths in parallel:
 
 1. independent market evidence through governed sources such as DataForSEO where rights permit;
