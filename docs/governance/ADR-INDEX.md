@@ -89,6 +89,9 @@ Operator alert recipient is supplied only through server-side runtime configurat
 ADR-055
 Cloudflare Gateway credentials are supplied only through server-side runtime configuration.
 
+ADR-056
+Editorial Guides use deterministic static generation.
+
 ---
 
 ## Naming Convention

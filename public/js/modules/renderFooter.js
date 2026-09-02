@@ -1,4 +1,4 @@
-export function renderFooter(containerId) {
+export function renderFooter(containerId, { basePath = "" } = {}) {
     const container = document.getElementById(containerId);
 
     if (!container) return;
@@ -21,31 +21,32 @@ export function renderFooter(containerId) {
                 <div>
                     <h4>Browse</h4>
 
-                    <a href="ddr5.html">DDR5</a>
-                    <a href="ddr4.html">DDR4</a>
-                    <a href="sodimm.html">Laptop RAM</a>
+                    <a href="${basePath}ddr5.html">DDR5</a>
+                    <a href="${basePath}ddr4.html">DDR4</a>
+                    <a href="${basePath}sodimm.html">Laptop RAM</a>
+                    <a href="${basePath}guides/">Guides</a>
                 </div>
 
                 <div>
                     <h4>Company</h4>
 
-                    <a href="about.html">About</a>
-                    <a href="how-we-choose.html">How We Choose</a>
-                    <a href="contact.html">Contact</a>
+                    <a href="${basePath}about.html">About</a>
+                    <a href="${basePath}how-we-choose.html">How We Choose</a>
+                    <a href="${basePath}contact.html">Contact</a>
                 </div>
 
                 <div>
                     <h4>Legal</h4>
 
-                    <a href="affiliate-disclosure.html">
+                    <a href="${basePath}affiliate-disclosure.html">
                         Affiliate Disclosure
                     </a>
 
-                    <a href="privacy-policy.html">
+                    <a href="${basePath}privacy-policy.html">
                         Privacy Policy
                     </a>
 
-                    <a href="terms.html">
+                    <a href="${basePath}terms.html">
                         Terms of Use
                     </a>
                 </div>

@@ -14,8 +14,17 @@ import { FileProductionFreshnessPolicyRepository } from "../packages/mercury/cur
 import { adapterRegistry } from "../packages/mercury/adapters/index.js";
 import { ProductRepository } from "../packages/atlas/ProductRepository.js";
 import { RetailerRepository } from "../packages/atlas/RetailerRepository.js";
+import { generateEditorialSite } from "./editorial-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+await generateEditorialSite({
+    sourceDir: path.join(root, "content", "guides"),
+    outputDir: path.join(root, "public"),
+    sitemapPath: path.join(root, "public", "sitemap.xml"),
+    routeManifestPath: path.join(root, "content", "site-routes.json"),
+    guidesIndexPath: path.join(root, "content", "guides-index.json")
+});
 
 async function copyDirectory(source, destination, { exclude = [] } = {}) {
     await rm(destination, { recursive: true, force: true });

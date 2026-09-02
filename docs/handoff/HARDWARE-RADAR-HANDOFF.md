@@ -6,7 +6,7 @@ This is the stable orientation layer for new Hardware Radar engineering sessions
 
 Hardware Radar is a Mirabelle Labs hardware decision-support product. Its current public scope is a static, RAM-focused experience for finding and understanding verified DDR4, DDR5, and laptop-memory options. Its mission is to help people make better hardware purchasing decisions and buy with confidence. The long-term direction is a traceable hardware-intelligence platform spanning broader component knowledge, market intelligence, validation, recommendations, and buying assistance.
 
-Canonical orientation sources include [product-bible.md](../../product-bible.md), [product vision and strategy](../products/product-vision-and-strategy.md), the [product evolution and scope doctrine](../products/HARDWARE-RADAR-PRODUCT-EVOLUTION.md), the [RAM launch catalog and minimum useful coverage definition](../products/RAM-LAUNCH-CATALOG-AND-COVERAGE.md), the [RAM launch retailer portfolio](../products/RAM-LAUNCH-RETAILER-PORTFOLIO.md), [architecture-bible.md](../architecture-bible.md), and [DATA-PHILOSOPHY.md](../DATA-PHILOSOPHY.md).
+Canonical orientation sources include [product-bible.md](../../product-bible.md), [product vision and strategy](../products/product-vision-and-strategy.md), the [product evolution and scope doctrine](../products/HARDWARE-RADAR-PRODUCT-EVOLUTION.md), the [Hardware Radar Content Foundation](../products/HARDWARE-RADAR-CONTENT-FOUNDATION.md), the [RAM launch catalog and minimum useful coverage definition](../products/RAM-LAUNCH-CATALOG-AND-COVERAGE.md), the [RAM launch retailer portfolio](../products/RAM-LAUNCH-RETAILER-PORTFOLIO.md), [architecture-bible.md](../architecture-bible.md), and [DATA-PHILOSOPHY.md](../DATA-PHILOSOPHY.md).
 
 ## Product evolution and scope interpretation
 
@@ -17,6 +17,7 @@ The RAM MVP is Hardware Radar's first product surface within a long-term hardwar
 - Optimize for purchasing-decision usefulness, confidence, simplicity, and trust before revenue.
 - Keep recommendations retailer-independent; affiliate economics must not determine ranking.
 - Apply the Commercial-First, Capability-Separated Partnership Doctrine: pursue independently valuable retailer/affiliate relationships without requiring ideal Mercury capability first, then classify feeds, APIs, retention, comparison, and other data rights separately. Commercial approval grants no evidence, publication, Cheapest, Pick, or recommendation authority.
+- Preserve Hardware Radar as hardware buying intelligence with a price engine. Editorial Guides support purchasing decisions and qualified discovery but must not displace the homepage's immediate governed price answer, manufacture Atlas/Mercury facts, imply first-party testing, or create Picks and recommendation authority.
 - Show evidence and provenance. Never invent production facts, identity, verification, configuration, or eligibility.
 - Separate canonical facts, observations, policy decisions, workflow, behavioral evidence, transport, and presentation by owner.
 - Treat privacy as an architectural boundary: collect the minimum required data, keep private values server-side, and prohibit behavioral evidence from becoming identity or market truth.

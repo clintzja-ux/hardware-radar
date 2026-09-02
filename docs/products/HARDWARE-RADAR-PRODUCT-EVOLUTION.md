@@ -173,6 +173,8 @@ The curated bridge bootstraps useful coverage but is not the target architecture
 
 The current finite Track C launch portfolio and relationship approach is maintained in the [RAM Launch Retailer Portfolio](./RAM-LAUNCH-RETAILER-PORTFOLIO.md); it is strategy and operator planning, not retailer identity, rights, or publication authority.
 
+Hardware Radar's editorial direction is **hardware buying intelligence with a price engine**, not a generic technology blog. The [Hardware Radar Content Foundation](./HARDWARE-RADAR-CONTENT-FOUNDATION.md) owns the durable editorial mission, evidence classifications, Guides taxonomy, authorship, maintenance rules, and staged content roadmap. Editorial content supports but never displaces the homepage's immediate governed price answer.
+
 ### Track status and future-agent interpretation
 
 Each track may be described as `ACTIVE`, `READY`, `BLOCKED`, `DEFERRED`, or `COMPLETE FOR CURRENT INCREMENT`. A blocked track should state what is blocked, its exact dependency, and which other tracks can proceed independently. This is operating language only, not a runtime project-management system.
