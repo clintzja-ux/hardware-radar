@@ -2,6 +2,7 @@ import { validateProduct } from "./ProductValidator.js";
 
 export const RAM_CATALOG_SCHEMA_VERSION = "1.0";
 export const RAM_CATALOG_ORDER = "BRAND_MODEL_MPN_ID_ASC";
+export const RAM_PUBLIC_PRODUCT_ROUTE_PREFIX = "/ram/";
 
 const freeze = (value) => {
     if (value && typeof value === "object" && !Object.isFrozen(value)) {
@@ -30,11 +31,15 @@ function projectProduct(product) {
 
     const identity = product.identity;
     const data = product.extension.data;
+    const publicIdentity = createRamPublicProductIdentity(product);
     const item = {
         atlasProductId: identity.atlasProductId,
+        publicSlug: publicIdentity.publicSlug,
+        publicPath: publicIdentity.publicPath,
         brand: identity.brand,
         productFamily: identity.productFamily,
         modelName: identity.modelName,
+        displayName: identity.displayName,
         manufacturerPartNumber: identity.manufacturerPartNumber,
         memoryType: data.classification.memoryType,
         capacityGb: data.capacity.capacityGb,
@@ -55,6 +60,22 @@ function projectProduct(product) {
     return item;
 }
 
+export function createRamPublicProductIdentity(product) {
+    const report = validateProduct(product);
+    if (!report.valid) throw new Error(`RAM_PUBLIC_IDENTITY_ATLAS_PRODUCT_INVALID:${product?.identity?.atlasProductId ?? "UNKNOWN"}`);
+    const { atlasProductId, productType, slug, updatedAt } = product.identity;
+    if (productType !== "ram") throw new Error(`RAM_PUBLIC_IDENTITY_PRODUCT_TYPE_UNSUPPORTED:${atlasProductId}`);
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new Error(`RAM_PUBLIC_IDENTITY_SLUG_UNSAFE:${atlasProductId}`);
+    const lastModified = String(updatedAt).slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(lastModified)) throw new Error(`RAM_PUBLIC_IDENTITY_LASTMOD_INVALID:${atlasProductId}`);
+    return freeze({
+        atlasProductId,
+        publicSlug: slug,
+        publicPath: `${RAM_PUBLIC_PRODUCT_ROUTE_PREFIX}${slug}/`,
+        lastModified
+    });
+}
+
 export function createRamCatalogProjection(products) {
     if (!Array.isArray(products)) throw new TypeError("RAM_CATALOG_PRODUCTS_REQUIRED");
     const projected = products.map(projectProduct).sort((left, right) =>
@@ -65,6 +86,12 @@ export function createRamCatalogProjection(products) {
     );
     if (new Set(projected.map((item) => item.atlasProductId)).size !== projected.length) {
         throw new Error("RAM_CATALOG_DUPLICATE_PRODUCT_ID");
+    }
+    if (new Set(projected.map((item) => item.publicSlug)).size !== projected.length) {
+        throw new Error("RAM_CATALOG_DUPLICATE_PUBLIC_SLUG");
+    }
+    if (new Set(projected.map((item) => item.publicPath)).size !== projected.length) {
+        throw new Error("RAM_CATALOG_DUPLICATE_PUBLIC_ROUTE");
     }
     return freeze({
         schemaVersion: RAM_CATALOG_SCHEMA_VERSION,

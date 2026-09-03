@@ -55,6 +55,7 @@ function card(item) {
         <p class="ram-catalog-card__model">${escapeHtml(item.modelName)}</p>
         <p class="ram-catalog-card__mpn"><span>MPN</span> <code>${escapeHtml(item.manufacturerPartNumber)}</code></p>
         <dl>${details.map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>
+        <a class="ram-catalog-card__link" href="${escapeHtml(item.publicPath)}">View specifications<span class="sr-only"> for ${escapeHtml(item.displayName)}</span></a>
     </li>`;
 }
 

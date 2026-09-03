@@ -15,11 +15,12 @@ import { adapterRegistry } from "../packages/mercury/adapters/index.js";
 import { ProductRepository } from "../packages/atlas/ProductRepository.js";
 import { RetailerRepository } from "../packages/atlas/RetailerRepository.js";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
-import { generateEditorialSite } from "./editorial-publishing.mjs";
+import { generateEditorialSite, generateSitemap } from "./editorial-publishing.mjs";
+import { generateRamProductPages } from "./ram-product-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-await generateEditorialSite({
+const editorial = await generateEditorialSite({
     sourceDir: path.join(root, "content", "guides"),
     outputDir: path.join(root, "public"),
     sitemapPath: path.join(root, "public", "sitemap.xml"),
@@ -71,6 +72,9 @@ const [products, retailers] = await Promise.all([
 ]);
 const ramCatalog = createRamCatalogProjection(products);
 await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
+const productPages = await generateRamProductPages({ catalog: ramCatalog, products, outputDir: path.join(root, "public") });
+const staticRoutes = await json(path.join(root, "content", "site-routes.json"));
+await writeFile(path.join(root, "public", "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
 const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();
 const mercury = new Mercury();
 let snapshot;

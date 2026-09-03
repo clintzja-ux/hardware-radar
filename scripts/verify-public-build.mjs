@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { generateSitemap, parseEditorialSource, renderArticle, renderGuidesIndex, validateArticleMetadata } from "./editorial-publishing.mjs";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
+import { createRamProductSitemapRoutes, renderRamProductPage } from "./ram-product-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const canonicalText = (contents) => contents.toString("utf8").replaceAll("\r\n", "\n");
@@ -39,7 +40,9 @@ try {
     const rawArticles = await Promise.all(names.map(async (name) => ({ name, ...parseEditorialSource(await readFile(path.join(sourceRoot, name), "utf8"), name) })));
     const knownRoutes = [...staticRoutes.map((route) => route.path), ...rawArticles.map((article) => article.metadata.canonicalPath)];
     const articles = rawArticles.map((article) => ({ ...article, metadata: validateArticleMetadata(article.metadata, { knownRoutes }) }));
-    const expectedSitemap = generateSitemap({ staticRoutes, articles });
+    const atlasManifest = JSON.parse(await readFile(path.join(root, "packages", "atlas", "atlas-manifest.json"), "utf8"));
+    const atlasProducts = await Promise.all(atlasManifest.products.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
+    const expectedSitemap = generateSitemap({ staticRoutes, articles, additionalRoutes: createRamProductSitemapRoutes(atlasProducts) });
     const actualSitemap = await readFile(path.join(root, "public", "sitemap.xml"), "utf8");
     if (expectedSitemap !== actualSitemap) errors.push("Editorial: sitemap.xml is stale or not deterministically generated.");
     if (/fixture-memory-notation|scripts\/fixtures\/editorial/.test(actualSitemap)) errors.push("Editorial: fixture content leaked into the production sitemap.");
@@ -63,10 +66,16 @@ try {
 try {
     const manifest = JSON.parse(await readFile(path.join(root, "packages", "atlas", "atlas-manifest.json"), "utf8"));
     const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
-    const expected = `${JSON.stringify(createRamCatalogProjection(products), null, 2)}\n`;
+    const catalog = createRamCatalogProjection(products);
+    const expected = `${JSON.stringify(catalog, null, 2)}\n`;
     const actual = await readFile(path.join(root, "public", "data", "ram-catalog.json"), "utf8");
     if (actual !== expected) errors.push("Atlas catalog: ram-catalog.json is stale or not deterministically generated.");
     await stat(path.join(root, "public", "ram", "index.html"));
+    for (const product of catalog.products) {
+        const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
+        const page = await readFile(output, "utf8");
+        if (page !== renderRamProductPage(product)) errors.push(`Atlas catalog: stale product page ${product.publicPath}`);
+    }
 } catch (error) { errors.push(`Atlas catalog: projection missing or invalid (${error.message}).`); }
 for (const internal of ["sentinel", "mercury"]) {
     try { await stat(path.join(root, "public", "data", internal)); errors.push(`${internal}: internal package must not be present in public/data.`); }

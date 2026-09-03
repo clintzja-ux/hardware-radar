@@ -57,5 +57,7 @@ export {
 export {
     RAM_CATALOG_ORDER,
     RAM_CATALOG_SCHEMA_VERSION,
+    RAM_PUBLIC_PRODUCT_ROUTE_PREFIX,
+    createRamPublicProductIdentity,
     createRamCatalogProjection
 } from "./RamCatalogProjection.js";
