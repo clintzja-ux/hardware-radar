@@ -113,6 +113,48 @@ Atlas, Mercury, Compass, Echo, and Aurora may ultimately support grounded questi
 
 Answers should be grounded in governed Hardware Radar knowledge and market evidence rather than unsupported model assertions.
 
+### Future concept — Hardware Radar Market Terminal
+
+**Hardware Radar Market Terminal** is a provisional working name for a possible high-density hardware market-intelligence experience, initially expressible as a **RAM Market Terminal**. It would serve a different interaction mode from the normal consumer product:
+
+```text
+Normal Hardware Radar: “I need hardware. Help me understand it and make a buying decision.”
+Market Terminal:       “I understand hardware. Show me the market.”
+```
+
+The Terminal would complement, never replace, the approachable homepage, catalog, Guides, and buying experience. Its durable design principle is:
+
+> **DENSITY IS EARNED BY DATA.**
+
+High information density, compact tables, rapid scanning, strong hierarchy, keyboard-friendly interaction, and evidence-backed charts or sparklines may create a professional market-monitor feel in Hardware Radar's blue/neutral visual language. The concept draws inspiration from dense professional monitoring, not from Bloomberg's brand: it must not copy Bloomberg's black/orange identity, imitate its interface directly, show fake ticker activity, or use decorative financial metrics without governed meaning. If three destinations are known, show three. If history or qualification is insufficient, show the governed insufficient, unavailable, or unknown state. Synthetic market activity is never acceptable.
+
+Existing ownership remains unchanged:
+
+- **Atlas** may supply the instrument/master-data layer: canonical product, brand, family, model, MPN, generation, capacity, module configuration, form factor, speed, timings, profiles, and factual catalog distributions.
+- **Mercury** may supply the market-observation layer: governed current and historical observations, qualifying offers, retailer coverage, freshness, and legitimately derived movement or historical ranges.
+- **Beacon** may supply aggregate product, comparison, engagement, and outbound-referral interest. Interest never creates market or recommendation authority.
+- **Compass** may supply separately governed interpretation or recommendations, visibly and semantically distinct from raw facts and market evidence.
+- **Gateway** may later own applicable external or API access.
+
+Possible modules—not committed scope—include a RAM Market Overview; evidence-backed 24-hour, 7-day, and 30-day movers; governed historical lows; capacity, speed, timing, generation, and form-factor views; exact retailer coverage; a chronological Product Tape where publication policy permits; and user-selected watchlists. No module may assert Current Price, Cheapest, Pick, Best, recommendation, availability, movement, or historical low without the governing subsystem's authority. Atlas facts alone are not market share, Beacon popularity is not product quality, and a retailer destination is not price or availability.
+
+Hardware Radar is not currently mature enough to justify the full Terminal: live market breadth and history are limited and audience learning is early. A smaller progression may be:
+
+```text
+RAM Catalog
+→ RAM Market Overview
+→ RAM Market Terminal
+→ Hardware Market Terminal
+```
+
+An earlier Atlas-only Market Overview could truthfully show tracked-product count and catalog composition by generation, capacity, speed, form factor, or manufacturer, explicitly labeled as **catalog coverage**, never market share. Later category views may extend to storage, CPUs, GPUs, and other governed hardware without committing their order.
+
+A useful core Terminal may remain free. Long-term optionality for a possible Hardware Radar Pro offering includes extended history, watchlists, alerts, advanced filters, dashboards, and exports; possible professional audiences include enthusiasts, system builders, repair shops, procurement teams, publishers, retailers, manufacturers, and market researchers. This establishes no pricing, paywall, subscription, account, or commercial commitment. Affiliate commission, sponsorship, retailer relationships, advertising spend, and commercial relationship health must not influence Terminal ordering, movement, lows, or intelligence; any future sponsored material must remain visibly separate.
+
+Implementation requires evidence of data maturity or demand, such as sufficient governed observations and historical depth, broader retailer coverage, repeat-user behavior, expressed interest in market monitoring, multi-category expansion, or demonstrated need for professional workflows. Future personalization must preserve privacy by default and must not assume persistent identity; accounts, if ever justified, require separate governance.
+
+This concept capture authorizes none of the following: a route or UI, ticker, charts, synthetic data, user accounts, subscriptions, alerts, watchlists, new scraping, provider spend, acquisition, retailer integration, Beacon production transport, Gateway deployment, or Compass recommendations. It is Category D future direction under the complexity-control doctrine, not an implementation commitment.
+
 ## 4. Parallel execution doctrine
 
 Hardware Radar is now developed as a small product program with multiple independent but coordinated execution tracks, not as one serial chain through every subsystem. A blocker in one track should not unnecessarily halt another independent track. Parallel work must preserve subsystem ownership, governance, provenance, authority boundaries, audit truth, and fail-closed behavior.
