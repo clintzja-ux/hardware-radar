@@ -6,7 +6,7 @@
   "scripts": {
     "build:public": "node scripts/build-public.mjs",
     "verify:public": "node scripts/verify-public-build.mjs",
-    "test": "node packages/sentinel/tests/run-all-tests.mjs && node packages/atlas/tests/run-all-tests.mjs && node packages/mercury/tests/run-all-tests.mjs && node packages/beacon/tests/run-all-tests.mjs && node packages/gateway/tests/run-all-tests.mjs && node scripts/repository-layout.test.mjs && node scripts/release-governance.test.mjs && node scripts/public-launch-shell.test.mjs && node scripts/editorial-publishing.test.mjs && node scripts/guides-surface.test.mjs && node scripts/ram-buying-guide.test.mjs && node scripts/ram-spoke-guides.test.mjs && node scripts/editorial-launch-qa.test.mjs && node scripts/ram-catalog.test.mjs && node scripts/ram-product-pages.test.mjs && node scripts/ram-comparison.test.mjs && node scripts/verify-public-build.mjs",
+    "test": "node packages/sentinel/tests/run-all-tests.mjs && node packages/atlas/tests/run-all-tests.mjs && node packages/mercury/tests/run-all-tests.mjs && node packages/beacon/tests/run-all-tests.mjs && node packages/gateway/tests/run-all-tests.mjs && node scripts/repository-layout.test.mjs && node scripts/release-governance.test.mjs && node scripts/public-launch-shell.test.mjs && node scripts/editorial-publishing.test.mjs && node scripts/guides-surface.test.mjs && node scripts/ram-buying-guide.test.mjs && node scripts/ram-spoke-guides.test.mjs && node scripts/editorial-launch-qa.test.mjs && node scripts/ram-catalog.test.mjs && node scripts/ram-product-pages.test.mjs && node scripts/ram-comparison.test.mjs && node scripts/retailer-destination-publishing.test.mjs && node scripts/verify-public-build.mjs",
     "test:public-shell": "node scripts/public-launch-shell.test.mjs",
     "test:editorial": "node scripts/editorial-publishing.test.mjs",
     "test:guides": "node scripts/guides-surface.test.mjs",
@@ -16,6 +16,7 @@
     "test:ram-catalog": "node scripts/ram-catalog.test.mjs",
     "test:ram-products": "node scripts/ram-product-pages.test.mjs",
     "test:ram-comparison": "node scripts/ram-comparison.test.mjs",
+    "test:retailer-destinations": "node scripts/retailer-destination-publishing.test.mjs",
     "test:sentinel": "node packages/sentinel/tests/run-all-tests.mjs",
     "test:aggregator": "node packages/sentinel/tests/DecisionAggregator.test.mjs",
     "test:registry": "node packages/sentinel/tests/RuleRegistry.test.mjs",

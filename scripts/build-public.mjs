@@ -17,6 +17,7 @@ import { RetailerRepository } from "../packages/atlas/RetailerRepository.js";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
 import { generateEditorialSite, generateSitemap } from "./editorial-publishing.mjs";
 import { generateRamProductPages } from "./ram-product-publishing.mjs";
+import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -72,7 +73,9 @@ const [products, retailers] = await Promise.all([
 ]);
 const ramCatalog = createRamCatalogProjection(products);
 await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
-const productPages = await generateRamProductPages({ catalog: ramCatalog, products, outputDir: path.join(root, "public") });
+const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
+const publicDestinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
+const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, outputDir: path.join(root, "public") });
 const staticRoutes = await json(path.join(root, "content", "site-routes.json"));
 await writeFile(path.join(root, "public", "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
 const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();

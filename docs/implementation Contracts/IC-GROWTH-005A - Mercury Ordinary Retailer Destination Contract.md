@@ -65,6 +65,6 @@ The Beacon projection contains only destination ID, product ID, retailer ID, mar
 
 Fixtures cover deterministic identity, URL normalization, exact Atlas binding, lifecycle validation, immutable reads, idempotent replay, conflict handling, replacement and retirement lineage, malformed-state rejection, affiliate independence, neutral ordering, privacy-safe Beacon projection, and explicit absence of downstream authority. They use no production destination record, provider call, link-health check, paid task, or spend.
 
-## Deferred seams
+## Public projection seam implemented by GROWTH-005B
 
-A future increment may add a validated source-controlled destination manifest and a public product-page resolver. Public rendering, operator production records, link-health monitoring, affiliate transformation/fallback behavior, and outbound event ingestion remain outside this increment and require their own authority.
+GROWTH-005B adds the validated checked-in manifest and deterministic static product-page projection. It exposes only the fields needed for an ordinary retailer link and preserves zero-record omission. Operator production records, link-health monitoring, affiliate transformation/fallback behavior, and outbound event ingestion remain outside this increment and require their own authority.

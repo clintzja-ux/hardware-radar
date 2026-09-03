@@ -41,7 +41,7 @@
 
             <a
                 class="price-button"
-                href="${product.affiliateUrl}"
+                href="${product.offerUrl}"
                 target="_blank"
                 rel="noopener noreferrer">
 

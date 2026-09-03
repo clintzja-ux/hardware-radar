@@ -45,7 +45,7 @@
 
             ${product.insight ? `<p class="insight-badge">${product.insight}</p>` : ""}
 
-            <a class="price-button" href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer">
+            <a class="price-button" href="${product.offerUrl}" target="_blank" rel="noopener noreferrer">
                 View retailer listing →
             </a>
         </article>

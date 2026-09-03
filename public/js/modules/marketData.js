@@ -25,7 +25,7 @@ function offerToDisplayProduct(item, scope, section, title, rank) {
         priceBasis: item.priceBasis === "LISTED_PRICE" ? "Listed price" : "Price basis unavailable",
         shippingMessage: shipping,
         retailer: item.retailer,
-        affiliateUrl: item.sourceUrl,
+        offerUrl: item.sourceUrl,
         verified: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",
         lastVerifiedTime: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",
         pricesChecked: scope.coverage.eligibleObservations,

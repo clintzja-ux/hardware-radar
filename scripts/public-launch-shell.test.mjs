@@ -127,7 +127,7 @@ renderRecommendation({
     priceBasis: "Listed price",
     shippingMessage: "Shipping not verified",
     insight: "Fixture",
-    affiliateUrl: "https://retailer.example/item"
+    offerUrl: "https://retailer.example/item"
 }, "recommendation");
 assert.match(containers.get("recommendation").innerHTML, /target="_blank"/);
 assert.match(containers.get("recommendation").innerHTML, /rel="noopener noreferrer"/);

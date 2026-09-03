@@ -137,4 +137,3 @@ await rejects(() => repository.getAll(), /STATE_INVALID/);
 
 equal((await import("../index.js")).RETAILER_DESTINATION_NAVIGATION_AUTHORITY, RETAILER_DESTINATION_NAVIGATION_AUTHORITY);
 console.log(`GROWTH-005A retailer destination tests passed (${cases} cases).`);
-

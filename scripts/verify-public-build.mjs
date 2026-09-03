@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { generateSitemap, parseEditorialSource, renderArticle, renderGuidesIndex, validateArticleMetadata } from "./editorial-publishing.mjs";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
 import { createRamProductSitemapRoutes, renderRamProductPage } from "./ram-product-publishing.mjs";
+import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const canonicalText = (contents) => contents.toString("utf8").replaceAll("\r\n", "\n");
@@ -66,6 +67,9 @@ try {
 try {
     const manifest = JSON.parse(await readFile(path.join(root, "packages", "atlas", "atlas-manifest.json"), "utf8"));
     const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
+    const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
+    const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
+    const destinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
     const catalog = createRamCatalogProjection(products);
     const expected = `${JSON.stringify(catalog, null, 2)}\n`;
     const actual = await readFile(path.join(root, "public", "data", "ram-catalog.json"), "utf8");
@@ -74,7 +78,7 @@ try {
     for (const product of catalog.products) {
         const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
         const page = await readFile(output, "utf8");
-        if (page !== renderRamProductPage(product)) errors.push(`Atlas catalog: stale product page ${product.publicPath}`);
+        if (page !== renderRamProductPage(product, destinations.filter(item => item.atlasProductId === product.atlasProductId))) errors.push(`Atlas catalog: stale product page ${product.publicPath}`);
     }
 } catch (error) { errors.push(`Atlas catalog: projection missing or invalid (${error.message}).`); }
 for (const internal of ["sentinel", "mercury"]) {
