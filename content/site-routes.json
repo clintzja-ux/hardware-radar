@@ -3,6 +3,8 @@
   { "path": "/ddr5.html", "lastmod": "2026-07-11", "changefreq": "daily", "priority": "0.95" },
   { "path": "/ddr4.html", "lastmod": "2026-07-11", "changefreq": "daily", "priority": "0.95" },
   { "path": "/sodimm.html", "lastmod": "2026-07-11", "changefreq": "daily", "priority": "0.95" },
+  { "path": "/ram/", "lastmod": "2026-09-02", "changefreq": "monthly", "priority": "0.80" },
+  { "path": "/ram/compare/", "lastmod": "2026-09-02", "changefreq": "monthly", "priority": "0.65" },
   { "path": "/about.html", "lastmod": "2026-07-11", "changefreq": "monthly", "priority": "0.70" },
   { "path": "/how-we-choose.html", "lastmod": "2026-07-11", "changefreq": "monthly", "priority": "0.70" },
   { "path": "/contact.html", "lastmod": "2026-07-11", "changefreq": "monthly", "priority": "0.60" },

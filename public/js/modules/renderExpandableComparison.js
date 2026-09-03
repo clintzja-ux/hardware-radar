@@ -56,7 +56,7 @@
 
                     </div>
 
-                    <a href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer" aria-label="View ${product.brand} ${product.model} at ${product.retailer}">View retailer listing →</a>
+                    <a href="${product.offerUrl}" target="_blank" rel="noopener noreferrer" aria-label="View ${product.brand} ${product.model} at ${product.retailer}">View retailer listing →</a>
 
                 </div>
             `;

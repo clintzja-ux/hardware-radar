@@ -24,6 +24,7 @@ export function renderFooter(containerId, { basePath = "" } = {}) {
                     <a href="${basePath}ddr5.html">DDR5</a>
                     <a href="${basePath}ddr4.html">DDR4</a>
                     <a href="${basePath}sodimm.html">Laptop RAM</a>
+                    <a href="${basePath}ram/">RAM Catalog</a>
                     <a href="${basePath}guides/">Guides</a>
                 </div>
 
