@@ -113,10 +113,30 @@
       "atlasProductId": "ram_kingston_kf556s40ibk2_64",
       "productType": "ram",
       "path": "products/ram/sodimm/HR-RAM-SODIMM-000022-kingston-fury-impact-kf556s40ibk2-64.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c30bbea_8",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000023-kingston-fury-beast-rgb-kf560c30bbea-8.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bbea_8",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000024-kingston-fury-beast-rgb-kf560c36bbea-8.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk16gx5m2b5200z40",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000025-corsair-vengeance-cmk16gx5m2b5200z40.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f16gx1_rs5k",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000026-g-skill-ripjaws-s5-f5-6000j3636f16gx1-rs5k.json"
     }
   ],
   "counts": {
-    "products": 22,
+    "products": 26,
     "brands": 5,
     "categories": 1,
     "retailers": 3

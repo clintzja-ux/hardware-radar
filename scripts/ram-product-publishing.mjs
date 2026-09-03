@@ -9,7 +9,7 @@ const displayFormFactor = (value) => value === "SO_DIMM" ? "SO-DIMM" : value;
 const displayEnum = (value) => String(value).replaceAll("_", " ").toLowerCase();
 
 function displayTitle(product) {
-    return `${product.brand} ${product.productFamily || product.modelName} ${product.capacityGb}GB ${product.memoryType}-${product.dataRateMtps}`;
+    return `${product.brand} ${product.productFamily || product.modelName} ${product.manufacturerPartNumber} ${product.capacityGb}GB ${product.memoryType}-${product.dataRateMtps}`;
 }
 
 function specificationGroup(title, rows) {

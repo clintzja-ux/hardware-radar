@@ -24,7 +24,7 @@ const expectedBrandDigests = {
 };
 
 assert.equal(manifest.counts.brands, 5);
-assert.equal(manifest.counts.products, 22, "D-002B must not add products beyond its authorized batch.");
+assert.ok(manifest.counts.products >= 22, "The D-002B product batch must remain present after later governed admissions.");
 assert.equal(brands.length, 5);
 assert.equal(validateBrandRepository(brands).valid, true);
 assert.equal(new Set(brands.map(({ brandId }) => brandId)).size, 5);

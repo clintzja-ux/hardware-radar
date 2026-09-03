@@ -20,6 +20,11 @@ assert.deepEqual(ready.products.map((product) => product.atlasProductId), [left.
 assert.equal(buildRamComparisonPath(ready.products), `/ram/compare/${query}`);
 assert.deepEqual(parseRamComparisonQuery(query, catalog.products), ready);
 
+const growthProducts = ["kingston-fury-beast-rgb-kf560c30bbea-8", "kingston-fury-beast-rgb-kf560c36bbea-8"];
+const growthReady = parseRamComparisonQuery(`?products=${growthProducts.join(",")}`, catalog.products);
+assert.equal(growthReady.status, "READY");
+assert.deepEqual(growthReady.products.map((product) => product.manufacturerPartNumber), ["KF560C30BBEA-8", "KF560C36BBEA-8"]);
+
 const reversed = parseRamComparisonQuery(`?products=${right.publicSlug},${left.publicSlug}`, catalog.products);
 assert.deepEqual(reversed.products.map((product) => product.publicSlug), [right.publicSlug, left.publicSlug], "Product A/B order must preserve transparent URL order.");
 assert.equal(parseRamComparisonQuery(`?products=${left.publicSlug}`, catalog.products).status, "INCOMPLETE");
@@ -75,7 +80,7 @@ const sitemap = await read("public/sitemap.xml");
 assert.equal((sitemap.match(/<loc>https:\/\/cheapestram\.com\/ram\/compare\/<\/loc>/g) ?? []).length, 1);
 assert.equal((sitemap.match(/<loc>https:\/\/cheapestram\.com\/ram\/compare\/\?products=/g) ?? []).length, 0);
 const detailRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]).filter((route) => route !== "/ram/compare/");
-assert.equal(detailRoutes.length, 22);
+assert.equal(detailRoutes.length, 26);
 
 const styles = await read("public/css/styles.css");
 assert.match(styles, /\.ram-comparison-table-wrap\{[^}]*overflow-x:auto/);
