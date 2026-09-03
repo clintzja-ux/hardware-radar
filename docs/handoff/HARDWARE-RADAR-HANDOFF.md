@@ -22,6 +22,7 @@ The RAM MVP is Hardware Radar's first product surface within a long-term hardwar
 - Separate canonical facts, observations, policy decisions, workflow, behavioral evidence, transport, and presentation by owner.
 - Treat public RAM specification comparison as an Atlas-derived factual surface only. It may expose deterministic similarities and differences, but it creates no market, compatibility, ranking, recommendation, Cheapest, Pick, or publication authority; see ADR-058.
 - Treat ordinary retailer product-page destinations as Mercury-owned navigation metadata only. Atlas retains product and retailer identity; destination eligibility is independent of affiliate state and grants no offer, observation, rights, publication, Current Price, Cheapest, Pick, or recommendation authority; see ADR-059.
+- Use GA4 for near-term third-party operational referral measurement; reserve Beacon for canonical Hardware Radar-governed first-party product/business intelligence, and do not deploy Beacon merely to duplicate sufficient GA4 measurement.
 - Treat privacy as an architectural boundary: collect the minimum required data, keep private values server-side, and prohibit behavioral evidence from becoming identity or market truth.
 - Use explicit, auditable governance and controlled automation. Unknown, malformed, contradictory, or unauthorized state fails closed.
 - Prefer the smallest architecture justified by measured needs. Architecture selection is not configuration, deployment, connection, or authority.

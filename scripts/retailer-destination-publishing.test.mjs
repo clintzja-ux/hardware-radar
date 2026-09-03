@@ -114,10 +114,13 @@ for (const productPage of catalog.products) {
     const rendered = renderRamProductPage(productPage, destinations);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);
+    assert.equal((rendered.match(/googletagmanager\.com\/gtag\/js/g) ?? []).length, 1);
+    assert.equal((rendered.match(/gtag\("config","G-QF6XJ8GCMY"\)/g) ?? []).length, 1);
     if (expectedProduction.has(productPage.atlasProductId)) {
         assert.match(rendered, /<h2 id="retailer-links-heading">Retailer links<\/h2>/);
         assert.match(rendered, />Amazon<\/span><a href="https:\/\/amazon\.com\//);
         assert.match(rendered, /target="_blank" rel="noopener noreferrer">Visit retailer<\/a>/);
+        assert.doesNotMatch(rendered, /onclick=|sendBeacon\(|fetch\(|gtag\("event"|data-(?:analytics|event|destination)/i);
         assert.match(rendered, /do not indicate current price or availability/);
         assert.doesNotMatch(rendered, /rel="[^"]*sponsored|affiliate|"@type":"(?:Offer|AggregateOffer)"|"price(?:Currency)?"|"availability"|"seller"/i);
     } else {

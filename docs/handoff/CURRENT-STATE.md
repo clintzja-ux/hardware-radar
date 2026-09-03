@@ -1,7 +1,7 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-09-02
+Last updated:                  2026-09-03
 Branch:                        hardware-radar-growth-1
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD; this current documentation correction remains uncommitted
@@ -14,7 +14,7 @@ Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Inge
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 Current product-definition increment: A-001 — RAM Launch Catalog and Minimum Useful Coverage complete
 Current public-product increment: A-002A — scoped cheapest-RAM proposition correction implemented and certified
-Current growth increment:        GROWTH-005B.3 — first three operator-reviewed Amazon US ordinary retailer destinations admitted and fixture-certified; navigation authority only
+Current growth increment:        GROWTH-006 — GA4 retailer-referral observability minimally corrected and fixture-certified; Beacon production collection remains deferred
 Current market-data planning increment: B-001 — 22-product Mercury acquisition plan complete; no acquisition authorized
 Current cohort-lifecycle increment: B-002A — six-product ACTIVE/READY transition completed and certified
 Current acquisition selection increment: B-004 — product-scoped initial acquisition inspection/PREPARE fixture-certified
@@ -59,6 +59,8 @@ GROWTH-002 adds a deterministic public Atlas projection and static `/ram/` disco
 GROWTH-005B.2 evaluated exactly eight operator-curated value-DDR5 candidates using first-party manufacturer evidence. Kingston `KF560C30BBEA-8`, Kingston `KF560C36BBEA-8`, Corsair `CMK16GX5M2B5200Z40`, and G.SKILL `F5-6000J3636F16GX1-RS5K` are admitted through existing Atlas governance. A-Tech `HMCG66AEBUA084N-ATC` and PNY `MD8GSD5560046-TB` / `MD16GSD5560046-TB` remain `HOLD` because exact submitted identity or module configuration was not established sufficiently; Silicon Power `SP016GXLWU60FBDKAI Gray` is `REJECT / MPN_CONTRADICTED` because first-party order data does not support the submitted exact identity and `2×8GB` configuration. No empty brand was registered. Atlas contains 26 RAM products and the same five brands.
 
 GROWTH-005B.3 admits the first three production ordinary retailer destinations: operator-reviewed Amazon US links for Kingston `KF560C30BBEA-8`, Corsair `CMK16GX5M2B5200Z40`, and G.SKILL `F5-6000J3636F16GX1-RS5K`. All bind exact Atlas products to active canonical retailer `RETAILER-0001` and `amazon.com`; each page alone renders the neutral **Retailer links** section. These are ordinary navigation destinations, not affiliate links, and pending Amazon affiliate state is irrelevant. They create no retailer authorization, offer, observation, source rights, price, availability, condition, shipping, publication, Current Price, Cheapest, Pick, ranking, or recommendation authority. The fail-closed public market snapshot remains unchanged.
+
+GROWTH-006 establishes GA4 as the near-term operational owner for retailer-referral counts and Beacon as the deferred canonical first-party product/business-intelligence owner. Operator inspection of the GA4 dashboard on 2026-09-03 confirmed the `cheapestram.com` stream active, Enhanced Measurement enabled, outbound clicks enabled, and recent data collection; repository inspection alone does not establish those external settings. Generated RAM product pages now load the site's existing GA4 tag, closing the page-level gap that otherwise prevented automatic outbound measurement for the three ordinary Amazon links. Their standard external HTTPS anchors remain usable without JavaScript and have no custom event, redirect, affiliate parameter, or Beacon dependency. Standard GA4 `click` reporting by link domain and originating persistent product route is sufficient for the current referral questions; canonical destination, Atlas product, retailer, marketplace, and trusted product-interest aggregation remain future Beacon concerns. Beacon transport remains `NOT_CONNECTED`, repository signals remain zero, and no analytics signal creates market, publication, ranking, recommendation, Current Price, Cheapest, or Pick authority.
 
 B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A registered exactly `RETAILER-0003` in Atlas, and merchant decision `mer_idrev_000000003` approved `DISCOVERED → REGISTERED` for evidence `dfev_bb40abbb467a6497b88a3e2d`. The governed path subsequently admitted immutable history, canonical observation `mer_obs_000000004`, and effective review `mer_rev_000000003 = REVIEWED`. B-014A fixture-certifies one shared durable-lineage context owner across E2J, E2P, and E2Q. Condition remains `UNKNOWN`; publication, Current Price, Cheapest, Pick, recommendation, and affiliate authority remain absent. The next safe MemoryC action is the separately authorized read-only E2S reassessment already identified below.
 
