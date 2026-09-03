@@ -1,7 +1,7 @@
 # IC-MERCURY-ACTIVATION-002B — Production Portfolio PREPARE Composition
 
-Status: implemented and fixture-certified  
-Owner: Mercury acquisition orchestration  
+Status: implemented and fixture-certified
+Owner: Mercury acquisition orchestration
 Provider spend authority: none
 
 ## Contract

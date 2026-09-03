@@ -173,6 +173,7 @@ const testModules = [
     ,"./RetailerDestination.test.mjs"
     ,"./AcquisitionPortfolioOrchestration.test.mjs"
     ,"./ProductionAcquisitionPortfolioComposition.test.mjs"
+    ,"./AcquisitionCheckpointExecutionComposition.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
