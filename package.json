@@ -88,6 +88,8 @@
     "acquisition:history-refresh:live:prepare": "node scripts/mercury-history-refresh-live-prepare.mjs",
     "acquisition:history-refresh:live:execute": "node --env-file=.env scripts/mercury-history-refresh-live-execute-once.mjs",
     "acquisition:history-refresh:result:retrieve": "node --env-file=.env scripts/mercury-history-refresh-result-retrieve.mjs",
+    "mercury:portfolio:prepare": "node scripts/mercury-acquisition-portfolio-prepare.mjs",
+    "mercury:portfolio:inspect": "node scripts/mercury-acquisition-portfolio-inspect.mjs",
     "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
     "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",
     "review:product-identity:approve": "node scripts/mercury-product-identity-review-approve.mjs",
