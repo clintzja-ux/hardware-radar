@@ -1,0 +1,9 @@
+import {mkdir,writeFile} from "node:fs/promises";
+import path from "node:path";
+import {FileDataForSeoMarketEvidenceRepository,prepareMerchantIdentityReview} from "../packages/mercury/index.js";
+const args=new Map(process.argv.slice(2).map(x=>{const i=x.indexOf("=");return i<0?[x,true]:[x.slice(0,i),x.slice(i+1)];}));
+const canonicalDomain=String(args.get("--domain")||"platinummicro.com");const canonicalMerchantName=String(args.get("--canonical-name")||"Platinummicro");const merchantId=args.get("--merchant-id");if(typeof merchantId!=="string")throw new Error("MERCHANT_ID_REQUIRED");
+const statePath=path.resolve(String(args.get("--state")||".forge-review/acquisition/dataforseo-market-evidence.json"));const out=path.resolve(String(args.get("--out")||`.forge-review/identity-review/merchant-${canonicalDomain}.json`));
+const records=await new FileDataForSeoMarketEvidenceRepository({statePath}).getAll();const preparedAt=new Date().toISOString();const request=prepareMerchantIdentityReview({records,canonicalDomain,canonicalMerchantName,merchantId,preparedAt,requestId:`merchant-review-${canonicalDomain}`});
+await mkdir(path.dirname(out),{recursive:true});await writeFile(out,`${JSON.stringify(request,null,2)}\n`,`utf8`);
+console.log("MERCHANT IDENTITY REVIEW PREPARE");console.log("Discovered merchant:    ",request.discoveredMerchantName);console.log("Canonical domain:       ",request.canonicalDomain);console.log("Merchant ID:            ",request.merchantId);console.log("Current state:          ",request.previousState);console.log("Proposed target:        ",request.requestedState);console.log("Evidence IDs:           ",request.supportingEvidenceReferences.join(", "));console.log("Status:                 ",request.status);console.log("Paid task created:      NO");console.log("Actual spend:           $0.000");console.log("Request export:         ",path.relative(process.cwd(),out));

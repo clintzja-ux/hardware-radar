@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "governanceType": "GATEWAY_ALERT_OPERATOR_RECIPIENT_APPROVAL",
+  "approvalId": "beacon_gateway_operator_alert_recipient_approval_v1",
+  "approvalState": "OPERATOR_APPROVED",
+  "approved": true,
+  "approvalScope": "SINGLE_OPERATOR_DESTINATION",
+  "configurationKey": "BEACON_ALERT_RECIPIENT",
+  "configurationSource": "SERVER_SIDE_RUNTIME",
+  "recipientAddressStored": false,
+  "runtimeConfigurationRequired": true,
+  "verificationRequired": true,
+  "verificationAuthority": "CLOUDFLARE_EMAIL_DESTINATION_VERIFICATION",
+  "verificationEvidencePresent": false,
+  "providerConfigurationId": "beacon_gateway_cloudflare_email_service_v1",
+  "sendingAuthorized": false,
+  "reason": "The operator approved one controlled operational-alert destination for later secure runtime configuration and independent Cloudflare verification."
+}

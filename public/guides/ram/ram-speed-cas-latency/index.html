@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAM Speed and CAS Latency Explained | Hardware Radar</title>
+<meta name="description" content="Understand MT/s, CAS latency, memory timings and the approximate latency calculation behind specifications such as DDR5-6000 CL30.">
+<link rel="canonical" href="https://cheapestram.com/guides/ram/ram-speed-cas-latency/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAM Speed and CAS Latency Explained">
+<meta property="og:description" content="Understand MT/s, CAS latency, memory timings and the approximate latency calculation behind specifications such as DDR5-6000 CL30.">
+<meta property="og:url" content="https://cheapestram.com/guides/ram/ram-speed-cas-latency/">
+<meta property="og:site_name" content="Hardware Radar">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RAM Speed and CAS Latency Explained">
+<meta name="twitter:description" content="Understand MT/s, CAS latency, memory timings and the approximate latency calculation behind specifications such as DDR5-6000 CL30.">
+<link rel="icon" type="image/svg+xml" href="/images/branding/favicon.svg">
+<link rel="stylesheet" href="/css/styles.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QF6XJ8GCMY"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-QF6XJ8GCMY");</script>
+<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","xmw7yj015l");</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"RAM Speed and CAS Latency Explained","description":"Understand MT/s, CAS latency, memory timings and the approximate latency calculation behind specifications such as DDR5-6000 CL30.","datePublished":"2026-09-02","dateModified":"2026-09-02","author":{"@type":"Organization","name":"Hardware Radar Editorial"},"publisher":{"@type":"Organization","name":"Mirabelle Labs"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cheapestram.com/guides/ram/ram-speed-cas-latency/"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://cheapestram.com/"},{"@type":"ListItem","position":2,"name":"Guides","item":"https://cheapestram.com/guides/"},{"@type":"ListItem","position":3,"name":"RAM","item":"https://cheapestram.com/guides/ram/"},{"@type":"ListItem","position":4,"name":"RAM Speed and CAS Latency Explained","item":"https://cheapestram.com/guides/ram/ram-speed-cas-latency/"}]}</script>
+</head>
+<body>
+<header id="headerContainer"></header>
+<nav class="article-breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/guides/">Guides</a></li><li><a href="/guides/ram/">RAM</a></li><li><span aria-current="page">RAM Speed and CAS Latency Explained</span></li></ol></nav>
+<main class="article-main"><article class="article-shell"><header class="article-heading"><p class="article-category">RAM guide</p><h1>RAM Speed and CAS Latency Explained</h1><p class="article-dek">Transfer rate describes data movement; CAS latency counts delay cycles. Read them together and only after compatibility and capacity.</p><p class="article-byline">By Hardware Radar Editorial · Published by Mirabelle Labs</p><p class="article-dates"><time datetime="2026-09-02">Published 2026-09-02</time></p></header><nav class="article-toc" aria-label="Table of contents"><p><strong>On this page</strong></p><ol><li><a href="#what-ram-speed-means">What RAM speed means</a></li><li><a href="#what-cas-latency-means">What CAS latency means</a></li><li><a href="#reading-primary-timing-notation">Reading primary timing notation</a></li><li><a href="#approximate-first-word-cas-latency">Approximate first-word CAS latency</a></li><li><a href="#bandwidth-and-latency-are-different">Bandwidth and latency are different</a></li><li><a href="#platform-support-sets-the-useful-ceiling">Platform support sets the useful ceiling</a></li><li><a href="#how-xmp-and-expo-relate-to-speed">How XMP and EXPO relate to speed</a></li><li><a href="#capacity-and-configuration-usually-come-first">Capacity and configuration usually come first</a></li><li><a href="#a-practical-comparison-method">A practical comparison method</a></li><li><a href="#common-interpretation-mistakes">Common interpretation mistakes</a></li><li><a href="#compare-ram-prices">Compare RAM prices</a></li></ol></nav><div class="article-body"><p>A label such as DDR5-6000 CL30 combines two different ideas. The <code>6000</code> describes an effective data transfer rate of 6000 megatransfers per second, while <code>CL30</code> describes a delay measured in 30 clock cycles for one timing operation. Neither number tells the complete story by itself.</p>
+<p>For buyers, these specifications are useful for comparing already-compatible products. They do not override the required DDR generation, form factor, capacity, module configuration, processor limits, or motherboard support.</p>
+<aside class="article-callout article-callout--note" aria-label="note"><strong>Note:</strong> Quick answer: use MT/s for transfer rate, interpret CL as a cycle count, and compare calculated latency only among viable kits. A lower CL number is not automatically faster across different transfer rates. The approximation <code>(CL × 2000) / MT/s</code> estimates CAS latency in nanoseconds but does not represent total system or application latency.</aside>
+<h2 id="what-ram-speed-means">What RAM speed means</h2>
+<p>Modern double-data-rate memory moves data on both edges of a clock signal. Consumer product names therefore commonly present an effective transfer rate: DDR4-3200 means 3200 million transfers per second, and DDR5-6000 means 6000 million transfers per second.</p>
+<p>The precise unit for that advertised data rate is MT/s. Retailers and manufacturers sometimes call the same number MHz in casual product copy, but MHz describes cycles per second rather than transfers per second. For buying comparisons, treating the label as MT/s avoids confusing the effective transfer rate with the underlying memory clock.</p>
+<p>Higher MT/s provides more potential memory bandwidth. That can help workloads capable of using it, but it does not guarantee an equal application-performance increase. Processor architecture, caches, graphics, software behavior, module layout, timings, and other bottlenecks all contribute.</p>
+<h2 id="what-cas-latency-means">What CAS latency means</h2>
+<p>CAS stands for column address strobe. CAS latency, written as CL followed by a number, is the number of clock cycles between a relevant read command and the availability of data under the timing definition.</p>
+<p>CL is a count of cycles, not a duration by itself. A cycle at one memory rate does not last the same amount of time as a cycle at another. This is why comparing <code>CL16</code> and <code>CL30</code> without their transfer rates is misleading.</p>
+<p>A lower CL can be desirable when other factors are equal, but products at different rates require a time-based comparison. Even that comparison covers only one timing and cannot replace real workload context.</p>
+<h2 id="reading-primary-timing-notation">Reading primary timing notation</h2>
+<p>Memory kits may list a sequence such as <code>30-36-36-76</code>. The first value is commonly CAS latency. Later values describe other delays, such as row-to-column and precharge behavior, according to the product’s primary timing set.</p>
+<p>The exact notation matters to tuning and detailed comparison, but a buyer does not need to rank every timing independently. Confirm that the kit’s rated settings are supported, consider the transfer rate and primary timings together, and avoid assuming that the first number describes the entire memory subsystem.</p>
+<h2 id="approximate-first-word-cas-latency">Approximate first-word CAS latency</h2>
+<p>A widely used comparison converts CAS cycles and transfer rate into an approximate latency in nanoseconds:</p>
+<p><code>latency_ns ≈ (CL × 2000) / MT/s</code></p>
+<p>The factor of 2000 accounts for the relationship between effective double-data-rate transfers and clock-cycle duration, then converts the result to nanoseconds.</p>
+<h3 id="example-1-ddr4-3200-cl16">Example 1: DDR4-3200 CL16</h3>
+<p><code>(16 × 2000) / 3200 = 10ns</code></p>
+<h3 id="example-2-ddr5-6000-cl30">Example 2: DDR5-6000 CL30</h3>
+<p><code>(30 × 2000) / 6000 = 10ns</code></p>
+<h3 id="example-3-ddr5-5600-cl40">Example 3: DDR5-5600 CL40</h3>
+<p><code>(40 × 2000) / 5600 ≈ 14.29ns</code></p>
+<p>The first two examples have the same approximate CAS latency even though their CL numbers and transfer rates differ. The DDR5-6000 example also offers a higher theoretical transfer rate, but that alone does not predict the result in every application.</p>
+<aside class="article-callout article-callout--warning" aria-label="warning"><strong>Warning:</strong> These calculations are comparison aids, not benchmark results. They omit other memory timings, controller delays, caches, queueing, motherboard behavior, processor architecture, and the workload itself.</aside>
+<h2 id="bandwidth-and-latency-are-different">Bandwidth and latency are different</h2>
+<p>Bandwidth describes how much data can be transferred over time. Latency describes delay before a particular operation completes. A memory configuration can offer higher bandwidth without having a proportionally lower first-word latency.</p>
+<p>Workloads that stream or process large amounts of data may value bandwidth. Workloads sensitive to small dependent accesses may respond differently. Most applications involve a combination of memory behavior plus processor and cache effects.</p>
+<p>That is why a balanced comparison does not declare one kit universally superior from <code>6000</code> or <code>CL30</code> alone. It asks whether the platform can use the settings, whether capacity is sufficient, and whether the price difference is justified in the buyer’s context.</p>
+<h2 id="platform-support-sets-the-useful-ceiling">Platform support sets the useful ceiling</h2>
+<p>Processors and motherboards publish supported memory configurations. Module count, capacity, ranks, firmware, and slot population can affect the attainable rate. Installing a kit rated above a platform’s standard support does not ensure the system will run that rating.</p>
+<p>Start with the <a href="/guides/ram/check-ram-compatibility/">RAM compatibility guide</a>. Confirm DDR generation, form factor, module type, supported capacity, and rates before comparing timings.</p>
+<p>Some systems may run a faster-rated kit at a lower compatible baseline setting. Whether that happens reliably is platform-specific, so do not buy on the assumption that every unsupported combination will simply downclock safely.</p>
+<h2 id="how-xmp-and-expo-relate-to-speed">How XMP and EXPO relate to speed</h2>
+<p>Intel XMP and AMD EXPO are memory profile technologies. Compatible kits store settings that a compatible motherboard can load, including transfer rate, timings, and voltage. A system may initially use standard baseline settings until the profile is selected.</p>
+<p>A profile is not a universal guarantee. Processor memory-controller capability, board design, firmware, number of modules, and configuration all affect stability. Use the documented slots, current firmware where appropriate, and settings the system can sustain reliably.</p>
+<p>The profile name also does not make an otherwise incompatible kit suitable. DDR generation, form factor, and module type remain mandatory requirements.</p>
+<h2 id="capacity-and-configuration-usually-come-first">Capacity and configuration usually come first</h2>
+<p>Insufficient capacity can cause more obvious disruption than a modest rate or timing difference. Choose enough memory for the workload before optimizing specifications within the remaining compatible choices.</p>
+<p>Module configuration matters too. A matched pair may establish the platform’s intended channel arrangement, while a single module can preserve expansion flexibility. A 1x32GB module and a 2x16GB kit therefore should not be compared solely by rate and CL.</p>
+<p>For capacity planning, read <a href="/guides/ram/16gb-vs-32gb/">16GB vs 32GB RAM</a>. For generation and platform tradeoffs, see <a href="/guides/ram/ddr4-vs-ddr5/">DDR4 vs DDR5</a>.</p>
+<h2 id="a-practical-comparison-method">A practical comparison method</h2>
+<ol><li>Eliminate incompatible DDR generations and form factors.</li><li>Choose the total capacity and module arrangement.</li><li>Check the processor and motherboard’s supported configurations.</li><li>Compare transfer rates in MT/s.</li><li>Compare primary timings and calculate approximate CAS latency if useful.</li><li>Confirm whether the advertised settings require XMP or EXPO.</li><li>Prefer stable, supported operation over an unusable headline rating.</li><li>Compare condition, known shipping, warranty, and total acquisition cost.</li></ol>
+<p>If two kits are both compatible and similarly priced, rate and timings can help distinguish them. If one kit requires unsupported settings or sacrifices needed capacity, its specification advantage is not actionable.</p>
+<h2 id="common-interpretation-mistakes">Common interpretation mistakes</h2>
+<ul><li>Calling the effective transfer-rate number the literal memory clock</li><li>Assuming lower CL always means lower time latency</li><li>Comparing timings without transfer rate</li><li>Treating approximate CAS latency as total system latency</li><li>Assuming advertised profile speed activates automatically</li><li>Ignoring reduced rates with additional modules</li><li>Buying too little capacity to afford a higher headline speed</li><li>Comparing different module counts as identical products</li><li>Generalizing one workload’s benchmark to every application</li></ul>
+<p>Return to the <a href="/guides/ram/">RAM Buying Guide</a> for the complete purchase sequence.</p>
+<h2 id="compare-ram-prices">Compare RAM prices</h2>
+<aside class="article-price-cta"><p>Compare DDR5 prices</p><a class="button" href="/ddr5.html">View tracked prices</a></aside>
+<aside class="article-price-cta"><p>Compare DDR4 prices</p><a class="button" href="/ddr4.html">View tracked prices</a></aside></div><section class="article-references" aria-labelledby="references"><h2 id="references">References</h2><ol><li><span class="evidence-label">FACT</span> <a href="https://www.crucial.com/support/articles-faq-memory/what-are-memory-timings" rel="noopener noreferrer">Crucial: What are memory timings?</a></li><li><span class="evidence-label">FACT</span> <a href="https://www.kingston.com/en/blog/gaming/cas-latency-cl-ram-timing-explained" rel="noopener noreferrer">Kingston: CAS latency and RAM timings explained</a></li><li><span class="evidence-label">FACT</span> <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html" rel="noopener noreferrer">Intel: Extreme Memory Profile (XMP)</a></li><li><span class="evidence-label">FACT</span> <a href="https://www.amd.com/en/products/processors/technologies/expo.html" rel="noopener noreferrer">AMD: Extended Profiles for Overclocking (EXPO)</a></li><li><span class="evidence-label">EXPLANATION</span> <a href="https://cheapestram.com/guides/ram/" rel="noopener noreferrer">Hardware Radar: RAM Buying Guide</a></li></ol></section></article></main>
+<footer id="footerContainer"></footer>
+<script type="module">import {renderHeader} from "/js/modules/renderHeader.js";import {renderFooter} from "/js/modules/renderFooter.js";renderHeader("headerContainer",{basePath:"/"});renderFooter("footerContainer",{basePath:"/"});</script>
+</body>
+</html>

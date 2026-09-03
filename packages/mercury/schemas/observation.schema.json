@@ -134,7 +134,8 @@
             "OPEN_BOX",
             "MANUFACTURER_REFURBISHED",
             "SELLER_REFURBISHED",
-            "USED"
+            "USED",
+            "UNKNOWN"
           ]
         },
         "sellerType": {

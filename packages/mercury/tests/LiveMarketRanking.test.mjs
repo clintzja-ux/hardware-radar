@@ -1,0 +1,13 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { Mercury } from "../Mercury.js";
+import { LiveMarketIntelligence } from "../live/LiveMarketIntelligence.js";
+import { makeAmazonApiObservation } from "./helpers/publicationFixture.mjs";
+const product=JSON.parse(await readFile(new URL("../../atlas/products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json",import.meta.url),"utf8"));
+const retailer=JSON.parse(await readFile(new URL("../../atlas/retailers/RETAILER-0001-amazon.json",import.meta.url),"utf8"));
+const expensive=makeAmazonApiObservation("mer_obs_000000703","2026-08-10T15:01:00Z"); expensive.offer.price=90;
+const cheap=makeAmazonApiObservation("mer_obs_000000704","2026-08-10T15:02:00Z"); cheap.offer.price=80;
+const stale=makeAmazonApiObservation("mer_obs_000000705","2026-08-10T12:00:00Z"); stale.offer.price=1;
+const result=await new LiveMarketIntelligence({mercury:new Mercury()}).evaluate({observations:[expensive,stale,cheap],products:[product],retailers:[retailer],asOf:"2026-08-10T15:20:00Z"});
+assert.equal(result.status,"AVAILABLE"); assert.equal(result.cheapest.observation.observationId,"mer_obs_000000704"); assert.equal(result.eligible.length,2); assert.equal(result.excluded.length,1);
+console.log("Live market ranking tests passed.");

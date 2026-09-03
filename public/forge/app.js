@@ -1,8 +1,17 @@
 import { ProductForm } from "./components/ProductForm.js";
 import { ForgeGenerator } from "./services/ForgeGenerator.js";
 import { copyToClipboard } from "./utils/clipboard.js";
+import { ObservationReviewPanel } from "./components/ObservationReviewPanel.js";
+import { AcquisitionOperationsPanel } from "./components/AcquisitionOperationsPanel.js";
+import { CertifiedMercuryOperationsPanel } from "./components/CertifiedMercuryOperationsPanel.js";
 
 const forge = new ForgeGenerator();
+const reviewPanelRoot = document.getElementById("observationReviewPanel");
+if (reviewPanelRoot) new ObservationReviewPanel(reviewPanelRoot, { copyToClipboard });
+const acquisitionPanelRoot = document.getElementById("acquisitionOperationsPanel");
+if (acquisitionPanelRoot) new AcquisitionOperationsPanel(acquisitionPanelRoot);
+const certifiedMercuryRoot = document.getElementById("certifiedMercuryOperationsPanel");
+if (certifiedMercuryRoot) new CertifiedMercuryOperationsPanel(certifiedMercuryRoot);
 
 const form = document.getElementById("forgeForm");
 const productForm = new ProductForm(form);

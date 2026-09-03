@@ -82,4 +82,23 @@ Applications consume published intelligence artifacts. They do not execute Mercu
 
 Pre-M001 `PRICE-*` records and the original `price-observation.schema.json` are preserved only under `legacy/` for historical engineering reference. They are not canonical repository members and cannot be loaded through the Mercury manifest.
 
-Forge v0.2 still contains a legacy Mercury preview workflow. It is explicitly non-canonical and must not be treated as a Mercury publication path. Canonical Forge-to-Mercury ingestion will use the registered adapter and validation pipeline in a later Forge integration sprint.
+Forge still contains a legacy Mercury preview workflow. It is explicitly non-canonical and must not be treated as a Mercury publication path. FM007 provides the certified read-only operations projection under `operations/`; it composes existing governed results and never performs ingestion, review, publication, or acquisition.
+
+FM008 exports that projection locally with an explicit `asOf` using `npm run forge:mercury:operations:export -- --as-of=<ISO_TIMESTAMP>`. The artifact remains under `.forge-review/forge/` for manual Forge loading and is never a public market snapshot.
+
+DF004-E2P adds record-specific canonical observation admission after E2G/E2H historical eligibility and E2J historical admission. Its assessment binds retained evidence, internal history, Atlas identities, provenance, source rights, and policy version before the existing observation-acceptance repository may accept a canonical `mer_obs_*` record. Canonical admission exposes no publication authority; review and publication remain separate. The older DataForSEO historical-promotion name is only a compatibility delegate and cannot accept caller-supplied identity resolutions.
+
+DF004-E2Q adds an immutable, expiring PREPARE authorization and an exact-confirmation, single-use EXECUTE boundary in front of E2P. Execution reassesses the owner state and delegates admission back to E2P; it creates no review or publication authority.
+
+DF004-E2S adds deterministic current-market qualification after effective canonical-observation review. It requires compatible adapter registration, explicit production freshness-policy resolution, derived confidence, condition/availability eligibility, Atlas bindings, and live-market rights. Qualification is time-dependent and non-persisted; it creates no publication, Current Price, Cheapest, Pick, ranking, or recommendation authority. E2S.1 adds the first provisional production policy: a six-hour CURRENT maximum and 24-hour STALE boundary scoped only to DataForSEO Google Shopping observations from Platinummicro. It is not refresh cadence or a universal threshold.
+
+## Governed publication workflow
+
+Canonical observations are not implicitly public. Publication proceeds through separate evidence eligibility, durable review, and durable publication authorization. `PUBLISH` and `WITHDRAW` decisions are append-only `mer_pub_*` workflow records. The public build consumes only governed published observations when durable operational state paths are supplied; otherwise it fails closed to insufficient-data output.
+
+
+## Live Market Intelligence
+
+Mercury treats current-market eligibility as a separate rights- and freshness-aware decision layer. A stored price is not automatically a live offer. Current observation, comparison, and public-display rights must be explicitly allowed; Atlas identities must resolve; evidence must validate; freshness/confidence/availability must satisfy policy; and licensed payload must remain usable.
+
+`LiveMarketIntelligence` returns `AVAILABLE` only when at least one observation passes every gate. Otherwise it returns `INSUFFICIENT_DATA`. Historical Intelligence remains independent and may remain dormant when historical-retention rights are unavailable.

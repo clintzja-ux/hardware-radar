@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "policyType": "HISTORICAL_REFRESH_CADENCE",
+  "policyId": "mer_histrefresh_cadence_ram_corsair_cmk32gx5m2b6000z30_v1",
+  "enabled": true,
+  "minimumIntervalMs": 86400000,
+  "atlasProductIds": [
+    "ram_corsair_cmk32gx5m2b6000z30"
+  ],
+  "retailerIds": null,
+  "rationale": "Initial operator-approved daily historical refresh cadence for production validation.",
+  "metadata": {
+    "approvalScope": "INITIAL_PRODUCTION_VALIDATION",
+    "schedulerWakeFrequencyIndependent": true,
+    "publicFreshnessPolicy": false
+  },
+  "automaticExecution": false
+}

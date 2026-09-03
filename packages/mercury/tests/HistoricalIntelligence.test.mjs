@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { HistoricalIntelligence } from "../HistoricalIntelligence.js";
-const base={schemaVersion:"1.1",atlasProductId:"ram_x",retailerId:"RETAILER-0001",marketplace:"amazon.com",sourceMethod:"MANUAL",lifecycleStatus:"RETRIEVED",validationStatus:"PASS",expiresAt:null};
+const base={schemaVersion:"1.1",atlasProductId:"ram_x",retailerId:"RETAILER-0001",marketplace:"amazon.com",sourceMethod:"MANUAL",lifecycleStatus:"RETRIEVED",validationStatus:"PASS",expiresAt:null,compliance:{licenseContext:"INDEPENDENT_SOURCE"}};
 const o=(id,time,price,extra={})=>({...base,observationId:id,observationTime:time,offer:{price,currency:"USD",condition:"NEW"},...extra});
 const rows=[o("mer_obs_000000003","2026-01-03T00:00:00Z",95),o("mer_obs_000000001","2026-01-01T00:00:00Z",100),o("mer_obs_000000002","2026-01-02T00:00:00Z",90)];
 const h=new HistoricalIntelligence(); const q={atlasProductId:"ram_x",currency:"USD",condition:"NEW"};

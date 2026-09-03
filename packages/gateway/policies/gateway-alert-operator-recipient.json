@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "1.0",
+  "configurationType": "GATEWAY_ALERT_OPERATOR_RECIPIENT",
+  "configurationId": "beacon_gateway_operator_alert_recipient_v1",
+  "purpose": "SECURITY_AND_OPERATIONAL_HEALTH",
+  "channel": "EMAIL",
+  "recipientMode": "VERIFIED_OPERATOR_DESTINATION",
+  "recipientAddress": null,
+  "verificationState": "NOT_CONFIGURED",
+  "verificationAuthority": "CLOUDFLARE_EMAIL_DESTINATION_VERIFICATION",
+  "verificationEvidenceReference": null,
+  "providerConfigurationId": "beacon_gateway_cloudflare_email_service_v1",
+  "bindingRestriction": "EXPLICIT_DESTINATION_ONLY",
+  "enabled": false,
+  "emailSendingEnabled": false,
+  "automaticRetry": false,
+  "automaticRemediation": false,
+  "behavioralAuthority": false,
+  "cadenceAuthority": false
+}

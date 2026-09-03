@@ -1,0 +1,26 @@
+{
+  "id": "RETAILER-0002",
+  "name": "Platinummicro",
+  "slug": "platinummicro",
+  "websiteUrl": "https://platinummicro.com",
+  "status": "active",
+  "regions": [
+    "US"
+  ],
+  "supportedCurrencies": [
+    "USD"
+  ],
+  "affiliateProgram": {
+    "available": false,
+    "status": "unknown",
+    "network": null,
+    "disclosureRequired": true
+  },
+  "metadata": {
+    "createdAt": "2026-08-23T00:00:00Z",
+    "updatedAt": "2026-08-23T00:00:00Z",
+    "sourceReferences": [
+      "Platinummicro"
+    ]
+  }
+}

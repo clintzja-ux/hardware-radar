@@ -12,5 +12,6 @@ for (const field of [
 }
 assert.equal(schema.properties.observationId.pattern, "^mer_obs_[0-9]{9}$");
 assert.equal(schema.additionalProperties, false);
+assert.equal(schema.properties.offer.properties.condition.enum.includes("UNKNOWN"), true, "Schema must support explicit UNKNOWN offer condition.");
 
 console.log("Mercury schema contract tests passed.");

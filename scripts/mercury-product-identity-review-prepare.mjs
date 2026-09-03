@@ -1,0 +1,11 @@
+import {mkdir,writeFile} from "node:fs/promises";
+import path from "node:path";
+import {FileDataForSeoMarketEvidenceRepository,prepareProductIdentityReview} from "../packages/mercury/index.js";
+const args=new Map(process.argv.slice(2).map(x=>{const i=x.indexOf("=");return i<0?[x,true]:[x.slice(0,i),x.slice(i+1)];}));
+const atlasProductId=String(args.get("--atlas-product")||"ram_corsair_cmk32gx5m2b6000z30");
+const statePath=path.resolve(String(args.get("--state")||".forge-review/acquisition/dataforseo-market-evidence.json"));
+const out=path.resolve(String(args.get("--out")||`.forge-review/identity-review/product-${atlasProductId}.json`));
+const records=await new FileDataForSeoMarketEvidenceRepository({statePath}).getAll();
+const preparedAt=new Date().toISOString();const request=prepareProductIdentityReview({records,atlasProductId,preparedAt,requestId:`product-review-${atlasProductId}`});
+await mkdir(path.dirname(out),{recursive:true});await writeFile(out,`${JSON.stringify(request,null,2)}\n`,`utf8`);
+console.log("PRODUCT IDENTITY REVIEW PREPARE");console.log("Atlas product:          ",request.atlasProductId);console.log("Current state:          ",request.previousState);console.log("Proposed target:        ",request.requestedState);console.log("Evidence IDs:           ",request.supportingEvidenceReferences.join(", "));console.log("Status:                 ",request.status);console.log("Paid task created:      NO");console.log("Actual spend:           $0.000");console.log("Request export:         ",path.relative(process.cwd(),out));

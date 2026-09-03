@@ -1,0 +1,174 @@
+{
+  "identity": {
+    "atlasProductId": "ram_kingston_kf432c16bbk2_16",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-09-01T00:00:00Z",
+    "updatedAt": "2026-09-01T00:00:00Z",
+    "createdBy": "system:d002-fixture-certification",
+    "updatedBy": "system:d002-fixture-certification",
+    "brand": "Kingston",
+    "manufacturer": "Kingston",
+    "productFamily": "FURY Beast",
+    "series": null,
+    "modelName": "FURY Beast KF432C16BBK2/16",
+    "manufacturerPartNumber": "KF432C16BBK2/16",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Kingston FURY Beast DDR4 16GB (2×8GB) 3200 MT/s",
+    "slug": "kingston-fury-beast-kf432c16bbk2-16"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "UNKNOWN",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "D-002 fixture candidate; production Atlas admission requires separate operator review.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF432C16BBK2-16-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.kingston.com/en/memory/search?partid=KF432C16BBK2%2F16",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF432C16BBK2-16-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.kingston.com/en/memory/search?partid=KF432C16BBK2%2F16",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF432C16BBK2-16-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.kingston.com/en/memory/search?partid=KF432C16BBK2%2F16",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF432C16BBK2-16-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.kingston.com/en/memory/search?partid=KF432C16BBK2%2F16",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-09-01T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true,
+        "gamingPositioning": null,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 8,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3200,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3200",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "PROFILE_INCLUDED",
+        "expoSupport": "NONE",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 25.6
+      },
+      "electrical": {
+        "ratedVoltage": 1.35,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": false,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

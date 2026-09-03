@@ -27,12 +27,13 @@ assert.equal((await atlas.getBrand("brand-corsair")).displayName, "Corsair");
 assert.equal((await atlas.getCategory("cat-ram")).shortName, "RAM");
 assert.equal((await atlas.getProduct("RAM_CORSAIR_CMK32GX5M2B6000Z30")).identity.brand, "Corsair");
 assert.equal((await atlas.getRetailer("retailer-0001")).name, "Amazon");
+assert.equal((await atlas.getRetailer("retailer-0003")).name, "MemoryC");
 
 const repositories = await atlas.loadRepositories();
-assert.equal(repositories.brands.length, 1);
+assert.equal(repositories.brands.length, 5);
 assert.equal(repositories.categories.length, 1);
-assert.equal(repositories.products.length, 1);
-assert.equal(repositories.retailers.length, 1);
+assert.equal(repositories.products.length, 22);
+assert.equal(repositories.retailers.length, 3);
 assert.equal(Object.isFrozen(repositories), true);
 
 const manifestReport = await atlas.validateManifest();

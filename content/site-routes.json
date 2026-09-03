@@ -1,0 +1,13 @@
+[
+  { "path": "/", "lastmod": "2026-07-11", "changefreq": "daily", "priority": "1.0" },
+  { "path": "/ddr5.html", "lastmod": "2026-07-11", "changefreq": "daily", "priority": "0.95" },
+  { "path": "/ddr4.html", "lastmod": "2026-07-11", "changefreq": "daily", "priority": "0.95" },
+  { "path": "/sodimm.html", "lastmod": "2026-07-11", "changefreq": "daily", "priority": "0.95" },
+  { "path": "/about.html", "lastmod": "2026-07-11", "changefreq": "monthly", "priority": "0.70" },
+  { "path": "/how-we-choose.html", "lastmod": "2026-07-11", "changefreq": "monthly", "priority": "0.70" },
+  { "path": "/contact.html", "lastmod": "2026-07-11", "changefreq": "monthly", "priority": "0.60" },
+  { "path": "/privacy-policy.html", "lastmod": "2026-07-11", "changefreq": "yearly", "priority": "0.30" },
+  { "path": "/affiliate-disclosure.html", "lastmod": "2026-07-11", "changefreq": "yearly", "priority": "0.30" },
+  { "path": "/terms.html", "lastmod": "2026-07-11", "changefreq": "yearly", "priority": "0.30" },
+  { "path": "/guides/", "lastmod": "2026-09-02", "changefreq": "monthly", "priority": "0.70" }
+]

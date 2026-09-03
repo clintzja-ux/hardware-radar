@@ -10,4 +10,6 @@ from the public Hardware Radar experience.
 
 Forge v0.2 retains a **legacy Mercury preview** for the existing authoring workflow. This preview is not a canonical Mercury observation and must not be written to `packages/mercury/observations/` or used for publication.
 
-Canonical Mercury ingestion is owned by the certified Mercury adapter → validation → observation pipeline. A future Forge integration sprint will replace the legacy preview with orchestration of that canonical pipeline.
+Canonical Mercury ingestion remains owned by the certified Mercury adapter → validation → observation pipeline. FM007 adds a separate certified, read-only operations panel that consumes a Mercury-owned operations projection. It renders existing identity, promotion, history/cadence, review, and publication semantics without making policy or writing state. The legacy authoring preview remains visibly isolated and noncanonical.
+
+FM008 materializes the local projection at `.forge-review/forge/certified-mercury-operations.json`. Select that file in the certified panel; it is not automatically published or loaded as public price data.

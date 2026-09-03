@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "generatedAt": "2026-08-09T06:32:21.251Z",
+  "generatedAt": "2026-08-24T16:23:37.048Z",
   "publicationPolicy": {
     "policyId": "hardware-radar-market-publication",
     "version": "1.0.0"
@@ -9,33 +9,41 @@
     "overall": {
       "status": "INSUFFICIENT_DATA",
       "cheapest": null,
+      "alternatives": [],
       "coverage": {
         "eligibleObservations": 0,
-        "retailersRepresented": 0
+        "retailersRepresented": 0,
+        "displayedOffers": 0
       }
     },
     "ddr5": {
       "status": "INSUFFICIENT_DATA",
       "cheapest": null,
+      "alternatives": [],
       "coverage": {
         "eligibleObservations": 0,
-        "retailersRepresented": 0
+        "retailersRepresented": 0,
+        "displayedOffers": 0
       }
     },
     "ddr4": {
       "status": "INSUFFICIENT_DATA",
       "cheapest": null,
+      "alternatives": [],
       "coverage": {
         "eligibleObservations": 0,
-        "retailersRepresented": 0
+        "retailersRepresented": 0,
+        "displayedOffers": 0
       }
     },
     "sodimm": {
       "status": "INSUFFICIENT_DATA",
       "cheapest": null,
+      "alternatives": [],
       "coverage": {
         "eligibleObservations": 0,
-        "retailersRepresented": 0
+        "retailersRepresented": 0,
+        "displayedOffers": 0
       }
     }
   }

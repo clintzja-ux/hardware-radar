@@ -24,7 +24,7 @@ const ENUMS = Object.freeze({
     lifecycleStatus: Object.freeze(["DISCOVERED", "RETRIEVED", "VALIDATED", "PUBLISHABLE", "PUBLISHED", "SUPERSEDED", "ARCHIVED"]),
     validationStatus: Object.freeze(["PASS", "WARN", "FAIL"]),
     availability: Object.freeze(["IN_STOCK", "LOW_STOCK", "OUT_OF_STOCK", "PREORDER", "BACKORDER", "DISCONTINUED", "UNKNOWN"]),
-    condition: Object.freeze(["NEW", "OPEN_BOX", "MANUFACTURER_REFURBISHED", "SELLER_REFURBISHED", "USED"]),
+    condition: Object.freeze(["NEW", "OPEN_BOX", "MANUFACTURER_REFURBISHED", "SELLER_REFURBISHED", "USED", "UNKNOWN"]),
     sellerType: Object.freeze(["MANUFACTURER", "AUTHORIZED_RESELLER", "RETAILER", "MARKETPLACE", "UNKNOWN"])
 });
 

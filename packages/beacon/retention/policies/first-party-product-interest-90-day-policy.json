@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "policyType": "BEACON_EVIDENCE_RETENTION",
+  "policyId": "beacon_first_party_product_interest_retention_90d_v1",
+  "enabled": true,
+  "evidenceClass": "FIRST_PARTY_PRODUCT_INTEREST",
+  "retentionMs": 7776000000,
+  "retentionTimestampField": "recordedAt",
+  "automaticDeletion": false,
+  "scope": {
+    "signalTypes": ["OUTBOUND_RETAILER_CLICK"],
+    "rawEvidenceOnly": true,
+    "excludesPersonIdentity": true
+  },
+  "rationale": "Initial privacy-conscious 90-day retention for raw governed first-party product-interest evidence."
+}

@@ -8,24 +8,26 @@ import { renderHeader } from "./modules/renderHeader.js";
 async function init() {
     try {
         const snapshot = await loadMarketSnapshot();
-        const overall = scopeToDisplayProduct(snapshot.scopes.overall, "overall", "TODAY'S CHEAPEST RAM");
+        const overall = scopeToDisplayProduct(snapshot.scopes.overall, "overall", "Cheapest RAM we're tracking");
         if (overall) renderOverall([overall]); else renderOverallUnavailable("overallSection");
 
         const categories = [
-            ["ddr5", "ddr5Section", "Cheapest DDR5", "More DDR5 Deals"],
-            ["ddr4", "ddr4Section", "Cheapest DDR4", "More DDR4 Deals"],
-            ["sodimm", "sodimmSection", "Cheapest SODIMM", "More Laptop RAM Deals"]
+            ["ddr5", "ddr5Section", "Cheapest DDR5 we're tracking", "More DDR5 Deals"],
+            ["ddr4", "ddr4Section", "Cheapest DDR4 we're tracking", "More DDR4 Deals"],
+            ["sodimm", "sodimmSection", "Cheapest Laptop RAM we're tracking", "More Laptop RAM Deals"]
         ];
         for (const [section, containerId, title, linkText] of categories) {
             const product = scopeToDisplayProduct(snapshot.scopes[section], section, title);
             if (product) renderCategory([product], section, containerId, linkText);
             else renderCategoryUnavailable(containerId, title);
         }
-        renderCategoryUnavailable("eccSection", "Server / ECC RAM");
         renderTrust();
     } catch (error) {
         console.error(error);
         renderOverallUnavailable("overallSection");
+        renderCategoryUnavailable("ddr5Section", "DDR5");
+        renderCategoryUnavailable("ddr4Section", "DDR4");
+        renderCategoryUnavailable("sodimmSection", "Laptop RAM");
     }
     renderHeader("headerContainer");
     renderFooter("footerContainer");

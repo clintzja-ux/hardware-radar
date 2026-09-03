@@ -1,0 +1,20 @@
+import {assessGatewayCloudflareRuntimeReadiness} from "../packages/gateway/index.js";
+
+const status = assessGatewayCloudflareRuntimeReadiness();
+console.log("CLOUDFLARE RECIPIENT VERIFICATION CREDENTIAL STATUS");
+console.log("");
+console.log("Account identifier source:       EPHEMERAL_OPERATOR_INPUT");
+console.log("Account identifier configured:  ", status.accountIdentifierConfigured ? "YES" : "NO");
+console.log("API token source:                EPHEMERAL_OPERATOR_SECRET");
+console.log("API token configured:           ", status.apiTokenConfigured ? "YES" : "NO");
+console.log("Recipient source:                SERVER_SIDE_RUNTIME");
+console.log("Recipient configured:           ", status.recipientConfigured ? "YES" : "NO");
+console.log("Verification runtime ready:     ", status.verificationRuntimeReady ? "YES" : "NO");
+console.log("Verification requested:          NO");
+console.log("Recipient verified:              NO");
+console.log("Email sending enabled:           NO");
+console.log("Production transport:           ", status.productionTransport);
+console.log("Secrets displayed:               NO");
+console.log("Network request:                 NONE");
+console.log("Action executed:                 NO");
+console.log("Actual spend:                    $0.000");

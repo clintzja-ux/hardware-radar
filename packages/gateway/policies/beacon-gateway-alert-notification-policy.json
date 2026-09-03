@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "policyType": "BEACON_GATEWAY_ALERT_NOTIFICATION",
+  "policyId": "beacon_gateway_alert_email_notification_v1",
+  "enabled": true,
+  "channel": "EMAIL",
+  "purpose": "SECURITY_AND_OPERATIONAL_HEALTH",
+  "eligibleAlertRuleIds": ["ENDPOINT_UNHEALTHY","STORAGE_FAILURE_RATE","HANDLER_ERROR_RATE","RATE_LIMIT_ACTIVITY","LATENCY_DEGRADATION"],
+  "activeOnly": true,
+  "recoveryNotifications": false,
+  "recipientConfiguration": "NOT_CONFIGURED",
+  "providerConfigured": false,
+  "automaticRemediation": false,
+  "automaticRetry": false,
+  "behavioralAuthority": false,
+  "cadenceAuthority": false,
+  "includeSensitiveDetails": false,
+  "rationale": "Explicit operator email is the approved initial channel for active security and operational-health alerts. Provider and recipients require separate configuration."
+}

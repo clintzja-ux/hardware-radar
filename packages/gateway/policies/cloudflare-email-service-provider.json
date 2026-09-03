@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "configurationId": "beacon_gateway_cloudflare_email_service_v1",
+  "provider": "CLOUDFLARE_EMAIL_SERVICE",
+  "transport": "WORKERS_SEND_EMAIL_BINDING",
+  "purpose": "SECURITY_AND_OPERATIONAL_HEALTH",
+  "recipientMode": "VERIFIED_OPERATOR_DESTINATION",
+  "bindingRestriction": "EXPLICIT_DESTINATION_ONLY",
+  "providerSelected": true,
+  "providerDeploymentConfigured": false,
+  "recipientConfigured": false,
+  "emailSendingEnabled": false,
+  "automaticRetry": false,
+  "automaticRemediation": false,
+  "behavioralAuthority": false,
+  "cadenceAuthority": false,
+  "rationale": "Cloudflare Email Service with a destination-restricted Workers send_email binding is selected for future operational-alert delivery. Deployment and recipient governance remain separate."
+}

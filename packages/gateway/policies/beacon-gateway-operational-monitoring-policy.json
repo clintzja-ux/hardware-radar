@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "policyType": "BEACON_GATEWAY_OPERATIONAL_MONITORING",
+  "policyId": "beacon_gateway_operational_monitoring_30d_v1",
+  "enabled": true,
+  "allowedCategories": [
+    "REQUESTS_EVALUATED",
+    "REQUESTS_ACCEPTED",
+    "DUPLICATES",
+    "MATERIAL_CONFLICTS",
+    "VALIDATION_REJECTIONS",
+    "RATE_LIMITED",
+    "STORAGE_FAILURES",
+    "HANDLER_ERRORS",
+    "ENDPOINT_HEALTH",
+    "HANDLER_LATENCY"
+  ],
+  "retentionMs": 2592000000,
+  "timestampBasis": "recordedAt",
+  "rawRequestBodiesAllowed": false,
+  "eventPayloadsAllowed": false,
+  "networkIdentityPersistenceAllowed": false,
+  "automaticDeletion": false,
+  "automaticRemediation": false,
+  "behavioralAnalyticsAuthority": false,
+  "cadenceAuthority": false,
+  "rationale": "Retain product-neutral Gateway security, availability, health, and incident-diagnosis categories for 30 days without behavioral payloads or persistent identity."
+}

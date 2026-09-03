@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {createProductInfoEnrichmentAuthorizationRequest,assertProductInfoAuthorizationBinding,createLiveAcquisitionAuthorization,SingleUseAuthorizedLiveAcquisitionExecutor} from '../index.js';
+const proposal={status:'PENDING_OPERATOR_REVIEW',operation:'PRODUCT_INFO',proposalId:'enrich_test',sourceTaskId:'products_task',atlasProductId:'ram_test',estimatedCostUsd:.001,maxPaidTasks:1,automaticPaidRetries:0,providerIdentity:{productId:null,dataDocId:'3844868436216882408',gid:null}};
+const createdAt='2026-08-21T05:00:00.000Z';
+const request=createProductInfoEnrichmentAuthorizationRequest({proposal,createdAt});
+assert.equal(request.maxSpendUsd,.001);assert.equal(request.maxPaidTasks,1);assert.equal(request.automaticPaidRetries,0);assert.equal(request.plan.decisions[0].execution.dataDocId,'3844868436216882408');assertProductInfoAuthorizationBinding({request,proposal});
+assert.throws(()=>assertProductInfoAuthorizationBinding({request,proposal:{...proposal,providerIdentity:{...proposal.providerIdentity,dataDocId:'17540895125310173539'}}}),/BINDING_MISMATCH/);
+let calls=0;const consumed=new Set();const repo={isConsumed:async id=>consumed.has(id),consume:async({authorizationId})=>consumed.has(authorizationId)?{status:'ALREADY_CONSUMED'}:(consumed.add(authorizationId),{status:'CONSUMED'})};
+const executor={execute:async plan=>{calls++;assert.equal(plan.decisions[0].execution.kind,'PRODUCT_INFO');assert.equal(plan.decisions[0].execution.dataDocId,'3844868436216882408');return {status:'COMPLETED',run:{actualSpendUsd:.001,tasks:[{providerTaskId:'provider_1'}]}}}};
+const single=new SingleUseAuthorizedLiveAcquisitionExecutor({executor,consumptionRepository:repo,now:()=> '2026-08-21T05:01:00.000Z'});
+const auth=createLiveAcquisitionAuthorization({authorizationId:request.requestId,authorized:true,planId:request.planId,authorizedAt:'2026-08-21T05:00:30.000Z',expiresAt:request.expiresAt,maxSpendUsd:.001,maxPaidTasks:1});
+const first=await single.execute({plan:request.plan,authorization:auth});assert.equal(first.status,'COMPLETED');assert.equal(calls,1);
+const replay=await single.execute({plan:request.plan,authorization:auth});assert.equal(replay.status,'LIVE_AUTHORIZATION_ALREADY_CONSUMED');assert.equal(calls,1);
+console.log('Product Info enrichment single-use authorization tests passed.');

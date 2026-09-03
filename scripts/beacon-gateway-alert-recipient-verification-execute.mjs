@@ -1,0 +1,62 @@
+import path from "node:path";
+import {
+  assertGatewayAlertRecipientVerificationConfirmation,
+  CloudflareEmailRoutingDestinationVerificationClient,
+  CloudflareEmailServiceProviderConfigurationRepository,
+  createGatewayCloudflareVerificationOperatorInput,
+  FileGatewayAlertRecipientVerificationAuthorizationRepository,
+  GatewayAlertOperatorRecipientApprovalRepository,
+  GatewayAlertRecipientVerificationExecutor,
+} from "../packages/gateway/index.js";
+
+const args = new Map(process.argv.slice(2).map(value => {
+  const index = value.indexOf("=");
+  return index < 0 ? [value, true] : [value.slice(0, index), value.slice(index + 1)];
+}));
+const authorizationId = args.get("--authorization-id");
+const confirmationToken = args.get("--confirm");
+assertGatewayAlertRecipientVerificationConfirmation(confirmationToken);
+if (typeof authorizationId !== "string" || authorizationId.trim() === "") {
+  throw new Error("AUTHORIZATION_ID_REQUIRED");
+}
+
+const repository = new FileGatewayAlertRecipientVerificationAuthorizationRepository({
+  filePath: path.resolve(".forge-review/gateway-alert-recipient-verification-authorizations.json"),
+});
+const authorization = await repository.getById(authorizationId);
+if (!authorization) throw new Error("ALERT_RECIPIENT_VERIFICATION_AUTHORIZATION_NOT_FOUND");
+
+// Secret-bearing environment values are read only after confirmation and authorization lookup.
+const operatorInput = createGatewayCloudflareVerificationOperatorInput({
+  ...(process.env.CLOUDFLARE_ACCOUNT_ID === undefined ? {} : {CLOUDFLARE_ACCOUNT_ID: process.env.CLOUDFLARE_ACCOUNT_ID}),
+  ...(process.env.CLOUDFLARE_API_TOKEN === undefined ? {} : {CLOUDFLARE_API_TOKEN: process.env.CLOUDFLARE_API_TOKEN}),
+  ...(process.env.BEACON_ALERT_RECIPIENT === undefined ? {} : {BEACON_ALERT_RECIPIENT: process.env.BEACON_ALERT_RECIPIENT}),
+});
+const [approval, providerConfiguration] = await Promise.all([
+  new GatewayAlertOperatorRecipientApprovalRepository().getApproval(),
+  new CloudflareEmailServiceProviderConfigurationRepository().getConfiguration(),
+]);
+const result = await operatorInput.withRuntimeConfiguration(async runtimeConfiguration => {
+  const executor = new GatewayAlertRecipientVerificationExecutor({
+    authorizationRepository: repository,
+    credentialLoader: async () => operatorInput.withRuntimeConfiguration(runtime => ({
+      accountId: runtime.CLOUDFLARE_ACCOUNT_ID,
+      apiToken: runtime.CLOUDFLARE_API_TOKEN,
+    })),
+    clientFactory: credentials => new CloudflareEmailRoutingDestinationVerificationClient(credentials),
+  });
+  return executor.execute({authorization, confirmationToken, approval, providerConfiguration, runtimeConfiguration});
+});
+
+console.log("ALERT RECIPIENT VERIFICATION EXECUTION");
+console.log("");
+console.log("Authorization ID:               ", authorizationId);
+console.log("Recipient value:                REDACTED");
+console.log("Result:                         ", result.status);
+console.log("Verification requested:         ", result.verificationRequested ? "YES" : "NO");
+console.log("Verification state:             ", result.recipientVerified ? "VERIFIED" : "PENDING_VERIFICATION");
+console.log("Alert email sent:               NO");
+console.log("Provider deployed:              NO");
+console.log("Sender/domain configured:       NO");
+console.log("Sending enabled:                NO");
+console.log("Actual spend:                   $0.000");

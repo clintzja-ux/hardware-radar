@@ -1,11 +1,11 @@
 # Amazon Compliance Bible
 
-**Document ID:** AMZ-COMP-BIBLE  
-**Version:** 0.1  
-**Status:** Living Document — Verified Foundation  
-**Owner:** Mirabelle Labs  
-**Applies To:** Hardware Radar, Mercury, Sentinel, Forge  
-**Research Cut-off:** 2026-07-18  
+**Document ID:** AMZ-COMP-BIBLE
+**Version:** 0.2
+**Status:** Living Document — Verified Foundation
+**Owner:** Mirabelle Labs
+**Applies To:** Hardware Radar, Mercury, Sentinel, Forge
+**Research Cut-off:** 2026-08-09
 **Marketplace Scope:** Amazon.com / United States Associates Program
 
 > This document is an internal engineering interpretation of current official requirements. It is not legal advice and does not replace Amazon's controlling agreements, policies, specifications, or written instructions. Where a conflict exists, the applicable official Amazon document controls.
@@ -76,7 +76,7 @@ No production compliance rule should be marked `VERIFIED` without a current offi
 | SRC-003 | Associates Program Participation Requirements | Amazon | VERIFIED | 2026-07-18 |
 | SRC-004 | Associates Program IP License and Usage Requirements | Amazon; incorporated within Program Policies | VERIFIED | 2026-07-18 |
 | SRC-005 | Associates Program Trademark Guidelines | Amazon; incorporated within Program Policies | PARTIALLY VERIFIED | 2026-07-18 |
-| SRC-006 | Creators API Documentation | Amazon | PARTIALLY VERIFIED | 2026-07-18 |
+| SRC-006 | Creators API Documentation | Amazon | VERIFIED FOR CURRENT TECHNICAL BASELINE | 2026-08-09 |
 | SRC-007 | Hardware Radar Architecture Bible | Mirabelle Labs | INTERNAL | 2026-07-18 |
 | SRC-008 | Applicable advertising and endorsement law/guidance | External legal authority | PENDING | — |
 
@@ -128,200 +128,200 @@ Mercury may preserve an audit record, but Amazon's caching, storage, termination
 
 ### REQ-0011 — Limited-purpose license
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Amazon grants only a limited, revocable, non-transferable, non-sublicensable license to use Program Content for participation in the Associates Program and within its express scope.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Amazon content must carry source, license scope, and current eligibility metadata. It must never be treated as owned or unrestricted content.
 
 ---
 
 ### REQ-0012 — No unapproved extraction methods
 
-**Source:** SRC-004  
+**Source:** SRC-004
 The license does not permit data mining, robots, or similar extraction tools. Product Advertising Content is obtained through Creators API, PA API, or an expressly approved data feed.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Production ingestion of Amazon Product Advertising Content must use an approved Amazon mechanism. General web scraping is not an approved Mercury source.
 
 ---
 
 ### REQ-0013 — Amazon-directed purpose
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Product Advertising Content must be used on a site or application whose principal purpose for that content is advertising and marketing an Amazon Site and driving sales there.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Amazon content blocks must have an Amazon purchase destination and may not be repurposed as a retailer-neutral data feed.
 
 ---
 
 ### REQ-0014 — Content-to-destination binding
 
-**Source:** SRC-003 and SRC-004  
+**Source:** SRC-003 and SRC-004
 Each use of Amazon Program Content must link only to the relevant Amazon product detail page or other directly relevant Amazon page.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Every Amazon content block requires a validated content-to-ASIN-to-destination relationship.
 
 ---
 
 ### REQ-0015 — Content alteration restrictions
 
-**Source:** SRC-003  
+**Source:** SRC-003
 Amazon Content may not be added to, deleted from, or altered, except proportionate image resizing and text truncation that does not change meaning or create factual inaccuracy.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Amazon-originated fields must be displayed without semantic rewriting. Hardware Radar editorial copy must be stored separately and visibly distinguishable.
 
 ---
 
 ### REQ-0016 — No model training or fine-tuning
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Program Content may not be used directly or indirectly to develop or improve large-language, multimodal, machine-learning, or related models.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Amazon Product Advertising Content must be excluded from model-training datasets, fine-tuning corpora, embedding-training corpora, and similar development pipelines.
 
 ---
 
 ### REQ-0017 — Restricted aggregation and repurposing
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Without prior written approval, Creators API, PA API, Data Feeds, and Product Advertising Content may not be accessed or used to aggregate, analyze, extract, or repurpose Product Advertising Content.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Hardware Radar must not assume that internally retaining Amazon-derived historical prices, producing trend analytics, or building generalized retailer datasets is permitted. These functions remain blocked pending explicit license analysis or written approval.
 
 ---
 
 ### REQ-0018 — Image storage restriction
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Amazon Product Advertising Content consisting of an image may not be stored or cached. A link to the image may be stored for up to 24 hours.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Hardware Radar must not download and self-host Amazon API image files. Mercury may temporarily store the returned image URL with a hard expiry no later than 24 hours after retrieval.
 
 ---
 
 ### REQ-0019 — Non-image caching restriction
 
-**Source:** SRC-004  
-Non-image Product Advertising Content may be cached for up to 24 hours, after which it must be refreshed and immediately re-displayed from a new approved retrieval.
+**Source:** SRC-004 and SRC-006
+The IP-license ceiling remains applicable, while the current Creators API caching guidance is more specific by resource. Current Creators API guidance specifies a **1-hour TTL for Offers** and a **1-day TTL for other listed resources** such as `BrowseNodeInfo`, `BrowseNodes`, `DetailPageURL`, `Images`, and `ItemInfo`. Customer information derived from Amazon must not be cached.
 
-**Engineering interpretation:**  
-Amazon-derived title, price, availability, and other licensed fields require `retrievedAt`, `expiresAt`, `sourceMethod`, and refresh status. Expired content cannot remain publicly displayed.
+**Engineering interpretation:**
+The platform must apply the **stricter resource-specific TTL**. Amazon price and availability obtained from `OffersV2` therefore require an expiry no later than one hour after retrieval under the current Creators API guidance. Other licensed fields may use the applicable documented TTL, never exceeding the controlling license. `retrievedAt`, `expiresAt`, `sourceMethod`, resource class, and refresh status are mandatory for publication. Expired content cannot remain publicly displayed.
 
 ---
 
 ### REQ-0020 — ASIN retention
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Unless Amazon states otherwise, individual ASINs may be stored for an indefinite period until termination of the license.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 ASIN is a durable retailer-mapping identifier. It may remain in Mercury independently of ephemeral licensed content, subject to deletion obligations following license termination or Amazon instruction.
 
 ---
 
 ### REQ-0021 — Pricing and availability timestamp
 
-**Source:** SRC-004  
+**Source:** SRC-004
 A date/time stamp must appear adjacent to pricing or availability when content comes from a data feed or is refreshed less frequently than hourly. The date may be omitted on the same day as retrieval.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Sentinel must determine refresh frequency and enforce a visible timestamp when required. Hardware Radar should default to showing a timestamp for transparency even where hourly refresh could permit omission.
 
 ---
 
 ### REQ-0022 — Pricing and availability disclaimer
 
-**Source:** SRC-004  
+**Source:** SRC-004
 A prescribed price-and-availability disclaimer must be adjacent to the information or accessible through an allowed disclosure mechanism.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Every Amazon price or availability component requires an associated disclaimer control. Publication is blocked when the required disclaimer cannot be rendered.
 
 ---
 
 ### REQ-0023 — Amazon textual-content disclaimer
 
-**Source:** SRC-004  
+**Source:** SRC-004
 When Amazon Product Advertising Content consisting of text is displayed, the site must show Amazon's required “content comes from Amazon” disclaimer in plain view.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Pages displaying Amazon-originated titles, descriptions, features, or other textual Product Advertising Content require a plain-view source disclaimer. This is separate from the Associates earnings disclosure.
 
 ---
 
 ### REQ-0024 — Credentials and account identifiers
 
-**Source:** SRC-004  
+**Source:** SRC-004
 API calls require assigned credentials and an Associates tag. Private keys must remain secret and may not be sold, transferred, sublicensed, or disclosed. Assigned identifiers belonging to others may not be used.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Credentials must remain server-side, secret-managed, access-controlled, and excluded from browser bundles, repositories, logs, analytics payloads, and generated pages.
 
 ---
 
 ### REQ-0025 — Credential incident response
 
-**Source:** SRC-004  
+**Source:** SRC-004
 The Associate is responsible for activity under its identifiers and should contact Amazon immediately if a private key is disclosed, lost, stolen, or suspected of unauthorized use.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Mirabelle Labs requires a credential-revocation and Amazon-notification runbook, with audit evidence and publication safeguards.
 
 ---
 
 ### REQ-0026 — API compatibility responsibility
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Amazon may change, deprecate, or republish its APIs, feeds, or features, and the Associate is responsible for remaining compatible with current requirements.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 The Amazon adapter must be versioned, monitored, and fail closed on incompatible responses. Compliance-source review is part of release maintenance.
 
 ---
 
 ### REQ-0027 — Rate and payload limits
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Applications must respect applicable request-rate limits and may not send files exceeding 40 KB without prior written approval.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 The adapter requires centralized throttling, payload-size enforcement, retry controls, and observability.
 
 ---
 
 ### REQ-0028 — Termination cleanup
 
-**Source:** SRC-004  
+**Source:** SRC-004
 When the license terminates, use of Program Content must stop and affected Program Content and Amazon Marks must be removed or destroyed promptly.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 The platform requires a retailer kill switch that can suppress Amazon content and links across Hardware Radar without deleting independent Atlas records.
 
 ---
 
 ### REQ-0029 — Prohibited removal of notices
 
-**Source:** SRC-004  
+**Source:** SRC-004
 Notices of intellectual-property or proprietary rights included in APIs, data feeds, Product Advertising Content, or specifications may not be removed, obscured, or altered.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Display transformations must preserve required notices and attribution. Sentinel must reject templates or CSS that hide them.
 
 ---
 
 ### REQ-0030 — Autonomous-agent transparency
 
-**Source:** SRC-004  
+**Source:** SRC-004
 An autonomous or semi-autonomous agent interacting with Program Content must identify itself in requests, disclose its agent name in the user-agent string, and must not conceal automation, defeat CAPTCHAs, or bypass access controls.
 
-**Engineering interpretation:**  
+**Engineering interpretation:**
 Any future Mirabelle agent that directly accesses Amazon Program Content must use an explicit `Agent/<name>` identity and may only operate through permitted interfaces. No CAPTCHA bypass or human-behavior emulation is allowed.
 
 ---
@@ -487,9 +487,9 @@ Price and availability may also require a third, specific disclaimer.
 
 The following remain open and must not be guessed:
 
-1. Exact Creators API eligibility and access path for the Hardware Radar account.
-2. Current production rate limits and whether they vary by account performance.
-3. Whether Amazon grants any additional retention rights through current Creators API specifications.
+1. Whether the Hardware Radar Associates account currently satisfies Creators API enrollment eligibility and has active credentials.
+2. The account-specific production TPS/TPD allocation at deployment time; Amazon documents an initial ceiling but allocation can change with shipped revenue and account state.
+3. Whether Amazon grants any additional retention or analytics rights beyond the currently documented Creators API caching guidance.
 4. Whether Hardware Radar's planned comparison and ranking presentation requires additional Amazon-specific wording.
 5. Exact operational treatment when API access is unavailable but independent Atlas content remains publishable.
 6. Whether any proposed internal historical-observation use qualifies as prohibited aggregation, analysis, extraction, or repurposing.
@@ -506,16 +506,16 @@ Until resolved, material items should produce `REVIEW` or `BLOCKED`, not `READY`
 |---|---|---|---|
 | RS-001 | 2026-07-18 | SRC-001, SRC-003 | Operating, disclosure, Special Link, and participation foundation reviewed |
 | RS-002 | 2026-07-18 | SRC-004, SRC-005 | IP-license, caching, price, image, API credential, trademark, and agent requirements extracted |
-| RS-003 | Planned | SRC-006 | Creators API operations, eligibility, authentication, limits, and migration review |
+| RS-003 | 2026-08-09 | SRC-006 | Creators API current technical baseline verified: enrollment, OAuth/LwA token model, endpoint family, operations/resources, rate model, caching TTLs, error handling, and PA-API migration status |
 | RS-004 | Planned | SRC-008 | Applicable disclosure, advertising, privacy, and cross-border legal review |
 
 ---
 
 ## 13. Next Sprint
 
-The next controlled research sprint is:
+The next controlled engineering gate is:
 
-**Creators API Technical and Operational Specification**
+**FC001 — Amazon Compliance Integration Review**
 
 Deliverables:
 

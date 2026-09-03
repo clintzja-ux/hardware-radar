@@ -1,0 +1,12 @@
+import {createProductInterestSignal} from "./ProductInterestSignal.js";
+import {validateFirstPartyProductInterestEvent} from "./FirstPartyProductInterestEvent.js";
+import {createFirstPartyInterestSignalId} from "./FirstPartyProductInterestCollectionRepository.js";
+const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
+export class FirstPartyProductInterestCollectionService{
+ constructor({productRepository,retailerRepository,collectionRepository}={}){if(!productRepository?.getById||!retailerRepository?.getById||!collectionRepository?.accept)throw new TypeError("FIRST_PARTY_INTEREST_COLLECTION_DEPENDENCIES_REQUIRED");Object.assign(this,{productRepository,retailerRepository,collectionRepository});}
+ async collect({event,recordedAt}={}){
+  const validated=validateFirstPartyProductInterestEvent(event);if(typeof recordedAt!=="string"||!Number.isFinite(Date.parse(recordedAt))||Date.parse(validated.occurredAt)>Date.parse(recordedAt))throw new TypeError("FIRST_PARTY_INTEREST_RECORDED_AT_INVALID");let product,retailer;try{[product,retailer]=await Promise.all([this.productRepository.getById(validated.atlasProductId),this.retailerRepository.getById(validated.retailerId)]);}catch(error){if(String(error?.message).toLowerCase().includes("retailer"))throw new Error("FIRST_PARTY_INTEREST_ATLAS_RETAILER_UNKNOWN");throw new Error("FIRST_PARTY_INTEREST_ATLAS_PRODUCT_UNKNOWN");}if(!product)throw new Error("FIRST_PARTY_INTEREST_ATLAS_PRODUCT_UNKNOWN");if(!retailer)throw new Error("FIRST_PARTY_INTEREST_ATLAS_RETAILER_UNKNOWN");
+  const signal=createProductInterestSignal({signalId:createFirstPartyInterestSignalId(validated.eventId),atlasProductId:validated.atlasProductId,signalType:validated.signalType,source:"HARDWARE_RADAR_FIRST_PARTY",observedAt:validated.occurredAt,windowStart:validated.occurredAt,windowEnd:validated.occurredAt,value:1,unit:"COUNT",evidenceKind:"RAW",provenance:{collectionBoundary:"BEACON_FIRST_PARTY_PRODUCT_INTEREST",eventId:validated.eventId,sourceSurface:validated.sourceSurface,retailerId:validated.retailerId,atlasValidated:true},metadata:{recordedAt}}),result=await this.collectionRepository.accept({event:validated,signal});return freeze({...result,atlasProductId:validated.atlasProductId,retailerId:validated.retailerId,paidTaskCreated:false,actualSpendUsd:0,cadenceAuthority:false,acquisitionAuthority:false});
+ }
+}
+export default FirstPartyProductInterestCollectionService;

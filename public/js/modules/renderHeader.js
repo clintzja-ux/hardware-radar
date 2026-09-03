@@ -1,4 +1,4 @@
- export function renderHeader(containerId) {
+ export function renderHeader(containerId, { basePath = "" } = {}) {
     const container = document.getElementById(containerId);
 
     if (!container) return;
@@ -7,10 +7,10 @@
         <div class="site-header">
             <div class="header-inner">
 
-                <a class="header-brand" href="index.html">
+                <a class="header-brand" href="${basePath}index.html">
                    <img
                     class="header-logo-image"
-                    src="images/branding/hardware-radar-icon.svg"
+                    src="${basePath}images/branding/hardware-radar-icon.svg"
                      alt=""
                     aria-hidden="true"
                    >
@@ -21,10 +21,11 @@
                 </a>
 
                 <nav class="header-nav" aria-label="Primary navigation">
-                    <a href="ddr5.html">DDR5</a>
-                    <a href="ddr4.html">DDR4</a>
-                    <a href="sodimm.html">Laptop RAM</a>
-                    <a href="about.html">About</a>
+                    <a href="${basePath}ddr5.html">DDR5</a>
+                    <a href="${basePath}ddr4.html">DDR4</a>
+                    <a href="${basePath}sodimm.html">Laptop RAM</a>
+                    <a href="${basePath}guides/">Guides</a>
+                    <a href="${basePath}about.html">About</a>
                 </nav>
 
             </div>

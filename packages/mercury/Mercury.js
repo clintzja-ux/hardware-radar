@@ -52,9 +52,9 @@ class Mercury {
         return this.evaluateFreshness(observation, options);
     }
 
-    evaluateConfidence(observation, { evaluatedAt, freshnessPolicy, confidencePolicy } = {}) {
+    evaluateConfidence(observation, { evaluatedAt, freshnessPolicy, confidencePolicy, adapterRegistry = this.adapters } = {}) {
         const freshnessResult = this.evaluateFreshness(observation, { evaluatedAt, policy: freshnessPolicy });
-        const evidence = deriveConfidenceEvidence(observation, { freshnessResult, adapterRegistry: this.adapters });
+        const evidence = deriveConfidenceEvidence(observation, { freshnessResult, adapterRegistry });
         return this.confidence.evaluate(evidence, { policy: confidencePolicy });
     }
 

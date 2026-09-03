@@ -26,13 +26,13 @@ const context = {
 const observation = amazonAdapter.normalize(input, context);
 assert.equal(observation.retailerId, "RETAILER-0001");
 assert.equal(observation.marketplace, "amazon.com");
-assert.equal(observation.provenance.transformation.adapterVersion, "mer_adapter_amazon_us@1.0.0");
+assert.equal(observation.provenance.transformation.adapterVersion, "mer_adapter_amazon_us@1.1.0");
 assert.equal(validateObservation(observation).valid, true);
 assert.equal(amazonAdapter.supportsMarketplace("amazon.com"), true);
 assert.equal(amazonAdapter.supportsMarketplace("amazon.co.uk"), false);
 assert.equal(amazonAdapter.supportsSourceMethod("MANUAL"), true);
-assert.equal(amazonAdapter.supportsSourceMethod("API"), false);
+assert.equal(amazonAdapter.supportsSourceMethod("API"), true);
 assert.throws(() => amazonAdapter.normalize(input, { ...context, marketplace: "amazon.co.uk" }), /does not support marketplace/);
-assert.throws(() => amazonAdapter.normalize(input, { ...context, sourceMethod: "API" }), /does not support source method/);
+
 
 console.log("AmazonAdapter tests passed.");

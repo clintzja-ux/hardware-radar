@@ -5,19 +5,20 @@
     const container = document.getElementById("overallSection");
 
     if (!product || !container) return;
+    container.setAttribute("aria-live", "polite");
 
     container.innerHTML = `
         <article class="overall-answer">
             <div class="overall-topline">
 
                 <p class="eyebrow">
-                    🏆 TODAY'S CHEAPEST RAM
+                    🏆 CHEAPEST RAM WE'RE TRACKING
                 </p>
 
                  <div class="verification-block">
 
                     <p class="verified-time">
-                         ✓ Verified ${product.lastVerifiedTime || product.verified}
+                         Observed ${product.lastVerifiedTime || product.verified}
                     </p>
 
                     <p class="verification-details">
@@ -31,7 +32,7 @@
 
             <h2>${product.brand} ${product.model} ${product.capacity}</h2>
 
-            <p class="best-for">Best for: ${product.bestFor}</p>
+            <p class="best-for">Comparison note: ${product.bestFor}</p>
 
             <p class="specs">${product.memoryType} • ${product.speed}</p>
 
@@ -40,10 +41,12 @@
                 <span class="retailer">${product.retailer}</span>
             </div>
 
+            <p class="price-basis">${product.priceBasis}. ${product.shippingMessage}. Taxes and other mandatory fees may apply.</p>
+
             ${product.insight ? `<p class="insight-badge">${product.insight}</p>` : ""}
 
-            <a class="price-button" href="${product.affiliateUrl}">
-                Go to Cheapest Price →
+            <a class="price-button" href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer">
+                View retailer listing →
             </a>
         </article>
     `;
@@ -51,11 +54,12 @@
 export function renderOverallUnavailable(containerId = "overallSection") {
     const container = document.getElementById(containerId);
     if (!container) return;
+    container.setAttribute("aria-live", "polite");
     container.innerHTML = `
-        <article class="overall-answer market-unavailable">
-            <p class="eyebrow">TODAY'S CHEAPEST RAM</p>
-            <h2>Current verified pricing is temporarily unavailable.</h2>
-            <p class="best-for">Hardware Radar only publishes prices that satisfy the platform's validation, freshness, and confidence requirements.</p>
-            <p class="specs">No qualifying current market observation is available right now.</p>
+        <article class="overall-answer market-unavailable" role="status">
+            <p class="eyebrow">CURRENT MARKET STATUS</p>
+            <h2>No tracked RAM price is available right now</h2>
+            <p class="best-for">We don't currently have an offer that qualifies for comparison.</p>
+            <p class="specs">Unavailable or stale prices stay hidden rather than being replaced with estimates. Check again later.</p>
         </article>`;
 }

@@ -1,0 +1,6 @@
+import assert from "node:assert/strict";
+import {execFileSync} from "node:child_process";
+import {mkdtemp,rm,writeFile} from "node:fs/promises";
+import {join} from "node:path";
+import {tmpdir} from "node:os";
+const root=await mkdtemp(join(tmpdir(),"hardware-radar-df005c-cli-")),file=join(root,"signals.json");try{await writeFile(file,JSON.stringify([{schemaVersion:"1.0",signalId:"fixture-signal",atlasProductId:"ram_corsair_cmk32gx5m2b6000z30",signalType:"PRODUCT_PAGE_VIEW",source:"BEACON_FIXTURE",observedAt:"2026-08-24T01:00:00Z",windowStart:"2026-08-24T00:00:00Z",windowEnd:"2026-08-24T01:00:00Z",value:1,unit:"COUNT",evidenceKind:"AGGREGATED",provenance:{fixture:"df005c"},metadata:null}]));const output=execFileSync(process.execPath,["scripts/beacon-product-interest.mjs","--atlas-product=ram_corsair_cmk32gx5m2b6000z30","--as-of=2026-08-25T00:00:00Z",`--signals=${file}`],{cwd:process.cwd(),encoding:"utf8"});assert.match(output,/Interest state:\s+OBSERVED/);assert.match(output,/Signals:\s+1/);assert.match(output,/Cadence changed:\s+NO/);assert.match(output,/Policy assigned:\s+NO/);assert.match(output,/Paid task created:\s+NO/);assert.match(output,/Actual spend:\s+\$0\.000/);}finally{await rm(root,{recursive:true,force:true});}console.log("Product interest CLI tests passed.");

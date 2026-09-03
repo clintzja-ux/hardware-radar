@@ -1,0 +1,7 @@
+# IC-DF005U — Cloudflare Verified Recipient Observation and Governed Evidence Capture
+
+DF005-U separates GET-only provider observation from explicit governed evidence admission. The observation client lists account-level Email Routing destination addresses, matches exactly one runtime recipient in memory, and produces a minimal immutable candidate only when Cloudflare supplies a verified timestamp. Missing, pending, ambiguous, malformed, and provider-failure states fail closed.
+
+The candidate persists only provider/authority, observation and verification times, opaque destination ID, destination and account digests, source operation, and negative mutation/sending authority. It contains no address, account ID, token, headers, or raw payload. Admission is a separate zero-network operator action that reloads approval and the candidate, verifies the private recipient digest, and writes the existing DF005-Q evidence representation with observation provenance and admission metadata. First admission is `ADMITTED`, exact replay is `DUPLICATE`, and material conflict is blocked.
+
+Admitted evidence may project recipient governance to `VERIFIED` after ephemeral runtime credentials have been cleared. Runtime configuration remains absent; provider deployment, sender/domain, email binding, sending, Gateway transport, and browser connection remain disabled. DF005-U performs no production observation or evidence admission, provider mutation, email, deployment, DataForSEO activity, or spend.

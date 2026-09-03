@@ -1,0 +1,174 @@
+{
+  "identity": {
+    "atlasProductId": "ram_g_skill_f4_3200c22d_32grs",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-09-01T00:00:00Z",
+    "updatedAt": "2026-09-01T00:00:00Z",
+    "createdBy": "system:d002-fixture-certification",
+    "updatedBy": "system:d002-fixture-certification",
+    "brand": "G.SKILL",
+    "manufacturer": "G.SKILL",
+    "productFamily": "Ripjaws",
+    "series": null,
+    "modelName": "Ripjaws F4-3200C22D-32GRS",
+    "manufacturerPartNumber": "F4-3200C22D-32GRS",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "G.SKILL Ripjaws DDR4 32GB (2×16GB) 3200 MT/s",
+    "slug": "g-skill-ripjaws-f4-3200c22d-32grs"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "UNKNOWN",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "D-002 fixture candidate; production Atlas admission requires separate operator review.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F4-3200C22D-32GRS-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594019162/F4-3200C22D-32GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F4-3200C22D-32GRS-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594019162/F4-3200C22D-32GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F4-3200C22D-32GRS-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594019162/F4-3200C22D-32GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F4-3200C22D-32GRS-D002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594019162/F4-3200C22D-32GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-01T00:00:00Z",
+          "verifiedBy": "system:d002-fixture-certification",
+          "verificationStatus": "VERIFIED",
+          "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-09-01T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true,
+        "gamingPositioning": null,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3200,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3200",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "NONE",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 25.6
+      },
+      "electrical": {
+        "ratedVoltage": 1.2,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": false,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

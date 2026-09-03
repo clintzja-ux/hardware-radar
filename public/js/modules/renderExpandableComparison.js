@@ -3,13 +3,18 @@
     const container = document.getElementById(containerId);
 
     if (!container) return;
+    container.setAttribute("aria-live", "polite");
     if (!Array.isArray(products) || products.length === 0) {
-        container.innerHTML = `<section class="comparison"><p class="best-for">Price comparisons will appear when qualifying observations are available.</p></section>`;
+        container.innerHTML = `<section class="comparison" role="status"><p class="best-for">Comparable monitored offers will appear when qualifying observations are available.</p></section>`;
+        return;
+    }
+    if (products.length === 1) {
+        container.innerHTML = `<section class="comparison" role="status"><p class="best-for">No additional qualifying monitored offers are available for comparison right now.</p></section>`;
         return;
     }
 
     const comparisonRows = products
-        .slice(1)   // Skip today's winner
+        .slice(1)   // Skip the lowest qualifying offer already shown above
         .map(product => {
 
             const difference = (
@@ -42,10 +47,16 @@
                         </strong>
 
                         <span>
-                            +$${difference}
+                            $${difference} more than the lowest qualifying offer
+                        </span>
+
+                        <span>
+                            ${product.shippingMessage}
                         </span>
 
                     </div>
+
+                    <a href="${product.affiliateUrl}" target="_blank" rel="noopener noreferrer" aria-label="View ${product.brand} ${product.model} at ${product.retailer}">View retailer listing →</a>
 
                 </div>
             `;
@@ -53,13 +64,15 @@
         })
         .join("");
 
+    const contentId = `${containerId}-comparison-content`;
+
     container.innerHTML = `
         <section class="comparison">
 
-           <button class="comparison-toggle">
+           <button type="button" class="comparison-toggle" aria-expanded="false" aria-controls="${contentId}">
 
              <span>
-             🔍 Compare today's winner with the next 10 cheapest
+             🔍 Compare qualifying monitored offers
             </span>
 
             <span class="comparison-arrow">
@@ -68,7 +81,7 @@
 
         </button>
 
-            <div class="comparison-content">
+            <div class="comparison-content" id="${contentId}" hidden>
 
                 ${comparisonRows}
 
@@ -81,14 +94,12 @@
     const content = container.querySelector(".comparison-content");
     const arrow = container.querySelector(".comparison-arrow");
 
-    content.style.display = "none";
-
     button.addEventListener("click", () => {
 
-        const isOpen = content.style.display === "block";
+        const isOpen = button.getAttribute("aria-expanded") === "true";
 
-        content.style.display = isOpen ? "none" : "block";
-
+        button.setAttribute("aria-expanded", String(!isOpen));
+        content.hidden = isOpen;
         arrow.textContent = isOpen ? "▼" : "▲";
 
 });

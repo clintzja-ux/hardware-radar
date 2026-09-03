@@ -17,7 +17,7 @@ assert.equal(countReport.errors.some((error) => error.code === "COUNT_MISMATCH")
 
 const duplicateManifest = structuredClone(manifest);
 duplicateManifest.brands.push({ ...duplicateManifest.brands[0] });
-duplicateManifest.counts.brands = 2;
+duplicateManifest.counts.brands = manifest.counts.brands + 1;
 const duplicateReport = validateManifest(duplicateManifest);
 assert.equal(duplicateReport.valid, false);
 assert.equal(duplicateReport.errors.some((error) => error.code === "DUPLICATE_ENTRY_ID"), true);

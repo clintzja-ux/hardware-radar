@@ -1,0 +1,2 @@
+import assert from "node:assert/strict"; import { DataForSeoMerchantApiClient } from "../index.js";
+let req; const c=new DataForSeoMerchantApiClient({login:"u",password:"p",transport:async r=>{req=r;return {status_code:20000,tasks:[{id:"s1",status_code:20100,cost:.001}]};}}); await c.postSellersTask({productId:"123"}); assert.match(req.url,/merchant\/google\/sellers\/task_post$/); assert.equal(req.body[0].product_id,"123"); console.log("DataForSEO sellers tests passed.");

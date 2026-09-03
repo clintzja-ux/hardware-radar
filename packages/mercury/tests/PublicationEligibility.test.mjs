@@ -5,6 +5,7 @@ import { evaluatePublicationEligibility } from "../publication/PublicationEligib
 
 const read = async (url) => JSON.parse(await readFile(fileURLToPath(url), "utf8"));
 const observation = await read(new URL("../observations/mer_obs_000000001.json", import.meta.url));
+observation.compliance.licenseContext = "INDEPENDENT_SOURCE";
 const product = await read(new URL("../../atlas/products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json", import.meta.url));
 const retailer = await read(new URL("../../atlas/retailers/RETAILER-0001-amazon.json", import.meta.url));
 const pass = evaluatePublicationEligibility(observation, { product, retailer, freshness: { status: "CURRENT" }, confidence: { status: "HIGH" } });
