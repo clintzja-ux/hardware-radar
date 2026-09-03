@@ -94,6 +94,7 @@ Do NOT create ADRs for:
 | ADR-055 | Cloudflare Gateway Secrets Are Supplied Only Through Server-Side Runtime Configuration |
 | ADR-056 | Editorial Guides Use Deterministic Static Generation |
 | ADR-057 | Atlas Product Identity Owns Persistent Public Product Routes |
+| ADR-058 | RAM Comparison Is an Atlas-Derived Factual Surface |
 
 ADR-005 through ADR-007 are intentionally unused. Accepted identifiers are never reassigned, and an ADR's own status remains authoritative for whether it is accepted, superseded, or otherwise inactive.
 

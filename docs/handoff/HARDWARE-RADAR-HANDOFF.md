@@ -20,6 +20,7 @@ The RAM MVP is Hardware Radar's first product surface within a long-term hardwar
 - Preserve Hardware Radar as hardware buying intelligence with a price engine. Editorial Guides support purchasing decisions and qualified discovery but must not displace the homepage's immediate governed price answer, manufacture Atlas/Mercury facts, imply first-party testing, or create Picks and recommendation authority.
 - Show evidence and provenance. Never invent production facts, identity, verification, configuration, or eligibility.
 - Separate canonical facts, observations, policy decisions, workflow, behavioral evidence, transport, and presentation by owner.
+- Treat public RAM specification comparison as an Atlas-derived factual surface only. It may expose deterministic similarities and differences, but it creates no market, compatibility, ranking, recommendation, Cheapest, Pick, or publication authority; see ADR-058.
 - Treat privacy as an architectural boundary: collect the minimum required data, keep private values server-side, and prohibit behavioral evidence from becoming identity or market truth.
 - Use explicit, auditable governance and controlled automation. Unknown, malformed, contradictory, or unauthorized state fails closed.
 - Prefer the smallest architecture justified by measured needs. Architecture selection is not configuration, deployment, connection, or authority.

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare RAM Specifications | Hardware Radar</title>
+    <meta name="description" content="Compare factual specifications for two canonical Hardware Radar RAM products side by side.">
+    <link rel="canonical" href="https://cheapestram.com/ram/compare/">
+    <meta name="robots" content="noindex,follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Compare RAM Specifications | Hardware Radar">
+    <meta property="og:description" content="Compare two Atlas-governed RAM specification records without prices, rankings or recommendations.">
+    <meta property="og:url" content="https://cheapestram.com/ram/compare/">
+    <meta property="og:site_name" content="Hardware Radar">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Compare RAM Specifications | Hardware Radar">
+    <meta name="twitter:description" content="A factual side-by-side RAM specification comparison.">
+    <link rel="icon" type="image/svg+xml" href="../../images/branding/favicon.svg">
+    <link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+    <header id="headerContainer"></header>
+    <nav class="catalog-breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/ram/">RAM catalog</a></li><li><span aria-current="page">Compare</span></li></ol></nav>
+    <main class="ram-comparison-main">
+        <header class="ram-comparison-heading"><p class="eyebrow">Atlas specification comparison</p><h1>Compare RAM Specifications</h1><p>Compare two factual product records side by side. Differences are descriptive and do not establish performance, value, compatibility or recommendation conclusions.</p></header>
+        <form id="ramComparisonControls" class="ram-comparison-controls" aria-label="Choose RAM products to compare">
+            <label for="ramComparisonA">Product A</label><select id="ramComparisonA" name="productA"></select>
+            <label for="ramComparisonB">Product B</label><select id="ramComparisonB" name="productB"></select>
+        </form>
+        <p id="ramComparisonStatus" class="ram-comparison-status" role="status" aria-live="polite">Loading RAM comparison…</p>
+        <div id="ramComparisonOutput"></div>
+        <p class="ram-comparison-back"><a href="/ram/">Back to the RAM catalog</a></p>
+    </main>
+    <footer id="footerContainer"></footer>
+    <script type="module">import {renderHeader} from "/js/modules/renderHeader.js";import {renderFooter} from "/js/modules/renderFooter.js";import {initializeRamComparison} from "/js/modules/ramComparison.js";renderHeader("headerContainer",{basePath:"/"});renderFooter("footerContainer",{basePath:"/"});initializeRamComparison();</script>
+</body>
+</html>

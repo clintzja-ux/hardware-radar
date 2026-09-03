@@ -91,6 +91,12 @@
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://cheapestram.com/ram/compare/</loc>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+  <url>
     <loc>https://cheapestram.com/ram/corsair-vengeance-cmk96gx5m2b6000c30/</loc>
     <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
