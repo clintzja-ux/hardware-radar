@@ -92,6 +92,7 @@
     "mercury:portfolio:inspect": "node scripts/mercury-acquisition-portfolio-inspect.mjs",
     "mercury:portfolio:checkpoint:inspect": "node scripts/mercury-acquisition-checkpoint-inspect.mjs",
     "mercury:portfolio:checkpoint:next-task:prepare": "node scripts/mercury-acquisition-checkpoint-next-prepare.mjs",
+    "mercury:portfolio:checkpoint:failure:reconcile": "node scripts/mercury-acquisition-checkpoint-failure-reconcile.mjs",
     "mercury:portfolio:products:reviews": "node scripts/mercury-acquisition-products-reviews-inspect.mjs",
     "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
     "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",

@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { SINGLE_WRITER_LOCK_STATUSES } from "../../runtime/FileSingleWriterRunLock.js";
 import { readGovernedSpendForUtcDay } from "../planning/GovernedDailySpend.js";
+import { createAcquisitionFailureDiagnostic } from "./AcquisitionFailureDiagnostic.js";
 
 export const ACQUISITION_EXECUTION_STATUSES = Object.freeze({ COMPLETED:"COMPLETED", PARTIAL:"PARTIAL", FAILED:"FAILED", DUPLICATE:"DUPLICATE", SKIPPED_LOCKED:"SKIPPED_LOCKED" });
 export const ACQUISITION_EXECUTION_STOP_REASONS = Object.freeze({ ACTUAL_RUN_BUDGET:"ACTUAL_RUN_BUDGET", ACTUAL_DAILY_BUDGET:"ACTUAL_DAILY_BUDGET", NEXT_TASK_RUN_BUDGET:"NEXT_TASK_RUN_BUDGET", NEXT_TASK_DAILY_BUDGET:"NEXT_TASK_DAILY_BUDGET", TRANSPORT_FAILURE:"TRANSPORT_FAILURE" });
@@ -37,6 +38,7 @@ export class ControlledAcquisitionExecutor {
       if (prior) return { duplicate:true, prior };
       const startedAt=this.now(); if(!validIso(startedAt)) throw new TypeError("now() must return ISO timestamps.");
       if(this.currentDaySpendResolver){const current=money(await this.currentDaySpendResolver(startedAt));if(current!==money(plan.spentTodayUsd))throw new Error("ACQUISITION_DAILY_SPEND_SNAPSHOT_DRIFT");if(money(current+plan.estimatedApprovedSpendUsd)>money(plan.policy.maxSpendPerDayUsd))throw new Error("ACQUISITION_DAILY_BUDGET_EXCEEDED");}
+      const executionRunId=this.runIdFactory();
       const tasks=[]; let actualSpend=0; let stopReason=null;
       for(const task of approved){
         if (money(actualSpend + task.estimatedCostUsd) > plan.policy.maxSpendPerRunUsd){ stopReason="NEXT_TASK_RUN_BUDGET"; tasks.push({candidateId:task.candidateId,outcome:"SKIPPED",reason:stopReason,estimatedCostUsd:task.estimatedCostUsd,actualCostUsd:0}); break; }
@@ -55,14 +57,16 @@ export class ControlledAcquisitionExecutor {
           if(actualSpend > plan.policy.maxSpendPerRunUsd){ stopReason="ACTUAL_RUN_BUDGET"; break; }
           if(money(plan.spentTodayUsd+actualSpend) > plan.policy.maxSpendPerDayUsd){ stopReason="ACTUAL_DAILY_BUDGET"; break; }
         } catch(error){
-          tasks.push({candidateId:task.candidateId,outcome:"FAILED",acquisitionOutcome:"FAILED",reason:"TRANSPORT_FAILURE",estimatedCostUsd:task.estimatedCostUsd,actualCostUsd:Number.isFinite(error?.costUsd)&&error.costUsd>=0?error.costUsd:0,providerTaskId:error?.providerTaskId ?? null,providerStatus:error?.providerStatus ?? null,errorCode:error?.code ?? error?.message ?? "TRANSPORT_FAILURE"});
+          const actualCostUsd=Number.isFinite(error?.costUsd)&&error.costUsd>=0?error.costUsd:0;
+          const failure=createAcquisitionFailureDiagnostic({error,provider:task.execution?.provider??"UNKNOWN",operation:task.execution?.kind??"UNKNOWN",occurredAt:this.now(),executionRunId,candidateId:task.candidateId,providerTaskId:error?.providerTaskId??null,actualSpendUsd:actualCostUsd});
+          tasks.push({candidateId:task.candidateId,outcome:"FAILED",acquisitionOutcome:"FAILED",reason:"TRANSPORT_FAILURE",estimatedCostUsd:task.estimatedCostUsd,actualCostUsd,providerTaskId:error?.providerTaskId ?? null,providerStatus:error?.providerStatus ?? null,errorCode:failure.safeErrorCode,failure});
           actualSpend=money(actualSpend+tasks.at(-1).actualCostUsd); stopReason="TRANSPORT_FAILURE"; break;
         }
       }
       const finishedAt=this.now(); if(!validIso(finishedAt)) throw new TypeError("now() must return ISO timestamps.");
       const completed=tasks.filter(x=>x.outcome==="COMPLETED").length, failed=tasks.filter(x=>x.outcome==="FAILED").length;
       const status=failed ? "FAILED" : stopReason ? "PARTIAL" : "COMPLETED";
-      const ledger=freeze({schemaVersion:"1.0",runId:this.runIdFactory(),planId:plan.planId,startedAt,finishedAt,status,stopReason,plannedTasks:approved.length,attemptedTasks:completed+failed,completedTasks:completed,failedTasks:failed,skippedTasks:tasks.filter(x=>x.outcome==="SKIPPED").length,estimatedSpendUsd:plan.estimatedApprovedSpendUsd,actualSpendUsd:actualSpend,tasks});
+      const ledger=freeze({schemaVersion:"1.0",runId:executionRunId,planId:plan.planId,startedAt,finishedAt,status,stopReason,plannedTasks:approved.length,attemptedTasks:completed+failed,completedTasks:completed,failedTasks:failed,skippedTasks:tasks.filter(x=>x.outcome==="SKIPPED").length,estimatedSpendUsd:plan.estimatedApprovedSpendUsd,actualSpendUsd:actualSpend,tasks});
       const recorded=await this.ledgerRepository.append(ledger);
       if(recorded.status!=="RECORDED") return {duplicate:true,prior:recorded.run};
       return {duplicate:false,ledger};

@@ -1,0 +1,33 @@
+import {createProductionPortfolioRuntime,parsePortfolioArgs} from "./mercury-acquisition-portfolio-runtime.mjs";
+import {CheckpointFailedExecutionReconciliationService,createProductsDiscoveryCheckpoint} from "../packages/mercury/index.js";
+
+const args=parsePortfolioArgs();
+const portfolioCycleId=args.get("--portfolio-cycle-id");
+const atlasProductId=args.get("--atlas-product");
+const authorizationId=args.get("--authorization-id");
+const confirmation=args.get("--confirm");
+if(typeof portfolioCycleId!=="string"||!portfolioCycleId)throw new Error("PORTFOLIO_CYCLE_ID_REQUIRED");
+if(typeof atlasProductId!=="string"||!atlasProductId)throw new Error("ATLAS_PRODUCT_ID_REQUIRED");
+if(typeof authorizationId!=="string"||!authorizationId)throw new Error("AUTHORIZATION_ID_REQUIRED");
+if(confirmation!=="RECONCILE-FAILED-EXECUTION")throw new Error("FAILURE_RECONCILIATION_CONFIRMATION_REQUIRED");
+const runtime=createProductionPortfolioRuntime(args);
+const portfolio=await runtime.portfolioRepository.getById(portfolioCycleId);
+if(!portfolio)throw new Error("PORTFOLIO_NOT_FOUND");
+await runtime.service.validate(portfolio);
+const checkpoint=createProductsDiscoveryCheckpoint({portfolio,asOf:portfolio.asOf});
+const task=await runtime.checkpointRepository.getTask(portfolioCycleId,checkpoint.checkpointId,atlasProductId);
+if(!task)throw new Error("CHECKPOINT_TASK_NOT_FOUND");
+const result=await new CheckpointFailedExecutionReconciliationService({checkpointRepository:runtime.checkpointRepository,executionRepository:runtime.executionRepository}).reconcile({portfolio,checkpoint,task,authorizationId});
+console.log("MERCURY CHECKPOINT FAILED EXECUTION RECONCILIATION\n");
+console.log("Portfolio:               ",portfolioCycleId);
+console.log("Checkpoint:              ",checkpoint.checkpointId);
+console.log("Atlas product:           ",atlasProductId);
+console.log("Execution run:           ",result.event.runId);
+console.log("Status:                  ",result.status);
+console.log("Failure class:           ",result.event.failure.failureClass);
+console.log("Safe reason:             ",result.event.failure.safeErrorMessage);
+console.log("Retryability:            ",result.event.failure.retryability);
+console.log("Provider task:           ",result.event.providerTaskId??"NONE");
+console.log("Actual spend:            $"+result.event.actualSpendUsd.toFixed(3));
+console.log("Provider calls:           0");
+

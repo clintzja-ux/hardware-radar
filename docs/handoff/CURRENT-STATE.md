@@ -3,6 +3,7 @@
 ```text
 Last updated:                  2026-09-03
 Branch:                        hardware-radar-growth-1
+Current committed HEAD:        6afe49c2d817905784d93b4bb2d4558485a2eb3a (`feat(mercury): bind acquisition checkpoint execution`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
@@ -70,7 +71,7 @@ MERCURY-DOCTRINE-001 reconciles the settled DataForSEO premise already owned by 
 
 MERCURY-DOCTRINE-001A clarifies that a permitted DataForSEO-returned retailer product URL may become a candidate for the existing ADR-059/GROWTH-005A destination review; it never automatically becomes `DESTINATION_NAVIGATION_ELIGIBLE`. Market `sourceUrl`/`offerUrl` evidence and admitted `destinationUrl` navigation are independent outputs and may qualify or fail independently. No candidate queue, destination record, affiliate authority, Beacon connection, or production mutation was created. MERCURY-ACTIVATION-001 should account for both outputs while preserving the existing admission boundary.
 
-MERCURY-ACTIVATION-002 fixture-certifies a zero-spend `ACQUISITION_ORCHESTRATION_AUTHORITY` over the existing task-specific DataForSEO boundaries. MERCURY-ACTIVATION-002B fixture-certifies its thin production PREPARE composition: canonical Atlas loading, historically governed provider-identity reuse, source-rights binding, existing-ledger UTC-day spend binding, deterministic operator-local persistence, and independent inspection. MERCURY-ACTIVATION-002C fixture-certifies immutable PRODUCTS-checkpoint identity, task-to-portfolio binding, combined checkpoint/program/day spend projection over the existing ledger, append-only progress, and durable per-product/provider-task PRODUCTS review artifacts. Portfolio PREPARE derives the current Atlas inventory rather than duplicating a product list: 26 canonical RAM products, 11 `ACTIVE` + `READY` acquisition-eligible products, and 15 lifecycle-excluded products. Two eligible products reuse governed provider identity and begin at `SELLERS`; nine begin at `PRODUCTS`, producing a computed maximum envelope of 29 tasks / `$0.029` under the unchanged `$0.001` task and `$0.010` UTC-day ceilings with zero automatic paid retries. The immutable portfolio and separate event projection can recommend the next task PREPARE but grant no paid execution, result acceptance, downstream Mercury, destination, or public authority. Production cycle `mer_acqportfolio_14bad432b919feca4cc416a0` remains `NOT_STARTED` with nine PRODUCTS-ready and two SELLERS-ready paths; Checkpoint 1 has zero tasks, authorizations, provider calls, progress events, or spend. Paid acquisition has not been executed for this portfolio, actual spend remains `$0.000`, and MERCURY-ACTIVATION-003 Checkpoint 1 still requires its existing separate task-level authorizations.
+MERCURY-ACTIVATION-002 fixture-certifies a zero-spend `ACQUISITION_ORCHESTRATION_AUTHORITY` over the existing task-specific DataForSEO boundaries. MERCURY-ACTIVATION-002B fixture-certifies its thin production PREPARE composition, and MERCURY-ACTIVATION-002C fixture-certifies immutable PRODUCTS-checkpoint identity, task-to-portfolio binding, combined checkpoint/program/day spend projection, append-only progress, and durable per-product/provider-task reviews. Portfolio PREPARE derives 26 canonical RAM products: 11 `ACTIVE` + `READY` acquisition-eligible and 15 lifecycle-excluded. Two eligible products reuse governed provider identity and begin at `SELLERS`; nine begin at `PRODUCTS`, producing a maximum envelope of 29 tasks / `$0.029` under the `$0.001` task and `$0.010` UTC-day ceilings with zero automatic paid retries. During MERCURY-ACTIVATION-003 Checkpoint 1, the first product task for `ram_corsair_cmk16gx5m2b5200z40` accepted exact confirmation and consumed authorization `liveauth_3a824b3c83e6d0e958883a8b` once, but execution `acqrun_4344444a-a972-4922-8fc8-7d9bafa914dc` failed before a provider task ID was recorded. Actual spend was `$0.000`; no result or market evidence was acquired. MERCURY-ACTIVATION-002D fixture-certifies sanitized failure-detail preservation and append-only terminal checkpoint reconciliation; its authorized local reconciliation appended the missing terminal event without changing the original run, authorization, or `TASK_AUTHORIZED` fact. The product now projects `FAILED / REVIEW_REQUIRED`, with the historical cause only partially recoverable as safe detail `fetch failed` and no invented provider task identity. Checkpoint 1 remains paused: the failed product requires a separate operator decision and fresh authorization for any retry, the other eight PRODUCTS paths remain ready and untouched, and the two reusable SELLERS paths remain untouched.
 
 B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A registered exactly `RETAILER-0003` in Atlas, and merchant decision `mer_idrev_000000003` approved `DISCOVERED → REGISTERED` for evidence `dfev_bb40abbb467a6497b88a3e2d`. The governed path subsequently admitted immutable history, canonical observation `mer_obs_000000004`, and effective review `mer_rev_000000003 = REVIEWED`. B-014A fixture-certifies one shared durable-lineage context owner across E2J, E2P, and E2Q. Condition remains `UNKNOWN`; publication, Current Price, Cheapest, Pick, recommendation, and affiliate authority remain absent. The next safe MemoryC action is the separately authorized read-only E2S reassessment already identified below.
 
@@ -88,13 +89,13 @@ B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A regi
 
 ## Current test baseline
 
-The current runners declare **221 subsystem test files**:
+The current runners declare **225 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 19 |
-| Mercury | 171 |
+| Mercury | 175 |
 | Beacon | 7 |
 | Gateway | 17 |
 
