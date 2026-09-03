@@ -122,6 +122,7 @@ Hardware Radar is now developed as a small product program with multiple indepen
 No track may manufacture an artifact owned by another track or bypass another subsystem's authority to unblock itself. Cross-track dependencies must be explicit. In particular:
 
 - Commercial or affiliate status must not silently alter recommendation, retailer-trust, or market-evidence authority and must not determine Cheapest or Pick eligibility.
+- An operator-reviewed ordinary retailer product-page destination is Mercury-owned navigation metadata, independent of affiliate enablement and data rights. It does not become an offer, observation, publication decision, or recommendation; see ADR-059.
 - Public UX must consume governed outputs; it must not manufacture prices, Picks, evidence, retailer eligibility, publication authority, or recommendations.
 - Atlas catalog presence does not imply historical, canonical, review, current-market, or publication eligibility.
 - Mercury evidence does not imply Compass recommendation authority.
