@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse RAM by Specification | Hardware Radar</title>
+    <meta name="description" content="Browse 22 canonical RAM products by brand, DDR generation, capacity, form factor, module count and speed.">
+    <link rel="canonical" href="https://cheapestram.com/ram/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Browse RAM by Specification | Hardware Radar">
+    <meta property="og:description" content="Search and filter the Hardware Radar RAM catalog using governed product specifications.">
+    <meta property="og:url" content="https://cheapestram.com/ram/">
+    <meta property="og:site_name" content="Hardware Radar">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Browse RAM by Specification | Hardware Radar">
+    <meta name="twitter:description" content="Search and filter canonical RAM specifications without price or retailer claims.">
+    <link rel="icon" type="image/svg+xml" href="../images/branding/favicon.svg">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Browse RAM by Specification","description":"A factual catalog of canonical RAM products and specifications maintained by Hardware Radar.","url":"https://cheapestram.com/ram/"}</script>
+</head>
+<body>
+    <header id="headerContainer"></header>
+    <nav class="catalog-breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="../index.html">Home</a></li><li><span aria-current="page">RAM catalog</span></li></ol></nav>
+    <main class="ram-catalog-main">
+        <header class="ram-catalog-heading">
+            <p class="eyebrow">Atlas product catalog</p>
+            <h1>Browse RAM by specification</h1>
+            <p>Search and filter canonical RAM product specifications. This catalog does not show prices, stock, retailer offers or recommendations.</p>
+        </header>
+        <form id="ramCatalogControls" class="ram-catalog-controls" role="search" aria-label="Search and filter RAM products">
+            <div class="ram-catalog-search"><label for="ramCatalogQuery">Search products</label><input id="ramCatalogQuery" name="query" type="search" placeholder="Brand, model or exact MPN" autocomplete="off"></div>
+            <div class="ram-catalog-filter-grid">
+                <label>Brand<select name="brand"><option value="">All brands</option></select></label>
+                <label>DDR generation<select name="memoryType"><option value="">All generations</option></select></label>
+                <label>Total capacity<select name="capacityGb"><option value="">All capacities</option></select></label>
+                <label>Form factor<select name="formFactor"><option value="">All form factors</option></select></label>
+                <label>Module count<select name="moduleCount"><option value="">All module counts</option></select></label>
+                <label>Speed<select name="dataRateMtps"><option value="">All speeds</option></select></label>
+            </div>
+            <button id="ramCatalogReset" class="ram-catalog-reset" type="button">Reset filters</button>
+        </form>
+        <p id="ramCatalogStatus" class="ram-catalog-status" role="status" aria-live="polite">Loading RAM catalog…</p>
+        <ul id="ramCatalogResults" class="ram-catalog-grid" aria-label="RAM catalog results"></ul>
+    </main>
+    <footer id="footerContainer"></footer>
+    <script type="module">
+        import { renderHeader } from "../js/modules/renderHeader.js";
+        import { renderFooter } from "../js/modules/renderFooter.js";
+        import { initializeRamCatalog } from "../js/modules/ramCatalog.js";
+        renderHeader("headerContainer", { basePath: "../" });
+        renderFooter("footerContainer", { basePath: "../" });
+        initializeRamCatalog();
+    </script>
+</body>
+</html>

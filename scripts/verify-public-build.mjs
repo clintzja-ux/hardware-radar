@@ -2,6 +2,7 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { generateSitemap, parseEditorialSource, renderArticle, renderGuidesIndex, validateArticleMetadata } from "./editorial-publishing.mjs";
+import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const canonicalText = (contents) => contents.toString("utf8").replaceAll("\r\n", "\n");
@@ -59,6 +60,14 @@ try {
     const expectedEditorialRoutes = ["/guides/", "/guides/ram/", "/guides/ram/16gb-vs-32gb/", "/guides/ram/check-ram-compatibility/", "/guides/ram/ddr4-vs-ddr5/", "/guides/ram/ram-speed-cas-latency/"];
     if (editorialRoutes.length !== expectedEditorialRoutes.length || expectedEditorialRoutes.some((route) => !editorialRoutes.includes(route))) errors.push("Editorial: production sitemap must contain exactly the Guides index, RAM hub, and four approved RAM spokes.");
 } catch (error) { errors.push(`Editorial: verification failed (${error.message}).`); }
+try {
+    const manifest = JSON.parse(await readFile(path.join(root, "packages", "atlas", "atlas-manifest.json"), "utf8"));
+    const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
+    const expected = `${JSON.stringify(createRamCatalogProjection(products), null, 2)}\n`;
+    const actual = await readFile(path.join(root, "public", "data", "ram-catalog.json"), "utf8");
+    if (actual !== expected) errors.push("Atlas catalog: ram-catalog.json is stale or not deterministically generated.");
+    await stat(path.join(root, "public", "ram", "index.html"));
+} catch (error) { errors.push(`Atlas catalog: projection missing or invalid (${error.message}).`); }
 for (const internal of ["sentinel", "mercury"]) {
     try { await stat(path.join(root, "public", "data", internal)); errors.push(`${internal}: internal package must not be present in public/data.`); }
     catch (error) { if (error.code !== "ENOENT") throw error; }

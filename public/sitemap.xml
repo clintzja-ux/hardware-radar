@@ -85,6 +85,12 @@
     <priority>0.30</priority>
   </url>
   <url>
+    <loc>https://cheapestram.com/ram/</loc>
+    <lastmod>2026-09-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
     <loc>https://cheapestram.com/sodimm.html</loc>
     <lastmod>2026-07-11</lastmod>
     <changefreq>daily</changefreq>

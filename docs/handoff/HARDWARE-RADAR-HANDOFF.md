@@ -80,6 +80,7 @@ Never treat `public/forge/` as canonical Forge source or raw retained provider e
 - ADRs explain durable architectural choices; implementation contracts define certified increment boundaries.
 - Versioned policy repositories own business and operational policy. Validators reject unknown or malformed fields.
 - Retained evidence, identity eligibility, historical eligibility/admission, canonical eligibility/admission, review, current-market qualification, publication eligibility, and publication are separate states.
+- The public `/ram/` catalog is a deterministic Atlas-only product-discovery projection. It carries no Mercury market evidence, retailer/affiliate data, price, availability, recommendation, Cheapest, Pick, or publication authority.
 - Evidence and audit records are immutable or append-only. Replay is deterministic; conflicting replay fails closed.
 - Condition is an offer-level claim: `UNKNOWN` must never be inferred as `NEW`. Any supplemental condition evidence must remain additive and preserve exact offer binding, provenance, independent source rights, temporal compatibility, and contradiction handling without rewriting retained, historical, or canonical observations.
 - Exact, contradiction-free acquisition lineage may project governed product identity only through a certified binding to an active/ready Atlas product, source tasks, provider identity, and validation digests. Provider assertion alone is never an Atlas mapping; explicit downstream contradictions take precedence, and merchant/downstream authority remains separate.

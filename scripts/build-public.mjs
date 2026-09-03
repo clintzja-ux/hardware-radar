@@ -14,6 +14,7 @@ import { FileProductionFreshnessPolicyRepository } from "../packages/mercury/cur
 import { adapterRegistry } from "../packages/mercury/adapters/index.js";
 import { ProductRepository } from "../packages/atlas/ProductRepository.js";
 import { RetailerRepository } from "../packages/atlas/RetailerRepository.js";
+import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
 import { generateEditorialSite } from "./editorial-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -68,6 +69,8 @@ const [products, retailers] = await Promise.all([
     loadManifestRecords(atlasRoot, atlasManifest.products),
     loadManifestRecords(atlasRoot, atlasManifest.retailers)
 ]);
+const ramCatalog = createRamCatalogProjection(products);
+await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
 const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();
 const mercury = new Mercury();
 let snapshot;
