@@ -4,7 +4,7 @@
 Last updated:                  2026-09-03
 Branch:                        hardware-radar-growth-1
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
-R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD; this current documentation correction remains uncommitted
+R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
 Branch/main relationship:      cached origin/main is the exact branch ancestor; 108 committed branch-only changesets at R2 preflight
