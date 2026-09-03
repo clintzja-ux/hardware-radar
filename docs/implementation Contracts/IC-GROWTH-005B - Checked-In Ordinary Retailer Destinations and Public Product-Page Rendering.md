@@ -1,6 +1,6 @@
 # IC-GROWTH-005B — Checked-In Ordinary Retailer Destinations and Public Product-Page Rendering
 
-**Status:** IMPLEMENTED / FIXTURE-CERTIFIED / ZERO PRODUCTION RECORDS
+**Status:** IMPLEMENTED / FIXTURE-CERTIFIED / THREE PRODUCTION RECORDS
 **Owner:** Mercury source and validation; public static product-page projection
 **Date:** 2026-09-02
 
@@ -24,4 +24,6 @@ Existing published-market navigation now uses the explicit presentation name `of
 
 Synthetic fixtures cover empty, single, multiple, superseded, retired, malformed, unsafe, mismatched, and conflicting sources; exact-product rendering; neutral ordering; non-affiliate visibility; output escaping; safe link attributes; absence of market language and Offer schema; and separation from market-offer links.
 
-Production destination records remain `0`. No real retailer URL was invented, discovered, or added. Public market state and the fail-closed snapshot remain unchanged.
+GROWTH-005B.3 admits three operator-supplied, operator-reviewed Amazon US product-page destinations for exact Atlas products. The records use canonical retailer `RETAILER-0001`, marketplace `amazon.com`, explicit Amazon listing IDs, `OPERATOR_INSPECTED_PUBLIC_PAGE` provenance, and `OPERATOR_EXACT_PRODUCT_REVIEW` binding. The existing URL policy removes `www` while retaining each supplied descriptive `/dp/<ASIN>` path; it introduces no Amazon-specific rewrite.
+
+Production destination records are now `3`. They grant navigation authority only and render independently of pending Amazon affiliate state. No affiliate tag, sponsored relation, price, availability, condition, shipping, offer schema, market observation, publication state, Current Price, Cheapest, Pick, ranking, or recommendation was added. The public market snapshot remains unchanged.

@@ -3,7 +3,7 @@ import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createRetailerDestination, RETAILER_DESTINATION_BINDING_METHOD, RETAILER_DESTINATION_SOURCE_TYPE, RETAILER_DESTINATION_TYPE } from "../packages/mercury/destinations/RetailerDestination.js";
+import { createRetailerDestination, RETAILER_DESTINATION_BINDING_METHOD, RETAILER_DESTINATION_SOURCE_TYPE, RETAILER_DESTINATION_TYPE, validateRetailerDestination } from "../packages/mercury/destinations/RetailerDestination.js";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { renderRamProductPage } from "./ram-product-publishing.mjs";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
@@ -70,9 +70,66 @@ await save([record, createRetailerDestination(input({ destinationUrl: "https://p
 await save([replacement]); await assert.rejects(() => loadRetailerDestinationSource({ sourcePath, products, retailers }), /SUPERSESSION/);
 
 const production = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages/mercury/destinations/production-destinations.json"), products, retailers });
-assert.equal(production.recordCount, 0);
-for (const productPage of catalog.products) assert.doesNotMatch(renderRamProductPage(productPage, []), /fixture-reviewed|Retailer links/);
+const productionProjection = createPublicRetailerDestinationProjection({ source: production, retailers });
+const expectedProduction = new Map([
+    ["ram_kingston_kf560c30bbea_8", { mpn: "KF560C30BBEA-8", listing: "B0CYM3TYCR", id: "mer_dest_a09300f14e011c9edac43a0d", url: "https://amazon.com/Kingston-6000MT-Desktop-Memory-KF560C30BBEA-8/dp/B0CYM3TYCR" }],
+    ["ram_corsair_cmk16gx5m2b5200z40", { mpn: "CMK16GX5M2B5200Z40", listing: "B0D2P1CVQD", id: "mer_dest_47a09c16a1755fe032dddf33", url: "https://amazon.com/CORSAIR-Vengeance-5200MHz-Compatible-Computer/dp/B0D2P1CVQD" }],
+    ["ram_g_skill_f5_6000j3636f16gx1_rs5k", { mpn: "F5-6000J3636F16GX1-RS5K", listing: "B0G7Q6R7N5", id: "mer_dest_f77afb296ff8e32efabaa489", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0G7Q6R7N5" }]
+]);
+assert.equal(production.recordCount, 3);
+assert.equal(production.effective.length, 3);
+assert.equal(productionProjection.length, 3);
+assert.equal(new Set(production.records.map(item => item.destinationId)).size, 3);
+assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 3);
+for (const destination of production.records) {
+    const expected = expectedProduction.get(destination.atlasProductId);
+    assert.ok(expected, `Unexpected production destination ${destination.destinationId}.`);
+    assert.equal(destination.destinationId, expected.id);
+    assert.equal(destination.binding.manufacturerPartNumber, expected.mpn);
+    assert.equal(destination.retailerListingId, expected.listing);
+    assert.equal(destination.destinationUrl, expected.url);
+    assert.equal(destination.retailerId, "RETAILER-0001");
+    assert.equal(destination.marketplace, "amazon.com");
+    assert.equal(destination.status, "ACTIVE");
+    assert.equal(destination.binding.method, "OPERATOR_EXACT_PRODUCT_REVIEW");
+    assert.equal(destination.binding.scope, "EXACT_STANDALONE_PRODUCT");
+    assert.equal(destination.provenance.sourceType, "OPERATOR_INSPECTED_PUBLIC_PAGE");
+    assert.equal(destination.reviewedBy, "operator:Clinton_Ramsook");
+    assert.equal(destination.destinationUrl.startsWith("https://amazon.com/"), true);
+    assert.equal(new URL(destination.destinationUrl).search, "");
+    assert.equal(new URL(destination.destinationUrl).hash, "");
+    assert.equal(destination.destinationUrl.includes("tag="), false);
+    assert.equal(destination.destinationUrl.endsWith(`/dp/${expected.listing}`), true);
+    assert.equal(validateRetailerDestination(destination).valid, true);
+    assert.equal(createRetailerDestination({
+        atlasProductId: destination.atlasProductId, retailerId: destination.retailerId, marketplace: destination.marketplace,
+        destinationType: destination.destinationType, destinationUrl: destination.destinationUrl, retailerListingId: destination.retailerListingId,
+        binding: destination.binding, provenance: destination.provenance, reviewedBy: destination.reviewedBy, reviewedAt: destination.reviewedAt,
+        status: destination.status, supersedesDestinationId: destination.supersedesDestinationId, retirementReason: destination.retirementReason,
+        createdAt: destination.createdAt, createdBy: destination.createdBy
+    }).materialFingerprint, destination.materialFingerprint);
+}
+for (const productPage of catalog.products) {
+    const destinations = productionProjection.filter(item => item.atlasProductId === productPage.atlasProductId);
+    const rendered = renderRamProductPage(productPage, destinations);
+    const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
+    assert.equal(generated, rendered);
+    if (expectedProduction.has(productPage.atlasProductId)) {
+        assert.match(rendered, /<h2 id="retailer-links-heading">Retailer links<\/h2>/);
+        assert.match(rendered, />Amazon<\/span><a href="https:\/\/amazon\.com\//);
+        assert.match(rendered, /target="_blank" rel="noopener noreferrer">Visit retailer<\/a>/);
+        assert.match(rendered, /do not indicate current price or availability/);
+        assert.doesNotMatch(rendered, /rel="[^"]*sponsored|affiliate|"@type":"(?:Offer|AggregateOffer)"|"price(?:Currency)?"|"availability"|"seller"/i);
+    } else {
+        assert.doesNotMatch(rendered, /Retailer links|amazon\.com/);
+    }
+}
+assert.equal(catalog.products.length - expectedProduction.size, 23);
 const marketData = await readFile(path.join(root, "public/js/modules/marketData.js"), "utf8");
 assert.match(marketData, /offerUrl: item\.sourceUrl/);
 assert.doesNotMatch(marketData, /affiliateUrl/);
+const catalogClient = await readFile(path.join(root, "public/js/modules/ramCatalog.js"), "utf8");
+const comparisonClient = await readFile(path.join(root, "public/js/modules/ramComparison.js"), "utf8");
+assert.doesNotMatch(catalogClient, /destinationUrl|retailerListingId|amazon\.com/);
+assert.doesNotMatch(comparisonClient, /destinationUrl|retailerListingId|amazon\.com/);
 console.log("GROWTH-005B retailer destination source and rendering tests passed.");

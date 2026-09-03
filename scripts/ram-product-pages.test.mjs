@@ -3,12 +3,16 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRamCatalogProjection, createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
+import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { createRamProductSitemapRoutes, renderRamProductPage } from "./ram-product-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
+const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
+const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages/mercury/destinations/production-destinations.json"), products, retailers });
+const destinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
 const catalog = createRamCatalogProjection(products);
 const replay = createRamCatalogProjection([...products].reverse());
 
@@ -40,7 +44,7 @@ for (const product of catalog.products) {
     const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
     await stat(output);
     const html = await readFile(output, "utf8");
-    assert.equal(html, renderRamProductPage(product), `${product.publicPath} must match its canonical generator.`);
+    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId)), `${product.publicPath} must match its canonical generator.`);
     assert.equal((html.match(/<h1>/g) ?? []).length, 1);
     assert.match(html, new RegExp(`data-atlas-product-id="${product.atlasProductId}"`));
     assert.ok(html.includes(product.manufacturerPartNumber));
