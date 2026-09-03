@@ -171,6 +171,7 @@ const testModules = [
     ,"./RamComparisonSnapshotProjection.test.mjs"
     ,"./CuratedRamOfferGovernance.test.mjs"
     ,"./RetailerDestination.test.mjs"
+    ,"./AcquisitionPortfolioOrchestration.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

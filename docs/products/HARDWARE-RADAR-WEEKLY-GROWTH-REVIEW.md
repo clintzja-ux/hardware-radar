@@ -1,7 +1,7 @@
 # Hardware Radar Weekly Growth Review
 
-**Status:** ACCEPTED  
-**Owner:** Mirabelle Labs  
+**Status:** ACCEPTED
+**Owner:** Mirabelle Labs
 **Scope:** Audience and authority operating practice
 
 ## Governing loop
