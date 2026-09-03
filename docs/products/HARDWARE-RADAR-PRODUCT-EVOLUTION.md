@@ -214,6 +214,24 @@ Smaller or specialist retailers can be disproportionately useful to Mercury when
 
 The curated bridge bootstraps useful coverage but is not the target architecture. It may be retired progressively per source/product/retailer path after automated Mercury acquisition reaches governed parity. Curated history and provenance must never be rewritten as automated evidence. DataForSEO addresses part of acquisition; it does not eliminate direct relationships. Affiliate relationships address part of commerce; they grant no market-evidence authority. Keep `OBSERVED`, `PUBLICLY COMPARABLE`, `RECOMMENDABLE`, and `AFFILIATE ENABLED` distinct.
 
+DataForSEO Merchant API use for Hardware Radar's confirmed consumer price-intelligence case is settled provider permission and part of Mercury's intended operating model. Mercury's product purpose is not merely defensive provenance or archival storage; it transforms permitted independent observations through governed stages:
+
+```text
+OBSERVE → RETAIN → QUALIFY → BUILD HISTORY → DERIVE → PUBLISH
+```
+
+Atlas answers “What product is this?” Mercury answers “What is happening in the market for this product?” `RetailerDestination` answers “Where can the shopper go?” Compass may eventually answer what the shopper should choose under governed recommendation policy; Beacon may describe aggregate interest; Aurora may explain governed intelligence. Catalog, content, comparison, social, and navigation support this system but do not replace its market-intelligence purpose.
+
+Hardware Radar began with “Where can I find the cheapest RAM?” Governed price intelligence is therefore foundational product capability, not ornamental future decoration. This does not require prices on every surface or justify immature claims. `DATA USE PERMISSION` is not `PUBLIC CLAIM AUTHORITY`: each observation must still pass identity, rights, retention, history, canonical, freshness, condition, shipping/fee, comparability, publication, and Cheapest governance. DataForSEO evidence and retailer-authorized commerce data remain independent, provenance-specific inputs; neither supersedes the other. DataForSEO market evidence is also distinct from Mercury navigation destinations, and affiliate status neither authorizes nor disqualifies otherwise governed market evidence.
+
+Audience & Authority and bounded Mercury activation may proceed concurrently. The next practical Mercury question is how to begin recurring DataForSEO Merchant API acquisition for canonical Atlas RAM products at controlled cost, including query strategy, tasks, cadence, spend ceilings, identity and merchant resolution, offer/bundle/condition/shipping comparability, freshness, retention, admission, publication, and retry behavior. It is not another generic use-rights investigation.
+
+That activation should treat a returned retailer product URL as a possible second output: independently governed market evidence plus a `RetailerDestination` candidate. The activation plan should define how candidates reach the existing review/admission boundary without building an automatic destination or conflating `sourceUrl`/`offerUrl` with `destinationUrl`.
+
+Future public price presentation should include truthful observation/freshness context and remind shoppers to confirm final price, availability, shipping, taxes, and terms. A disclaimer never rescues stale or unqualified evidence. Cheapest remains the lowest qualifying comparable offer, respecting exact product identity, standalone/bundle and conditional-offer semantics, condition, retailer eligibility, freshness, reliably known mandatory costs, and governed unknown-cost treatment.
+
+DataForSEO/Mercury history may eventually support legitimate Market Terminal trends, averages, lows, movement, and retailer coverage. Permission alone does not make those statistics mature: **DENSITY IS EARNED BY DATA.**
+
 The current finite Track C launch portfolio and relationship approach is maintained in the [RAM Launch Retailer Portfolio](./RAM-LAUNCH-RETAILER-PORTFOLIO.md); it is strategy and operator planning, not retailer identity, rights, or publication authority.
 
 Hardware Radar's editorial direction is **hardware buying intelligence with a price engine**, not a generic technology blog. The [Hardware Radar Content Foundation](./HARDWARE-RADAR-CONTENT-FOUNDATION.md) owns the durable editorial mission, evidence classifications, Guides taxonomy, authorship, maintenance rules, and staged content roadmap. Editorial content supports but never displaces the homepage's immediate governed price answer.
@@ -257,6 +275,8 @@ Governance effort should be proportional to current product risk. Once a boundar
 Hardware Radar should reach real users before attempting to complete the entire hardware-intelligence vision. The RAM product should become useful, launchable, and capable of producing real-world user and market learning.
 
 Actual usage, market evidence, economics, and observed user needs should increasingly influence which advanced capabilities are built next. This is not permission to weaken accepted governance merely to launch faster.
+
+The ongoing operating practice for turning audience evidence into bounded priorities is defined by the [Hardware Radar Weekly Growth Review](./HARDWARE-RADAR-WEEKLY-GROWTH-REVIEW.md). Its governing loop is **MEASURE → LEARN → EXPAND**: evidence informs prioritization but never overrides authority, integrity, privacy, commercial independence, or fail-closed behavior.
 
 ## 7. Interpretation rule for future agents
 
