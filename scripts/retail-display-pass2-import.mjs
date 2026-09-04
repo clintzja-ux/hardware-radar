@@ -2,14 +2,17 @@ import { readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { ProductRepository, RetailerRepository } from "../packages/atlas/index.js";
 import { createRetailerDestination } from "../packages/mercury/index.js";
-import { FileCurrentDisplaySnapshotRepository, RetailDisplayImportService } from "../packages/mercury/current-display/index.js";
+import { classifyRetailDiscoveryGaps, FileCurrentDisplaySnapshotRepository, RetailDisplayImportService } from "../packages/mercury/current-display/index.js";
 
 const args = new Map(process.argv.slice(2).map(value => { const index = value.indexOf("="); return index < 0 ? [value, true] : [value.slice(0, index), value.slice(index + 1)]; }));
-if (args.get("--confirm") !== "IMPORT-RETAIL-DISPLAY-PASS2") throw new Error("RETAIL_DISPLAY_PASS2_CONFIRMATION_REQUIRED");
+const confirmation = String(args.get("--confirm") ?? "");
+if (!["IMPORT-RETAIL-DISPLAY-PASS2", "IMPORT-RETAIL-DISPLAY-PASS3"].includes(confirmation)) throw new Error("RETAIL_DISPLAY_INCREMENTAL_CONFIRMATION_REQUIRED");
 const rowsPath = path.resolve(String(args.get("--rows-json") ?? ""));
 const reviewedAt = String(args.get("--reviewed-at") ?? "");
 const reviewedBy = String(args.get("--reviewed-by") ?? "");
 const importedAt = String(args.get("--imported-at") ?? "");
+const sourceWorkbook = String(args.get("--source-workbook") ?? (confirmation.endsWith("PASS3") ? "atlas-ram-retail-discovery-103-live-sweep-pass3.xlsx" : "atlas-ram-retail-discovery-103-live-sweep-pass2.xlsx"));
+const gapReportPath = args.get("--gap-report") ? path.resolve(String(args.get("--gap-report"))) : null;
 if (!rowsPath || !reviewedBy.trim() || !Number.isFinite(Date.parse(reviewedAt)) || !Number.isFinite(Date.parse(importedAt))) throw new Error("RETAIL_DISPLAY_PASS2_AUDIT_REQUIRED");
 
 const destinationPath = path.resolve("packages/mercury/destinations/production-destinations.json");
@@ -28,7 +31,6 @@ if (identityFailures.length) throw new Error("RETAIL_DISPLAY_PASS2_ATLAS_BINDING
 const destinationState = JSON.parse(await readFile(destinationPath, "utf8"));
 const snapshotRepository = new FileCurrentDisplaySnapshotRepository({ statePath: snapshotPath });
 const priorSnapshotState = await snapshotRepository.getState();
-const sourceWorkbook = "atlas-ram-retail-discovery-103-live-sweep-pass2.xlsx";
 const sourceSheet = "RAM Retail Discovery";
 const firstPass = new RetailDisplayImportService({ products, destinations: destinationState.records }).importRows({ rows, sourceWorkbook, sourceSheet, importedAt, priorSnapshot: priorSnapshotState.current });
 const additions = [];
@@ -80,6 +82,19 @@ if (additions.length) {
 }
 const replacement = await snapshotRepository.replace(secondPass.snapshot);
 
+if (gapReportPath) {
+    const records = classifyRetailDiscoveryGaps(rows, products);
+    const report = {
+        schemaVersion: "1.0",
+        source: { workbook: sourceWorkbook, sheet: sourceSheet },
+        generatedAt: importedAt,
+        completelyUnverified: records.filter(record => record.classifications.includes("COMPLETELY_UNVERIFIED")),
+        partiallyResolved: records.filter(record => !record.classifications.includes("COMPLETELY_UNVERIFIED") && !record.classifications.includes("COMPLETE_BOTH_RETAILERS")),
+        classificationCounts: Object.fromEntries([...new Set(records.flatMap(record => record.classifications))].sort().map(category => [category, records.filter(record => record.classifications.includes(category)).length]))
+    };
+    await writeFile(gapReportPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
+}
+
 const count = status => firstPass.outcomes.filter(item => item.status === status).length;
 const eligible = secondPass.snapshot.offers.filter(offer => offer.itemPriceEligible);
 const eligibleByProduct = new Map();
@@ -90,17 +105,17 @@ const summary = {
     destinationsBefore: destinationState.records.length,
     destinationsAdmitted: additions.length,
     destinationsReused: count("DESTINATION_REUSED"),
-    destinationConflicts: count("DESTINATION_REVIEW_REQUIRED") + admissionFailures.length,
+    destinationConflicts: count("DESTINATION_REVIEW_REQUIRED") + count("CONFLICTING_FINDING") + admissionFailures.length,
     lifecycleBlocked: count("DESTINATION_BLOCKED_ATLAS_NOT_ACTIVE_READY"),
     searchOnly: count("SEARCH_URL_ONLY"),
     numericPricesImported: secondPass.snapshot.offers.length,
-    priceOnlyDestinationUnresolved: secondPass.outcomes.filter(item => item.status === "PRICE_OBSERVED_DESTINATION_UNRESOLVED").length,
+    priceOnlyDestinationUnresolved: secondPass.snapshot.offers.filter(offer => !offer.destinationId).length,
     itemPriceEligible: eligible.length,
     itemPriceBlocked: secondPass.snapshot.offers.length - eligible.length,
     twoRetailerProducts: [...eligibleByProduct.values()].filter(value => value >= 2).length,
     singleRetailerProducts: [...eligibleByProduct.values()].filter(value => value === 1).length,
     deliveredCostEligible: secondPass.snapshot.offers.filter(offer => offer.deliveredCostEligible).length,
-    stillUnverifiedProducts: secondPass.outcomes.filter(item => item.status === "UNVERIFIED").length,
+    stillUnverifiedProducts: rows.filter(row => !row.amazonUrl && !row.neweggUrl && !Number.isFinite(row.amazonObservedPriceUsd) && !Number.isFinite(row.neweggObservedPriceUsd)).length,
     snapshotId: secondPass.snapshot.snapshotId,
     previousSnapshotId: replacement.previousSnapshotId,
     snapshotStatus: replacement.status,
@@ -108,5 +123,5 @@ const summary = {
     paidTasks: 0,
     actualSpendUsd: 0
 };
-console.log("RETAIL DISPLAY PASS-2 IMPORT\n");
+console.log(`RETAIL DISPLAY ${confirmation.endsWith("PASS3") ? "PASS-3" : "PASS-2"} IMPORT\n`);
 console.log(JSON.stringify(summary, null, 2));

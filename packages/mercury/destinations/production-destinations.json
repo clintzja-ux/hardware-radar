@@ -1044,6 +1044,354 @@
       "createdAt": "2026-09-04T19:30:00.000Z",
       "createdBy": "human:Clinton_Ramsook",
       "materialFingerprint": "eaec918f7f3ca084f18fec0dea10f9a3a90d2c50831f5246ee5723879021059e"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5f0501c9e218da221fad43a5",
+      "atlasProductId": "ram_crucial_ct2k16g56c46s5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-32gb-ddr5-5600-cas-latency-cl46-notebook-memory/p/N82E16820156316",
+      "retailerListingId": "N82E16820156316",
+      "binding": {
+        "manufacturerPartNumber": "CT2K16G56C46S5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:28:newegg:N82E16820156316"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "0d614bfb94434ce506277784c5e9567817138aadd70a4a9cf4eb6ca5343d8efd"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5050aaa505d398f0d1cfef29",
+      "atlasProductId": "ram_crucial_ct2k32g56c46s5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-64gb-ddr5-5600-cas-latency-cl46-laptop-memory/p/N82E16820156317",
+      "retailerListingId": "N82E16820156317",
+      "binding": {
+        "manufacturerPartNumber": "CT2K32G56C46S5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:31:newegg:N82E16820156317"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "89cb5ca740e2601c80679d0edc5fcb5808bfd4012982c8a82e4a64d967834625"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_28717d7497e6740a438db276",
+      "atlasProductId": "ram_crucial_ct2k32g56c46u5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/3C6-00T1-00144",
+      "retailerListingId": "3C6-00T1-00144",
+      "binding": {
+        "manufacturerPartNumber": "CT2K32G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:32:newegg:3C6-00T1-00144"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "44aaceb1682ec825577b8c7546459c5bb0e54c3592c5b3a812f98c0d2d287aca"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5582e47d30034898b2cee4a2",
+      "atlasProductId": "ram_g_skill_f5_6000j3036f16gx2_fx5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/3C6-034Y-00651",
+      "retailerListingId": "3C6-034Y-00651",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3036F16GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:45:newegg:3C6-034Y-00651"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "68e56240d01ac56b33abd42831eec72b2df621f3e86486397e3a3e14381f3b97"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_877cc58ab9e365fb9236e426",
+      "atlasProductId": "ram_kingston_kcp556sd8_32",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-32gb/p/0RM-001W-006B3",
+      "retailerListingId": "0RM-001W-006B3",
+      "binding": {
+        "manufacturerPartNumber": "KCP556SD8-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:69:newegg:0RM-001W-006B3"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "df944c495c9c3bc5725b84afca45975a625e4c48bc94cbb71bfd88f4f604f5df"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_148e13804bb642474b4e03fd",
+      "atlasProductId": "ram_kingston_kf560c36bbe2k2_32",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-fury-beast-32gb-ddr5-6000-cas-latency-cl36-memory-black/p/0RN-001J-01574",
+      "retailerListingId": "0RN-001J-01574",
+      "binding": {
+        "manufacturerPartNumber": "KF560C36BBE2K2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:72:newegg:0RN-001J-01574"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "af6d33be4ca659327b21569a0f9ac559479c5c8104e5543a5d674aa386cef821"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_66b2bae11ec25aa4f4b8d635",
+      "atlasProductId": "ram_kingston_kf556s40ibk2_32",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-fury-impact-32gb-ddr5-5600-cas-latency-cl40-memory/p/0RN-001J-014J9",
+      "retailerListingId": "0RN-001J-014J9",
+      "binding": {
+        "manufacturerPartNumber": "KF556S40IBK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:82:newegg:0RN-001J-014J9"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "3f5c8bbe983c8ac519dbd91229dd3b646e55ff0b1186ccb204ecefd0390f5b6d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_7026d58d45c64dda497eb388",
+      "atlasProductId": "ram_kingston_kvr32n22d8_32",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-valueram-32gb-ddr4-3200-cas-latency-cl22-memory/p/1B4-00M4-003S6",
+      "retailerListingId": "1B4-00M4-003S6",
+      "binding": {
+        "manufacturerPartNumber": "KVR32N22D8/32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:90:newegg:1B4-00M4-003S6"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "d0e9580c6c544fbe0e63010c6b8ed76c105d463df58d16ad10cbd2dc79a8cc1b"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_9a11ea86eedb443bd16d0bbb",
+      "atlasProductId": "ram_teamgroup_ctced532g6400hc32adc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-create-expert-32gb-ddr5-6400-cas-latency-cl32-desktop-memory-black/p/N82E16820985076",
+      "retailerListingId": "N82E16820985076",
+      "binding": {
+        "manufacturerPartNumber": "CTCED532G6400HC32ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:94:newegg:N82E16820985076"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "737dae8a9a8e1ba3911fa793d968c701b729c58b8d5e03d58918424fec8be9d4"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_29b7d5f7863cc945014ef41d",
+      "atlasProductId": "ram_teamgroup_ff4d532g6000hc38adc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-32gb-ddr5-6000-cas-latency-cl38-desktop-memory-white/p/N82E16820331749",
+      "retailerListingId": "N82E16820331749",
+      "binding": {
+        "manufacturerPartNumber": "FF4D532G6000HC38ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:103:newegg:N82E16820331749"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "547752610fc6b9d9b7eabce73c27844d65e6543311e4a3dbdca1f5bdb2a042bc"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_8f5f377053489be410a3e301",
+      "atlasProductId": "ram_teamgroup_tf3d416g3200hc16fdc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-16gb-ddr4-3200-cas-latency-cl16-desktop-memory-black/p/N82E16820331858",
+      "retailerListingId": "N82E16820331858",
+      "binding": {
+        "manufacturerPartNumber": "TF3D416G3200HC16FDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:105:newegg:N82E16820331858"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "5a18f7a60a70abe8e7b092732c6ee1ec3d4b6d2cf99a1ab9b4668c2232103084"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_1f020eae170299f849f99dc0",
+      "atlasProductId": "ram_teamgroup_tf3d432g3200hc16fdc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-32gb-ddr4-3200-cas-latency-cl16-desktop-memory-black/p/N82E16820331634",
+      "retailerListingId": "N82E16820331634",
+      "binding": {
+        "manufacturerPartNumber": "TF3D432G3200HC16FDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:106:newegg:N82E16820331634"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T20:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T20:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "9f5fe67aa93db818dff84dc4219a233a732ee2925dadae5d91742a4445b67234"
     }
   ]
 }

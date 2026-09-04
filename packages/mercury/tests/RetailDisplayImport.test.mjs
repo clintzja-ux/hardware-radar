@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import {
     createCurrentDisplaySnapshot,
+    classifyRetailDiscoveryGaps,
     deriveCurrentDisplayComparison,
     FileCurrentDisplaySnapshotRepository,
     deriveCurrentDisplayDeliveredCost,
@@ -113,5 +114,28 @@ assert.equal(passTwo.snapshot.offers.find(offer => offer.retailer === "AMAZON").
 assert.equal(passTwo.snapshot.offers.find(offer => offer.retailer === "NEWEGG").priceUsd, 85);
 assert.equal(passTwo.snapshot.offers.find(offer => offer.retailer === "NEWEGG").observedAt, "2026-09-04T13:48:00.000Z");
 assert.equal(passTwo.snapshot.observedAt, "2026-09-04T13:48:00.000Z"); cases += 1;
+
+const olderPass = service.importRows({
+    rows: [row({ neweggObservedPriceUsd: 70, observedAt: "2026-09-04 05:00:00" })],
+    sourceWorkbook: "older.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T15:00:00Z", priorSnapshot: passTwo.snapshot
+});
+assert.equal(olderPass.snapshot.offers.find(offer => offer.retailer === "NEWEGG").priceUsd, 85);
+assert.equal(olderPass.outcomes.some(item => item.retailer === "NEWEGG" && item.status === "NO_NEW_EVIDENCE"), true); cases += 1;
+
+const conflictingPass = service.importRows({
+    rows: [row({ neweggObservedPriceUsd: 84, observedAt: "2026-09-04 13:48:00" })],
+    sourceWorkbook: "conflict.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T15:00:00Z", priorSnapshot: passTwo.snapshot
+});
+assert.equal(conflictingPass.snapshot.offers.find(offer => offer.retailer === "NEWEGG").priceUsd, 85);
+assert.equal(conflictingPass.outcomes.some(item => item.retailer === "NEWEGG" && item.status === "CONFLICTING_FINDING"), true); cases += 1;
+
+const gaps = classifyRetailDiscoveryGaps([
+    row({ canonicalBrand: "Fixture", family: "One", series: null, exactMpnSearchKey: "FIX-ONE", amazonUrl: null, amazonObservedPriceUsd: null, amazonAvailability: null, amazonMatchStatus: null, neweggUrl: null, neweggObservedPriceUsd: null, neweggAvailability: null, neweggMatchStatus: null }),
+    row({ atlasProductId: "ram_fixture_two", manufacturerPartNumber: "FIX-TWO", canonicalBrand: "Fixture", family: "Two", series: null, exactMpnSearchKey: "FIX-TWO", amazonUrl: null, amazonObservedPriceUsd: null, neweggUrl: "https://www.newegg.com/p/pl?d=FIX-TWO", neweggObservedPriceUsd: 75, neweggMatchStatus: "EXACT_MPN_SEARCH_RESULT" })
+], products);
+assert.deepEqual(gaps[0].classifications, ["COMPLETELY_UNVERIFIED"]);
+assert.equal(gaps[1].classifications.includes("NEWEGG_ONLY"), true);
+assert.equal(gaps[1].classifications.includes("SEARCH_RESULT_ONLY"), true);
+assert.equal(gaps[1].classifications.includes("PRICE_ONLY_DESTINATION_UNRESOLVED"), true); cases += 1;
 
 console.log(`Retail display import tests passed: ${cases} cases.`);
