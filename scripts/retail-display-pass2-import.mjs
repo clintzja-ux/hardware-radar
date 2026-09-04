@@ -6,12 +6,13 @@ import { classifyRetailDiscoveryGaps, FileCurrentDisplaySnapshotRepository, Reta
 
 const args = new Map(process.argv.slice(2).map(value => { const index = value.indexOf("="); return index < 0 ? [value, true] : [value.slice(0, index), value.slice(index + 1)]; }));
 const confirmation = String(args.get("--confirm") ?? "");
-if (!["IMPORT-RETAIL-DISPLAY-PASS2", "IMPORT-RETAIL-DISPLAY-PASS3"].includes(confirmation)) throw new Error("RETAIL_DISPLAY_INCREMENTAL_CONFIRMATION_REQUIRED");
+if (!["IMPORT-RETAIL-DISPLAY-PASS2", "IMPORT-RETAIL-DISPLAY-PASS3", "IMPORT-RETAIL-DISPLAY-PASS4"].includes(confirmation)) throw new Error("RETAIL_DISPLAY_INCREMENTAL_CONFIRMATION_REQUIRED");
 const rowsPath = path.resolve(String(args.get("--rows-json") ?? ""));
 const reviewedAt = String(args.get("--reviewed-at") ?? "");
 const reviewedBy = String(args.get("--reviewed-by") ?? "");
 const importedAt = String(args.get("--imported-at") ?? "");
-const sourceWorkbook = String(args.get("--source-workbook") ?? (confirmation.endsWith("PASS3") ? "atlas-ram-retail-discovery-103-live-sweep-pass3.xlsx" : "atlas-ram-retail-discovery-103-live-sweep-pass2.xlsx"));
+const pass = confirmation.match(/PASS(\d)$/)?.[1] ?? "2";
+const sourceWorkbook = String(args.get("--source-workbook") ?? `atlas-ram-retail-discovery-103-live-sweep-pass${pass}.xlsx`);
 const gapReportPath = args.get("--gap-report") ? path.resolve(String(args.get("--gap-report"))) : null;
 if (!rowsPath || !reviewedBy.trim() || !Number.isFinite(Date.parse(reviewedAt)) || !Number.isFinite(Date.parse(importedAt))) throw new Error("RETAIL_DISPLAY_PASS2_AUDIT_REQUIRED");
 
@@ -123,5 +124,5 @@ const summary = {
     paidTasks: 0,
     actualSpendUsd: 0
 };
-console.log(`RETAIL DISPLAY ${confirmation.endsWith("PASS3") ? "PASS-3" : "PASS-2"} IMPORT\n`);
+console.log(`RETAIL DISPLAY PASS-${pass} IMPORT\n`);
 console.log(JSON.stringify(summary, null, 2));

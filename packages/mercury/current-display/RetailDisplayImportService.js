@@ -36,7 +36,16 @@ export function classifyRetailDiscoveryGaps(rows = [], products = []) {
         if (/OUT_OF_STOCK/.test(`${row.amazonAvailability ?? ""} ${row.neweggAvailability ?? ""}`)) categories.push("OUT_OF_STOCK");
         if (/MARKETPLACE|REFURBISHED/.test(`${row.amazonAvailability ?? ""} ${row.neweggAvailability ?? ""} ${row.researchNotes ?? ""}`.toUpperCase())) categories.push("MARKETPLACE_REVIEW");
         if ((price(row.amazonObservedPriceUsd) && !exactAmazon(row)) || (price(row.neweggObservedPriceUsd) && !exactNewegg(row))) categories.push("PRICE_ONLY_DESTINATION_UNRESOLVED");
+        if (/NO_QUALIFYING|NO_CLEAN_RETAILER|NOT_SOLD/.test(`${row.amazonMatchStatus ?? ""} ${row.neweggMatchStatus ?? ""} ${row.researchNotes ?? ""}`.toUpperCase())) categories.push("CONFIRM_NOT_SOLD");
+        if (/VOLATILE/.test(`${row.amazonAvailability ?? ""} ${row.neweggAvailability ?? ""} ${row.researchNotes ?? ""}`.toUpperCase())) categories.push("MANUAL_PRICE_REFRESH");
         const product = productById.get(row.atlasProductId);
+        const recommendedNextResearchAction = categories.includes("COMPLETELY_UNVERIFIED") ? "VERIFY_AMAZON_AND_NEWEGG_EXACT_SKU"
+            : categories.includes("MANUAL_PRICE_REFRESH") ? "REFRESH_VOLATILE_PRICE"
+                : categories.includes("MARKETPLACE_REVIEW") ? "REVIEW_MARKETPLACE_SELLER_AND_CONDITION"
+                    : categories.includes("SEARCH_RESULT_ONLY") || categories.includes("PRICE_ONLY_DESTINATION_UNRESOLVED") ? "RESOLVE_EXACT_PRODUCT_DESTINATION"
+                        : categories.includes("URL_FOUND_PRICE_MISSING") ? "REFRESH_CURRENT_PRICE"
+                            : categories.includes("CONFIRM_NOT_SOLD") ? "CONFIRM_RETAILER_NON_AVAILABILITY"
+                                : "COMPLETE_MISSING_RETAILER_RESEARCH";
         return {
             atlasProductId: row.atlasProductId,
             canonicalBrand: row.canonicalBrand,
@@ -46,6 +55,7 @@ export function classifyRetailDiscoveryGaps(rows = [], products = []) {
             lifecycle: product ? `${product.governance.lifecycleStatus}/${product.governance.publicationStatus}` : null,
             exactMpnSearchKey: row.exactMpnSearchKey,
             classifications: categories,
+            recommendedNextResearchAction,
             missingRetailerFields: [
                 ...(!row.amazonUrl ? ["amazonUrl"] : []), ...(!price(row.amazonObservedPriceUsd) ? ["amazonObservedPriceUsd"] : []),
                 ...(!row.neweggUrl ? ["neweggUrl"] : []), ...(!price(row.neweggObservedPriceUsd) ? ["neweggObservedPriceUsd"] : [])

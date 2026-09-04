@@ -1392,6 +1392,528 @@
       "createdAt": "2026-09-04T20:30:00.000Z",
       "createdBy": "human:Clinton_Ramsook",
       "materialFingerprint": "9f5fe67aa93db818dff84dc4219a233a732ee2925dadae5d91742a4445b67234"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_8e902c44800f50d6892d0f37",
+      "atlasProductId": "ram_crucial_cp2k16g4dfra32a",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-pro-32gb-ddr4-3200-cas-latency-cl22-desktop-memory-black/p/N82E16820156326",
+      "retailerListingId": "N82E16820156326",
+      "binding": {
+        "manufacturerPartNumber": "CP2K16G4DFRA32A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:38:newegg:N82E16820156326"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "95c3a1964418d1193c0164d8e0505e01b9aec59794e9ceccd786093498260e80"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_14030561faef98a1699901da",
+      "atlasProductId": "ram_crucial_cp2k16g64c32u5b",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-pro-overclocking-32gb-2-x-16gb-ddr5-6400-pc5-51200-cas-latency-cl32-desktop-memory-black/p/N82E16820156450",
+      "retailerListingId": "N82E16820156450",
+      "binding": {
+        "manufacturerPartNumber": "CP2K16G64C32U5B",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:40:newegg:N82E16820156450"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "7fa34c7726366fb971b5164ef3e08500d0e31b3b38e03f0d01382b1fd96e89f6"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_0e477b5ebef31720cae6a130",
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5b",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-64gb-ddr5-6400/p/N82E16820156421",
+      "retailerListingId": "N82E16820156421",
+      "binding": {
+        "manufacturerPartNumber": "CP2K32G60C40U5B",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:41:newegg:N82E16820156421"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "53024bfcb04f4d9f26c7175779b2e27e5350f0a67fd5816820aa65e94a3bccf9"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_4325418c03afb832e2fdf9d9",
+      "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5w",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-ripjaws-s5-series-32gb-ddr5-5200-cas-latency-cl40-desktop-memory-white/p/N82E16820374330",
+      "retailerListingId": "N82E16820374330",
+      "binding": {
+        "manufacturerPartNumber": "F5-5200J4040A16GX2-RS5W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:53:newegg:N82E16820374330"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "7116c2e1429f4cc01351e99b06af351e25cce0b1c0eae423e2a21c1c6f0d4421"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_adf6e072ca96ca20ba3abf46",
+      "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5w",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-ripjaws-s5-series-32gb-ddr5-6000-cas-latency-cl30-desktop-memory-white/p/N82E16820374370",
+      "retailerListingId": "N82E16820374370",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3040F16GX2-RS5W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:56:newegg:N82E16820374370"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "744ad6e3417ab58db5850b6baf8e8bbf43d631bdfe20a865c6c4928d9cab22aa"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_9cefe0f3fb161d7f24747e78",
+      "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_rs5k",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-ripjaws-s5-series-64gb-ddr5-6000-cas-latency-cl36-desktop-memory-black/p/N82E16820374497",
+      "retailerListingId": "N82E16820374497",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3636F32GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:60:newegg:N82E16820374497"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "ab39c1f0002113572a29e788ff78996de969d7c9662b545df4c6b9eba4b0d3c2"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_078ad23bfa0c36963b94056d",
+      "atlasProductId": "ram_g_skill_f5_6400j3239g16gx2_rs5k",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-ripjaws-s5-series-32gb-ddr5-6400-cas-latency-cl32-desktop-memory-black/p/N82E16820374451",
+      "retailerListingId": "N82E16820374451",
+      "binding": {
+        "manufacturerPartNumber": "F5-6400J3239G16GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:61:newegg:N82E16820374451"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "0fb6fd517c1c299f5e6c9132376a9a547deb2c4474584d987c5926c94f7fd09b"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_802a6e83c29c96571cbdd5ae",
+      "atlasProductId": "ram_kingston_kf560c36bbeak2_16",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-fury-beast-16gb-ddr5-6000-cas-latency-cl36-memory-black/p/0RN-001J-014J2",
+      "retailerListingId": "0RN-001J-014J2",
+      "binding": {
+        "manufacturerPartNumber": "KF560C36BBEAK2-16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:80:newegg:0RN-001J-014J2"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "230bf03cf99685a7821fff30fe483a1b21ed904dee02ec0b78cca4fa5d0fd476"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_4068afd282d464e5c03744e8",
+      "atlasProductId": "ram_kingston_kf564c32bbeak2_32",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-fury-beast-32gb-ddr5-6400-cas-latency-cl32-memory-black/p/N82E16820242869",
+      "retailerListingId": "N82E16820242869",
+      "binding": {
+        "manufacturerPartNumber": "KF564C32BBEAK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:81:newegg:N82E16820242869"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "dde2ce6806b615b119437dc6d06ee408909f077da278ae4edc5ac6efe5fe95ab"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_3c7da6d7ec6a9f510df2d1c1",
+      "atlasProductId": "ram_kingston_kf564s38ibk2_32",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-fury-impact-32gb-ddr5-6400-cas-latency-cl38-memory/p/0RM-001W-006Z9",
+      "retailerListingId": "0RM-001W-006Z9",
+      "binding": {
+        "manufacturerPartNumber": "KF564S38IBK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:86:newegg:0RM-001W-006Z9"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "6f0a43e13e9898b92a75b5a45d905f7d3e523fd87a76c5deccfca6e2ad8069f6"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_b5d207c0542dbc4b4f48edb0",
+      "atlasProductId": "ram_teamgroup_ctced532g6000hc30dc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-32gb-ddr5-6000/p/N82E16820985077",
+      "retailerListingId": "N82E16820985077",
+      "binding": {
+        "manufacturerPartNumber": "CTCED532G6000HC30DC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:92:newegg:N82E16820985077"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "c6a58605c219a5e685d014c152d972c9afaefef29af8c25aa1797f3d104c5b9a"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_aac36556110eb88b3af12e8f",
+      "atlasProductId": "ram_teamgroup_ctced532g6000hc38adc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-create-expert-32gb-ddr5-6000-cas-latency-cl38-desktop-memory-black/p/N82E16820985004",
+      "retailerListingId": "N82E16820985004",
+      "binding": {
+        "manufacturerPartNumber": "CTCED532G6000HC38ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:93:newegg:N82E16820985004"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "77d49847b9dbb633f7b0a3c68d684720d8c9f37dd8ed9c1d6aa4ec25ccf14e86"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_dd5a27ac9635226cda6fe9ea",
+      "atlasProductId": "ram_teamgroup_ff2d532g6400hc32adc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-eco-32gb-ddr5-6400-cas-latency-cl32-desktop-memory-silver/p/N82E16820985279",
+      "retailerListingId": "N82E16820985279",
+      "binding": {
+        "manufacturerPartNumber": "FF2D532G6400HC32ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:95:newegg:N82E16820985279"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "648bacb9dff0f96f1ec3511709068e9327684e295dc873a64f16c888bd318a0b"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_deafb6642ae28d4a541ddb79",
+      "atlasProductId": "ram_teamgroup_ff3d532g6400hc38jdc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-32gb-ddr5-6400-cas-latency-cl38-desktop-memory-black/p/N82E16820985309",
+      "retailerListingId": "N82E16820985309",
+      "binding": {
+        "manufacturerPartNumber": "FF3D532G6400HC38JDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:97:newegg:N82E16820985309"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "7f3b0530469bfe9f1ae5c67850bd33359a2624d24143b9cba66038969a5583db"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_0c60612a4a9a5d6f132d4a79",
+      "atlasProductId": "ram_teamgroup_ff3d564g5200hc40cdc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-64gb-ddr5-5200-cas-latency-cl40-desktop-memory-black/p/N82E16820331982",
+      "retailerListingId": "N82E16820331982",
+      "binding": {
+        "manufacturerPartNumber": "FF3D564G5200HC40CDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:98:newegg:N82E16820331982"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "d69b62e460daa564b343f094f4a72d13751f7ab8b6a101ba9b5c2e08d6524aa7"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a616689fe4263c59e4ae4c05",
+      "atlasProductId": "ram_teamgroup_ff3d564g6000hc38adc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-64gb-ddr5-6000-cas-latency-cl38-desktop-memory-black/p/N82E16820331978",
+      "retailerListingId": "N82E16820331978",
+      "binding": {
+        "manufacturerPartNumber": "FF3D564G6000HC38ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:99:newegg:N82E16820331978"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "363508179ac80e93c6c31cdc1a04b7a3b8e5cd87c0dc3168e9fb407a60bd10d1"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_54f18e714b8c52d92ecc66ee",
+      "atlasProductId": "ram_teamgroup_ff4d516g6000hc38adc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-16gb-ddr5-6000-cas-latency-cl38-memory-white/p/N82E16820985308",
+      "retailerListingId": "N82E16820985308",
+      "binding": {
+        "manufacturerPartNumber": "FF4D516G6000HC38ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:100:newegg:N82E16820985308"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "0c9d45b8ef212efb2bfd9236c47951a853f902467848ab2c0b5c1cb739192b0d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_30c9253b581df49eb0a91eb8",
+      "atlasProductId": "ram_teamgroup_ff4d532g5200hc40cdc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-32gb-ddr5-5200-cas-latency-cl40-desktop-memory-white/p/N82E16820331811",
+      "retailerListingId": "N82E16820331811",
+      "binding": {
+        "manufacturerPartNumber": "FF4D532G5200HC40CDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:101:newegg:N82E16820331811"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T14:36:47.431Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T14:36:47.431Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "6e8c22310425ce5c111e7b9e379b5c58886e90850cba834f15dc77b2943eaca8"
     }
   ]
 }

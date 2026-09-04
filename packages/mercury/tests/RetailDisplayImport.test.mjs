@@ -138,4 +138,12 @@ assert.equal(gaps[1].classifications.includes("NEWEGG_ONLY"), true);
 assert.equal(gaps[1].classifications.includes("SEARCH_RESULT_ONLY"), true);
 assert.equal(gaps[1].classifications.includes("PRICE_ONLY_DESTINATION_UNRESOLVED"), true); cases += 1;
 
+const passFourGaps = classifyRetailDiscoveryGaps([
+    row({ neweggObservedPriceUsd: null, neweggAvailability: "PRICE_VOLATILE_REFRESH_REQUIRED", researchNotes: "price volatile" }),
+    row({ atlasProductId: "ram_fixture_two", manufacturerPartNumber: "FIX-TWO", neweggUrl: null, neweggObservedPriceUsd: null, neweggAvailability: "NO_CLEAN_RETAILER_EXACT_PAGE", neweggMatchStatus: "NO_CLEAN_RETAILER_EXACT_PAGE" })
+], products);
+assert.equal(passFourGaps[0].classifications.includes("MANUAL_PRICE_REFRESH"), true);
+assert.equal(passFourGaps[0].recommendedNextResearchAction, "REFRESH_VOLATILE_PRICE");
+assert.equal(passFourGaps[1].classifications.includes("CONFIRM_NOT_SOLD"), true); cases += 1;
+
 console.log(`Retail display import tests passed: ${cases} cases.`);
