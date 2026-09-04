@@ -2,11 +2,11 @@ import { readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { ProductRepository, RetailerRepository } from "../packages/atlas/index.js";
 import { createRetailerDestination } from "../packages/mercury/index.js";
-import { classifyRetailDiscoveryGaps, FileCurrentDisplaySnapshotRepository, RetailDisplayImportService } from "../packages/mercury/current-display/index.js";
+import { buildFinalRetailManualPass, classifyRetailDiscoveryGaps, FileCurrentDisplaySnapshotRepository, RetailDisplayImportService } from "../packages/mercury/current-display/index.js";
 
 const args = new Map(process.argv.slice(2).map(value => { const index = value.indexOf("="); return index < 0 ? [value, true] : [value.slice(0, index), value.slice(index + 1)]; }));
 const confirmation = String(args.get("--confirm") ?? "");
-if (!["IMPORT-RETAIL-DISPLAY-PASS2", "IMPORT-RETAIL-DISPLAY-PASS3", "IMPORT-RETAIL-DISPLAY-PASS4"].includes(confirmation)) throw new Error("RETAIL_DISPLAY_INCREMENTAL_CONFIRMATION_REQUIRED");
+if (!["IMPORT-RETAIL-DISPLAY-PASS2", "IMPORT-RETAIL-DISPLAY-PASS3", "IMPORT-RETAIL-DISPLAY-PASS4", "IMPORT-RETAIL-DISPLAY-PASS5"].includes(confirmation)) throw new Error("RETAIL_DISPLAY_INCREMENTAL_CONFIRMATION_REQUIRED");
 const rowsPath = path.resolve(String(args.get("--rows-json") ?? ""));
 const reviewedAt = String(args.get("--reviewed-at") ?? "");
 const reviewedBy = String(args.get("--reviewed-by") ?? "");
@@ -14,6 +14,7 @@ const importedAt = String(args.get("--imported-at") ?? "");
 const pass = confirmation.match(/PASS(\d)$/)?.[1] ?? "2";
 const sourceWorkbook = String(args.get("--source-workbook") ?? `atlas-ram-retail-discovery-103-live-sweep-pass${pass}.xlsx`);
 const gapReportPath = args.get("--gap-report") ? path.resolve(String(args.get("--gap-report"))) : null;
+const manualReportPath = args.get("--manual-report") ? path.resolve(String(args.get("--manual-report"))) : null;
 if (!rowsPath || !reviewedBy.trim() || !Number.isFinite(Date.parse(reviewedAt)) || !Number.isFinite(Date.parse(importedAt))) throw new Error("RETAIL_DISPLAY_PASS2_AUDIT_REQUIRED");
 
 const destinationPath = path.resolve("packages/mercury/destinations/production-destinations.json");
@@ -94,6 +95,10 @@ if (gapReportPath) {
         classificationCounts: Object.fromEntries([...new Set(records.flatMap(record => record.classifications))].sort().map(category => [category, records.filter(record => record.classifications.includes(category)).length]))
     };
     await writeFile(gapReportPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
+}
+if (manualReportPath) {
+    const manual = buildFinalRetailManualPass(rows, products);
+    await writeFile(manualReportPath, `${JSON.stringify({ schemaVersion: "1.0", source: { workbook: sourceWorkbook, sheet: sourceSheet }, generatedAt: importedAt, ...manual }, null, 2)}\n`, "utf8");
 }
 
 const count = status => firstPass.outcomes.filter(item => item.status === status).length;

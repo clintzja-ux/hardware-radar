@@ -4,7 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import {
     createCurrentDisplaySnapshot,
-    classifyRetailDiscoveryGaps,
+    buildFinalRetailManualPass, classifyRetailDiscoveryGaps,
     deriveCurrentDisplayComparison,
     FileCurrentDisplaySnapshotRepository,
     deriveCurrentDisplayDeliveredCost,
@@ -145,5 +145,11 @@ const passFourGaps = classifyRetailDiscoveryGaps([
 assert.equal(passFourGaps[0].classifications.includes("MANUAL_PRICE_REFRESH"), true);
 assert.equal(passFourGaps[0].recommendedNextResearchAction, "REFRESH_VOLATILE_PRICE");
 assert.equal(passFourGaps[1].classifications.includes("CONFIRM_NOT_SOLD"), true); cases += 1;
+
+const manual = buildFinalRetailManualPass([row(), row({ atlasProductId: "ram_fixture_two", manufacturerPartNumber: "FIX-TWO", amazonUrl: null, amazonObservedPriceUsd: null, neweggUrl: null, neweggObservedPriceUsd: null })], products);
+assert.equal(manual.actionableItems.length, 1);
+assert.equal(manual.actionableItems[0].researchState, "COMPLETELY_UNVERIFIED");
+assert.equal(manual.actionableItems[0].priority, "HIGH");
+assert.equal(manual.actionableItems.some(item => item.priority === "NO_ACTION"), false); cases += 1;
 
 console.log(`Retail display import tests passed: ${cases} cases.`);

@@ -65,6 +65,32 @@ export function classifyRetailDiscoveryGaps(rows = [], products = []) {
     return Object.freeze(records.map(record => Object.freeze(record)));
 }
 
+export function buildFinalRetailManualPass(rows = [], products = []) {
+    const productById = new Map(products.map(product => [product.identity?.atlasProductId, product]));
+    const exactAmazon = row => /\/dp\/[A-Z0-9]{10}(?:\/|$|\?)/i.test(row.amazonUrl ?? "");
+    const exactNewegg = row => Boolean(row.neweggUrl) && !row.neweggUrl.includes("/p/pl?") && /\/p\/[A-Z0-9-]+(?:\/|$|\?)/i.test(row.neweggUrl);
+    const unavailable = value => /OUT_OF_STOCK|MARKETPLACE_ONLY/.test(String(value ?? "").toUpperCase());
+    const records = rows.map(row => {
+        const amazonExact = exactAmazon(row), neweggExact = exactNewegg(row);
+        const amazonFinding = Boolean(row.amazonUrl) || price(row.amazonObservedPriceUsd);
+        const neweggFinding = Boolean(row.neweggUrl) || price(row.neweggObservedPriceUsd);
+        const actions = [];
+        if (!amazonExact) actions.push(price(row.amazonObservedPriceUsd) ? "AMAZON_EXACT_URL_NEEDED" : "AMAZON_URL_NEEDED");
+        else if (!price(row.amazonObservedPriceUsd) && !unavailable(row.amazonAvailability)) actions.push("AMAZON_PRICE_NEEDED");
+        if (!neweggExact) actions.push(price(row.neweggObservedPriceUsd) || row.neweggUrl?.includes("/p/pl?") ? "NEWEGG_EXACT_URL_NEEDED" : "NEWEGG_URL_NEEDED");
+        else if (!price(row.neweggObservedPriceUsd) && !unavailable(row.neweggAvailability)) actions.push(/VOLATILE/.test(String(row.neweggAvailability ?? "")) ? "MANUAL_PRICE_REFRESH" : "NEWEGG_PRICE_NEEDED");
+        const researchState = amazonExact && neweggExact ? "COMPLETE_BOTH_RETAILERS"
+            : !amazonFinding && !neweggFinding ? "COMPLETELY_UNVERIFIED"
+                : "PARTIAL_RETAIL_COVERAGE";
+        const priority = researchState === "COMPLETELY_UNVERIFIED" || (price(row.amazonObservedPriceUsd) && !amazonExact) || (price(row.neweggObservedPriceUsd) && !neweggExact) ? "HIGH"
+            : actions.some(action => /PRICE_NEEDED|EXACT_URL_NEEDED|MANUAL_PRICE_REFRESH/.test(action)) ? "MEDIUM" : "LOW";
+        const product = productById.get(row.atlasProductId);
+        return { atlasProductId: row.atlasProductId, brand: row.canonicalBrand, family: row.family ?? null, series: row.series ?? null, manufacturerPartNumber: row.manufacturerPartNumber, researchState, priority, recommendedManualActions: actions, searchKey: row.exactMpnSearchKey, currentAmazon: { url: row.amazonUrl ?? null, priceUsd: row.amazonObservedPriceUsd ?? null, availability: row.amazonAvailability ?? null, matchStatus: row.amazonMatchStatus ?? null }, currentNewegg: { url: row.neweggUrl ?? null, priceUsd: row.neweggObservedPriceUsd ?? null, availability: row.neweggAvailability ?? null, matchStatus: row.neweggMatchStatus ?? null }, lifecycle: product ? `${product.governance.lifecycleStatus}/${product.governance.publicationStatus}` : null };
+    });
+    const actionableItems = records.filter(record => record.recommendedManualActions.length);
+    return Object.freeze({ researchCompletionCounts: Object.fromEntries(["COMPLETE_BOTH_RETAILERS", "PARTIAL_RETAIL_COVERAGE", "CONFIRMED_SINGLE_RETAILER", "COMPLETELY_UNVERIFIED"].map(state => [state, records.filter(record => record.researchState === state).length])), priorityCounts: Object.fromEntries(["HIGH", "MEDIUM", "LOW"].map(priority => [priority, actionableItems.filter(record => record.priority === priority).length])), actionableItems: Object.freeze(actionableItems) });
+}
+
 export class RetailDisplayImportService {
     constructor({ products, destinations = [] } = {}) {
         this.products = new Map((products ?? []).map(product => [product.identity?.atlasProductId, product]));
