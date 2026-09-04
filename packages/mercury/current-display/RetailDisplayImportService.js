@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { createCurrentDisplaySnapshot } from "./CurrentDisplaySnapshot.js";
+import { assessStandardRetailNewCondition } from "./StandardRetailNewConditionPolicy.js";
 
 const BLOCKED_PRICE_STATES = new Set(["PRICE_VOLATILE_REFRESH_REQUIRED", "PAGE_FOUND_PRICE_NOT_EXPOSED", "OUT_OF_STOCK_OR_PRICE_NOT_EXPOSED", "NO_QUALIFYING_NEW_EXACT_PAGE", "NO_CLEAN_RETAILER_EXACT_PAGE"]);
 const digest = value => crypto.createHash("sha256").update(JSON.stringify(value)).digest("hex");
@@ -35,7 +36,7 @@ export class RetailDisplayImportService {
             }
             for (const retailer of [
                 { key: "AMAZON", id: "RETAILER-0001", marketplace: "amazon.com", url: row.amazonUrl, amount: row.amazonObservedPriceUsd, availability: row.amazonAvailability, matchStatus: row.amazonMatchStatus, listing: amazonListing(row.amazonUrl) },
-                { key: "NEWEGG", id: null, marketplace: "newegg.com", url: row.neweggUrl, amount: row.neweggObservedPriceUsd, availability: row.neweggAvailability, matchStatus: row.neweggMatchStatus, listing: neweggListing(row.neweggUrl) }
+                { key: "NEWEGG", id: "RETAILER-0004", marketplace: "newegg.com", url: row.neweggUrl, amount: row.neweggObservedPriceUsd, availability: row.neweggAvailability, matchStatus: row.neweggMatchStatus, listing: neweggListing(row.neweggUrl) }
             ]) {
                 if (!retailer.url && !price(retailer.amount)) continue;
                 let destinationId = null;
@@ -56,6 +57,11 @@ export class RetailDisplayImportService {
                     if (retailer.url) outcomes.push({ sourceRow, atlasProductId: row.atlasProductId, retailer: retailer.key, status: "NO_CURRENT_PRICE" });
                     continue;
                 }
+                const condition = assessStandardRetailNewCondition({ retailer: retailer.key, researchUrl: retailer.url, matchStatus: retailer.matchStatus, evidenceText: row.researchNotes });
+                const comparisonReasons = [];
+                if (!condition.eligible) comparisonReasons.push(...condition.reasons);
+                if (!destinationId) comparisonReasons.push("DESTINATION_UNRESOLVED");
+                if (retailer.availability !== "AVAILABLE") comparisonReasons.push("AVAILABILITY_NOT_ELIGIBLE");
                 offers.push({
                     atlasProductId: row.atlasProductId,
                     retailer: retailer.key,
@@ -64,15 +70,15 @@ export class RetailDisplayImportService {
                     priceUsd: retailer.amount,
                     currency: "USD",
                     availability: retailer.availability,
-                    condition: null,
+                    condition: condition.condition,
                     shippingUsd: null,
                     feesUsd: null,
                     researchUrl: retailer.url ?? null,
                     destinationId,
                     matchStatus: retailer.matchStatus,
                     sourceRow,
-                    comparisonEligible: false,
-                    comparisonReasons: ["CONDITION_UNKNOWN"]
+                    comparisonEligible: comparisonReasons.length === 0,
+                    comparisonReasons
                 });
                 outcomes.push({ sourceRow, atlasProductId: row.atlasProductId, retailer: retailer.key, status: retailer.url && destinationId ? "DISPLAY_PRICE_IMPORTED" : "PRICE_OBSERVED_DESTINATION_UNRESOLVED" });
             }

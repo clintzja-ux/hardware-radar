@@ -1,0 +1,27 @@
+{
+  "id": "RETAILER-0004",
+  "name": "Newegg",
+  "slug": "newegg",
+  "websiteUrl": "https://www.newegg.com",
+  "status": "active",
+  "regions": [
+    "US"
+  ],
+  "supportedCurrencies": [
+    "USD"
+  ],
+  "affiliateProgram": {
+    "available": false,
+    "status": "unknown",
+    "network": null,
+    "disclosureRequired": true
+  },
+  "metadata": {
+    "createdAt": "2026-09-04T12:00:00.000Z",
+    "updatedAt": "2026-09-04T12:00:00.000Z",
+    "sourceReferences": [
+      "operator:retail-display-002:canonical-registration"
+    ],
+    "notes": "Canonical retailer identity only; no affiliate, recommendation, historical-market, Cheapest, or publication authority implied."
+  }
+}

@@ -25,7 +25,7 @@ assert.equal(report.valid, true);
 assert.equal(report.status, "PASS");
 assert.equal(report.brokenReferences, 0);
 assert.equal(report.duplicateIdentities, 0);
-assert.deepEqual(report.counts, { products: 103, brands: 5, categories: 1, retailers: 3 });
+assert.deepEqual(report.counts, { products: 103, brands: 5, categories: 1, retailers: 4 });
 assert.equal(Object.isFrozen(report), true);
 
 const text = await atlas.getHealthReport();

@@ -524,7 +524,7 @@
     "products": 103,
     "brands": 5,
     "categories": 1,
-    "retailers": 3
+    "retailers": 4
   },
   "brands": [
     {
@@ -566,6 +566,10 @@
     {
       "retailerId": "RETAILER-0003",
       "path": "retailers/RETAILER-0003-memoryc.json"
+    },
+    {
+      "retailerId": "RETAILER-0004",
+      "path": "retailers/RETAILER-0004-newegg.json"
     }
   ]
 }
