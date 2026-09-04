@@ -19,7 +19,7 @@ const expectedBrandDigests = {
     "corsair.json": "5d1fb0aaf886ea8f57049ce6d883ce4d225dede803d932ebd4b1b5c0750ce0e8",
     "crucial.json": "33b96f051833a6c38c02f38d46f0df4e7289362ceae3573721c7b8caf6fc7b0e",
     "gskill.json": "0a9ae7da023db3422ec0214178cf43da01befc49264c47b71a69c0ed139167ac",
-    "kingston.json": "a9bc0c269088bd57c180ce65deed69195f4575369b4b72cd863d2a477df48aa2",
+    "kingston.json": "317ccf41fc3e4aff047dcc79e03dffe27f4e5e2cc1cb92186172e5ae731a37d7",
     "teamgroup.json": "7047e189e26b3bdc5e1784eea168f94a45be0a7dc5a98acda2a082a41042e992"
 };
 

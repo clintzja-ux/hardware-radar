@@ -32,4 +32,3 @@ let deep=new Error("level-8");for(let i=7;i>=0;i--)deep=new Error(`level-${i}`,{
 const circular=new Error("circular");circular.cause=circular;value=diagnostic(circular);assert.equal(value.causeChain.length,1);cases++;
 assert.equal(value.actualSpendUsd,0);assert.equal(value.providerTaskId,null);cases++;
 console.log(`DataForSEO system-CA transport tests passed: ${cases} cases.`);
-

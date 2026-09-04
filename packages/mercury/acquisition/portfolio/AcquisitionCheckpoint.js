@@ -5,6 +5,7 @@ import {createAcquisitionBudgetPolicy} from "../planning/AcquisitionBudgetPolicy
 import {createAcquisitionPlan} from "../planning/AcquisitionPlan.js";
 import {createManualLiveAuthorizationRequest} from "../authorization/ManualLiveAuthorizationRequest.js";
 import {calculateGovernedSpendForUtcDay} from "../planning/GovernedDailySpend.js";
+import {classifyDefaultAcquisitionRoute} from "../enrichment/DefaultAcquisitionRouting.js";
 import {ACQUISITION_FAILURE_CLASSES,ACQUISITION_FAILURE_RETRYABILITY,ACQUISITION_FAILURE_STAGES,createAcquisitionFailureDiagnostic} from "../execution/AcquisitionFailureDiagnostic.js";
 
 const stable=v=>Array.isArray(v)?`[${v.map(stable).join(",")}]`:v&&typeof v==="object"?`{${Object.keys(v).sort().map(k=>`${JSON.stringify(k)}:${stable(v[k])}`).join(",")}}`:JSON.stringify(v);
@@ -48,12 +49,13 @@ export function checkpointSpendProjection({checkpoint,executionRuns=[],events=[]
  return freeze({checkpointSpendUsd:checkpointSpend,programSpendUsd:portfolioSpend,currentUtcDaySpendUsd:currentDay,remaining,maximumExecutableTasks:Math.max(0,Math.floor(Math.min(...Object.values(remaining))/task+1e-9))});
 }
 
-export function projectProductsCheckpoint({checkpoint,tasks=[],events=[],reviews=[]}={}){
+export function projectProductsCheckpoint({checkpoint,tasks=[],events=[],reviews=[],providerSelections=[]}={}){
  const byProduct=new Map(checkpoint.products.map(x=>[x.atlasProductId,{atlasProductId:x.atlasProductId,state:"READY_FOR_PRODUCTS",providerTaskId:null}]));
  for(const task of tasks){const p=byProduct.get(task.atlasProductId);if(!p||task.checkpointId!==checkpoint.checkpointId)throw new Error("CHECKPOINT_TASK_BINDING_INVALID");p.state="PRODUCTS_PREPARED";}
  for(const event of events){const p=byProduct.get(event.atlasProductId);if(!p||event.checkpointId!==checkpoint.checkpointId)throw new Error("CHECKPOINT_EVENT_BINDING_INVALID");if(event.type==="TASK_AUTHORIZED")p.state="PRODUCTS_AUTHORIZED";if(event.type==="PRODUCTS_POSTED"){p.state="PRODUCTS_PENDING";p.providerTaskId=event.providerTaskId;}if(event.type==="RESULT_PENDING")p.state="PRODUCTS_PENDING";if(event.type==="FAILED"||event.type==="TASK_FAILED"){p.state="FAILED";p.failure=event.failure??null;p.executionRunId=event.runId??null;}}
- for(const review of reviews){const p=byProduct.get(review.atlasProductId);if(!p||review.checkpointId!==checkpoint.checkpointId)throw new Error("CHECKPOINT_REVIEW_BINDING_INVALID");p.state=review.identityState==="EXACT_OR_GOVERNED_MATCH"?"READY_FOR_PRODUCT_INFO":review.identityState==="AMBIGUOUS_REVIEW_REQUIRED"||review.identityState==="CONTRADICTED"?"PRODUCTS_REVIEW_REQUIRED":review.identityState==="NO_RESULT"?"NO_RESULT":review.identityState==="PROVIDER_PENDING"?"PRODUCTS_PENDING":"FAILED";}
- const products=[...byProduct.values()],terminal=products.filter(x=>["READY_FOR_PRODUCT_INFO","PRODUCTS_REVIEW_REQUIRED","NO_RESULT","FAILED"].includes(x.state)).length;
+ for(const review of reviews){const p=byProduct.get(review.atlasProductId);if(!p||review.checkpointId!==checkpoint.checkpointId)throw new Error("CHECKPOINT_REVIEW_BINDING_INVALID");const direct=review.identityState==="EXACT_OR_GOVERNED_MATCH"&&classifyDefaultAcquisitionRoute({resolution:review.resultIdentity,directSellersLineageCertified:true}).executableRoute==="READY_FOR_SELLERS";p.state=review.identityState==="EXACT_OR_GOVERNED_MATCH"?(direct?"READY_FOR_SELLERS":"READY_FOR_PRODUCT_INFO"):review.identityState==="AMBIGUOUS_REVIEW_REQUIRED"||review.identityState==="CONTRADICTED"?"PRODUCTS_REVIEW_REQUIRED":review.identityState==="NO_RESULT"?"NO_RESULT":review.identityState==="PROVIDER_PENDING"?"PRODUCTS_PENDING":"FAILED";}
+ for(const selection of providerSelections){const p=byProduct.get(selection.atlasProductId),review=reviews.find(value=>value.reviewId===selection.sourceProductsReviewId);if(!p||!review||selection.sourceProductsTaskId!==review.providerTaskId||selection.decision!=="SELECTED_PROVIDER_IDENTITY_FOR_DOWNSTREAM_LINEAGE")throw new Error("CHECKPOINT_PROVIDER_SELECTION_BINDING_INVALID");p.state="READY_FOR_PRODUCT_INFO";p.providerSelectionDecisionId=selection.selectionDecisionId;p.selectedProviderIdentity=clone(selection.selectedProviderIdentity);}
+ const products=[...byProduct.values()],terminal=products.filter(x=>["READY_FOR_SELLERS","READY_FOR_PRODUCT_INFO","PRODUCTS_REVIEW_REQUIRED","NO_RESULT","FAILED"].includes(x.state)).length;
  return freeze({status:terminal===products.length?"CHECKPOINT_COMPLETE":products.some(x=>x.state!=="READY_FOR_PRODUCTS")?"IN_PROGRESS":"NOT_STARTED",complete:terminal===products.length,counts:Object.fromEntries([...new Set(products.map(x=>x.state))].map(s=>[s,products.filter(x=>x.state===s).length])),products,nextProduct:products.find(x=>x.state==="READY_FOR_PRODUCTS")??null});
 }
 

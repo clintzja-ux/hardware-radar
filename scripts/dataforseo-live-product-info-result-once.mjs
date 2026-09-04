@@ -1,78 +1,20 @@
-import {
-  DataForSeoMerchantApiClient,
-  DataForSeoAcquisitionService,
-  loadDataForSeoCredentials
-} from "../packages/mercury/index.js";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { BrandRepository, ProductRepository } from "../packages/atlas/index.js";
+import { DataForSeoAcquisitionService, DataForSeoMerchantApiClient, FileAcquisitionExecutionLedgerRepository, FileDataForSeoTaskLedger, FileLiveAuthorizationConsumptionRepository, FileProductInfoResultRepository, ProductInfoResultRetrievalService, loadDataForSeoCredentials, renderProductInfoResultOutcome } from "../packages/mercury/index.js";
+import { createProviderIdentityGovernanceRuntime } from "./mercury-provider-identity-governance-runtime.mjs";
 
-const credentials = loadDataForSeoCredentials();
-
-const transport = async ({ method, url, headers, body }) => {
-  const response = await fetch(url, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return data;
-};
-
-const client = new DataForSeoMerchantApiClient({
-  login: credentials.login,
-  password: credentials.password,
-  transport
-});
-
-const acquisition = new DataForSeoAcquisitionService({
-  client
-});
-
-const taskId = "08210619-2304-0455-0000-6f9d1fa692ed";
-
-const result = await acquisition.getProductInfoResult(taskId);
-
-console.log("PRODUCT INFO RESULT RETRIEVED");
-console.log("Task ID:", result.id);
-console.log("Status:", result.status_code);
-console.log("Status message:", result.status_message);
-console.log("Cost USD:", result.cost ?? 0);
-
-const resultBlock = result?.result?.[0] ?? null;
-
-if (!resultBlock) {
-  console.log("No result block returned.");
-  process.exit(0);
-}
-
-const items = resultBlock?.items ?? [];
-
-console.log("Items:", items.length);
-
-for (const [index, item] of items.slice(0, 5).entries()) {
-  console.log(`\n--- ITEM ${index + 1} ---`);
-  console.log("Type:", item.type ?? null);
-  console.log("Title:", item.title ?? null);
-  console.log("Product ID:", item.product_id ?? null);
-  console.log("Data Doc ID:", item.data_docid ?? null);
-  console.log("GID:", item.gid ?? null);
-  console.log("Description:", item.description ?? null);
-  console.log("Brand:", item.brand ?? null);
-  console.log("Sellers:", item.sellers ?? null);
-  console.log("Specifications count:", item.specifications?.length ?? 0);
-
-  if (Array.isArray(item.specifications)) {
-    for (const spec of item.specifications.slice(0, 40)) {
-      console.log(
-        "SPEC:",
-        spec.specification_name ?? null,
-        "=",
-        spec.specification_value ?? null
-      );
-    }
-  }
-}
+const args=new Map(process.argv.slice(2).map(value=>{const index=value.indexOf("=");return index<0?[value,true]:[value.slice(0,index),value.slice(index+1)];}));
+const taskId=args.get("--task-id");if(typeof taskId!=="string"||!taskId.trim())throw new Error("PRODUCT_INFO_TASK_ID_REQUIRED");
+const stateRoot=path.resolve(".forge-review/acquisition"),readJson=async file=>JSON.parse(await readFile(file,"utf8"));
+const authorization=await readJson(path.join(stateRoot,"product-info-authorization-request.json")),prepared=await readJson(path.join(stateRoot,"product-enrichment-proposal.json")),proposal=prepared.proposal??prepared;
+const tasks=new FileDataForSeoTaskLedger(path.join(stateRoot,"dataforseo-task-ledger.json")).getAll(),matches=tasks.filter(value=>value.taskId===taskId.trim());
+if(matches.length!==1)throw new Error("PRODUCT_INFO_TASK_LINEAGE_NOT_UNIQUE");if(matches[0].kind!=="PRODUCT_INFO")throw new Error("PRODUCT_INFO_TASK_OPERATION_MISMATCH");
+const runtime=createProviderIdentityGovernanceRuntime(),assessment=await runtime.governanceRepository.getAssessment(proposal.providerSelectionLineage?.equivalenceAssessmentId),decision=await runtime.governanceRepository.getDecisionForAssessment(proposal.providerSelectionLineage?.equivalenceAssessmentId);
+if(!assessment||!decision||decision.selectionDecisionId!==proposal.providerSelectionLineage?.selectionDecisionId||decision.equivalenceGroupDigest!==proposal.providerSelectionLineage?.equivalenceGroupDigest||JSON.stringify(decision.selectedProviderIdentity)!==JSON.stringify(proposal.providerIdentity))throw new Error("PRODUCT_INFO_PROVIDER_SELECTION_LINEAGE_INVALID");
+const atlasProduct=await new ProductRepository({readJson}).loadProduct(authorization.atlasProductId),brandRecord=await new BrandRepository({readJson}).getByDisplayName(atlasProduct.identity.brand);
+const executionRepository=new FileAcquisitionExecutionLedgerRepository({filePath:path.join(stateRoot,"execution-ledger.json")}),consumptionRepository=new FileLiveAuthorizationConsumptionRepository({filePath:path.join(stateRoot,"live-authorization-consumptions.json")});
+const retriever=async exactTaskId=>{const credentials=loadDataForSeoCredentials(),transport=async({method,url,headers})=>{if(method!=="GET"||!url.endsWith(`/product_info/task_get/advanced/${encodeURIComponent(exactTaskId)}`))throw new Error("PRODUCT_INFO_RESULT_RETRIEVAL_GET_ONLY");const response=await fetch(url,{method,headers});const data=await response.json();if(!response.ok)throw new Error(`HTTP_${response.status}`);return data;};const acquisition=new DataForSeoAcquisitionService({client:new DataForSeoMerchantApiClient({login:credentials.login,password:credentials.password,transport})});return acquisition.getProductInfoResult(exactTaskId);};
+const service=new ProductInfoResultRetrievalService({retriever,resultRepository:new FileProductInfoResultRepository({statePath:path.resolve(String(args.get("--result-state")||path.join(stateRoot,"product-info-results.json")))})});
+const outcome=await service.retrieve({taskId:taskId.trim(),productInfoAuthorization:authorization,productInfoProposal:proposal,taskLedger:tasks,executionRuns:await executionRepository.getAll(),authorizationConsumptions:await consumptionRepository.getAll(),atlasProduct,brandAliases:brandRecord?.aliases??[]});
+process.stdout.write(renderProductInfoResultOutcome(outcome));

@@ -34,4 +34,3 @@ The certified network-capable commands are:
 - `acquisition:history-refresh:result:retrieve`
 
 This increment posts no task, creates no authorization, performs no result retrieval, and incurs no provider spend.
-

@@ -27,12 +27,14 @@ const args = new Map(process.argv.slice(2).map((x) => {
 const sellersTaskId = args.get('--sellers-task-id');
 const productInfoTaskId = args.get('--product-info-task-id');
 if (typeof sellersTaskId !== 'string') throw new Error('SELLERS_TASK_ID_REQUIRED');
-if (typeof productInfoTaskId !== 'string') throw new Error('PRODUCT_INFO_TASK_ID_REQUIRED');
 
 const stateRoot = path.resolve('.forge-review/acquisition');
 const sellersAuthorization = JSON.parse(await readFile(path.join(stateRoot, 'sellers-authorization-request.json'), 'utf8'));
 const prepared = JSON.parse(await readFile(path.join(stateRoot, 'sellers-enrichment-proposal.json'), 'utf8'));
 const sellersProposal = prepared.proposal ?? prepared;
+const direct = sellersProposal.identityLineageType === 'DIRECT_PRODUCTS_STRONG_IDENTITY';
+if (!direct && typeof productInfoTaskId !== 'string') throw new Error('PRODUCT_INFO_TASK_ID_REQUIRED');
+if (direct && productInfoTaskId != null) throw new Error('DIRECT_PRODUCTS_LINEAGE_REJECTS_PRODUCT_INFO_TASK');
 const taskRepository = new FileDataForSeoTaskLedger(path.join(stateRoot, 'dataforseo-task-ledger.json'));
 const executionRepository = new FileAcquisitionExecutionLedgerRepository({ filePath: path.join(stateRoot, 'execution-ledger.json') });
 const consumptionRepository = new FileLiveAuthorizationConsumptionRepository({ filePath: path.join(stateRoot, 'live-authorization-consumptions.json') });
@@ -47,11 +49,9 @@ const transport = async ({ method, url, headers, body }) => {
 };
 const client = new DataForSeoMerchantApiClient({ login: credentials.login, password: credentials.password, transport });
 const acquisition = new DataForSeoAcquisitionService({ client });
-const [sellersResult, productInfoResult] = await Promise.all([
-  acquisition.getSellersResult(sellersTaskId),
-  acquisition.getProductInfoResult(productInfoTaskId)
-]);
-if (Number(sellersResult?.cost ?? 0) !== 0 || Number(productInfoResult?.cost ?? 0) !== 0) throw new Error('DF003_RETENTION_RETRIEVAL_MUST_BE_ZERO_COST');
+const sellersResult = await acquisition.getSellersResult(sellersTaskId);
+const productInfoResult = direct ? null : await acquisition.getProductInfoResult(productInfoTaskId);
+if (Number(sellersResult?.cost ?? 0) !== 0 || (!direct && Number(productInfoResult?.cost ?? 0) !== 0)) throw new Error('DF003_RETENTION_RETRIEVAL_MUST_BE_ZERO_COST');
 const governance = validateSellersRetentionResults({ lineage, sellersResult, productInfoResult });
 
 const readLocalJson = async (resource) => JSON.parse(await readFile(resource, 'utf8'));
@@ -88,7 +88,8 @@ await writeFile(out, JSON.stringify(auditResult, null, 2) + '\n');
 const first = result.integrations[0] ?? null;
 console.log('SELLERS RESULT → DF003 RETENTION');
 console.log('Sellers task:             ', sellersTaskId);
-console.log('Product Info task:        ', productInfoTaskId);
+console.log('Identity lineage:         ', direct ? 'DIRECT_PRODUCTS_STRONG_IDENTITY' : 'PRODUCT_INFO_VALIDATED');
+console.log('Product Info task:        ', productInfoTaskId ?? 'NOT_REQUIRED');
 console.log('Seller items:             ', result.sellerItems);
 console.log('Evidence retained:        ', result.retained);
 console.log('Duplicates:               ', result.duplicates);

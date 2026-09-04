@@ -216,6 +216,8 @@ The curated bridge bootstraps useful coverage but is not the target architecture
 
 DataForSEO Merchant API use for Hardware Radar's confirmed consumer price-intelligence case is settled provider permission and part of Mercury's intended operating model. Mercury's product purpose is not merely defensive provenance or archival storage; it transforms permitted independent observations through governed stages:
 
+Mercury's normal identity rule is **normalize representation differences; escalate material identity contradictions**. Case, surrounding whitespace, conventional manufacturer punctuation/spacing, and explicit Atlas aliases may canonicalize deterministically; missing provider fields remain unknown. Different MPNs, capacities, module configurations, DDR generations, or other material variant evidence fail closed. A single unique provider identity with exact normalized MPN and canonical manufacturer evidence now follows the certified default `PRODUCTS → SELLERS` route. Product Info and manual provider selection remain escalation tools for insufficient, ambiguous, or contradictory identity—not a product-family alias mechanism or a reason to fuzzy-match.
+
 ```text
 OBSERVE → RETAIN → QUALIFY → BUILD HISTORY → DERIVE → PUBLISH
 ```
