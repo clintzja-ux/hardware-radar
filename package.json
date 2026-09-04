@@ -102,6 +102,7 @@
     "mercury:provider-selection:execute": "node scripts/mercury-provider-selection-execute.mjs",
     "mercury:provider-selection:inspect": "node scripts/mercury-provider-selection-inspect.mjs",
     "mercury:product-info:selected:prepare": "node scripts/mercury-selected-product-info-prepare.mjs",
+    "atlas:expansion:review": "node scripts/atlas-expansion-batch-review.mjs",
     "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
     "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",
     "review:product-identity:approve": "node scripts/mercury-product-identity-review-approve.mjs",

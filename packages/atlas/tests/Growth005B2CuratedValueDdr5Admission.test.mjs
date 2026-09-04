@@ -77,7 +77,7 @@ const visit = (value, path = "$") => {
 admitted.forEach(([mpn]) => visit(products.find(({ identity }) => identity.manufacturerPartNumber === mpn)));
 
 const destinations = JSON.parse(await readFile(fileURLToPath(new URL("../../mercury/destinations/production-destinations.json", import.meta.url)), "utf8"));
-assert.equal(destinations.records.length, 4);
+assert.equal(destinations.records.length, 24);
 for (const atlasProductId of ["ram_kingston_kf560c30bbea_8", "ram_corsair_cmk16gx5m2b5200z40", "ram_g_skill_f5_6000j3636f16gx1_rs5k"]) {
     assert.equal(destinations.records.some(destination => destination.atlasProductId === atlasProductId && destination.retailerId === "RETAILER-0001"), true);
 }

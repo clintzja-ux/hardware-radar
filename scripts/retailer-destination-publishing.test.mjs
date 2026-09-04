@@ -76,11 +76,14 @@ const expectedProduction = new Map([
     ["ram_corsair_cmk16gx5m2b5200z40", { mpn: "CMK16GX5M2B5200Z40", listing: "B0D2P1CVQD", id: "mer_dest_47a09c16a1755fe032dddf33", url: "https://amazon.com/CORSAIR-Vengeance-5200MHz-Compatible-Computer/dp/B0D2P1CVQD" }],
     ["ram_g_skill_f5_6000j3636f16gx1_rs5k", { mpn: "F5-6000J3636F16GX1-RS5K", listing: "B0G7Q6R7N5", id: "mer_dest_f77afb296ff8e32efabaa489", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0G7Q6R7N5" }]
 ]);
-assert.equal(production.recordCount, 4);
-assert.equal(production.effective.length, 4);
-assert.equal(productionProjection.length, 4);
-assert.equal(new Set(production.records.map(item => item.destinationId)).size, 4);
-assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 4);
+assert.equal(production.recordCount, 24);
+assert.equal(production.effective.length, 24);
+assert.equal(productionProjection.length, 24);
+assert.equal(new Set(production.records.map(item => item.destinationId)).size, 24);
+assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 24);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 6);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 18);
+assert.equal(production.records.some(item => item.destinationUrl.includes("/p/pl?")), false);
 for (const destination of production.records) {
     const expected = expectedProduction.get(destination.atlasProductId);
     assert.equal(validateRetailerDestination(destination).valid, true);
@@ -127,7 +130,7 @@ for (const productPage of catalog.products) {
         assert.doesNotMatch(rendered, /Retailer links|amazon\.com|newegg\.com/);
     }
 }
-assert.equal(catalog.products.filter(product => !productionProjection.some(destination => destination.atlasProductId === product.atlasProductId)).length, 100);
+assert.equal(catalog.products.filter(product => !productionProjection.some(destination => destination.atlasProductId === product.atlasProductId)).length, 83);
 const marketData = await readFile(path.join(root, "public/js/modules/marketData.js"), "utf8");
 assert.match(marketData, /offerUrl: item\.sourceUrl/);
 assert.doesNotMatch(marketData, /affiliateUrl/);

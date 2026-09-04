@@ -45,9 +45,13 @@ export function validateCurrentDisplaySnapshot(snapshot) {
         if (![null, "NEW", "USED", "REFURBISHED", "OPEN_BOX"].includes(offer.condition) || offer.shippingUsd !== null || offer.feesUsd !== null) errors.push("CURRENT_DISPLAY_UNKNOWN_VALUE_INVALID");
         if (offer.researchUrl !== null) { try { if (new URL(offer.researchUrl).protocol !== "https:") throw new Error(); } catch { errors.push("CURRENT_DISPLAY_RESEARCH_URL_INVALID"); } }
         if (offer.destinationId !== null && !/^mer_dest_[a-f0-9]{24}$/.test(offer.destinationId)) errors.push("CURRENT_DISPLAY_DESTINATION_ID_INVALID");
+        const extendedEligibilityPresent = "itemPriceEligible" in offer || "deliveredCostEligible" in offer || "deliveredCostReasons" in offer;
+        if (extendedEligibilityPresent && (typeof offer.itemPriceEligible !== "boolean" || typeof offer.deliveredCostEligible !== "boolean" || !Array.isArray(offer.deliveredCostReasons) || offer.deliveredCostReasons.some(reason => !nonBlank(reason)))) errors.push("CURRENT_DISPLAY_COMPARISON_INVALID");
         if (typeof offer.comparisonEligible !== "boolean" || !Array.isArray(offer.comparisonReasons) || offer.comparisonReasons.some(reason => !nonBlank(reason))) errors.push("CURRENT_DISPLAY_COMPARISON_INVALID");
         if (offer.comparisonEligible && offer.comparisonReasons.length) errors.push("CURRENT_DISPLAY_COMPARISON_CONTRADICTORY");
         if (offer.comparisonEligible && (offer.condition !== "NEW" || offer.availability !== "AVAILABLE")) errors.push("CURRENT_DISPLAY_COMPARISON_UNSUPPORTED");
+        if (extendedEligibilityPresent && offer.comparisonEligible !== offer.itemPriceEligible) errors.push("CURRENT_DISPLAY_ITEM_PRICE_COMPATIBILITY_INVALID");
+        if (offer.deliveredCostEligible && (offer.deliveredCostReasons.length || !offer.itemPriceEligible || !Number.isFinite(offer.shippingUsd) || offer.shippingUsd < 0 || !Number.isFinite(offer.feesUsd) || offer.feesUsd < 0)) errors.push("CURRENT_DISPLAY_DELIVERED_COST_UNSUPPORTED");
     }
     if (snapshot.snapshotId !== createCurrentDisplaySnapshotId(snapshot)) errors.push("CURRENT_DISPLAY_ID_INVALID");
     if (snapshot.materialFingerprint !== currentDisplaySnapshotFingerprint(snapshot)) errors.push("CURRENT_DISPLAY_FINGERPRINT_INVALID");
@@ -77,5 +81,14 @@ export function deriveCurrentDisplayComparison(snapshot, atlasProductId) {
     const offers = snapshot.offers.filter(offer => offer.atlasProductId === atlasProductId && offer.comparisonEligible);
     if (!offers.length) return freeze({ status: "UNAVAILABLE", atlasProductId, cheapest: null, offers: [] });
     const ordered = [...offers].sort((left, right) => left.priceUsd - right.priceUsd || left.retailer.localeCompare(right.retailer));
+    return freeze({ status: "AVAILABLE", atlasProductId, cheapest: ordered[0], offers: ordered });
+}
+
+export function deriveCurrentDisplayDeliveredCost(snapshot, atlasProductId) {
+    const report = validateCurrentDisplaySnapshot(snapshot);
+    if (!report.valid) throw new TypeError(report.errors.join(","));
+    const offers = snapshot.offers.filter(offer => offer.atlasProductId === atlasProductId && offer.deliveredCostEligible).map(offer => ({ ...offer, deliveredCostUsd: offer.priceUsd + offer.shippingUsd + offer.feesUsd }));
+    if (!offers.length) return freeze({ status: "UNAVAILABLE", atlasProductId, cheapest: null, offers: [] });
+    const ordered = [...offers].sort((left, right) => left.deliveredCostUsd - right.deliveredCostUsd || left.retailer.localeCompare(right.retailer));
     return freeze({ status: "AVAILABLE", atlasProductId, cheapest: ordered[0], offers: ordered });
 }

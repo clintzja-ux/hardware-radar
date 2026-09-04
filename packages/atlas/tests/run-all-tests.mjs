@@ -18,7 +18,8 @@ const testModules = [
     "./D002ALaunchBrandRegistration.test.mjs",
     "./B002RamLaunchCohortActivationReadiness.test.mjs",
     "./Growth005B2CuratedValueDdr5Admission.test.mjs",
-    "./AtlasRamExpansion002Admission.test.mjs"
+    "./AtlasRamExpansion002Admission.test.mjs",
+    "./AtlasActivation001BatchReview.test.mjs"
 ];
 
 console.log("Running Atlas test suite...\n");

@@ -6,6 +6,7 @@ import {
     createCurrentDisplaySnapshot,
     deriveCurrentDisplayComparison,
     FileCurrentDisplaySnapshotRepository,
+    deriveCurrentDisplayDeliveredCost,
     RetailDisplayImportService,
     assessStandardRetailNewCondition,
     validateCurrentDisplaySnapshot
@@ -26,7 +27,8 @@ const service = new RetailDisplayImportService({ products, destinations: [destin
 const imported = service.importRows({ rows: [row()], sourceWorkbook: "fixture.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T12:00:00Z" });
 assert.equal(validateCurrentDisplaySnapshot(imported.snapshot).valid, true);
 assert.equal(imported.snapshot.offers.length, 2);
-assert.equal(imported.snapshot.offers.every(offer => offer.condition === "NEW" && offer.comparisonEligible === true), true);
+assert.equal(imported.snapshot.offers.every(offer => offer.condition === "NEW" && offer.itemPriceEligible === true && offer.comparisonEligible === true), true);
+assert.equal(imported.snapshot.offers.every(offer => offer.deliveredCostEligible === false && offer.deliveredCostReasons.includes("SHIPPING_COST_UNKNOWN")), true);
 assert.equal(imported.outcomes.some(item => item.status === "DESTINATION_REUSED"), true);
 assert.equal(imported.outcomes.filter(item => item.status === "DESTINATION_REUSED").length, 2);
 assert.deepEqual({ network: imported.networkOperations, tasks: imported.providerTasks, spend: imported.actualSpendUsd, history: imported.historicalObservationsCreated }, { network: 0, tasks: 0, spend: 0, history: 0 }); cases += 1;
@@ -60,11 +62,12 @@ assert.equal(assessStandardRetailNewCondition({ retailer: "AMAZON", researchUrl:
 assert.equal(assessStandardRetailNewCondition({ retailer: "NEWEGG", researchUrl: "https://www.newegg.com/fixture/p/N82E16800000001", matchStatus: "EXACT_PRODUCT_PAGE", evidenceText: "sold/shipped by Newegg" }).condition, "NEW");
 assert.equal(assessStandardRetailNewCondition({ retailer: "NEWEGG", researchUrl: "https://www.newegg.com/p/pl?d=FIX", matchStatus: "EXACT_MPN_SEARCH_RESULT" }).eligible, false); cases += 1;
 
-const eligibleOffer = (atlasProductId, retailer, priceUsd) => ({ atlasProductId, retailer, retailerId: retailer === "AMAZON" ? "RETAILER-0001" : "RETAILER-0004", marketplace: retailer === "AMAZON" ? "amazon.com" : "newegg.com", priceUsd, currency: "USD", availability: "AVAILABLE", condition: "NEW", shippingUsd: null, feesUsd: null, researchUrl: null, destinationId: retailer === "AMAZON" ? "mer_dest_aaaaaaaaaaaaaaaaaaaaaaaa" : "mer_dest_bbbbbbbbbbbbbbbbbbbbbbbb", matchStatus: "EXACT_PRODUCT_PAGE", sourceRow: 5, comparisonEligible: true, comparisonReasons: [] });
+const eligibleOffer = (atlasProductId, retailer, priceUsd) => ({ atlasProductId, retailer, retailerId: retailer === "AMAZON" ? "RETAILER-0001" : "RETAILER-0004", marketplace: retailer === "AMAZON" ? "amazon.com" : "newegg.com", priceUsd, currency: "USD", availability: "AVAILABLE", condition: "NEW", shippingUsd: null, feesUsd: null, researchUrl: null, destinationId: retailer === "AMAZON" ? "mer_dest_aaaaaaaaaaaaaaaaaaaaaaaa" : "mer_dest_bbbbbbbbbbbbbbbbbbbbbbbb", matchStatus: "EXACT_PRODUCT_PAGE", sourceRow: 5, itemPriceEligible: true, deliveredCostEligible: false, deliveredCostReasons: ["SHIPPING_COST_UNKNOWN", "FEES_UNKNOWN"], comparisonEligible: true, comparisonReasons: [] });
 const comparable = createCurrentDisplaySnapshot({ observedAt: "2026-09-04T06:00:00Z", importedAt: "2026-09-04T12:00:00Z", source: { workbook: "fixture.xlsx", sheet: "RAM Retail Discovery", digest: "a".repeat(64) }, offers: [eligibleOffer("ram_fixture_one", "AMAZON", 100), eligibleOffer("ram_fixture_one", "NEWEGG", 90), eligibleOffer("ram_fixture_two", "AMAZON", 80)] });
 assert.equal(deriveCurrentDisplayComparison(comparable, "ram_fixture_one").cheapest.retailer, "NEWEGG");
 assert.equal(deriveCurrentDisplayComparison(comparable, "ram_fixture_two").cheapest.retailer, "AMAZON");
 assert.equal(deriveCurrentDisplayComparison(comparable, "ram_fixture_one").cheapest.retailer, "NEWEGG"); cases += 1;
+assert.equal(deriveCurrentDisplayDeliveredCost(comparable, "ram_fixture_one").status, "UNAVAILABLE"); cases += 1;
 
 const temporary = await mkdtemp(path.join(os.tmpdir(), "retail-display-"));
 try {

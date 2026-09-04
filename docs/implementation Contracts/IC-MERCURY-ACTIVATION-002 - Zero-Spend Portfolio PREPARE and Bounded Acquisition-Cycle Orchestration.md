@@ -18,7 +18,9 @@ The computed maximum envelope is nine `PRODUCTS`, nine `PRODUCT_INFO`, and eleve
 
 ## Progressive state
 
-Each eligible product begins at `READY_FOR_PRODUCTS` or `READY_FOR_SELLERS`. Append-only events may project it through pending, result-dependent ready, review-required, no-result, failed, or acquisition-complete states. An invalid sequence, excluded product, conflicting replay, expired or mismatched task authorization, task-cost overrun, Atlas drift, rights drift, or program/daily exhaustion fails closed. Exact event replay is idempotent. Failure affects only the bound product and never fabricates complete portfolio coverage. A failed paid task may report `RETRY_REQUIRES_OPERATOR_ACTION`; automatic paid retries remain zero.
+Each eligible product begins at `READY_FOR_PRODUCTS` or `READY_FOR_SELLERS`. Append-only events may project it through pending, result-dependent ready, review-required, no-result, failed, or acquisition-complete states. An invalid sequence, excluded product, conflicting replay, expired or mismatched task authorization, task-cost overrun, material artifact corruption, rights drift, or program/daily exhaustion fails closed. Exact event replay is idempotent. Failure affects only the bound product and never fabricates complete portfolio coverage. A failed paid task may report `RETRY_REQUIRES_OPERATOR_ACTION`; automatic paid retries remain zero.
+
+The prepared product membership, task maximum, and spend ceiling are immutable PREPARE-time facts. Later Atlas lifecycle changes are informational `ATLAS_DRIFT_SINCE_PREPARE`; they never recompose or expand the stored portfolio. A future portfolio PREPARE may independently include newly eligible products.
 
 ## Authority separation
 

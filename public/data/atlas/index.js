@@ -61,3 +61,8 @@ export {
     createRamPublicProductIdentity,
     createRamCatalogProjection
 } from "./RamCatalogProjection.js";
+export {
+    ATLAS_BATCH_REVIEW_POLICY_VERSION,
+    ATLAS_EXPANSION_REVIEW_SOURCE,
+    reviewAtlasExpansionBatch
+} from "./AtlasBatchLifecycleReview.js";

@@ -62,6 +62,9 @@ export class RetailDisplayImportService {
                 if (!condition.eligible) comparisonReasons.push(...condition.reasons);
                 if (!destinationId) comparisonReasons.push("DESTINATION_UNRESOLVED");
                 if (retailer.availability !== "AVAILABLE") comparisonReasons.push("AVAILABILITY_NOT_ELIGIBLE");
+                const itemPriceEligible = comparisonReasons.length === 0;
+                const deliveredCostReasons = [...comparisonReasons];
+                if (itemPriceEligible) deliveredCostReasons.push("SHIPPING_COST_UNKNOWN", "FEES_UNKNOWN");
                 offers.push({
                     atlasProductId: row.atlasProductId,
                     retailer: retailer.key,
@@ -77,7 +80,10 @@ export class RetailDisplayImportService {
                     destinationId,
                     matchStatus: retailer.matchStatus,
                     sourceRow,
-                    comparisonEligible: comparisonReasons.length === 0,
+                    itemPriceEligible,
+                    deliveredCostEligible: deliveredCostReasons.length === 0,
+                    deliveredCostReasons,
+                    comparisonEligible: itemPriceEligible,
                     comparisonReasons
                 });
                 outcomes.push({ sourceRow, atlasProductId: row.atlasProductId, retailer: retailer.key, status: retailer.url && destinationId ? "DISPLAY_PRICE_IMPORTED" : "PRICE_OBSERVED_DESTINATION_UNRESOLVED" });

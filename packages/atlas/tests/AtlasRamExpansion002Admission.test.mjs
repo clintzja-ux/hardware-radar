@@ -37,9 +37,11 @@ assert.deepEqual(
 for (const product of admitted) {
     const { classification, capacity } = product.extension.data;
     assert.equal(capacity.capacityGb, capacity.moduleCount * capacity.capacityPerModuleGb);
-    assert.equal(product.governance.lifecycleStatus, "DRAFT");
-    assert.equal(product.governance.publicationStatus, "PENDING");
-    assert.equal(product.governance.humanReviewRequired, true);
+    assert.equal(product.governance.lifecycleStatus, "ACTIVE");
+    assert.equal(product.governance.publicationStatus, "READY");
+    assert.equal(product.governance.humanReviewRequired, false);
+    assert.equal(product.governance.reviewedBy, "human:Clinton_Ramsook");
+    assert.equal(product.governance.reviewedAt, "2026-09-04T18:00:00.000Z");
     assert.ok(["Corsair", "Crucial", "G.SKILL", "Kingston", "TeamGroup"].includes(product.identity.brand));
     assert.equal(["DDR4", "DDR5"].includes(classification.memoryType), true);
     for (const rule of RamRuleSet.rules) {
