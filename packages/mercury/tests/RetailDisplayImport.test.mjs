@@ -27,6 +27,7 @@ const service = new RetailDisplayImportService({ products, destinations: [destin
 const imported = service.importRows({ rows: [row()], sourceWorkbook: "fixture.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T12:00:00Z" });
 assert.equal(validateCurrentDisplaySnapshot(imported.snapshot).valid, true);
 assert.equal(imported.snapshot.offers.length, 2);
+assert.equal(imported.snapshot.offers.every(offer => offer.observedAt === "2026-09-04T06:00:00.000Z"), true);
 assert.equal(imported.snapshot.offers.every(offer => offer.condition === "NEW" && offer.itemPriceEligible === true && offer.comparisonEligible === true), true);
 assert.equal(imported.snapshot.offers.every(offer => offer.deliveredCostEligible === false && offer.deliveredCostReasons.includes("SHIPPING_COST_UNKNOWN")), true);
 assert.equal(imported.outcomes.some(item => item.status === "DESTINATION_REUSED"), true);
@@ -53,6 +54,17 @@ assert.equal(isolated.outcomes.some(item => item.status === "REJECTED_IDENTITY_M
 const draft = service.importRows({ rows: [row({ atlasProductId: "ram_fixture_draft", manufacturerPartNumber: "FIX-DRAFT" })], sourceWorkbook: "fixture.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T12:00:00Z" });
 assert.equal(draft.outcomes.some(item => item.retailer === "AMAZON" && item.status === "DESTINATION_BLOCKED_ATLAS_NOT_ACTIVE_READY"), true); cases += 1;
 
+const admission = service.importRows({ rows: [row({ atlasProductId: "ram_fixture_two", manufacturerPartNumber: "FIX-TWO", amazonUrl: "https://www.amazon.com/dp/B000000002", neweggUrl: null, neweggObservedPriceUsd: null })], sourceWorkbook: "fixture.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T12:00:00Z" });
+assert.equal(admission.outcomes.some(item => item.retailer === "AMAZON" && item.status === "DESTINATION_ADMISSION_REQUIRED"), true); cases += 1;
+
+const conflict = service.importRows({ rows: [row({ amazonUrl: "https://www.amazon.com/dp/B000000099" })], sourceWorkbook: "fixture.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T12:00:00Z" });
+assert.equal(conflict.outcomes.some(item => item.retailer === "AMAZON" && item.status === "DESTINATION_REVIEW_REQUIRED"), true);
+assert.equal(conflict.snapshot.offers.find(offer => offer.retailer === "AMAZON").itemPriceEligible, false); cases += 1;
+
+const outOfStock = service.importRows({ rows: [row({ neweggAvailability: "OUT_OF_STOCK" })], sourceWorkbook: "fixture.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T12:00:00Z" });
+assert.equal(outOfStock.outcomes.some(item => item.retailer === "NEWEGG" && item.status === "DESTINATION_REUSED"), true);
+assert.equal(outOfStock.snapshot.offers.find(offer => offer.retailer === "NEWEGG").itemPriceEligible, false); cases += 1;
+
 for (const evidenceText of ["refurbished", "used", "open-box", "renewed", "pre-owned", "marketplace ambiguity"]) {
     const condition = assessStandardRetailNewCondition({ retailer: "NEWEGG", researchUrl: "https://www.newegg.com/fixture/p/N82E16800000001", matchStatus: "EXACT_PRODUCT_PAGE", evidenceText });
     assert.equal(condition.eligible, false);
@@ -60,6 +72,7 @@ for (const evidenceText of ["refurbished", "used", "open-box", "renewed", "pre-o
 }
 assert.equal(assessStandardRetailNewCondition({ retailer: "AMAZON", researchUrl: "https://www.amazon.com/dp/B000000001", matchStatus: "EXACT_PRODUCT_PAGE" }).condition, "NEW");
 assert.equal(assessStandardRetailNewCondition({ retailer: "NEWEGG", researchUrl: "https://www.newegg.com/fixture/p/N82E16800000001", matchStatus: "EXACT_PRODUCT_PAGE", evidenceText: "sold/shipped by Newegg" }).condition, "NEW");
+assert.equal(assessStandardRetailNewCondition({ retailer: "NEWEGG", researchUrl: "https://www.newegg.com/fixture/p/N82E16800000001", matchStatus: "EXACT_PRODUCT_PAGE", evidenceText: "marketplace seller" }).eligible, false);
 assert.equal(assessStandardRetailNewCondition({ retailer: "NEWEGG", researchUrl: "https://www.newegg.com/p/pl?d=FIX", matchStatus: "EXACT_MPN_SEARCH_RESULT" }).eligible, false); cases += 1;
 
 const eligibleOffer = (atlasProductId, retailer, priceUsd) => ({ atlasProductId, retailer, retailerId: retailer === "AMAZON" ? "RETAILER-0001" : "RETAILER-0004", marketplace: retailer === "AMAZON" ? "amazon.com" : "newegg.com", priceUsd, currency: "USD", availability: "AVAILABLE", condition: "NEW", shippingUsd: null, feesUsd: null, researchUrl: null, destinationId: retailer === "AMAZON" ? "mer_dest_aaaaaaaaaaaaaaaaaaaaaaaa" : "mer_dest_bbbbbbbbbbbbbbbbbbbbbbbb", matchStatus: "EXACT_PRODUCT_PAGE", sourceRow: 5, itemPriceEligible: true, deliveredCostEligible: false, deliveredCostReasons: ["SHIPPING_COST_UNKNOWN", "FEES_UNKNOWN"], comparisonEligible: true, comparisonReasons: [] });
@@ -85,5 +98,20 @@ try {
     assert.equal((await readFile(statePath, "utf8")).includes("history"), false);
 } finally { await rm(temporary, { recursive: true, force: true }); }
 cases += 1;
+
+const passOne = service.importRows({ rows: [row()], sourceWorkbook: "pass1.xlsx", sourceSheet: "RAM Retail Discovery", importedAt: "2026-09-04T12:00:00Z" });
+const passTwo = service.importRows({
+    rows: [row({ amazonUrl: null, amazonObservedPriceUsd: null, amazonAvailability: null, amazonMatchStatus: "NOT_VERIFIED_IN_INITIAL_SWEEP", neweggObservedPriceUsd: 85, observedAt: "2026-09-04 13:48:00" })],
+    sourceWorkbook: "pass2.xlsx",
+    sourceSheet: "RAM Retail Discovery",
+    importedAt: "2026-09-04T14:00:00Z",
+    priorSnapshot: passOne.snapshot
+});
+assert.equal(passTwo.snapshot.offers.length, 2);
+assert.equal(passTwo.snapshot.offers.find(offer => offer.retailer === "AMAZON").priceUsd, 100);
+assert.equal(passTwo.snapshot.offers.find(offer => offer.retailer === "AMAZON").observedAt, "2026-09-04T06:00:00.000Z");
+assert.equal(passTwo.snapshot.offers.find(offer => offer.retailer === "NEWEGG").priceUsd, 85);
+assert.equal(passTwo.snapshot.offers.find(offer => offer.retailer === "NEWEGG").observedAt, "2026-09-04T13:48:00.000Z");
+assert.equal(passTwo.snapshot.observedAt, "2026-09-04T13:48:00.000Z"); cases += 1;
 
 console.log(`Retail display import tests passed: ${cases} cases.`);

@@ -7,7 +7,7 @@ const BLOCKED = Object.freeze([
     ["USED", /\bused\b/i],
     ["PRE_OWNED", /\bpre[ -]?owned\b/i],
     ["REPLACEMENT_ONLY", /\breplacement(?: only)?\b/i],
-    ["MIXED_OR_AMBIGUOUS_CONDITION", /\b(?:mixed condition|marketplace ambiguity|unclear condition|alternate condition)\b/i]
+    ["MIXED_OR_AMBIGUOUS_CONDITION", /\b(?:mixed condition|marketplace(?: ambiguity| seller| listing| variant)?|unclear condition|alternate condition)\b/i]
 ]);
 const EXACT_PAGE = /^EXACT_PRODUCT_PAGE(?:_|$)/;
 const supportedRetailer = value => value === "AMAZON" || value === "NEWEGG";

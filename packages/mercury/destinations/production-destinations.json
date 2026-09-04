@@ -696,6 +696,354 @@
       "createdAt": "2026-09-04T18:00:00.000Z",
       "createdBy": "operator:Clinton_Ramsook",
       "materialFingerprint": "f7f8c2e050f5caa8bd5c0b9fc494edf72be551570a19c4887c72d95ef49209eb"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_29595fee3ea02605b29e74de",
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/corsair-vengeance-32gb-ddr5-6000-cas-latency-cl30-desktop-memory-gray/p/N82E16820982040",
+      "retailerListingId": "N82E16820982040",
+      "binding": {
+        "manufacturerPartNumber": "CMK32GX5M2B6000Z30",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:8:newegg:N82E16820982040"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "101fac359909cf79575a420e4d3717f0e51385763b942fbcfb5ae322bcd57a0c"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_57b2a9892e38f2cb8a5569e8",
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6400c36",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/corsair-vengeance-32gb-ddr5-6400-cas-latency-cl36-desktop-memory-black/p/N82E16820236986",
+      "retailerListingId": "N82E16820236986",
+      "binding": {
+        "manufacturerPartNumber": "CMK32GX5M2B6400C36",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:9:newegg:N82E16820236986"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "da21a64cb2c92fe82cc6b95a895ac069b7952bfc8ade0daeadab8653fd547d11"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_4a514b88badcae6db23380e0",
+      "atlasProductId": "ram_corsair_cmk64gx5m2b5200c40",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/corsair-vengeance-64gb-ddr5-5200-cas-latency-cl40-desktop-memory-black/p/N82E16820236839",
+      "retailerListingId": "N82E16820236839",
+      "binding": {
+        "manufacturerPartNumber": "CMK64GX5M2B5200C40",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:10:newegg:N82E16820236839"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "6497d9b6f11f71b2be91561f7a9580cb5b0842b0f9c42e0b863cd0c7d6eaf3cc"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_d7dc195816062d094efacef9",
+      "atlasProductId": "ram_corsair_cmh16gx5m2b5200z40",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/corsair-vengeance-rgb-16gb-2-x-8gb-ddr5-5200-pc5-41600-cas-latency-cl40-desktop-memory-gray/p/N82E16820982322",
+      "retailerListingId": "N82E16820982322",
+      "binding": {
+        "manufacturerPartNumber": "CMH16GX5M2B5200Z40",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:15:newegg:N82E16820982322"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "4b3451dc38d457040d7db0b9588f432288f1738c638143ef1fd5b7f07e3dcaef"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5a780452d255b13eca8a1ac3",
+      "atlasProductId": "ram_corsair_cmh32gx5m2f6000z36",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/corsair-vengeance-rgb-32gb-2-x-16gb-ddr5-6000-pc5-48000-cas-latency-cl36-desktop-memory-gray/p/N82E16820982285",
+      "retailerListingId": "N82E16820982285",
+      "binding": {
+        "manufacturerPartNumber": "CMH32GX5M2F6000Z36",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:21:newegg:N82E16820982285"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "d097fc0bf1d777882184878806d04f30d78fcfe9010b695c05ae9303f04d1302"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_f9c46267ed69c74db806ba8d",
+      "atlasProductId": "ram_corsair_cmh64gx5m2d5600z40",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/corsair-vengeance-64gb-2-x-32gb-ddr5-5600-pc5-44800-cas-latency-cl40-desktop-memory-gray/p/N82E16820982303",
+      "retailerListingId": "N82E16820982303",
+      "binding": {
+        "manufacturerPartNumber": "CMH64GX5M2D5600Z40",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:22:newegg:N82E16820982303"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "dd568ae6fcba80536cfc9246e18eeaff6782816af3180b093b1fd5bd9027c4bc"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_c72ee2226bbf94072eb62782",
+      "atlasProductId": "ram_crucial_ct2k16g4sfra32a",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-32gb-ddr4-3200-cas-latency-cl22-laptop-memory/p/N82E16820156263",
+      "retailerListingId": "N82E16820156263",
+      "binding": {
+        "manufacturerPartNumber": "CT2K16G4SFRA32A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:27:newegg:N82E16820156263"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "c4780590e68d7ee52bedd10ca9fa5b31189411a76e7d6c718c8d70fd85ddd026"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_7684a18aa9bf7805aaf77e95",
+      "atlasProductId": "ram_crucial_ct2k16g56c46u5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-32gb-ddr5-5600-cas-latency-cl46-desktop-memory-black/p/N82E16820156312",
+      "retailerListingId": "N82E16820156312",
+      "binding": {
+        "manufacturerPartNumber": "CT2K16G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:29:newegg:N82E16820156312"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "bade7fe9a549aace0ae51588d7e4b29751c795b8607cf1dc6cf9b050d1750a1c"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_df6992ade8d9e0721e6552b0",
+      "atlasProductId": "ram_crucial_ct32g56c46s5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-32gb-ddr5-5600-cas-latency-cl46-laptop-memory/p/N82E16820156315",
+      "retailerListingId": "N82E16820156315",
+      "binding": {
+        "manufacturerPartNumber": "CT32G56C46S5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:33:newegg:N82E16820156315"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "e20271f4e06bae11ccac7f12895f2d1c81ea4bf213b80b2f60c7032ec65c4873"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_887c3c755b361eb4c307eecc",
+      "atlasProductId": "ram_crucial_cp2k16g56c46u5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-pro-32gb-ddr5-5600-cas-latency-cl46-desktop-memory-black/p/N82E16820156328",
+      "retailerListingId": "N82E16820156328",
+      "binding": {
+        "manufacturerPartNumber": "CP2K16G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:36:newegg:N82E16820156328"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "a5554956935f525c41bfb6d890977c70f5a61364f8007ee3e1ef0571cca55584"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_6ac16e3564d5e286aa11553b",
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5w",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-pro-overclocking-64gb-ddr5-6000-cas-latency-cl40-desktop-memory-white/p/N82E16820156420",
+      "retailerListingId": "N82E16820156420",
+      "binding": {
+        "manufacturerPartNumber": "CP2K32G60C40U5W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:42:newegg:N82E16820156420"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "b8fe2462a2e17face68e5f56eabb4ef233aaa24be62e89c92f08d7080faf34ea"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_e7955a3f1cde158b19808bbd",
+      "atlasProductId": "ram_g_skill_f5_6000j3038f16gh2_fx5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-flare-x5-32gb-2-x-16gb-ddr5-6000-pc5-48000-cas-latency-cl30-desktop-memory-black/p/N82E16820374783",
+      "retailerListingId": "N82E16820374783",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3038F16GH2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-003:workbook-row:46:newegg:N82E16820374783"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-04T19:30:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-04T19:30:00.000Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "eaec918f7f3ca084f18fec0dea10f9a3a90d2c50831f5246ee5723879021059e"
     }
   ]
 }

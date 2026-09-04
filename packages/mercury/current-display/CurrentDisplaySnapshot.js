@@ -42,6 +42,7 @@ export function validateCurrentDisplaySnapshot(snapshot) {
         if (offer?.retailerId !== null && !/^RETAILER-\d{4}$/.test(offer.retailerId)) errors.push("CURRENT_DISPLAY_RETAILER_ID_INVALID");
         if (!nonBlank(offer?.marketplace) || !Number.isFinite(offer?.priceUsd) || offer.priceUsd <= 0 || offer.currency !== "USD") errors.push("CURRENT_DISPLAY_PRICE_INVALID");
         if (!nonBlank(offer?.availability) || !nonBlank(offer?.matchStatus) || !Number.isInteger(offer?.sourceRow) || offer.sourceRow < 1) errors.push("CURRENT_DISPLAY_EVIDENCE_INVALID");
+        if ("observedAt" in offer && !validTime(offer.observedAt)) errors.push("CURRENT_DISPLAY_OFFER_TIME_INVALID");
         if (![null, "NEW", "USED", "REFURBISHED", "OPEN_BOX"].includes(offer.condition) || offer.shippingUsd !== null || offer.feesUsd !== null) errors.push("CURRENT_DISPLAY_UNKNOWN_VALUE_INVALID");
         if (offer.researchUrl !== null) { try { if (new URL(offer.researchUrl).protocol !== "https:") throw new Error(); } catch { errors.push("CURRENT_DISPLAY_RESEARCH_URL_INVALID"); } }
         if (offer.destinationId !== null && !/^mer_dest_[a-f0-9]{24}$/.test(offer.destinationId)) errors.push("CURRENT_DISPLAY_DESTINATION_ID_INVALID");
