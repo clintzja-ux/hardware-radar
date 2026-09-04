@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_teamgroup_tf3d416g3200hc16fdc01",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-09-04T00:00:00Z",
+    "updatedAt": "2026-09-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-expansion-002",
+    "updatedBy": "system:atlas-ram-expansion-002",
+    "brand": "TeamGroup",
+    "manufacturer": "Team Group Inc.",
+    "productFamily": "T-Force Delta RGB",
+    "series": null,
+    "modelName": "T-Force Delta RGB TF3D416G3200HC16FDC01",
+    "manufacturerPartNumber": "TF3D416G3200HC16FDC01",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "TeamGroup T-Force Delta RGB DDR4 16GB (2×8GB) 3200 MT/s CL16",
+    "slug": "teamgroup-t-force-delta-rgb-tf3d416g3200hc16fdc01"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "UNKNOWN",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS-RAM-EXPANSION-002 manufacturer-verified workbook admission; lifecycle activation requires separate review.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TF3D416G3200HC16FDC01-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.teamgroupinc.com/en/support/compatibility/by-product/",
+          "publisher": "TeamGroup",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TF3D416G3200HC16FDC01-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.teamgroupinc.com/en/support/compatibility/by-product/",
+          "publisher": "TeamGroup",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TF3D416G3200HC16FDC01-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.teamgroupinc.com/en/support/compatibility/by-product/",
+          "publisher": "TeamGroup",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TF3D416G3200HC16FDC01-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.teamgroupinc.com/en/support/compatibility/by-product/",
+          "publisher": "TeamGroup",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TF3D416G3200HC16FDC01-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.teamgroupinc.com/en/support/compatibility/by-product/",
+          "publisher": "TeamGroup",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TF3D416G3200HC16FDC01-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.teamgroupinc.com/en/support/compatibility/by-product/",
+          "publisher": "TeamGroup",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-09-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true,
+        "gamingPositioning": null,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 8,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3200,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3200",
+        "casLatency": 16,
+        "tRcd": 20,
+        "tRp": 20,
+        "tRas": 40,
+        "primaryTimings": "16-20-20-40",
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 25.6
+      },
+      "electrical": {
+        "ratedVoltage": 1.35,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": true,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

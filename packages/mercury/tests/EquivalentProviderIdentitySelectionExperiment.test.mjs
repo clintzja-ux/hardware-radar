@@ -67,4 +67,3 @@ const expanded = assessEquivalentProviderIdentitySelection({ atlasProduct, equiv
 assert.equal(expanded.status, 'MANUAL_SELECTION_REQUIRED', 'a new equivalent document must not alter the no-automatic-selection posture');
 
 console.log('Equivalent provider identity selection fixture experiment tests passed.');
-

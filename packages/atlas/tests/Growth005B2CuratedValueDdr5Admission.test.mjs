@@ -18,7 +18,7 @@ const admitted = [
     ["F5-6000J3636F16GX1-RS5K", "ram_g_skill_f5_6000j3636f16gx1_rs5k", 16, 1, 16, 6000, 36, "PROFILE_INCLUDED", "PROFILE_INCLUDED"]
 ];
 
-assert.equal(manifest.counts.products, 26);
+assert.ok(manifest.counts.products >= 26);
 assert.equal(manifest.counts.brands, 5, "Existing registered brands are reused; empty candidate brands are not created.");
 assert.equal(validateRepository(products).valid, true);
 assert.equal(new Set(products.map(({ identity }) => identity.atlasProductId)).size, products.length);

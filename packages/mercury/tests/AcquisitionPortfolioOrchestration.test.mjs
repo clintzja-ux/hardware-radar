@@ -22,9 +22,9 @@ const again = await service.prepare({ asOf });
 
 assert.deepEqual(portfolio, again); cases++;
 assert(Object.isFrozen(portfolio) && Object.isFrozen(portfolio.eligibleProducts)); cases++;
-assert.equal(portfolio.counts.canonicalProducts, 26); cases++;
+assert.equal(portfolio.counts.canonicalProducts, 103); cases++;
 assert.equal(portfolio.counts.eligible, 11); cases++;
-assert.equal(portfolio.counts.excluded, 15); cases++;
+assert.equal(portfolio.counts.excluded, 92); cases++;
 assert.equal(portfolio.eligibleProducts.filter(item => item.providerIdentityState === "REUSABLE").length, 2); cases++;
 assert.equal(portfolio.eligibleProducts.filter(item => item.initialState === PORTFOLIO_PRODUCT_STATES.READY_FOR_PRODUCTS).length, 9); cases++;
 assert.deepEqual(portfolio.taskEnvelope, { products: 9, productInfo: 9, sellers: 11, maximumProgramTaskCount: 29 }); cases++;

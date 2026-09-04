@@ -127,7 +127,7 @@ for (const productPage of catalog.products) {
         assert.doesNotMatch(rendered, /Retailer links|amazon\.com/);
     }
 }
-assert.equal(catalog.products.length - expectedProduction.size, 23);
+assert.equal(catalog.products.length - expectedProduction.size, 100);
 const marketData = await readFile(path.join(root, "public/js/modules/marketData.js"), "utf8");
 assert.match(marketData, /offerUrl: item\.sourceUrl/);
 assert.doesNotMatch(marketData, /affiliateUrl/);

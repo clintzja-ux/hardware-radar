@@ -32,7 +32,7 @@ assert.equal((await atlas.getRetailer("retailer-0003")).name, "MemoryC");
 const repositories = await atlas.loadRepositories();
 assert.equal(repositories.brands.length, 5);
 assert.equal(repositories.categories.length, 1);
-assert.equal(repositories.products.length, 26);
+assert.equal(repositories.products.length, 103);
 assert.equal(repositories.retailers.length, 3);
 assert.equal(Object.isFrozen(repositories), true);
 

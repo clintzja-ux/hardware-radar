@@ -16,11 +16,11 @@ const destinations = createPublicRetailerDestinationProjection({ source: destina
 const catalog = createRamCatalogProjection(products);
 const replay = createRamCatalogProjection([...products].reverse());
 
-assert.equal(catalog.productCount, 26);
-assert.equal(catalog.products.length, 26);
-assert.equal(new Set(catalog.products.map((product) => product.atlasProductId)).size, 26);
-assert.equal(new Set(catalog.products.map((product) => product.publicSlug)).size, 26);
-assert.equal(new Set(catalog.products.map((product) => product.publicPath)).size, 26);
+assert.equal(catalog.productCount, 103);
+assert.equal(catalog.products.length, 103);
+assert.equal(new Set(catalog.products.map((product) => product.atlasProductId)).size, 103);
+assert.equal(new Set(catalog.products.map((product) => product.publicSlug)).size, 103);
+assert.equal(new Set(catalog.products.map((product) => product.publicPath)).size, 103);
 assert.deepEqual(replay, catalog, "Public identity must be deterministic across input order.");
 assert.ok(catalog.products.every((product) => product.publicPath === `/ram/${product.publicSlug}/`));
 assert.ok(catalog.products.every((product) => product.capacityGb === product.moduleCount * product.capacityPerModuleGb));
@@ -81,10 +81,10 @@ assert.deepEqual(generatedCatalog, catalog);
 
 const sitemap = await read("public/sitemap.xml");
 const productRoutes = createRamProductSitemapRoutes(products);
-assert.equal(productRoutes.length, 26);
+assert.equal(productRoutes.length, 103);
 for (const route of productRoutes) assert.equal((sitemap.match(new RegExp(`<loc>https://cheapestram\\.com${route.path}</loc>`, "g")) ?? []).length, 1);
 const ramChildRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]);
-assert.equal(ramChildRoutes.filter((route) => route !== "/ram/compare/").length, 26);
+assert.equal(ramChildRoutes.filter((route) => route !== "/ram/compare/").length, 103);
 
 const styles = await read("public/css/styles.css");
 assert.match(styles, /\.ram-product-heading h1[^}]*overflow-wrap:anywhere/);
@@ -99,4 +99,4 @@ assert.match(sodimm, /<h1>Compare Laptop RAM Prices<\/h1>/);
 assert.match(guides, /<h1>Hardware Buying Guides<\/h1>/);
 assert.equal([...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com\/guides\/[^<]*<\/loc>/g)].length, 6);
 
-console.log("GROWTH-003 canonical public RAM product identity contract passed (26 routes).");
+console.log("GROWTH-003 canonical public RAM product identity contract passed (103 routes).");

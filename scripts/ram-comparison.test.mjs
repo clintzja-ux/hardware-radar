@@ -80,7 +80,7 @@ const sitemap = await read("public/sitemap.xml");
 assert.equal((sitemap.match(/<loc>https:\/\/cheapestram\.com\/ram\/compare\/<\/loc>/g) ?? []).length, 1);
 assert.equal((sitemap.match(/<loc>https:\/\/cheapestram\.com\/ram\/compare\/\?products=/g) ?? []).length, 0);
 const detailRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]).filter((route) => route !== "/ram/compare/");
-assert.equal(detailRoutes.length, 26);
+assert.equal(detailRoutes.length, 103);
 
 const styles = await read("public/css/styles.css");
 assert.match(styles, /\.ram-comparison-table-wrap\{[^}]*overflow-x:auto/);

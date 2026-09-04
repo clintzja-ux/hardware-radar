@@ -2,7 +2,7 @@
   "atlasVersion": "1.0.0",
   "coreSchemaVersion": "1.0",
   "repositoryStatus": "stable",
-  "generatedAt": "2026-09-01T00:00:00Z",
+  "generatedAt": "2026-09-04T00:00:00Z",
   "products": [
     {
       "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
@@ -133,10 +133,395 @@
       "atlasProductId": "ram_g_skill_f5_6000j3636f16gx1_rs5k",
       "productType": "ram",
       "path": "products/ram/ddr5/HR-RAM-DDR5-000026-g-skill-ripjaws-s5-f5-6000j3636f16gx1-rs5k.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2b6000z30wcb",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000027-corsair-vengeance-rgb-cmh32gx5m2b6000z30wcb.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk64gx5m2b5200c40",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000028-corsair-vengeance-cmk64gx5m2b5200c40.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2b6000c38",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000029-corsair-vengeance-rgb-cmh32gx5m2b6000c38.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000c30",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000030-corsair-vengeance-cmk32gx5m2b6000c30.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2f6000z36",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000031-corsair-vengeance-rgb-cmh32gx5m2f6000z36.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh16gx5m2e6000z36",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000032-corsair-vengeance-rgb-cmh16gx5m2e6000z36.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6400c36",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000033-corsair-vengeance-cmk32gx5m2b6400c36.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh64gx5m2n6400c32w",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000034-corsair-vengeance-rgb-cmh64gx5m2n6400c32w.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk64gx5m2b5600c40",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000035-corsair-vengeance-cmk64gx5m2b5600c40.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh16gx5m2b5200z40",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000036-corsair-vengeance-rgb-cmh16gx5m2b5200z40.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh64gx5m2d5600z40",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000037-corsair-vengeance-rgb-cmh64gx5m2d5600z40.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2b6400c36",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000038-corsair-vengeance-rgb-cmh32gx5m2b6400c36.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2e6000c36w",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000039-corsair-vengeance-rgb-cmh32gx5m2e6000c36w.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000c38",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000040-corsair-vengeance-cmk32gx5m2b6000c38.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_fx5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000041-g-skill-flare-x5-f5-6000j3636f16gx2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3038f16gh2_fx5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000042-g-skill-flare-x5-f5-6000j3038f16gh2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j2836g16gx2_fx5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000043-g-skill-flare-x5-f5-6000j2836g16gx2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3036f16gx2_fx5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000044-g-skill-flare-x5-f5-6000j3036f16gx2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_fx5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000045-g-skill-flare-x5-f5-6000j3636f32gx2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6400j3239g32gx2_tz5rk",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000046-g-skill-trident-z5-rgb-f5-6400j3239g32gx2-tz5rk.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_7600j3646g16gx2_tz5rk",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000047-g-skill-trident-z5-rgb-f5-7600j3646g16gx2-tz5rk.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5w",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000048-g-skill-ripjaws-s5-f5-5200j4040a16gx2-rs5w.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_rs5k",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000049-g-skill-ripjaws-s5-f5-6000j3636f16gx2-rs5k.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_rs5k",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000050-g-skill-ripjaws-s5-f5-6000j3636f32gx2-rs5k.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5w",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000051-g-skill-ripjaws-s5-f5-6000j3040f16gx2-rs5w.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5k",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000052-g-skill-ripjaws-s5-f5-6000j3040f16gx2-rs5k.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3238f16gx2_rs5w",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000053-g-skill-ripjaws-s5-f5-6000j3238f16gx2-rs5w.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5k",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000054-g-skill-ripjaws-s5-f5-5200j4040a16gx2-rs5k.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600j3636d32gx2_rs5w",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000055-g-skill-ripjaws-s5-f5-5600j3636d32gx2-rs5w.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6400j3239g16gx2_rs5k",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000056-g-skill-ripjaws-s5-f5-6400j3239g16gx2-rs5k.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6800j3445g16gx2_rs5k",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000057-g-skill-ripjaws-s5-f5-6800j3445g16gx2-rs5k.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600s4645a32gx2_rs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000058-g-skill-ripjaws-so-dimm-f5-5600s4645a32gx2-rs.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600s4645a16gx2_rs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000059-g-skill-ripjaws-so-dimm-f5-5600s4645a16gx2-rs.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c30bweak2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000060-kingston-fury-beast-rgb-kf560c30bweak2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564c32bbek2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000061-kingston-fury-beast-kf564c32bbek2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564c32bbeak2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000062-kingston-fury-beast-rgb-kf564c32bbeak2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bbe2ak2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000063-kingston-fury-beast-rgb-kf560c36bbe2ak2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c30bbek2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000064-kingston-fury-beast-kf560c30bbek2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c30bbeak2_16",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000065-kingston-fury-beast-rgb-kf560c30bbeak2-16.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bbeak2_16",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000066-kingston-fury-beast-rgb-kf560c36bbeak2-16.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bbe2k2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000067-kingston-fury-beast-kf560c36bbe2k2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bwe2k2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000068-kingston-fury-beast-kf560c36bwe2k2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564c32rsak2_32",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000069-kingston-fury-renegade-rgb-kf564c32rsak2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560s38ibk2_32",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000070-kingston-fury-impact-kf560s38ibk2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf556s40ibk2_32",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000071-kingston-fury-impact-kf556s40ibk2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564s38ibk2_32",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000072-kingston-fury-impact-kf564s38ibk2-32.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564s38ib_16",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000073-kingston-fury-impact-kf564s38ib-16.json"
+    },
+    {
+      "atlasProductId": "ram_kingston_kcp556sd8_32",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000074-kingston-client-premier-kcp556sd8-32.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k32g56c46u5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000075-crucial-crucial-ct2k32g56c46u5.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k16g56c46u5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000076-crucial-crucial-ct2k16g56c46u5.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct16g56c46u5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000077-crucial-crucial-ct16g56c46u5.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct32g56c46s5",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000078-crucial-crucial-ct32g56c46s5.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k32g56c46s5",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000079-crucial-crucial-ct2k32g56c46s5.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k16g56c46s5",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000080-crucial-crucial-ct2k16g56c46s5.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g60c36u5b",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000081-crucial-pro-overclocking-cp2k16g60c36u5b.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g64c32u5b",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000082-crucial-pro-overclocking-cp2k16g64c32u5b.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5w",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000083-crucial-pro-overclocking-cp2k32g60c40u5w.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5b",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000084-crucial-pro-overclocking-cp2k32g60c40u5b.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k32g64c40u5w",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000085-crucial-pro-overclocking-cp2k32g64c40u5w.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g4dfra32a",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000086-crucial-pro-cp2k16g4dfra32a.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k16g4sfra32a",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000087-crucial-crucial-ct2k16g4sfra32a.json"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k32g4sfd832a",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000088-crucial-crucial-ct2k32g4sfd832a.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d532g6000hc38adc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000089-teamgroup-t-force-delta-rgb-ff4d532g6000hc38adc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff3d564g6000hc38adc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000090-teamgroup-t-force-delta-rgb-ff3d564g6000hc38adc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff3d532g6400hc38jdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000091-teamgroup-t-force-delta-rgb-ff3d532g6400hc38jdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d532g6400hc32adc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000092-teamgroup-t-force-delta-rgb-ff4d532g6400hc32adc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d532g5200hc40cdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000093-teamgroup-t-force-delta-rgb-ff4d532g5200hc40cdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff3d564g5200hc40cdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000094-teamgroup-t-force-delta-rgb-ff3d564g5200hc40cdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d532g6000hc30dc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000095-teamgroup-t-force-delta-rgb-ff4d532g6000hc30dc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff3d532g6000hc38jdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000096-teamgroup-t-force-delta-rgb-ff3d532g6000hc38jdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff2d532g6400hc32adc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000097-teamgroup-t-force-delta-eco-ff2d532g6400hc32adc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ctced532g6000hc38adc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000098-teamgroup-t-create-expert-ctced532g6000hc38adc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ctced532g6400hc32adc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000099-teamgroup-t-create-expert-ctced532g6400hc32adc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tlzgd432g3200hc16fdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000100-teamgroup-t-force-vulcan-z-tlzgd432g3200hc16fdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tf3d432g3200hc16fdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000101-teamgroup-t-force-delta-rgb-tf3d432g3200hc16fdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tf3d416g3200hc16fdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000102-teamgroup-t-force-delta-rgb-tf3d416g3200hc16fdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d516g6000hc38adc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000103-teamgroup-t-force-delta-rgb-ff4d516g6000hc38adc01.json"
     }
   ],
   "counts": {
-    "products": 26,
+    "products": 103,
     "brands": 5,
     "categories": 1,
     "retailers": 3

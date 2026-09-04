@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_corsair_cmh16gx5m2e6000z36",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-09-04T00:00:00Z",
+    "updatedAt": "2026-09-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-expansion-002",
+    "updatedBy": "system:atlas-ram-expansion-002",
+    "brand": "Corsair",
+    "manufacturer": "Corsair Gaming, Inc.",
+    "productFamily": "Vengeance RGB",
+    "series": null,
+    "modelName": "Vengeance RGB CMH16GX5M2E6000Z36",
+    "manufacturerPartNumber": "CMH16GX5M2E6000Z36",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Corsair Vengeance RGB DDR5 16GB (2×8GB) 6000 MT/s CL36",
+    "slug": "corsair-vengeance-rgb-cmh16gx5m2e6000z36"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "UNKNOWN",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS-RAM-EXPANSION-002 manufacturer-verified workbook admission; lifecycle activation requires separate review.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMH16GX5M2E6000Z36-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.corsair.com/us/en/c/memory",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMH16GX5M2E6000Z36-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.corsair.com/us/en/c/memory",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMH16GX5M2E6000Z36-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.corsair.com/us/en/c/memory",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMH16GX5M2E6000Z36-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.corsair.com/us/en/c/memory",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMH16GX5M2E6000Z36-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.corsair.com/us/en/c/memory",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMH16GX5M2E6000Z36-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.corsair.com/us/en/c/memory",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-09-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true,
+        "gamingPositioning": null,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 8,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 6000,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR5-6000",
+        "casLatency": 36,
+        "tRcd": 44,
+        "tRp": 44,
+        "tRas": 96,
+        "primaryTimings": "36-44-44-96",
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 48
+      },
+      "electrical": {
+        "ratedVoltage": 1.35,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": true,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

@@ -53,7 +53,7 @@ assert.equal(existsSync(path.join(root, "docs", "test cmds.md")), false, "Operat
 const currentState = await text(path.join("docs", "handoff", "CURRENT-STATE.md"));
 assert.doesNotMatch(currentState, /HEAD at inspection:/, "CURRENT-STATE must not encode a commit hash that becomes stale on its own reconciliation commit.");
 assert.doesNotMatch(currentState, /clean committed baseline before MAIN-PROMOTION-R1/, "CURRENT-STATE must not describe R1 as uncommitted after certification.");
-assert.match(currentState, /\*\*229 subsystem test files\*\*/);
+assert.match(currentState, /\*\*235 subsystem test files\*\*/);
 assert.match(currentState, /MAIN_BRANCH_CONTINUOUS_DEPLOYMENT_TO_CLOUDFLARE_CONFIRMED/);
 
 const gitProbe = spawnSync("git", ["rev-parse", "--verify", "origin/main"], { cwd: root, encoding: "utf8" });

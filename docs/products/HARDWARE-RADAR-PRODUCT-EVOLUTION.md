@@ -155,6 +155,40 @@ Implementation requires evidence of data maturity or demand, such as sufficient 
 
 This concept capture authorizes none of the following: a route or UI, ticker, charts, synthetic data, user accounts, subscriptions, alerts, watchlists, new scraping, provider spend, acquisition, retailer integration, Beacon production transport, Gateway deployment, or Compass recommendations. It is Category D future direction under the complexity-control doctrine, not an implementation commitment.
 
+### Current display pricing and durable history
+
+Hardware Radar intentionally separates two price streams:
+
+```text
+ATLAS
+= what the product is
+
+DAILY AMAZON + NEWEGG DISPLAY STREAM
+= what the two tracked retailers appear to charge now
+
+MERCURY
+= durable governed market observations and historical evidence
+
+TERMINAL
+= derived current and historical market intelligence
+```
+
+The initial current-display design is a once-daily, batch-capable refresh of exact, governed Amazon and Newegg product destinations. It may show each qualifying actionable offer and the lower qualifying tracked price for the exact Atlas product. If only one offer qualifies, only that retailer may be shown; if neither qualifies, the result remains unavailable or unknown. Affiliate status may affect retailer-button presentation order, but it never changes Cheapest, Current Price, historical intelligence, market ordering, or recommendation authority.
+
+Current-display observations are ephemeral. They do not become Mercury history merely because they are displayed, do not accumulate into a daily historical series, and cannot establish historical lows, highs, movement, averages, or volatility. A minimal replaceable previous-display snapshot may support current-session or current-day `CHG` and `CHG%`; that snapshot is transient operational state, not retained market evidence. Derived current low, high, spread, change, and percentage change should be calculated rather than persisted as separate facts.
+
+Exact retailer destination mappings are durable operational identity: each Atlas product may map independently to an operator-governed Amazon destination and Newegg destination. Later display refreshes should revisit those known destinations. A missing or drifting destination becomes unavailable or review-required and is rediscovered only as needed. Atlas remains the product owner and must not store retailer prices, availability, price changes, or historical observations.
+
+DataForSEO remains Mercury's intended durable historical acquisition stream, initially targeted at a separately governed 48-hour cadence. Qualifying observations retain their original retailer/source provenance and observation time and may support reproducible retailer-specific or cross-retailer historical derivations. The daily display cadence and historical cadence are independent; neither implies the other, and not every displayed price must become a durable Mercury observation.
+
+Both streams must eventually isolate per-product failures within portfolio batches. Ordinary current-display refreshes must not require per-product operator intervention, while durable DataForSEO acquisition retains its existing rights, identity, spend, retention, admission, replay, review, qualification, and publication gates. Future authorized retailers may join the display layer without changing these ownership rules.
+
+Existing offer-comparability doctrine applies to both streams: standalone offers compete only with comparable standalone offers; bundles and conditional offers remain distinct; used, refurbished, and open-box condition must not silently become new; known mandatory shipping and unavoidable fees must be respected; and unknown costs must never become zero. Every displayed observation carries a freshness timestamp and remains subject to change at the retailer.
+
+The Terminal may eventually combine a clearly labeled current panel from ephemeral display state with historical panels derived exclusively from retained Mercury observations. Historical claims—including period lows/highs, movement, averages, volatility, trends, and retailer histories—belong to Mercury history. **DENSITY IS EARNED BY DATA:** absent or insufficient history remains absent or insufficient rather than being reconstructed from the transient display cache.
+
+This doctrine does not implement Amazon or Newegg retrieval, complete destination mapping, a display cache, scheduling, a 48-hour DataForSEO cycle, public price publication, or Terminal UI. The intended near-term order is: complete Atlas RAM expansion; establish exact Amazon and Newegg destinations and capture the initial display price; implement the lightweight daily display batch and minimal replaceable snapshot; activate separately governed batch-capable DataForSEO history on the initial 48-hour cadence; then derive historical intelligence and add Terminal capability only when the evidence depth earns it.
+
 ## 4. Parallel execution doctrine
 
 Hardware Radar is now developed as a small product program with multiple independent but coordinated execution tracks, not as one serial chain through every subsystem. A blocker in one track should not unnecessarily halt another independent track. Parallel work must preserve subsystem ownership, governance, provenance, authority boundaries, audit truth, and fail-closed behavior.

@@ -41,7 +41,6 @@ function selectionBinding({ atlasProduct, equivalenceGroup, sourceTaskId }) {
   };
   return freeze({ ...material, equivalenceGroupDigest: hash(material) });
 }
-
 export function assessEquivalentProviderIdentitySelection({ atlasProduct, equivalenceGroup, sourceTaskId, priorSelection = null } = {}) {
   const binding = selectionBinding({ atlasProduct, equivalenceGroup, sourceTaskId });
   if (!priorSelection) return freeze({ status: 'MANUAL_SELECTION_REQUIRED', binding, selectedProviderIdentity: null, reason: 'NO_PROVIDER_CONTRACT_PREFERENCE' });
@@ -89,4 +88,3 @@ export function createManualEquivalentProviderIdentitySelectionDecision({ assess
     materialDigest: hash(material)
   });
 }
-

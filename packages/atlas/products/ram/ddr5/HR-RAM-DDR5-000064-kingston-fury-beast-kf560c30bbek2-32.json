@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_kingston_kf560c30bbek2_32",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-09-04T00:00:00Z",
+    "updatedAt": "2026-09-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-expansion-002",
+    "updatedBy": "system:atlas-ram-expansion-002",
+    "brand": "Kingston",
+    "manufacturer": "Kingston Technology Company, Inc.",
+    "productFamily": "FURY Beast",
+    "series": null,
+    "modelName": "FURY Beast KF560C30BBEK2-32",
+    "manufacturerPartNumber": "KF560C30BBEK2-32",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6000 MT/s",
+    "slug": "kingston-fury-beast-kf560c30bbek2-32"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "UNKNOWN",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS-RAM-EXPANSION-002 manufacturer-verified workbook admission; lifecycle activation requires separate review.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF560C30BBEK2-32-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.kingston.com/en/memory/search",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF560C30BBEK2-32-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.kingston.com/en/memory/search",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF560C30BBEK2-32-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.kingston.com/en/memory/search",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF560C30BBEK2-32-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.kingston.com/en/memory/search",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF560C30BBEK2-32-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.kingston.com/en/memory/search",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-KINGSTON-KF560C30BBEK2-32-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.kingston.com/en/memory/search",
+          "publisher": "Kingston",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-09-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true,
+        "gamingPositioning": null,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 6000,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR5-6000",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 48
+      },
+      "electrical": {
+        "ratedVoltage": 1.4,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

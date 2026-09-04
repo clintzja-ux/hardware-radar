@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_rs5k",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-09-04T00:00:00Z",
+    "updatedAt": "2026-09-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-expansion-002",
+    "updatedBy": "system:atlas-ram-expansion-002",
+    "brand": "G.SKILL",
+    "manufacturer": "G.SKILL International Enterprise Co., Ltd.",
+    "productFamily": "Ripjaws S5",
+    "series": null,
+    "modelName": "Ripjaws S5 F5-6000J3636F16GX2-RS5K",
+    "manufacturerPartNumber": "F5-6000J3636F16GX2-RS5K",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL36",
+    "slug": "g-skill-ripjaws-s5-f5-6000j3636f16gx2-rs5k"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "UNKNOWN",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS-RAM-EXPANSION-002 manufacturer-verified workbook admission; lifecycle activation requires separate review.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F5-6000J3636F16GX2-RS5K-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.gskill.com/",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F5-6000J3636F16GX2-RS5K-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.gskill.com/",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F5-6000J3636F16GX2-RS5K-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.gskill.com/",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F5-6000J3636F16GX2-RS5K-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.gskill.com/",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F5-6000J3636F16GX2-RS5K-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.gskill.com/",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F5-6000J3636F16GX2-RS5K-ARE002",
+          "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
+          "sourceLocator": "https://www.gskill.com/",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-09-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-expansion-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED: Exact MPN and material identity/specification verified against manufacturer product, datasheet, QVL, or official part lookup."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-09-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true,
+        "gamingPositioning": null,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 6000,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR5-6000",
+        "casLatency": 36,
+        "tRcd": 36,
+        "tRp": 36,
+        "tRas": 96,
+        "primaryTimings": "36-36-36-96",
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 48
+      },
+      "electrical": {
+        "ratedVoltage": 1.35,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}
