@@ -30,4 +30,3 @@ console.log("Retryability:            ",result.event.failure.retryability);
 console.log("Provider task:           ",result.event.providerTaskId??"NONE");
 console.log("Actual spend:            $"+result.event.actualSpendUsd.toFixed(3));
 console.log("Provider calls:           0");
-

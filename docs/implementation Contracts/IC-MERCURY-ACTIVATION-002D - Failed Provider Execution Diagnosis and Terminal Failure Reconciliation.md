@@ -27,4 +27,3 @@ This command performs no provider request and creates no paid task. A retry is a
 ## Operator visibility
 
 The existing checkpoint inspection command reports failed product, execution run, failure class, safe reason, optional provider task, and retryability. Checkpoint/program monetary capacity is derived from actual execution-ledger spend for both posted and failed bound runs.
-

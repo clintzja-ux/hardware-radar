@@ -55,6 +55,7 @@ Compass, Echo, and Aurora appear in long-term platform documentation as future r
 - Cloudflare Workers and D1 are the selected future Gateway runtime/storage architecture. A draft D1 migration exists, but neither Worker nor D1 is configured or deployed.
 - Cloudflare WAF rate limiting, Workers Logs, and Cloudflare Email Service are selected future provider boundaries. Selection and policy configuration do not mean deployment.
 - DataForSEO acquisition is governed through Mercury rights, planning, budget, authorization, execution, retention, replay, and promotion boundaries. LIVE commands are operator-controlled and never implicit.
+- Repository-owned DataForSEO network commands run Node with the certified system-CA trust policy so operating-system trust roots are honored while full TLS certificate validation remains enabled; insecure certificate bypasses are prohibited.
 - Git owns version history. Operator inspection of the Cloudflare dashboard confirmed that Cloudflare Pages project `hardware-radar` continuously deploys connected repository `clintzja-ux/hardware-radar`, with `main` as production and non-main branches as Preview deployments. Repository inspection alone did not establish this external configuration.
 - Local operational tooling is Node-based, with PowerShell wrappers for sensitive ephemeral operator input. Secrets must not be passed as command arguments or written into source, public artifacts, logs, chat, or handoff documents.
 
