@@ -6,6 +6,7 @@ import {
     RETAILER_DESTINATION_BINDING_METHOD,
     RETAILER_DESTINATION_NAVIGATION_AUTHORITY,
     RETAILER_DESTINATION_SOURCE_TYPE,
+    RETAILER_DESTINATION_MANUAL_REVIEW_SOURCE_TYPE,
     RETAILER_DESTINATION_TYPE,
     assessRetailerDestinationBinding,
     canonicalizeRetailerDestinationUrl,
@@ -52,6 +53,7 @@ equal(destination.marketplace, "platinummicro.com");
 equal(Object.isFrozen(destination), true);
 equal(Object.isFrozen(destination.binding), true);
 equal(validateRetailerDestination(destination).valid, true);
+equal(validateRetailerDestination(createRetailerDestination(makeInput({ provenance: { sourceType: RETAILER_DESTINATION_MANUAL_REVIEW_SOURCE_TYPE } }))).valid, true);
 equal(createRetailerDestination(makeInput()).destinationId, destination.destinationId);
 equal(createRetailerDestination(makeInput()).materialFingerprint, destination.materialFingerprint);
 check(/^mer_dest_[a-f0-9]{24}$/.test(destination.destinationId));

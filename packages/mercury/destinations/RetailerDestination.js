@@ -4,6 +4,8 @@ export const RETAILER_DESTINATION_SCHEMA_VERSION = "1.0";
 export const RETAILER_DESTINATION_TYPE = "PRODUCT_PAGE";
 export const RETAILER_DESTINATION_BINDING_METHOD = "OPERATOR_EXACT_PRODUCT_REVIEW";
 export const RETAILER_DESTINATION_SOURCE_TYPE = "OPERATOR_INSPECTED_PUBLIC_PAGE";
+export const RETAILER_DESTINATION_MANUAL_REVIEW_SOURCE_TYPE = "OPERATOR_CURATED_RETAIL_REVIEW";
+export const RETAILER_DESTINATION_SOURCE_TYPES = Object.freeze([RETAILER_DESTINATION_SOURCE_TYPE, RETAILER_DESTINATION_MANUAL_REVIEW_SOURCE_TYPE]);
 export const RETAILER_DESTINATION_STATUSES = Object.freeze(["ACTIVE", "RETIRED"]);
 export const RETAILER_DESTINATION_NAVIGATION_AUTHORITY = "DESTINATION_NAVIGATION_ELIGIBLE";
 
@@ -89,7 +91,7 @@ export function validateRetailerDestination(value) {
     if (value.retailerListingId !== null && !nonBlank(value.retailerListingId)) errors.push("RETAILER_DESTINATION_LISTING_ID_INVALID");
     if (!nonBlank(value.binding?.manufacturerPartNumber) || value.binding?.method !== RETAILER_DESTINATION_BINDING_METHOD || value.binding?.scope !== "EXACT_STANDALONE_PRODUCT" || !Array.isArray(value.binding?.evidenceReferences) || value.binding.evidenceReferences.length === 0 || value.binding.evidenceReferences.some(reference => !nonBlank(reference))) errors.push("RETAILER_DESTINATION_BINDING_INVALID");
     if (new Set(value.binding?.evidenceReferences ?? []).size !== (value.binding?.evidenceReferences ?? []).length) errors.push("RETAILER_DESTINATION_EVIDENCE_REFERENCES_INVALID");
-    if (value.provenance?.sourceType !== RETAILER_DESTINATION_SOURCE_TYPE) errors.push("RETAILER_DESTINATION_PROVENANCE_INVALID");
+    if (!RETAILER_DESTINATION_SOURCE_TYPES.includes(value.provenance?.sourceType)) errors.push("RETAILER_DESTINATION_PROVENANCE_INVALID");
     if (!nonBlank(value.reviewedBy) || !validTime(value.reviewedAt) || !validTime(value.createdAt) || !nonBlank(value.createdBy)) errors.push("RETAILER_DESTINATION_AUDIT_INVALID");
     if (!RETAILER_DESTINATION_STATUSES.includes(value.status)) errors.push("RETAILER_DESTINATION_STATUS_INVALID");
     if (value.supersedesDestinationId !== null && !/^mer_dest_[a-f0-9]{24}$/.test(value.supersedesDestinationId ?? "")) errors.push("RETAILER_DESTINATION_SUPERSESSION_ID_INVALID");

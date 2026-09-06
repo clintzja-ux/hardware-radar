@@ -2262,6 +2262,2326 @@
       "createdAt": "2026-09-04T15:02:10.126Z",
       "createdBy": "human:Clinton_Ramsook",
       "materialFingerprint": "c24b0e17e28f27f118225b907d24824efce5cb3bd9bbf48f0710df833929b9ac"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_01797f12ece8ce81b17d5721",
+      "atlasProductId": "ram_kingston_kf560c36bbea_8",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Desktop-Infrared-Syncing-KF560C36BBEA-8/dp/B0BRTJ6W3R",
+      "retailerListingId": "B0BRTJ6W3R",
+      "binding": {
+        "manufacturerPartNumber": "KF560C36BBEA-8",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-2:amazon:B0BRTJ6W3R"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "da878d2e7e11e3ace3e3b68764339feeb82dc5593def09f2aea1a365388b480f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a3fb09075f8f844182625fb8",
+      "atlasProductId": "ram_corsair_cmh32gx5m2b6400c36",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/CORSAIR-VENGEANCE-6400MHz-Compatible-Computer/dp/B0BXHC74WD",
+      "retailerListingId": "B0BXHC74WD",
+      "binding": {
+        "manufacturerPartNumber": "CMH32GX5M2B6400C36",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-5:amazon:B0BXHC74WD"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "69d294230b4dae57c326141a735cf94ea72a824a84bdc202484b38534636654d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_847f7186a2d3addbe08a0659",
+      "atlasProductId": "ram_crucial_ct16g56c46s5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-5600MHz-5200MHz-4800MHz-CT16G56C46S5/dp/B0BLTGMCB7",
+      "retailerListingId": "B0BLTGMCB7",
+      "binding": {
+        "manufacturerPartNumber": "CT16G56C46S5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-7:amazon:B0BLTGMCB7"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "33c0d95dd90e3b001e642933cc4662ce69f37e568998d3e4edee407745ced18a"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_208ae4fb8f4ce9931ecbb49e",
+      "atlasProductId": "ram_crucial_ct16g56c46s5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-16gb-ddr5-5600-cas-latency-cl46-notebook-memory/p/N82E16820156314",
+      "retailerListingId": "N82E16820156314",
+      "binding": {
+        "manufacturerPartNumber": "CT16G56C46S5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-7:newegg:N82E16820156314"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "eb2a47e846b9a2069aa658fe6d6b7ba3a14ef7d82778020146f0cf2d1255a9af"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_2687a5dd58cacb1f8a074efb",
+      "atlasProductId": "ram_crucial_ct16g56c46u5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-5600MHz-5200MHz-4800MHz-CT16G56C46U5/dp/B0BLTH3KWV",
+      "retailerListingId": "B0BLTH3KWV",
+      "binding": {
+        "manufacturerPartNumber": "CT16G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-8:amazon:B0BLTH3KWV"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "06b92bc2381dd639b03edad4bb9df3e83782b4c962ab035839bfdecdc5a6e75f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_6c2718065b7d334e32a858d1",
+      "atlasProductId": "ram_crucial_ct16g56c46u5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-16gb-ddr5-5600-cas-latency-cl46-desktop-memory-black/p/N82E16820156310",
+      "retailerListingId": "N82E16820156310",
+      "binding": {
+        "manufacturerPartNumber": "CT16G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-8:newegg:N82E16820156310"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "266ed22cba735347856d3efb9580cf967168038ec9d575b2e8fd3237a702514a"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_d4e607c2396e62ebefefe58a",
+      "atlasProductId": "ram_crucial_ct2k32g4sfd832a",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-3200MHz-2933MHz-2666MHz-CT2K32G4SFD832A/dp/B07ZLCVKPV",
+      "retailerListingId": "B07ZLCVKPV",
+      "binding": {
+        "manufacturerPartNumber": "CT2K32G4SFD832A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-9:amazon:B07ZLCVKPV"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "f43de3c9846f55ef02e5f944a649fa00afd1cf6a725c5075906ddfc47ea2d40c"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_9fe516cb668d36cc8b199127",
+      "atlasProductId": "ram_crucial_ct2k32g4sfd832a",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-64gb-ddr4-3200-cas-latency-cl22-laptop-memory/p/N82E16820156242",
+      "retailerListingId": "N82E16820156242",
+      "binding": {
+        "manufacturerPartNumber": "CT2K32G4SFD832A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-9:newegg:N82E16820156242"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "3918ba2af079b15267e89ebb85c00614375e18176a00465eab7dedaed0f172b6"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_2cc987b3a36197a447e4e000",
+      "atlasProductId": "ram_g_skill_f5_6000j2836g16gx2_fx5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-2x16GB-CL28-36-36-96-Desktop-Computer/dp/B0DP1WHGQW",
+      "retailerListingId": "B0DP1WHGQW",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J2836G16GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-12:amazon:B0DP1WHGQW"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "22c626bb3592749ee17cd6fb09ec789c1c9bd1e3b8b004d53c2dec452352dc6e"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5014a539f099e424cd382656",
+      "atlasProductId": "ram_g_skill_f5_6000j2836g16gx2_fx5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-flare-x5-32gb-ddr5-6000-cas-latency-cl28-desktop-memory-black/p/N82E16820374660",
+      "retailerListingId": "N82E16820374660",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J2836G16GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-12:newegg:N82E16820374660"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "3ee2dc568ba3ac841276a3c8f716ab40de4d2529d9753d5647f16a4b5fcd22e1"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_382872dd2f837b8ce7c9eba3",
+      "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_fx5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-288-Pin-CL36-36-36-96-Channel-F5-6000J3636F16GX2-FX5/dp/B0BFGB2D2Z",
+      "retailerListingId": "B0BFGB2D2Z",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3636F16GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-14:amazon:B0BFGB2D2Z"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "af553d4f359df47f51ef14fac5230d3282d679710b863d441abfaabd22d19c90"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a7843fafa16182f7c209627d",
+      "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_fx5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-flare-x5-32gb-ddr5-6000-cas-latency-cl36-desktop-memory-black/p/N82E16820374419",
+      "retailerListingId": "N82E16820374419",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3636F16GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-14:newegg:N82E16820374419"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "6e114710a0b27b3acd4dcd423a0c1a44e81042b6ad7d177e9d880b67f2b46d3b"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_b8cb1c042d0414ebede74cd6",
+      "atlasProductId": "ram_g_skill_f5_5600s4040a16gx2_rs",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-CL40-40-40-89-Unbuffered-Notebook-F5-5600S4040A16GX2-RS/dp/B0C64HZSRX",
+      "retailerListingId": "B0C64HZSRX",
+      "binding": {
+        "manufacturerPartNumber": "F5-5600S4040A16GX2-RS",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-16:amazon:B0C64HZSRX"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "982fe838aa60306791a3a15b21d9a34cd258ad5ea29d71002ec04c0e4493ee81"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_97a0a22ca4da2c35b33e9de8",
+      "atlasProductId": "ram_g_skill_f5_5600s4040a16gx2_rs",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-ripjaws-so-dimm-32gb-ddr5-5600-cas-latency-cl40-laptop-memory/p/N82E16820374490",
+      "retailerListingId": "N82E16820374490",
+      "binding": {
+        "manufacturerPartNumber": "F5-5600S4040A16GX2-RS",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-16:newegg:N82E16820374490"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "ed74faca38e473e978b216ffdcccb8481d0b85aa691427684504a25437384209"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_92f7e57ee7737fe71e823681",
+      "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5k",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-Gskill-5200-32GB-Ripjaws/dp/B09WB6HQL3",
+      "retailerListingId": "B09WB6HQL3",
+      "binding": {
+        "manufacturerPartNumber": "F5-5200J4040A16GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-17:amazon:B09WB6HQL3"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "c2266f36d3b3cd2e53c696a5cf320b211cbe89d65d8dec29048ad8d10f68069f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_843c1e6959555b00fe50013d",
+      "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5k",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-ripjaws-s5-series-32gb-ddr5-5200-cas-latency-cl40-desktop-memory-black/p/N82E16820374329",
+      "retailerListingId": "N82E16820374329",
+      "binding": {
+        "manufacturerPartNumber": "F5-5200J4040A16GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-17:newegg:N82E16820374329"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "34c8f7f2d25eebd649915ace3126a1d9cca0fbac9102a493e1260124ecf3cb3c"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_e9f8205e3b00534941157fb6",
+      "atlasProductId": "ram_g_skill_f4_3200c16d_32gvk",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-Ripjaws-PC4-25600-Platform-F4-3200C16D-32GVK/dp/B0171GQR0C",
+      "retailerListingId": "B0171GQR0C",
+      "binding": {
+        "manufacturerPartNumber": "F4-3200C16D-32GVK",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-18:amazon:B0171GQR0C"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "65f6214b2bd5e03a4214acd03ae5b6c39f4c0f74c8e5df8dc9432bac9eca8c3c"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_aa6191d4feec0c47a6781996",
+      "atlasProductId": "ram_g_skill_f4_3200c16d_32gvk",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-ripjaws-v-series-32gb-ddr4-3200-cas-latency-cl16-desktop-memory-black/p/N82E16820232091",
+      "retailerListingId": "N82E16820232091",
+      "binding": {
+        "manufacturerPartNumber": "F4-3200C16D-32GVK",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-18:newegg:N82E16820232091"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "1de28701edadfd0e9725459078f559de4d5d82814990baee023ea2febb40c364"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_1a9a8ba9877aa86a35a76c86",
+      "atlasProductId": "ram_kingston_kf560c30bbea_8",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/0ZK-01M8-003T7",
+      "retailerListingId": "0ZK-01M8-003T7",
+      "binding": {
+        "manufacturerPartNumber": "KF560C30BBEA-8",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-19:newegg:0ZK-01M8-003T7"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "78a3c3fc8cd39432d01ca752b43638411da8c48f522da3b73eaa694f3afb58fa"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_c2006fb5aec5bf686699b2b3",
+      "atlasProductId": "ram_kingston_kf560c30bbeak2_16",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-6000MT-Desktop-Memory-KF560C30BBEAK2-16/dp/B0CYM25PS8",
+      "retailerListingId": "B0CYM25PS8",
+      "binding": {
+        "manufacturerPartNumber": "KF560C30BBEAK2-16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-20:amazon:B0CYM25PS8"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "cfe408f310c860070513538fadc57b4864c986dba16734b7b65530ab731b2ca5"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_aefaee4821c18b521f33221a",
+      "atlasProductId": "ram_kingston_kf560c30bbeak2_16",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-fury-beast-16gb-2-x-8gb-ddr5-6000-pc5-48000-cas-latency-cl30-memory-desktop-memory-black/p/N82E16820970007",
+      "retailerListingId": "N82E16820970007",
+      "binding": {
+        "manufacturerPartNumber": "KF560C30BBEAK2-16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-20:newegg:N82E16820970007"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "91fd5f6c857b29085bfafd3b05093b554652e883fa0becef6f5416897b269207"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_6814f92ced863b5bc05ccffa",
+      "atlasProductId": "ram_teamgroup_ff4d532g6000hc30dc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Force-6000MHz-PC5-48000-Desktop/dp/B0B3HGJ4V7",
+      "retailerListingId": "B0B3HGJ4V7",
+      "binding": {
+        "manufacturerPartNumber": "FF4D532G6000HC30DC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-21:amazon:B0B3HGJ4V7"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "c341d509cba4d96c2bfc1a5979dc768f748d1ecdb3ab00625104b0429ce8fe0d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_72381a241b22dd237013b6a4",
+      "atlasProductId": "ram_teamgroup_ff4d532g6000hc30dc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-32gb-ddr5-6000-cas-latency-cl30-desktop-memory-white/p/N82E16820331846",
+      "retailerListingId": "N82E16820331846",
+      "binding": {
+        "manufacturerPartNumber": "FF4D532G6000HC30DC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-21:newegg:N82E16820331846"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "c02b2fcdf57bb473fae11142894a75f459f96f345df7d72057982270e7eec671"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_7a7b4083699f082ef8dcdcec",
+      "atlasProductId": "ram_teamgroup_ff4d532g6400hc32adc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Force-6400MHz-PC5-51200-Desktop/dp/B0CBBGG4Z8",
+      "retailerListingId": "B0CBBGG4Z8",
+      "binding": {
+        "manufacturerPartNumber": "FF4D532G6400HC32ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-22:amazon:B0CBBGG4Z8"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "302a99051f5ed2eb457e39c95996637e71e490a0eff865b2e4504faeadd54414"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_6d7f1bd3e29d8981e789e984",
+      "atlasProductId": "ram_teamgroup_ff4d532g6400hc32adc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-delta-rgb-32gb-ddr5-6400-cas-latency-cl32-desktop-memory-white/p/N82E16820985154",
+      "retailerListingId": "N82E16820985154",
+      "binding": {
+        "manufacturerPartNumber": "FF4D532G6400HC32ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-22:newegg:N82E16820985154"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "c9e29fb68be55e7f99ff8607afd9d2f9d1a3c713b6186c653b96059eb7a5f49d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_56030ed0f01adba0bfbf5de8",
+      "atlasProductId": "ram_teamgroup_tlzgd432g3200hc16fdc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Force-3200MHz-PC4-25600-Desktop/dp/B08NVQZ9XQ",
+      "retailerListingId": "B08NVQZ9XQ",
+      "binding": {
+        "manufacturerPartNumber": "TLZGD432G3200HC16FDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-23:amazon:B08NVQZ9XQ"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "bee7b7483be8758f092a2d4d06301063ae6ef005e15a54d933d03fd46b27fe68"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_573691b4d57d59cacbfc9bfe",
+      "atlasProductId": "ram_teamgroup_tlzgd432g3200hc16fdc01",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/team-group-t-force-vulcan-z-32gb-ddr4-3200-cas-latency-cl16-desktop-memory-gray/p/N82E16820331618",
+      "retailerListingId": "N82E16820331618",
+      "binding": {
+        "manufacturerPartNumber": "TLZGD432G3200HC16FDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-23:newegg:N82E16820331618"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "a630c1f1764eaf02c128e348c7fce033a5bb49bb9bb6fc7cc4aa6179322bfb06"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_b655cf44ae14fe103d6a6703",
+      "atlasProductId": "ram_corsair_cmh32gx5m2e6000c36w",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/CORSAIR-VENGEANCE-6000MHz-Compatible-Computer/dp/B0CDY46PFK",
+      "retailerListingId": "B0CDY46PFK",
+      "binding": {
+        "manufacturerPartNumber": "CMH32GX5M2E6000C36W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-28:amazon:B0CDY46PFK"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "663fc3a3ee6dcb2d5e5bb043a125f40a2e8870721882396635ae64fcf57a2517"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_c4eb2bd6e6d6634f642358cd",
+      "atlasProductId": "ram_crucial_ct2k16g4sfra32a",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-PC4-25600-Downclockable-260-Pin-Compatible/dp/B08C4X9VR5",
+      "retailerListingId": "B08C4X9VR5",
+      "binding": {
+        "manufacturerPartNumber": "CT2K16G4SFRA32A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-29:amazon:B08C4X9VR5"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "2e731e7a61bc04f736dd96bf16ba940c917013afe02e76f07509876d4ac83a95"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_6b7758415fcb4bec859927e3",
+      "atlasProductId": "ram_crucial_cp2k16g56c46u5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-2x16GB-5600MT-Desktop-CP2K16G56C46U5/dp/B0C2B7W1W4",
+      "retailerListingId": "B0C2B7W1W4",
+      "binding": {
+        "manufacturerPartNumber": "CP2K16G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-33:amazon:B0C2B7W1W4"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "8dd7fde8429157d4e6305656a79e4d41922f0fa3a4cd23b7bf3ce25b3ef7e0b3"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_79a8bcc17b3f4005d9241d3a",
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5b",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-6000MHz-Overclocking-Desktop-Compatible/dp/B0DSQVNBD5",
+      "retailerListingId": "B0DSQVNBD5",
+      "binding": {
+        "manufacturerPartNumber": "CP2K32G60C40U5B",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-34:amazon:B0DSQVNBD5"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "8aa10989f6d11fc396151ac33d0b9f19a9a9b794d21d171e9e09d414feb1e44f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_fa7195867ee7ff6f183e8687",
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5w",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-6000MHz-Overclocking-Desktop-Compatible/dp/B0DSQTD4TN",
+      "retailerListingId": "B0DSQTD4TN",
+      "binding": {
+        "manufacturerPartNumber": "CP2K32G60C40U5W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-35:amazon:B0DSQTD4TN"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "3a77c1a73b92b843a15fe45b29991330a5c935ac3b78be2c2df514b9caa80456"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_52010d1b450688934f93d51f",
+      "atlasProductId": "ram_crucial_cp2k32g64c40u5w",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-6400MHz-Overclocking-Desktop-Compatible/dp/B0DSQMCV8B",
+      "retailerListingId": "B0DSQMCV8B",
+      "binding": {
+        "manufacturerPartNumber": "CP2K32G64C40U5W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-36:amazon:B0DSQMCV8B"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "c5865104ff9ff8e5924f5cfae8269bdce5f612039a083c0906b1a90d2a15cd31"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_ecba370299cccde9b5d411cd",
+      "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_fx5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-6000MT-CL36-36-36-96-Desktop-Computer/dp/B0DN4LY1MQ",
+      "retailerListingId": "B0DN4LY1MQ",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3636F32GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-37:amazon:B0DN4LY1MQ"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "e4566f379f07f91b373881cfc2d8d761410d838703e6dd8f85c26fdb84b6c4ed"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_00f481b3f0df696cac5be07e",
+      "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_fx5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-flare-x5-64gb-ddr5-6000-cas-latency-cl36-desktop-memory-black/p/N82E16820374656",
+      "retailerListingId": "N82E16820374656",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3636F32GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-37:newegg:N82E16820374656"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "7505fde5012d0630efd204a0ac5ffe27ab19ba5ef3503edcccf3118ae8102324"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_882d0f7478e3cbd006547f9a",
+      "atlasProductId": "ram_g_skill_f5_5600j3636d32gx2_rs5w",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-D564GB-5600-36-Ripjaws-F5-5600J3636D32GX2-RS5W/dp/B0B2S4SPHS",
+      "retailerListingId": "B0B2S4SPHS",
+      "binding": {
+        "manufacturerPartNumber": "F5-5600J3636D32GX2-RS5W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-38:amazon:B0B2S4SPHS"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "d4d71747bdcee2cf55fba9856af09e08dbe54d9f523a31e34c67ada2763db9f4"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a2e3b633952a989593cb70e7",
+      "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5k",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-Ripjaws-6000MHz-Channel-Black/dp/B0BNLNB682",
+      "retailerListingId": "B0BNLNB682",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3040F16GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-39:amazon:B0BNLNB682"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "3b7920620a2a1ba91e492a0b33595df425a333b75118e4324d6f3fa1fb8a87d9"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_854cd5bb290de7bde7d24fc3",
+      "atlasProductId": "ram_g_skill_f5_6800j3445g16gx2_rs5k",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-Ripjaws-CL34-45-45-108-Desktop-Computer/dp/B0C6HWWKQK",
+      "retailerListingId": "B0C6HWWKQK",
+      "binding": {
+        "manufacturerPartNumber": "F5-6800J3445G16GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-40:amazon:B0C6HWWKQK"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "7fcdb810009516ffb001fd4068c1b810d77f60c86fb822063d80e5959f8bda79"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a0f76132b09983dae81d1f9e",
+      "atlasProductId": "ram_kingston_kf560c36bwe2k2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-6000MT-2x16GB-Desktop-Gaming/dp/B0DCKF3MJN",
+      "retailerListingId": "B0DCKF3MJN",
+      "binding": {
+        "manufacturerPartNumber": "KF560C36BWE2K2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-41:amazon:B0DCKF3MJN"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "7c36c957eb17ebcd26e0bcf4e5c0674350d395a0ed56a7607e1bca2652aec473"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_58e0c07cec589cfd0ce8563e",
+      "atlasProductId": "ram_kingston_kf564c32rsak2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Technology-Overclocking-Stability-KF564C32RSAK2-32/dp/B0B72BM63Q",
+      "retailerListingId": "B0B72BM63Q",
+      "binding": {
+        "manufacturerPartNumber": "KF564C32RSAK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-44:amazon:B0B72BM63Q"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "83e46e02caa195d8cee0d30502588ccc5d2afd5cab774df2e7695550f6bee450"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_006454e86ec14c34bf01fe14",
+      "atlasProductId": "ram_teamgroup_ctced532g6000hc30dc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Create-Overclocking-6000MHz-PC5-48000/dp/B0C4NM8NMC",
+      "retailerListingId": "B0C4NM8NMC",
+      "binding": {
+        "manufacturerPartNumber": "CTCED532G6000HC30DC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-46:amazon:B0C4NM8NMC"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "418c5451d9bf80e96c9d30bce212984549cbd3ec1cf116958aa3a59cdd012c4e"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_6fb23928511932e3c7f87387",
+      "atlasProductId": "ram_teamgroup_ctced532g6000hc38adc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Create-Overclocking-6000MHz-PC5-48000/dp/B0BPHRGLSH",
+      "retailerListingId": "B0BPHRGLSH",
+      "binding": {
+        "manufacturerPartNumber": "CTCED532G6000HC38ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-47:amazon:B0BPHRGLSH"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "02fcac7cf3252839b9f7424ff6c870ebbb858b5b89c0f8cb7cc06fdd65ed98af"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_7ccdfe0d03fb47cd218629ca",
+      "atlasProductId": "ram_teamgroup_ff4d516g6000hc38adc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-DDR5-Memory/dp/B0CXDS7751",
+      "retailerListingId": "B0CXDS7751",
+      "binding": {
+        "manufacturerPartNumber": "FF4D516G6000HC38ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-49:amazon:B0CXDS7751"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "e6059dcdf712b65998b25ed28c403a3ca9fde0957e16353fe215582a798d12d0"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a0fb40b641dd41c36cd8a4c4",
+      "atlasProductId": "ram_teamgroup_ff4d532g6000hc38adc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Force-6000MHz-PC5-48000-Desktop/dp/B09LHNF6GT",
+      "retailerListingId": "B09LHNF6GT",
+      "binding": {
+        "manufacturerPartNumber": "FF4D532G6000HC38ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-51:amazon:B09LHNF6GT"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "0be5e414b542764e0637a121764a248832b55b23965b79ff0c4ded61c6e87973"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_3d00f37a0d9f1fb43355d2f4",
+      "atlasProductId": "ram_corsair_cmk64gx5m2b5200c40",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/CORSAIR-VENGEANCE-5200MHz-Compatible-Computer/dp/B09R7S7PXC",
+      "retailerListingId": "B09R7S7PXC",
+      "binding": {
+        "manufacturerPartNumber": "CMK64GX5M2B5200C40",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-53:amazon:B09R7S7PXC"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "aa41ac495887b13a92d49eb45ad517aaee495ee721de01e43cf448a2832705bd"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_ecf284d281ab3b932bb38d8d",
+      "atlasProductId": "ram_corsair_cmk64gx5m2b5600c40",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/CORSAIR-VENGEANCE-5600MHz-Compatible-Computer/dp/B09WN2H42Y",
+      "retailerListingId": "B09WN2H42Y",
+      "binding": {
+        "manufacturerPartNumber": "CMK64GX5M2B5600C40",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-54:amazon:B09WN2H42Y"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "5667e4ffe1bcd9d5705f21164d6f09652e247c66a12fec02c6dbb37cfcc17971"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_463dd66a701deb6e7674413e",
+      "atlasProductId": "ram_corsair_cmh64gx5m2n6400c32w",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/64GB-32GB-Desktop-Memory-Corsair/dp/B0FKTM3RCW",
+      "retailerListingId": "B0FKTM3RCW",
+      "binding": {
+        "manufacturerPartNumber": "CMH64GX5M2N6400C32W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-60:amazon:B0FKTM3RCW"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "5e321fee0d90f9316fdaebd803e627032a2c913d741ab62f83230860e1ce8d72"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_3955469dcf98fbe5921e50eb",
+      "atlasProductId": "ram_crucial_ct2k16g56c46s5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-5600MHz-5200MHz-4800MHz-CT2K16G56C46S5/dp/B0BLTDRRLF",
+      "retailerListingId": "B0BLTDRRLF",
+      "binding": {
+        "manufacturerPartNumber": "CT2K16G56C46S5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-61:amazon:B0BLTDRRLF"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "df953657f310a38649c3296f1fc291abf4dcefc9921c7fb409308068bd278d01"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_51b241c4720259e5ec74ca8a",
+      "atlasProductId": "ram_crucial_ct2k32g56c46u5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-5600MHz-5200MHz-4800MHz-CT2K32G56C46U5/dp/B0BLTG3RLR",
+      "retailerListingId": "B0BLTG3RLR",
+      "binding": {
+        "manufacturerPartNumber": "CT2K32G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-62:amazon:B0BLTG3RLR"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "f76b812a18c19619ccdad5a8039d7728a3fc771013f5273ba001a2e8be249484"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_0b9b9bf6f06ce8066063178c",
+      "atlasProductId": "ram_crucial_ct32g56c46s5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-5600MHz-5200MHz-4800MHz-CT32G56C46S5/dp/B0BLTDTD86",
+      "retailerListingId": "B0BLTDTD86",
+      "binding": {
+        "manufacturerPartNumber": "CT32G56C46S5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-63:amazon:B0BLTDTD86"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "413084df3dbbea56fffe87afb6fb6956f155143aaf12a325632391d00ae05f6d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_48edb5a9082eafcf15de5b59",
+      "atlasProductId": "ram_crucial_cp2k16g4dfra32a",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-High-Performance-3200MHz-3000MHz-Compatible/dp/B0C29R9LNL",
+      "retailerListingId": "B0C29R9LNL",
+      "binding": {
+        "manufacturerPartNumber": "CP2K16G4DFRA32A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-64:amazon:B0C29R9LNL"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "e11971012d4bd6189fbfaa0649054a74815f54a940e5e99555bdb52e3365dea6"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_150351a34e3920f5fdc57009",
+      "atlasProductId": "ram_crucial_cp2k16g60c36u5b",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-6000MHz-Overclocking-Desktop-Compatible/dp/B0CTHXMYL8",
+      "retailerListingId": "B0CTHXMYL8",
+      "binding": {
+        "manufacturerPartNumber": "CP2K16G60C36U5B",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-65:amazon:B0CTHXMYL8"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "8a4c8a00ea08c3859d03f24178b6c164dedca62a2316ab09ac78a8e59fc1da9f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_b170e44a77d496775ee4b5ef",
+      "atlasProductId": "ram_crucial_cp2k16g64c32u5b",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-6400MHz-Overclocking-Desktop-Compatible/dp/B0FQMLKVLS",
+      "retailerListingId": "B0FQMLKVLS",
+      "binding": {
+        "manufacturerPartNumber": "CP2K16G64C32U5B",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-66:amazon:B0FQMLKVLS"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "2a23dd60abf3041fa47756d78e40596be98e2a3ba29adfcba2be11c76a985609"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_696b912fd754af49abfb876f",
+      "atlasProductId": "ram_g_skill_f5_6000j3036f16gx2_fx5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-2x16GB-CL30-36-36-96-Desktop-Computer/dp/B0DD295CNY",
+      "retailerListingId": "B0DD295CNY",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3036F16GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-67:amazon:B0DD295CNY"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "7df736a2e06949ba7917be1a19b0773709a409ddb0456caa4fcafb63c14df938"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_012b091fe1c17429f9ca193e",
+      "atlasProductId": "ram_g_skill_f5_6000j3038f16gh2_fx5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-2x16GB-CL30-38-38-96-Desktop-Computer/dp/B0G7QNTRLW",
+      "retailerListingId": "B0G7QNTRLW",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3038F16GH2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-68:amazon:B0G7QNTRLW"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "bf9599edd761df99fd09befc4aced4a5422a03d5fa0d7e4703e52982cafabf65"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_3bd911f40f13aa2fa2fd0c84",
+      "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5w",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-Ripjaws-CL40-40-40-83-Desktop-Computer/dp/B0CHBKHH9Q",
+      "retailerListingId": "B0CHBKHH9Q",
+      "binding": {
+        "manufacturerPartNumber": "F5-5200J4040A16GX2-RS5W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-69:amazon:B0CHBKHH9Q"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "57c65289c7c7e7d2371fbe2cff62ee5f5fc13e0b7f78e5a4530c0e36dc7ff2dc"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_3a86e69976994c9063d55fdc",
+      "atlasProductId": "ram_g_skill_f5_6000j3238f16gx2_rs5w",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Skill-F5-6000J3238F16GX2-RS5W-Memory-16-GB/dp/B0C9FJBSLV",
+      "retailerListingId": "B0C9FJBSLV",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3238F16GX2-RS5W",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-71:amazon:B0C9FJBSLV"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "c82bf67fcef94ec8d0c75e82a34dcc52b0f76467c2a8f666f619c1b07c381552"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5e7ca623ab1cb2e33e9a10cb",
+      "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_rs5k",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-RipJaws-288-Pin-CL36-36-36-96-F5-6000J3636F16GX2-RS5K/dp/B0BJ181PX7",
+      "retailerListingId": "B0BJ181PX7",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3636F16GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-73:amazon:B0BJ181PX7"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "ec89299fcea6076fc68dfb3475c1b6fe87329aa229bd4bafa104cf5c46eab05a"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_ea5e501174d93c020d6dc735",
+      "atlasProductId": "ram_g_skill_f5_6400j3239g16gx2_rs5k",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-RipJaws-288-Pin-CL32-39-39-102-F5-6400J3239G16GX2-RS5K/dp/B0BNYWFC91",
+      "retailerListingId": "B0BNYWFC91",
+      "binding": {
+        "manufacturerPartNumber": "F5-6400J3239G16GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-75:amazon:B0BNYWFC91"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "d81605c9a9a6a8032ef74d189eba48d7a152b74fdb3273c81709e7b5f9b80ec9"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_6ee2d0b67aee65fe61e58544",
+      "atlasProductId": "ram_g_skill_f5_5600s4645a16gx2_rs",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-CL46-45-45-89-Unbuffered-Notebook-F5-5600S4645A16GX2-RS/dp/B0C64BNCWX",
+      "retailerListingId": "B0C64BNCWX",
+      "binding": {
+        "manufacturerPartNumber": "F5-5600S4645A16GX2-RS",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-76:amazon:B0C64BNCWX"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "26af6ea5e3860796266cf93ef18ab6da6912af62a3c3129185b6fc03d30523e2"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_8233b92878a5f869061872ef",
+      "atlasProductId": "ram_g_skill_f5_5600s4645a32gx2_rs",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-CL46-45-45-89-Unbuffered-Notebook-F5-5600S4645A32GX2-RS/dp/B0C64NGBXF",
+      "retailerListingId": "B0C64NGBXF",
+      "binding": {
+        "manufacturerPartNumber": "F5-5600S4645A32GX2-RS",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-77:amazon:B0C64NGBXF"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "a185223441a8c75e2b08b86cf511f251fa22bf73f51dfca0134d03286e881202"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a05c822922d0607a13d46706",
+      "atlasProductId": "ram_g_skill_f5_6400j3239g32gx2_tz5rk",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-Trident-288-Pin-CL32-39-39-102-F5-6400J3239G32GX2-TZ5RK/dp/B0BJ7X9P1W",
+      "retailerListingId": "B0BJ7X9P1W",
+      "binding": {
+        "manufacturerPartNumber": "F5-6400J3239G32GX2-TZ5RK",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-79:amazon:B0BJ7X9P1W"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "44d851de2a0d4443a222420605cedfebb78914f0c268dd023ac2f99d1dc35235"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_b72b89c3855fa926680971ff",
+      "atlasProductId": "ram_g_skill_f5_7600j3646g16gx2_tz5rk",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-Trident-288-Pin-CL36-46-46-121-F5-7600J3646G16GX2-TZ5RK/dp/B0BJ84L4QT",
+      "retailerListingId": "B0BJ84L4QT",
+      "binding": {
+        "manufacturerPartNumber": "F5-7600J3646G16GX2-TZ5RK",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-80:amazon:B0BJ84L4QT"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "f38da9bda841ef44356ca209cd0db1428d63383f3ac2906ca3e0b7173445e989"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_f2aa695b1452a041ecf5f24c",
+      "atlasProductId": "ram_kingston_kcp556sd8_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-32GB-SDRAM-Memory-Module/dp/B0BXBBJYD6",
+      "retailerListingId": "B0BXBBJYD6",
+      "binding": {
+        "manufacturerPartNumber": "KCP556SD8-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-81:amazon:B0BXBBJYD6"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "124339cdfe8dd1f3bce4916febde909741bf0cf10d3102a61c4abb5b13d7ced5"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_b82e362574873e30ecacd6c2",
+      "atlasProductId": "ram_kingston_kf560c30bbek2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-2x16GB-6000MT-Desktop-KF560C30BBEK2-32/dp/B0CYHC58P6",
+      "retailerListingId": "B0CYHC58P6",
+      "binding": {
+        "manufacturerPartNumber": "KF560C30BBEK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-83:amazon:B0CYHC58P6"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "033ae86493bfd9992936e33db4a58b984783a68cc291939965ddd3c95dbf20d8"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_81fbdd54449764dd2ee90c1d",
+      "atlasProductId": "ram_kingston_kf560c36bbe2k2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-2x16GB-6000MT-Desktop-KF560C36BBE2K2-32/dp/B0DCKBGBTP",
+      "retailerListingId": "B0DCKBGBTP",
+      "binding": {
+        "manufacturerPartNumber": "KF560C36BBE2K2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-84:amazon:B0DCKBGBTP"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "e7eee757a7969eb9c93e3beea4a19101b92574a8c55387ef0b9227349907b144"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_3f9720f4d851295031b347ca",
+      "atlasProductId": "ram_kingston_kf564c32bbek2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-2x32GB-6400MT-Desktop-KF564C32BBEK2-64/dp/B0CYH8MD2Y",
+      "retailerListingId": "B0CYH8MD2Y",
+      "binding": {
+        "manufacturerPartNumber": "KF564C32BBEK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-85:amazon:B0CYH8MD2Y"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "5d387064f632a48000e949eeb8ed6e34723bd9fd3c4b9fc4ace8ed64eb3c5b68"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_1632092a16cdeb9a11719bc7",
+      "atlasProductId": "ram_kingston_kf560c30bweak2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-6000MT-Desktop-Gaming-Memory/dp/B0CYM3WSHX",
+      "retailerListingId": "B0CYM3WSHX",
+      "binding": {
+        "manufacturerPartNumber": "KF560C30BWEAK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-86:amazon:B0CYM3WSHX"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "5db5dd6e402818a7e85e0a1b7150b5a02dc92cda8e07a11dbd43b09a73f26702"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_f03dfe734877ec91fc94a3fb",
+      "atlasProductId": "ram_kingston_kf560c36bbeak2_16",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Desktop-Infrared-Syncing-KF560C36BBEAK2-16/dp/B0BRTKL725",
+      "retailerListingId": "B0BRTKL725",
+      "binding": {
+        "manufacturerPartNumber": "KF560C36BBEAK2-16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-87:amazon:B0BRTKL725"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "c7a1020c80cbd48c5532bcf3eeabc3d10bad802b3f4b21ec5be19da7234d7293"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_58e6d3679adf2113864276bd",
+      "atlasProductId": "ram_kingston_kf564c32bbeak2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-2x16GB-6400MT-Desktop-KF564C32BBEAK2-32/dp/B0CYM25PSL",
+      "retailerListingId": "B0CYM25PSL",
+      "binding": {
+        "manufacturerPartNumber": "KF564C32BBEAK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-88:amazon:B0CYM25PSL"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "708814fd9c01e0fd973d33d22f16d1d6cacd47b5ba30a7ed3eba8e2743cad8a2"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_d34ab705d5a3b6618354b8f3",
+      "atlasProductId": "ram_kingston_kf556s40ibk2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Impact-2x16GB-Comsumption-KF556S40IBK2-32/dp/B0BRTJ4Q94",
+      "retailerListingId": "B0BRTJ4Q94",
+      "binding": {
+        "manufacturerPartNumber": "KF556S40IBK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-89:amazon:B0BRTJ4Q94"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "66b0ccd1b72bbb4c61c7d42796185090cd041a65ac11fd30dd830625a1c83c37"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_35f8b471ac81ce15c8cd66fa",
+      "atlasProductId": "ram_kingston_kf560s38ibk2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Technology-Impact-2x16GB-KF560S38IBK2-32/dp/B0C3HS9JVQ",
+      "retailerListingId": "B0C3HS9JVQ",
+      "binding": {
+        "manufacturerPartNumber": "KF560S38IBK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-90:amazon:B0C3HS9JVQ"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "cce38c76fa0ad72d9979642e04152f4bda1c4259ad097a72896864213efc56a8"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_d19be4ba0ded90165e8b69be",
+      "atlasProductId": "ram_kingston_kf564s38ib_16",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Technology-Impact-6400MT-KF564S38IB-16/dp/B0C3HTXDDB",
+      "retailerListingId": "B0C3HTXDDB",
+      "binding": {
+        "manufacturerPartNumber": "KF564S38IB-16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-91:amazon:B0C3HTXDDB"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "958cb8a5dc980619003de242f7306070ff9ff8c361c8ca85bff3fcfe93fb44fd"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_415dfecf4403bb10bce27e90",
+      "atlasProductId": "ram_kingston_kf564s38ibk2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Technology-Impact-2x16GB-KF564S38IBK2-32/dp/B0C3J1GC17",
+      "retailerListingId": "B0C3J1GC17",
+      "binding": {
+        "manufacturerPartNumber": "KF564S38IBK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-92:amazon:B0C3J1GC17"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "54c8f2589b37b89d015f2425cc144414d787257851b7ba941d666dde81aee855"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_2e47cab7322a7cbb37231ca4",
+      "atlasProductId": "ram_kingston_kvr32n22d8_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-KVR32N22D8-32-3200MHz-Non-ECC/dp/B084GKDJ6M",
+      "retailerListingId": "B084GKDJ6M",
+      "binding": {
+        "manufacturerPartNumber": "KVR32N22D8/32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-94:amazon:B084GKDJ6M"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "78b7986379b75291de03c587a4bdbdd2f761a9b402e89755cd6582130878a08b"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_75dbae84fafbcb5b002d592b",
+      "atlasProductId": "ram_teamgroup_ctced532g6400hc32adc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Create-Overclocking-6400MHz-PC5-51200/dp/B0C657LC81",
+      "retailerListingId": "B0C657LC81",
+      "binding": {
+        "manufacturerPartNumber": "CTCED532G6400HC32ADC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-95:amazon:B0C657LC81"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "5f3daab042e13d271913ba6310ca26b1358a4fa3ec0a5f31534eb730d81dcf41"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_93a3bc3903416cc01dcb815e",
+      "atlasProductId": "ram_teamgroup_ff3d532g6000hc38jdc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Force-PC5-48000-Compatible-FF3D532G6000HC38JDC01/dp/B0DX798QSS",
+      "retailerListingId": "B0DX798QSS",
+      "binding": {
+        "manufacturerPartNumber": "FF3D532G6000HC38JDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-96:amazon:B0DX798QSS"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "ee5f19aed2d62bd4e8e643fd4f8e24970bdeff5cb3782aefb43fc12cea6898c9"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_13a4c2712178139d3e042e79",
+      "atlasProductId": "ram_teamgroup_ff3d532g6400hc38jdc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Force-6400MHz-PC5-51200-FF3D532G6400HC38JDC01/dp/B0DX67S1D8",
+      "retailerListingId": "B0DX67S1D8",
+      "binding": {
+        "manufacturerPartNumber": "FF3D532G6400HC38JDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-97:amazon:B0DX67S1D8"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "44982c2a8a380bd75396a66c92b93742c874b8f405e38d604195cb2462e46aa0"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_91151b435d0b066353b5eca0",
+      "atlasProductId": "ram_teamgroup_tf3d416g3200hc16fdc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-Team-T-Force-Gaming-Memory/dp/B0937GY2LV",
+      "retailerListingId": "B0937GY2LV",
+      "binding": {
+        "manufacturerPartNumber": "TF3D416G3200HC16FDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-100:amazon:B0937GY2LV"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "cd04c496d139a6cdf767a1af6c2c210e2fc018355bdd73c34a6500a64ba13920"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_771944d0f1fcdd65565b9e15",
+      "atlasProductId": "ram_teamgroup_tf3d432g3200hc16fdc01",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/TEAMGROUP-T-Force-3200MHz-PC4-25600-TF3D432G3200HC16FDC01/dp/B08PV1QQJX",
+      "retailerListingId": "B08PV1QQJX",
+      "binding": {
+        "manufacturerPartNumber": "TF3D432G3200HC16FDC01",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-008:retail-discovery-final-manual-pass-enriched.xlsx:manual-pass:row-101:amazon:B08PV1QQJX"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:40:57.407Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:40:57.407Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "eba8612d706b7f7ee8dd4f8ff363bf5ac766f9cfaa9ae0ee5637d5ef5f0304fb"
     }
   ]
 }

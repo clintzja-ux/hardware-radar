@@ -77,10 +77,10 @@ const visit = (value, path = "$") => {
 admitted.forEach(([mpn]) => visit(products.find(({ identity }) => identity.manufacturerPartNumber === mpn)));
 
 const destinations = JSON.parse(await readFile(fileURLToPath(new URL("../../mercury/destinations/production-destinations.json", import.meta.url)), "utf8"));
-assert.equal(destinations.records.length, 78);
+assert.equal(destinations.records.length, 158);
 for (const atlasProductId of ["ram_kingston_kf560c30bbea_8", "ram_corsair_cmk16gx5m2b5200z40", "ram_g_skill_f5_6000j3636f16gx1_rs5k"]) {
     assert.equal(destinations.records.some(destination => destination.atlasProductId === atlasProductId && destination.retailerId === "RETAILER-0001"), true);
 }
-assert.equal(destinations.records.some(({ atlasProductId }) => atlasProductId === "ram_kingston_kf560c36bbea_8"), false);
+assert.equal(destinations.records.some(({ atlasProductId, provenance }) => atlasProductId === "ram_kingston_kf560c36bbea_8" && provenance.sourceType === "OPERATOR_CURATED_RETAIL_REVIEW"), true);
 
 console.log("GROWTH-005B.2 curated value-DDR5 Atlas admission tests passed (4 admitted, 3 held, 1 rejected).");

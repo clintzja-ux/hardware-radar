@@ -8,13 +8,14 @@ import {
     deriveCurrentDisplayComparison,
     FileCurrentDisplaySnapshotRepository,
     deriveCurrentDisplayDeliveredCost,
+    ManualRetailReviewImportService,
     RetailDisplayImportService,
     assessStandardRetailNewCondition,
     validateCurrentDisplaySnapshot
 } from "../current-display/index.js";
 
 let cases = 0;
-const product = (id, mpn, lifecycleStatus = "ACTIVE", publicationStatus = "READY") => ({ identity: { atlasProductId: id, manufacturerPartNumber: mpn }, governance: { lifecycleStatus, publicationStatus } });
+const product = (id, mpn, lifecycleStatus = "ACTIVE", publicationStatus = "READY", formFactor = "DIMM") => ({ identity: { atlasProductId: id, manufacturerPartNumber: mpn }, governance: { lifecycleStatus, publicationStatus }, extension: { data: { classification: { memoryType: "DDR5", formFactor, applicationClass: formFactor === "DIMM" ? "DESKTOP" : "LAPTOP" } } } });
 const products = [product("ram_fixture_one", "FIX-ONE"), product("ram_fixture_two", "FIX-TWO"), product("ram_fixture_draft", "FIX-DRAFT", "DRAFT", "PENDING")];
 const destination = { destinationId: "mer_dest_aaaaaaaaaaaaaaaaaaaaaaaa", atlasProductId: "ram_fixture_one", retailerId: "RETAILER-0001", retailerListingId: "B000000001" };
 const neweggDestination = { destinationId: "mer_dest_bbbbbbbbbbbbbbbbbbbbbbbb", atlasProductId: "ram_fixture_one", retailerId: "RETAILER-0004", retailerListingId: "N82E16800000001" };
@@ -151,5 +152,47 @@ assert.equal(manual.actionableItems.length, 1);
 assert.equal(manual.actionableItems[0].researchState, "COMPLETELY_UNVERIFIED");
 assert.equal(manual.actionableItems[0].priority, "HIGH");
 assert.equal(manual.actionableItems.some(item => item.priority === "NO_ACTION"), false); cases += 1;
+
+const manualRow = overrides => ({ atlasProductId: "ram_fixture_one", mpn: "FIX-ONE", manualAction: "AMAZON_URL_NEEDED", operatorReviewStatus: "COMPLETED", operatorNotes: "", ddrGeneration: "DDR5", formFactor: "DIMM", applicationClass: "DESKTOP", amazonUrlCurrent: "https://www.amazon.com/dp/B000000001", amazonPriceCurrent: 100, amazonStatusCurrent: "AVAILABLE", amazonUrlManual: "https://www.amazon.com/dp/B000000001", amazonPriceManual: 105, amazonManualNotes: "Exact MPN confirmed; sold by Amazon", neweggUrlCurrent: "https://www.newegg.com/fixture/p/N82E16800000001", neweggPriceCurrent: 90, neweggStatusCurrent: "AVAILABLE", neweggUrlManual: null, neweggPriceManual: null, neweggManualNotes: null, ...overrides });
+const manualService = new ManualRetailReviewImportService({ products, destinations: [destination, neweggDestination] });
+const manualPrior = imported.snapshot;
+const reviewed = manualService.importRows({ rows: [manualRow()], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+const reviewedAmazon = reviewed.snapshot.offers.find(offer => offer.retailer === "AMAZON");
+assert.equal(reviewedAmazon.priceUsd, 105);
+assert.equal(reviewedAmazon.manualReviewProvenance.sourceType, "OPERATOR_CURATED_RETAIL_REVIEW");
+assert.equal(reviewed.snapshot.offers.find(offer => offer.retailer === "NEWEGG").priceUsd, 90);
+assert.equal(reviewed.outcomes.some(item => item.retailer === "NEWEGG" && item.status === "NO_NEW_MANUAL_VALUE"), true);
+assert.deepEqual({ network: reviewed.networkOperations, spend: reviewed.actualSpendUsd, history: reviewed.historicalObservationsCreated }, { network: 0, spend: 0, history: 0 }); cases += 1;
+
+for (const [status, expectedRetailers] of [
+    ["CONFIRMED_NOT_SOLD_AMAZON", ["AMAZON"]], ["CONFIRMED_NOT_SOLD_NEWEGG", ["NEWEGG"]], ["CONFIRMED_NOT_SOLD_BOTH", ["AMAZON", "NEWEGG"]]
+]) {
+    const result = manualService.importRows({ rows: [manualRow({ operatorReviewStatus: status, amazonUrlManual: null, amazonPriceManual: null })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+    assert.deepEqual(result.outcomes.filter(item => item.status === "CONFIRMED_NOT_SOLD").map(item => item.retailer), expectedRetailers);
+} cases += 1;
+
+const pending = manualService.importRows({ rows: [manualRow({ operatorReviewStatus: "PENDING" })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(pending.outcomes[0].status, "PENDING_IGNORED"); assert.deepEqual(pending.snapshot.offers, manualPrior.offers); cases += 1;
+
+const outManual = manualService.importRows({ rows: [manualRow({ operatorReviewStatus: "OUT_OF_STOCK_CONFIRMED" })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(outManual.snapshot.offers.find(offer => offer.retailer === "AMAZON").availability, "OUT_OF_STOCK");
+assert.equal(outManual.snapshot.offers.find(offer => offer.retailer === "AMAZON").itemPriceEligible, false); cases += 1;
+
+const marketplace = manualService.importRows({ rows: [manualRow({ operatorReviewStatus: "MARKETPLACE_ONLY_CONFIRMED", amazonManualNotes: "Exact MPN; third-party seller" })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(marketplace.snapshot.offers.find(offer => offer.retailer === "AMAZON").availability, "AVAILABLE_MARKETPLACE");
+assert.equal(marketplace.snapshot.offers.find(offer => offer.retailer === "AMAZON").itemPriceEligible, false); cases += 1;
+
+const unresolvedManual = manualService.importRows({ rows: [manualRow({ operatorReviewStatus: "UNRESOLVED_AFTER_MANUAL_REVIEW", amazonUrlManual: null, amazonPriceManual: null })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(unresolvedManual.outcomes.filter(item => item.status === "UNRESOLVED_AFTER_MANUAL_REVIEW").length, 2); cases += 1;
+
+const isolatedManual = manualService.importRows({ rows: [manualRow({ ddrGeneration: "DDR4" }), manualRow({ atlasProductId: "ram_fixture_two", mpn: "FIX-TWO", manualAction: "NEWEGG_URL_NEEDED", amazonUrlManual: null, amazonPriceManual: null, neweggUrlManual: "https://www.newegg.com/fixture/p/N82E16800000002", neweggPriceManual: 95, neweggManualNotes: "Exact MPN confirmed; sold by Newegg" })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(isolatedManual.outcomes.some(item => item.status === "ROW_REJECTED" && item.reasons.includes("MANUAL_REVIEW_ATLAS_CONTEXT_INVALID")), true);
+assert.equal(isolatedManual.outcomes.some(item => item.atlasProductId === "ram_fixture_two" && item.status === "NEW_EXACT_DESTINATION_ADMITTED"), true); cases += 1;
+
+const searchManual = manualService.importRows({ rows: [manualRow({ neweggUrlManual: "https://www.newegg.com/p/pl?d=FIX-ONE", neweggPriceManual: 90 })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(searchManual.outcomes.some(item => item.retailer === "NEWEGG" && item.status === "SEARCH_URL_REJECTED"), true); cases += 1;
+
+const lifecycleManual = new ManualRetailReviewImportService({ products, destinations: [] }).importRows({ rows: [manualRow({ atlasProductId: "ram_fixture_draft", mpn: "FIX-DRAFT", amazonUrlManual: "https://www.amazon.com/dp/B000000003", amazonPriceManual: 70 })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(lifecycleManual.outcomes.some(item => item.status === "LIFECYCLE_BLOCKED"), true); cases += 1;
 
 console.log(`Retail display import tests passed: ${cases} cases.`);
