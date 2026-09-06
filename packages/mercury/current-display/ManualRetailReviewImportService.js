@@ -27,6 +27,35 @@ const statusApplies = (status, retailer) => status === "CONFIRMED_NOT_SOLD_BOTH"
 const classification = product => product?.extension?.data?.classification ?? {};
 const clone = value => structuredClone(value);
 
+export function canonicalizeSuppliedAmazonProductUrl(value) {
+    if (!nonBlank(value) || host(value) !== "amazon.com") return null;
+    const asin = value.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:\/|$|\?)/i)?.[1]?.toUpperCase() ?? null;
+    return asin ? `https://amazon.com/dp/${asin}` : null;
+}
+
+export function classifyDestinationBackedMissingPrice({ availability, notes } = {}) {
+    const evidence = `${availability ?? ""} ${notes ?? ""}`.toUpperCase();
+    if (/OUT_OF_STOCK/.test(evidence)) return "OUT_OF_STOCK_PRICE_NOT_REQUIRED";
+    if (/MARKETPLACE/.test(evidence)) return "MARKETPLACE_PRICE_NOT_ELIGIBLE";
+    if (/PRICE_NOT_EXPOSED|PAGE_FOUND_PRICE_NOT_EXPOSED/.test(evidence)) return "PRICE_NOT_CURRENTLY_EXPOSED";
+    if (/REFRESH|VOLATILE/.test(evidence)) return "REQUIRES_FUTURE_REFRESH";
+    return "MANUAL_PRICE_MISSING";
+}
+
+export function classifyManualRetailResearch({ operatorReviewStatus, amazonListing = false, neweggListing = false, lifecycleBlocked = false } = {}) {
+    const amazonAbsent = ["CONFIRMED_NOT_SOLD_AMAZON", "CONFIRMED_NOT_SOLD_BOTH"].includes(operatorReviewStatus);
+    const neweggAbsent = ["CONFIRMED_NOT_SOLD_NEWEGG", "CONFIRMED_NOT_SOLD_BOTH"].includes(operatorReviewStatus);
+    const amazonResolved = amazonListing || amazonAbsent;
+    const neweggResolved = neweggListing || neweggAbsent;
+    if (lifecycleBlocked) return "RETAIL_EVIDENCE_LIFECYCLE_BLOCKED";
+    if (amazonAbsent && neweggAbsent) return "BOTH_RETAILERS_CONFIRMED_ABSENT";
+    if (amazonAbsent && neweggListing) return "NEWEGG_RESOLVED_AMAZON_ABSENT";
+    if (neweggAbsent && amazonListing) return "AMAZON_RESOLVED_NEWEGG_ABSENT";
+    if (amazonResolved && neweggResolved) return "BOTH_RETAILERS_RESOLVED";
+    if (amazonResolved || neweggResolved) return "SINGLE_RETAILER_RESOLVED_OTHER_UNRESOLVED";
+    return "TRUE_RESEARCH_UNRESOLVED";
+}
+
 function availabilityFrom(status, notes, prior, sameDestination) {
     if (status === "OUT_OF_STOCK_CONFIRMED") return "OUT_OF_STOCK";
     if (status === "MARKETPLACE_ONLY_CONFIRMED" || /third[- ]party seller|marketplace/i.test(notes)) return "AVAILABLE_MARKETPLACE";

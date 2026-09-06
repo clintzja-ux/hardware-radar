@@ -76,13 +76,13 @@ const expectedProduction = new Map([
     ["ram_corsair_cmk16gx5m2b5200z40", { mpn: "CMK16GX5M2B5200Z40", listing: "B0D2P1CVQD", id: "mer_dest_47a09c16a1755fe032dddf33", url: "https://amazon.com/CORSAIR-Vengeance-5200MHz-Compatible-Computer/dp/B0D2P1CVQD" }],
     ["ram_g_skill_f5_6000j3636f16gx1_rs5k", { mpn: "F5-6000J3636F16GX1-RS5K", listing: "B0G7Q6R7N5", id: "mer_dest_f77afb296ff8e32efabaa489", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0G7Q6R7N5" }]
 ]);
-assert.equal(production.recordCount, 158);
-assert.equal(production.effective.length, 158);
-assert.equal(productionProjection.length, 158);
-assert.equal(new Set(production.records.map(item => item.destinationId)).size, 158);
-assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 158);
-assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 72);
-assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 86);
+assert.equal(production.recordCount, 160);
+assert.equal(production.effective.length, 159);
+assert.equal(productionProjection.length, 159);
+assert.equal(new Set(production.records.map(item => item.destinationId)).size, 160);
+assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 160);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 73);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 87);
 assert.equal(production.records.some(item => item.destinationUrl.includes("/p/pl?")), false);
 for (const destination of production.records) {
     const expected = expectedProduction.get(destination.atlasProductId);

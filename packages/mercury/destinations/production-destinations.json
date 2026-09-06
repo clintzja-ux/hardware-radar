@@ -4582,6 +4582,64 @@
       "createdAt": "2026-09-06T05:40:57.407Z",
       "createdBy": "operator:Clinton_Ramsook",
       "materialFingerprint": "eba8612d706b7f7ee8dd4f8ff363bf5ac766f9cfaa9ae0ee5637d5ef5f0304fb"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_2f3e8f7b579da3454c78d356",
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5b",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-pro-overclocking-64gb-ddr5-6000-cas-latency-cl40-desktop-memory-black/p/N82E16820156419",
+      "retailerListingId": "N82E16820156419",
+      "binding": {
+        "manufacturerPartNumber": "CP2K32G60C40U5B",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-009:manual-pass:row-34:retailer-0004:N82E16820156419"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:50:35.760Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": "mer_dest_0e477b5ebef31720cae6a130",
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:50:35.760Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "eacb2f5ff4f5c3a9b0f3c4030c600efbc15b398188d45172d74bffbf9f5b17c8"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_d569896c0d7559fc2d71b03e",
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/CORSAIR-Vengeance-6000MHz-Compatible-Computer/dp/B0CBRJ63RT",
+      "retailerListingId": "B0CBRJ63RT",
+      "binding": {
+        "manufacturerPartNumber": "CMK32GX5M2B6000Z30",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-009:manual-pass:row-52:retailer-0001:B0CBRJ63RT"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-06T05:50:35.760Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-06T05:50:35.760Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "3677044709dfce88b2b81513bb4f31f9c1622be251706f227762e12e601e9e38"
     }
   ]
 }

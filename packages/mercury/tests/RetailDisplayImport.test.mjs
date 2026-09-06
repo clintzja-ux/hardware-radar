@@ -9,6 +9,9 @@ import {
     FileCurrentDisplaySnapshotRepository,
     deriveCurrentDisplayDeliveredCost,
     ManualRetailReviewImportService,
+    canonicalizeSuppliedAmazonProductUrl,
+    classifyDestinationBackedMissingPrice,
+    classifyManualRetailResearch,
     RetailDisplayImportService,
     assessStandardRetailNewCondition,
     validateCurrentDisplaySnapshot
@@ -194,5 +197,28 @@ assert.equal(searchManual.outcomes.some(item => item.retailer === "NEWEGG" && it
 
 const lifecycleManual = new ManualRetailReviewImportService({ products, destinations: [] }).importRows({ rows: [manualRow({ atlasProductId: "ram_fixture_draft", mpn: "FIX-DRAFT", amazonUrlManual: "https://www.amazon.com/dp/B000000003", amazonPriceManual: 70 })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
 assert.equal(lifecycleManual.outcomes.some(item => item.status === "LIFECYCLE_BLOCKED"), true); cases += 1;
+
+const crossProductConflict = new ManualRetailReviewImportService({ products, destinations: [destination] }).importRows({ rows: [manualRow({ atlasProductId: "ram_fixture_two", mpn: "FIX-TWO", amazonUrlManual: "https://www.amazon.com/dp/B000000001", amazonPriceManual: 80 })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(crossProductConflict.outcomes.some(item => item.status === "DESTINATION_CONFLICT" && item.reasons.includes("RETAILER_LISTING_PRODUCT_CONFLICT")), true);
+assert.deepEqual(crossProductConflict.snapshot.offers, manualPrior.offers); cases += 1;
+
+const activeLifecycle = new ManualRetailReviewImportService({ products, destinations: [] }).importRows({ rows: [manualRow({ atlasProductId: "ram_fixture_two", mpn: "FIX-TWO", amazonUrlManual: "https://www.amazon.com/dp/B000000004", amazonPriceManual: 80 })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(activeLifecycle.outcomes.some(item => item.status === "LIFECYCLE_BLOCKED"), false);
+assert.equal(activeLifecycle.outcomes.some(item => item.status === "NEW_EXACT_DESTINATION_ADMITTED"), true); cases += 1;
+
+assert.equal(canonicalizeSuppliedAmazonProductUrl("https://www.amazon.com/gp/product/B000000001?ref_=fixture"), "https://amazon.com/dp/B000000001");
+assert.equal(canonicalizeSuppliedAmazonProductUrl("https://www.amazon.com/Fixture-Product"), null); cases += 1;
+assert.equal(classifyDestinationBackedMissingPrice({ availability: "OUT_OF_STOCK" }), "OUT_OF_STOCK_PRICE_NOT_REQUIRED");
+assert.equal(classifyDestinationBackedMissingPrice({ notes: "marketplace only" }), "MARKETPLACE_PRICE_NOT_ELIGIBLE");
+assert.equal(classifyDestinationBackedMissingPrice({ availability: "PAGE_FOUND_PRICE_NOT_EXPOSED" }), "PRICE_NOT_CURRENTLY_EXPOSED");
+assert.equal(classifyDestinationBackedMissingPrice({ notes: "refresh later" }), "REQUIRES_FUTURE_REFRESH");
+assert.equal(classifyDestinationBackedMissingPrice({}), "MANUAL_PRICE_MISSING"); cases += 1;
+assert.equal(classifyManualRetailResearch({ operatorReviewStatus: "CONFIRMED_NOT_SOLD_NEWEGG", amazonListing: true }), "AMAZON_RESOLVED_NEWEGG_ABSENT");
+assert.equal(classifyManualRetailResearch({ operatorReviewStatus: "CONFIRMED_NOT_SOLD_BOTH" }), "BOTH_RETAILERS_CONFIRMED_ABSENT");
+assert.equal(classifyManualRetailResearch({ operatorReviewStatus: "COMPLETED", amazonListing: true, lifecycleBlocked: true }), "RETAIL_EVIDENCE_LIFECYCLE_BLOCKED");
+assert.equal(classifyManualRetailResearch({ operatorReviewStatus: "COMPLETED" }), "TRUE_RESEARCH_UNRESOLVED"); cases += 1;
+const scopedMarketplace = manualService.importRows({ rows: [manualRow({ amazonManualNotes: "Exact MPN; third-party seller", neweggUrlManual: "https://www.newegg.com/fixture/p/N82E16800000001", neweggPriceManual: 92, neweggManualNotes: "Exact MPN; sold by Newegg" })], sourceWorkbook: "manual.xlsx", importedAt: "2026-09-06T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(scopedMarketplace.snapshot.offers.find(offer => offer.retailer === "AMAZON").availability, "AVAILABLE_MARKETPLACE");
+assert.equal(scopedMarketplace.snapshot.offers.find(offer => offer.retailer === "NEWEGG").availability, "AVAILABLE"); cases += 1;
 
 console.log(`Retail display import tests passed: ${cases} cases.`);
