@@ -116,6 +116,8 @@ globalThis.document = {
 };
 const { renderRecommendation } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderRecommendation.js")));
 renderRecommendation({
+    title: "Cheapest DDR5 Today",
+    displayName: "Example RAM 32GB",
     brand: "Example",
     model: "RAM",
     bestFor: "Fixture",
@@ -126,13 +128,14 @@ renderRecommendation({
     retailer: "Retailer",
     priceBasis: "Listed price",
     shippingMessage: "Shipping not verified",
-    insight: "Fixture",
+    formFactor: "DIMM",
     offerUrl: "https://retailer.example/item"
 }, "recommendation");
 assert.match(containers.get("recommendation").innerHTML, /target="_blank"/);
 assert.match(containers.get("recommendation").innerHTML, /rel="noopener noreferrer"/);
 assert.match(containers.get("recommendation").innerHTML, /Prices shown exclude applicable shipping, taxes, and fees\./);
-assert.match(containers.get("recommendation").innerHTML, /CHEAPEST CURRENT ITEM PRICE/);
+assert.match(containers.get("recommendation").innerHTML, /Cheapest DDR5 Today/);
+assert.doesNotMatch(containers.get("recommendation").innerHTML, /Comparison note|Item-price comparison/);
 
 const { renderOverallUnavailable } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderOverall.js")));
 const { winnerToDisplayProduct } = await import(pathToFileURL(path.join(publicRoot, "js/modules/marketData.js")));
@@ -145,8 +148,9 @@ assert.doesNotMatch(containers.get("overallSection").innerHTML, /publication req
 const { renderOverall } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderOverall.js")));
 renderOverall([{ ...projected, section: "overall" }]);
 assert.match(containers.get("overallSection").innerHTML, /CHEAPEST RAM TODAY/);
-assert.match(containers.get("overallSection").innerHTML, /Prices shown exclude applicable shipping, taxes, and fees\./);
 assert.match(containers.get("overallSection").innerHTML, /Price checked/);
+assert.doesNotMatch(containers.get("overallSection").innerHTML, /Comparison note|Item-price comparison|prices checked|trusted retailer/i);
+assert.match(containers.get("overallSection").innerHTML, /DDR5 • 32GB • 6000 MT\/s/);
 
 const { renderCategoryUnavailable } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderCategory.js")));
 renderCategoryUnavailable("ddr5Section", "Cheapest DDR5 we're tracking");
@@ -156,6 +160,7 @@ const { renderCategory } = await import(pathToFileURL(path.join(publicRoot, "js/
 renderCategory([{ ...projected, section: "ddr5", title: "Cheapest DDR5 Today" }], "ddr5", "ddr5Section", "Browse DDR5 RAM");
 assert.match(containers.get("ddr5Section").innerHTML, /Cheapest DDR5 Today/);
 assert.match(containers.get("ddr5Section").innerHTML, /Price checked/);
+assert.doesNotMatch(containers.get("ddr5Section").innerHTML, /Comparison note|Item-price comparison/);
 
 assert.equal(projected.price, "99.00");
 assert.equal(projected.shippingMessage, "Shipping, taxes and fees excluded");
@@ -174,6 +179,11 @@ assert.match(styles, /\.comparison-toggle:focus-visible/);
 assert.match(styles, /@media\(max-width:600px\)[\s\S]*?\.comparison-item\{[\s\S]*?flex-direction:column/);
 assert.match(styles, /\.comparison-item a\{[\s\S]*?min-height:44px/);
 assert.match(styles, /\.category-grid\{[\s\S]*?grid-template-columns:repeat\(3,1fr\)/);
+assert.match(styles, /\.current-retail-disclosure\{max-width:1150px;margin:16px auto 32px;padding:0 20px/);
+assert.match(styles, /@media\(max-width:600px\)[\s\S]*?\.price-row\{flex-wrap:wrap/);
+
+const polishedHomepage = await readPublic("index.html");
+assert.equal((polishedHomepage.match(/Prices shown exclude applicable shipping, taxes, and fees\./g) ?? []).length, 1);
 
 const methodology = await readPublic("how-we-choose.html");
 assert.match(methodology, /lowest qualifying listed price within its monitored coverage/);

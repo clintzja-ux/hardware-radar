@@ -14,16 +14,12 @@
     container.innerHTML = `
         <article class="overall-answer">
 
-            <p class="eyebrow">CHEAPEST CURRENT ITEM PRICE</p>
+            <p class="eyebrow">${product.title}</p>
 
-            <h2>${product.brand} ${product.model}</h2>
-
-            <p class="best-for">
-                Comparison note: ${product.bestFor}
-            </p>
+            <h2>${product.displayName || `${product.brand} ${product.model}`}</h2>
 
             <p class="specs">
-                ${product.capacity} • ${product.memoryType} • ${product.speed}
+                ${product.memoryType} • ${product.capacity} • ${product.formFactor === "SO_DIMM" ? "SO-DIMM • " : ""}${product.speed}
             </p>
 
             <div class="price-row">
@@ -35,12 +31,6 @@
                 Prices shown exclude applicable shipping, taxes, and fees.
             </p>
 
-            <p class="mini-verified">Price checked ${product.verified}</p>
-
-            <p class="insight-badge">
-                ${product.insight}
-            </p>
-
             <a
                 class="price-button"
                 href="${product.offerUrl}"
@@ -50,6 +40,8 @@
                 View retailer listing →
 
             </a>
+
+            <p class="mini-verified">Price checked ${product.verified}</p>
 
         </article>
     `;

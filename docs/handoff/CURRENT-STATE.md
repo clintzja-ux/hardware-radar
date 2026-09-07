@@ -14,7 +14,7 @@ Current content-foundation increment: CONTENT-006A — launch QA remains complet
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 Current product-definition increment: A-001 — RAM Launch Catalog and Minimum Useful Coverage complete
-Current public-product increment: PUBLIC-RAM-CATALOG-002 — certified public current-retail projection and item-price Cheapest experience implemented and fixture-certified
+Current public-product increment: PUBLIC-RAM-CATALOG-003 — current-price consumer language, hierarchy, disclosure alignment, and responsive density polished over the unchanged PUBLIC-RAM-CATALOG-002 policy
 Current growth increment:        GROWTH-006 — GA4 retailer-referral observability minimally corrected and fixture-certified; Beacon production collection remains deferred
 Current operating priority:      AUDIENCE & AUTHORITY — useful distribution, SEO/audience observation, content authority, and selective evidence-supported product/retailer expansion
 DataForSEO operating premise:    DATAFORSEO_MARKET_INTELLIGENCE_USE_AUTHORIZED — confirmed Merchant API price-intelligence use is settled; practical activation and every evidence/claim gate remain governed

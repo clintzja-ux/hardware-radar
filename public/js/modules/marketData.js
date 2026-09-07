@@ -11,15 +11,14 @@ export function offerToDisplayProduct(item, section, title, coverage = {}) {
         id: item.atlasProductId, section, title, brand: item.brand,
         model: item.family || item.displayName, displayName: item.displayName,
         capacity: `${item.totalCapacityGb}GB`, memoryType: item.ddrGeneration,
-        speed: `${item.speedMtps} MT/s`, moduleConfiguration: `${item.moduleCount} × ${item.capacityPerModuleGb}GB`,
-        bestFor: "Lowest qualifying current displayed item price",
+        speed: `${item.speedMtps} MT/s`, formFactor: item.formFactor,
+        moduleConfiguration: `${item.moduleCount} × ${item.capacityPerModuleGb}GB`,
         price: Number(item.itemPriceUsd).toFixed(2), currency: item.currency,
         priceBasis: "Current tracked item price", shippingMessage: "Shipping, taxes and fees excluded",
         retailer: item.retailerName, offerUrl: item.destinationUrl,
         verified: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",
         lastVerifiedTime: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",
-        pricesChecked: coverage.offerCount ?? 1, retailersMonitored: coverage.retailerCount ?? 1,
-        insight: "Item-price comparison", comparisonSemantics: item.comparisonSemantics
+        comparisonSemantics: item.comparisonSemantics
     };
 }
 

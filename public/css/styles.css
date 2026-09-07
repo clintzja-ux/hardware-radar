@@ -305,7 +305,7 @@ footer{
 .price-row,
 .category-price-row{
     display:flex;
-    justify-content:space-between;
+    justify-content:flex-start;
     align-items:center;
     gap:16px;
 }
@@ -321,6 +321,7 @@ footer{
     font-weight:700;
     margin:0;
     font-size:.95rem;
+    margin-top:16px;
 }
 
 .verification-details{
@@ -424,11 +425,14 @@ footer{
         grid-template-columns:1fr;
     }
 
-    .overall-topline,
-    .price-row{
+    .overall-topline{
         align-items:flex-start;
         flex-direction:column;
     }
+    .price-row{flex-wrap:wrap;gap:8px 14px}
+    .overall-answer{padding:20px}
+    .overall-answer .specs{margin-bottom:20px}
+    .overall-answer .price-button{padding:14px 22px;min-height:44px}
     .verification-block{
         align-items:flex-start;
         margin-top:8px;
@@ -1141,7 +1145,7 @@ footer{
 .ram-catalog-card__model{color:var(--text-secondary);font-size:.92rem;overflow-wrap:anywhere}
 .ram-catalog-card__mpn{margin:14px 0;font-size:.88rem;overflow-wrap:anywhere}
 .ram-catalog-card__price{display:grid;gap:3px;margin:14px 0;padding:12px;border-radius:8px;background:#eff6ff}.ram-catalog-card__price span,.ram-catalog-card__price small{color:var(--text-secondary);font-size:.82rem}.ram-catalog-card__price strong{font-size:1.15rem}
-.current-retail-disclosure{margin:16px 0;color:var(--text-secondary);font-size:.9rem}
+.current-retail-disclosure{max-width:1150px;margin:16px auto 32px;padding:0 20px;color:var(--text-secondary);font-size:.9rem}
 .ram-catalog-card__mpn span{font-weight:700}
 .ram-catalog-card dl{display:grid;gap:8px}
 .ram-catalog-card dl div{display:flex;justify-content:space-between;gap:14px;border-top:1px solid var(--border);padding-top:8px}

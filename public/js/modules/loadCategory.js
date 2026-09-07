@@ -1,9 +1,9 @@
 import { loadCurrentRetailSnapshot, winnerToDisplayProduct } from "./marketData.js";
 
 const CATEGORY_SCOPES = Object.freeze({
-    ddr5: "Qualifying DDR5 listed price",
-    ddr4: "Qualifying DDR4 listed price",
-    sodimm: "Qualifying SODIMM listed price"
+    ddr5: "Cheapest DDR5 Today",
+    ddr4: "Cheapest DDR4 Today",
+    sodimm: "Cheapest Laptop RAM Today"
 });
 
 export async function loadCategory(scopeName) {
