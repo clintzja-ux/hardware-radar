@@ -4640,6 +4640,122 @@
       "createdAt": "2026-09-06T05:50:35.760Z",
       "createdBy": "operator:Clinton_Ramsook",
       "materialFingerprint": "3677044709dfce88b2b81513bb4f31f9c1622be251706f227762e12e601e9e38"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5f753a01eeaf3eaea11bfbde",
+      "atlasProductId": "ram_crucial_ct2k16g56c46u5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-5600MHz-5200MHz-4800MHz-CT2K16G56C46U5/dp/B0BLTGP2JX",
+      "retailerListingId": "B0BLTGP2JX",
+      "binding": {
+        "manufacturerPartNumber": "CT2K16G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-011:retail-discovery-final-six-review.xlsx:final-six:row-30:amazon:B0BLTGP2JX"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-07T16:53:20.7868427Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-07T16:53:20.7868427Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "13afe96d259b2fb862001802abeacc13be9f9db0f91ea480c73e37190e84ebbd"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_7e524652d53a840a3106bace",
+      "atlasProductId": "ram_crucial_ct2k32g56c46s5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-2x32GB-5600MHz-262-Pin-CT2K32G56C46S5/dp/B0H4QH584J",
+      "retailerListingId": "B0H4QH584J",
+      "binding": {
+        "manufacturerPartNumber": "CT2K32G56C46S5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-011:retail-discovery-final-six-review.xlsx:final-six:row-31:amazon:B0H4QH584J"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-07T16:53:20.7868427Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-07T16:53:20.7868427Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "4b03bf940a661065cd6075be7e3836adc1c2443935b18b2902da09e560213dd3"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_4232b39beaf37f8da51556d9",
+      "atlasProductId": "ram_corsair_cmh32gx5m2f6000z36",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/CORSAIR-Vengeance-2x16GB-6000MHz-Desktop/dp/B0FV3M2PGJ",
+      "retailerListingId": "B0FV3M2PGJ",
+      "binding": {
+        "manufacturerPartNumber": "CMH32GX5M2F6000Z36",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-011:retail-discovery-final-six-review.xlsx:final-six:row-58:amazon:B0FV3M2PGJ"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-07T16:53:20.7868427Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-07T16:53:20.7868427Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "3a386a8bc08917ba9522c1035f62179013d0be77278e40f7594a8d8654fa2176"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5206bc4c58f5cdf145699f85",
+      "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_rs5k",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0C6HWKGWV",
+      "retailerListingId": "B0C6HWKGWV",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3636F32GX2-RS5K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-display-011:retail-discovery-final-six-review.xlsx:final-six:row-74:amazon:B0C6HWKGWV"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-09-07T16:53:20.7868427Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-07T16:53:20.7868427Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "27804307625f02deae8f9c9c646002c95f3ef46401c017a0dca62d99eefaf1a1"
     }
   ]
 }

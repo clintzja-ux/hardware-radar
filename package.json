@@ -109,6 +109,7 @@
     "retail-display:pass5:import": "node scripts/retail-display-pass2-import.mjs",
     "retail-display:manual:import": "node scripts/retail-display-final-manual-import.mjs",
     "retail-display:residue:reconcile": "node scripts/retail-display-residue-reconcile.mjs",
+    "retail-display:final-six:import": "node scripts/retail-display-final-six-import.mjs",
     "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
     "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",
     "review:product-identity:approve": "node scripts/mercury-product-identity-review-approve.mjs",

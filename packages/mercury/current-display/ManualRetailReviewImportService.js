@@ -86,7 +86,7 @@ export class ManualRetailReviewImportService {
         const seenRows = new Set();
         const research = [];
         for (const [index, row] of (rows ?? []).entries()) {
-            const sourceRow = index + 2;
+            const sourceRow = Number.isInteger(row.sourceRow) && row.sourceRow >= 2 ? row.sourceRow : index + 2;
             const rowKey = `${row.atlasProductId}|${row.manualAction}`;
             const product = this.products.get(row.atlasProductId);
             const status = String(row.operatorReviewStatus ?? "").trim();

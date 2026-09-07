@@ -221,4 +221,13 @@ const scopedMarketplace = manualService.importRows({ rows: [manualRow({ amazonMa
 assert.equal(scopedMarketplace.snapshot.offers.find(offer => offer.retailer === "AMAZON").availability, "AVAILABLE_MARKETPLACE");
 assert.equal(scopedMarketplace.snapshot.offers.find(offer => offer.retailer === "NEWEGG").availability, "AVAILABLE"); cases += 1;
 
+const finalSixRow = manualRow({ sourceRow: 74, atlasProductId: "ram_fixture_two", mpn: "FIX-TWO", amazonUrlManual: "https://www.amazon.com/dp/B000000004", amazonPriceManual: 989.99, amazonManualNotes: "Exact MPN confirmed; third-party seller", neweggUrlManual: null, neweggPriceManual: null });
+const finalSix = new ManualRetailReviewImportService({ products, destinations: [] }).importRows({ rows: [finalSixRow], sourceWorkbook: "final-six.xlsx", sourceSheet: "Final Six", importedAt: "2026-09-07T12:00:00Z", priorSnapshot: manualPrior });
+assert.equal(finalSix.outcomes.some(item => item.sourceRow === 74 && item.retailer === "AMAZON" && item.status === "NEW_EXACT_DESTINATION_ADMITTED"), true);
+const finalSixAmazon = finalSix.snapshot.offers.find(offer => offer.atlasProductId === "ram_fixture_two" && offer.retailer === "AMAZON");
+assert.equal(finalSixAmazon.availability, "AVAILABLE_MARKETPLACE");
+assert.equal(finalSixAmazon.condition, null);
+assert.equal(finalSixAmazon.itemPriceEligible, false);
+assert.deepEqual({ network: finalSix.networkOperations, history: finalSix.historicalObservationsCreated }, { network: 0, history: 0 }); cases += 1;
+
 console.log(`Retail display import tests passed: ${cases} cases.`);
