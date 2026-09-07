@@ -1,20 +1,20 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-09-06
+Last updated:                  2026-09-07
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        b0d47690d1bbd7a0a03154df30a52641f55631fd (`feat(retail): import final human RAM retailer review`)
+Current committed HEAD:        f13e3c9cc9bd82a30486d72f8809b2eedfa4313a (`feat(retail): complete initial RAM retailer research cycle`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 18 ahead at RETAIL-DISPLAY-011 preflight
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 19 ahead at PUBLIC-RAM-CATALOG-002 preflight
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 Current product-definition increment: A-001 — RAM Launch Catalog and Minimum Useful Coverage complete
-Current public-product increment: A-002A — scoped cheapest-RAM proposition correction implemented and certified
+Current public-product increment: PUBLIC-RAM-CATALOG-002 — certified public current-retail projection and item-price Cheapest experience implemented and fixture-certified
 Current growth increment:        GROWTH-006 — GA4 retailer-referral observability minimally corrected and fixture-certified; Beacon production collection remains deferred
 Current operating priority:      AUDIENCE & AUTHORITY — useful distribution, SEO/audience observation, content authority, and selective evidence-supported product/retailer expansion
 DataForSEO operating premise:    DATAFORSEO_MARKET_INTELLIGENCE_USE_AUTHORIZED — confirmed Merchant API price-intelligence use is settled; practical activation and every evidence/claim gate remain governed
@@ -30,7 +30,7 @@ Current retailer-registration increment: B-011A — `RETAILER-0003` MemoryC cano
 Current catalog-resolution increment: D-001 — 24 RAM launch candidates resolved for operator review
 Current catalog-balance review: D-001A — brand and retailer relevance reviewed; 22 ready, 2 need evidence
 Current Atlas-admission increment: ATLAS-ACTIVATION-001 — 77 manufacturer-verified expansion records human-reviewed and activated through the Atlas-owned batch boundary; committed at current HEAD
-Current retail-display increment: RETAIL-DISPLAY-011 — final-six manual import completed locally; `RETAIL_RESEARCH_CYCLE_COMPLETE`; operator commit/push pending
+Current retail-display increment: RETAIL-DISPLAY-011 — final-six manual import and `RETAIL_RESEARCH_CYCLE_COMPLETE` committed at current HEAD
 Current brand-registration increment: D-002A — four launch brand prerequisites canonically registered
 ```
 
@@ -52,7 +52,7 @@ Current-display snapshot `mer_display_57f0ae6e10e6c6d013b39731` contains 185 eph
 
 The snapshot repository retains only current and immediately previous replaceable state; it creates no growing history. `RETAIL_RESEARCH_CYCLE_COMPLETE` means every targeted retailer/product question in this 103-product cycle has a resolved evidence state; it does not imply destination, availability, comparison, shipping/fees, or Cheapest coverage. Final classification is 74 both-retailers-resolved, 3 Amazon-resolved/Newegg-absent, 11 Newegg-resolved/Amazon-absent, 1 both-retailers-confirmed-absent, 0 single-retailer-resolved/other-unresolved, 14 lifecycle-held, and 0 true-unresolved. The separate ignored hold report remains byte-identical with 22 lifecycle findings across 14 of the 15 `DRAFT/PENDING` products; none was activated or consumed. Daily automated refresh, automated 48-hour DataForSEO acquisition, and Terminal implementation remain unimplemented or unauthorized. ATLAS-ACTIVATION-001 and RETAIL-DISPLAY-003/004/005/006/008/009/011 created no Mercury retained/historical/canonical observation, DataForSEO task, publication, durable Current Price, delivered-cost Cheapest, or Pick authority; provider calls and spend were zero. The daily display cadence remains independent of historical cadence, and affiliate status does not determine item-price display eligibility.
 
-A-001 defines a 24-product target across 9 DDR5 desktop, 7 DDR4 desktop, and 8 laptop/SODIMM slots, with a launch floor of 18 publication-ready Atlas products and at least 6 per category. Minimum public coverage requires every category to be available with at least 3 qualifying offers spanning at least 2 products and 2 retailers, and at least 3 retailers overall. The ephemeral current-display snapshot now has 26 qualifying item-price offers across 24 products, but it is not the governed public market snapshot and creates no publication authority; the public snapshot remains fail closed with zero eligible published observations. Track B owns finite observation/public-coverage requirements, Track C owns retailer-portfolio/commercial development, and Track D owns remaining evidence gaps. A-001 created no production state.
+A-001 defines a 24-product target across 9 DDR5 desktop, 7 DDR4 desktop, and 8 laptop/SODIMM slots, with a launch floor of 18 publication-ready Atlas products and at least 6 per category. Minimum public coverage requires every category to be available with at least 3 qualifying offers spanning at least 2 products and 2 retailers, and at least 3 retailers overall. The ephemeral current-display snapshot now has 44 qualifying item-price offers across 42 products, but it is not the governed historical/publication market snapshot and creates no durable publication authority. PUBLIC-RAM-CATALOG-002 adds a separate Mercury-owned public current-retail projection: at the certified build evaluation time, four offers qualify under the explicit 36-hour item-price policy, yielding an overall/DDR5 winner while DDR4 and laptop remain unavailable. The generated public artifact omits private review state and discloses that shipping, taxes, and fees are excluded. Track B owns finite observation/public-coverage requirements, Track C owns retailer-portfolio/commercial development, and Track D owns remaining evidence gaps. A-001 created no production state.
 
 D-001 resolved the original 24 A-001 slots into exact-MPN candidates; D-001A subsequently rebalanced the set to 22 ready and two needing more evidence. D-002B has now admitted the ready set, while exact Track C retailer stocking remains unverified and Atlas admission still creates no Mercury evidence, rights, publication, Current Price, Cheapest, or Pick authority.
 
@@ -100,17 +100,17 @@ B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A regi
 | **Forge** | Internal static authoring/review application, generated public projection, certified read-only Mercury operations panel, and local FM008 exporter | Explicit local export materializes governed Atlas/Mercury state under `.forge-review/forge/`; legacy preview remains isolated and noncanonical |
 | **Beacon** | Product-interest signal, collection/write boundaries, transactional adapter, and 90-day retention policy | Application boundary ready; durable file adapter available but not production-configured; repository signals 0; automatic execution disabled |
 | **Gateway** | Runtime/storage contracts, Cloudflare deployment plan, WAF policy, monitoring, alerts, recipient verification, sender/domain governance, DF005-W PREPARE, and fixture-verified DF005-X onboarding authorization/executor | One valid DF005-W authorization is `PREPARED`; DF005-X production PREPARE/EXECUTE are blocked by missing official least-privilege permission policy; backend remains undeployed, production transport `NOT_CONNECTED`, and browser disconnected |
-| **Public Hardware Radar** | Generated static RAM site, Atlas-driven `/ram/` catalog, 103 canonical product-reference routes, and one factual `/ram/compare/` shell, plus category/trust pages under `public/`; consumes a governed winner plus bounded alternatives, preserves listed-price and shipping-knownness semantics, and remains fail closed without qualifying published observations | Launch shell and static catalog/detail/comparison projections are truthful and fixture-tested but still have zero eligible public observations; specification comparison creates no market or recommendation authority; production publication remains later controlled work; current external hosting/deployment was not queried by this task |
+| **Public Hardware Radar** | Generated static RAM site, Atlas-driven `/ram/` catalog, 103 canonical product-reference routes, one factual `/ram/compare/` shell, and a Mercury-owned current-retail artifact plus category/trust pages under `public/`; current-display prices use a 36-hour item-price policy and explicit excluded-cost disclosure | The current-retail surface is fail closed by scope and currently exposes four fresh qualifying DDR5 offers; DDR4 and laptop remain unavailable. It creates no durable historical/canonical/review/publication, Current Price, delivered-cost Cheapest, or Pick authority; current external hosting/deployment was not queried by this task |
 
 ## Current test baseline
 
-The current runners declare **237 subsystem test files**:
+The current runners declare **238 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 21 |
-| Mercury | 185 |
+| Mercury | 186 |
 | Beacon | 7 |
 | Gateway | 17 |
 

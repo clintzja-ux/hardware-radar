@@ -12,13 +12,13 @@
             <div class="overall-topline">
 
                 <p class="eyebrow">
-                    🏆 CHEAPEST RAM WE'RE TRACKING
+                    🏆 CHEAPEST RAM TODAY
                 </p>
 
                  <div class="verification-block">
 
                     <p class="verified-time">
-                         Observed ${product.lastVerifiedTime || product.verified}
+                         Price checked ${product.lastVerifiedTime || product.verified}
                     </p>
 
                     <p class="verification-details">
@@ -41,7 +41,7 @@
                 <span class="retailer">${product.retailer}</span>
             </div>
 
-            <p class="price-basis">${product.priceBasis}. ${product.shippingMessage}. Taxes and other mandatory fees may apply.</p>
+            <p class="price-basis">Prices shown exclude applicable shipping, taxes, and fees.</p>
 
             ${product.insight ? `<p class="insight-badge">${product.insight}</p>` : ""}
 

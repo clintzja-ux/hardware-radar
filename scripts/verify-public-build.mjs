@@ -5,6 +5,7 @@ import { generateSitemap, parseEditorialSource, renderArticle, renderGuidesIndex
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
 import { createRamProductSitemapRoutes, renderRamProductPage } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
+import { validatePublicCurrentRetailProjection } from "../packages/mercury/current-display/PublicCurrentRetailProjection.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const canonicalText = (contents) => contents.toString("utf8").replaceAll("\r\n", "\n");
@@ -70,6 +71,18 @@ try {
     const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
     const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
     const destinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
+    const currentRetail = JSON.parse(await readFile(path.join(root, "public", "data", "ram-current-retail.json"), "utf8"));
+    const currentRetailReport = validatePublicCurrentRetailProjection(currentRetail);
+    if (!currentRetailReport.valid) errors.push(`Current retail: ${currentRetailReport.errors.join(",")}.`);
+    const productIds = new Set(products.map(item => item.identity.atlasProductId));
+    const retailerIds = new Set(retailers.map(item => item.id));
+    const destinationIds = new Set(destinations.map(item => item.destinationId));
+    for (const item of currentRetail.products ?? []) for (const offer of item.offers ?? []) {
+        if (!productIds.has(offer.atlasProductId)) errors.push(`Current retail: unknown Atlas product ${offer.atlasProductId}.`);
+        if (!retailerIds.has(offer.retailerId)) errors.push(`Current retail: unknown Atlas retailer ${offer.retailerId}.`);
+        if (!destinationIds.has(offer.destinationId)) errors.push(`Current retail: unknown retailer destination ${offer.destinationId}.`);
+    }
+    const currentRetailByProduct = new Map((currentRetail.products ?? []).map(item => [item.atlasProductId, item]));
     const catalog = createRamCatalogProjection(products);
     const expected = `${JSON.stringify(catalog, null, 2)}\n`;
     const actual = await readFile(path.join(root, "public", "data", "ram-catalog.json"), "utf8");
@@ -78,7 +91,7 @@ try {
     for (const product of catalog.products) {
         const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
         const page = await readFile(output, "utf8");
-        if (page !== renderRamProductPage(product, destinations.filter(item => item.atlasProductId === product.atlasProductId))) errors.push(`Atlas catalog: stale product page ${product.publicPath}`);
+        if (page !== renderRamProductPage(product, destinations.filter(item => item.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure)) errors.push(`Atlas catalog: stale product page ${product.publicPath}`);
     }
 } catch (error) { errors.push(`Atlas catalog: projection missing or invalid (${error.message}).`); }
 for (const internal of ["sentinel", "mercury"]) {

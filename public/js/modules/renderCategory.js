@@ -41,7 +41,7 @@
                 </div>
 
                 <p class="mini-verified">
-                    Observed ${product.verified}
+                    Price checked ${product.verified}
                 </p>
 
                 ${

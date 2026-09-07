@@ -13,6 +13,8 @@ const products = await Promise.all(manifest.products.map(async (entry) => JSON.p
 const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
 const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages/mercury/destinations/production-destinations.json"), products, retailers });
 const destinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
+const currentRetail = JSON.parse(await read("public/data/ram-current-retail.json"));
+const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const catalog = createRamCatalogProjection(products);
 const replay = createRamCatalogProjection([...products].reverse());
 
@@ -44,7 +46,7 @@ for (const product of catalog.products) {
     const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
     await stat(output);
     const html = await readFile(output, "utf8");
-    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId)), `${product.publicPath} must match its canonical generator.`);
+    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure), `${product.publicPath} must match its canonical generator.`);
     assert.equal((html.match(/<h1>/g) ?? []).length, 1);
     assert.match(html, new RegExp(`data-atlas-product-id="${product.atlasProductId}"`));
     assert.ok(html.includes(product.manufacturerPartNumber));
@@ -90,6 +92,14 @@ const styles = await read("public/css/styles.css");
 assert.match(styles, /\.ram-product-heading h1[^}]*overflow-wrap:anywhere/);
 assert.match(styles, /@media\(max-width:650px\)[^}]*\.ram-product-main/s);
 assert.match(styles, /\.ram-product-specs\{grid-template-columns:1fr\}/);
+assert.match(styles, /\.ram-product-current-retail/);
+assert.match(styles, /@media\(max-width:650px\)[^}]*\.ram-product-current-retail/s);
+const pricedPage = catalog.products.find(product => currentRetailByProduct.has(product.atlasProductId));
+assert.ok(pricedPage);
+const pricedHtml = await read(path.join("public", pricedPage.publicPath.slice(1), "index.html"));
+assert.match(pricedHtml, /Current tracked prices/);
+assert.match(pricedHtml, /Prices shown exclude applicable shipping, taxes, and fees\./);
+assert.doesNotMatch(pricedHtml, /"@type":"Offer"/);
 
 const [homepage, ddr5, ddr4, sodimm, guides] = await Promise.all([read("public/index.html"), read("public/ddr5.html"), read("public/ddr4.html"), read("public/sodimm.html"), read("public/guides/index.html")]);
 assert.match(homepage, /<h1>Compare RAM Prices<\/h1>/);

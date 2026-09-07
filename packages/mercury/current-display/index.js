@@ -3,3 +3,4 @@ export * from "./FileCurrentDisplaySnapshotRepository.js";
 export * from "./RetailDisplayImportService.js";
 export * from "./ManualRetailReviewImportService.js";
 export * from "./StandardRetailNewConditionPolicy.js";
+export * from "./PublicCurrentRetailProjection.js";

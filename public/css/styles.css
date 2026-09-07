@@ -1140,6 +1140,8 @@ footer{
 .ram-catalog-card h2{margin:4px 0 7px;font-size:1.2rem;line-height:1.25}
 .ram-catalog-card__model{color:var(--text-secondary);font-size:.92rem;overflow-wrap:anywhere}
 .ram-catalog-card__mpn{margin:14px 0;font-size:.88rem;overflow-wrap:anywhere}
+.ram-catalog-card__price{display:grid;gap:3px;margin:14px 0;padding:12px;border-radius:8px;background:#eff6ff}.ram-catalog-card__price span,.ram-catalog-card__price small{color:var(--text-secondary);font-size:.82rem}.ram-catalog-card__price strong{font-size:1.15rem}
+.current-retail-disclosure{margin:16px 0;color:var(--text-secondary);font-size:.9rem}
 .ram-catalog-card__mpn span{font-weight:700}
 .ram-catalog-card dl{display:grid;gap:8px}
 .ram-catalog-card dl div{display:flex;justify-content:space-between;gap:14px;border-top:1px solid var(--border);padding-top:8px}
@@ -1173,6 +1175,8 @@ footer{
 .ram-product-next a:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
 .ram-product-next p{flex-basis:100%;color:var(--text-secondary);font-size:.9rem}
 @media(max-width:650px){.ram-product-main{padding:24px 16px 56px}.ram-product-specs{grid-template-columns:1fr}.ram-product-spec-group,.ram-product-destinations{padding:18px}.ram-product-spec-group dl div{grid-template-columns:1fr;gap:3px}.ram-product-spec-group dd{text-align:left}.ram-product-destinations li{align-items:flex-start;flex-direction:column;gap:6px}.catalog-breadcrumbs ol{flex-wrap:wrap}.catalog-breadcrumbs li{min-width:0;overflow-wrap:anywhere}}
+.ram-product-current-retail{margin-top:24px;padding:22px;border:1px solid var(--border);border-radius:var(--radius-md);background:#eff6ff}.ram-product-current-retail>p{margin:8px 0 16px;color:var(--text-secondary);font-size:.9rem}.ram-product-current-retail ul{display:grid;gap:10px;padding:0;list-style:none}.ram-product-current-retail li{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:10px;border-top:1px solid var(--border)}.ram-product-current-retail li div{display:grid;gap:3px}.ram-product-current-retail li span,.ram-product-current-retail li small{display:block}.ram-product-current-retail li a{font-weight:700}
+@media(max-width:650px){.ram-product-current-retail{padding:18px}.ram-product-current-retail li{align-items:flex-start;flex-direction:column}.ram-product-current-retail li a{min-height:44px}}
 
 /* Atlas-derived factual RAM comparison; no market or recommendation authority. */
 .ram-comparison-main{max-width:1120px;margin:0 auto;padding:32px 20px 72px}

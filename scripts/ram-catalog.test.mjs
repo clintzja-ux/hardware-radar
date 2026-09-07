@@ -87,6 +87,9 @@ assert.doesNotMatch(html, /"@type":"(?:Product|Offer|AggregateOffer|Review|Aggre
 assert.match(script, /No RAM products match these filters\./);
 assert.match(script, /form\.reset\(\)/);
 assert.match(script, /RAM catalog unavailable/);
+assert.match(script, /ram-current-retail\.json/);
+assert.match(script, /Current tracked price/);
+assert.match(html, /Prices shown exclude applicable shipping, taxes, and fees\./);
 assert.match(styles, /@media\(max-width:600px\)[^}]*\.catalog-breadcrumbs/s);
 assert.match(styles, /\.ram-catalog-filter-grid,.ram-catalog-grid\{grid-template-columns:1fr\}/);
 assert.match(sitemap, /<loc>https:\/\/cheapestram\.com\/ram\/<\/loc>[\s\S]*?<lastmod>2026-09-02<\/lastmod>/);

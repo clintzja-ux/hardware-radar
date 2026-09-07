@@ -18,6 +18,7 @@ import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjecti
 import { generateEditorialSite, generateSitemap } from "./editorial-publishing.mjs";
 import { generateRamProductPages } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
+import { FileCurrentDisplaySnapshotRepository, createEmptyPublicCurrentRetailProjection, createPublicCurrentRetailProjection } from "../packages/mercury/current-display/index.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -75,10 +76,22 @@ const ramCatalog = createRamCatalogProjection(products);
 await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
 const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
 const publicDestinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
-const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, outputDir: path.join(root, "public") });
+const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();
+let currentRetail;
+try {
+    const currentDisplayPath = process.env.HARDWARE_RADAR_CURRENT_DISPLAY_STATE || path.join(root, ".forge-review", "retail-display", "current-display-snapshots.json");
+    const currentDisplayState = await new FileCurrentDisplaySnapshotRepository({ statePath: currentDisplayPath }).getState();
+    currentRetail = currentDisplayState.current
+        ? createPublicCurrentRetailProjection({ products, retailers, destinations: publicDestinations, currentSnapshot: currentDisplayState.current, asOf: generatedAt })
+        : createEmptyPublicCurrentRetailProjection({ asOf: generatedAt });
+} catch {
+    currentRetail = createEmptyPublicCurrentRetailProjection({ asOf: generatedAt });
+}
+await writeFile(path.join(root, "public", "data", "ram-current-retail.json"), `${JSON.stringify(currentRetail, null, 2)}\n`);
+const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
+const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, disclosure: currentRetail.disclosure, outputDir: path.join(root, "public") });
 const staticRoutes = await json(path.join(root, "content", "site-routes.json"));
 await writeFile(path.join(root, "public", "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
-const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();
 const mercury = new Mercury();
 let snapshot;
 

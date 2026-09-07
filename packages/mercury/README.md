@@ -60,6 +60,8 @@ public/data/market-snapshot.json
 
 Applications consume published intelligence artifacts. They do not execute Mercury directly in the browser or independently determine publication eligibility.
 
+The separate `public/data/ram-current-retail.json` artifact is a sanitized projection of ephemeral current-display state under `PUBLIC-RAM-CURRENT-RETAIL-001-1.0`. It supports only fresh qualifying item-price presentation with explicit excluded-cost disclosure; it is not historical or canonical observation storage and grants no publication, delivered-cost Cheapest, Pick, or recommendation authority.
+
 ## Core contracts
 
 - Canonical observation schema: `schemas/observation.schema.json` (v1.1)

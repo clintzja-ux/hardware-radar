@@ -38,7 +38,8 @@ function populateFilters(catalog, form) {
     }
 }
 
-function card(item) {
+function card(item, currentRetailByProduct = new Map()) {
+    const current = currentRetailByProduct.get(item.atlasProductId)?.lowerCurrentItemPrice ?? null;
     const details = [
         ["Memory", `${item.memoryType} · ${displayFormFactor(item.formFactor)}`],
         ["Capacity", `${item.capacityGb}GB (${item.moduleCount} × ${item.capacityPerModuleGb}GB)`],
@@ -54,6 +55,7 @@ function card(item) {
         <h2>${escapeHtml(item.productFamily || item.modelName)}</h2>
         <p class="ram-catalog-card__model">${escapeHtml(item.modelName)}</p>
         <p class="ram-catalog-card__mpn"><span>MPN</span> <code>${escapeHtml(item.manufacturerPartNumber)}</code></p>
+        ${current ? `<p class="ram-catalog-card__price"><span>Current tracked price</span><strong>$${Number(current.itemPriceUsd).toFixed(2)} USD</strong><small>${escapeHtml(current.retailerName)}</small></p>` : ""}
         <dl>${details.map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>
         <div class="ram-catalog-card__actions"><a class="ram-catalog-card__link" href="${escapeHtml(item.publicPath)}">View specifications<span class="sr-only"> for ${escapeHtml(item.displayName)}</span></a><a class="ram-catalog-card__compare" href="/ram/compare/?products=${escapeHtml(item.publicSlug)}">Compare<span class="sr-only"> ${escapeHtml(item.displayName)} with another RAM product</span></a></div>
     </li>`;
@@ -63,22 +65,27 @@ function values(form) {
     return Object.fromEntries(Object.keys(EMPTY_RAM_CATALOG_FILTERS).map((key) => [key, form.elements.namedItem(key).value]));
 }
 
-export async function initializeRamCatalog({ fetchCatalog = () => fetch("/data/ram-catalog.json", { cache: "no-store" }) } = {}) {
+export async function initializeRamCatalog({ fetchCatalog = () => fetch("/data/ram-catalog.json", { cache: "no-store" }), fetchCurrentRetail = () => fetch("/data/ram-current-retail.json", { cache: "no-store" }) } = {}) {
     const form = document.getElementById("ramCatalogControls");
     const results = document.getElementById("ramCatalogResults");
     const status = document.getElementById("ramCatalogStatus");
     const reset = document.getElementById("ramCatalogReset");
     if (!form || !results || !status || !reset) return;
     try {
-        const response = await fetchCatalog();
+        const [response, currentResponse] = await Promise.all([fetchCatalog(), fetchCurrentRetail().catch(() => null)]);
         if (!response.ok) throw new Error("RAM_CATALOG_LOAD_FAILED");
         const catalog = await response.json();
         if (catalog?.schemaVersion !== "1.0" || catalog?.catalogType !== "ATLAS_RAM_PRODUCT_CATALOG" || !Array.isArray(catalog.products)) throw new Error("RAM_CATALOG_INVALID");
+        let currentRetailByProduct = new Map();
+        if (currentResponse?.ok) {
+            const currentRetail = await currentResponse.json();
+            if (currentRetail?.schemaVersion === "1.0" && Array.isArray(currentRetail.products)) currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
+        }
         populateFilters(catalog, form);
         const render = () => {
             const matches = filterRamCatalogProducts(catalog.products, values(form));
             status.textContent = `${matches.length} RAM product${matches.length === 1 ? "" : "s"} shown.`;
-            results.innerHTML = matches.length ? matches.map(card).join("") : `<li class="ram-catalog-empty"><h2>No RAM products match these filters.</h2><p>Clear the search and filters to browse the complete catalog.</p></li>`;
+            results.innerHTML = matches.length ? matches.map(item => card(item, currentRetailByProduct)).join("") : `<li class="ram-catalog-empty"><h2>No RAM products match these filters.</h2><p>Clear the search and filters to browse the complete catalog.</p></li>`;
         };
         form.addEventListener("input", render);
         form.addEventListener("change", render);

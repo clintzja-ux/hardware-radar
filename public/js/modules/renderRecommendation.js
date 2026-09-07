@@ -14,7 +14,7 @@
     container.innerHTML = `
         <article class="overall-answer">
 
-            <p class="eyebrow">CHEAPEST TRACKED OFFER</p>
+            <p class="eyebrow">CHEAPEST CURRENT ITEM PRICE</p>
 
             <h2>${product.brand} ${product.model}</h2>
 
@@ -32,8 +32,10 @@
             </div>
 
             <p class="price-basis">
-                ${product.priceBasis}. ${product.shippingMessage}. Taxes and other mandatory fees may apply.
+                Prices shown exclude applicable shipping, taxes, and fees.
             </p>
+
+            <p class="mini-verified">Price checked ${product.verified}</p>
 
             <p class="insight-badge">
                 ${product.insight}

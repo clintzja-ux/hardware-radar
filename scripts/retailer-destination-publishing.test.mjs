@@ -14,6 +14,8 @@ const manifest = await json(path.join(root, "packages/atlas/atlas-manifest.json"
 const products = await Promise.all(manifest.products.map(entry => json(path.join(root, "packages/atlas", entry.path))));
 const retailers = await Promise.all(manifest.retailers.map(entry => json(path.join(root, "packages/atlas", entry.path))));
 const catalog = createRamCatalogProjection(products);
+const currentRetail = await json(path.join(root, "public/data/ram-current-retail.json"));
+const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const product = products.find(item => item.identity.atlasProductId === "ram_corsair_cmk32gx5m2b6000z30");
 const publicProduct = catalog.products.find(item => item.atlasProductId === product.identity.atlasProductId);
 const retailer = retailers.find(item => item.id === "RETAILER-0002");
@@ -118,7 +120,7 @@ for (const destination of production.records) {
 }
 for (const productPage of catalog.products) {
     const destinations = productionProjection.filter(item => item.atlasProductId === productPage.atlasProductId);
-    const rendered = renderRamProductPage(productPage, destinations);
+    const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);
     assert.equal((rendered.match(/googletagmanager\.com\/gtag\/js/g) ?? []).length, 1);
@@ -136,10 +138,10 @@ for (const productPage of catalog.products) {
 }
 assert.equal(catalog.products.filter(product => !productionProjection.some(destination => destination.atlasProductId === product.atlasProductId)).length, 15);
 const marketData = await readFile(path.join(root, "public/js/modules/marketData.js"), "utf8");
-assert.match(marketData, /offerUrl: item\.sourceUrl/);
+assert.match(marketData, /offerUrl: item\.destinationUrl/);
 assert.doesNotMatch(marketData, /affiliateUrl/);
 const catalogClient = await readFile(path.join(root, "public/js/modules/ramCatalog.js"), "utf8");
 const comparisonClient = await readFile(path.join(root, "public/js/modules/ramComparison.js"), "utf8");
-assert.doesNotMatch(catalogClient, /destinationUrl|retailerListingId|amazon\.com/);
+assert.doesNotMatch(catalogClient, /retailerListingId|amazon\.com/);
 assert.doesNotMatch(comparisonClient, /destinationUrl|retailerListingId|amazon\.com/);
 console.log("GROWTH-005B retailer destination source and rendering tests passed.");

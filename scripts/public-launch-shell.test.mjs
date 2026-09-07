@@ -52,10 +52,10 @@ for (const obsoletePath of [
 }
 
 const loader = await readPublic("js/modules/loadCategory.js");
-assert.match(loader, /loadMarketSnapshot\(\)/);
+assert.match(loader, /loadCurrentRetailSnapshot\(\)/);
 assert.doesNotMatch(loader, /fetch\(path\)/);
 assert.match(loader, /Unsupported governed market scope/);
-assert.match(loader, /scopeToDisplayProducts/);
+assert.match(loader, /winnerToDisplayProduct/);
 
 for (const file of categoryModules) {
     assert.doesNotMatch(await readPublic(file), /data\/ram\//);
@@ -101,10 +101,10 @@ assert.equal((homepage.match(/id="(?:ddr5|ddr4|sodimm)Section"/g) ?? []).length,
 assert.doesNotMatch(homepage, /eccSection|Server\s*\/\s*ECC/i);
 
 const homepageRuntime = await readPublic("js/main.js");
-assert.match(homepageRuntime, /Cheapest RAM we're tracking/);
-assert.match(homepageRuntime, /Cheapest DDR5 we're tracking/);
-assert.match(homepageRuntime, /Cheapest DDR4 we're tracking/);
-assert.match(homepageRuntime, /Cheapest Laptop RAM we're tracking/);
+assert.match(homepageRuntime, /Cheapest RAM Today/);
+assert.match(homepageRuntime, /Cheapest DDR5 Today/);
+assert.match(homepageRuntime, /Cheapest DDR4 Today/);
+assert.match(homepageRuntime, /Cheapest Laptop RAM Today/);
 assert.doesNotMatch(homepageRuntime, /eccSection|Server\s*\/\s*ECC/i);
 
 const containers = new Map();
@@ -131,28 +131,36 @@ renderRecommendation({
 }, "recommendation");
 assert.match(containers.get("recommendation").innerHTML, /target="_blank"/);
 assert.match(containers.get("recommendation").innerHTML, /rel="noopener noreferrer"/);
-assert.match(containers.get("recommendation").innerHTML, /Shipping not verified/);
-assert.match(containers.get("recommendation").innerHTML, /CHEAPEST TRACKED OFFER/);
+assert.match(containers.get("recommendation").innerHTML, /Prices shown exclude applicable shipping, taxes, and fees\./);
+assert.match(containers.get("recommendation").innerHTML, /CHEAPEST CURRENT ITEM PRICE/);
 
 const { renderOverallUnavailable } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderOverall.js")));
+const { winnerToDisplayProduct } = await import(pathToFileURL(path.join(publicRoot, "js/modules/marketData.js")));
+const publicOffer = { atlasProductId: "ram_one", brand: "Example", family: "Winner", displayName: "Example Winner", totalCapacityGb: 32, moduleCount: 2, capacityPerModuleGb: 16, ddrGeneration: "DDR5", formFactor: "DIMM", speedMtps: 6000, itemPriceUsd: 99, currency: "USD", retailerId: "RETAILER-0001", retailerName: "Retailer A", destinationUrl: "https://retailer.example/a", observedAt: "2026-08-31T12:00:00Z", comparisonSemantics: "ITEM_PRICE" };
+const projected = winnerToDisplayProduct({ winners: { ddr5: publicOffer }, products: [{ offers: [publicOffer] }] }, "ddr5", "ddr5", "Cheapest DDR5 Today");
 renderOverallUnavailable("overallSection");
 assert.match(containers.get("overallSection").innerHTML, /No tracked RAM price is available right now/);
 assert.match(containers.get("overallSection").innerHTML, /stay hidden rather than being replaced with estimates/);
 assert.doesNotMatch(containers.get("overallSection").innerHTML, /publication requirements|governed candidates|E2S/i);
+const { renderOverall } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderOverall.js")));
+renderOverall([{ ...projected, section: "overall" }]);
+assert.match(containers.get("overallSection").innerHTML, /CHEAPEST RAM TODAY/);
+assert.match(containers.get("overallSection").innerHTML, /Prices shown exclude applicable shipping, taxes, and fees\./);
+assert.match(containers.get("overallSection").innerHTML, /Price checked/);
 
 const { renderCategoryUnavailable } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderCategory.js")));
 renderCategoryUnavailable("ddr5Section", "Cheapest DDR5 we're tracking");
 assert.match(containers.get("ddr5Section").innerHTML, /Price unavailable right now/);
 assert.match(containers.get("ddr5Section").innerHTML, /Check again later/);
+const { renderCategory } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderCategory.js")));
+renderCategory([{ ...projected, section: "ddr5", title: "Cheapest DDR5 Today" }], "ddr5", "ddr5Section", "Browse DDR5 RAM");
+assert.match(containers.get("ddr5Section").innerHTML, /Cheapest DDR5 Today/);
+assert.match(containers.get("ddr5Section").innerHTML, /Price checked/);
 
-const { scopeToDisplayProducts } = await import(pathToFileURL(path.join(publicRoot, "js/modules/marketData.js")));
-const projected = scopeToDisplayProducts({ status: "AVAILABLE", cheapest: { atlasProductId: "ram_one", observationId: "mer_obs_000000001", brand: "Example", modelName: "Winner", capacityGb: 32, memoryType: "DDR5", dataRateMtps: 6000, price: 99, currency: "USD", priceBasis: "LISTED_PRICE", shipping: { known: false, amount: null, currency: null }, retailer: "Retailer A", sourceUrl: "https://retailer.example/a", observedAt: "2026-08-31T12:00:00Z", freshness: "CURRENT", confidence: "HIGH" }, alternatives: [{ atlasProductId: "ram_two", observationId: "mer_obs_000000002", brand: "Example", modelName: "Alternative", capacityGb: 32, memoryType: "DDR5", dataRateMtps: 5600, price: 109, currency: "USD", priceBasis: "LISTED_PRICE", shipping: { known: true, amount: 0, currency: "USD" }, retailer: "Retailer B", sourceUrl: "https://retailer.example/b", observedAt: "2026-08-31T12:01:00Z", freshness: "CURRENT", confidence: "HIGH" }], coverage: { eligibleObservations: 2, retailersRepresented: 2 } }, "ddr5", "Qualifying DDR5 listed price");
-assert.equal(projected.length, 2);
-assert.equal(projected[0].rank, 1);
-assert.equal(projected[1].rank, 2);
-assert.equal(projected[0].shippingMessage, "Shipping not verified");
-assert.equal(projected[1].shippingMessage, "Shipping verified as free");
-assert.deepEqual(scopeToDisplayProducts({ status: "INSUFFICIENT_DATA", cheapest: null, alternatives: [] }, "ddr5", "DDR5"), []);
+assert.equal(projected.price, "99.00");
+assert.equal(projected.shippingMessage, "Shipping, taxes and fees excluded");
+assert.equal(projected.comparisonSemantics, "ITEM_PRICE");
+assert.equal(winnerToDisplayProduct({ winners: { ddr5: null }, products: [] }, "ddr5", "ddr5", "DDR5"), null);
 const comparisonSource = await readPublic("js/modules/renderExpandableComparison.js");
 assert.match(comparisonSource, /shippingMessage/);
 assert.match(comparisonSource, /target="_blank" rel="noopener noreferrer"/);
@@ -190,5 +198,9 @@ for (const scope of ["overall", "ddr5", "ddr4", "sodimm"]) {
     assert.equal(marketSnapshot.scopes[scope].cheapest, null);
     assert.deepEqual(marketSnapshot.scopes[scope].alternatives, []);
 }
+const currentRetail = JSON.parse(await readPublic("data/ram-current-retail.json"));
+assert.equal(currentRetail.comparisonSemantics, "ITEM_PRICE");
+assert.equal(currentRetail.disclosure, "Prices shown exclude applicable shipping, taxes, and fees.");
+assert.doesNotMatch(JSON.stringify(currentRetail), /\.forge-review|operatorNotes|workbook/i);
 
 console.log("Public launch-shell truth and safety contract passed.");
