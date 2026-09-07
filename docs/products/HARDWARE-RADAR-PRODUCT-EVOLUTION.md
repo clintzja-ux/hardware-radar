@@ -185,6 +185,33 @@ DataForSEO remains Mercury's intended durable historical acquisition stream, ini
 
 Both streams must eventually isolate per-product failures within portfolio batches. Ordinary current-display refreshes must not require per-product operator intervention, while durable DataForSEO acquisition retains its existing rights, identity, spend, retention, admission, replay, review, qualification, and publication gates. Future authorized retailers may join the display layer without changing these ownership rules.
 
+### Retail commerce source independence
+
+Retailer functionality must not depend on affiliate status or any single commerce-data provider. Four concerns remain separate:
+
+1. **Retailer identity** is canonically owned by Atlas and answers which retailer an entity represents.
+2. **Retailer destination** is owned by Mercury's existing `RetailerDestination` boundary and binds an Atlas product to an exact retailer listing.
+3. **Commerce data source** is a replaceable provider of ephemeral evidence for that known binding, such as an authorized retailer API, affiliate feed or Product Search API, independent commerce provider, or governed operator import.
+4. **Affiliate routing** is an optional downstream monetization mechanism that decides how an already-selected outbound click is routed.
+
+The canonical retailer URL preserves durable retailer/listing identity. An affiliate URL may transform current click routing, but it must not replace or redefine the canonical destination. If affiliate routing becomes unavailable, policy may fall back to the canonical destination without changing product identity, retailer identity, price truth, or market selection.
+
+Affiliate status may affect monetized routing, relationship-health reporting, available integrations, and separately approved neutral presentation ordering. It must not determine observability, trust, recommendability, evidence interpretation, Current Price, Cheapest, Picks, or market ranking. An affiliate feed contributes evidence under its own source-rights profile; its commercial origin gives it no authority over Atlas, `RetailerDestination`, comparison, trust, or recommendations.
+
+A future source-neutral `CurrentRetailSourceAdapter` boundary should normalize source-specific evidence into the existing `CurrentDisplaySnapshot`, including the applicable product, retailer, destination, item price, currency, condition, availability, seller/marketplace state, observation time, source identity, and rights profile. Missing fields remain null or unknown. Examples may include Rakuten feed/search adapters, an authorized Newegg feed/API adapter, an authorized Amazon adapter, an independent provider adapter, and the existing operator/manual path. These are replaceable implementations; none owns current-display semantics and no provider-specific price repository is warranted.
+
+Operationally a retailer/source path may be automated-primary, automated-alternate, manual-only, or unavailable without changing canonical identities or destinations. Precedence must follow authority, provenance, exact binding, rights, freshness, completeness, data quality, and reliability—not commission, conversion, payout, or advertiser preference. This principle does not establish a speculative global ranking.
+
+When a source is lost, preserve Atlas and destination records, preserve the last observation with its original timestamp only where current-display policy and source TTL permit, allow stale public data to expire naturally, continue other retailer/source work, and report the isolated failure. Never fabricate a refresh. Approved manual acquisition is a first-class continuity mode when it preserves exact bindings, explicit operator provenance, null/unknown fields, and current-display-only scope. It may remain available alongside automation.
+
+Every source requires its own machine-readable rights determination for acquisition, ephemeral retention, public display, comparison, attribution, TTL, historical retention, and analytics. Affiliate approval alone establishes none of those rights. Current-display authorization never implies durable Mercury-history authorization, and current state remains bounded to current plus immediately previous subject to the source's stricter TTL.
+
+Rakuten account reactivation and Newegg affiliate approval are current commercial facts. Dashboard availability of Product Feeds, Product Search, Deep Links, and other publisher APIs identifies possible capabilities, not certified evidence authority. Product Feed enablement, actual fields, comparison/public-display rights, attribution, TTL, and operating behavior still require inspection. Deep-link transformation belongs after canonical offer selection: Cheapest selects a qualifying canonical retailer offer, then an affiliate router may transform the outbound destination. Commercial routing never selects the winner.
+
+The eventual ownership layer should therefore be `CurrentRetailRefreshPortfolio` plus `CurrentRetailRefreshOrchestrator` plus a source-neutral adapter boundary. Retailer-specific clients remain below it. Forge may later project source mode, health, rights, fallback availability, last success, and affiliate relationship health, but it owns neither source truth nor comparison semantics.
+
+This doctrine applies across Hardware Radar, including future SSD, GPU, CPU, motherboard, storage, and other hardware categories. It protects the architecture while allowing individual source capabilities to be deferred or replaced.
+
 Existing offer-comparability doctrine applies to both streams: standalone offers compete only with comparable standalone offers; bundles and conditional offers remain distinct; used, refurbished, and open-box condition must not silently become new; known mandatory shipping and unavoidable fees must be respected; and unknown costs must never become zero. Every displayed observation carries a freshness timestamp and remains subject to change at the retailer.
 
 The Terminal may eventually combine a clearly labeled current panel from ephemeral display state with historical panels derived exclusively from retained Mercury observations. Historical claims—including period lows/highs, movement, averages, volatility, trends, and retailer histories—belong to Mercury history. **DENSITY IS EARNED BY DATA:** absent or insufficient history remains absent or insufficient rather than being reconstructed from the transient display cache.
