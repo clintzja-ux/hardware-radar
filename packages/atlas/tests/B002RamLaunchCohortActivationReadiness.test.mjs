@@ -11,6 +11,7 @@ import {
     B002_ACTIVATION_REVIEWER,
     createB002ActivationFixture
 } from "./fixtures/B002RamLaunchCohortActivationFixtures.mjs";
+import { ATLAS_PRE_EXPANSION_PRODUCT_IDS } from "../AtlasPreExpansionLifecycleReview.js";
 
 const manifest = JSON.parse(await readFile(new URL("../atlas-manifest.json", import.meta.url), "utf8"));
 const readManifestRecords = async (entries) => Promise.all(entries.map(async ({ path }) =>
@@ -68,7 +69,7 @@ for (const atlasProductId of B002_ACTIVATION_PRODUCT_IDS) {
 }
 
 for (const [atlasProductId, preTransition] of d002ById) {
-    if (B002_ACTIVATION_PRODUCT_IDS.includes(atlasProductId)) continue;
+    if (B002_ACTIVATION_PRODUCT_IDS.includes(atlasProductId) || ATLAS_PRE_EXPANSION_PRODUCT_IDS.includes(atlasProductId)) continue;
     assert.deepEqual(
         canonicalById.get(atlasProductId),
         preTransition,

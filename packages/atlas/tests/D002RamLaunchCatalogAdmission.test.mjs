@@ -13,6 +13,7 @@ import {
     B002_ACTIVATION_PRODUCT_IDS,
     createB002ActivationFixture
 } from "./fixtures/B002RamLaunchCohortActivationFixtures.mjs";
+import { ATLAS_PRE_EXPANSION_PRODUCT_IDS } from "../AtlasPreExpansionLifecycleReview.js";
 
 const manifestUrl = new URL("../atlas-manifest.json", import.meta.url);
 const anchorUrl = new URL("../products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json", import.meta.url);
@@ -40,9 +41,14 @@ for (const fixture of records) {
         ({ identity }) => identity.atlasProductId === fixture.identity.atlasProductId
     );
     assert.ok(canonical, `Missing admitted product ${fixture.identity.atlasProductId}.`);
-    const expected = B002_ACTIVATION_PRODUCT_IDS.includes(fixture.identity.atlasProductId)
+    let expected = B002_ACTIVATION_PRODUCT_IDS.includes(fixture.identity.atlasProductId)
         ? createB002ActivationFixture(fixture)
         : fixture;
+    if (ATLAS_PRE_EXPANSION_PRODUCT_IDS.includes(fixture.identity.atlasProductId)) {
+        expected = structuredClone(fixture);
+        expected.identity = { ...expected.identity, recordRevision: 2, updatedAt: "2026-09-08T05:58:28.556Z", updatedBy: "human:Clinton_Ramsook" };
+        expected.governance = { ...expected.governance, publicationStatus: "READY", lifecycleStatus: "ACTIVE", humanReviewRequired: false, reviewedBy: "human:Clinton_Ramsook", reviewedAt: "2026-09-08T05:58:28.556Z", changeReason: "ATLAS-ACTIVATION-002 authorized pre-expansion RAM lifecycle review; no retail, acquisition, market, price, or publication authority implied." };
+    }
     assert.deepEqual(canonical, expected, `${fixture.identity.manufacturerPartNumber} differs from its certified lifecycle fixture.`);
 }
 assert.equal(anchor.identity.manufacturerPartNumber, D002_EXISTING_ANCHOR_MPN);

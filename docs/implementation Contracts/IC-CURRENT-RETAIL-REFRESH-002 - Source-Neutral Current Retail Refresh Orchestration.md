@@ -1,7 +1,7 @@
 # IC-CURRENT-RETAIL-REFRESH-002 — Source-Neutral Current Retail Refresh Orchestration
 
-**Status:** FIXTURE-CERTIFIED  
-**Owner:** Mercury current-display boundary  
+**Status:** FIXTURE-CERTIFIED
+**Owner:** Mercury current-display boundary
 **Date:** 2026-09-08
 
 ## Purpose
