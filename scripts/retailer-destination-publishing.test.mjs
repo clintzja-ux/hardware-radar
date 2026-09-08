@@ -82,13 +82,13 @@ const expectedProduction = new Map([
     ["ram_corsair_cmh32gx5m2f6000z36", { mpn: "CMH32GX5M2F6000Z36", listing: "B0FV3M2PGJ", id: "mer_dest_4232b39beaf37f8da51556d9", url: "https://amazon.com/CORSAIR-Vengeance-2x16GB-6000MHz-Desktop/dp/B0FV3M2PGJ", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }],
     ["ram_g_skill_f5_6000j3636f32gx2_rs5k", { mpn: "F5-6000J3636F32GX2-RS5K", listing: "B0C6HWKGWV", id: "mer_dest_5206bc4c58f5cdf145699f85", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0C6HWKGWV", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }]
 ]);
-assert.equal(production.recordCount, 164);
-assert.equal(production.effective.length, 163);
-assert.equal(productionProjection.length, 163);
-assert.equal(new Set(production.records.map(item => item.destinationId)).size, 164);
-assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 164);
-assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 77);
-assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 87);
+assert.equal(production.recordCount, 186);
+assert.equal(production.effective.length, 185);
+assert.equal(productionProjection.length, 185);
+assert.equal(new Set(production.records.map(item => item.destinationId)).size, 186);
+assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 186);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 91);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 95);
 assert.equal(production.records.some(item => item.destinationUrl.includes("/p/pl?")), false);
 for (const destination of production.records) {
     const expected = expectedProduction.get(destination.atlasProductId);
@@ -136,7 +136,7 @@ for (const productPage of catalog.products) {
         assert.doesNotMatch(rendered, /Retailer links|amazon\.com|newegg\.com/);
     }
 }
-assert.equal(catalog.products.filter(product => !productionProjection.some(destination => destination.atlasProductId === product.atlasProductId)).length, 15);
+assert.equal(catalog.products.filter(product => !productionProjection.some(destination => destination.atlasProductId === product.atlasProductId)).length, 1);
 const marketData = await readFile(path.join(root, "public/js/modules/marketData.js"), "utf8");
 assert.match(marketData, /offerUrl: item\.destinationUrl/);
 assert.doesNotMatch(marketData, /affiliateUrl/);

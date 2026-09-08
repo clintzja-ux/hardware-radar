@@ -4756,6 +4756,644 @@
       "createdAt": "2026-09-07T16:53:20.7868427Z",
       "createdBy": "operator:Clinton_Ramsook",
       "materialFingerprint": "27804307625f02deae8f9c9c646002c95f3ef46401c017a0dca62d99eefaf1a1"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_88cfd181a19de685c228defd",
+      "atlasProductId": "ram_kingston_kf572c38rsk2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Renegade-Overclocking-Stability-KF572C38RSK2-32/dp/B0BMQTXZ3Q",
+      "retailerListingId": "B0BMQTXZ3Q",
+      "binding": {
+        "manufacturerPartNumber": "KF572C38RSK2-32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-3:retailer-0001:B0BMQTXZ3Q"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "db6efa7cf5f01aa86c30cf19a562dbb9347d2722fe1ca24a5d2d2a6770ad9059"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_67f90487daae04861be333f4",
+      "atlasProductId": "ram_corsair_cmk32gx4m2e3200c16",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Corsair-VENGEANCE-3200MHz-Compatible-Computer/dp/B07RW6Z692",
+      "retailerListingId": "B07RW6Z692",
+      "binding": {
+        "manufacturerPartNumber": "CMK32GX4M2E3200C16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-4:retailer-0001:B07RW6Z692"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "31f6904af95ccb121676073531c498494f03ec0866c390347656020500b56a9e"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_2b77161071670cc662e44242",
+      "atlasProductId": "ram_corsair_cmk32gx4m2e3200c16",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/corsair-vengeance-lpx-32gb-ddr4-3200-cas-latency-cl16-desktop-memory-black/p/N82E16820236541",
+      "retailerListingId": "N82E16820236541",
+      "binding": {
+        "manufacturerPartNumber": "CMK32GX4M2E3200C16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-4:retailer-0004:N82E16820236541"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "285f7ae06cba34d7f5823d952e9388406c0bde2e46d7503e5ae0dfc1788bd0c7"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_24ffd0daaded714bcf211a8a",
+      "atlasProductId": "ram_crucial_ct16g4dfra32a",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-3200MHz-PC4-25600-Downclockable-Compatible/dp/B08C4VHQV2",
+      "retailerListingId": "B08C4VHQV2",
+      "binding": {
+        "manufacturerPartNumber": "CT16G4DFRA32A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-6:retailer-0001:B08C4VHQV2"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "adee806fcf94e6f06b4071744649eeed193dd6c4eb6fd8eb6df135d11d69c2ae"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_13e3470e27118c9e384ed161",
+      "atlasProductId": "ram_crucial_ct16g4dfra32a",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-16gb-ddr4-3200-cas-latency-cl22-desktop-memory-green/p/N82E16820156268",
+      "retailerListingId": "N82E16820156268",
+      "binding": {
+        "manufacturerPartNumber": "CT16G4DFRA32A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-6:retailer-0004:N82E16820156268"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "ad1c68aa2e133f03e00212cf2e481af583c1f057844b690961f94640cfddb076"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_dbbf1d728002e217d7e6bb9d",
+      "atlasProductId": "ram_crucial_ct32g56c46u5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-5600MHz-5200MHz-4800MHz-CT32G56C46U5/dp/B0BLTFFBL9",
+      "retailerListingId": "B0BLTFFBL9",
+      "binding": {
+        "manufacturerPartNumber": "CT32G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-10:retailer-0001:B0BLTFFBL9"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "68c72e3b5ab61f15a58c984e9de480ebb9660d978bcad967975a3eb452358201"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_c4f0dc3565c24cc45bf7a510",
+      "atlasProductId": "ram_crucial_ct32g56c46u5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-32gb-ddr5-5600-cas-latency-cl46-memory-black/p/N82E16820156311",
+      "retailerListingId": "N82E16820156311",
+      "binding": {
+        "manufacturerPartNumber": "CT32G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-10:retailer-0004:N82E16820156311"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "212c9576caef4d9fdea6a7f00d9a73ed8070ffb8e3fc2beb943fb976ac91d69d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_3e745d2ce8d4da28dc225277",
+      "atlasProductId": "ram_crucial_cp2k32g56c46u5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-2x32GB-5600MT-Desktop-CP2K32G56C46U5/dp/B0C79H54TQ",
+      "retailerListingId": "B0C79H54TQ",
+      "binding": {
+        "manufacturerPartNumber": "CP2K32G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-11:retailer-0001:B0C79H54TQ"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "9ca27f92beefad7c926088350e84b6f726192a1f846addf42e2beb6788dbbf70"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_667ee3313abfd0fc6cf62897",
+      "atlasProductId": "ram_crucial_cp2k32g56c46u5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-pro-64gb-ddr5-5600-cas-latency-cl46-desktop-memory-black/p/N82E16820156380",
+      "retailerListingId": "N82E16820156380",
+      "binding": {
+        "manufacturerPartNumber": "CP2K32G56C46U5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-11:retailer-0004:N82E16820156380"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "bae4be0b99614b8cd2a2919989bbdaac0e6196eea5abfeeb33cdd5aba36fe7b6"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_99cf9d1a7b2e0cc818f87f05",
+      "atlasProductId": "ram_g_skill_f5_6000j3038f16gx2_fx5",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-SKILL-2x16GB-CL30-38-38-96-Desktop-Computer/dp/B0C1TKSDKR",
+      "retailerListingId": "B0C1TKSDKR",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3038F16GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-13:retailer-0001:B0C1TKSDKR"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "23fb65ef6639d3d960dff016e9b81947f67be83ec42481308cf216bd69c49735"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_c33f006eceb5456b1c082aef",
+      "atlasProductId": "ram_g_skill_f5_6000j3038f16gx2_fx5",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/g-skill-flare-x5-32gb-ddr5-6000-cas-latency-cl30-desktop-memory-black/p/N82E16820374457",
+      "retailerListingId": "N82E16820374457",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3038F16GX2-FX5",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-13:retailer-0004:N82E16820374457"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "0913656f8fd07de7f78d6cd8766f5ea4f07f8f46a6f813df56c6edaf38969a8d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_24dfee370f38e0c6b9914e72",
+      "atlasProductId": "ram_g_skill_f4_3200c22d_32grs",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-RipJaws-PC4-25600-CL22-22-22-52-F4-3200C22D-32GRS/dp/B08KSGVZDZ",
+      "retailerListingId": "B08KSGVZDZ",
+      "binding": {
+        "manufacturerPartNumber": "F4-3200C22D-32GRS",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-15:retailer-0001:B08KSGVZDZ"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "aa7151938a8ad86e796adfcace18a93ed3a89764ee502eeea4bc77b2c6436eb3"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_c00bc151146db22c794eab1a",
+      "atlasProductId": "ram_crucial_ct8g4sfra32a",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Crucial-3200MHz-PC4-25600-Downclockable-Compatible/dp/B08C4Z69LN",
+      "retailerListingId": "B08C4Z69LN",
+      "binding": {
+        "manufacturerPartNumber": "CT8G4SFRA32A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-32:retailer-0001:B08C4Z69LN"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "e1f5acf6aa2a918384cb0f450e66ab601317d3b9b14e9e8a992b4fb5174d1dc1"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_3da9e6caddfc038424feeb38",
+      "atlasProductId": "ram_crucial_ct8g4sfra32a",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/crucial-8gb-ddr4-3200-cas-latency-cl22-laptop-memory/p/N82E16820156258",
+      "retailerListingId": "N82E16820156258",
+      "binding": {
+        "manufacturerPartNumber": "CT8G4SFRA32A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-32:retailer-0004:N82E16820156258"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "d42da4c5403769f4ad868341e4b940bcc33b7bca63185ec7e1072ac09879c026"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_66838dde80fcea9cd9ec7665",
+      "atlasProductId": "ram_kingston_kf556s40ibk2_64",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Impact-2x32GB-Comsumption-KF556S40IBK2-64/dp/B0BRTJT5P2",
+      "retailerListingId": "B0BRTJT5P2",
+      "binding": {
+        "manufacturerPartNumber": "KF556S40IBK2-64",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-43:retailer-0001:B0BRTJT5P2"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "cf1d1a70bccc670d5a69d14d49db80712b37d3058b3ac0bc1596a1dcade44179"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_48aa04dafae5c86790329c64",
+      "atlasProductId": "ram_kingston_kf556s40ibk2_64",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-fury-impact-64gb-ddr5-5600-cas-latency-cl40-memory/p/N82E16820242793",
+      "retailerListingId": "N82E16820242793",
+      "binding": {
+        "manufacturerPartNumber": "KF556S40IBK2-64",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-43:retailer-0004:N82E16820242793"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "0e753556c52b39d362664d15d4cb31e1dfab3424e93ba94f306a57640b3a9e46"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_87698013d4c0ae2779d4b9ff",
+      "atlasProductId": "ram_kingston_kvr32s22s8_16",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/16GB-3200MHZ-DDR4-Non-ECC-CL22SODIMM/dp/B08G499YKV",
+      "retailerListingId": "B08G499YKV",
+      "binding": {
+        "manufacturerPartNumber": "KVR32S22S8/16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-45:retailer-0001:B08G499YKV"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "f38dae9fe952f03f7ecb0a6a1ec1a71a8bc9ba06455a12aaae91786283847a3f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_cd4f8d3eba014acc978a309d",
+      "atlasProductId": "ram_kingston_kvr32s22s8_16",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/kingston-technology-corp-16gb-ddr4-3200-cas-latency-cl22-accessories-general/p/1B4-00M4-003W8",
+      "retailerListingId": "1B4-00M4-003W8",
+      "binding": {
+        "manufacturerPartNumber": "KVR32S22S8/16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-45:retailer-0004:1B4-00M4-003W8"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "b73a58ca9b92bbc94c2551eb948a2ff838400cc35a228b4dd879dda63319a681"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_d152723e15b180ee06f81955",
+      "atlasProductId": "ram_corsair_cmsx32gx5m1a5600c48",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/CORSAIR-Vengeance-5600MHz-Compatible-Computer/dp/B0D33THVDL",
+      "retailerListingId": "B0D33THVDL",
+      "binding": {
+        "manufacturerPartNumber": "CMSX32GX5M1A5600C48",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-55:retailer-0001:B0D33THVDL"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "d1b39819667e758c9b011bb7ec979bf6ee82c7478454643b73da436b962ce5f8"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_37fdb8f63888c77716122c5d",
+      "atlasProductId": "ram_g_skill_f5_6000j3040g32gx2_tz5n",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/G-Skill-Trident-288-Pin-CL30-40-40-96-F5-6000J3040G32GX2-TZ5N/dp/B0BJP3MRW1",
+      "retailerListingId": "B0BJP3MRW1",
+      "binding": {
+        "manufacturerPartNumber": "F5-6000J3040G32GX2-TZ5N",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-78:retailer-0001:B0BJP3MRW1"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "d2a7b32533e191b04da54d3eafc470017923c5aaeac6c3fe93be02e93055510b"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_d7017f5be31975355ee758a4",
+      "atlasProductId": "ram_kingston_kf432c16bbk2_16",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/16GB-3200MHz-DDR4-Beast-Black/dp/B097K2WBL3",
+      "retailerListingId": "B097K2WBL3",
+      "binding": {
+        "manufacturerPartNumber": "KF432C16BBK2/16",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-82:retailer-0001:B097K2WBL3"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "c8422f626ac0b5745f998bb92ddda615b571fd96e9ad2ff57978015005cd5c9f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_4e1fdc6dd6cd6e71d19b8da6",
+      "atlasProductId": "ram_kingston_kf436c16rb12k2_32",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/Kingston-Renegade-3600MT-Desktop-Gaming/dp/B0CKJ71M2Y",
+      "retailerListingId": "B0CKJ71M2Y",
+      "binding": {
+        "manufacturerPartNumber": "KF436C16RB12K2/32",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "operator:retail-lifecycle-reassess-001:manual-pass:row-93:retailer-0001:B0CKJ71M2Y"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "human:Clinton_Ramsook",
+      "reviewedAt": "2026-09-08T15:15:55.452Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-09-08T15:15:55.452Z",
+      "createdBy": "human:Clinton_Ramsook",
+      "materialFingerprint": "5b35d0fa929b52057baee580038c993c48766b5113e1b9707c01724dcb5aa8b4"
     }
   ]
 }
