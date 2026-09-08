@@ -1,7 +1,7 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-09-07
+Last updated:                  2026-09-08
 Branch:                        hardware-radar-growth-1
 Current committed HEAD:        ddf7cd829074456d33ef94a3c93bd9ef58fc876f (`fix(public): polish current RAM price experience`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
@@ -31,6 +31,7 @@ Current catalog-resolution increment: D-001 — 24 RAM launch candidates resolve
 Current catalog-balance review: D-001A — brand and retailer relevance reviewed; 22 ready, 2 need evidence
 Current Atlas-admission increment: ATLAS-ACTIVATION-001 — 77 manufacturer-verified expansion records human-reviewed and activated through the Atlas-owned batch boundary; committed at current HEAD
 Current retail-display increment: RETAIL-DISPLAY-011 — final-six manual import and `RETAIL_RESEARCH_CYCLE_COMPLETE` committed at current HEAD
+Current retail-refresh increment: CURRENT-RETAIL-REFRESH-002 — source-neutral portfolio/adapter/orchestrator boundary fixture-certified; no live adapter or production command exists
 Current brand-registration increment: D-002A — four launch brand prerequisites canonically registered
 ```
 
@@ -42,7 +43,7 @@ Hardware Radar now operates through parallel, coordinated tracks rather than one
 
 Mercury automated acquisition remains the durable target; curated ingestion remains transitional bootstrap infrastructure. Production publication remains governed by E2S and the separate publication boundary. No documented future-stage capability is implementation authority, and this parallel posture changes none of the operational facts below.
 
-RETAIL-SOURCE-RESILIENCE-001 records the platform-wide source-independence rule. Atlas retailer identity, Mercury `RetailerDestination`, replaceable commerce-data acquisition, and downstream affiliate routing are separate concerns. Affiliate feeds, retailer APIs, independent providers, and governed operator acquisition may supply ephemeral current-retail evidence through a future source-neutral adapter boundary, but no source or affiliate relationship owns product identity, destination identity, comparison truth, Cheapest, or Picks. Source loss preserves canonical identity and destinations, never fabricates freshness, and degrades per source to an approved alternate, manual-only, or unavailable mode. Rakuten is reactivated and Newegg affiliate approval is established; Product Feed/API fields and current-display/comparison rights still require inspection and certification. CURRENT-RETAIL-REFRESH implementation and all source adapters remain pending; this documentation increment performed no external operation.
+RETAIL-SOURCE-RESILIENCE-001 records the platform-wide source-independence rule. Atlas retailer identity, Mercury `RetailerDestination`, replaceable commerce-data acquisition, and downstream affiliate routing are separate concerns. CURRENT-RETAIL-REFRESH-002 now fixture-certifies the source-neutral `CurrentRetailRefreshPortfolio`, replaceable adapter contract, and bounded `CurrentRetailRefreshOrchestrator` over the existing `CurrentDisplaySnapshot`; it creates no parallel repository and leaves public freshness/Cheapest to `PublicCurrentRetailProjection`. Source loss preserves canonical identity, destinations, and the prior observation's original timestamp while other operations continue and manual acquisition remains available. Affiliate state is not an orchestration input. Rakuten/Newegg feed enablement, actual schema, binding, rights, TTL, and a real adapter remain pending, Amazon automated access remains unavailable, and no production refresh command or live adapter is exposed.
 
 PRICE-STREAMS-001 settles the price-stream design without claiming implementation. The daily Amazon and Newegg current-display stream is ephemeral: it may compare qualifying actionable offers, calculate current low/high/spread and change from one minimal replaceable previous-display snapshot, and order retailer presentation independently of affiliate status, but it does not accumulate as Mercury history or establish historical claims. DataForSEO/Mercury remains the durable governed historical stream, initially targeting a separately governed 48-hour cadence; retained observations preserve retailer/source provenance and support derived historical intelligence. A future Terminal may combine clearly distinguished current-display and historical projections, with **DENSITY IS EARNED BY DATA** remaining controlling.
 

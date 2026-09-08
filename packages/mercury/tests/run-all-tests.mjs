@@ -185,6 +185,7 @@ const testModules = [
     ,"./ProductionAcquisitionPortfolioComposition.test.mjs"
     ,"./AcquisitionCheckpointExecutionComposition.test.mjs"
     ,"./RetailDisplayImport.test.mjs"
+    ,"./CurrentRetailRefreshOrchestrator.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
 ];
 

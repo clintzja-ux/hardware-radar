@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { createCurrentDisplaySnapshot } from "./CurrentDisplaySnapshot.js";
+import { assessCurrentDisplayItemPriceEligibility } from "./CurrentDisplayEligibility.js";
 
 export const MANUAL_RETAIL_REVIEW_STATUSES = Object.freeze([
     "PENDING", "COMPLETED", "CONFIRMED_NOT_SOLD_AMAZON", "CONFIRMED_NOT_SOLD_NEWEGG",
@@ -138,21 +139,15 @@ export class ManualRetailReviewImportService {
                 const evidenceText = `${manualNotes ?? ""} ${row.operatorNotes ?? ""}`;
                 const availability = availabilityFrom(status, evidenceText, prior, sameDestination);
                 const condition = conditionFrom(evidenceText, prior, sameDestination);
-                const reasons = [];
-                if (condition !== "NEW") reasons.push("CONDITION_NOT_ELIGIBLE");
-                if (!destinationId) reasons.push("DESTINATION_UNRESOLVED");
-                if (availability !== "AVAILABLE") reasons.push("AVAILABILITY_NOT_ELIGIBLE");
-                const itemPriceEligible = reasons.length === 0;
+                const eligibility = assessCurrentDisplayItemPriceEligibility({ condition, availability, destinationId });
                 offers.set(offerKey, {
                     atlasProductId: row.atlasProductId, retailer, retailerId: retailerId(retailer), marketplace: expectedHost(retailer),
                     priceUsd: effectivePrice, currency: "USD", availability, condition, shippingUsd: null, feesUsd: null,
                     researchUrl: effectiveUrl, destinationId, matchStatus: "EXACT_PRODUCT_PAGE", sourceRow, observedAt: importedAt,
                     manualReviewProvenance: { sourceType: "OPERATOR_CURATED_RETAIL_REVIEW", workbook: sourceWorkbook, sheet: sourceSheet, operatorReviewStatus: status, operatorNotes: row.operatorNotes ?? null, retailerNotes: manualNotes, manufacturerPartNumber: row.mpn },
-                    itemPriceEligible, deliveredCostEligible: false,
-                    deliveredCostReasons: itemPriceEligible ? ["SHIPPING_COST_UNKNOWN", "FEES_UNKNOWN"] : reasons,
-                    comparisonEligible: itemPriceEligible, comparisonReasons: reasons
+                    ...eligibility
                 });
-                outcomes.push({ sourceRow, atlasProductId: row.atlasProductId, retailer, status: itemPriceEligible ? "CURRENT_ITEM_PRICE_ELIGIBLE" : "CURRENT_ITEM_PRICE_BLOCKED" });
+                outcomes.push({ sourceRow, atlasProductId: row.atlasProductId, retailer, status: eligibility.itemPriceEligible ? "CURRENT_ITEM_PRICE_ELIGIBLE" : "CURRENT_ITEM_PRICE_BLOCKED" });
             }
             research.push(researchRecord);
         }

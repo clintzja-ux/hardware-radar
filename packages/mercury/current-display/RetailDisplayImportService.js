@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { createCurrentDisplaySnapshot } from "./CurrentDisplaySnapshot.js";
 import { assessStandardRetailNewCondition } from "./StandardRetailNewConditionPolicy.js";
+import { assessCurrentDisplayItemPriceEligibility } from "./CurrentDisplayEligibility.js";
 
 const BLOCKED_PRICE_STATES = new Set(["PRICE_VOLATILE_REFRESH_REQUIRED", "PAGE_FOUND_PRICE_NOT_EXPOSED", "OUT_OF_STOCK_OR_PRICE_NOT_EXPOSED", "NO_QUALIFYING_NEW_EXACT_PAGE", "NO_CLEAN_RETAILER_EXACT_PAGE"]);
 const digest = value => crypto.createHash("sha256").update(JSON.stringify(value)).digest("hex");
@@ -157,13 +158,7 @@ export class RetailDisplayImportService {
                 }
                 if (!replaceOffer) continue;
                 const condition = assessStandardRetailNewCondition({ retailer: retailer.key, researchUrl: retailer.url, matchStatus: retailer.matchStatus, evidenceText: `${retailer.availability ?? ""} ${row.researchNotes ?? ""}` });
-                const comparisonReasons = [];
-                if (!condition.eligible) comparisonReasons.push(...condition.reasons);
-                if (!destinationId) comparisonReasons.push("DESTINATION_UNRESOLVED");
-                if (retailer.availability !== "AVAILABLE") comparisonReasons.push("AVAILABILITY_NOT_ELIGIBLE");
-                const itemPriceEligible = comparisonReasons.length === 0;
-                const deliveredCostReasons = [...comparisonReasons];
-                if (itemPriceEligible) deliveredCostReasons.push("SHIPPING_COST_UNKNOWN", "FEES_UNKNOWN");
+                const eligibility = assessCurrentDisplayItemPriceEligibility({ condition: condition.condition, conditionReasons: condition.reasons, availability: retailer.availability, destinationId });
                 if (!observedAt) {
                     outcomes.push({ sourceRow, atlasProductId: row.atlasProductId, retailer: retailer.key, status: "CURRENT_PRICE_BLOCKED_OBSERVATION_TIME_MISSING" });
                     continue;
@@ -184,11 +179,7 @@ export class RetailDisplayImportService {
                     matchStatus: retailer.matchStatus,
                     sourceRow,
                     observedAt,
-                    itemPriceEligible,
-                    deliveredCostEligible: deliveredCostReasons.length === 0,
-                    deliveredCostReasons,
-                    comparisonEligible: itemPriceEligible,
-                    comparisonReasons
+                    ...eligibility
                 });
                 outcomes.push({ sourceRow, atlasProductId: row.atlasProductId, retailer: retailer.key, status: retailer.url && destinationId ? "DISPLAY_PRICE_IMPORTED" : "PRICE_OBSERVED_DESTINATION_UNRESOLVED" });
             }
