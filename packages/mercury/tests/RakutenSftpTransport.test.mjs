@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import { gzipSync } from "node:zlib";
+import { spawnSync } from "node:child_process";
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { classifyRakutenFeedFile, loadRakutenSftpConfig, OpenSshSftpSession, RakutenProductCatalogSftpTransport, redactRakutenSftpError, selectRakutenNeweggMainDelta } from "../current-display/index.js";
+import { classifyOpenSshFailure, classifyRakutenFeedFile, ensureWindowsOpenSshAskpass, loadRakutenSftpConfig, OpenSshSftpSession, RakutenProductCatalogSftpTransport, redactRakutenSftpError, selectRakutenNeweggMainDelta } from "../current-display/index.js";
 import { fixtureFeedText, sanitizedCases } from "./fixtures/rakuten-newegg/sanitized-feed-fixtures.js";
 
 let cases=0;
@@ -14,6 +15,23 @@ assert.doesNotMatch(JSON.stringify(config),new RegExp(`${secret}|${username}`));
 assert.throws(()=>loadRakutenSftpConfig({}),/SFTP_CONFIG_MISSING/); assert.throws(()=>loadRakutenSftpConfig({RAKUTEN_SFTP_USERNAME:"u",RAKUTEN_SFTP_PASSWORD:"p",RAKUTEN_SFTP_CONNECTIONS:"6"}),/CONNECTION_LIMIT/); assert.throws(()=>loadRakutenSftpConfig({RAKUTEN_SFTP_USERNAME:"u",RAKUTEN_SFTP_PASSWORD:"p",RAKUTEN_SFTP_HOST:"wrong.example"}),/CONFIG_INVALID/); cases++;
 const redacted=redactRakutenSftpError(new Error(`auth ${username} password=${secret}`),[username,secret]); assert.doesNotMatch(redacted.message,new RegExp(`${secret}|${username}`)); cases++;
 await assert.rejects(()=>new OpenSshSftpSession({config,knownHostsPath:"known",askpassPath:"askpass",trustOnFirstUse:false}).connect(),/HOST_VERIFICATION_REQUIRED/); cases++;
+await assert.rejects(()=>new OpenSshSftpSession({config,knownHostsPath:"known",askpassPath:"askpass.cmd",trustOnFirstUse:true,sshExecutable:"definitely-missing-ssh",sftpExecutable:process.execPath}).connect(),/SFTP_SSH_EXECUTABLE_MISSING/); cases++;
+await assert.rejects(()=>new OpenSshSftpSession({config,knownHostsPath:"known",askpassPath:"askpass.cmd",trustOnFirstUse:true,sshExecutable:process.execPath,sftpExecutable:"definitely-missing-sftp"}).connect(),/SFTP_SFTP_EXECUTABLE_MISSING/); cases++;
+assert.equal(classifyOpenSshFailure("Permission denied (password)."),"SFTP_AUTH_FAILED");
+assert.equal(classifyOpenSshFailure("REMOTE HOST IDENTIFICATION HAS CHANGED"),"SFTP_HOST_VERIFICATION_FAILED");
+assert.equal(classifyOpenSshFailure("Connection timed out"),"SFTP_CONNECT_TIMEOUT");
+assert.equal(classifyOpenSshFailure("Connection refused"),"SFTP_CONNECT_REFUSED");
+assert.equal(classifyOpenSshFailure("Could not resolve hostname"),"SFTP_DNS_FAILED");
+assert.equal(classifyOpenSshFailure("subsystem request failed"),"SFTP_SESSION_START_FAILED"); cases++;
+if(process.platform==="win32"){
+ const askpassRoot=await mkdtemp(path.join(os.tmpdir(),"hr askpass path "));
+ try {
+  const helper=await ensureWindowsOpenSshAskpass({root:askpassRoot});
+  const fixtureSecret="fixture askpass value with spaces";
+  const invoked=spawnSync(helper,["password prompt"],{encoding:"utf8",env:{...process.env,RAKUTEN_SFTP_PASSWORD:fixtureSecret},windowsHide:true});
+  assert.equal(invoked.status,0);assert.equal(invoked.stdout,fixtureSecret);assert.doesNotMatch(`${invoked.stderr}`,new RegExp(fixtureSecret)); cases++;
+ } finally { await rm(askpassRoot,{recursive:true,force:true}); }
+}
 
 const metadata=(filename,size=100)=>({filename,size,modifiedAt:"2026-09-09T01:00:00.000Z",isDirectory:false});
 assert.equal(classifyRakutenFeedFile({remotePath:"/44583/a_mp_delta.txt.gz",filename:"a_mp_delta.txt.gz"}),"DELTA");
@@ -42,4 +60,6 @@ try{
 
 const source=await readFile(new URL("../current-display/RakutenProductCatalogSftpTransport.js",import.meta.url),"utf8");
 assert.doesNotMatch(source,/CurrentDisplaySnapshotRepository|PublicCurrentRetailProjection|historical-observations|affiliate/i); assert.doesNotMatch(source,/fetch\(|http:|ftp:/i); cases++;
+const sessionSource=await readFile(new URL("../current-display/OpenSshSftpSession.js",import.meta.url),"utf8");
+assert.match(sessionSource,/SSH_ASKPASS_REQUIRE:"force"/);assert.match(sessionSource,/StrictHostKeyChecking=accept-new/);assert.match(sessionSource,/BatchMode=no/);assert.match(sessionSource,/PreferredAuthentications=password,keyboard-interactive/);assert.doesNotMatch(sessionSource,/StrictHostKeyChecking=no|password=.*args/i); cases++;
 console.log(`RAKUTEN-SFTP-003 transport tests passed: ${cases} cases.`);

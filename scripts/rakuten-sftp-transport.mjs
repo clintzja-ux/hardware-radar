@@ -1,6 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadRakutenSftpConfig, OpenSshSftpSession, RakutenProductCatalogSftpTransport } from "../packages/mercury/current-display/index.js";
+import { ensureWindowsOpenSshAskpass, loadRakutenSftpConfig, OpenSshSftpSession, RakutenProductCatalogSftpTransport } from "../packages/mercury/current-display/index.js";
 
 const args=new Map(process.argv.slice(2).map(value=>{const i=value.indexOf("=");return i<0?[value,true]:[value.slice(0,i),value.slice(i+1)];}));
 const operation=args.get("--operation");
@@ -8,7 +8,8 @@ if(!["inspect","download-delta"].includes(operation))throw new Error("SFTP_OPERA
 if(args.get("--confirm-host-key")!=="TRUST-RAKUTEN-HOST-ON-FIRST-USE")throw new Error("SFTP_HOST_VERIFICATION_REQUIRED");
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const config=loadRakutenSftpConfig();
-const sessionFactory=()=>new OpenSshSftpSession({config,knownHostsPath:path.join(root,".forge-review","rakuten-sftp","known_hosts"),askpassPath:path.join(root,"scripts","rakuten-sftp-askpass.cmd"),trustOnFirstUse:true});
+const askpassPath=await ensureWindowsOpenSshAskpass({root:path.join(root,".forge-review","rakuten-sftp","askpass")});
+const sessionFactory=()=>new OpenSshSftpSession({config,knownHostsPath:path.join(root,".forge-review","rakuten-sftp","known_hosts"),askpassPath,trustOnFirstUse:true});
 const transport=new RakutenProductCatalogSftpTransport({sessionFactory,stagingRoot:path.join(root,".forge-review","rakuten-sftp","staging"),connectionConcurrency:config.concurrency,maxAttempts:1});
 const result=operation==="inspect"?await transport.inspect():await transport.downloadAndValidate();
 console.log("RAKUTEN PRODUCT CATALOG SFTP TRANSPORT");

@@ -21,3 +21,14 @@ export function redactRakutenSftpError(error, secrets = []) {
     safe.code = error?.code?.startsWith?.("SFTP_") ? error.code : "SFTP_OPERATION_FAILED";
     return safe;
 }
+
+export function classifyOpenSshFailure(value) {
+    const text = String(value ?? "");
+    if (/permission denied|authentication failed|too many authentication failures/i.test(text)) return "SFTP_AUTH_FAILED";
+    if (/host key verification failed|remote host identification has changed|offending .* key/i.test(text)) return "SFTP_HOST_VERIFICATION_FAILED";
+    if (/connection timed out|operation timed out/i.test(text)) return "SFTP_CONNECT_TIMEOUT";
+    if (/connection refused/i.test(text)) return "SFTP_CONNECT_REFUSED";
+    if (/could not resolve hostname|name or service not known|no such host is known/i.test(text)) return "SFTP_DNS_FAILED";
+    if (/subsystem request failed|subsystem .* failed|couldn't execute ssh_askpass|askpass.*(?:failed|error|not found|cannot)/i.test(text)) return "SFTP_SESSION_START_FAILED";
+    return "SFTP_CONNECT_FAILED";
+}
