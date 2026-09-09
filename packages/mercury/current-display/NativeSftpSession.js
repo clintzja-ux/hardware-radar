@@ -70,12 +70,12 @@ export function classifyNativeSftpFailure(value,{hostMismatch=false}={}){
 }
 
 export class NativeSftpSession {
-    constructor({config,knownHostsPath,trustOnFirstUse=false,clientFactory=()=>new Client(),readyTimeout=30000,cleanupTimeoutMs=2000,connectionAccounting=createRakutenSftpConnectionAccounting()}={}){this.config=config;this.knownHostsPath=path.resolve(knownHostsPath);this.trustOnFirstUse=trustOnFirstUse;this.clientFactory=clientFactory;this.readyTimeout=readyTimeout;this.cleanupTimeoutMs=cleanupTimeoutMs;this.accounting=connectionAccounting;this.client=null;this.sftp=null;this.hostMismatch=false;this.presentedKey=null;this.connectionsUsed=0;this.closePromise=null;this.secrets=[config?.username,config?.password];}
+    constructor({config,knownHostsPath,trustOnFirstUse=false,clientFactory=()=>new Client(),readyTimeout=30000,cleanupTimeoutMs=2000,connectionAccounting=createRakutenSftpConnectionAccounting()}={}){this.config=config;this.knownHostsPath=path.resolve(knownHostsPath);this.trustOnFirstUse=trustOnFirstUse;this.clientFactory=clientFactory;this.readyTimeout=readyTimeout;this.cleanupTimeoutMs=cleanupTimeoutMs;this.accounting=connectionAccounting;this.client=null;this.sftp=null;this.clientClosed=false;this.hostMismatch=false;this.presentedKey=null;this.connectionsUsed=0;this.closePromise=null;this.secrets=[config?.username,config?.password];}
     async connect(){
         if(!this.config||this.config.protocol!=="SFTP"||this.config.concurrency!==1)throw error("SFTP_CONFIG_INVALID");
         const trust=await readRakutenSftpHostTrust({knownHostsPath:this.knownHostsPath,host:this.config.host,port:this.config.port});
         if(trust.status==="MISSING"&&!this.trustOnFirstUse)throw error("SFTP_HOST_VERIFICATION_REQUIRED");
-        this.client=this.clientFactory();if(!(this.client instanceof EventEmitter)&&typeof this.client?.on!=="function")throw error("SFTP_CONNECT_FAILED");
+        this.client=this.clientFactory();if(!(this.client instanceof EventEmitter)&&typeof this.client?.on!=="function")throw error("SFTP_CONNECT_FAILED");this.client.once?.("close",()=>{this.clientClosed=true;});this.client.once?.("end",()=>{this.clientClosed=true;});
         try{
             await new Promise((resolve,reject)=>{
                 let settled=false;const done=(fn,value)=>{if(settled)return;settled=true;fn(value);};
@@ -93,8 +93,29 @@ export class NativeSftpSession {
         catch(cause){const failure=error("SFTP_LIST_FAILED"),status=Number(cause?.code);if(Number.isInteger(status)){failure.sftpStatusCode=status;failure.sftpStatusCategory=status===2?"PATH_NOT_FOUND":status===3?"PERMISSION_DENIED":status===4?"SERVER_FAILURE":"UNKNOWN_LIST_FAILURE";}else failure.sftpStatusCategory=cause?.code==="ENOENT"?"PATH_NOT_FOUND":cause?.code==="EACCES"?"PERMISSION_DENIED":"UNKNOWN_LIST_FAILURE";throw failure;}
     }
     async stat(remotePath){try{const attrs=await new Promise((resolve,reject)=>this.sftp.stat(remotePath,(cause,value)=>cause?reject(cause):resolve(value)));return metadata(path.posix.basename(remotePath),attrs);}catch{throw error("SFTP_LIST_FAILED");}}
-    async download(remotePath,localPath){try{await new Promise((resolve,reject)=>this.sftp.fastGet(remotePath,localPath,cause=>cause?reject(cause):resolve()));}catch(cause){if(["EACCES","ENOSPC","EROFS","EMFILE","ENFILE"].includes(cause?.code))throw error("SFTP_LOCAL_WRITE_FAILED");throw error("SFTP_DOWNLOAD_FAILED");}}
+    async download(remotePath,localPath,{signal,stallTimeoutMs=60000,downloadTimeoutMs=900000,reportedRemoteBytes=null,onProgress=()=>{},now=()=>Date.now()}={}){
+        if(!Number.isFinite(stallTimeoutMs)||stallTimeoutMs<=0||!Number.isFinite(downloadTimeoutMs)||downloadTimeoutMs<=stallTimeoutMs||typeof onProgress!=="function")throw error("SFTP_DOWNLOAD_CONFIG_INVALID");
+        const startedMs=now(),progress={bytesTransferred:0,reportedRemoteBytes:Number.isFinite(reportedRemoteBytes)&&reportedRemoteBytes>=0?reportedRemoteBytes:null,transferStartedAt:new Date(startedMs).toISOString(),lastProgressAt:new Date(startedMs).toISOString(),progressEvents:0,completionObserved:false};
+        const snapshot=()=>Object.freeze({...progress,percentCompleteEstimate:progress.reportedRemoteBytes>0?Math.min(100,Number(((progress.bytesTransferred/progress.reportedRemoteBytes)*100).toFixed(2))):null});
+        try{
+            await new Promise((resolve,reject)=>{
+                let settled=false,stallTimer,absoluteTimer;
+                const cleanup=()=>{clearTimeout(stallTimer);clearTimeout(absoluteTimer);signal?.removeEventListener?.("abort",cancel);this.client?.removeListener?.("close",closed);this.client?.removeListener?.("end",closed);this.client?.removeListener?.("error",sessionFailed);this.sftp?.removeListener?.("close",closed);this.sftp?.removeListener?.("end",closed);this.sftp?.removeListener?.("error",sessionFailed);};
+                const finish=(fn,value)=>{if(settled)return;settled=true;cleanup();fn(value);};
+                const fail=code=>{const cause=error(code);cause.transfer=snapshot();finish(reject,cause);void this.close();};
+                const armStall=()=>{clearTimeout(stallTimer);stallTimer=setTimeout(()=>fail("SFTP_DOWNLOAD_STALLED"),stallTimeoutMs);};
+                const cancel=()=>fail("SFTP_DOWNLOAD_CANCELLED"),closed=()=>fail("SFTP_DOWNLOAD_SESSION_CLOSED"),sessionFailed=()=>fail("SFTP_DOWNLOAD_FAILED");
+                if(signal?.aborted)return cancel();
+                signal?.addEventListener?.("abort",cancel,{once:true});this.client?.once?.("close",closed);this.client?.once?.("end",closed);this.client?.once?.("error",sessionFailed);this.sftp?.once?.("close",closed);this.sftp?.once?.("end",closed);this.sftp?.once?.("error",sessionFailed);
+                armStall();absoluteTimer=setTimeout(()=>fail("SFTP_DOWNLOAD_TIMEOUT"),downloadTimeoutMs);
+                const step=(total)=>{if(settled||!Number.isFinite(total)||total<=progress.bytesTransferred)return;progress.bytesTransferred=total;progress.progressEvents+=1;progress.lastProgressAt=new Date(now()).toISOString();armStall();try{onProgress(snapshot());}catch{}}
+                try{this.sftp.fastGet(remotePath,localPath,{step},cause=>{if(cause){const code=["EACCES","ENOSPC","EROFS","EMFILE","ENFILE"].includes(cause?.code)?"SFTP_LOCAL_WRITE_FAILED":"SFTP_DOWNLOAD_FAILED";const failure=error(code);failure.transfer=snapshot();return finish(reject,failure);}progress.completionObserved=true;finish(resolve);});}
+                catch(cause){const code=["EACCES","ENOSPC","EROFS","EMFILE","ENFILE"].includes(cause?.code)?"SFTP_LOCAL_WRITE_FAILED":"SFTP_DOWNLOAD_FAILED";const failure=error(code);failure.transfer=snapshot();finish(reject,failure);}
+            });
+            return snapshot();
+        }catch(cause){if(cause?.code?.startsWith("SFTP_"))throw cause;const failure=error("SFTP_DOWNLOAD_FAILED");failure.transfer=snapshot();throw failure;}
+    }
     async close(){if(this.closePromise)return this.closePromise;this.closePromise=this.cleanup();return this.closePromise;}
-    async cleanup(){const client=this.client,sftp=this.sftp;this.sftp=null;this.client=null;if(!client||!this.accounting.beginCleanup())return this.accounting.snapshot();let completed=false;const closed=new Promise(resolve=>{const done=()=>{if(completed)return;completed=true;resolve(true);};client.once?.("close",done);client.once?.("end",done);});const force=()=>{try{if(typeof client.destroy!=="function")throw new Error("DESTROY_UNAVAILABLE");client.destroy();this.accounting.release({fallback:true});}catch{this.accounting.release({fallback:true,cleanupFailed:true});}};try{sftp?.end?.();client.end();}catch{completed=true;force();return this.accounting.snapshot();}let timeout;const graceful=await Promise.race([closed,new Promise(resolve=>{timeout=setTimeout(()=>resolve(false),this.cleanupTimeoutMs);})]);clearTimeout(timeout);if(graceful)this.accounting.release();else force();return this.accounting.snapshot();}
+    async cleanup(){const client=this.client,sftp=this.sftp,alreadyClosed=this.clientClosed;this.sftp=null;this.client=null;if(!client||!this.accounting.beginCleanup())return this.accounting.snapshot();if(alreadyClosed){try{sftp?.end?.();}catch{}this.accounting.release();return this.accounting.snapshot();}let completed=false;const closed=new Promise(resolve=>{const done=()=>{if(completed)return;completed=true;resolve(true);};client.once?.("close",done);client.once?.("end",done);});const force=()=>{try{if(typeof client.destroy!=="function")throw new Error("DESTROY_UNAVAILABLE");client.destroy();this.accounting.release({fallback:true});}catch{this.accounting.release({fallback:true,cleanupFailed:true});}};try{sftp?.end?.();client.end();}catch{completed=true;force();return this.accounting.snapshot();}let timeout;const graceful=await Promise.race([closed,new Promise(resolve=>{timeout=setTimeout(()=>resolve(false),this.cleanupTimeoutMs);})]);clearTimeout(timeout);if(graceful)this.accounting.release();else force();return this.accounting.snapshot();}
     connectionAccounting(){return this.accounting.snapshot();}
 }

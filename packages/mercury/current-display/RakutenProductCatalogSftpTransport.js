@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { mkdir, readFile, rename, rm, stat } from "node:fs/promises";
+import { mkdir, readFile, readdir, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import { collectRakutenProductCatalogFixture } from "./RakutenProductCatalogParser.js";
 import { redactRakutenSftpError } from "./RakutenSftpConfig.js";
@@ -12,6 +12,17 @@ const safePath = value => typeof value === "string" && value.startsWith("/") && 
 const safeName = value => typeof value === "string" && value.length>0&&!/[\\/\0\r\n]/.test(value);
 const mainFeedPattern = /^(\d+)_(\d+)_mp(?:_(delta|deltatemplate)|_template)?\.txt\.gz$/i;
 const validInstant=value=>typeof value==="string"&&Number.isFinite(Date.parse(value));
+
+export const RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS=60000;
+export const RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS=900000;
+
+export async function inspectRakutenStalePartials(stagingRoot,{asOf=new Date().toISOString()}={}){
+    const absolute=path.resolve(stagingRoot),marker=`${path.sep}.forge-review${path.sep}`;
+    if(!absolute.includes(marker)||!validInstant(asOf))throw error("SFTP_STAGING_PATH_INVALID");
+    let names;try{names=await readdir(absolute);}catch(cause){if(cause?.code==="ENOENT")return freeze([]);throw error("SFTP_STAGING_INSPECTION_FAILED");}
+    const values=[];for(const filename of names.filter(value=>safeName(value)&&value.includes(".partial-"))){const metadata=await stat(path.join(absolute,filename));if(!metadata.isFile())continue;values.push({filename,size:metadata.size,modifiedAt:metadata.mtime.toISOString(),ageMs:Math.max(0,Date.parse(asOf)-metadata.mtimeMs)});}
+    return freeze(values.sort((a,b)=>a.filename.localeCompare(b.filename)));
+}
 
 export function classifyRakutenFeedFile({ remotePath, filename } = {}) {
     const upperPath = String(remotePath ?? "").toUpperCase(), lower = String(filename ?? "").toLowerCase();
@@ -89,7 +100,7 @@ export class RakutenProductCatalogSftpTransport {
             try { await session.connect(); result=await operation(session); }
             catch(error){ last=error;primary=error; }
             finally { await session.close().catch(()=>{});this.lastConnectionAccounting=session.connectionAccounting?.()??accounting.snapshot(); }
-            if(primary){const safe=redactRakutenSftpError(primary,session.secrets??[]);safe.connectionAccounting=this.lastConnectionAccounting;if(primary.discovery)safe.discovery=primary.discovery;if(primary.directoryListings)safe.directoryListings=primary.directoryListings;throw safe;}
+            if(primary){const safe=redactRakutenSftpError(primary,session.secrets??[]);safe.connectionAccounting=this.lastConnectionAccounting;if(primary.discovery)safe.discovery=primary.discovery;if(primary.directoryListings)safe.directoryListings=primary.directoryListings;if(primary.transfer)safe.transfer=primary.transfer;throw safe;}
             return freeze({...result,connectionAccounting:this.lastConnectionAccounting,connectionsUsed:this.lastConnectionAccounting.connectionsOpened});
         }
         throw redactRakutenSftpError(last);
@@ -109,13 +120,13 @@ export class RakutenProductCatalogSftpTransport {
             return freeze({...result,directories:listingSpecs(advertiserMid).map(item=>item.remotePath),downloaded:false,connectionsUsed:1,externalOperations:1,actualSpendUsd:0});
         });
     }
-    async downloadAndValidate({ advertiserMid="44583" }={}) {
+    async downloadAndValidate({ advertiserMid="44583",signal,stallTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS,downloadTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS,onProgress }={}) {
         return this.withSession(async session=>{
             const discovery=await this.discover(session,{advertiserMid}),selected=discovery.selected;
             await mkdir(this.stagingRoot,{recursive:true});
-            const finalPath=path.join(this.stagingRoot,selected.filename), temporaryPath=`${finalPath}.partial-${process.pid}`;
+            const finalPath=path.join(this.stagingRoot,selected.filename), temporaryPath=`${finalPath}.partial-${crypto.randomUUID()}`;
             try {
-                await session.download(selected.remotePath,temporaryPath);
+                const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress});
                 await session.close();
                 const local=await stat(temporaryPath); if(local.size<=0)throw new Error("SFTP_DOWNLOAD_FAILED");
                 const bytes=await readFile(temporaryPath), records=await collectRakutenProductCatalogFixture(bytes);
@@ -123,7 +134,7 @@ export class RakutenProductCatalogSftpTransport {
                 if(!header||!trailer||trailer.actualProductCount!==products.length)throw new Error("SFTP_INTEGRITY_FAILED");
                 await rename(temporaryPath,finalPath);
                 const count=value=>products.filter(item=>item.modification===value).length;
-                return freeze({status:"DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,localPath:finalPath,localBytes:local.size,sha256:crypto.createHash("sha256").update(bytes).digest("hex"),headerTimestamp:header.feedTimestamp,productRows:products.length,trailerRows:trailer.productCount,modifications:{I:count("I"),U:count("U"),D:count("D")},fieldCounts:[...new Set(products.map(item=>item.fieldCount))].sort(),connectionsUsed:1,externalOperations:1,actualSpendUsd:0});
+                return freeze({status:"DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,transfer,localPath:finalPath,localBytes:local.size,sha256:crypto.createHash("sha256").update(bytes).digest("hex"),headerTimestamp:header.feedTimestamp,productRows:products.length,trailerRows:trailer.productCount,modifications:{I:count("I"),U:count("U"),D:count("D")},fieldCounts:[...new Set(products.map(item=>item.fieldCount))].sort(),connectionsUsed:1,externalOperations:1,actualSpendUsd:0});
             } catch(error){await rm(temporaryPath,{force:true});if(String(error?.message??"").startsWith("SFTP_"))throw error;if(["EACCES","ENOSPC","EROFS","EMFILE","ENFILE","ENOENT"].includes(error?.code))throw new Error("SFTP_LOCAL_WRITE_FAILED");throw new Error("SFTP_INTEGRITY_FAILED");}
         });
     }
