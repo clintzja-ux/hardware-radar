@@ -8,7 +8,15 @@ import { createRakutenSftpConnectionAccounting } from "./RakutenSftpConnectionAc
 const error = code => Object.assign(new Error(code), { code });
 const digest = key => crypto.createHash("sha256").update(key).digest("hex");
 const hostTokens = (host, port) => port === 22 ? [host, `[${host}]:${port}`] : [`[${host}]:${port}`, host];
-const metadata = (filename,attrs) => {const sourceSeconds=Number(attrs?.mtime),instant=Number.isFinite(sourceSeconds)&&sourceSeconds>=0?new Date(sourceSeconds*1000):null;return {filename,size:Number(attrs?.size??0),remoteTimestampSourceSeconds:Number.isFinite(sourceSeconds)?sourceSeconds:null,modifiedAt:instant&&!Number.isNaN(instant.valueOf())?instant.toISOString():null,isDirectory:attrs?.isDirectory?.()===true,isFile:attrs?.isFile?.()===true};};
+const S_IFMT=0o170000,S_IFDIR=0o040000,S_IFREG=0o100000;
+const metadata = (filename,attrs) => {
+    const attributeShapeValid=attrs==null||typeof attrs==="object";
+    let isDirectory=false,isFile=false;
+    if(attributeShapeValid&&attrs){try{isDirectory=attrs.isDirectory?.()===true;isFile=attrs.isFile?.()===true;}catch{isDirectory=false;isFile=false;}if(!isDirectory&&!isFile&&Number.isInteger(attrs.mode)){isDirectory=(attrs.mode&S_IFMT)===S_IFDIR;isFile=(attrs.mode&S_IFMT)===S_IFREG;}}
+    const rawMtime=attrs?.mtime,sourceSeconds=rawMtime instanceof Date?rawMtime.getTime()/1000:Number(rawMtime),instant=Number.isFinite(sourceSeconds)&&sourceSeconds>=0?new Date(sourceSeconds*1000):null;
+    const rawSize=attrs?.size,size=rawSize===undefined||rawSize===null?null:Number(rawSize);
+    return {filename,size:Number.isFinite(size)?size:null,remoteTimestampSourceSeconds:Number.isFinite(sourceSeconds)?sourceSeconds:null,modifiedAt:instant&&!Number.isNaN(instant.valueOf())?instant.toISOString():null,isDirectory,isFile,attributeShapeValid};
+};
 
 function keyType(key) {
     if (!Buffer.isBuffer(key) || key.length < 5) throw error("SFTP_HOST_TRUST_INVALID");
@@ -82,7 +90,7 @@ export class NativeSftpSession {
     }
     async list(remotePath){
         try{const entries=await new Promise((resolve,reject)=>this.sftp.readdir(remotePath,(cause,value)=>cause?reject(cause):resolve(value)));return entries.map(item=>metadata(item.filename,item.attrs));}
-        catch{throw error("SFTP_LIST_FAILED");}
+        catch(cause){const failure=error("SFTP_LIST_FAILED"),status=Number(cause?.code);if(Number.isInteger(status)){failure.sftpStatusCode=status;failure.sftpStatusCategory=status===2?"PATH_NOT_FOUND":status===3?"PERMISSION_DENIED":status===4?"SERVER_FAILURE":"UNKNOWN_LIST_FAILURE";}else failure.sftpStatusCategory=cause?.code==="ENOENT"?"PATH_NOT_FOUND":cause?.code==="EACCES"?"PERMISSION_DENIED":"UNKNOWN_LIST_FAILURE";throw failure;}
     }
     async stat(remotePath){try{const attrs=await new Promise((resolve,reject)=>this.sftp.stat(remotePath,(cause,value)=>cause?reject(cause):resolve(value)));return metadata(path.posix.basename(remotePath),attrs);}catch{throw error("SFTP_LIST_FAILED");}}
     async download(remotePath,localPath){try{await new Promise((resolve,reject)=>this.sftp.fastGet(remotePath,localPath,cause=>cause?reject(cause):resolve()));}catch(cause){if(["EACCES","ENOSPC","EROFS","EMFILE","ENFILE"].includes(cause?.code))throw error("SFTP_LOCAL_WRITE_FAILED");throw error("SFTP_DOWNLOAD_FAILED");}}
