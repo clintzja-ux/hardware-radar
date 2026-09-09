@@ -118,5 +118,8 @@
     "review:product-identity:approve": "node scripts/mercury-product-identity-review-approve.mjs",
     "review:merchant-identity:approve": "node scripts/mercury-merchant-identity-review-approve.mjs",
     "review:identity:audit-remediate": "node scripts/mercury-identity-review-audit-remediate.mjs"
+  },
+  "dependencies": {
+    "ssh2": "1.17.0"
   }
 }

@@ -77,7 +77,7 @@ export class RakutenProductCatalogSftpTransport {
                 await rename(temporaryPath,finalPath);
                 const count=value=>products.filter(item=>item.modification===value).length;
                 return freeze({status:"DOWNLOADED_AND_VALIDATED",selected,localPath:finalPath,localBytes:local.size,sha256:crypto.createHash("sha256").update(bytes).digest("hex"),headerTimestamp:header.feedTimestamp,productRows:products.length,trailerRows:trailer.productCount,modifications:{I:count("I"),U:count("U"),D:count("D")},fieldCounts:[...new Set(products.map(item=>item.fieldCount))].sort(),connectionsUsed:1,externalOperations:1,actualSpendUsd:0});
-            } catch(error){await rm(temporaryPath,{force:true});throw error;}
+            } catch(error){await rm(temporaryPath,{force:true});if(String(error?.message??"").startsWith("SFTP_"))throw error;if(["EACCES","ENOSPC","EROFS","EMFILE","ENFILE","ENOENT"].includes(error?.code))throw new Error("SFTP_LOCAL_WRITE_FAILED");throw new Error("SFTP_INTEGRITY_FAILED");}
         });
     }
 }

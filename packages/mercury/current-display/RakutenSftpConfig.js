@@ -20,30 +20,5 @@ export function redactRakutenSftpError(error, secrets = []) {
     text = text.replace(/(password|passphrase|authorization)\s*[=:]\s*[^\s]+/gi, "$1=REDACTED").replace(/sftp:\/\/[^\s@]+@/gi, "sftp://REDACTED@");
     const safe = new Error(text.startsWith("SFTP_") ? text : "SFTP_OPERATION_FAILED");
     safe.code = error?.code?.startsWith?.("SFTP_") ? error.code : "SFTP_OPERATION_FAILED";
-    if (error?.stage) safe.diagnostic = Object.freeze({ stage:error.stage, exitCode:error.exitCode??null, signal:error.signal??null, processStarted:error.processStarted===true, streamsOpened:error.streamsOpened===true, askpassAttempted:error.askpassAttempted===true, askpassAttemptCount:Number.isInteger(error.askpassAttemptCount)?error.askpassAttemptCount:0, readinessPromptObserved:error.readinessPromptObserved===true, stdoutBytesObserved:Number.isInteger(error.stdoutBytesObserved)?error.stdoutBytesObserved:0, stderrBytesObserved:Number.isInteger(error.stderrBytesObserved)?error.stderrBytesObserved:0, controlProbeSent:error.controlProbeSent===true, controlProbeResponseObserved:error.controlProbeResponseObserved===true, timeoutStage:error.timeoutStage??null });
     return safe;
-}
-
-export function classifyOpenSshFailure(value) {
-    const text = String(value ?? "");
-    if (/permission denied|authentication failed|too many authentication failures/i.test(text)) return "SFTP_AUTH_FAILED";
-    if (/host key verification failed|remote host identification has changed|offending .* key/i.test(text)) return "SFTP_HOST_VERIFICATION_FAILED";
-    if (/connection timed out|operation timed out/i.test(text)) return "SFTP_CONNECT_TIMEOUT";
-    if (/connection refused/i.test(text)) return "SFTP_CONNECT_REFUSED";
-    if (/could not resolve hostname|name or service not known|no such host is known/i.test(text)) return "SFTP_DNS_FAILED";
-    if (/subsystem request failed|subsystem .* failed|couldn't execute ssh_askpass|askpass.*(?:failed|error|not found|cannot)/i.test(text)) return "SFTP_SESSION_START_FAILED";
-    return "SFTP_CONNECT_FAILED";
-}
-
-export function classifyOpenSshProcessFailure({ kind, stderr, exitCode, signal, askpassAttempted = false } = {}) {
-    const classified = classifyOpenSshFailure(stderr);
-    if (classified !== "SFTP_CONNECT_FAILED") return classified;
-    if (kind === "SPAWN") return "SFTP_PROCESS_SPAWN_FAILED";
-    if (kind === "TIMEOUT") return askpassAttempted ? "SFTP_HANDSHAKE_TIMEOUT" : "SFTP_ASKPASS_NOT_INVOKED";
-    if (kind === "CONTROL_PROBE_TIMEOUT") return askpassAttempted ? "SFTP_CONTROL_PROBE_TIMEOUT" : "SFTP_ASKPASS_NOT_INVOKED";
-    if (kind === "COMMAND_TIMEOUT") return "SFTP_COMMAND_TIMEOUT";
-    if (signal) return "SFTP_PROCESS_TERMINATED";
-    if (Number.isInteger(exitCode) && exitCode !== 0) return askpassAttempted ? "SFTP_PROCESS_EXITED" : "SFTP_ASKPASS_NOT_INVOKED";
-    if (kind === "EXIT") return "SFTP_SESSION_START_FAILED";
-    return "SFTP_CONNECT_FAILED";
 }
