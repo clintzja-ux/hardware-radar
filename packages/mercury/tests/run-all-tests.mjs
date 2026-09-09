@@ -187,6 +187,7 @@ const testModules = [
     ,"./RetailDisplayImport.test.mjs"
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
+    ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
 ];
 

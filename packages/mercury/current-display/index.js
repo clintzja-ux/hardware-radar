@@ -7,3 +7,5 @@ export * from "./PublicCurrentRetailProjection.js";
 export * from "./CurrentDisplayEligibility.js";
 export * from "./CurrentRetailRefresh.js";
 export * from "./RetailLifecycleHeldReassessment.js";
+export * from "./RakutenProductCatalogParser.js";
+export * from "./RakutenNeweggProductFeedAdapter.js";
