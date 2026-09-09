@@ -8,7 +8,7 @@ import { createRakutenSftpConnectionAccounting } from "./RakutenSftpConnectionAc
 const error = code => Object.assign(new Error(code), { code });
 const digest = key => crypto.createHash("sha256").update(key).digest("hex");
 const hostTokens = (host, port) => port === 22 ? [host, `[${host}]:${port}`] : [`[${host}]:${port}`, host];
-const metadata = (filename,attrs) => ({filename,size:Number(attrs?.size??0),modifiedAt:new Date(Number(attrs?.mtime)*1000).toISOString(),isDirectory:attrs?.isDirectory?.()===true});
+const metadata = (filename,attrs) => {const sourceSeconds=Number(attrs?.mtime),instant=Number.isFinite(sourceSeconds)&&sourceSeconds>=0?new Date(sourceSeconds*1000):null;return {filename,size:Number(attrs?.size??0),remoteTimestampSourceSeconds:Number.isFinite(sourceSeconds)?sourceSeconds:null,modifiedAt:instant&&!Number.isNaN(instant.valueOf())?instant.toISOString():null,isDirectory:attrs?.isDirectory?.()===true,isFile:attrs?.isFile?.()===true};};
 
 function keyType(key) {
     if (!Buffer.isBuffer(key) || key.length < 5) throw error("SFTP_HOST_TRUST_INVALID");

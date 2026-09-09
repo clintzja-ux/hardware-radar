@@ -18,7 +18,8 @@ export function redactRakutenSftpError(error, secrets = []) {
     let text = String(error?.message ?? error ?? "SFTP_OPERATION_FAILED");
     for (const secret of secrets.filter(nonBlank)) text = text.split(secret).join("REDACTED");
     text = text.replace(/(password|passphrase|authorization)\s*[=:]\s*[^\s]+/gi, "$1=REDACTED").replace(/sftp:\/\/[^\s@]+@/gi, "sftp://REDACTED@");
-    const safe = new Error(text.startsWith("SFTP_") ? text : "SFTP_OPERATION_FAILED");
-    safe.code = error?.code?.startsWith?.("SFTP_") ? error.code : "SFTP_OPERATION_FAILED";
+    const messageCode=/^SFTP_[A-Z0-9_]+$/.test(text)?text:null,explicitCode=/^SFTP_[A-Z0-9_]+$/.test(String(error?.code??""))?error.code:null,safeCode=explicitCode??messageCode??"SFTP_OPERATION_FAILED";
+    const safe = new Error(safeCode);
+    safe.code = safeCode;
     return safe;
 }
