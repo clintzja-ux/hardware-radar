@@ -3,6 +3,7 @@ import { mkdir, readFile, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import { collectRakutenProductCatalogFixture } from "./RakutenProductCatalogParser.js";
 import { redactRakutenSftpError } from "./RakutenSftpConfig.js";
+import { createRakutenSftpConnectionAccounting } from "./RakutenSftpConnectionAccounting.js";
 
 export const RAKUTEN_SFTP_MAX_CONNECTIONS = 5;
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
@@ -36,19 +37,21 @@ export function selectRakutenNeweggMainDelta(entries, { advertiserMid = "44583" 
 }
 
 export class RakutenProductCatalogSftpTransport {
-    constructor({ sessionFactory, stagingRoot, connectionConcurrency = 1, maxAttempts = 1 } = {}) {
-        if (typeof sessionFactory !== "function" || !stagingRoot || !Number.isInteger(connectionConcurrency) || connectionConcurrency < 1 || connectionConcurrency > RAKUTEN_SFTP_MAX_CONNECTIONS || !Number.isInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > 2) throw new Error(connectionConcurrency > RAKUTEN_SFTP_MAX_CONNECTIONS ? "SFTP_CONNECTION_LIMIT_INVALID" : "SFTP_TRANSPORT_CONFIG_INVALID");
+    constructor({ sessionFactory, stagingRoot, connectionConcurrency = 1, maxAttempts = 1, connectionAccountingFactory=()=>createRakutenSftpConnectionAccounting() } = {}) {
+        if (typeof sessionFactory !== "function" || typeof connectionAccountingFactory!=="function" || !stagingRoot || connectionConcurrency!==1 || maxAttempts!==1) throw new Error(connectionConcurrency > RAKUTEN_SFTP_MAX_CONNECTIONS ? "SFTP_CONNECTION_LIMIT_INVALID" : "SFTP_TRANSPORT_CONFIG_INVALID");
         const absolute = path.resolve(stagingRoot), marker = `${path.sep}.forge-review${path.sep}`;
         if (!absolute.includes(marker) || absolute.includes(`${path.sep}public${path.sep}`)) throw new Error("SFTP_STAGING_PATH_INVALID");
-        this.sessionFactory=sessionFactory; this.stagingRoot=absolute; this.connectionConcurrency=connectionConcurrency; this.maxAttempts=maxAttempts;
+        this.sessionFactory=sessionFactory; this.stagingRoot=absolute; this.connectionConcurrency=connectionConcurrency; this.maxAttempts=maxAttempts;this.connectionAccountingFactory=connectionAccountingFactory;this.lastConnectionAccounting=null;
     }
     async withSession(operation) {
-        let last;
+        let last;const accounting=this.connectionAccountingFactory();
         for (let attempt=1;attempt<=this.maxAttempts;attempt+=1) {
-            const session=this.sessionFactory();
-            try { await session.connect(); return await operation(session); }
-            catch(error){ last=error; if(attempt===this.maxAttempts) throw redactRakutenSftpError(error,session.secrets??[]); }
-            finally { await session.close().catch(()=>{}); }
+            const session=this.sessionFactory({connectionAccounting:accounting});let result,primary;
+            try { await session.connect(); result=await operation(session); }
+            catch(error){ last=error;primary=error; }
+            finally { await session.close().catch(()=>{});this.lastConnectionAccounting=session.connectionAccounting?.()??accounting.snapshot(); }
+            if(primary){const safe=redactRakutenSftpError(primary,session.secrets??[]);safe.connectionAccounting=this.lastConnectionAccounting;throw safe;}
+            return freeze({...result,connectionAccounting:this.lastConnectionAccounting,connectionsUsed:this.lastConnectionAccounting.connectionsOpened});
         }
         throw redactRakutenSftpError(last);
     }
@@ -70,6 +73,7 @@ export class RakutenProductCatalogSftpTransport {
             const finalPath=path.join(this.stagingRoot,selected.filename), temporaryPath=`${finalPath}.partial-${process.pid}`;
             try {
                 await session.download(selected.remotePath,temporaryPath);
+                await session.close();
                 const local=await stat(temporaryPath); if(local.size<=0)throw new Error("SFTP_DOWNLOAD_FAILED");
                 const bytes=await readFile(temporaryPath), records=await collectRakutenProductCatalogFixture(bytes);
                 const header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL"),products=records.filter(item=>item.recordType==="PRODUCT");

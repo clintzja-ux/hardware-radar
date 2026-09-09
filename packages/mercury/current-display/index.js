@@ -12,3 +12,4 @@ export * from "./RakutenNeweggProductFeedAdapter.js";
 export * from "./RakutenSftpConfig.js";
 export * from "./RakutenProductCatalogSftpTransport.js";
 export * from "./NativeSftpSession.js";
+export * from "./RakutenSftpConnectionAccounting.js";

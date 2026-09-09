@@ -1,14 +1,14 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-09-08
+Last updated:                  2026-09-09
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        67861da70f042ed71396f3a6b0794266cdfc6dba (`feat(mercury): add source-neutral current retail refresh orchestration`)
+Current committed HEAD:        1df373ae5a7c05943eb50e4df30887ae8b01ce8a (`feat(mercury): replace Rakuten OpenSSH transport with native SFTP`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 21 ahead at RETAIL-SOURCE-RESILIENCE-001 preflight
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 31 ahead at RAKUTEN-SFTP-005 preflight
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -32,6 +32,7 @@ Current catalog-balance review: D-001A — brand and retailer relevance reviewed
 Current Atlas-admission increment: ATLAS-ACTIVATION-002 — the exact 15 pre-expansion RAM records human-reviewed and activated through a separate Atlas-owned batch boundary; local changes are not yet committed
 Current retail-display increment: RETAIL-LIFECYCLE-REASSESS-001 — lifecycle-held evidence reassessed after full Atlas activation; local checkpoint awaiting operator commit/push
 Current retail-refresh increment: CURRENT-RETAIL-REFRESH-002 — source-neutral portfolio/adapter/orchestrator boundary fixture-certified; no live adapter or production command exists
+Current Rakuten transport increment: RAKUTEN-SFTP-005 — deterministic local connection accounting and cleanup fixture-certified; no live connection performed
 Current brand-registration increment: D-002A — four launch brand prerequisites canonically registered
 ```
 
@@ -43,7 +44,7 @@ Hardware Radar now operates through parallel, coordinated tracks rather than one
 
 Mercury automated acquisition remains the durable target; curated ingestion remains transitional bootstrap infrastructure. Production publication remains governed by E2S and the separate publication boundary. No documented future-stage capability is implementation authority, and this parallel posture changes none of the operational facts below.
 
-RETAIL-SOURCE-RESILIENCE-001 records the platform-wide source-independence rule. Atlas retailer identity, Mercury `RetailerDestination`, replaceable commerce-data acquisition, and downstream affiliate routing are separate concerns. CURRENT-RETAIL-REFRESH-002 fixture-certifies the source-neutral `CurrentRetailRefreshPortfolio`, replaceable adapter contract, and bounded `CurrentRetailRefreshOrchestrator` over the existing `CurrentDisplaySnapshot`; it creates no parallel repository and leaves public freshness/Cheapest to `PublicCurrentRetailProjection`. RAKUTEN-NEWEGG-002 fixture-certifies a streaming-capable gzip/pipe Product Catalog parser and exact-destination `RakutenNeweggProductFeedAdapter` against sanitized operator-observed feed shapes. RAKUTEN-SFTP-003–003C established the SFTP file/staging/integrity boundary and documented the unsuccessful Windows OpenSSH control-channel attempts. RAKUTEN-SFTP-004 replaces only that process-control session with pinned `ssh2` 1.17.0 native password/SFTP operations while preserving the certified higher transport contract. The existing isolated OpenSSH known-hosts state is consumed directly and currently resolves to exactly one host-bound trusted key; server-key mismatch fails closed, explicit TOFU remains required only when trust is absent, one connection remains default, and five remains the maximum. OpenSSH, askpass, prompts, and control probes are no longer production dependencies. The native transport is fixture-certified and awaits one operator live inspection; no feed has been downloaded or admitted. Transport and adapter rights remain separate: public display/comparison, history, live adapter registration, scheduling, and production refresh remain unavailable. Source loss preserves canonical identity, destinations, and the prior observation's original timestamp while other operations continue and manual acquisition remains available. Affiliate state is not an orchestration input; Amazon automated access remains unavailable.
+RETAIL-SOURCE-RESILIENCE-001 records the platform-wide source-independence rule. Atlas retailer identity, Mercury `RetailerDestination`, replaceable commerce-data acquisition, and downstream affiliate routing are separate concerns. CURRENT-RETAIL-REFRESH-002 fixture-certifies the source-neutral `CurrentRetailRefreshPortfolio`, replaceable adapter contract, and bounded `CurrentRetailRefreshOrchestrator` over the existing `CurrentDisplaySnapshot`; it creates no parallel repository and leaves public freshness/Cheapest to `PublicCurrentRetailProjection`. RAKUTEN-NEWEGG-002 fixture-certifies a streaming-capable gzip/pipe Product Catalog parser and exact-destination `RakutenNeweggProductFeedAdapter` against sanitized operator-observed feed shapes. RAKUTEN-SFTP-003–003C established the SFTP file/staging/integrity boundary and documented the unsuccessful Windows OpenSSH control-channel attempts. RAKUTEN-SFTP-004 replaces only that process-control session with pinned `ssh2` 1.17.0 native password/SFTP operations while preserving the certified higher transport contract. RAKUTEN-SFTP-005 adds deterministic, secret-free local lifecycle accounting and idempotent cleanup: routine operations allow one reusable connection, five is only the absolute external ceiling, automatic retries remain zero, and a two-second graceful-close wait falls back to one forced destroy. `activeConnectionsAtEnd = 0` proves only local release, not Rakuten server-side session state; Mercury processing concurrency cannot increase SFTP connection concurrency. After abnormal failure the operator must pause before retrying, and WinSCP must not overlap a Hardware Radar session. The existing isolated OpenSSH known-hosts state is consumed directly and currently resolves to exactly one host-bound trusted key; server-key mismatch fails closed and explicit TOFU remains required only when trust is absent. OpenSSH, askpass, prompts, and control probes are no longer production dependencies. The native transport and cleanup lifecycle are fixture-certified and await one operator live inspection; no feed has been downloaded or admitted. Transport and adapter rights remain separate: public display/comparison, history, live adapter registration, scheduling, and production refresh remain unavailable. Source loss preserves canonical identity, destinations, and the prior observation's original timestamp while other operations continue and manual acquisition remains available. Affiliate state is not an orchestration input; Amazon automated access remains unavailable.
 
 PRICE-STREAMS-001 settles the price-stream design without claiming implementation. The daily Amazon and Newegg current-display stream is ephemeral: it may compare qualifying actionable offers, calculate current low/high/spread and change from one minimal replaceable previous-display snapshot, and order retailer presentation independently of affiliate status, but it does not accumulate as Mercury history or establish historical claims. DataForSEO/Mercury remains the durable governed historical stream, initially targeting a separately governed 48-hour cadence; retained observations preserve retailer/source provenance and support derived historical intelligence. A future Terminal may combine clearly distinguished current-display and historical projections, with **DENSITY IS EARNED BY DATA** remaining controlling.
 
@@ -107,13 +108,13 @@ B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A regi
 
 ## Current test baseline
 
-The current runners declare **238 subsystem test files**:
+The current runners declare **243 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
-| Atlas | 21 |
-| Mercury | 186 |
+| Atlas | 22 |
+| Mercury | 190 |
 | Beacon | 7 |
 | Gateway | 17 |
 

@@ -8,9 +8,10 @@ if(!["inspect","download-delta"].includes(operation))throw new Error("SFTP_OPERA
 if(args.get("--confirm-host-key")!=="TRUST-RAKUTEN-HOST-ON-FIRST-USE")throw new Error("SFTP_HOST_VERIFICATION_REQUIRED");
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const config=loadRakutenSftpConfig();
-const sessionFactory=()=>new NativeSftpSession({config,knownHostsPath:path.join(root,".forge-review","rakuten-sftp","known_hosts"),trustOnFirstUse:true});
+const sessionFactory=({connectionAccounting})=>new NativeSftpSession({config,knownHostsPath:path.join(root,".forge-review","rakuten-sftp","known_hosts"),trustOnFirstUse:true,connectionAccounting});
 const transport=new RakutenProductCatalogSftpTransport({sessionFactory,stagingRoot:path.join(root,".forge-review","rakuten-sftp","staging"),connectionConcurrency:config.concurrency,maxAttempts:1});
-const result=operation==="inspect"?await transport.inspect():await transport.downloadAndValidate();
+let result;try{result=operation==="inspect"?await transport.inspect():await transport.downloadAndValidate();}catch(error){console.error("RAKUTEN PRODUCT CATALOG SFTP TRANSPORT");console.error("Operation:                   ",error.code??"SFTP_OPERATION_FAILED");printAccounting(error.connectionAccounting);console.error("Actual spend:                $0.000");process.exitCode=1;throw error;}
+function printAccounting(value={}){console.log("Connection accounting:");console.log("  opened:                    ",value.connectionsOpened??0);console.log("  ready:                     ",value.connectionsReady??0);console.log("  closed gracefully:         ",value.connectionsClosedGracefully??0);console.log("  destroyed as fallback:     ",value.connectionsDestroyedAsFallback??0);console.log("  active at start:           ",value.activeConnectionsAtStart??0);console.log("  active at end:             ",value.activeConnectionsAtEnd??0);console.log("  peak local concurrent:     ",value.peakLocalConcurrentConnections??0);}
 console.log("RAKUTEN PRODUCT CATALOG SFTP TRANSPORT");
 console.log("Operation:                  ",operation.toUpperCase());
 console.log("Host:                       ",config.host);
@@ -29,4 +30,5 @@ console.log("Current-display mutation:    NONE");
 console.log("Historical mutation:         NONE");
 console.log("Affiliate routing:           NONE");
 console.log("SFTP connections:           ",result.connectionsUsed);
+printAccounting(result.connectionAccounting);
 console.log("Actual spend:                $0.000");

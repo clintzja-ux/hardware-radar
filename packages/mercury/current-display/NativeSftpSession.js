@@ -3,6 +3,7 @@ import { EventEmitter } from "node:events";
 import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { Client } from "ssh2";
+import { createRakutenSftpConnectionAccounting } from "./RakutenSftpConnectionAccounting.js";
 
 const error = code => Object.assign(new Error(code), { code });
 const digest = key => crypto.createHash("sha256").update(key).digest("hex");
@@ -52,6 +53,7 @@ async function persistTrust({knownHostsPath,host,port,key}){
 export function classifyNativeSftpFailure(value,{hostMismatch=false}={}){
     if(hostMismatch)return "SFTP_HOST_VERIFICATION_FAILED";
     const code=String(value?.code??""),level=String(value?.level??""),message=String(value?.message??value??"");
+    if(code.startsWith("SFTP_"))return code;
     if(level==="client-authentication"||/authentication failed|all configured authentication methods failed|permission denied/i.test(message))return "SFTP_AUTH_FAILED";
     if(code==="ETIMEDOUT"||/timed? out/i.test(message))return "SFTP_CONNECT_TIMEOUT";
     if(code==="ECONNREFUSED"||/connection refused/i.test(message))return "SFTP_CONNECT_REFUSED";
@@ -60,7 +62,7 @@ export function classifyNativeSftpFailure(value,{hostMismatch=false}={}){
 }
 
 export class NativeSftpSession {
-    constructor({config,knownHostsPath,trustOnFirstUse=false,clientFactory=()=>new Client(),readyTimeout=30000}={}){this.config=config;this.knownHostsPath=path.resolve(knownHostsPath);this.trustOnFirstUse=trustOnFirstUse;this.clientFactory=clientFactory;this.readyTimeout=readyTimeout;this.client=null;this.sftp=null;this.hostMismatch=false;this.presentedKey=null;this.connectionsUsed=0;this.secrets=[config?.username,config?.password];}
+    constructor({config,knownHostsPath,trustOnFirstUse=false,clientFactory=()=>new Client(),readyTimeout=30000,cleanupTimeoutMs=2000,connectionAccounting=createRakutenSftpConnectionAccounting()}={}){this.config=config;this.knownHostsPath=path.resolve(knownHostsPath);this.trustOnFirstUse=trustOnFirstUse;this.clientFactory=clientFactory;this.readyTimeout=readyTimeout;this.cleanupTimeoutMs=cleanupTimeoutMs;this.accounting=connectionAccounting;this.client=null;this.sftp=null;this.hostMismatch=false;this.presentedKey=null;this.connectionsUsed=0;this.closePromise=null;this.secrets=[config?.username,config?.password];}
     async connect(){
         if(!this.config||this.config.protocol!=="SFTP"||this.config.concurrency!==1)throw error("SFTP_CONFIG_INVALID");
         const trust=await readRakutenSftpHostTrust({knownHostsPath:this.knownHostsPath,host:this.config.host,port:this.config.port});
@@ -71,8 +73,9 @@ export class NativeSftpSession {
                 let settled=false;const done=(fn,value)=>{if(settled)return;settled=true;fn(value);};
                 this.client.once("ready",()=>done(resolve));
                 this.client.once("error",cause=>done(reject,error(classifyNativeSftpFailure(cause,{hostMismatch:this.hostMismatch}))));
-                try{this.connectionsUsed+=1;this.client.connect({host:this.config.host,port:this.config.port,username:this.config.username,password:this.config.password,readyTimeout:this.readyTimeout,hostVerifier:key=>{const actual=digest(key);if(trust.status==="TRUSTED"){const accepted=trust.digests.includes(actual);this.hostMismatch=!accepted;return accepted;}this.presentedKey=Buffer.from(key);return this.trustOnFirstUse;}});}catch(cause){done(reject,error(classifyNativeSftpFailure(cause,{hostMismatch:this.hostMismatch})));}
+                try{this.accounting.reserve();this.connectionsUsed+=1;this.client.connect({host:this.config.host,port:this.config.port,username:this.config.username,password:this.config.password,readyTimeout:this.readyTimeout,hostVerifier:key=>{const actual=digest(key);if(trust.status==="TRUSTED"){const accepted=trust.digests.includes(actual);this.hostMismatch=!accepted;return accepted;}this.presentedKey=Buffer.from(key);return this.trustOnFirstUse;}});}catch(cause){done(reject,error(classifyNativeSftpFailure(cause,{hostMismatch:this.hostMismatch})));}
             });
+            this.accounting.markReady();
             if(trust.status==="MISSING")await persistTrust({knownHostsPath:this.knownHostsPath,host:this.config.host,port:this.config.port,key:this.presentedKey});
             this.sftp=await new Promise((resolve,reject)=>this.client.sftp((cause,value)=>cause?reject(error("SFTP_CONNECT_FAILED")):resolve(value)));
         }catch(cause){await this.close();throw cause;}
@@ -83,5 +86,7 @@ export class NativeSftpSession {
     }
     async stat(remotePath){try{const attrs=await new Promise((resolve,reject)=>this.sftp.stat(remotePath,(cause,value)=>cause?reject(cause):resolve(value)));return metadata(path.posix.basename(remotePath),attrs);}catch{throw error("SFTP_LIST_FAILED");}}
     async download(remotePath,localPath){try{await new Promise((resolve,reject)=>this.sftp.fastGet(remotePath,localPath,cause=>cause?reject(cause):resolve()));}catch(cause){if(["EACCES","ENOSPC","EROFS","EMFILE","ENFILE"].includes(cause?.code))throw error("SFTP_LOCAL_WRITE_FAILED");throw error("SFTP_DOWNLOAD_FAILED");}}
-    async close(){const client=this.client;this.sftp=null;this.client=null;if(!client)return;try{client.end();}catch{} }
+    async close(){if(this.closePromise)return this.closePromise;this.closePromise=this.cleanup();return this.closePromise;}
+    async cleanup(){const client=this.client,sftp=this.sftp;this.sftp=null;this.client=null;if(!client||!this.accounting.beginCleanup())return this.accounting.snapshot();let completed=false;const closed=new Promise(resolve=>{const done=()=>{if(completed)return;completed=true;resolve(true);};client.once?.("close",done);client.once?.("end",done);});const force=()=>{try{if(typeof client.destroy!=="function")throw new Error("DESTROY_UNAVAILABLE");client.destroy();this.accounting.release({fallback:true});}catch{this.accounting.release({fallback:true,cleanupFailed:true});}};try{sftp?.end?.();client.end();}catch{completed=true;force();return this.accounting.snapshot();}let timeout;const graceful=await Promise.race([closed,new Promise(resolve=>{timeout=setTimeout(()=>resolve(false),this.cleanupTimeoutMs);})]);clearTimeout(timeout);if(graceful)this.accounting.release();else force();return this.accounting.snapshot();}
+    connectionAccounting(){return this.accounting.snapshot();}
 }
