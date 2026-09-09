@@ -1,10 +1,13 @@
 import assert from "node:assert/strict";
 import { gzipSync } from "node:zlib";
 import { spawnSync } from "node:child_process";
+import { EventEmitter } from "node:events";
+import { writeFileSync } from "node:fs";
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { PassThrough } from "node:stream";
 import os from "node:os";
 import path from "node:path";
-import { classifyOpenSshFailure, classifyRakutenFeedFile, ensureWindowsOpenSshAskpass, loadRakutenSftpConfig, OpenSshSftpSession, RakutenProductCatalogSftpTransport, redactRakutenSftpError, selectRakutenNeweggMainDelta } from "../current-display/index.js";
+import { buildOpenSshSftpInvocation, classifyOpenSshFailure, classifyOpenSshProcessFailure, classifyRakutenFeedFile, ensureWindowsOpenSshAskpass, loadRakutenSftpConfig, OpenSshSftpSession, RakutenProductCatalogSftpTransport, redactRakutenSftpError, selectRakutenNeweggMainDelta } from "../current-display/index.js";
 import { fixtureFeedText, sanitizedCases } from "./fixtures/rakuten-newegg/sanitized-feed-fixtures.js";
 
 let cases=0;
@@ -14,6 +17,7 @@ assert.deepEqual({protocol:config.protocol,host:config.host,port:config.port,con
 assert.doesNotMatch(JSON.stringify(config),new RegExp(`${secret}|${username}`)); cases++;
 assert.throws(()=>loadRakutenSftpConfig({}),/SFTP_CONFIG_MISSING/); assert.throws(()=>loadRakutenSftpConfig({RAKUTEN_SFTP_USERNAME:"u",RAKUTEN_SFTP_PASSWORD:"p",RAKUTEN_SFTP_CONNECTIONS:"6"}),/CONNECTION_LIMIT/); assert.throws(()=>loadRakutenSftpConfig({RAKUTEN_SFTP_USERNAME:"u",RAKUTEN_SFTP_PASSWORD:"p",RAKUTEN_SFTP_HOST:"wrong.example"}),/CONFIG_INVALID/); cases++;
 const redacted=redactRakutenSftpError(new Error(`auth ${username} password=${secret}`),[username,secret]); assert.doesNotMatch(redacted.message,new RegExp(`${secret}|${username}`)); cases++;
+const diagnosticError=Object.assign(new Error("SFTP_AUTH_FAILED"),{code:"SFTP_AUTH_FAILED",stage:"EXIT",exitCode:1,signal:null,processStarted:true,streamsOpened:true,askpassAttempted:true});const safeDiagnostic=redactRakutenSftpError(diagnosticError,[secret]);assert.deepEqual(safeDiagnostic.diagnostic,{stage:"EXIT",exitCode:1,signal:null,processStarted:true,streamsOpened:true,askpassAttempted:true});assert.doesNotMatch(JSON.stringify(safeDiagnostic.diagnostic),new RegExp(secret));cases++;
 await assert.rejects(()=>new OpenSshSftpSession({config,knownHostsPath:"known",askpassPath:"askpass",trustOnFirstUse:false}).connect(),/HOST_VERIFICATION_REQUIRED/); cases++;
 await assert.rejects(()=>new OpenSshSftpSession({config,knownHostsPath:"known",askpassPath:"askpass.cmd",trustOnFirstUse:true,sshExecutable:"definitely-missing-ssh",sftpExecutable:process.execPath}).connect(),/SFTP_SSH_EXECUTABLE_MISSING/); cases++;
 await assert.rejects(()=>new OpenSshSftpSession({config,knownHostsPath:"known",askpassPath:"askpass.cmd",trustOnFirstUse:true,sshExecutable:process.execPath,sftpExecutable:"definitely-missing-sftp"}).connect(),/SFTP_SFTP_EXECUTABLE_MISSING/); cases++;
@@ -23,6 +27,11 @@ assert.equal(classifyOpenSshFailure("Connection timed out"),"SFTP_CONNECT_TIMEOU
 assert.equal(classifyOpenSshFailure("Connection refused"),"SFTP_CONNECT_REFUSED");
 assert.equal(classifyOpenSshFailure("Could not resolve hostname"),"SFTP_DNS_FAILED");
 assert.equal(classifyOpenSshFailure("subsystem request failed"),"SFTP_SESSION_START_FAILED"); cases++;
+assert.equal(classifyOpenSshProcessFailure({kind:"SPAWN"}),"SFTP_PROCESS_SPAWN_FAILED");
+assert.equal(classifyOpenSshProcessFailure({kind:"EXIT",exitCode:1}),"SFTP_ASKPASS_NOT_INVOKED");
+assert.equal(classifyOpenSshProcessFailure({kind:"EXIT",exitCode:1,askpassAttempted:true}),"SFTP_PROCESS_EXITED");
+assert.equal(classifyOpenSshProcessFailure({kind:"EXIT",signal:"SIGTERM"}),"SFTP_PROCESS_TERMINATED");
+assert.equal(classifyOpenSshProcessFailure({kind:"TIMEOUT"}),"SFTP_ASKPASS_NOT_INVOKED"); cases++;
 if(process.platform==="win32"){
  const askpassRoot=await mkdtemp(path.join(os.tmpdir(),"hr askpass path "));
  try {
@@ -32,6 +41,28 @@ if(process.platform==="win32"){
   assert.equal(invoked.status,0);assert.equal(invoked.stdout,fixtureSecret);assert.doesNotMatch(`${invoked.stderr}`,new RegExp(fixtureSecret)); cases++;
  } finally { await rm(askpassRoot,{recursive:true,force:true}); }
 }
+
+const harnessRoot=await mkdtemp(path.join(os.tmpdir(),"hr sftp process "));
+try {
+ const executable=path.join(harnessRoot,"fixture.exe"),helper=path.join(harnessRoot,"askpass.exe"),knownHosts=path.join(harnessRoot,"known_hosts"),marker=path.join(harnessRoot,"askpass.invoked");
+ await writeFile(executable,Buffer.from([0x4d,0x5a,0]));await writeFile(helper,Buffer.from([0x4d,0x5a,0]));
+ const baseEnv={SystemRoot:"fixture-system",PATH:"fixture-path",TEMP:"fixture-temp",USERPROFILE:"fixture-profile"};
+ const invocation=buildOpenSshSftpInvocation({config,knownHostsPath:knownHosts,askpassPath:helper,askpassMarkerPath:marker,baseEnv});
+ assert.equal(invocation.env.SystemRoot,baseEnv.SystemRoot);assert.equal(invocation.env.PATH,baseEnv.PATH);assert.equal(invocation.env.TEMP,baseEnv.TEMP);assert.equal(invocation.env.USERPROFILE,baseEnv.USERPROFILE);
+ assert.equal(invocation.env.SSH_ASKPASS_REQUIRE,"force");assert.ok(invocation.env.DISPLAY);assert.equal(invocation.env.RAKUTEN_SFTP_PASSWORD,secret);assert.equal(invocation.args.at(-1),`${username}@aftp.linksynergy.com`);assert.doesNotMatch(JSON.stringify(invocation.args),new RegExp(secret)); cases++;
+ const makeProcess=({stderr="",exitCode,signal,error,promptOnStderr=false,markAskpass=false}={})=>{const child=new EventEmitter();child.stdin=new PassThrough();child.stdout=new PassThrough();child.stderr=new PassThrough();queueMicrotask(()=>{if(markAskpass)writeFileSync(marker,"INVOKED");if(stderr)child.stderr.write(stderr);if(promptOnStderr)child.stderr.write("sftp> ");if(error)child.emit("error",error);else if(exitCode!==undefined||signal)child.emit("exit",exitCode??null,signal??null);});return child;};
+ const options={config,knownHostsPath:knownHosts,askpassPath:helper,askpassMarkerPath:marker,trustOnFirstUse:true,sshExecutable:executable,sftpExecutable:executable,handshakeTimeoutMs:20};
+ await assert.rejects(()=>new OpenSshSftpSession({...options,spawnImpl:()=>makeProcess({error:new Error("spawn failed")})}).connect(),/SFTP_PROCESS_SPAWN_FAILED/);
+ await assert.rejects(()=>new OpenSshSftpSession({...options,spawnImpl:()=>makeProcess({stderr:"Permission denied (password).",exitCode:1,markAskpass:true})}).connect(),/SFTP_AUTH_FAILED/);
+ await assert.rejects(()=>new OpenSshSftpSession({...options,spawnImpl:()=>makeProcess({stderr:"Host key verification failed.",exitCode:1})}).connect(),/SFTP_HOST_VERIFICATION_FAILED/);
+ await assert.rejects(()=>new OpenSshSftpSession({...options,spawnImpl:()=>makeProcess({stderr:"subsystem request failed",exitCode:1,markAskpass:true})}).connect(),/SFTP_SESSION_START_FAILED/);
+ await assert.rejects(()=>new OpenSshSftpSession({...options,spawnImpl:()=>makeProcess({exitCode:1})}).connect(),/SFTP_ASKPASS_NOT_INVOKED/);
+ await assert.rejects(()=>new OpenSshSftpSession({...options,spawnImpl:()=>makeProcess()}).connect(),/SFTP_ASKPASS_NOT_INVOKED/);
+ const promptSession=new OpenSshSftpSession({...options,spawnImpl:()=>makeProcess({promptOnStderr:true,markAskpass:true})});await promptSession.connect();await promptSession.close(); cases++;
+ const invalidHelper=path.join(harnessRoot,"invalid.exe");await writeFile(invalidHelper,"not-pe");
+ await assert.rejects(()=>new OpenSshSftpSession({...options,askpassPath:invalidHelper}).connect(),/SFTP_ASKPASS_HELPER_INVALID/); cases++;
+ await assert.rejects(()=>new OpenSshSftpSession({...options,askpassPath:path.join(harnessRoot,"missing.exe")}).connect(),/SFTP_ASKPASS_HELPER_MISSING/); cases++;
+} finally {await rm(harnessRoot,{recursive:true,force:true});}
 
 const metadata=(filename,size=100)=>({filename,size,modifiedAt:"2026-09-09T01:00:00.000Z",isDirectory:false});
 assert.equal(classifyRakutenFeedFile({remotePath:"/44583/a_mp_delta.txt.gz",filename:"a_mp_delta.txt.gz"}),"DELTA");
