@@ -20,7 +20,7 @@ export function redactRakutenSftpError(error, secrets = []) {
     text = text.replace(/(password|passphrase|authorization)\s*[=:]\s*[^\s]+/gi, "$1=REDACTED").replace(/sftp:\/\/[^\s@]+@/gi, "sftp://REDACTED@");
     const safe = new Error(text.startsWith("SFTP_") ? text : "SFTP_OPERATION_FAILED");
     safe.code = error?.code?.startsWith?.("SFTP_") ? error.code : "SFTP_OPERATION_FAILED";
-    if (error?.stage) safe.diagnostic = Object.freeze({ stage:error.stage, exitCode:error.exitCode??null, signal:error.signal??null, processStarted:error.processStarted===true, streamsOpened:error.streamsOpened===true, askpassAttempted:error.askpassAttempted===true });
+    if (error?.stage) safe.diagnostic = Object.freeze({ stage:error.stage, exitCode:error.exitCode??null, signal:error.signal??null, processStarted:error.processStarted===true, streamsOpened:error.streamsOpened===true, askpassAttempted:error.askpassAttempted===true, askpassAttemptCount:Number.isInteger(error.askpassAttemptCount)?error.askpassAttemptCount:0, readinessPromptObserved:error.readinessPromptObserved===true, stdoutBytesObserved:Number.isInteger(error.stdoutBytesObserved)?error.stdoutBytesObserved:0, stderrBytesObserved:Number.isInteger(error.stderrBytesObserved)?error.stderrBytesObserved:0, controlProbeSent:error.controlProbeSent===true, controlProbeResponseObserved:error.controlProbeResponseObserved===true, timeoutStage:error.timeoutStage??null });
     return safe;
 }
 
@@ -40,6 +40,8 @@ export function classifyOpenSshProcessFailure({ kind, stderr, exitCode, signal, 
     if (classified !== "SFTP_CONNECT_FAILED") return classified;
     if (kind === "SPAWN") return "SFTP_PROCESS_SPAWN_FAILED";
     if (kind === "TIMEOUT") return askpassAttempted ? "SFTP_HANDSHAKE_TIMEOUT" : "SFTP_ASKPASS_NOT_INVOKED";
+    if (kind === "CONTROL_PROBE_TIMEOUT") return askpassAttempted ? "SFTP_CONTROL_PROBE_TIMEOUT" : "SFTP_ASKPASS_NOT_INVOKED";
+    if (kind === "COMMAND_TIMEOUT") return "SFTP_COMMAND_TIMEOUT";
     if (signal) return "SFTP_PROCESS_TERMINATED";
     if (Number.isInteger(exitCode) && exitCode !== 0) return askpassAttempted ? "SFTP_PROCESS_EXITED" : "SFTP_ASKPASS_NOT_INVOKED";
     if (kind === "EXIT") return "SFTP_SESSION_START_FAILED";

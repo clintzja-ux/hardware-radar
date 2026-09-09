@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { access, mkdir, readFile, rm } from "node:fs/promises";
-import { constants, existsSync } from "node:fs";
+import { constants, existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { classifyOpenSshProcessFailure, redactRakutenSftpError } from "./RakutenSftpConfig.js";
 
@@ -24,8 +24,11 @@ export function buildOpenSshSftpInvocation({config,knownHostsPath,askpassPath,as
     return {args,env};
 }
 
+const READY_PATTERN=/Remote working directory:/i;
+const MAX_CONTROL_BUFFER_BYTES=8*1024*1024;
+
 export class OpenSshSftpSession {
-    constructor({config,knownHostsPath,askpassPath,askpassMarkerPath=`${askpassPath}.invoked`,trustOnFirstUse=false,spawnImpl=spawn,sftpExecutable=process.platform==="win32"?path.join(process.env.SystemRoot??"C:\\Windows","System32","OpenSSH","sftp.exe"):"sftp",sshExecutable=process.platform==="win32"?path.join(process.env.SystemRoot??"C:\\Windows","System32","OpenSSH","ssh.exe"):"ssh",handshakeTimeoutMs=30000}={}){this.config=config;this.knownHostsPath=path.resolve(knownHostsPath);this.askpassPath=path.resolve(askpassPath);this.askpassMarkerPath=path.resolve(askpassMarkerPath);this.trustOnFirstUse=trustOnFirstUse;this.spawnImpl=spawnImpl;this.sftpExecutable=sftpExecutable;this.sshExecutable=sshExecutable;this.handshakeTimeoutMs=handshakeTimeoutMs;this.process=null;this.buffer="";this.stderr="";this.waiters=[];this.started=false;this.streamsOpened=false;this.handshakeComplete=false;this.secrets=[config?.username,config?.password];}
+    constructor({config,knownHostsPath,askpassPath,askpassMarkerPath=`${askpassPath}.invoked`,trustOnFirstUse=false,spawnImpl=spawn,sftpExecutable=process.platform==="win32"?path.join(process.env.SystemRoot??"C:\\Windows","System32","OpenSSH","sftp.exe"):"sftp",sshExecutable=process.platform==="win32"?path.join(process.env.SystemRoot??"C:\\Windows","System32","OpenSSH","ssh.exe"):"ssh",handshakeTimeoutMs=30000}={}){this.config=config;this.knownHostsPath=path.resolve(knownHostsPath);this.askpassPath=path.resolve(askpassPath);this.askpassMarkerPath=path.resolve(askpassMarkerPath);this.trustOnFirstUse=trustOnFirstUse;this.spawnImpl=spawnImpl;this.sftpExecutable=sftpExecutable;this.sshExecutable=sshExecutable;this.handshakeTimeoutMs=handshakeTimeoutMs;this.process=null;this.buffer="";this.stderr="";this.waiters=[];this.started=false;this.streamsOpened=false;this.handshakeComplete=false;this.stdoutBytesObserved=0;this.stderrBytesObserved=0;this.readinessPromptObserved=false;this.controlProbeSent=false;this.controlProbeResponseObserved=false;this.secrets=[config?.username,config?.password];}
     async connect(){
         if(!this.config||this.config.protocol!=="SFTP"||this.config.concurrency!==1)throw new Error("SFTP_CONFIG_INVALID");
         if(!this.trustOnFirstUse)throw new Error("SFTP_HOST_VERIFICATION_REQUIRED");
@@ -41,17 +44,19 @@ export class OpenSshSftpSession {
         const {args,env}=buildOpenSshSftpInvocation({config:this.config,knownHostsPath:this.knownHostsPath,askpassPath:this.askpassPath,askpassMarkerPath:this.askpassMarkerPath});
         this.process=this.spawnImpl(this.sftpExecutable,args,{stdio:["pipe","pipe","pipe"],env,windowsHide:true});
         this.started=true;this.streamsOpened=Boolean(this.process?.stdin&&this.process?.stdout&&this.process?.stderr);
-        const append=chunk=>{this.buffer+=chunk.toString("utf8");this.flush();}; this.process.stdout.on("data",append);this.process.stderr.on("data",chunk=>{const text=chunk.toString("utf8");this.stderr+=text;this.buffer+=text;this.flush();});
+        const append=(chunk,stream)=>{const text=chunk.toString("utf8");if(stream==="stdout")this.stdoutBytesObserved+=chunk.length;else{this.stderrBytesObserved+=chunk.length;this.stderr+=text;}this.buffer+=text;if(this.buffer.includes("sftp>"))this.readinessPromptObserved=true;if(Buffer.byteLength(this.buffer,"utf8")>MAX_CONTROL_BUFFER_BYTES){this.rejectAll(Object.assign(new Error("SFTP_CONTROL_BUFFER_LIMIT"),{code:"SFTP_CONTROL_BUFFER_LIMIT"}));return;}this.flush();}; this.process.stdout.on("data",chunk=>append(chunk,"stdout"));this.process.stderr.on("data",chunk=>append(chunk,"stderr"));
         this.process.on("error",error=>this.rejectAll(this.failure({kind:"SPAWN",stderr:error?.message})));
         this.process.on("exit",(code,signal)=>{if(!this.handshakeComplete||code!==0||signal)this.rejectAll(this.failure({kind:"EXIT",exitCode:code,signal}));});
-        await this.waitForPrompt("SFTP_CONNECT_FAILED");
+        this.controlProbeSent=true;this.process.stdin.write("pwd\n");
+        await this.waitForBoundary(READY_PATTERN,"CONTROL_PROBE_TIMEOUT",true);
     }
     async requireFile(value,code){try{await access(value,constants.F_OK);}catch{throw Object.assign(new Error(code),{code});}}
-    failure({kind,stderr=this.stderr,exitCode=null,signal=null}={}){const code=classifyOpenSshProcessFailure({kind,stderr,exitCode,signal,askpassAttempted:existsSync(this.askpassMarkerPath)});return Object.assign(new Error(code),{code,stage:kind,exitCode,signal,processStarted:this.started,streamsOpened:this.streamsOpened,askpassAttempted:existsSync(this.askpassMarkerPath)});}
-    flush(){if(!this.buffer.includes("sftp>"))return;this.handshakeComplete=true;const output=this.buffer;this.buffer="";const waiter=this.waiters.shift();if(waiter)waiter.resolve(output);}
+    askpassAttemptCount(){if(!existsSync(this.askpassMarkerPath))return 0;try{const count=Number(readFileSync(this.askpassMarkerPath,"utf8"));return Number.isInteger(count)&&count>0?count:1;}catch{return 1;}}
+    failure({kind,stderr=this.stderr,exitCode=null,signal=null}={}){const askpassAttemptCount=this.askpassAttemptCount();const code=classifyOpenSshProcessFailure({kind,stderr,exitCode,signal,askpassAttempted:askpassAttemptCount>0});return Object.assign(new Error(code),{code,stage:kind,exitCode,signal,processStarted:this.started,streamsOpened:this.streamsOpened,askpassAttempted:askpassAttemptCount>0,askpassAttemptCount,readinessPromptObserved:this.readinessPromptObserved,stdoutBytesObserved:this.stdoutBytesObserved,stderrBytesObserved:this.stderrBytesObserved,controlProbeSent:this.controlProbeSent,controlProbeResponseObserved:this.controlProbeResponseObserved,timeoutStage:kind?.includes("TIMEOUT")?kind:null});}
+    flush(){const waiter=this.waiters[0];if(!waiter||!waiter.pattern.test(this.buffer))return;this.waiters.shift();if(waiter.ready){this.handshakeComplete=true;this.controlProbeResponseObserved=true;}const output=this.buffer;this.buffer="";waiter.resolve(output);}
     rejectAll(error){for(const waiter of this.waiters.splice(0))waiter.reject(error);}
-    waitForPrompt(code){return new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(this.failure({kind:"TIMEOUT"})),this.handshakeTimeoutMs);this.waiters.push({resolve:value=>{clearTimeout(timer);resolve(value);},reject:error=>{clearTimeout(timer);reject(error);}});this.flush();});}
-    async command(value,code){if(!this.process||/[\r\n]/.test(value))throw new Error("SFTP_COMMAND_INVALID");this.process.stdin.write(`${value}\n`);const output=await this.waitForPrompt(code);if(/Permission denied|Couldn't|Failure|not found/i.test(output))throw Object.assign(new Error(code),{code});return output;}
+    waitForBoundary(pattern,timeoutKind="COMMAND_TIMEOUT",ready=false){return new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(this.failure({kind:timeoutKind})),this.handshakeTimeoutMs);this.waiters.push({pattern,ready,resolve:value=>{clearTimeout(timer);resolve(value);},reject:error=>{clearTimeout(timer);reject(error);}});this.flush();});}
+    async command(value,code){if(!this.process||/[\r\n]/.test(value))throw new Error("SFTP_COMMAND_INVALID");this.process.stdin.write(`${value}\npwd\n`);const output=await this.waitForBoundary(READY_PATTERN,"COMMAND_TIMEOUT");if(/Permission denied|Couldn't|Failure|not found/i.test(output))throw Object.assign(new Error(code),{code});return output;}
     async list(remotePath){if(!/^\/[A-Za-z0-9._/-]*$/.test(remotePath)||remotePath.includes(".."))throw new Error("SFTP_LIST_FAILED");return listing(await this.command(`ls -l ${remotePath}`,"SFTP_LIST_FAILED"));}
     async download(remotePath,localPath){if(!/^\/[A-Za-z0-9._/-]+$/.test(remotePath)||remotePath.includes("..")||/[\r\n"]/.test(localPath))throw new Error("SFTP_DOWNLOAD_FAILED");await this.command(`get ${remotePath} "${localPath}"`,"SFTP_DOWNLOAD_FAILED");}
     async close(){if(!this.process)return;try{this.process.stdin.write("bye\n");}catch{}this.process=null;}

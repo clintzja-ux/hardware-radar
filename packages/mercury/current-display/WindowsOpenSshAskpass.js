@@ -9,7 +9,7 @@ using System.IO;
 internal static class HardwareRadarRakutenAskpass {
     public static int Main() {
         string marker = Environment.GetEnvironmentVariable("RAKUTEN_SFTP_ASKPASS_MARKER");
-        if (!String.IsNullOrEmpty(marker)) { try { File.WriteAllText(marker, "INVOKED"); } catch { return 3; } }
+        if (!String.IsNullOrEmpty(marker)) { try { int count = 0; if (File.Exists(marker)) Int32.TryParse(File.ReadAllText(marker), out count); File.WriteAllText(marker, (count + 1).ToString()); } catch { return 3; } }
         string value = Environment.GetEnvironmentVariable("RAKUTEN_SFTP_PASSWORD");
         if (String.IsNullOrEmpty(value)) return 2;
         Console.Out.Write(value);
