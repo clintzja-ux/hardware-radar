@@ -111,6 +111,8 @@
     "retail-display:residue:reconcile": "node scripts/retail-display-residue-reconcile.mjs",
     "retail-display:final-six:import": "node scripts/retail-display-final-six-import.mjs",
     "retail-lifecycle-held:reassess": "node scripts/retail-lifecycle-held-reassess.mjs",
+    "rakuten:sftp:inspect": "node --env-file=.env scripts/rakuten-sftp-transport.mjs --operation=inspect",
+    "rakuten:sftp:download:delta": "node --env-file=.env scripts/rakuten-sftp-transport.mjs --operation=download-delta",
     "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
     "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",
     "review:product-identity:approve": "node scripts/mercury-product-identity-review-approve.mjs",

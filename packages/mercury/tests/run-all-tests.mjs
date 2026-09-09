@@ -188,6 +188,7 @@ const testModules = [
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
+    ,"./RakutenSftpTransport.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
 ];
 
