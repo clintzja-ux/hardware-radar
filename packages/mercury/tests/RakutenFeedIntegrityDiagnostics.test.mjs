@@ -16,7 +16,7 @@ const compressed=gzip(validText);await expect(compressed.subarray(0,compressed.l
 await expect(gzip(`BAD|44583|SANITIZED FIXTURE|2026-09-08T12:00:00Z\nTRL|0`),"SFTP_HDR_INVALID","HDR",value=>value.gzipOpened===true&&value.gzipCompleted===false);cases++;
 await expect(gzip(`HDR|44583|SANITIZED FIXTURE|not-a-time\nTRL|0`),"SFTP_HDR_TIMESTAMP_INVALID","HDR");cases++;
 await expect(gzip(`HDR|44583|SANITIZED FIXTURE|2026-09-08T12:00:00Z\ntoo|few\nTRL|1`),"SFTP_PRODUCT_FIELD_COUNT_INVALID","PRODUCT",value=>value.rowOrdinal===2&&value.observedFieldCount===2&&!JSON.stringify(value).includes("too"));cases++;
-await expect(gzip(`HDR|44583|SANITIZED FIXTURE|2026-09-08T12:00:00Z\n"unterminated|field\nTRL|1`),"SFTP_PRODUCT_ROW_INVALID","PRODUCT",value=>value.rowOrdinal===2);cases++;
+await expect(gzip(`HDR|44583|SANITIZED FIXTURE|2026-09-08T12:00:00Z\n"unterminated|field\nTRL|1`),"SFTP_PRODUCT_QUOTE_UNTERMINATED","PRODUCT",value=>value.rowOrdinal===2);cases++;
 await expect(gzip(`HDR|44583|SANITIZED FIXTURE|2026-09-08T12:00:00Z\n${fixtureRow()}`),"SFTP_TRAILER_MISSING","TRAILER",value=>value.productRowsParsed===1&&value.gzipCompleted===true);cases++;
 await expect(gzip(fixtureFeedText({rows:[fixtureRow()],trailerCount:2})),"SFTP_TRAILER_COUNT_MISMATCH","COUNT",value=>value.trailerCountObserved===2&&value.productRowsParsed===1);cases++;
 await expect(Buffer.from("not gzip"),"SFTP_GZIP_INVALID","GZIP");cases++;

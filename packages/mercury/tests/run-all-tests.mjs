@@ -190,6 +190,7 @@ const testModules = [
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
+    ,"./RakutenProductRecordFraming.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
 ];
 
