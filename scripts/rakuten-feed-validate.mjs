@@ -11,7 +11,8 @@ const printIntegrity=(value,write=(...args)=>console.log(...args))=>{write("Inte
 
 try{
     const local=await stat(filePath);if(!local.isFile()||local.size<=0)throw new Error("RAKUTEN_LOCAL_FEED_PATH_INVALID");
-    const validation=await validateRakutenProductCatalogGzip(await readFile(filePath));
+    const lower=path.basename(filePath).toLowerCase(),feedProfile=lower.endsWith("_mp_delta.txt.gz")?"MAIN_DELTA":lower.endsWith("_mp.txt.gz")?"MAIN_FULL":"MAIN";
+    const validation=await validateRakutenProductCatalogGzip(await readFile(filePath),{feedProfile});
     console.log("RAKUTEN PRODUCT CATALOG LOCAL VALIDATION");console.log("Result:                      PASS");console.log("File:                       ",path.basename(filePath));console.log("Local bytes:                ",local.size);console.log("Reported remote bytes:      ",reportedRemoteBytes??"NOT PROVIDED");console.log("Size difference bytes:      ",reportedRemoteBytes===null?"NOT AVAILABLE":local.size-reportedRemoteBytes);printIntegrity(validation.integrity);console.log("SFTP connections:            0");console.log("Adapter execution:           NO");console.log("Current-display mutation:    NONE");console.log("Actual spend:                $0.000");
 }catch(cause){
     console.error("RAKUTEN PRODUCT CATALOG LOCAL VALIDATION");console.error("Result:                     ",cause?.code??cause?.message??"SFTP_INTEGRITY_FAILED");console.error("File:                       ",path.basename(filePath));if(cause?.integrity)printIntegrity(cause.integrity,(...args)=>console.error(...args));console.error("SFTP connections:            0");console.error("Adapter execution:           NO");console.error("Current-display mutation:    NONE");console.error("Actual spend:                $0.000");process.exitCode=1;

@@ -192,6 +192,7 @@ const testModules = [
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
     ,"./RakutenProductRecordFraming.test.mjs"
     ,"./RakutenLineOrientedQuoteSemantics.test.mjs"
+    ,"./RakutenProductCatalogFieldMap.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
 ];
 

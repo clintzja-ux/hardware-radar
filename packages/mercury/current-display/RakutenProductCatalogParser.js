@@ -4,16 +4,17 @@ import { StringDecoder } from "node:string_decoder";
 
 export const RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS = 1_048_576;
 
-export const RAKUTEN_PRODUCT_CATALOG_BASE_FIELDS = Object.freeze([
-    "productId", "productName", "sku", "primaryCategory", "secondaryCategories",
-    "productUrl", "buyUrl", "shortDescription", "longDescription", "discount",
-    "discountType", "salePrice", "retailPrice", "beginDate", "endDate", "brand",
-    "shipping", "keywords", "manufacturerPartNumber", "manufacturerName",
-    "shippingInformation", "availability", "upc", "classId", "currency",
-    "attribute1", "attribute2", "attribute3", "attribute4", "attribute5",
-    "attribute6", "attribute7", "attribute8", "attribute9", "attribute10",
-    "attribute11", "attribute12", "attribute13"
-]);
+const RAKUTEN_APPENDIX_A_FIELD_NAMES = [
+    "productId", "productName", "sku", "primaryCategory", "secondaryCategory",
+    "productUrl", "productImageUrl", "buyUrl", "shortDescription", "longDescription",
+    "discount", "discountType", "salePrice", "retailPrice", "beginDate", "endDate",
+    "brand", "shipping", "keywords", "manufacturerPartNumber", "manufacturerName",
+    "shippingInformation", "availability", "upc", "classId", "currency", "m1", "pixel",
+    "attribute1", "attribute2", "attribute3", "attribute4", "attribute5", "attribute6",
+    "attribute7", "attribute8", "attribute9", "attribute10"
+];
+export const RAKUTEN_PRODUCT_CATALOG_FIELD_MAP = Object.freeze(RAKUTEN_APPENDIX_A_FIELD_NAMES.map((name, arrayIndex) => Object.freeze({ rakutenFieldNumber: arrayIndex + 1, arrayIndex, name })));
+export const RAKUTEN_PRODUCT_CATALOG_BASE_FIELDS = Object.freeze(RAKUTEN_PRODUCT_CATALOG_FIELD_MAP.map(field => field.name));
 
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const parserError=(code,properties={})=>Object.assign(new TypeError(code),{code,...properties});
@@ -74,7 +75,7 @@ function parseTrailer(fields) {
 }
 
 function parseProduct(fields, diagnostics, feedProfile) {
-    const supported = feedProfile === "NEWEGG_MKPL" ? [51] : [38, 39];
+    const supported = feedProfile === "NEWEGG_MKPL" ? [51] : feedProfile === "MAIN_FULL" ? [38] : feedProfile === "MAIN_DELTA" ? [39] : [38, 39];
     if (!supported.includes(fields.length)) throw parserError("RAKUTEN_PRODUCT_FIELD_COUNT_INVALID",{...diagnostics,observedFieldCount:fields.length});
     const record = Object.fromEntries(RAKUTEN_PRODUCT_CATALOG_BASE_FIELDS.map((name, index) => [name, fields[index] || null]));
     record.profileFields = fields.length === 51 ? fields.slice(38, 50) : [];
@@ -85,7 +86,7 @@ function parseProduct(fields, diagnostics, feedProfile) {
 
 export async function* parseRakutenProductCatalogGzip(input, { feedProfile = "MAIN",maxPhysicalRecordCharacters=RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS } = {}) {
     if (!(Buffer.isBuffer(input) || input?.[Symbol.asyncIterator] || input?.pipe)) throw parserError("RAKUTEN_GZIP_INPUT_INVALID");
-    if (!["MAIN", "NEWEGG_MKPL"].includes(feedProfile)) throw parserError("RAKUTEN_FEED_PROFILE_INVALID");
+    if (!["MAIN", "MAIN_FULL", "MAIN_DELTA", "NEWEGG_MKPL"].includes(feedProfile)) throw parserError("RAKUTEN_FEED_PROFILE_INVALID");
     const source = Buffer.isBuffer(input) ? Readable.from([input]) : input;
     const decompressed=source.pipe(createGunzip());
     let header = null;

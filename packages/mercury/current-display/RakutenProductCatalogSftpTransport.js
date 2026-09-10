@@ -129,7 +129,7 @@ export class RakutenProductCatalogSftpTransport {
                 const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress});
                 await session.close();
                 const local=await stat(temporaryPath); if(local.size<=0)throw new Error("SFTP_DOWNLOAD_FAILED");
-                const bytes=await readFile(temporaryPath),validation=await validateRakutenProductCatalogGzip(bytes),records=validation.records;
+                const bytes=await readFile(temporaryPath),validation=await validateRakutenProductCatalogGzip(bytes,{feedProfile:selected.feedFamily==="DELTA"?"MAIN_DELTA":"MAIN_FULL"}),records=validation.records;
                 const header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL"),products=records.filter(item=>item.recordType==="PRODUCT");
                 if(!header||!trailer||trailer.actualProductCount!==products.length)throw new Error("SFTP_INTEGRITY_FAILED");
                 await rename(temporaryPath,finalPath);
