@@ -14,7 +14,7 @@ export const fixtureMkplRow = (overrides = {}) => {
     const base = fixtureRow(overrides, { delta: false }).split("|");
     return [...base, ...Array.from({ length: 12 }, (_, index) => `mkpl-${index + 1}`), overrides.modification ?? "U"].join("|");
 };
-export const fixtureFeedText = ({ rows, timestamp = "2026-09-08T12:00:00.000Z", trailerCount = rows.length } = {}) => [`HDR|${timestamp}|SANITIZED_FIXTURE`, ...rows, `TRL|${trailerCount}`].join("\n");
+export const fixtureFeedText = ({ rows, timestamp = "2026-09-08T12:00:00.000Z", trailerCount = rows.length,advertiserMid="44583",advertiserName="SANITIZED FIXTURE" } = {}) => [`HDR|${advertiserMid}|${advertiserName}|${timestamp}`, ...rows, `TRL|${trailerCount}`].join("\n");
 
 // Derived only from the operator-observed Rakuten Newegg Product Catalog schema.
 // No credential, SFTP identifier, private tracking identifier, or real feed payload is retained.

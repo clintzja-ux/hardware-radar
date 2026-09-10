@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { mkdir, readFile, readdir, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
-import { collectRakutenProductCatalogFixture } from "./RakutenProductCatalogParser.js";
+import { validateRakutenProductCatalogGzip } from "./RakutenProductCatalogParser.js";
 import { redactRakutenSftpError } from "./RakutenSftpConfig.js";
 import { createRakutenSftpConnectionAccounting } from "./RakutenSftpConnectionAccounting.js";
 
@@ -100,7 +100,7 @@ export class RakutenProductCatalogSftpTransport {
             try { await session.connect(); result=await operation(session); }
             catch(error){ last=error;primary=error; }
             finally { await session.close().catch(()=>{});this.lastConnectionAccounting=session.connectionAccounting?.()??accounting.snapshot(); }
-            if(primary){const safe=redactRakutenSftpError(primary,session.secrets??[]);safe.connectionAccounting=this.lastConnectionAccounting;if(primary.discovery)safe.discovery=primary.discovery;if(primary.directoryListings)safe.directoryListings=primary.directoryListings;if(primary.transfer)safe.transfer=primary.transfer;throw safe;}
+            if(primary){const safe=redactRakutenSftpError(primary,session.secrets??[]);safe.connectionAccounting=this.lastConnectionAccounting;if(primary.discovery)safe.discovery=primary.discovery;if(primary.directoryListings)safe.directoryListings=primary.directoryListings;if(primary.transfer)safe.transfer=primary.transfer;if(primary.integrity)safe.integrity=primary.integrity;throw safe;}
             return freeze({...result,connectionAccounting:this.lastConnectionAccounting,connectionsUsed:this.lastConnectionAccounting.connectionsOpened});
         }
         throw redactRakutenSftpError(last);
@@ -129,12 +129,12 @@ export class RakutenProductCatalogSftpTransport {
                 const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress});
                 await session.close();
                 const local=await stat(temporaryPath); if(local.size<=0)throw new Error("SFTP_DOWNLOAD_FAILED");
-                const bytes=await readFile(temporaryPath), records=await collectRakutenProductCatalogFixture(bytes);
+                const bytes=await readFile(temporaryPath),validation=await validateRakutenProductCatalogGzip(bytes),records=validation.records;
                 const header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL"),products=records.filter(item=>item.recordType==="PRODUCT");
                 if(!header||!trailer||trailer.actualProductCount!==products.length)throw new Error("SFTP_INTEGRITY_FAILED");
                 await rename(temporaryPath,finalPath);
                 const count=value=>products.filter(item=>item.modification===value).length;
-                return freeze({status:"DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,transfer,localPath:finalPath,localBytes:local.size,sha256:crypto.createHash("sha256").update(bytes).digest("hex"),headerTimestamp:header.feedTimestamp,productRows:products.length,trailerRows:trailer.productCount,modifications:{I:count("I"),U:count("U"),D:count("D")},fieldCounts:[...new Set(products.map(item=>item.fieldCount))].sort(),connectionsUsed:1,externalOperations:1,actualSpendUsd:0});
+                return freeze({status:"DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,transfer,integrity:validation.integrity,localPath:finalPath,localBytes:local.size,sha256:crypto.createHash("sha256").update(bytes).digest("hex"),headerTimestamp:header.feedTimestamp,productRows:products.length,trailerRows:trailer.productCount,modifications:{I:count("I"),U:count("U"),D:count("D")},fieldCounts:[...new Set(products.map(item=>item.fieldCount))].sort(),connectionsUsed:1,externalOperations:1,actualSpendUsd:0});
             } catch(error){await rm(temporaryPath,{force:true});if(String(error?.message??"").startsWith("SFTP_"))throw error;if(["EACCES","ENOSPC","EROFS","EMFILE","ENFILE","ENOENT"].includes(error?.code))throw new Error("SFTP_LOCAL_WRITE_FAILED");throw new Error("SFTP_INTEGRITY_FAILED");}
         });
     }

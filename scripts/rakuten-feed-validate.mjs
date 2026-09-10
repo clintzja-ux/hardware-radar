@@ -1,0 +1,18 @@
+import path from "node:path";
+import { readFile,stat } from "node:fs/promises";
+import { validateRakutenProductCatalogGzip } from "../packages/mercury/current-display/index.js";
+
+const values=process.argv.slice(2),fileArgument=values.find(value=>!value.startsWith("--")),reportedArgument=values.find(value=>value.startsWith("--reported-bytes="));
+if(!fileArgument||!fileArgument.toLowerCase().endsWith(".gz"))throw new Error("RAKUTEN_LOCAL_FEED_PATH_INVALID");
+const filePath=path.resolve(fileArgument),reportedRemoteBytes=reportedArgument?Number(reportedArgument.slice("--reported-bytes=".length)):null;
+if(reportedArgument&&(!Number.isInteger(reportedRemoteBytes)||reportedRemoteBytes<0))throw new Error("RAKUTEN_REPORTED_SIZE_INVALID");
+
+const printIntegrity=(value,write=(...args)=>console.log(...args))=>{write("Integrity stage:             ",value.integrityStage);write("Rows parsed:                ",value.rowsParsed);write("Product rows parsed:        ",value.productRowsParsed);write("Field counts observed:      ",value.fieldCountsObserved.join(", ")||"NONE");write("Row ordinal:                ",value.rowOrdinal??"NONE");write("Observed field count:       ",value.observedFieldCount??"NONE");write("Trailer count observed:     ",value.trailerCountObserved??"NONE");write("Header timestamp present:   ",value.headerTimestampPresent?"YES":"NO");write("Gzip opened:                ",value.gzipOpened?"YES":"NO");write("Gzip completed:             ",value.gzipCompleted?"YES":"NO");};
+
+try{
+    const local=await stat(filePath);if(!local.isFile()||local.size<=0)throw new Error("RAKUTEN_LOCAL_FEED_PATH_INVALID");
+    const validation=await validateRakutenProductCatalogGzip(await readFile(filePath));
+    console.log("RAKUTEN PRODUCT CATALOG LOCAL VALIDATION");console.log("Result:                      PASS");console.log("File:                       ",path.basename(filePath));console.log("Local bytes:                ",local.size);console.log("Reported remote bytes:      ",reportedRemoteBytes??"NOT PROVIDED");console.log("Size difference bytes:      ",reportedRemoteBytes===null?"NOT AVAILABLE":local.size-reportedRemoteBytes);printIntegrity(validation.integrity);console.log("SFTP connections:            0");console.log("Adapter execution:           NO");console.log("Current-display mutation:    NONE");console.log("Actual spend:                $0.000");
+}catch(cause){
+    console.error("RAKUTEN PRODUCT CATALOG LOCAL VALIDATION");console.error("Result:                     ",cause?.code??cause?.message??"SFTP_INTEGRITY_FAILED");console.error("File:                       ",path.basename(filePath));if(cause?.integrity)printIntegrity(cause.integrity,(...args)=>console.error(...args));console.error("SFTP connections:            0");console.error("Adapter execution:           NO");console.error("Current-display mutation:    NONE");console.error("Actual spend:                $0.000");process.exitCode=1;
+}

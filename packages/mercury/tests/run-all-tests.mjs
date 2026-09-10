@@ -189,6 +189,7 @@ const testModules = [
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
+    ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
 ];
 
