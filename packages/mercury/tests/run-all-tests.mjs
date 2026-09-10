@@ -191,6 +191,7 @@ const testModules = [
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
     ,"./RakutenProductRecordFraming.test.mjs"
+    ,"./RakutenLineOrientedQuoteSemantics.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
 ];
 

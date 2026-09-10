@@ -2,7 +2,7 @@ import { createGunzip } from "node:zlib";
 import { Readable } from "node:stream";
 import { StringDecoder } from "node:string_decoder";
 
-export const RAKUTEN_MAX_LOGICAL_RECORD_CHARACTERS = 1_048_576;
+export const RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS = 1_048_576;
 
 export const RAKUTEN_PRODUCT_CATALOG_BASE_FIELDS = Object.freeze([
     "productId", "productName", "sku", "primaryCategory", "secondaryCategories",
@@ -18,57 +18,49 @@ export const RAKUTEN_PRODUCT_CATALOG_BASE_FIELDS = Object.freeze([
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const parserError=(code,properties={})=>Object.assign(new TypeError(code),{code,...properties});
 const recognizedToken=text=>text.startsWith("HDR|")?"HDR":text.startsWith("TRL|")?"TRAILER":"PRODUCT";
-const framingProperties=({physicalLineOrdinal,logicalRecordOrdinal,logicalRecordPhysicalLineCount,text,quoteState,delimiterCountOutsideQuotes})=>({physicalLineOrdinal,logicalRecordOrdinal,logicalRecordPhysicalLineCount,logicalRecordByteLength:Buffer.byteLength(text,"utf8"),quoteStateAtFailure:quoteState,delimiterCountOutsideQuotes,recordClassification:recognizedToken(text),startsWithRecognizedRecordToken:text.startsWith("HDR|")||text.startsWith("TRL|")});
+const recordProperties=({physicalLineOrdinal,recordOrdinal,text})=>({physicalLineOrdinal,recordOrdinal,physicalRecordByteLength:Buffer.byteLength(text,"utf8"),recordClassification:recognizedToken(text),startsWithRecognizedRecordToken:text.startsWith("HDR|")||text.startsWith("TRL|")});
 
-export async function* frameRakutenLogicalRecords(input,{maxLogicalRecordCharacters=RAKUTEN_MAX_LOGICAL_RECORD_CHARACTERS}={}){
-    if(!Number.isInteger(maxLogicalRecordCharacters)||maxLogicalRecordCharacters<1||maxLogicalRecordCharacters>RAKUTEN_MAX_LOGICAL_RECORD_CHARACTERS)throw parserError("RAKUTEN_RECORD_SIZE_LIMIT_INVALID");
-    const decoder=new StringDecoder("utf8");let text="",quoteState="OUTSIDE_QUOTED_FIELD",physicalLineOrdinal=1,logicalRecordOrdinal=1,logicalRecordPhysicalLineCount=1,delimiterCountOutsideQuotes=0,skipLfAfterRecordCr=false,previousInsideCr=false;
-    const properties=()=>framingProperties({physicalLineOrdinal,logicalRecordOrdinal,logicalRecordPhysicalLineCount,text,quoteState,delimiterCountOutsideQuotes});
-    const append=character=>{text+=character;if(text.length>maxLogicalRecordCharacters)throw parserError("RAKUTEN_PRODUCT_RECORD_TOO_LARGE",properties());};
-    const complete=()=>{if(!text)return null;const value=freeze({text,...properties(),quoteStateAtFailure:"OUTSIDE_QUOTED_FIELD"});text="";logicalRecordOrdinal+=1;logicalRecordPhysicalLineCount=1;delimiterCountOutsideQuotes=0;return value;};
+export async function* frameRakutenPhysicalRecords(input,{maxPhysicalRecordCharacters=RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS}={}){
+    if(!Number.isInteger(maxPhysicalRecordCharacters)||maxPhysicalRecordCharacters<1||maxPhysicalRecordCharacters>RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS)throw parserError("RAKUTEN_RECORD_SIZE_LIMIT_INVALID");
+    const decoder=new StringDecoder("utf8");let text="",physicalLineOrdinal=1,recordOrdinal=1,skipLfAfterCr=false;
+    const properties=()=>recordProperties({physicalLineOrdinal,recordOrdinal,text});
+    const append=character=>{text+=character;if(text.length>maxPhysicalRecordCharacters)throw parserError("RAKUTEN_PRODUCT_RECORD_TOO_LARGE",properties());};
+    const complete=()=>{if(!text)return null;const value=freeze({text,...properties()});text="";recordOrdinal+=1;return value;};
     const chunks=(async function*(){for await(const chunk of input)yield decoder.write(chunk);const final=decoder.end();if(final)yield final;})();
     for await(const chunk of chunks){for(let index=0;index<chunk.length;index+=1){let character=chunk[index];
-        if(skipLfAfterRecordCr){skipLfAfterRecordCr=false;if(character==="\n")continue;}
-        if(quoteState==="QUOTE_ESCAPE_OR_CLOSE_PENDING"){
-            if(character==='"'){append(character);quoteState="INSIDE_QUOTED_FIELD";previousInsideCr=false;continue;}
-            quoteState="OUTSIDE_QUOTED_FIELD";
-        }
-        if(quoteState==="INSIDE_QUOTED_FIELD"){
-            append(character);
-            if(character==='"'){quoteState="QUOTE_ESCAPE_OR_CLOSE_PENDING";previousInsideCr=false;continue;}
-            if(character==="\r"){physicalLineOrdinal+=1;logicalRecordPhysicalLineCount+=1;previousInsideCr=true;continue;}
-            if(character==="\n"){if(!previousInsideCr){physicalLineOrdinal+=1;logicalRecordPhysicalLineCount+=1;}previousInsideCr=false;continue;}
-            previousInsideCr=false;continue;
-        }
-        if(character==='"'){append(character);quoteState="INSIDE_QUOTED_FIELD";previousInsideCr=false;continue;}
-        if(character==="|"){append(character);delimiterCountOutsideQuotes+=1;continue;}
+        if(skipLfAfterCr){skipLfAfterCr=false;if(character==="\n")continue;}
         if(character==="\r"||character==="\n"){
-            const record=complete();physicalLineOrdinal+=1;if(character==="\r")skipLfAfterRecordCr=true;if(record)yield record;continue;
+            const record=complete();physicalLineOrdinal+=1;if(character==="\r")skipLfAfterCr=true;if(record)yield record;continue;
         }
         append(character);
     }}
-    if(quoteState==="INSIDE_QUOTED_FIELD")throw parserError("RAKUTEN_PRODUCT_QUOTE_UNTERMINATED",{...properties(),gzipCompleted:true});
-    if(quoteState==="QUOTE_ESCAPE_OR_CLOSE_PENDING")quoteState="OUTSIDE_QUOTED_FIELD";
     const record=complete();if(record)yield record;
 }
 
-export function parseRakutenPipeRecord(line) {
+function parseRakutenPipeRecordDetailed(line,diagnostics={}) {
     if (typeof line !== "string") throw parserError("RAKUTEN_RECORD_INVALID");
     const fields = [];
     let value = "";
     let quoted = false;
+    let atFieldStart = true;
+    let delimiterCountOutsideQuotes=0,literalQuotesObserved=0,structuralQuotesObserved=0,fieldOrdinalAtQuoteOpen=null;
+    const details=()=>({...diagnostics,delimiterCountOutsideQuotes,quoteStateAtFailure:quoted?"INSIDE_QUOTED_FIELD":"OUTSIDE_QUOTED_FIELD",fieldOrdinalAtQuoteOpen,literalQuotesObserved,structuralQuotesObserved});
     for (let index = 0; index < line.length; index += 1) {
         const character = line[index];
-        if (character === '"') {
-            if (quoted && line[index + 1] === '"') { value += '"'; index += 1; }
-            else quoted = !quoted;
-        } else if (character === "|" && !quoted) { fields.push(value); value = ""; }
-        else value += character;
+        if (quoted && character === '"') {
+            if (line[index + 1] === '"') { value += '"'; index += 1; structuralQuotesObserved+=2; }
+            else if (index + 1 === line.length || line[index + 1] === "|") { quoted = false; structuralQuotesObserved+=1; }
+            else { value += character; literalQuotesObserved+=1; }
+        } else if (!quoted && character === '"' && atFieldStart) { quoted = true; atFieldStart = false;fieldOrdinalAtQuoteOpen=fields.length+1;structuralQuotesObserved+=1; }
+        else if (!quoted && character === "|") { fields.push(value); value = ""; atFieldStart = true;delimiterCountOutsideQuotes+=1; }
+        else { value += character;atFieldStart = false;if(character==='"')literalQuotesObserved+=1; }
     }
-    if (quoted) throw parserError("RAKUTEN_RECORD_QUOTE_INVALID");
+    if (quoted) throw parserError("RAKUTEN_PRODUCT_QUOTE_UNTERMINATED",details());
     fields.push(value);
-    return fields;
+    return {fields,diagnostics:details()};
 }
+
+export function parseRakutenPipeRecord(line) { return parseRakutenPipeRecordDetailed(line).fields; }
 
 function parseHeader(fields) {
     if (fields[0] !== "HDR" || fields.length !== 4 || !/^\d+$/.test(fields[1]) || !fields[2].trim()) throw parserError("RAKUTEN_HEADER_INVALID");
@@ -88,10 +80,10 @@ function parseProduct(fields, diagnostics, feedProfile) {
     record.profileFields = fields.length === 51 ? fields.slice(38, 50) : [];
     record.modification = [39, 51].includes(fields.length) ? fields.at(-1) || null : null;
     if (record.modification !== null && !["I", "U", "D"].includes(record.modification)) throw parserError("RAKUTEN_MODIFICATION_INVALID",{...diagnostics,observedFieldCount:fields.length});
-    return freeze({ recordType: "PRODUCT", fieldCount: fields.length, lineNumber:diagnostics.logicalRecordOrdinal, physicalLineOrdinal:diagnostics.physicalLineOrdinal, logicalRecordPhysicalLineCount:diagnostics.logicalRecordPhysicalLineCount, ...record });
+    return freeze({ recordType: "PRODUCT", fieldCount: fields.length, lineNumber:diagnostics.recordOrdinal, physicalLineOrdinal:diagnostics.physicalLineOrdinal, ...record });
 }
 
-export async function* parseRakutenProductCatalogGzip(input, { feedProfile = "MAIN",maxLogicalRecordCharacters=RAKUTEN_MAX_LOGICAL_RECORD_CHARACTERS } = {}) {
+export async function* parseRakutenProductCatalogGzip(input, { feedProfile = "MAIN",maxPhysicalRecordCharacters=RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS } = {}) {
     if (!(Buffer.isBuffer(input) || input?.[Symbol.asyncIterator] || input?.pipe)) throw parserError("RAKUTEN_GZIP_INPUT_INVALID");
     if (!["MAIN", "NEWEGG_MKPL"].includes(feedProfile)) throw parserError("RAKUTEN_FEED_PROFILE_INVALID");
     const source = Buffer.isBuffer(input) ? Readable.from([input]) : input;
@@ -101,10 +93,10 @@ export async function* parseRakutenProductCatalogGzip(input, { feedProfile = "MA
     let productCount = 0;
     let gzipOpened = false;
     try {
-        for await (const framed of frameRakutenLogicalRecords(decompressed,{maxLogicalRecordCharacters})) {
-            const line=framed.text,diagnostics={physicalLineOrdinal:framed.physicalLineOrdinal,logicalRecordOrdinal:framed.logicalRecordOrdinal,logicalRecordPhysicalLineCount:framed.logicalRecordPhysicalLineCount,logicalRecordByteLength:framed.logicalRecordByteLength,quoteStateAtFailure:framed.quoteStateAtFailure,delimiterCountOutsideQuotes:framed.delimiterCountOutsideQuotes,recordClassification:framed.recordClassification,startsWithRecognizedRecordToken:framed.startsWithRecognizedRecordToken,productRowOrdinal:productCount+1};
+        for await (const framed of frameRakutenPhysicalRecords(decompressed,{maxPhysicalRecordCharacters})) {
+            const line=framed.text,baseDiagnostics={physicalLineOrdinal:framed.physicalLineOrdinal,recordOrdinal:framed.recordOrdinal,physicalRecordByteLength:framed.physicalRecordByteLength,recordClassification:framed.recordClassification,startsWithRecognizedRecordToken:framed.startsWithRecognizedRecordToken,productRowOrdinal:productCount+1};
             gzipOpened = true;
-            const fields = parseRakutenPipeRecord(line);
+            const parsed=parseRakutenPipeRecordDetailed(line,baseDiagnostics),fields=parsed.fields,diagnostics=parsed.diagnostics;
             if (!header) { header = parseHeader(fields); yield header; continue; }
             if(fields[0]==="HDR"||(/^[A-Z]{3}$/.test(fields[0])&&fields[0]!=="TRL"))throw parserError("RAKUTEN_RECORD_CLASSIFICATION_INVALID",{...diagnostics,recordClassification:"UNKNOWN"});
             if (fields[0] === "TRL") { if (trailer) throw parserError("RAKUTEN_TRAILER_DUPLICATE",diagnostics); trailer = parseTrailer(fields); continue; }
@@ -140,7 +132,7 @@ export async function validateRakutenProductCatalogGzip(input,options){
     try{for await(const record of parseRakutenProductCatalogGzip(input,options))records.push(record);}
     catch(cause){
         const [code,integrityStage]=integrityMapping[cause?.code??cause?.message]??["SFTP_INTEGRITY_FAILED","UNKNOWN"],products=records.filter(item=>item.recordType==="PRODUCT"),header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL");
-        const integrity=freeze({status:"FAILED",integrityStage,rowsParsed:records.length,productRowsParsed:cause?.productRowsParsed??products.length,fieldCountsObserved:freeze([...new Set(products.map(item=>item.fieldCount))].sort((a,b)=>a-b)),rowOrdinal:Number.isInteger(cause?.logicalRecordOrdinal)?cause.logicalRecordOrdinal:null,physicalLineOrdinal:Number.isInteger(cause?.physicalLineOrdinal)?cause.physicalLineOrdinal:null,logicalRecordOrdinal:Number.isInteger(cause?.logicalRecordOrdinal)?cause.logicalRecordOrdinal:null,productRowOrdinal:Number.isInteger(cause?.productRowOrdinal)?cause.productRowOrdinal:null,logicalRecordPhysicalLineCount:Number.isInteger(cause?.logicalRecordPhysicalLineCount)?cause.logicalRecordPhysicalLineCount:null,logicalRecordByteLength:Number.isInteger(cause?.logicalRecordByteLength)?cause.logicalRecordByteLength:null,quoteStateAtFailure:cause?.quoteStateAtFailure??null,delimiterCountOutsideQuotes:Number.isInteger(cause?.delimiterCountOutsideQuotes)?cause.delimiterCountOutsideQuotes:null,recordClassification:cause?.recordClassification??null,startsWithRecognizedRecordToken:typeof cause?.startsWithRecognizedRecordToken==="boolean"?cause.startsWithRecognizedRecordToken:null,observedFieldCount:Number.isInteger(cause?.observedFieldCount)?cause.observedFieldCount:null,trailerCountObserved:Number.isInteger(cause?.trailerCountObserved)?cause.trailerCountObserved:trailer?.productCount??null,headerTimestampPresent:Boolean(header?.feedTimestamp),gzipOpened:cause?.gzipOpened??records.length>0,gzipCompleted:cause?.gzipCompleted??false});
+        const integrity=freeze({status:"FAILED",integrityStage,rowsParsed:records.length,productRowsParsed:cause?.productRowsParsed??products.length,fieldCountsObserved:freeze([...new Set(products.map(item=>item.fieldCount))].sort((a,b)=>a-b)),rowOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,physicalLineOrdinal:Number.isInteger(cause?.physicalLineOrdinal)?cause.physicalLineOrdinal:null,recordOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,productRowOrdinal:Number.isInteger(cause?.productRowOrdinal)?cause.productRowOrdinal:null,physicalRecordByteLength:Number.isInteger(cause?.physicalRecordByteLength)?cause.physicalRecordByteLength:null,quoteStateAtFailure:cause?.quoteStateAtFailure??null,delimiterCountOutsideQuotes:Number.isInteger(cause?.delimiterCountOutsideQuotes)?cause.delimiterCountOutsideQuotes:null,quoteOpenedAtFieldBoundary:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen),fieldOrdinalAtQuoteOpen:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen)?cause.fieldOrdinalAtQuoteOpen:null,literalQuotesObserved:Number.isInteger(cause?.literalQuotesObserved)?cause.literalQuotesObserved:null,structuralQuotesObserved:Number.isInteger(cause?.structuralQuotesObserved)?cause.structuralQuotesObserved:null,recordClassification:cause?.recordClassification??null,startsWithRecognizedRecordToken:typeof cause?.startsWithRecognizedRecordToken==="boolean"?cause.startsWithRecognizedRecordToken:null,observedFieldCount:Number.isInteger(cause?.observedFieldCount)?cause.observedFieldCount:null,trailerCountObserved:Number.isInteger(cause?.trailerCountObserved)?cause.trailerCountObserved:trailer?.productCount??null,headerTimestampPresent:Boolean(header?.feedTimestamp),gzipOpened:cause?.gzipOpened??records.length>0,gzipCompleted:cause?.gzipCompleted??false});
         throw Object.assign(new Error(code),{code,integrity});
     }
     const products=records.filter(item=>item.recordType==="PRODUCT"),header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL"),integrity=freeze({status:"PASS",integrityStage:"COMPLETE",rowsParsed:records.length,productRowsParsed:products.length,fieldCountsObserved:freeze([...new Set(products.map(item=>item.fieldCount))].sort((a,b)=>a-b)),rowOrdinal:null,observedFieldCount:null,trailerCountObserved:trailer.productCount,headerTimestampPresent:true,gzipOpened:true,gzipCompleted:true});

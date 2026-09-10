@@ -4,6 +4,8 @@
 
 RAKUTEN-SFTP-012 fixture-certifies bounded, quote-aware logical-record framing inside the existing Rakuten Product Catalog parser. It changes no SFTP connection, authentication, discovery, selection, timestamp, sequential transfer, timeout, cancellation, adapter, current-display, Atlas, retailer, history, affiliate, or publication owner.
 
+**Superseded behavior:** RAKUTEN-SFTP-013 retires this contract's cross-line quoted-record continuation after captured Rakuten documentation established CR/LF-terminated Product Catalog records and live diagnostics exposed unsafe multi-row accumulation. RAKUTEN-SFTP-012 remains the historical record of the intermediate correction; RAKUTEN-SFTP-013 owns current production parsing semantics.
+
 Certification is offline. It performs no Rakuten connection, download, provider operation, production mutation, or spend.
 
 ## Live diagnostic and root cause
