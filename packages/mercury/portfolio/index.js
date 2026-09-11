@@ -5,4 +5,6 @@ export * from "./HistoricalBootstrapProductionComposition.js";
 export * from "./HistoricalBootstrapCheckpoint.js";
 export * from "./HistoricalBootstrapContinuation.js";
 export * from "./HistoricalBootstrapLifecycleService.js";
+export * from "./HistoricalBootstrapPreparedActionResolver.js";
+export * from "./HistoricalBootstrapResultDispatcher.js";
 export * from "./ProductionHistoricalBootstrapLocalOwners.js";
