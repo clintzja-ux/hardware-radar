@@ -112,6 +112,8 @@ MERCURY-HISTORY-025 fixture-certifies `HistoricalBootstrapLifecycleService` as t
 
 MERCURY-HISTORY-026 partially extracts that production wiring. Paid PRODUCTS, PRODUCT_INFO, and SELLERS execution now share `createProductionDataForSeoTaskOwner`, including the canonical task/execution/consumption repositories, writer lock, authorization, budget, retry, optional internal paid-action intent, and task-specific provider operation. Existing execution commands use the shared owner without exposing an intent argument. The state remains `MERCURY_HISTORY_REUSABLE_PRODUCTION_OWNERS_PARTIAL`: PREPARE, operation-specific retrieval, SELLERS DF003/comparability/E2J processing, lifecycle injection, and the seven production bootstrap command shells remain unextracted/unavailable. Real INIT/INSPECT and every provider or production mutation remained unrun; spend remains `$0.000`.
 
+MERCURY-HISTORY-027 extracts lazy reusable PRODUCTS/PRODUCT_INFO/SELLERS retrieval and the existing local SELLERS lineage/DF003 production composition. Ordinary scripts now consume those same factories, retrieval remains separate from local processing, and no ordinary behavior gains historical admission. The lifecycle remains `MERCURY_HISTORY_PRODUCTION_LIFECYCLE_PARTIAL`: canonical PRODUCTS/PRODUCT_INFO identity progression, HISTORY-018 comparability, E2J admission, portfolio reconstruction, lifecycle injection, crash/race certification, and all seven production bootstrap command shells remain unavailable rather than duplicated. Real INIT/INSPECT, provider retrieval, paid work, and production mutation were not run; spend remains `$0.000`.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |

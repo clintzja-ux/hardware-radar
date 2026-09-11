@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { BrandRepository, ProductRepository } from "../packages/atlas/index.js";
-import { DataForSeoAcquisitionService, DataForSeoMerchantApiClient, FileAcquisitionExecutionLedgerRepository, FileDataForSeoTaskLedger, FileLiveAuthorizationConsumptionRepository, FileProductInfoResultRepository, ProductInfoResultRetrievalService, loadDataForSeoCredentials, renderProductInfoResultOutcome } from "../packages/mercury/index.js";
+import { createProductionDataForSeoRetrievalOwner, FileAcquisitionExecutionLedgerRepository, FileDataForSeoTaskLedger, FileLiveAuthorizationConsumptionRepository, FileProductInfoResultRepository, ProductInfoResultRetrievalService, renderProductInfoResultOutcome } from "../packages/mercury/index.js";
 import { createProviderIdentityGovernanceRuntime } from "./mercury-provider-identity-governance-runtime.mjs";
 
 const args=new Map(process.argv.slice(2).map(value=>{const index=value.indexOf("=");return index<0?[value,true]:[value.slice(0,index),value.slice(index+1)];}));
@@ -14,7 +14,7 @@ const runtime=createProviderIdentityGovernanceRuntime(),assessment=await runtime
 if(!assessment||!decision||decision.selectionDecisionId!==proposal.providerSelectionLineage?.selectionDecisionId||decision.equivalenceGroupDigest!==proposal.providerSelectionLineage?.equivalenceGroupDigest||JSON.stringify(decision.selectedProviderIdentity)!==JSON.stringify(proposal.providerIdentity))throw new Error("PRODUCT_INFO_PROVIDER_SELECTION_LINEAGE_INVALID");
 const atlasProduct=await new ProductRepository({readJson}).loadProduct(authorization.atlasProductId),brandRecord=await new BrandRepository({readJson}).getByDisplayName(atlasProduct.identity.brand);
 const executionRepository=new FileAcquisitionExecutionLedgerRepository({filePath:path.join(stateRoot,"execution-ledger.json")}),consumptionRepository=new FileLiveAuthorizationConsumptionRepository({filePath:path.join(stateRoot,"live-authorization-consumptions.json")});
-const retriever=async exactTaskId=>{const credentials=loadDataForSeoCredentials(),transport=async({method,url,headers})=>{if(method!=="GET"||!url.endsWith(`/product_info/task_get/advanced/${encodeURIComponent(exactTaskId)}`))throw new Error("PRODUCT_INFO_RESULT_RETRIEVAL_GET_ONLY");const response=await fetch(url,{method,headers});const data=await response.json();if(!response.ok)throw new Error(`HTTP_${response.status}`);return data;};const acquisition=new DataForSeoAcquisitionService({client:new DataForSeoMerchantApiClient({login:credentials.login,password:credentials.password,transport})});return acquisition.getProductInfoResult(exactTaskId);};
+const retrievalOwner=createProductionDataForSeoRetrievalOwner({operation:"PRODUCT_INFO"}),retriever=exactTaskId=>retrievalOwner.retrieve({providerTaskId:exactTaskId});
 const service=new ProductInfoResultRetrievalService({retriever,resultRepository:new FileProductInfoResultRepository({statePath:path.resolve(String(args.get("--result-state")||path.join(stateRoot,"product-info-results.json")))})});
 const outcome=await service.retrieve({taskId:taskId.trim(),productInfoAuthorization:authorization,productInfoProposal:proposal,taskLedger:tasks,executionRuns:await executionRepository.getAll(),authorizationConsumptions:await consumptionRepository.getAll(),atlasProduct,brandAliases:brandRecord?.aliases??[]});
 process.stdout.write(renderProductInfoResultOutcome(outcome));

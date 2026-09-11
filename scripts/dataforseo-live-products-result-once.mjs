@@ -1,40 +1,8 @@
-import {
-  DataForSeoMerchantApiClient,
-  DataForSeoAcquisitionService,
-  loadDataForSeoCredentials
-} from "../packages/mercury/index.js";
-
-const credentials = loadDataForSeoCredentials();
-
-const transport = async ({ method, url, headers, body }) => {
-  const response = await fetch(url, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`);
-  }
-
-  return data;
-};
-
-const client = new DataForSeoMerchantApiClient({
-  login: credentials.login,
-  password: credentials.password,
-  transport
-});
-
-const acquisition = new DataForSeoAcquisitionService({
-  client
-});
+import { createProductionDataForSeoRetrievalOwner } from "../packages/mercury/index.js";
 
 const taskId = "08210233-2304-0179-0000-4ad9784a612c";
 
-const result = await acquisition.getProductsResult(taskId);
+const result = await createProductionDataForSeoRetrievalOwner({ operation: "PRODUCTS" }).retrieve({ providerTaskId: taskId });
 
 console.log("PRODUCTS RESULT RETRIEVED");
 console.log("Task ID:", result.id);
