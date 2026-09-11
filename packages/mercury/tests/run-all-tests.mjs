@@ -171,6 +171,7 @@ const testModules = [
     ,"./HistoricalRefreshCadenceCli.test.mjs"
     ,"./InitialProductionHistoricalRefreshCadence.test.mjs"
     ,"./HistoricalObservationPortfolio.test.mjs"
+    ,"./HistoricalBootstrapPreparation.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"
     ,"./MultiProductCadencePolicy.test.mjs"
     ,"./MultiProductCadencePolicyCli.test.mjs"

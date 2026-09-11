@@ -96,6 +96,8 @@ B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A regi
 
 MERCURY-HISTORY-018 fixture-certifies a deterministic offer-comparability gate inside the existing E2J historical-admission owner. Only retained evidence classified `STANDALONE_COMPARABLE` may enter the ordinary standalone history series; explicit bundles, conditional shopper prices, and unknown comparability fail closed before persistence. The assessment preserves unknown shipping/tax, distinguishes explicit zero shipping, and treats provider total as an unverified-composition provider value rather than actionable delivered cost. Initial and refresh admission share the same gate. Historical schema `1.0`, the four existing production historical observations, E2K queries, portfolio state, Forge, and all current/public-price authority remain unchanged; provider operations and spend were zero.
 
+MERCURY-HISTORY-019 prepares the first Atlas-scoped historical bootstrap at explicit `asOf=2026-09-11T12:00:00.000Z`. Review artifact `mer_histbootstrap_71c280422c057da3b248a43b` deterministically selects one no-history, destination-backed product per Atlas category: DDR5 DIMM `ram_corsair_cmh16gx5m2b5200z40`, DDR4 DIMM `ram_corsair_cmk32gx4m2e3200c16`, and SODIMM `ram_corsair_cmsx32gx5m1a5600c48`. None has reusable provider identity/results, so each begins at PRODUCTS, may require conditional PRODUCT_INFO escalation, and requires SELLERS before evidence exists. The immutable maximum is 9 paid tasks / `$0.009`, subject to `$0.001` per-task and `$0.010` UTC-day ceilings with zero automatic retries. Execution and spend remain `NOT_AUTHORIZED`; no provider operation or production-state mutation occurred. The next safe action is operator review followed by a separately certified, sequential, artifact-bound execution increment—not a provider call.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
@@ -110,13 +112,13 @@ MERCURY-HISTORY-018 fixture-certifies a deterministic offer-comparability gate i
 
 ## Current test baseline
 
-The current runners declare **248 subsystem test files**:
+The current runners declare **250 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 195 |
+| Mercury | 197 |
 | Beacon | 7 |
 | Gateway | 17 |
 
