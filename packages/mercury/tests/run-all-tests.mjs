@@ -185,6 +185,7 @@ const testModules = [
     ,"./HistoricalBootstrapResultDispatcher.test.mjs"
     ,"./ProductionHistoricalBootstrapResultBridge.test.mjs"
     ,"./HistoricalBootstrapFinalCompositionReadiness.test.mjs"
+    ,"./HistoricalBootstrapProductsReviewBinding.test.mjs"
     ,"./ProductionDataForSeoRetrievalOwners.test.mjs"
     ,"./ProductionHistoricalBootstrapLocalOwners.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"
