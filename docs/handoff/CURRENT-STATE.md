@@ -100,6 +100,8 @@ MERCURY-HISTORY-019 prepares the first Atlas-scoped historical bootstrap at expl
 
 MERCURY-HISTORY-020 fixture-certifies the artifact-bound sequential execution domain: exact artifact validation, expiring single-use authorization, deterministic product/task order, runtime rights and spend revalidation, three-task/product and nine-task/`$0.009` cohort caps, zero retries, fail-closed comparability, cancellation, replay rejection, and existing portfolio/Forge reconstruction. Production execution remains unavailable because the separately certified PRODUCTS, conditional PRODUCT_INFO, SELLERS, retrieval/DF003, and E2J authorization owners are not yet composed under one cohort command. No provider task, spend, evidence, history, or downstream authority changed. The next safe action is a narrow production-composition increment; do not run the cohort.
 
+MERCURY-HISTORY-021 makes the required production-owner map explicit and fail closed, but remains `MERCURY_HISTORY_PRODUCTION_COMPOSITION_PARTIAL`. The existing task stages are asynchronous and separately authorized: a paid task may be durably created before its governed result is available, while HISTORY-020 consumes its cohort authorization before the first provider call and forbids blind resume. A safe production command therefore still requires a durable checkpoint/resume lifecycle that preserves pending task lineage and every task-specific authorization. No live authorize/execute command is exposed, and no provider, evidence, history, current-display, or downstream state changed. The next safe action is to design and certify that narrow checkpoint lifecycle before any cohort authorization or spend.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
