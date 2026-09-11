@@ -183,6 +183,7 @@ const testModules = [
     ,"./ProductionDataForSeoPrepareOwners.test.mjs"
     ,"./HistoricalBootstrapArtifactResolution.test.mjs"
     ,"./HistoricalBootstrapResultDispatcher.test.mjs"
+    ,"./ProductionHistoricalBootstrapResultBridge.test.mjs"
     ,"./ProductionDataForSeoRetrievalOwners.test.mjs"
     ,"./ProductionHistoricalBootstrapLocalOwners.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"
