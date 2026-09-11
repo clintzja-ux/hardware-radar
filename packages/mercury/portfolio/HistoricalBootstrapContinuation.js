@@ -10,7 +10,9 @@ export const paidActionIntentId=p=>`mer_histbootintent_${hash({artifactId:p.arti
 
 export function prepareDurableHistoricalBootstrapContinuation(args){
  const authorization=createHistoricalBootstrapContinuationAuthorization(args),projection=args.projection,intentId=paidActionIntentId(projection);
- const binding={...authorization,continuationAuthorizationId:authorization.authorizationId,paidActionIntentId:intentId,sourceId:"DATAFORSEO_GOOGLE_SHOPPING",maximumTaskPriceUsd:.001,artifactDigest:projection.artifactDigest??null};
+ const sourceRightsProfileDigest=args.sourceRightsProfileDigest??projection.sourceRightsProfileDigest;
+ if(typeof sourceRightsProfileDigest!=="string"||!/^[a-f0-9]{64}$/.test(sourceRightsProfileDigest))throw new Error("HISTORY_023_SOURCE_RIGHTS_LINEAGE_REQUIRED");
+ const binding={...authorization,continuationAuthorizationId:authorization.authorizationId,paidActionIntentId:intentId,sourceId:"DATAFORSEO_GOOGLE_SHOPPING",sourceRightsProfileDigest,maximumTaskPriceUsd:.001,artifactDigest:projection.artifactDigest??null};
  return freeze({...binding,policyVersion:HISTORICAL_BOOTSTRAP_CONTINUATION_VERSION,authorizationBindingHash:hash(binding)});
 }
 
@@ -44,7 +46,7 @@ export class HistoricalBootstrapPaidTaskHandoff{
  async execute({checkpoint,authorizationId,confirmation}){
   const p=projectHistoricalBootstrapCheckpoint({checkpoint}),a=await this.continuationRepository.getById(authorizationId),r=p.prepareReference;
   if(p.cohortState!=="PREPARED_FOR_AUTHORIZATION"||!r)throw new Error("HISTORY_030_PREPARE_REFERENCE_REQUIRED");
-  if(!a||a.checkpointId!==p.checkpointId||a.eventSequence!==r.preparedFromEventSequence||a.atlasProductId!==p.atlasProductId||a.productIndex!==p.productIndex||a.nextOperation!==p.nextPaidOperation||a.sourceId!=="DATAFORSEO_GOOGLE_SHOPPING"||a.confirmation!==confirmation||r.continuationAuthorizationId!==a.continuationAuthorizationId||r.paidActionIntentId!==a.paidActionIntentId||r.operation!==a.nextOperation||r.atlasProductId!==a.atlasProductId)throw new Error("HISTORY_023_AUTHORIZATION_BINDING_INVALID");
+  if(!a||a.checkpointId!==p.checkpointId||a.eventSequence!==r.preparedFromEventSequence||a.atlasProductId!==p.atlasProductId||a.productIndex!==p.productIndex||a.nextOperation!==p.nextPaidOperation||a.sourceId!=="DATAFORSEO_GOOGLE_SHOPPING"||a.sourceRightsProfileDigest!==checkpoint.binding.sourceRightsProfileDigest||a.confirmation!==confirmation||r.continuationAuthorizationId!==a.continuationAuthorizationId||r.paidActionIntentId!==a.paidActionIntentId||r.operation!==a.nextOperation||r.atlasProductId!==a.atlasProductId)throw new Error("HISTORY_023_AUTHORIZATION_BINDING_INVALID");
   if(Date.parse(this.now())>=Date.parse(a.expiresAt))throw new Error("HISTORY_023_AUTHORIZATION_EXPIRED");
   const prepared=await this.preparedActionResolver.resolve({checkpoint,continuation:a});
   if(this.rightsRegistry.get(a.sourceId)?.acquisition?.api!=="ALLOWED")throw new Error("BLOCKED_RIGHTS");

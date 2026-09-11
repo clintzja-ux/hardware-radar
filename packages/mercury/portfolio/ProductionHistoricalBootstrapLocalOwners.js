@@ -24,7 +24,13 @@ export function createProductsIdentityProgressionOwner() {
         : routing.executableRoute === DEFAULT_ACQUISITION_ROUTES.READY_FOR_PRODUCT_INFO
           ? "ESCALATION_REQUIRED"
           : "BLOCKED_IDENTITY";
-      return freeze({ status, prepared, routing, paidTaskCreated: false, actualSpendUsd: 0 });
+      const reviewAssessment = status === "STRONG_UNIQUE" ? {
+        providerTaskId,
+        identityState: "EXACT_OR_GOVERNED_MATCH",
+        resultIdentity: prepared.resolution,
+        reasons: []
+      } : null;
+      return freeze({ status, prepared, routing, reviewAssessment, paidTaskCreated: false, actualSpendUsd: 0 });
     }
   });
 }
