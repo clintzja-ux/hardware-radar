@@ -77,10 +77,13 @@ const incompleteTask = {
   atlasProductId: selected[0].atlasProductId,
   query: "FIXTURE-MPN"
 };
-const review = createDurableProductsReview({ task: incompleteTask, result, assessment, retrievedAt: at });
-assert.equal(review.sourceRightsDigest, undefined);
-assert.equal(typeof review.reviewId, "string");
-assert.equal(typeof review.materialDigest, "string");
-assert.notEqual(review.identityState, undefined);
+assert.throws(
+  () => createDurableProductsReview({ task: incompleteTask, result, assessment, retrievedAt: at }),
+  /PRODUCTS_REVIEW_INPUT_INVALID/
+);
+const governedTask = { ...incompleteTask, sourceRightsDigest: "c".repeat(64) };
+const review = createDurableProductsReview({ task: governedTask, result, assessment, retrievedAt: at });
+assert.equal(review.sourceRightsDigest, governedTask.sourceRightsDigest);
+assert.deepEqual(createDurableProductsReview({ task: governedTask, result, assessment, retrievedAt: at }), review);
 
 console.log("Historical bootstrap PRODUCTS review binding tests passed (8 cases).");
