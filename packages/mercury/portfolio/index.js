@@ -10,3 +10,4 @@ export * from "./HistoricalBootstrapResultDispatcher.js";
 export * from "./FileHistoricalBootstrapProviderResultRepository.js";
 export * from "./ProductionHistoricalBootstrapResultBridge.js";
 export * from "./ProductionHistoricalBootstrapLocalOwners.js";
+export * from "./ProductionHistoricalBootstrapLifecycle.js";

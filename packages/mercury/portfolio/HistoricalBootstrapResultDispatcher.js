@@ -28,6 +28,7 @@ export class HistoricalBootstrapResultDispatcher{
   const progression=await owner.process({checkpoint,projection,resultReference:reference});
   if(!progression||typeof progression.status!=="string")throw new Error("RESULT_PROGRESSION_INVALID");
   const nextStageReference=progression.nextStageReference??null;
-  return this.checkpointRepository.append(projection.checkpointId,{eventId:`progression:${reference.resultReferenceId}`,type:"RESULT_REVIEWED",at:this.now(),productIndex:projection.productIndex,identityStatus:progression.status,nextStageReference});
+  const terminal=reference.operation==="SELLERS";
+  return this.checkpointRepository.append(projection.checkpointId,{eventId:`progression:${reference.resultReferenceId}`,type:terminal?"LOCAL_TERMINAL":"RESULT_REVIEWED",at:this.now(),productIndex:projection.productIndex,...(terminal?{outcome:progression.status}:{identityStatus:progression.status,nextStageReference})});
  }
 }
