@@ -180,6 +180,7 @@ const testModules = [
     ,"./PaidActionIntentLineage.test.mjs"
     ,"./HistoricalBootstrapLifecycleService.test.mjs"
     ,"./ProductionDataForSeoTaskOwner.test.mjs"
+    ,"./ProductionDataForSeoPrepareOwners.test.mjs"
     ,"./ProductionDataForSeoRetrievalOwners.test.mjs"
     ,"./ProductionHistoricalBootstrapLocalOwners.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"

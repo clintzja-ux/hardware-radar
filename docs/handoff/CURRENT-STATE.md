@@ -118,6 +118,8 @@ MERCURY-HISTORY-028 exposes reusable local identity-progression owners over the 
 
 MERCURY-HISTORY-029 confirms the complete Stage A lifecycle cannot yet be production-composed without duplicating task-specific PREPARE governance. `HistoricalBootstrapPaidTaskHandoff` supplies trusted continuation metadata, while `createProductionDataForSeoTaskOwner` correctly requires an already validated operation-specific plan/authorization request; PRODUCTS, PRODUCT_INFO, and SELLERS proposal/PREPARE composition and their durable checkpoint references remain script-bound. Status is `MERCURY_HISTORY_STAGE_A_LIFECYCLE_PARTIAL`. No lifecycle factory or command shell is exposed, real INIT/INSPECT remain unrun, and the next safe increment is reusable task-specific PREPARE-owner extraction plus append-only checkpoint binding—not Stage A execution. Provider operations and production mutations remain zero; spend is `$0.000`.
 
+MERCURY-HISTORY-030 extracts reusable production PRODUCTS, PRODUCT_INFO, and SELLERS PREPARE owners and makes the ordinary zero-spend scripts delegate to them. Trusted bootstrap use accepts only the continuation-derived intent/checkpoint/artifact binding; generic CLI injection is rejected. An append-only `PREPARE_BOUND` checkpoint event stores canonical artifact/request IDs and digests without copying their contents, projecting `PREPARED_FOR_AUTHORIZATION`; PREPARE is not durable rights or spend authority. Status is `MERCURY_HISTORY_PREPARE_OWNERS_CERTIFIED`. Full Stage A commands remain unavailable and unrun pending lifecycle composition over this new reference; provider operations and production mutations remain zero and spend is `$0.000`.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |

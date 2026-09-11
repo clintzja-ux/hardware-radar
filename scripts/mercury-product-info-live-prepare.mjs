@@ -1,24 +1,18 @@
-import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import {
-  createProductInfoEnrichmentAuthorizationRequest,
-  extractReviewedProductEnrichmentProposal,
+  createProductionProductInfoPrepareOwner,
   FileAcquisitionExecutionLedgerRepository,
-  readGovernedSpendForUtcDay
 } from '../packages/mercury/index.js';
 
+if (process.argv.length > 2) throw new Error('PRODUCT_INFO_PREPARE_ARGUMENT_INVALID');
 const stateRoot = path.resolve('.forge-review/acquisition');
-const envelope = JSON.parse(
-  await readFile(path.join(stateRoot, 'product-enrichment-proposal.json'), 'utf8')
-);
-const proposal = extractReviewedProductEnrichmentProposal(envelope);
-const createdAt = new Date().toISOString();
-const executionRepository = new FileAcquisitionExecutionLedgerRepository({ filePath: path.join(stateRoot, 'execution-ledger.json') });
-const spentTodayUsd = await readGovernedSpendForUtcDay({ executionRepository, evaluationTime: createdAt });
-const request = createProductInfoEnrichmentAuthorizationRequest({ proposal, createdAt, spentTodayUsd });
-const out = path.join(stateRoot, 'product-info-authorization-request.json');
-await mkdir(path.dirname(out), { recursive: true });
-await writeFile(out, JSON.stringify(request, null, 2) + '\n');
+const owner = createProductionProductInfoPrepareOwner({
+  proposalEnvelopePath: path.join(stateRoot, 'product-enrichment-proposal.json'),
+  executionRepository: new FileAcquisitionExecutionLedgerRepository({ filePath: path.join(stateRoot, 'execution-ledger.json') }),
+  authorizationRequestPath: path.join(stateRoot, 'product-info-authorization-request.json')
+});
+const { authorizationRequest: request } = await owner.prepare();
+const spentTodayUsd = request.plan.spentTodayUsd;
 
 console.log('PRODUCT INFO LIVE PREPARE');
 console.log('API call:             NONE');
