@@ -155,6 +155,7 @@ const testModules = [
     "./EvidencePromotionAssessmentCliWiring.test.mjs",
     "./IdentityReviewAuditRemediation.test.mjs",
     "./AtlasBackedMerchantRegistration.test.mjs",
+    "./HistoricalOfferComparabilityAssessment.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",

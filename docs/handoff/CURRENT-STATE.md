@@ -94,6 +94,8 @@ MERCURY-ACTIVATION-004D promotes the fixture-proven duplicate-document rule into
 
 B-011/C-002A fixture-certified MemoryC canonical retailer readiness, B-011A registered exactly `RETAILER-0003` in Atlas, and merchant decision `mer_idrev_000000003` approved `DISCOVERED → REGISTERED` for evidence `dfev_bb40abbb467a6497b88a3e2d`. The governed path subsequently admitted immutable history, canonical observation `mer_obs_000000004`, and effective review `mer_rev_000000003 = REVIEWED`. B-014A fixture-certifies one shared durable-lineage context owner across E2J, E2P, and E2Q. Condition remains `UNKNOWN`; publication, Current Price, Cheapest, Pick, recommendation, and affiliate authority remain absent. The next safe MemoryC action is the separately authorized read-only E2S reassessment already identified below.
 
+MERCURY-HISTORY-018 fixture-certifies a deterministic offer-comparability gate inside the existing E2J historical-admission owner. Only retained evidence classified `STANDALONE_COMPARABLE` may enter the ordinary standalone history series; explicit bundles, conditional shopper prices, and unknown comparability fail closed before persistence. The assessment preserves unknown shipping/tax, distinguishes explicit zero shipping, and treats provider total as an unverified-composition provider value rather than actionable delivered cost. Initial and refresh admission share the same gate. Historical schema `1.0`, the four existing production historical observations, E2K queries, portfolio state, Forge, and all current/public-price authority remain unchanged; provider operations and spend were zero.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
