@@ -181,6 +181,7 @@ const testModules = [
     ,"./HistoricalBootstrapLifecycleService.test.mjs"
     ,"./ProductionDataForSeoTaskOwner.test.mjs"
     ,"./ProductionDataForSeoRetrievalOwners.test.mjs"
+    ,"./ProductionHistoricalBootstrapLocalOwners.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"
     ,"./MultiProductCadencePolicy.test.mjs"
     ,"./MultiProductCadencePolicyCli.test.mjs"
