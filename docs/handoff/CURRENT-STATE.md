@@ -110,6 +110,8 @@ MERCURY-HISTORY-024 propagates optional internal `paidActionIntentId` through ta
 
 MERCURY-HISTORY-025 fixture-certifies `HistoricalBootstrapLifecycleService` as the sole trusted bootstrap injector of paid-action intent. Its INIT/INSPECT/AUTHORIZE-NEXT/EXECUTE-NEXT/RETRIEVE/PROCESS/CANCEL service API derives artifact, product, operation, source, task, and limits from durable state and rejects caller overrides; no step automatically invokes another. It remains `MERCURY_HISTORY_TRUSTED_LIFECYCLE_PARTIAL` because existing operation-specific production owners are script compositions rather than injectable services, and duplicating their production request/retrieval wiring would violate ownership. Production commands and real Stage A initialization remain unavailable; no provider call, spend, or production mutation occurred.
 
+MERCURY-HISTORY-026 partially extracts that production wiring. Paid PRODUCTS, PRODUCT_INFO, and SELLERS execution now share `createProductionDataForSeoTaskOwner`, including the canonical task/execution/consumption repositories, writer lock, authorization, budget, retry, optional internal paid-action intent, and task-specific provider operation. Existing execution commands use the shared owner without exposing an intent argument. The state remains `MERCURY_HISTORY_REUSABLE_PRODUCTION_OWNERS_PARTIAL`: PREPARE, operation-specific retrieval, SELLERS DF003/comparability/E2J processing, lifecycle injection, and the seven production bootstrap command shells remain unextracted/unavailable. Real INIT/INSPECT and every provider or production mutation remained unrun; spend remains `$0.000`.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |

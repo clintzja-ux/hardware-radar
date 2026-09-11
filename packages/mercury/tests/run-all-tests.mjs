@@ -179,6 +179,7 @@ const testModules = [
     ,"./HistoricalBootstrapContinuation.test.mjs"
     ,"./PaidActionIntentLineage.test.mjs"
     ,"./HistoricalBootstrapLifecycleService.test.mjs"
+    ,"./ProductionDataForSeoTaskOwner.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"
     ,"./MultiProductCadencePolicy.test.mjs"
     ,"./MultiProductCadencePolicyCli.test.mjs"
