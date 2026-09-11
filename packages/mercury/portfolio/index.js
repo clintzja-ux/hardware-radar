@@ -3,3 +3,4 @@ export * from "./HistoricalBootstrapPreparation.js";
 export * from "./HistoricalBootstrapExecution.js";
 export * from "./HistoricalBootstrapProductionComposition.js";
 export * from "./HistoricalBootstrapCheckpoint.js";
+export * from "./HistoricalBootstrapContinuation.js";
