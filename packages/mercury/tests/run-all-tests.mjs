@@ -177,6 +177,7 @@ const testModules = [
     ,"./HistoricalBootstrapCheckpoint.test.mjs"
     ,"./HistoricalBootstrapOwnership.test.mjs"
     ,"./HistoricalBootstrapContinuation.test.mjs"
+    ,"./PaidActionIntentLineage.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"
     ,"./MultiProductCadencePolicy.test.mjs"
     ,"./MultiProductCadencePolicyCli.test.mjs"

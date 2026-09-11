@@ -106,6 +106,8 @@ MERCURY-HISTORY-022 fixture-certifies the append-only cohort checkpoint model an
 
 MERCURY-HISTORY-023 fixture-certifies typed durable continuation authorization, deterministic `mer_histbootintent_*` identity, irreversible consumption, one-task handoff, replay protection, orphan classification, and provider/execution-ledger-first reconstruction. It remains `MERCURY_HISTORY_PAID_TASK_HANDOFF_PARTIAL` because existing task-specific PRODUCTS/PRODUCT_INFO/SELLERS authorization, provider-task, and execution records do not yet persist the paid-action intent as a first-class lineage field. Production commands remain unavailable until that narrow propagation is certified. No authorization, provider operation, spend, evidence, history, Atlas, current-display, or downstream state changed.
 
+MERCURY-HISTORY-024 propagates optional internal `paidActionIntentId` through task-specific Product Info/Sellers proposal and authorization bindings, generic PRODUCTS plan execution, the existing DataForSEO task ledger, acquisition execution/spend records, and ledger-first reconstruction. It is backward-compatible and never enters provider payloads, Atlas, evidence identity, or historical observation identity. The increment remains `MERCURY_HISTORY_PAID_ACTION_LINEAGE_PARTIAL`: production PREPARE scripts must still receive the intent only through trusted bootstrap composition, and lifecycle retrieval/process commands are not yet composed. No production command is exposed and no provider, spend, evidence, history, or downstream state changed.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |

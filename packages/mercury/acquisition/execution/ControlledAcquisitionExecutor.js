@@ -66,7 +66,7 @@ export class ControlledAcquisitionExecutor {
       const finishedAt=this.now(); if(!validIso(finishedAt)) throw new TypeError("now() must return ISO timestamps.");
       const completed=tasks.filter(x=>x.outcome==="COMPLETED").length, failed=tasks.filter(x=>x.outcome==="FAILED").length;
       const status=failed ? "FAILED" : stopReason ? "PARTIAL" : "COMPLETED";
-      const ledger=freeze({schemaVersion:"1.0",runId:executionRunId,planId:plan.planId,startedAt,finishedAt,status,stopReason,plannedTasks:approved.length,attemptedTasks:completed+failed,completedTasks:completed,failedTasks:failed,skippedTasks:tasks.filter(x=>x.outcome==="SKIPPED").length,estimatedSpendUsd:plan.estimatedApprovedSpendUsd,actualSpendUsd:actualSpend,tasks});
+      const intents=[...new Set(approved.map(x=>x.execution?.paidActionIntentId).filter(Boolean))];if(intents.length>1)throw new Error("ACQUISITION_PAID_ACTION_INTENT_CONFLICT");const ledger=freeze({schemaVersion:"1.0",runId:executionRunId,planId:plan.planId,...(intents[0]?{paidActionIntentId:intents[0]}:{}),startedAt,finishedAt,status,stopReason,plannedTasks:approved.length,attemptedTasks:completed+failed,completedTasks:completed,failedTasks:failed,skippedTasks:tasks.filter(x=>x.outcome==="SKIPPED").length,estimatedSpendUsd:plan.estimatedApprovedSpendUsd,actualSpendUsd:actualSpend,tasks:tasks.map((x,i)=>approved[i]?.execution?.paidActionIntentId?{...x,paidActionIntentId:approved[i].execution.paidActionIntentId}:x)});
       const recorded=await this.ledgerRepository.append(ledger);
       if(recorded.status!=="RECORDED") return {duplicate:true,prior:recorded.run};
       return {duplicate:false,ledger};
