@@ -98,6 +98,8 @@ MERCURY-HISTORY-018 fixture-certifies a deterministic offer-comparability gate i
 
 MERCURY-HISTORY-019 prepares the first Atlas-scoped historical bootstrap at explicit `asOf=2026-09-11T12:00:00.000Z`. Review artifact `mer_histbootstrap_71c280422c057da3b248a43b` deterministically selects one no-history, destination-backed product per Atlas category: DDR5 DIMM `ram_corsair_cmh16gx5m2b5200z40`, DDR4 DIMM `ram_corsair_cmk32gx4m2e3200c16`, and SODIMM `ram_corsair_cmsx32gx5m1a5600c48`. None has reusable provider identity/results, so each begins at PRODUCTS, may require conditional PRODUCT_INFO escalation, and requires SELLERS before evidence exists. The immutable maximum is 9 paid tasks / `$0.009`, subject to `$0.001` per-task and `$0.010` UTC-day ceilings with zero automatic retries. Execution and spend remain `NOT_AUTHORIZED`; no provider operation or production-state mutation occurred. The next safe action is operator review followed by a separately certified, sequential, artifact-bound execution increment—not a provider call.
 
+MERCURY-HISTORY-020 fixture-certifies the artifact-bound sequential execution domain: exact artifact validation, expiring single-use authorization, deterministic product/task order, runtime rights and spend revalidation, three-task/product and nine-task/`$0.009` cohort caps, zero retries, fail-closed comparability, cancellation, replay rejection, and existing portfolio/Forge reconstruction. Production execution remains unavailable because the separately certified PRODUCTS, conditional PRODUCT_INFO, SELLERS, retrieval/DF003, and E2J authorization owners are not yet composed under one cohort command. No provider task, spend, evidence, history, or downstream authority changed. The next safe action is a narrow production-composition increment; do not run the cohort.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
@@ -112,13 +114,13 @@ MERCURY-HISTORY-019 prepares the first Atlas-scoped historical bootstrap at expl
 
 ## Current test baseline
 
-The current runners declare **250 subsystem test files**:
+The current runners declare **251 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 197 |
+| Mercury | 198 |
 | Beacon | 7 |
 | Gateway | 17 |
 
