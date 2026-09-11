@@ -108,6 +108,8 @@ MERCURY-HISTORY-023 fixture-certifies typed durable continuation authorization, 
 
 MERCURY-HISTORY-024 propagates optional internal `paidActionIntentId` through task-specific Product Info/Sellers proposal and authorization bindings, generic PRODUCTS plan execution, the existing DataForSEO task ledger, acquisition execution/spend records, and ledger-first reconstruction. It is backward-compatible and never enters provider payloads, Atlas, evidence identity, or historical observation identity. The increment remains `MERCURY_HISTORY_PAID_ACTION_LINEAGE_PARTIAL`: production PREPARE scripts must still receive the intent only through trusted bootstrap composition, and lifecycle retrieval/process commands are not yet composed. No production command is exposed and no provider, spend, evidence, history, or downstream state changed.
 
+MERCURY-HISTORY-025 fixture-certifies `HistoricalBootstrapLifecycleService` as the sole trusted bootstrap injector of paid-action intent. Its INIT/INSPECT/AUTHORIZE-NEXT/EXECUTE-NEXT/RETRIEVE/PROCESS/CANCEL service API derives artifact, product, operation, source, task, and limits from durable state and rejects caller overrides; no step automatically invokes another. It remains `MERCURY_HISTORY_TRUSTED_LIFECYCLE_PARTIAL` because existing operation-specific production owners are script compositions rather than injectable services, and duplicating their production request/retrieval wiring would violate ownership. Production commands and real Stage A initialization remain unavailable; no provider call, spend, or production mutation occurred.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
