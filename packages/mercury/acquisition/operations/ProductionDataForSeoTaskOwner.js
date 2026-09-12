@@ -2,6 +2,7 @@ import path from "node:path";
 import { DataForSeoMerchantApiClient } from "../dataforseo/DataForSeoMerchantApiClient.js";
 import { DataForSeoAcquisitionService } from "../dataforseo/DataForSeoAcquisitionService.js";
 import { DataForSeoAmazonAcquisitionService } from "../../amazon-dataforseo/DataForSeoAmazonAcquisitionService.js";
+import { DataForSeoAmazonMerchantApiClient } from "../../amazon-dataforseo/DataForSeoAmazonMerchantApiClient.js";
 import { FileDataForSeoTaskLedger } from "../dataforseo/FileDataForSeoTaskLedger.js";
 import { loadDataForSeoCredentials } from "../dataforseo/DataForSeoConfig.js";
 import { ControlledAcquisitionExecutor } from "../execution/ControlledAcquisitionExecutor.js";
@@ -96,7 +97,8 @@ export function createProductionDataForSeoTaskOwner({
             error.retryability = "NON_RETRYABLE_CONFIGURATION_OR_CONTRACT_FAILURE";
             throw error;
           }
-          const client = new DataForSeoMerchantApiClient({ login: credentials.login, password: credentials.password, transport: canonicalHttpTransport });
+          const Client = operation.startsWith("AMAZON_") ? DataForSeoAmazonMerchantApiClient : DataForSeoMerchantApiClient;
+          const client = new Client({ login: credentials.login, password: credentials.password, transport: canonicalHttpTransport });
           const ledger=new FileDataForSeoTaskLedger(taskLedgerPath);
           value = operation.startsWith("AMAZON_") ? new DataForSeoAmazonAcquisitionService({client,ledger}) : new DataForSeoAcquisitionService({client,ledger});
         }
