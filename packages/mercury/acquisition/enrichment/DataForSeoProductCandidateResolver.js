@@ -27,6 +27,47 @@ function primaryTimingEvidence(title,performance){
   return {matched:new RegExp(`\\b${escaped}\\b`,'i').test(title),detail:timing};
 }
 
+const freeze=value=>{if(value&&typeof value==='object'&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
+const identityKey=item=>JSON.stringify([item?.productId??null,item?.dataDocId??null,item?.gid??null]);
+const nonNullValues=(candidates,field)=>[...new Set(candidates.map(candidate=>candidate.item?.[field]).filter(value=>value!=null).map(String))].sort();
+
+export const PRODUCTS_IDENTITY_POLICY_VERSION='MERCURY-HISTORY-044-1.0';
+export const ATLAS_IDENTITY_STATES=Object.freeze({CONTRADICTED:'CONTRADICTED',UNRESOLVED:'UNRESOLVED',CORROBORATED:'CORROBORATED'});
+export const PROVIDER_IDENTITY_STATES=Object.freeze({UNIQUE_DOCUMENT_ANCHOR:'UNIQUE_DOCUMENT_ANCHOR',SHARED_DOCUMENTED_PRODUCT:'SHARED_DOCUMENTED_PRODUCT',MULTIPLE_DOCUMENTS_UNGROUPED:'MULTIPLE_DOCUMENTS_UNGROUPED',UNRESOLVED:'UNRESOLVED'});
+
+export function deriveLayeredProductsIdentity({candidates}={}){
+  if(!Array.isArray(candidates))throw new TypeError('candidates must be an array.');
+  const cleanByIdentity=new Map();
+  for(const candidate of candidates){
+    if(candidate?.exactMpnMatch===true&&candidate?.outcome!==PRODUCT_CANDIDATE_OUTCOMES.REJECTED&&(!Array.isArray(candidate.contradictions)||candidate.contradictions.length===0)&&(candidate.item?.productId||candidate.item?.dataDocId||candidate.item?.gid))cleanByIdentity.set(identityKey(candidate.item),candidate);
+  }
+  const clean=[...cleanByIdentity.values()].sort((a,b)=>identityKey(a.item).localeCompare(identityKey(b.item)));
+  const contradictions=[...new Set(candidates.flatMap(candidate=>Array.isArray(candidate?.contradictions)?candidate.contradictions:[]))].sort();
+  const atlasIdentity=clean.length
+    ? {state:ATLAS_IDENTITY_STATES.CORROBORATED,reasons:['EXACT_MPN_MATERIALLY_CONCORDANT'],candidateCount:clean.length}
+    : contradictions.length
+      ? {state:ATLAS_IDENTITY_STATES.CONTRADICTED,reasons:['MATERIAL_ATLAS_IDENTITY_CONTRADICTION',...contradictions],candidateCount:0}
+      : {state:ATLAS_IDENTITY_STATES.UNRESOLVED,reasons:['ATLAS_IDENTITY_EVIDENCE_INSUFFICIENT'],candidateCount:0};
+  const documents=clean.map(candidate=>({dataDocId:candidate.item.dataDocId??null,productId:candidate.item.productId??null,gid:candidate.item.gid??null}));
+  let providerIdentity;
+  if(!clean.length)providerIdentity={state:PROVIDER_IDENTITY_STATES.UNRESOLVED,groupingKey:null,anchor:null,documents,reasons:['PROVIDER_IDENTITY_UNRESOLVED']};
+  else if(clean.length===1)providerIdentity={state:PROVIDER_IDENTITY_STATES.UNIQUE_DOCUMENT_ANCHOR,groupingKey:null,anchor:documents[0],documents,reasons:['UNIQUE_PROVIDER_DOCUMENT_ANCHOR']};
+  else{
+    const productIds=nonNullValues(clean,'productId'),gids=nonNullValues(clean,'gid');
+    const productConflict=productIds.length>1,gidConflict=gids.length>1;
+    const sharedProductId=!productConflict&&clean.every(candidate=>candidate.item.productId!=null)&&productIds.length===1?productIds[0]:null;
+    const sharedGid=!gidConflict&&clean.every(candidate=>candidate.item.gid!=null)&&gids.length===1?gids[0]:null;
+    if(productConflict||gidConflict){
+      const reasons=['PROVIDER_IDENTITY_UNRESOLVED'];if(productConflict)reasons.push('PRODUCT_ID_CONFLICT');if(gidConflict)reasons.push('GID_CONFLICT');
+      providerIdentity={state:PROVIDER_IDENTITY_STATES.UNRESOLVED,groupingKey:null,anchor:null,documents,reasons};
+    }else if(sharedProductId||sharedGid){
+      const groupingKey=sharedProductId&&sharedGid?{type:'PRODUCT_ID_AND_GID',productId:sharedProductId,gid:sharedGid}:sharedProductId?{type:'PRODUCT_ID',value:sharedProductId}:{type:'GID',value:sharedGid};
+      providerIdentity={state:PROVIDER_IDENTITY_STATES.SHARED_DOCUMENTED_PRODUCT,groupingKey,anchor:{productId:sharedProductId,dataDocId:null,gid:sharedGid},documents,reasons:[sharedProductId?'SHARED_DOCUMENTED_PRODUCT_ID':'SHARED_DOCUMENTED_GID']};
+    }else providerIdentity={state:PROVIDER_IDENTITY_STATES.MULTIPLE_DOCUMENTS_UNGROUPED,groupingKey:null,anchor:null,documents,reasons:['PROVIDER_IDENTITY_UNRESOLVED','NO_SHARED_DOCUMENTED_PRODUCT_KEY']};
+  }
+  return freeze({schemaVersion:'1.0',policyVersion:PRODUCTS_IDENTITY_POLICY_VERSION,atlasIdentity,providerIdentity});
+}
+
 export const PRODUCT_CANDIDATE_OUTCOMES=Object.freeze({RECOMMENDED:'RECOMMENDED',AMBIGUOUS:'AMBIGUOUS',REJECTED:'REJECTED'});
 
 export function scoreDataForSeoProductCandidate({atlasProduct,item}={}){
@@ -71,9 +112,10 @@ export function scoreDataForSeoProductCandidate({atlasProduct,item}={}){
 
 export function resolveDataForSeoProductCandidates({atlasProduct,items}={}){
   if(!Array.isArray(items)) throw new TypeError('items must be an array.');
-  const candidates=items.map(item=>scoreDataForSeoProductCandidate({atlasProduct,item})).sort((a,b)=>b.score-a.score);
+  const candidates=items.map(item=>scoreDataForSeoProductCandidate({atlasProduct,item})).sort((a,b)=>b.score-a.score||identityKey(a.item).localeCompare(identityKey(b.item)));
   const eligible=candidates.filter(c=>c.outcome==='RECOMMENDED');
   const top=eligible[0]??null, second=eligible[1]??null;
   const recommendation=top && (!second || top.score>second.score || (top.item.dataDocId&&top.item.dataDocId===second.item.dataDocId)) ? top : null;
-  return Object.freeze({schemaVersion:'1.1',atlasProductId:atlasProduct.identity.atlasProductId,candidateCount:candidates.length,recommendationStatus:recommendation?'RECOMMENDED':eligible.length?'AMBIGUOUS':'NO_SAFE_CANDIDATE',recommendedCandidate:recommendation,runnerUp:second??null,candidates:Object.freeze(candidates)});
+  const layeredIdentity=deriveLayeredProductsIdentity({candidates});
+  return freeze({schemaVersion:'1.2',identityPolicyVersion:PRODUCTS_IDENTITY_POLICY_VERSION,atlasProductId:atlasProduct.identity.atlasProductId,candidateCount:candidates.length,recommendationStatus:recommendation?'RECOMMENDED':eligible.length?'AMBIGUOUS':'NO_SAFE_CANDIDATE',recommendedCandidate:recommendation,runnerUp:second??null,candidates,layeredIdentity});
 }

@@ -7,7 +7,7 @@ export async function prepareProductEnrichmentFromProductsResult({atlasProduct,s
   const items=productsResult?.result?.[0]?.items;
   if(!Array.isArray(items)) throw new Error('PRODUCTS_RESULT_ITEMS_MISSING');
   const resolution=resolveDataForSeoProductCandidates({atlasProduct,items});
-  const proposal=resolution.recommendationStatus==='RECOMMENDED'
+  const proposal=['UNIQUE_DOCUMENT_ANCHOR','SHARED_DOCUMENTED_PRODUCT'].includes(resolution.layeredIdentity?.providerIdentity?.state)
     ? createProductEnrichmentProposal({resolution,sourceTaskId})
     : null;
   return Object.freeze({schemaVersion:'1.0',sourceTaskId,atlasProductId:atlasProduct.identity.atlasProductId,resolution,proposal,paidTaskCreated:false,actualSpendUsd:0});

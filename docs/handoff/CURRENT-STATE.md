@@ -3,12 +3,12 @@
 ```text
 Last updated:                  2026-09-11
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        96c635e055de5340495ad9e7c966aac5e460ab3a (`fix(mercury): enforce exact MPN token boundaries`)
+Current committed HEAD:        36c54d218f6a2f9479ce559b67b8a9ebe13d3cc9 (`docs(mercury): define Google Shopping provider identity semantics`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 66 ahead at MERCURY-HISTORY-043 preflight
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 67 ahead at MERCURY-HISTORY-044 preflight
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -138,6 +138,8 @@ MERCURY-HISTORY-042 corrects the generic exact-MPN boundary exposed by the first
 
 MERCURY-HISTORY-043 documents the provider-identity semantics behind that ambiguity without changing policy. DataForSEO documents `data_docid` as SERP-element/document identity and `product_id`/`gid` as product/product-entity identifiers; the three clean exact Corsair records all corroborate one Atlas identity but have distinct DataDocs and no `product_id` or `gid`, so their provider-product relationship remains unspecified and cannot be collapsed. The recommended future generic model is `LAYERED_CONCORDANT_ATLAS_WITH_EXPLICIT_PROVIDER_GROUPING`: preserve every DataDoc, separate Atlas corroboration from downstream provider-tuple selection, group automatically only on a common documented non-null product-level key, and otherwise fail closed without price or retailer preference. Existing evidence shows multiple clean exact candidates in 2 of 7 measurable production PRODUCTS result sets, making manual selection a credible scaling bottleneck while not establishing a catalog-wide frequency. Status is `PROVIDER_IDENTITY_MODEL_REQUIRES_EXPLICIT_GROUPING`; resolve and fixture-certify this semantic class before another paid Stage-A acceptance run.
 
+MERCURY-HISTORY-044 fixture-certifies policy `MERCURY-HISTORY-044-1.0`, which separates Atlas corroboration from provider identity resolution. Multiple clean exact documents may establish Atlas `CORROBORATED`; they become `SHARED_DOCUMENTED_PRODUCT` only when every relevant document shares the same non-null documented `product_id` or `gid`, while conflicting keys fail closed and `data_docid` remains document identity. Null-key multiplicity produces `MULTIPLE_DOCUMENTS_UNGROUPED` and `PROVIDER_IDENTITY_UNRESOLVED`; no price, retailer, seller, affiliate, trust, or ordering preference may select an anchor. A valid shared group supplies only its common product-level key to the unchanged single-anchor PRODUCT_INFO/SELLERS boundaries. Offline replay of the three real Corsair DataDocs now reports Atlas `CORROBORATED`, provider `MULTIPLE_DOCUMENTS_UNGROUPED`, and downstream execution blocked without rewriting terminal checkpoint `mer_histbootcp_4fa3d069973180b29221c6aa`. Status is `MERCURY_LAYERED_PROVIDER_IDENTITY_CERTIFIED`; a new acceptance run is semantically safe only after separate operator authorization and creation of a new artifact/checkpoint.
+
 Stage A now has schema-1.1 artifact `mer_histbootstrap_fefb3b96bc7980c75fe5b4ab` and terminal checkpoint `mer_histbootcp_4fa3d069973180b29221c6aa`. Its first PRODUCTS task used one paid task and `$0.001`, persisted canonical result `mer_providerresult_8fe5fcdc9709ad24b4ee51d6`, and stopped at product index 0 with the immutable historical outcome `BLOCKED_IDENTITY`. H042 establishes that a future corrected run would classify the same evidence as genuine multiple-provider-identity ambiguity; it does not rewrite or resume this checkpoint. A new artifact/checkpoint remains unavailable until a separate operator-authorized path deliberately creates it after the ambiguity boundary is resolved.
 
 ## Current platform status
@@ -154,13 +156,13 @@ Stage A now has schema-1.1 artifact `mer_histbootstrap_fefb3b96bc7980c75fe5b4ab`
 
 ## Current test baseline
 
-The current runners declare **270 subsystem test files**:
+The current runners declare **272 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 217 |
+| Mercury | 219 |
 | Beacon | 7 |
 | Gateway | 17 |
 

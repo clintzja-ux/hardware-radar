@@ -29,7 +29,7 @@ assert.equal(value.executableRoute,"READY_FOR_PRODUCT_INFO");
 assert.deepEqual(value.blockers,["DIRECT_SELLERS_LINEAGE_NOT_CERTIFIED"]);
 assert.equal(value.fuzzyMatching,false);
 assert.equal(classifyDefaultAcquisitionRoute({resolution:recommended,directSellersLineageCertified:true}).executableRoute,"READY_FOR_SELLERS");
-assert.equal(classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"AMBIGUOUS",recommendedCandidate:null,candidates:[candidate(),candidate({dataDocId:"doc-2"})]}}).desiredRoute,"MANUAL_PROVIDER_SELECTION");
+assert.equal(classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"AMBIGUOUS",recommendedCandidate:null,candidates:[candidate(),candidate({dataDocId:"doc-2"})]}}).desiredRoute,"UNRESOLVED");
 assert.equal(classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"NO_SAFE_CANDIDATE",recommendedCandidate:null,candidates:[{...candidate(),contradictions:["CAPACITY_CONFLICT"]}]}}).desiredRoute,"MANUAL_IDENTITY_REVIEW");
 assert.equal(classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"NO_SAFE_CANDIDATE",recommendedCandidate:null,candidates:[{...candidate(),exactMpnMatch:false}]}}).desiredRoute,"MANUAL_IDENTITY_REVIEW");
 assert.equal(classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"NO_SAFE_CANDIDATE",recommendedCandidate:null,candidates:[]}}).desiredRoute,"UNRESOLVED");

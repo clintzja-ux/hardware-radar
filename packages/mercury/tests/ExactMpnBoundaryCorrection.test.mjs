@@ -38,8 +38,8 @@ assert.equal(classifyDefaultAcquisitionRoute({ resolution: unique, directSellers
 const multiple = resolveDataForSeoProductCandidates({ atlasProduct: atlas(corsairMpn), items: ["a", "b", "c"].map(data_docid => ({ title: cleanTitle, data_docid })) });
 assert.equal(multiple.recommendationStatus, "AMBIGUOUS");
 const multipleRoute = classifyDefaultAcquisitionRoute({ resolution: multiple, directSellersLineageCertified: true });
-assert.equal(multipleRoute.materialIdentity, "AMBIGUOUS");
-assert.equal(multipleRoute.executableRoute, "MANUAL_PROVIDER_SELECTION");
+assert.equal(multipleRoute.materialIdentity, "CORROBORATED");
+assert.equal(multipleRoute.executableRoute, "UNRESOLVED");
 
 const rejectedSubstring = { ...multiple.candidates[0], outcome: "REJECTED", contradictions: ["DIFFERENT_MPN:ABC123W"] };
 const isolated = classifyDefaultAcquisitionRoute({
@@ -58,8 +58,8 @@ const liveReplay = resolveDataForSeoProductCandidates({ atlasProduct: atlas(cors
 assert.equal(liveReplay.candidates.find(value => value.item.dataDocId === "13939921956259571079").exactMpnMatch, false);
 assert.equal(liveReplay.candidates.filter(value => value.exactMpnMatch && value.outcome === "RECOMMENDED").length, 3);
 const liveRoute = classifyDefaultAcquisitionRoute({ resolution: liveReplay, directSellersLineageCertified: true });
-assert.equal(liveRoute.materialIdentity, "AMBIGUOUS");
-assert.equal(liveRoute.executableRoute, "MANUAL_PROVIDER_SELECTION");
+assert.equal(liveRoute.materialIdentity, "CORROBORATED");
+assert.equal(liveRoute.executableRoute, "UNRESOLVED");
 assert.equal(liveRoute.reasons.includes("MATERIAL_IDENTITY_CONTRADICTION"), false);
 
 console.log("Exact MPN boundary correction tests passed (20 cases).");

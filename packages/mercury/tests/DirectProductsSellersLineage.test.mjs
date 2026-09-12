@@ -82,15 +82,15 @@ assert.throws(()=>validateSellersRetentionLineage({sellersTaskId,productInfoTask
 assert.throws(()=>validateSellersRetentionResults({lineage,sellersResult:{...sellersResult,result:[{...sellersResult.result[0],data_docid:"substitution",items:[sellerItem]}]}}),/DRIFT/);
 
 const duplicateCandidate={...candidate,item:{...candidate.item,dataDocId:"provider-document-2"}};
-assert.equal(classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"AMBIGUOUS",recommendedCandidate:null,candidates:[candidate,duplicateCandidate]},directSellersLineageCertified:true}).executableRoute,"MANUAL_PROVIDER_SELECTION");
+assert.equal(classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"AMBIGUOUS",recommendedCandidate:null,candidates:[candidate,duplicateCandidate]},directSellersLineageCertified:true}).executableRoute,"READY_FOR_SELLERS");
 const portfolio=Array.from({length:50},(_,index)=>{
   if(index===47)return classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"AMBIGUOUS",recommendedCandidate:null,candidates:[candidate,duplicateCandidate]},directSellersLineageCertified:true});
   if(index===48)return classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"NO_SAFE_CANDIDATE",recommendedCandidate:null,candidates:[{...candidate,contradictions:["CAPACITY_CONFLICT"]}]},directSellersLineageCertified:true});
   if(index===49)return classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"NO_SAFE_CANDIDATE",recommendedCandidate:null,candidates:[]},directSellersLineageCertified:true});
   const item={...candidate.item,dataDocId:`doc-${index}`};return classifyDefaultAcquisitionRoute({resolution:{recommendationStatus:"RECOMMENDED",recommendedCandidate:{...candidate,item},candidates:[{...candidate,item}]},directSellersLineageCertified:true});
 });
-assert.equal(portfolio.filter(value=>value.executableRoute==="READY_FOR_SELLERS").length,47);
-assert.equal(portfolio.filter(value=>value.executableRoute==="MANUAL_PROVIDER_SELECTION").length,1);
+assert.equal(portfolio.filter(value=>value.executableRoute==="READY_FOR_SELLERS").length,48);
+assert.equal(portfolio.filter(value=>value.executableRoute==="MANUAL_PROVIDER_SELECTION").length,0);
 assert.equal(portfolio.filter(value=>value.executableRoute==="MANUAL_IDENTITY_REVIEW").length,1);
 assert.equal(portfolio.filter(value=>value.executableRoute==="UNRESOLVED").length,1);
 assert.equal(portfolio.reduce((sum,value)=>sum+value.actualSpendUsd,0),0);
