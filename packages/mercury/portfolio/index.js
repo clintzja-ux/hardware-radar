@@ -9,5 +9,6 @@ export * from "./HistoricalBootstrapPreparedActionResolver.js";
 export * from "./HistoricalBootstrapResultDispatcher.js";
 export * from "./FileHistoricalBootstrapProviderResultRepository.js";
 export * from "./ProductionHistoricalBootstrapResultBridge.js";
+export * from "./ProductionHistoricalBootstrapCommandComposition.js";
 export * from "./ProductionHistoricalBootstrapLocalOwners.js";
 export * from "./ProductionHistoricalBootstrapLifecycle.js";

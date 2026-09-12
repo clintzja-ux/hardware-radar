@@ -1,14 +1,14 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-09-09
+Last updated:                  2026-09-11
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        bbd44d44bae8f6e8878b59ff1dcf4f6e37e4f0ee (`fix(mercury): support logical Rakuten product record framing`)
+Current committed HEAD:        9f2475cc19fd6788aca5be056043a34c623f726a (`feat(mercury): add immutable bootstrap proposal handoff`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 38 ahead at RAKUTEN-SFTP-013 preflight
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 64 ahead at MERCURY-HISTORY-041 preflight
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -130,9 +130,11 @@ MERCURY-HISTORY-035 directly attempted final production composition and remains 
 
 MERCURY-HISTORY-036 attempted that exact review-owner reuse and is `MERCURY_HISTORY_PRODUCTS_REVIEW_BINDING_BLOCKED`: the immutable H019 Stage-A artifact and H022–H034 lineage preserve only `rightsStatus`/opaque portfolio binding, not the originating acquisition portfolio's `sourceRightsProfileDigest` required by the canonical PRODUCTS review. Current rights cannot replace historical lineage, and the opaque portfolio digest is not a rights digest. No review or H034 reference was written. The smallest safe next decision is whether to add an append-only artifact-to-original-portfolio lineage binding or prepare a successor artifact from a durably resolvable portfolio; the existing artifact must remain unchanged. Commands remain unavailable and production/provider/spend state remains unchanged (`$0.000`).
 
-MERCURY-HISTORY-037/038 now certifies the corrected bootstrap rights lineage end to end. The original H019 acquisition portfolio is not durably resolvable, so `mer_histbootstrap_71c280422c057da3b248a43b` remains immutable/readable but execution-ineligible; current rights are never backfilled into historical lineage. New schema-1.1 successor artifacts bind an exact originating portfolio reference plus `sourceRightsProfileDigest`, use new deterministic identities, and may identify an immutable predecessor. That digest now propagates through H022 checkpoints, H023 continuations, H030/H032 immutable PREPARE bindings, H034 canonical results/progression, and the existing durable PRODUCTS review/direct-SELLERS path; PRODUCT_INFO escalation preserves the same provenance. Current executable rights remain an independent recheck and cannot rewrite originating provenance. Status is `MERCURY_HISTORY_RIGHTS_PROPAGATION_CERTIFIED`; production lifecycle commands and real Stage A remain unavailable pending final lifecycle composition. No provider operation, production mutation, or spend occurred (`$0.000`).
+MERCURY-HISTORY-037/038 now certifies the corrected bootstrap rights lineage end to end. The original H019 acquisition portfolio is not durably resolvable, so `mer_histbootstrap_71c280422c057da3b248a43b` remains immutable/readable but execution-ineligible; current rights are never backfilled into historical lineage. New schema-1.1 successor artifacts bind an exact originating portfolio reference plus `sourceRightsProfileDigest`, use new deterministic identities, and may identify an immutable predecessor. That digest now propagates through H022 checkpoints, H023 continuations, H030/H032 immutable PREPARE bindings, H034 canonical results/progression, and the existing durable PRODUCTS review/direct-SELLERS path; PRODUCT_INFO escalation preserves the same provenance. Current executable rights remain an independent recheck and cannot rewrite originating provenance. Status is `MERCURY_HISTORY_RIGHTS_PROPAGATION_CERTIFIED`; H041 now supplies the thin production commands, while real Stage A remains blocked pending a new eligible successor artifact and explicit operator actions. No provider operation, production mutation, or spend occurred (`$0.000`).
 
-MERCURY-HISTORY-039 composes dynamic schema-1.1 INIT, read-only INSPECT, continuation authorization, immutable PREPARE binding, single-task execution, H034 retrieval/dispatch, correct SELLERS terminal handling, and next-product progression in the existing H025 lifecycle. MERCURY-HISTORY-040 closes its remaining proposal-handoff blocker: H034 now persists exact immutable PRODUCT_INFO and direct/escalated SELLERS proposals, progression records carry only bound ID/digest/operation references, bootstrap H030 PREPARE resolves those references internally, and H027 SELLERS processing can consume the exact H032 PREPARE authorization/proposal. Ordinary latest-file workflows remain compatible but cannot override bootstrap authority. Fixture certification is product/cohort generic, fail closed across product/operation/checkpoint/rights/digest conflicts, and preserves current/public isolation. No new policy, workflow store, operator proposal-ID input, automatic continuation, or run-all command was added. Real Stage A and all provider/production operations remain unrun; spend is `$0.000`.
+MERCURY-HISTORY-039 composes dynamic schema-1.1 INIT, read-only INSPECT, continuation authorization, immutable PREPARE binding, single-task execution, H034 retrieval/dispatch, correct SELLERS terminal handling, and next-product progression in the existing H025 lifecycle. MERCURY-HISTORY-040 closes its remaining proposal-handoff blocker: H034 now persists exact immutable PRODUCT_INFO and direct/escalated SELLERS proposals, progression records carry only bound ID/digest/operation references, bootstrap H030 PREPARE resolves those references internally, and H027 SELLERS processing can consume the exact H032 PREPARE authorization/proposal. MERCURY-HISTORY-041 exposes that certified graph through exactly eight thin, one-action commands: INIT, INSPECT, AUTHORIZE-NEXT, PREPARE-NEXT, EXECUTE-NEXT, RETRIEVE, PROCESS, and CANCEL. Strict command parsing rejects product, operation, task, result, proposal, intent, budget, repository, and raw-artifact overrides; no run-all, resume-all, background loop, or automatic continuation exists. Ordinary latest-file workflows remain compatible but cannot override bootstrap authority. Fixture certification is product/cohort generic, fail closed across product/operation/checkpoint/rights/digest conflicts, and preserves current/public isolation.
+
+Operator readiness remains `SUCCESSOR_ARTIFACT_STILL_REQUIRED`: the only local bootstrap artifact, `mer_histbootstrap_71c280422c057da3b248a43b`, is legacy schema `1.0` / `MERCURY-HISTORY-019-1.0` and cannot pass schema-1.1 originating-rights eligibility. The existing zero-provider command `npm run mercury:history-bootstrap:prepare -- --as-of=<EXPLICIT_ISO_TIME>` may prepare the required successor for review, but has not been run by H041. Real Stage A INIT/INSPECT and all provider/production operations remain unrun; paid tasks `0`, spend `$0.000`.
 
 ## Current platform status
 
@@ -148,13 +150,13 @@ MERCURY-HISTORY-039 composes dynamic schema-1.1 INIT, read-only INSPECT, continu
 
 ## Current test baseline
 
-The current runners declare **251 subsystem test files**:
+The current runners declare **270 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 198 |
+| Mercury | 217 |
 | Beacon | 7 |
 | Gateway | 17 |
 
