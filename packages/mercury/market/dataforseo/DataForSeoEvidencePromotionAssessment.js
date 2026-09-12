@@ -109,7 +109,7 @@ export function assessDataForSeoEvidencePromotion(input = {}) {
             critical.push(reason("MALFORMED_RETAINED_EVIDENCE", "provenance", record.evidenceId ?? null));
             continue;
         }
-        if (candidate.candidateType !== "MERCURY_MARKET_OBSERVATION" || marketEvidence.provider !== "DATAFORSEO" || marketEvidence.source !== "DATAFORSEO_GOOGLE_SHOPPING" || !provenance.sourceTaskId || !validDate(provenance.observedAt)) {
+        if (candidate.candidateType !== "MERCURY_MARKET_OBSERVATION" || marketEvidence.provider !== "DATAFORSEO" || !["DATAFORSEO_GOOGLE_SHOPPING", "DATAFORSEO_AMAZON"].includes(marketEvidence.source) || !provenance.sourceTaskId || !validDate(provenance.observedAt)) {
             critical.push(reason("UNSUPPORTED_OR_INCOMPLETE_PROVENANCE", "provenance", record.evidenceId));
         }
         if (!PRODUCT_OUTCOMES.has(identity?.outcome)) critical.push(reason("UNKNOWN_PRODUCT_IDENTITY", "productIdentity", identity?.outcome ?? null));

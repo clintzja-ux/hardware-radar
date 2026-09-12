@@ -148,6 +148,8 @@ MERCURY-HISTORY-046 fixture-certifies the distinct `DATAFORSEO_AMAZON` source pr
 
 MERCURY-HISTORY-047 fixture-certifies the bounded DataForSEO Amazon Products, ASIN, and Sellers task/retrieval transport and immutable provider-result composition. Pure request builders send only documented provider fields; Atlas, checkpoint, rights, and paid-intent lineage remain in the existing Mercury task ledger. The existing single-use execution, spend, task, retrieval, and H034 immutable-result owners are reused and source-aware; Amazon uses `$0.0015` per task with a three-task/`$0.0045` one-product envelope and zero automatic retries. Same-task identical results replay idempotently and changed material results fail closed. Products processing delegates to the H046 identity owner; only `STRONG_UNIQUE_ASIN` exposes Sellers readiness, without creating a paid task. No live CLI, automatic chain, DF003/E2J Amazon admission, provider call, production mutation, or downstream authority was added; spend remains `$0.000`. The next safe action is a separate fixture-only Amazon DF003/E2J composition increment before any bounded live acceptance authorization.
 
+MERCURY-HISTORY-048 fixture-certifies the source-typed Amazon Sellers retention and historical-admission composition through the existing DF003 evidence repository, E2G/E2H policy, HISTORY-018 comparability, E2J immutable history, and historical portfolio. Strong governed ASIN and exact immutable task/result/rights lineage are mandatory. Amazon marketplace context never proves Amazon seller identity: unresolved and third-party sellers retain as `DISCOVERED`, while Amazon-as-seller succeeds only through the existing append-only merchant review and Atlas `RETAILER-0001` validation. Null condition/delivery remain null, zero delivery remains zero, and conditional/bundle/unknown comparability remains fail closed. No live CLI, provider call, paid task, production evidence/history write, Current Display, canonical/publication, Cheapest, Pick, or affiliate authority was created; spend remains `$0.000`. The next safe action is design and operator review of one bounded live Amazon acceptance envelope, not execution.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
@@ -162,13 +164,13 @@ MERCURY-HISTORY-047 fixture-certifies the bounded DataForSEO Amazon Products, AS
 
 ## Current test baseline
 
-The current runners declare **274 subsystem test files**:
+The current runners declare **275 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 221 |
+| Mercury | 222 |
 | Beacon | 7 |
 | Gateway | 17 |
 

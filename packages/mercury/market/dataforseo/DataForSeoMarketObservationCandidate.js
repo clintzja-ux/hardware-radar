@@ -28,8 +28,8 @@ export function createDataForSeoMarketObservationCandidate({ marketEvidence, atl
     requireObject(marketEvidence, "marketEvidence");
     requireObject(atlasResolution, "atlasResolution");
 
-    if (marketEvidence.provider !== "DATAFORSEO" || marketEvidence.source !== "DATAFORSEO_GOOGLE_SHOPPING") {
-        throw new TypeError("DF003-B requires normalized DataForSEO Google Shopping market evidence.");
+    if (marketEvidence.provider !== "DATAFORSEO" || !["DATAFORSEO_GOOGLE_SHOPPING", "DATAFORSEO_AMAZON"].includes(marketEvidence.source)) {
+        throw new TypeError("DF003-B requires normalized DataForSEO market evidence from a supported source.");
     }
 
     const outcome = atlasResolution.outcome;

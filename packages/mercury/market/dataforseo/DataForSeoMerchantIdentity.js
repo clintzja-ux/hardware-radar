@@ -60,8 +60,8 @@ function retailerDomain(retailer) {
 export function resolveDataForSeoMerchantIdentity({ marketEvidence, retailers = [] } = {}) {
     requireObject(marketEvidence, "marketEvidence");
     if (!Array.isArray(retailers)) throw new TypeError("retailers must be an array.");
-    if (marketEvidence.provider !== "DATAFORSEO" || marketEvidence.source !== "DATAFORSEO_GOOGLE_SHOPPING") {
-        throw new TypeError("Merchant resolution requires normalized DataForSEO Google Shopping market evidence.");
+    if (marketEvidence.provider !== "DATAFORSEO" || !["DATAFORSEO_GOOGLE_SHOPPING", "DATAFORSEO_AMAZON"].includes(marketEvidence.source)) {
+        throw new TypeError("Merchant resolution requires normalized supported DataForSEO market evidence.");
     }
 
     const seller = requireObject(marketEvidence.seller, "marketEvidence.seller");
