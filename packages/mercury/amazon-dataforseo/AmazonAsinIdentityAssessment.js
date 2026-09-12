@@ -25,6 +25,9 @@ function assessCandidate(atlasProduct, candidate, aliases) {
   compare("TIMINGS", data.performance?.primaryTimings, explicit(candidate, "primaryTimings"));
   compare("COLOR", data.physical?.color, explicit(candidate, "color"));
   compare("RGB", data.physical?.rgbLighting, explicit(candidate, "rgbLighting"));
+  const capacities=[...title.matchAll(/\b(8|16|24|32|48|64|96|128)\s*GB\b/gi)].map(match=>Number(match[1]));
+  if(capacities.length&&data.capacity?.capacityGb!=null&&!capacities.includes(Number(data.capacity.capacityGb)))contradictions.push("CAPACITY_CONFLICT");
+  if(/\bDDR[45]\b/i.test(title)&&!new RegExp(`\\b${String(data.classification?.memoryType??"")}\\b`,"i").test(title))contradictions.push("MEMORY_TYPE_CONFLICT");
   const condition = norm(candidate?.condition ?? candidate?.conditionDescription), renewed = /RENEWED|USED|REFURBISHED|OPENBOX|PREOWNED/.test(condition) || /\b(RENEWED|USED|REFURBISHED|OPEN[ -]?BOX|PRE[ -]?OWNED)\b/i.test(title);
   const bundle = candidate?.bundle === true || /\b(BUNDLE|COMBO|WITH (?:CPU|PROCESSOR|MOTHERBOARD))\b/i.test(title);
   const asin = String(candidate?.dataAsin ?? candidate?.data_asin ?? "").toUpperCase();

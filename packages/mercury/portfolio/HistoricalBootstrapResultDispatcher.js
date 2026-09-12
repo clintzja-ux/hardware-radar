@@ -9,7 +9,7 @@ const freeze=value=>deepFreeze(structuredClone(value));
 export const HISTORICAL_BOOTSTRAP_RESULT_REFERENCE_VERSION="MERCURY-HISTORY-032-1.0";
 
 export function createHistoricalBootstrapResultReference({operation,providerTaskId,canonicalResultId,resultDigest,providerStatus="AVAILABLE",paidActionIntentId,recordedAt}={}){
- if(!["PRODUCTS","PRODUCT_INFO","SELLERS"].includes(operation)||![providerTaskId,canonicalResultId,resultDigest,recordedAt].every(value=>typeof value==="string"&&value.trim())||!Number.isFinite(Date.parse(recordedAt)))throw new Error("RESULT_REFERENCE_INVALID");
+ if(!["PRODUCTS","PRODUCT_INFO","SELLERS","AMAZON_PRODUCTS","AMAZON_ASIN","AMAZON_SELLERS"].includes(operation)||![providerTaskId,canonicalResultId,resultDigest,recordedAt].every(value=>typeof value==="string"&&value.trim())||!Number.isFinite(Date.parse(recordedAt)))throw new Error("RESULT_REFERENCE_INVALID");
  const binding={operation,providerTaskId,canonicalResultId,resultDigest,providerStatus,paidActionIntentId:paidActionIntentId??null};
  return freeze({schemaVersion:"1.0",policyVersion:HISTORICAL_BOOTSTRAP_RESULT_REFERENCE_VERSION,resultReferenceId:`mer_resultref_${digest(binding).slice(0,24)}`,...binding,bindingDigest:digest(binding),recordedAt});
 }

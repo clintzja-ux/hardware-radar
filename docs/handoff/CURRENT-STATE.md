@@ -3,12 +3,12 @@
 ```text
 Last updated:                  2026-09-11
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        f6333dd1bb4441e007358c508ced83200b01c8f9 (`docs(mercury): evaluate DataForSEO Amazon historical evidence`)
+Current committed HEAD:        a2185ef1352b99cd01fce29ded77407bf6e72fba (`feat(mercury): add DataForSEO Amazon source foundation`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 69 ahead at MERCURY-HISTORY-046 preflight
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 70 ahead at MERCURY-HISTORY-047 preflight
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -146,6 +146,8 @@ MERCURY-HISTORY-045B recommends DataForSEO Amazon Merchant API as an additional,
 
 MERCURY-HISTORY-046 fixture-certifies the distinct `DATAFORSEO_AMAZON` source profile, transport-free Products/ASIN/Sellers contracts, and deterministic Atlas-to-ASIN identity assessment. Missing condition and delivery price remain null, bundles and renewed/used identity fail closed, parent/child ASINs remain evidence rather than automatic equivalence, and price/seller/order cannot select identity. Existing Amazon destinations are corroborating evidence only. Google and Amazon retained-evidence fixtures remain independent, while the generic historical schema already preserves source identity. E2J remains unchanged and fail closed because Amazon DF003 identity, merchant, promotion, acquisition-chain, and transport composition are not yet certified. No HTTP/provider operation, production command, paid task, retained production evidence, history, Atlas, Current Display, or downstream authority changed; spend is `$0.000`. The next safe action is a bounded fixture-only Amazon transport/result-composition increment before any live authorization.
 
+MERCURY-HISTORY-047 fixture-certifies the bounded DataForSEO Amazon Products, ASIN, and Sellers task/retrieval transport and immutable provider-result composition. Pure request builders send only documented provider fields; Atlas, checkpoint, rights, and paid-intent lineage remain in the existing Mercury task ledger. The existing single-use execution, spend, task, retrieval, and H034 immutable-result owners are reused and source-aware; Amazon uses `$0.0015` per task with a three-task/`$0.0045` one-product envelope and zero automatic retries. Same-task identical results replay idempotently and changed material results fail closed. Products processing delegates to the H046 identity owner; only `STRONG_UNIQUE_ASIN` exposes Sellers readiness, without creating a paid task. No live CLI, automatic chain, DF003/E2J Amazon admission, provider call, production mutation, or downstream authority was added; spend remains `$0.000`. The next safe action is a separate fixture-only Amazon DF003/E2J composition increment before any bounded live acceptance authorization.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
@@ -160,13 +162,13 @@ MERCURY-HISTORY-046 fixture-certifies the distinct `DATAFORSEO_AMAZON` source pr
 
 ## Current test baseline
 
-The current runners declare **272 subsystem test files**:
+The current runners declare **274 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 219 |
+| Mercury | 221 |
 | Beacon | 7 |
 | Gateway | 17 |
 

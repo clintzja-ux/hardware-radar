@@ -1,6 +1,7 @@
 import path from "node:path";
 import { DataForSeoMerchantApiClient } from "../dataforseo/DataForSeoMerchantApiClient.js";
 import { DataForSeoAcquisitionService } from "../dataforseo/DataForSeoAcquisitionService.js";
+import { DataForSeoAmazonAcquisitionService } from "../../amazon-dataforseo/DataForSeoAmazonAcquisitionService.js";
 import { FileDataForSeoTaskLedger } from "../dataforseo/FileDataForSeoTaskLedger.js";
 import { loadDataForSeoCredentials } from "../dataforseo/DataForSeoConfig.js";
 import { ControlledAcquisitionExecutor } from "../execution/ControlledAcquisitionExecutor.js";
@@ -14,12 +15,18 @@ const METHODS = Object.freeze({
   PRODUCTS: "createProductsTask",
   PRODUCT_INFO: "createProductInfoTask",
   SELLERS: "createSellersTask"
+  ,AMAZON_PRODUCTS: "createAmazonProductsTask"
+  ,AMAZON_ASIN: "createAmazonAsinTask"
+  ,AMAZON_SELLERS: "createAmazonSellersTask"
 });
 
 const CODES = Object.freeze({
   PRODUCTS: "E2B_ONLY_PRODUCTS_ALLOWED",
   PRODUCT_INFO: "E2D_ONLY_PRODUCT_INFO_ALLOWED",
   SELLERS: "E2E_ONLY_SELLERS_ALLOWED"
+  ,AMAZON_PRODUCTS: "AMAZON_PRODUCTS_ONLY_ALLOWED"
+  ,AMAZON_ASIN: "AMAZON_ASIN_ONLY_ALLOWED"
+  ,AMAZON_SELLERS: "AMAZON_SELLERS_ONLY_ALLOWED"
 });
 
 /**
@@ -90,7 +97,8 @@ export function createProductionDataForSeoTaskOwner({
             throw error;
           }
           const client = new DataForSeoMerchantApiClient({ login: credentials.login, password: credentials.password, transport: canonicalHttpTransport });
-          value = new DataForSeoAcquisitionService({ client, ledger: new FileDataForSeoTaskLedger(taskLedgerPath) });
+          const ledger=new FileDataForSeoTaskLedger(taskLedgerPath);
+          value = operation.startsWith("AMAZON_") ? new DataForSeoAmazonAcquisitionService({client,ledger}) : new DataForSeoAcquisitionService({client,ledger});
         }
         return value[method](execution);
       }

@@ -84,6 +84,7 @@ const testModules = [
     "./LiveMarketWorkflow.test.mjs",
     "./DataForSeoRights.test.mjs",
     "./DataForSeoAmazonFoundation.test.mjs",
+    "./DataForSeoAmazonTransport.test.mjs",
     "./DataForSeoConfig.test.mjs",
     "./DataForSeoClient.test.mjs",
     "./DataForSeoRetrieval.test.mjs",
