@@ -5,3 +5,8 @@ export * from "./DataForSeoAmazonMerchantApiClient.js";
 export * from "./DataForSeoAmazonAcquisitionService.js";
 export * from "./DataForSeoAmazonResults.js";
 export * from "./DataForSeoAmazonHistoricalRetention.js";
+export * from "./AmazonHistoricalAcceptancePreparation.js";
+export * from "./FileAmazonHistoricalAcceptanceRepository.js";
+export * from "./AmazonAcceptanceExecution.js";
+export * from "./FileAmazonAcceptanceActionRepository.js";
+export * from "./AmazonAcceptanceExecutionService.js";

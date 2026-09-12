@@ -1,0 +1,6 @@
+import { validateAmazonHistoricalAcceptance } from "../packages/mercury/index.js";
+import { createAmazonAcceptanceRuntime, parseArgs } from "./mercury-amazon-acceptance-runtime.mjs";
+const args = parseArgs(), id = args.get("--artifact-id"); if (typeof id !== "string" || !id) throw new Error("AMAZON_ACCEPTANCE_ARTIFACT_ID_REQUIRED");
+const artifact = await createAmazonAcceptanceRuntime(args).artifactRepository.getById(id); if (!artifact) throw new Error("AMAZON_ACCEPTANCE_ARTIFACT_NOT_FOUND"); validateAmazonHistoricalAcceptance(artifact);
+console.log("DATAFORSEO AMAZON HISTORICAL ACCEPTANCE INSPECT\n"); console.log("Artifact:                 ", artifact.acceptanceArtifactId); console.log("Atlas product:            ", artifact.atlasProductId); console.log("Source:                   ", artifact.sourceId); console.log("Authorization:            ", artifact.authorizationState); console.log("Execution eligible:       ", artifact.executionEligible ? "YES" : "NO"); console.log("Maximum paid tasks:       ", artifact.costEnvelope.maximumTasks); console.log("Maximum provider spend:   $" + artifact.costEnvelope.maximumProviderSpendUsd.toFixed(4)); console.log("Next permitted action:    OPERATOR_REVIEW"); console.log("Provider calls:           0"); console.log("Actual spend:             $0.000");
+

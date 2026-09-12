@@ -1,14 +1,14 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-09-11
+Last updated:                  2026-09-12
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        a2185ef1352b99cd01fce29ded77407bf6e72fba (`feat(mercury): add DataForSEO Amazon source foundation`)
+Current committed HEAD:        7bc032de310125b7315f0ef143c7973764c7d94e (`feat(mercury): certify DataForSEO Amazon historical admission`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 70 ahead at MERCURY-HISTORY-047 preflight
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 72 ahead at MERCURY-HISTORY-049 preflight
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -150,6 +150,10 @@ MERCURY-HISTORY-047 fixture-certifies the bounded DataForSEO Amazon Products, AS
 
 MERCURY-HISTORY-048 fixture-certifies the source-typed Amazon Sellers retention and historical-admission composition through the existing DF003 evidence repository, E2G/E2H policy, HISTORY-018 comparability, E2J immutable history, and historical portfolio. Strong governed ASIN and exact immutable task/result/rights lineage are mandatory. Amazon marketplace context never proves Amazon seller identity: unresolved and third-party sellers retain as `DISCOVERED`, while Amazon-as-seller succeeds only through the existing append-only merchant review and Atlas `RETAILER-0001` validation. Null condition/delivery remain null, zero delivery remains zero, and conditional/bundle/unknown comparability remains fail closed. No live CLI, provider call, paid task, production evidence/history write, Current Display, canonical/publication, Cheapest, Pick, or affiliate authority was created; spend remains `$0.000`. The next safe action is design and operator review of one bounded live Amazon acceptance envelope, not execution.
 
+MERCURY-HISTORY-049 fixture-certifies an immutable PREPARE-only, single-product `DATAFORSEO_AMAZON` acceptance artifact selected deterministically from active/ready Atlas products with reviewed Amazon destinations and no Amazon-source history. The current deterministic candidate is `ram_corsair_cmh32gx5m2b6000c38`; the artifact binds Atlas identity, destination corroboration, rights, H046/H047 policies, explicit assessment time, current durable UTC-day spend, and the three-task/`$0.0045` maximum with zero retries. Ambiguous Products identity stops because ASIN enrichment is not yet a certified escalation; strong unique ASIN permits only later separate Sellers authorization. PREPARE and INSPECT are zero-cost and create no paid authorization, provider task, evidence, history, Current Display, or downstream authority. The next safe action is operator execution of PREPARE and INSPECT only, followed by review and stop; paid execution remains unauthorized.
+
+MERCURY-HISTORY-050 fixture-certifies the one-action-at-a-time execution boundary over H049 artifact `mer_amzaccept_fe85419f5ef4b52dc9997843`. Products and Sellers each require separate expiring, operator-attributed, single-use authorization and exact execution confirmation; task, spend, consumption, retrieval, immutable result, ASIN assessment, retention, and history remain with existing owners. `AMAZON_ASIN` escalation remains unavailable. The practical path is at most two tasks / `$0.003`, although the immutable H049 envelope remains three tasks / `$0.0045`. Current durable UTC-day spend is `$0.002` with `$0.008` remaining at readiness inspection. The real artifact remains `NOT_AUTHORIZED`; the next safe action is its zero-cost Products authorization only, followed by operator review before any paid execution.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
@@ -164,13 +168,13 @@ MERCURY-HISTORY-048 fixture-certifies the source-typed Amazon Sellers retention 
 
 ## Current test baseline
 
-The current runners declare **275 subsystem test files**:
+The current runners declare **277 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 222 |
+| Mercury | 224 |
 | Beacon | 7 |
 | Gateway | 17 |
 

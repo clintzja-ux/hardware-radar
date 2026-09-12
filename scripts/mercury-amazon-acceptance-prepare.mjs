@@ -1,0 +1,14 @@
+import { AMAZON_ACCEPTANCE_CONFIRMATION, prepareAmazonHistoricalAcceptance, selectAmazonHistoricalAcceptanceProduct, loadRetailerDestinationSource } from "../packages/mercury/index.js";
+import { createAmazonAcceptanceRuntime, parseArgs } from "./mercury-amazon-acceptance-runtime.mjs";
+const args = parseArgs(), asOf = args.get("--as-of"), confirmation = args.get("--confirm");
+if (typeof asOf !== "string" || !Number.isFinite(Date.parse(asOf))) throw new Error("EXPLICIT_AS_OF_REQUIRED");
+if (confirmation !== AMAZON_ACCEPTANCE_CONFIRMATION) throw new Error("AMAZON_ACCEPTANCE_PREPARE_CONFIRMATION_REQUIRED");
+const runtime = createAmazonAcceptanceRuntime(args), products = await runtime.productRepository.getAll(), retailers = await runtime.retailerRepository.getAll();
+const source = await loadRetailerDestinationSource({ sourcePath: runtime.location("--destination-state", "packages/mercury/destinations/production-destinations.json"), products, retailers });
+const selection = selectAmazonHistoricalAcceptanceProduct({ atlasProducts: products, destinations: source.records, historicalObservations: await runtime.historicalRepository.getAll() });
+const currentSpend = await runtime.readGovernedSpendForUtcDay({ executionRepository: runtime.executionRepository, evaluationTime: asOf });
+const artifact = prepareAmazonHistoricalAcceptance({ asOf, selection, rightsProfile: runtime.rightsRegistry.require("DATAFORSEO_AMAZON"), currentUtcDaySpendUsd: currentSpend });
+const saved = await runtime.artifactRepository.record(artifact);
+console.log("DATAFORSEO AMAZON HISTORICAL ACCEPTANCE PREPARE\n");
+console.log("Artifact:                 ", artifact.acceptanceArtifactId); console.log("Status:                   ", saved.status); console.log("Atlas product:            ", artifact.atlasProductId); console.log("Source:                   ", artifact.sourceId); console.log("Current UTC-day spend:    $" + artifact.costEnvelope.currentUtcDaySpendUsd.toFixed(4)); console.log("Remaining UTC-day capacity:$" + artifact.costEnvelope.remainingUtcDayCapacityUsd.toFixed(4)); console.log("Maximum paid tasks:       ", artifact.costEnvelope.maximumTasks); console.log("Maximum provider spend:   $" + artifact.costEnvelope.maximumProviderSpendUsd.toFixed(4)); console.log("Execution eligible:       ", artifact.executionEligible ? "YES" : "NO"); console.log("Execution authorized:     NO"); console.log("Provider calls:           0"); console.log("Actual spend:             $0.000");
+
