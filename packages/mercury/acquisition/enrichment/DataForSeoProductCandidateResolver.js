@@ -3,6 +3,11 @@ import {normalizeManufacturerKey,normalizeManufacturerPartNumber} from '../../re
 function norm(v){return normalizeManufacturerKey(String(v??''))?.toUpperCase()??'';}
 function titleText(item){return String(item?.title??'').toUpperCase();}
 function has(re,s){return re.test(s);}
+function escapeRegExp(value){return value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function hasExactMpnToken(title,mpn){
+  if(!mpn) return false;
+  return new RegExp(`(?<![A-Z0-9-])${escapeRegExp(mpn)}(?![A-Z0-9-])`).test(title);
+}
 function signal(name,matched,weight,detail){return Object.freeze({name,matched,weight,detail});}
 function normalizeColor(v){
   const n=norm(v);
@@ -31,7 +36,7 @@ export function scoreDataForSeoProductCandidate({atlasProduct,item}={}){
   const performance=data.performance??{}, physical=data.physical??{};
   const mpn=normalizeManufacturerPartNumber(id.manufacturerPartNumber), brand=norm(id.brand), memory=norm(data.classification?.memoryType);
   const capacity=Number(data.capacity?.capacityGb), modules=Number(data.capacity?.moduleCount), perModule=Number(data.capacity?.capacityPerModuleGb), speed=Number(performance.dataRateMtps), cl=Number(performance.casLatency);
-  const exactMpn=mpn && title.includes(mpn);
+  const exactMpn=hasExactMpnToken(title,mpn);
   const otherCorsairMpn=(title.match(/\bCM[A-Z0-9]{8,}\b/g)??[]).map(normalizeManufacturerPartNumber).find(x=>x!==mpn);
   const wrongGeneration=memory==='DDR5'&&has(/\bDDR4\b/,title) || memory==='DDR4'&&has(/\bDDR5\b/,title);
   const wrongCapacity=Number.isFinite(capacity)&&has(/\b(?:8|16|32|48|64|96|128)\s*GB\b/,title)&&!new RegExp(`\\b${capacity}\\s*GB\\b`).test(title);

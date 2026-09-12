@@ -7,7 +7,7 @@ export const DEFAULT_ACQUISITION_ROUTES=Object.freeze({READY_FOR_SELLERS:"READY_
 export function classifyDefaultAcquisitionRoute({resolution,directSellersLineageCertified=false}={}){
   if(!resolution||typeof resolution!=="object")throw new TypeError("PRODUCTS_RESOLUTION_REQUIRED");
   const candidates=Array.isArray(resolution.candidates)?resolution.candidates:[],recommended=resolution.recommendedCandidate??null;
-  const exactCandidates=candidates.filter(candidate=>candidate?.exactMpnMatch===true&&hasIdentity(candidate.item));
+  const exactCandidates=candidates.filter(candidate=>candidate?.exactMpnMatch===true&&candidate?.outcome!=="REJECTED"&&(!Array.isArray(candidate?.contradictions)||candidate.contradictions.length===0)&&hasIdentity(candidate.item));
   const relevant=recommended?[recommended]:exactCandidates.length?exactCandidates:candidates.slice(0,1);
   const contradictions=[...new Set(relevant.flatMap(candidate=>Array.isArray(candidate?.contradictions)?candidate.contradictions:[]))];
   let materialIdentity="AMBIGUOUS",desiredRoute=DEFAULT_ACQUISITION_ROUTES.UNRESOLVED,reasons=[];

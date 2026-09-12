@@ -48,7 +48,7 @@ function summarize(action, result) {
     nextPermittedAction: result.nextPermittedAction, originatingRightsDigest: result.sourceRightsProfileDigest,
     currentRightsStatus: result.rightsState, continuationState: "RESOLVED_BY_ACTION_BOUNDARY",
     prepareState: result.prepareReference ? "PREPARE_BOUND" : "NOT_BOUND", providerTaskState: result.providerTaskId ? "TASK_BOUND" : "NONE",
-    resultState: result.cohortState === "RESULT_AVAILABLE" ? "AVAILABLE" : "NONE_OR_PENDING", terminalOutcome: result.lastTerminalOutcome,
+    resultState: result.resultState ?? (result.cohortState === "RESULT_AVAILABLE" ? "AVAILABLE" : "NONE"), terminalOutcome: result.lastTerminalOutcome,
     tasksUsed: result.tasksUsed, taskCap: result.taskCap, cohortSpendUsd: result.spendUsedUsd, cohortSpendCapUsd: result.spendCapUsd,
     utcDaySpendUsd: result.currentUtcDaySpendUsd, downstreamAuthority: "NONE", providerTasksCreated: 0, actualSpendUsd: 0
   };

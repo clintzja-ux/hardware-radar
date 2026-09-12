@@ -134,6 +134,7 @@ const testModules = [
     "./ProductEnrichmentRealEvidencePrepare.test.mjs",
     "./ProductEnrichmentCliNodeCompatibility.test.mjs",
     "./ProductCandidateResolverEvidenceEnhancement.test.mjs",
+    "./ExactMpnBoundaryCorrection.test.mjs",
     "./ProviderDocumentEquivalenceExperiment.test.mjs",
     "./EquivalentProviderIdentitySelectionExperiment.test.mjs",
     "./ProviderIdentityGovernance.test.mjs",
