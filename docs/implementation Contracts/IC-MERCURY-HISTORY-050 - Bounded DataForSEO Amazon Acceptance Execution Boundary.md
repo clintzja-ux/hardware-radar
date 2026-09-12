@@ -22,7 +22,6 @@ The practical certified first path is Products plus Sellers: two tasks and `$0.0
 
 ## Replay, races, isolation, and scalability
 
-Exact authorization persistence replays idempotently and conflicts fail closed. Existing owners prevent duplicate execution and immutable-result conflicts; retained evidence and E2J retain their existing replay behavior. Rights or spend changes block before transport. Google Shopping and Amazon Creators API tasks/results cannot satisfy `DATAFORSEO_AMAZON` lineage.
+Exact authorization persistence replays idempotently and conflicts fail closed. One unexpired authorization may exist per artifact/operation. An expired authorization may receive one new immutable successor only when the shared consumption ledger and provider-task ledger prove every predecessor unused; consumed or task-producing predecessors permanently block replacement. The successor links to its immediate predecessor, rebinds current spend and current source rights, and leaves every earlier authorization unchanged. Atomic repository persistence prevents concurrent successor requests from creating two active authorizations. Existing owners prevent duplicate execution and immutable-result conflicts; retained evidence and E2J retain their existing replay behavior. Rights or spend changes block before transport. Google Shopping and Amazon Creators API tasks/results cannot satisfy `DATAFORSEO_AMAZON` lineage.
 
 No Current Display, Current Price, Cheapest, Pick, publication, affiliate, or public authority exists. Runtime selection is artifact-driven with no hard-coded product or ASIN. The eight thin action commands expose no run-all, auto-next, polling, or background progression.
-

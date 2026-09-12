@@ -27,4 +27,3 @@ The exposed surface is intentionally limited to zero-cost `mercury:amazon:accept
 The artifact repository is immutable and append-only. Existing H047 controls own authorization consumption, durable provider task recording, immutable result replay, and spend; existing retained-evidence and E2J owners provide duplicate/conflict protection. Amazon and Google source lineage cannot satisfy one another. No Current Display, Current Price, Cheapest, Pick, publication, affiliate-routing, or public authority is present.
 
 Certification applies to the supported Amazon semantic class, not an ASIN, seller, or Atlas product. Products enter through repository data and the same selection rule. H049 does not reuse the Google-specific historical-bootstrap checkpoint because doing so would misstate source lineage; it adds only a bounded acceptance preparation artifact, not a parallel acquisition or history subsystem.
-

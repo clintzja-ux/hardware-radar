@@ -14,4 +14,3 @@ export function createAmazonAcceptanceRuntime(args) {
   const artifactRepository = new FileAmazonHistoricalAcceptanceRepository({ statePath: location("--acceptance-state", ".forge-review/mercury/amazon-acceptance-artifacts.json") });
   return { location, readJson, productRepository, retailerRepository, historicalRepository, executionRepository, artifactRepository, rightsRegistry: defaultSourceRightsRegistry, readGovernedSpendForUtcDay };
 }
-
