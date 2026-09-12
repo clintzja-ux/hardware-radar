@@ -188,6 +188,7 @@ const testModules = [
     ,"./HistoricalBootstrapProductsReviewBinding.test.mjs"
     ,"./HistoricalBootstrapRightsPropagation.test.mjs"
     ,"./HistoricalBootstrapProductionLifecycle.test.mjs"
+    ,"./HistoricalBootstrapImmutableProposalHandoff.test.mjs"
     ,"./ProductionDataForSeoRetrievalOwners.test.mjs"
     ,"./ProductionHistoricalBootstrapLocalOwners.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"

@@ -9,8 +9,9 @@ const unresolved=await products.resolve({atlasProduct,providerTaskId:"products-2
 const conflict=await products.resolve({atlasProduct,providerTaskId:"products-3",providerResult:{result:[{items:[{title:"Corsair 64GB DDR4 CMK000000000000",data_docid:"doc-2"}]}]}});assert.equal(conflict.status,"BLOCKED_IDENTITY");assert.equal(conflict.routing.materialIdentity,"CONTRADICTED");
 
 const info=createProductInfoIdentityProgressionOwner();
-assert.equal((await info.resolve({retrievalOutcome:{status:"RESULT_RECEIVED",sellersReadiness:"READY_FOR_SELLERS",result:{resultId:"r1"}}})).status,"STRONG_UNIQUE");
-assert.equal((await info.resolve({retrievalOutcome:{status:"DUPLICATE",sellersReadiness:"READY_FOR_SELLERS",result:{resultId:"r1"}}})).status,"STRONG_UNIQUE");
+const sellersProposal={proposalId:"s1",operation:"SELLERS",atlasProductId:"ram_fixture"};
+assert.equal((await info.resolve({retrievalOutcome:{status:"RESULT_RECEIVED",sellersReadiness:"READY_FOR_SELLERS",result:{resultId:"r1"},sellersProposal}})).status,"STRONG_UNIQUE");
+assert.equal((await info.resolve({retrievalOutcome:{status:"DUPLICATE",sellersReadiness:"READY_FOR_SELLERS",result:{resultId:"r1"},sellersProposal}})).status,"STRONG_UNIQUE");
 assert.equal((await info.resolve({retrievalOutcome:{status:"PRODUCT_INFO_REVIEW_REQUIRED",sellersReadiness:"NOT_ESTABLISHED"}})).status,"BLOCKED_IDENTITY");
 await assert.rejects(()=>info.resolve({}),/OUTCOME_REQUIRED/);
 

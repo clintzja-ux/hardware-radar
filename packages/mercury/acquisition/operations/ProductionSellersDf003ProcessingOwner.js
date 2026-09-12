@@ -18,10 +18,11 @@ export function createProductionSellersDf003ProcessingOwner({ stateRoot = path.r
   const canonicalEvidencePath = evidencePath ? path.resolve(evidencePath) : path.join(stateRoot, "dataforseo-market-evidence.json");
   return Object.freeze({
     evidencePath: canonicalEvidencePath,
-    async process({ sellersTaskId, productInfoTaskId = null, sellersResult, productInfoResult = null } = {}) {
-      const sellersAuthorization = await readJson(path.join(stateRoot, "sellers-authorization-request.json"));
-      const prepared = await readJson(path.join(stateRoot, "sellers-enrichment-proposal.json"));
-      const sellersProposal = prepared.proposal ?? prepared;
+    async process({ sellersTaskId, productInfoTaskId = null, sellersResult, productInfoResult = null, trustedSellersAuthorization = null, trustedSellersProposal = null } = {}) {
+      if ((trustedSellersAuthorization == null) !== (trustedSellersProposal == null)) throw new Error("SELLERS_TRUSTED_LINEAGE_INCOMPLETE");
+      const sellersAuthorization = trustedSellersAuthorization ?? await readJson(path.join(stateRoot, "sellers-authorization-request.json"));
+      const prepared = trustedSellersProposal == null ? await readJson(path.join(stateRoot, "sellers-enrichment-proposal.json")) : null;
+      const sellersProposal = trustedSellersProposal ?? prepared.proposal ?? prepared;
       const direct = sellersProposal.identityLineageType === "DIRECT_PRODUCTS_STRONG_IDENTITY";
       if (typeof sellersTaskId !== "string") throw new Error("SELLERS_TASK_ID_REQUIRED");
       if (!direct && typeof productInfoTaskId !== "string") throw new Error("PRODUCT_INFO_TASK_ID_REQUIRED");

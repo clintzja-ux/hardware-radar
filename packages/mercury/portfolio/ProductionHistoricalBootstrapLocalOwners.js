@@ -42,7 +42,8 @@ export function createProductInfoIdentityProgressionOwner() {
       const status = retrievalOutcome.sellersReadiness === "READY_FOR_SELLERS" && ["RESULT_RECEIVED", "DUPLICATE"].includes(retrievalOutcome.status)
         ? "STRONG_UNIQUE"
         : "BLOCKED_IDENTITY";
-      return freeze({ status, resultId: retrievalOutcome.result?.resultId ?? null, sellersReadiness: retrievalOutcome.sellersReadiness ?? "NOT_ESTABLISHED", paidTaskCreated: false, actualSpendUsd: 0 });
+      if (status === "STRONG_UNIQUE" && retrievalOutcome.sellersProposal?.operation !== "SELLERS") throw new Error("PRODUCT_INFO_SELLERS_PROPOSAL_REQUIRED");
+      return freeze({ status, resultId: retrievalOutcome.result?.resultId ?? null, sellersReadiness: retrievalOutcome.sellersReadiness ?? "NOT_ESTABLISHED", nextProposal: status === "STRONG_UNIQUE" ? retrievalOutcome.sellersProposal : null, paidTaskCreated: false, actualSpendUsd: 0 });
     }
   });
 }
