@@ -57,6 +57,15 @@ const profiles = Object.freeze({
     presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
     status: "WRITTEN_PROVIDER_AUTHORIZATION_2026_08"
   }),
+  DATAFORSEO_AMAZON: Object.freeze({
+    sourceId: "DATAFORSEO_AMAZON", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
+    acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },
+    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
+    retention: { storageClass: "DURABLE", contentTtlMs: null, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.ALLOWED, offerCondition: RIGHTS_STATES.ALLOWED, historicalAnalytics: RIGHTS_STATES.ALLOWED },
+    presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
+    status: "DATAFORSEO_MARKET_INTELLIGENCE_USE_AUTHORIZED_2026_08"
+  }),
   BEST_BUY_PRODUCTS_API: Object.freeze({
     sourceId: "BEST_BUY_PRODUCTS_API", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
     acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },
