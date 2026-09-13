@@ -181,6 +181,7 @@ const testModules = [
     "./HistoricalFactReplayExecution.test.mjs",
     "./RepeatObservationBoundary.test.mjs",
     "./RepeatObservationPersistence.test.mjs",
+    "./RepeatObservationScale.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",
