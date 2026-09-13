@@ -329,6 +329,8 @@ Actual spend:                             $0.000
 
 ## Current blockers and operator decisions
 
+- The generic governed Mercury repeat-observation primitive and its additive durable acquisition-persistence extension are fixture-certified. The existing DataForSEO prepared-artifact repository now preserves immutable Amazon/Google repeat preparations and append-only exact-bound authorizations while the existing live-consumption/task owners retain single-use execution authority. It creates no production command or orchestration authority; no production preparation, authorization, task, retrieval, evidence, or history was created. The next safe action is the previously blocked production-composition/operator-command increment before preparing the seven-day longitudinal cohort.
+
 - Wait for the submitted Cloudflare Community clarification request to receive moderator approval and a response. The pending post itself establishes no permission fact or authorization.
 - Obtain sufficiently authoritative confirmation of the exact API-token permission-group name and public ID accepted by `POST /zones/{zone_id}/email/sending/subdomains`, whether it can be restricted to the specific zone, and whether automatic onboarding requires separate DNS permission; current documentation, schema-derived metadata, permission listings, generated SDK material, and the pending community submission do not establish the mapping.
 - Keep production DF005-X PREPARE and EXECUTE unavailable until that permission is adopted into canonical permission evidence.

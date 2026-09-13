@@ -98,3 +98,4 @@ export * from "./curated-offer/index.js";
 export * from "./condition-evidence/index.js";
 export * from "./destinations/index.js";
 export * from "./amazon-dataforseo/index.js";
+export * from "./repeat-observation/index.js";
