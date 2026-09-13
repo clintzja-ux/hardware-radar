@@ -3,12 +3,12 @@
 ```text
 Last updated:                  2026-09-12
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        2b0972e3e9cc880a83596a10de6674948b2aec51 (`fix(mercury): correct Amazon ASIN exact-MPN assessment`)
+Current committed HEAD:        e26fd13a3875110772765b84ff41b5517a187745 (`feat(mercury): add append-only Amazon Products reassessment`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 78 ahead at MERCURY-HISTORY-052 validation
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 79 ahead at MERCURY-HISTORY-053 validation
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -156,7 +156,9 @@ MERCURY-HISTORY-050/H050A/H050B/H050C/H050D/H050E/H050F fixture-certifies the on
 
 MERCURY-HISTORY-051 identifies that result as an H046 implementation bug: the reducer allowed non-exact-MPN Amazon search rows to create target variant conflicts. Corrected policy `MERCURY-HISTORY-051-1.0` evaluates bundle, condition, contradictions, compatibility, and multiplicity within exact canonical-MPN candidates. Offline replay derives assessment `mer_amzasin_63ee7d6cd20944771fc87da6`, `STRONG_UNIQUE_ASIN`, with ASIN `B0CQQVNCB6` from one clean exact-MPN candidate among 26 results; rank, price, destination, retailer, and unrelated rows have no selection authority. Multiple clean exact ASINs and materially contradictory exact-MPN variants remain fail closed. Original outcome and assessment remain immutable.
 
-MERCURY-HISTORY-052 fixture-certifies an append-only, zero-cost Products identity reassessment in the existing Amazon acceptance action repository. It derives artifact, original outcome, Products task, immutable result/digest, product, source, operation, policy, and ASIN from durable lineage; the operator supplies only artifact ID, attribution, reason, and exact confirmation. One validated reassessment becomes the effective local Products state; competing records fail closed. Existing Sellers authority/task or dependent history blocks reassessment. A strong reassessment permits only future separate Sellers authorization review and creates no Sellers authority, provider work, history, Current Display, or public authority. Production readiness is `REAL_AMAZON_PRODUCTS_REASSESSMENT_READY`: one original outcome, zero reassessments, zero Sellers authorizations/tasks, and zero dependent history. The command was not run during certification. The next safe action is operator review and explicit execution of the zero-cost H052 reassessment command, then stop and inspect its record before considering Sellers authorization.
+MERCURY-HISTORY-052 fixture-certifies an append-only, zero-cost Products identity reassessment in the existing Amazon acceptance action repository. It derives artifact, original outcome, Products task, immutable result/digest, product, source, operation, policy, and ASIN from durable lineage; the operator supplies only artifact ID, attribution, reason, and exact confirmation. One validated reassessment becomes the effective local Products state; competing records fail closed. Existing Sellers authority/task or dependent history blocks reassessment. A strong reassessment permits only future separate Sellers authorization review and creates no Sellers authority, provider work, history, Current Display, or public authority.
+
+Production H052 reassessment `mer_amzreassess_3c05017ff0b90e7a4e769745` is now the validated effective Products identity for artifact `mer_amzaccept_fe85419f5ef4b52dc9997843`. It preserves original blocked outcome `mer_amzoutcome_5c0dfb2cdd6e7618bdab9374` unchanged while projecting `STRONG_UNIQUE_ASIN`, governed ASIN `B0CQQVNCB6`, and `OPERATOR_REVIEW_FOR_SELLERS`. MERCURY-HISTORY-053 fixture-certifies that the existing H050 Sellers authorization path consumes this effective reassessment rather than the obsolete original outcome, derives the ASIN and all lineage from durable state, and preserves current rights/spend and duplicate-authority/task guards. No runtime change was required. No real Sellers authorization or task exists yet; the next safe action is operator review and explicit execution of the zero-cost Sellers authorization command, followed by inspection and stop before any paid execution.
 
 ## Current platform status
 
@@ -172,13 +174,13 @@ MERCURY-HISTORY-052 fixture-certifies an append-only, zero-cost Products identit
 
 ## Current test baseline
 
-The current runners declare **285 subsystem test files**:
+The current runners declare **286 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 232 |
+| Mercury | 233 |
 | Beacon | 7 |
 | Gateway | 17 |
 
