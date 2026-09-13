@@ -40,4 +40,12 @@ Preparations are indexed by preparation ID, paid-action intent, acquisition cycl
 
 Legacy `FileDataForSeoPrepareArtifactRepository` JSON remains unchanged and readable as audit/history. Its experimental repeat collections were removed rather than retained as a second operational source of truth. There is no production migration or indefinite dual write. A future database adapter can implement the same repository methods without changing `RepeatObservationService` or downstream identity, task, retention, and H058 semantics.
 
+## Production composition
+
+`createProductionRepeatObservationService` is the single production composition owner. Its canonical operational database is `.forge-review/mercury/repeat-observations.sqlite`, resolved relative to the runtime working directory and never placed in source or public assets. Opening the repository initializes schema version `1`; WAL and full synchronous durability apply. Operators must include this file and its SQLite WAL state in coordinated local backups while Mercury is stopped.
+
+Amazon identity is derived from the existing effective Amazon acceptance outcome and permits only `STRONG_UNIQUE_ASIN` or `STRONG_OPERATOR_CONFIRMED_ASIN`; the caller cannot supply an ASIN. Google identity is derived from the latest governed Google historical observation and its exactly bound retained evidence; missing history/evidence or ambiguous lineage returns discovery-required/fail-closed rather than launching PRODUCTS. Execution reloads and compares the current governed identity, rights profile, and durable UTC-day spend before delegating exactly one `AMAZON_SELLERS` or `SELLERS` task to the existing production task owner.
+
+The thin commands are `mercury:repeat-observation:prepare`, `mercury:repeat-observation:authorize`, and `mercury:repeat-observation:execute`. PREPARE and AUTHORIZE are local and zero-spend. EXECUTE is explicitly confirmed and is the only command capable of posting one paid task. The reusable service also exposes `retrieve`, `processRetain`, and `assessAdmitFact`; these route by governed IDs to existing owners and do not grant downstream authority. Repeat execution authority never implies retention, historical admission, canonical retailer identity, Current Price, Current Display, Cheapest, Pick, recommendation, publication, or affiliate authority.
+
 Production command composition remains a separate increment. Persistence certification uses temporary fixture databases and creates no production preparation or authorization.

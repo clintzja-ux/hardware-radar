@@ -182,6 +182,7 @@ const testModules = [
     "./RepeatObservationBoundary.test.mjs",
     "./RepeatObservationPersistence.test.mjs",
     "./RepeatObservationScale.test.mjs",
+    "./RepeatObservationProductionComposition.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",
