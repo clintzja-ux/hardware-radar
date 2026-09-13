@@ -3,12 +3,12 @@
 ```text
 Last updated:                  2026-09-12
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        e26fd13a3875110772765b84ff41b5517a187745 (`feat(mercury): add append-only Amazon Products reassessment`)
+Current committed HEAD:        e466df198537cc358ff11969180a7f487a732d16 (`test(mercury): certify Amazon Sellers readiness after reassessment`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 79 ahead at MERCURY-HISTORY-053 validation
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 80 ahead at MERCURY-HISTORY-054 validation
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -160,6 +160,8 @@ MERCURY-HISTORY-052 fixture-certifies an append-only, zero-cost Products identit
 
 Production H052 reassessment `mer_amzreassess_3c05017ff0b90e7a4e769745` is now the validated effective Products identity for artifact `mer_amzaccept_fe85419f5ef4b52dc9997843`. It preserves original blocked outcome `mer_amzoutcome_5c0dfb2cdd6e7618bdab9374` unchanged while projecting `STRONG_UNIQUE_ASIN`, governed ASIN `B0CQQVNCB6`, and `OPERATOR_REVIEW_FOR_SELLERS`. MERCURY-HISTORY-053 fixture-certifies that the existing H050 Sellers authorization path consumes this effective reassessment rather than the obsolete original outcome, derives the ASIN and all lineage from durable state, and preserves current rights/spend and duplicate-authority/task guards. No runtime change was required. No real Sellers authorization or task exists yet; the next safe action is operator review and explicit execution of the zero-cost Sellers authorization command, followed by inspection and stop before any paid execution.
 
+The separately authorized Sellers action subsequently created exactly one paid task `09130317-2304-0309-0000-71d6d0d866ca` and immutable result `mer_providerresult_1f525fa00efc9dcd1bd82d90`, bringing the bounded Amazon acceptance spend to `$0.0030`. MERCURY-HISTORY-054 corrects the live provider-shape adapter exposed by that immutable result: Sellers rows inherit ASIN and provider observation time from the result envelope, price is a structured object, and delivery price is nested under delivery information. The certified projection retains the null main row as incomplete evidence and the Newegg Business/Amazon Japan rows as independent `DISCOVERED` merchant evidence with exact item prices, explicit `New` condition, and null shipping despite “FREE delivery” text. Neither seller has existing merchant-review authority; both priced offers remain `UNKNOWN_COMPARABILITY`, historical-ineligible, and retained-only. No production processing ran during certification. The next safe action is operator review and explicit execution of the zero-cost process-sellers command, followed by inspection of retained-only outcomes; no historical admission or public authority is implied.
+
 ## Current platform status
 
 | Subsystem | Implemented/tested | Configured/production state |
@@ -174,13 +176,13 @@ Production H052 reassessment `mer_amzreassess_3c05017ff0b90e7a4e769745` is now t
 
 ## Current test baseline
 
-The current runners declare **286 subsystem test files**:
+The current runners declare **287 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 233 |
+| Mercury | 234 |
 | Beacon | 7 |
 | Gateway | 17 |
 
