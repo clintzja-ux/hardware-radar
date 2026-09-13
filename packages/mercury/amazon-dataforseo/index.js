@@ -11,3 +11,5 @@ export * from "./AmazonAcceptanceExecution.js";
 export * from "./FileAmazonAcceptanceActionRepository.js";
 export * from "./AmazonAcceptanceExecutionService.js";
 export * from "./AmazonProductsIdentityReassessment.js";
+export * from "./AmazonPilotPreparation.js";
+export * from "./FileAmazonPilotRepository.js";

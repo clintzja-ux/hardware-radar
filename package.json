@@ -114,6 +114,8 @@
     "mercury:amazon:acceptance:process-sellers": "node scripts/mercury-amazon-acceptance-action.mjs --action=process-sellers",
     "mercury:amazon:acceptance:recover-products": "node scripts/mercury-amazon-acceptance-action.mjs --action=recover-products",
     "mercury:amazon:acceptance:recover-sellers": "node scripts/mercury-amazon-acceptance-action.mjs --action=recover-sellers",
+    "mercury:amazon:pilot:prepare": "node scripts/mercury-amazon-pilot-prepare.mjs",
+    "mercury:amazon:pilot:inspect": "node scripts/mercury-amazon-pilot-inspect.mjs",
     "mercury:portfolio:inspect": "node scripts/mercury-acquisition-portfolio-inspect.mjs",
     "mercury:portfolio:checkpoint:inspect": "node scripts/mercury-acquisition-checkpoint-inspect.mjs",
     "mercury:portfolio:checkpoint:next-task:prepare": "node scripts/mercury-acquisition-checkpoint-next-prepare.mjs",
