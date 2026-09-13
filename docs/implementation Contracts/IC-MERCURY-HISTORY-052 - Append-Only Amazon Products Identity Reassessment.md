@@ -27,3 +27,13 @@ Exact replay uses the first record's immutable creation time and returns the sam
 `npm run mercury:amazon:acceptance:reassess-products -- --artifact-id=<ID> --operator=<LABEL> --reason=<REASON> --confirm=REASSESS-DATAFORSEO-AMAZON-PRODUCTS`
 
 The command reports reassessment and lineage IDs, prior/new state, governed ASIN if established, next permitted action, zero provider calls, and `$0.000` spend. It does not print provider payloads.
+
+## Operator-confirmed destination continuation
+
+The narrow `MERCURY-HISTORY-052-1.1` continuation preserves H051 automatic matching unchanged. It applies only when the immutable original Products outcome is `INSUFFICIENT_ASIN_EVIDENCE` and one active, operator-reviewed Amazon US `RetailerDestination` exactly matches the artifact's Atlas product and MPN, Amazon ASIN/URL binding, corroboration, provenance, and current source-rights lineage. A current H051 replay must still reproduce the original insufficient assessment; an automatic strong outcome, changed result, competing destination, retired/superseded destination, or any binding conflict fails closed.
+
+The existing acceptance action repository appends one content-addressed `OPERATOR_VERIFIED_PUBLIC_OBSERVATION` record. It binds the artifact, original outcome/assessment, canonical result/digest, Atlas product/MPN, destination ID/digest/evidence/reviewer, Amazon retailer, ASIN/URL, source-rights digest, confirming operator, reason, decision time, policy versions, and binding digest. Original provider, H051, outcome, destination, and Atlas records remain immutable. Exact replay is idempotent; altered operator/reason or competing H052 identity state conflicts.
+
+The effective projection is `STRONG_OPERATOR_CONFIRMED_ASIN`, exposed to the existing separately authorized Sellers readiness boundary as `STRONG_UNIQUE_ASIN`. It creates no authorization, task, provider call, retained evidence, history, Current Price, Cheapest, Pick, affiliate, or publication authority.
+
+`npm run mercury:amazon:acceptance:confirm-products-identity -- --artifact-id=<ID> --operator=<LABEL> --reason=<REASON> --confirm=CONFIRM-DATAFORSEO-AMAZON-DESTINATION-IDENTITY`

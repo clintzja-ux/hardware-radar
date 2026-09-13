@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import {mkdir,readFile,rename,writeFile} from "node:fs/promises";
 import {dirname,resolve} from "node:path";
 import {createHistoricalBootstrapContinuationAuthorization,projectHistoricalBootstrapCheckpoint} from "./HistoricalBootstrapCheckpoint.js";
+import {DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD} from "../acquisition/planning/AcquisitionBudgetPolicy.js";
 
 const stable=v=>Array.isArray(v)?`[${v.map(stable).join(",")}]`:v&&typeof v==="object"?`{${Object.keys(v).sort().map(k=>`${JSON.stringify(k)}:${stable(v[k])}`).join(",")}}`:JSON.stringify(v);
 const hash=v=>crypto.createHash("sha256").update(stable(v)).digest("hex"),clone=structuredClone,freeze=v=>Object.freeze(clone(v));
@@ -50,7 +51,7 @@ export class HistoricalBootstrapPaidTaskHandoff{
   if(Date.parse(this.now())>=Date.parse(a.expiresAt))throw new Error("HISTORY_023_AUTHORIZATION_EXPIRED");
   const prepared=await this.preparedActionResolver.resolve({checkpoint,continuation:a});
   if(this.rightsRegistry.get(a.sourceId)?.acquisition?.api!=="ALLOWED")throw new Error("BLOCKED_RIGHTS");
-  if(await this.spendResolver(this.now())+.001>.01)throw new Error("BUDGET_BLOCKED");
+  if(await this.spendResolver(this.now())+.001>DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD)throw new Error("BUDGET_BLOCKED");
   const consumed=await this.continuationRepository.consume({authorizationId,paidActionIntentId:a.paidActionIntentId,consumedAt:this.now()});
   if(consumed.status!=="CONSUMED")return freeze({status:"ALREADY_CONSUMED",providerCalls:0});
   const task=await this.taskSpecificOwner.execute({request:prepared.authorizationRequest,authorizedAt:this.now()});

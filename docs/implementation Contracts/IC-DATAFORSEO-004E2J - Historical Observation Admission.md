@@ -1,19 +1,19 @@
 # IC-DATAFORSEO-004E2J — Historical Observation Admission
 
-**Status:** Implemented; B-013A governed operator boundary fixture-certified
+**Status:** Implemented; fact-level semantics superseded by MERCURY-HISTORY-058
 **Increment:** DF004-E2J
 
 ## Boundary
 
-E2J admits one retained DataForSEO evidence record into immutable internal Mercury history only after current E2G/E2H assessment returns `HISTORICAL_ELIGIBLE`. Retention does not imply history, and eligibility does not itself create a historical record.
+E2J remains the sole immutable history-creation owner. Under `DF004-E2H-2.0-FACT`, it may admit a fact-level historical offer even when stronger E2G/E2H merchant authority remains `REVIEW_REQUIRED`. Retention does not imply history, and eligibility does not itself create a historical record.
 
-Admission loads durable identity decisions and audit remediations, canonical Atlas product and retailer state, and the governed acquisition chain. Product must project `VERIFIED`; merchant must project `REGISTERED` through an actual Atlas-backed `RESOLVED` result. Missing, contradictory, malformed, or substituted state fails closed.
+Admission loads durable identity decisions and audit remediations, Atlas state, and the governed acquisition chain. Product must project `VERIFIED`; provenance, rights, timestamp, positive item price, and currency remain mandatory. Merchant resolution and offer comparability are preserved as metadata. They are not fact-level prerequisites. Missing, contradictory, malformed, or substituted factual state fails closed.
 
 For evidence bound to a governed initial acquisition, E2J reuses the certified B-009A/B-010A `GOVERNED_INITIAL_ACQUISITION_BINDING` composition. The immutable retained DF003 identity is not rewritten. Claimed governed lineage cannot fall back to weaker generic resolution; the exact retention audit, proposal, PRODUCTS/PRODUCT_INFO/SELLERS tasks, provider identity, validation digests, active/ready Atlas product, retained evidence, and merchant decision must still agree.
 
 ## Record semantics
 
-Historical observations use deterministic immutable `mer_hist_<16 lowercase hex>` IDs derived from the retained evidence ID. This distinct namespace prevents internal history from colliding with or impersonating canonical `mer_obs_` records. Append-only local persistence also binds the idempotency key `E2J_HISTORICAL_ADMISSION:<retainedEvidenceId>`, ensuring one retained observation enters history at most once.
+Historical observations use deterministic immutable `mer_hist_<16 lowercase hex>` IDs derived from the retained evidence ID. Schema `1.1` additively permits `retailerId=null`, preserves observed merchant identity separately from canonical retailer identity, and records comparability and rights metadata. Existing schema `1.0` records remain valid without migration. Append-only persistence retains the idempotency key `E2J_HISTORICAL_ADMISSION:<retainedEvidenceId>`.
 
 The record stores original `observationTime` separately from `admittedAt`. Provider base price, total price, shipping, tax, currency, condition, availability, seller URL, and seller identity are copied losslessly. Null values remain null, and total price is never recomputed from unknown components.
 
@@ -21,13 +21,14 @@ Provenance binds the record to retained evidence, provider/source, raw payload r
 
 ## Governance
 
-E2J requires:
+Fact-level E2J requires:
 
-- `historicalEligible = true`
+- `factLevelHistoricalEligible = true`
+- verified Atlas product identity and complete factual lineage
 - `canonicalEligible = false`
 - `publicationEligible = false`
 
-Admission neither invokes publication nor creates canonical eligibility. It does not modify Atlas, retained evidence, identity reviews, or audit remediation state.
+Admission neither invokes publication nor creates canonical, Current Price, Cheapest, Pick, recommendation, affiliate, or merchant-registration authority. Retailer-dependent consumers must resolve/filter `retailerId=null` records fail closed. It does not modify Atlas, retained evidence, identity reviews, or audit remediation state.
 
 The governed operator path separates assessment from mutation:
 

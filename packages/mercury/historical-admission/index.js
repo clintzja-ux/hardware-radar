@@ -5,5 +5,6 @@ export * from "./FileHistoricalAdmissionAuthorizationRepository.js";
 export * from "./HistoricalAdmissionOperatorService.js";
 export * from "./HistoricalObservationIntelligence.js";
 export * from "./HistoricalOfferComparabilityAssessment.js";
+export * from "./HistoricalFactAdmissionPolicy.js";
 export * from "./HistoricalRefreshAdmissionGovernance.js";
 export * from "./persistence/FileHistoricalObservationRepository.js";

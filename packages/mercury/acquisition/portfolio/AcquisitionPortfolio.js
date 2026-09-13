@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD } from "../planning/AcquisitionBudgetPolicy.js";
 import { canonicalizeMerchantDomain } from "../../market/dataforseo/DataForSeoMerchantIdentity.js";
 import { canonicalizeRetailerDestinationUrl } from "../../destinations/RetailerDestination.js";
 
@@ -42,7 +43,7 @@ function rightsMaterial(profile) {
 }
 
 export class AcquisitionPortfolioPrepareService {
-  constructor({ atlas, rightsRegistry, providerIdentityResolver, taskCostUsd = 0.001, dailySpendCeilingUsd = 0.01 } = {}) {
+  constructor({ atlas, rightsRegistry, providerIdentityResolver, taskCostUsd = 0.001, dailySpendCeilingUsd = DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD } = {}) {
     if (!atlas?.products?.getAll || !rightsRegistry?.get || !providerIdentityResolver?.resolve) throw new TypeError("ACQUISITION_PORTFOLIO_DEPENDENCY_REQUIRED");
     validateMoney(taskCostUsd, "taskCostUsd", { positive: true }); validateMoney(dailySpendCeilingUsd, "dailySpendCeilingUsd", { positive: true });
     this.atlas = atlas; this.rightsRegistry = rightsRegistry; this.providerIdentityResolver = providerIdentityResolver;

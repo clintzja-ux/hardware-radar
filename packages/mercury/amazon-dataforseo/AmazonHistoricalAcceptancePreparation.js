@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD } from "../acquisition/planning/AcquisitionBudgetPolicy.js";
 
 export const AMAZON_ACCEPTANCE_POLICY_VERSION = "MERCURY-HISTORY-049-1.0";
 export const AMAZON_ACCEPTANCE_CONFIRMATION = "PREPARE-DATAFORSEO-AMAZON-ACCEPTANCE";
@@ -30,7 +31,7 @@ export function selectAmazonHistoricalAcceptanceProduct({ atlasProducts, destina
   const selected = eligible[0]; return freeze({ atlasProduct: structuredClone(selected.product), productFacts: selected.facts, productIdentityDigest: digest(selected.facts), destinationId: selected.destination.destinationId, corroboratingDestinationAsins: selected.corroboratingDestinationAsins, selectionRule: "ACTIVE_READY_WITH_AMAZON_DESTINATION_NO_DATAFORSEO_AMAZON_HISTORY_THEN_IDENTITY_COMPLETENESS_DESC_ATLAS_PRODUCT_ID_ASC", eligibleCount: eligible.length });
 }
 
-export function prepareAmazonHistoricalAcceptance({ asOf, selection, rightsProfile, currentUtcDaySpendUsd, utcDaySpendCeilingUsd = 0.01 } = {}) {
+export function prepareAmazonHistoricalAcceptance({ asOf, selection, rightsProfile, currentUtcDaySpendUsd, utcDaySpendCeilingUsd = DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD } = {}) {
   if (typeof asOf !== "string" || !Number.isFinite(Date.parse(asOf)) || !selection?.productFacts?.atlasProductId || rightsProfile?.sourceId !== "DATAFORSEO_AMAZON" || !Number.isFinite(currentUtcDaySpendUsd) || currentUtcDaySpendUsd < 0) throw new TypeError("AMAZON_ACCEPTANCE_PREPARE_INPUT_INVALID");
   const rightsAllowed = rightsProfile.acquisition?.api === "ALLOWED" && rightsProfile.retention?.historical === "ALLOWED" && rightsProfile.retention?.durableAuditMetadata === "ALLOWED" && rightsProfile.derivation?.historicalAnalytics === "ALLOWED";
   if (!rightsAllowed) throw new Error("AMAZON_ACCEPTANCE_SOURCE_RIGHTS_BLOCKED");

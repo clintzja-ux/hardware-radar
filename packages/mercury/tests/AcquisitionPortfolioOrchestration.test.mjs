@@ -31,9 +31,9 @@ assert.equal(portfolio.eligibleProducts.filter(item => item.providerIdentityStat
 assert.equal(portfolio.eligibleProducts.filter(item => item.initialState === PORTFOLIO_PRODUCT_STATES.READY_FOR_PRODUCTS).length, 9); cases++;
 assert.deepEqual(portfolio.taskEnvelope, { products: 9, productInfo: 9, sellers: 11, maximumProgramTaskCount: 29 }); cases++;
 assert.equal(portfolio.costEnvelope.maximumProgramSpendUsd, .029); cases++;
-assert.equal(portfolio.costEnvelope.utcDaySpendCeilingUsd, .01); cases++;
-assert.equal(portfolio.costEnvelope.maxTasksPerUtcDay, 10); cases++;
-assert.equal(portfolio.costEnvelope.minimumUtcDayCapacityEnvelopes, 3); cases++;
+assert.equal(portfolio.costEnvelope.utcDaySpendCeilingUsd, .025); cases++;
+assert.equal(portfolio.costEnvelope.maxTasksPerUtcDay, 25); cases++;
+assert.equal(portfolio.costEnvelope.minimumUtcDayCapacityEnvelopes, 2); cases++;
 assert.equal(portfolio.automaticPaidRetries, 0); cases++;
 assert.equal(portfolio.providerSpendAuthorized, false); cases++;
 assert.equal(portfolio.networkOperation, "NONE"); cases++;
@@ -74,7 +74,7 @@ assert.equal(projectAcquisitionPortfolio({ portfolio, events: [auth("dup", newPr
 assert.throws(() => projectAcquisitionPortfolio({ portfolio, events: [auth("over-a", newProduct, "PRODUCTS"), event("over-p", newProduct, PORTFOLIO_EVENT_TYPES.PRODUCTS_POSTED, { operation: "PRODUCTS", actualSpendUsd: .002 })] }), /TASK_COST_CEILING_EXCEEDED/); cases++;
 const expired = auth("expired", newProduct, "PRODUCTS"); expired.authorizationExpiresAt = asOf;
 assert.throws(() => projectAcquisitionPortfolio({ portfolio, events: [expired] }), /TASK_AUTHORIZATION_INVALID/); cases++;
-assert(projectAcquisitionPortfolio({ portfolio, currentUtcDaySpendUsd: .01 }).blockers.includes("UTC_DAY_SPEND_CEILING_EXHAUSTED")); cases++;
+assert(projectAcquisitionPortfolio({ portfolio, currentUtcDaySpendUsd: .025 }).blockers.includes("UTC_DAY_SPEND_CEILING_EXHAUSTED")); cases++;
 assert.throws(() => projectAcquisitionPortfolio({ portfolio, events: [event("excluded", portfolio.excludedProducts[0].atlasProductId, PORTFOLIO_EVENT_TYPES.PRODUCTS_POSTED, { operation: "PRODUCTS" })] }), /EXCLUDED_OR_UNKNOWN/); cases++;
 
 assert.equal(await assertAcquisitionPortfolioBindingCurrent({ portfolio, atlas, rightsRegistry: defaultSourceRightsRegistry }), true); cases++;

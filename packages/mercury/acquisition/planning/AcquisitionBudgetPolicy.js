@@ -1,4 +1,5 @@
 export const ACQUISITION_PRIORITIES = Object.freeze({ HIGH: "HIGH", NORMAL: "NORMAL", LOW: "LOW", PAUSED: "PAUSED" });
+export const DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD = 0.025;
 
 function finiteNonNegative(value, field) {
   if (!Number.isFinite(value) || value < 0) throw new TypeError(`${field} must be a finite non-negative number.`);
@@ -13,7 +14,7 @@ export function createAcquisitionBudgetPolicy({
   enabled = false,
   maxPaidTasksPerRun = 1,
   maxSpendPerRunUsd = 0.001,
-  maxSpendPerDayUsd = 0.01,
+  maxSpendPerDayUsd = DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD,
   automaticPaidRetries = 0,
   defaultRefreshCooldownMs = 6 * 60 * 60 * 1000
 } = {}) {

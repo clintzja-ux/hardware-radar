@@ -2,7 +2,7 @@
 
 ## Status
 
-Fixture-certified implementation contract.
+Fixture-certified assessment; its pre-write gate is superseded by MERCURY-HISTORY-058 for fact-level history.
 
 ## Boundary
 
@@ -19,7 +19,7 @@ The policy version is `MERCURY-HISTORY-018-1.0`. The assessment yields exactly o
 - `CONDITIONAL`: the displayed price explicitly depends on a coupon/code, membership/subscription, trade-in, financing, loyalty, quantity, or similar shopper condition.
 - `UNKNOWN_COMPARABILITY`: retained evidence is malformed or lacks descriptive evidence sufficient to classify the offer.
 
-Only `STANDALONE_COMPARABLE` may enter the ordinary standalone historical series. The other outcomes fail before a historical write with, respectively, `HISTORICAL_OFFER_BUNDLE_NOT_COMPARABLE`, `HISTORICAL_OFFER_CONDITIONAL_NOT_COMPARABLE`, or `HISTORICAL_OFFER_COMPARABILITY_UNKNOWN`. Numerical attractiveness never changes that result. An unconditional public sale is not conditional merely because its sale price differs from retail price.
+Only `STANDALONE_COMPARABLE` may participate in ordinary standalone price comparison. MERCURY-HISTORY-058 preserves `BUNDLE`, `CONDITIONAL`, and `UNKNOWN_COMPARABILITY` facts in history with their exact classification and reasons, but grants them no standalone comparison, Current Price, Cheapest, Pick, or publication authority. Numerical attractiveness never changes that result.
 
 ## Price semantics
 
