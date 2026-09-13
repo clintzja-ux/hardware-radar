@@ -14,6 +14,8 @@ Mercury preserves a rigorously validated historical fact before requiring author
 
 Admission requires a verified single Atlas product, no critical product contradiction, complete immutable acquisition/provenance lineage, historical-retention rights, original observation time, positive item price, and valid currency. Condition, shipping, tax, delivery, seller URL, and total price preserve their exact known or null state. No missing value is inferred.
 
+Complete acquisition lineage may be either the existing initial discovery/bootstrap chain or a validated `REUSABLE_IDENTITY_REPEAT_LINEAGE`. Repeat lineage must bind the prior governed source identity and digest, exact product/source/rights, repeat preparation and authorization, acquisition cycle, new provider task, and immutable result. This establishes why direct SELLERS acquisition was authorized without claiming that another PRODUCTS task occurred. It does not weaken factual minimums or promote identity.
+
 Canonical retailer registration and `STANDALONE_COMPARABLE` are not required to preserve the fact. Unresolved merchants retain `retailerId=null`; later governed resolution may supply downstream authority without rewriting the factual observation. Non-standalone observations remain excluded from standalone analytics.
 
 ## Authority separation

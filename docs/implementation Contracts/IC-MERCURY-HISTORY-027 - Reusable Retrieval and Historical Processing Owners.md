@@ -10,6 +10,8 @@
 
 `createProductionSellersDf003ProcessingOwner` owns the local production composition formerly embedded after retrieval in `mercury-sellers-df003-retain.mjs`: task/authorization/execution lineage validation, zero-cost result validation, Atlas product lookup, retailer resolution, governed initial-acquisition projection, and DF003 evidence retention. The existing command uses this owner and retains its output and duplicate/conflict behavior. It does not add comparability or E2J admission because the ordinary command did not previously perform those actions.
 
+The same owner now accepts additive governed reusable-identity lineage for repeat SELLERS acquisition. That form must prove the exact Atlas product, certified Google provider identity and digest, rights digest, repeat preparation/authorization/cycle, paid-action intent, task, and immutable result. Amazon retention applies the equivalent source-specific ASIN validation. Initial-discovery validation remains unchanged; neither path may fabricate PRODUCTS ancestry, and both retain into their existing evidence repositories before H058.
+
 Both factories use the same canonical production task, execution, authorization-consumption, evidence, Atlas, and retailer paths as the prior scripts. Credentials are loaded lazily only when retrieval is invoked. Tests may inject a mock acquisition service; production callers cannot use CLI arguments to inject an intent, product, operation, source, task price, spend ceiling, or alternate repository path beyond previously supported arguments.
 
 ## Remaining certification gap

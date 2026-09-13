@@ -31,7 +31,7 @@ export class SellersResultDf003RetentionService {
   async retain({ sellersResult, productInfoResult, sellersTaskId, productInfoTaskId, observedAt, providerIdentity, candidateId = null, governedAcquisition = null } = {}) {
     requireObject(sellersResult, 'sellersResult');
     const sourceTaskId = requireString(sellersTaskId, 'sellersTaskId');
-    const direct=governedAcquisition?.identityLineageType==='DIRECT_PRODUCTS_STRONG_IDENTITY';
+    const direct=['DIRECT_PRODUCTS_STRONG_IDENTITY','REUSABLE_IDENTITY_REPEAT_LINEAGE'].includes(governedAcquisition?.identityLineageType);
     if(!direct){requireObject(productInfoResult, 'productInfoResult');requireString(productInfoTaskId, 'productInfoTaskId');}
     const timestamp = requireString(observedAt, 'observedAt');
     if (!Number.isFinite(Date.parse(timestamp))) throw new TypeError('observedAt must be an ISO timestamp.');

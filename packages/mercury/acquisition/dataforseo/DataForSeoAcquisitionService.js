@@ -21,10 +21,10 @@ export class DataForSeoAcquisitionService {
     return persistProviderTask(this.ledger,requestKey,{ kind:"PRODUCT_INFO", taskId:task.id, costUsd:Number(task.cost ?? 0), createdStatus:task.status_code, sourceId:DATAFORSEO_SOURCE_ID,...(paidActionIntentId?{paidActionIntentId}:{}) });
   }
   async getProductInfoResult(taskId) { assertRights(); return this.client.getProductInfoResult(taskId); }
-  async createSellersTask({ productId, dataDocId, gid, locationName="United States", languageName="English", acquisitionCycleId=null, paidActionIntentId=null }={}) {
+  async createSellersTask({ productId, dataDocId, gid, locationName="United States", languageName="English", acquisitionCycleId=null, paidActionIntentId=null, atlasProductId=null, preparedObservationId=null, reusableIdentityDigest=null, sourceRightsProfileDigest=null, repeatAuthorizationId=null, parentRunAuthorizationId=null }={}) {
     assertRights(); const payload={productId:productId ?? null,dataDocId:dataDocId ?? null,gid:gid ?? null,locationName,languageName}; const internal=acquisitionCycleId==null?payload:{...payload,acquisitionCycleId};const requestKey=key("SELLERS",paidActionIntentId?{...internal,paidActionIntentId}:internal); this.ledger.requireNew(requestKey);
     const task=await this.client.postSellersTask({productId,dataDocId,gid,locationName,languageName,tag:requestKey});
-    return persistProviderTask(this.ledger,requestKey,{ kind:"SELLERS", taskId:task.id, costUsd:Number(task.cost ?? 0), createdStatus:task.status_code, sourceId:DATAFORSEO_SOURCE_ID,...(paidActionIntentId?{paidActionIntentId}:{}) });
+    return persistProviderTask(this.ledger,requestKey,{ kind:"SELLERS", taskId:task.id, costUsd:Number(task.cost ?? 0), createdStatus:task.status_code, sourceId:DATAFORSEO_SOURCE_ID,...(paidActionIntentId?{paidActionIntentId}:{}),...(acquisitionCycleId?{acquisitionCycleId}:{}),...(atlasProductId?{atlasProductId}:{}),...(preparedObservationId?{preparedObservationId}:{}),...(reusableIdentityDigest?{reusableIdentityDigest}:{}),...(sourceRightsProfileDigest?{sourceRightsProfileDigest}:{}),...(repeatAuthorizationId?{repeatAuthorizationId}:{}),...(parentRunAuthorizationId?{parentRunAuthorizationId}:{}) });
   }
   async getSellersResult(taskId) { assertRights(); return this.client.getSellersResult(taskId); }
 }

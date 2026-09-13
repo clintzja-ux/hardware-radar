@@ -48,4 +48,22 @@ Amazon identity is derived from the existing effective Amazon acceptance outcome
 
 The thin commands are `mercury:repeat-observation:prepare`, `mercury:repeat-observation:authorize`, and `mercury:repeat-observation:execute`. PREPARE and AUTHORIZE are local and zero-spend. EXECUTE is explicitly confirmed and is the only command capable of posting one paid task. The reusable service also exposes `retrieve`, `processRetain`, and `assessAdmitFact`; these route by governed IDs to existing owners and do not grant downstream authority. Repeat execution authority never implies retention, historical admission, canonical retailer identity, Current Price, Current Display, Cheapest, Pick, recommendation, publication, or affiliate authority.
 
+## Bounded repeat runs
+
+`BoundedRepeatObservationRunService` composes those six certified service methods for a data-driven cohort. PREPARE RUN accepts only an explicit UTC cycle and product/source pairs, persists READY and blocked results as one immutable plan, and calculates the exact task/spend envelope. One expiring operator authorization binds the complete plan and may authorize H058 factual admission only for evidence produced by that run. START consumes that scope once and derives exact, non-expandable task authorizations internally; it cannot add products, sources, discovery, retries, or tasks.
+
+Run plans, authorizations, runs, and minimal member progress use indexed tables in the same `repeat-observations.sqlite` database. `WAITING_FOR_PROVIDER` is durable and RESUME retrieves only already-created tasks. Product-local evidence/offer failures become isolated exceptions; rights, binding, budget, repository, authorization, SQLite, or task-owner integrity failures stop the run. The small states are `PREPARED`, `AUTHORIZED`, `RUNNING`, `WAITING_FOR_PROVIDER`, `COMPLETED`, `COMPLETED_WITH_EXCEPTIONS`, and `FAILED`.
+
+The fixture service exposes `prepareRun`, `authorizeRun`, `startRun`, `inspectRun`, and `resumeRun` directly; neither shell spawning nor per-product operator actions belong in the service contract. Production commands are intentionally not exposed.
+
+## Governed reusable-identity lineage
+
+Mercury recognizes two acquisition origins without conflating them. `INITIAL_DISCOVERY_LINEAGE` preserves the existing PRODUCTS/discovery-to-SELLERS chain. `REUSABLE_IDENTITY_REPEAT_LINEAGE` binds a new SELLERS acquisition to an already governed source identity, the exact repeat preparation, paid-action intent, acquisition cycle, task authorization, task/result, rights digest, and optional parent bounded-run authorization. It never fabricates a PRODUCTS task or upgrades identity authority.
+
+Amazon reuse remains limited to strong unique or operator-confirmed ASIN identity. Google reuse remains limited to the certified applicable/verified/reused provider-identity projection. Missing, ambiguous, contradictory, retired, or changed identity and rights fail closed. `DataForSeoTaskLedger` accepts only the explicit historical-bootstrap and repeat-observation intent classes and validates repeat product, source, operation, cycle, preparation, authorization, identity, and rights bindings.
+
+The production result pipeline resolves tasks by indexed paid-action intent, retrieves through existing source owners, persists immutable canonical results in the existing provider-result repository, retains through existing Amazon or Google DF003 boundaries, and presents the validated repeat lineage to H058. Exact replay is duplicate-safe; changed material under the same acquisition identity is a conflict. Source retention and H058 preserve unresolved merchant evidence and grant no downstream authority.
+
+Fixtures certify complete Amazon and Google bounded-run paths, including one provider-pending member that resumes against the same task without new paid work. The lineage model is product-neutral and keyed by indexed IDs/digests; it introduces no new identity, task, evidence, or history repository. Production bounded-run commands remain deliberately unavailable pending a separate command-surface authorization increment.
+
 Production command composition remains a separate increment. Persistence certification uses temporary fixture databases and creates no production preparation or authorization.
