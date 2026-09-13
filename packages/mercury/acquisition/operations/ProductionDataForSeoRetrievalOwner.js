@@ -1,6 +1,7 @@
 import { DataForSeoMerchantApiClient } from "../dataforseo/DataForSeoMerchantApiClient.js";
 import { DataForSeoAcquisitionService } from "../dataforseo/DataForSeoAcquisitionService.js";
 import { DataForSeoAmazonAcquisitionService } from "../../amazon-dataforseo/DataForSeoAmazonAcquisitionService.js";
+import { DataForSeoAmazonMerchantApiClient } from "../../amazon-dataforseo/DataForSeoAmazonMerchantApiClient.js";
 import { loadDataForSeoCredentials } from "../dataforseo/DataForSeoConfig.js";
 
 const METHODS = Object.freeze({ PRODUCTS: "getProductsResult", PRODUCT_INFO: "getProductInfoResult", SELLERS: "getSellersResult", AMAZON_PRODUCTS:"getAmazonProductsResult", AMAZON_ASIN:"getAmazonAsinResult", AMAZON_SELLERS:"getAmazonSellersResult" });
@@ -30,7 +31,8 @@ export function createProductionDataForSeoRetrievalOwner({ operation, credential
       if (typeof providerTaskId !== "string" || !providerTaskId.trim()) throw new Error(`${operation}_TASK_ID_REQUIRED`);
       if (!service) {
         const credentials = credentialLoader();
-        const client=new DataForSeoMerchantApiClient({ login: credentials.login, password: credentials.password, transport: canonicalTransport });
+        const Client=operation.startsWith("AMAZON_")?DataForSeoAmazonMerchantApiClient:DataForSeoMerchantApiClient;
+        const client=new Client({ login: credentials.login, password: credentials.password, transport: canonicalTransport });
         service = operation.startsWith("AMAZON_") ? new DataForSeoAmazonAcquisitionService({client}) : new DataForSeoAcquisitionService({client});
       }
       const result = await service[method](providerTaskId.trim());
