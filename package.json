@@ -111,6 +111,8 @@
     "mercury:amazon:acceptance:execute-sellers": "node --use-system-ca --env-file=.env scripts/mercury-amazon-acceptance-action.mjs --action=execute-sellers",
     "mercury:amazon:acceptance:retrieve-sellers": "node --use-system-ca --env-file=.env scripts/mercury-amazon-acceptance-action.mjs --action=retrieve-sellers",
     "mercury:amazon:acceptance:process-sellers": "node scripts/mercury-amazon-acceptance-action.mjs --action=process-sellers",
+    "mercury:amazon:acceptance:recover-products": "node scripts/mercury-amazon-acceptance-action.mjs --action=recover-products",
+    "mercury:amazon:acceptance:recover-sellers": "node scripts/mercury-amazon-acceptance-action.mjs --action=recover-sellers",
     "mercury:portfolio:inspect": "node scripts/mercury-acquisition-portfolio-inspect.mjs",
     "mercury:portfolio:checkpoint:inspect": "node scripts/mercury-acquisition-checkpoint-inspect.mjs",
     "mercury:portfolio:checkpoint:next-task:prepare": "node scripts/mercury-acquisition-checkpoint-next-prepare.mjs",

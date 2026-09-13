@@ -82,6 +82,7 @@ export * from "./acquisition/scheduling/index.js";
 export * from "./acquisition/operations/index.js";
 
 export * from "./acquisition/authorization/index.js";
+export * from "./acquisition/recovery/PaidActionRecovery.js";
 
 export * from "./acquisition/enrichment/index.js";
 export * from "./acquisition/portfolio/index.js";
