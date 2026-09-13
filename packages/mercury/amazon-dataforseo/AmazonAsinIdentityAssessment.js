@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 
-export const AMAZON_ASIN_IDENTITY_POLICY_VERSION = "MERCURY-HISTORY-046-1.0";
+export const AMAZON_ASIN_IDENTITY_POLICY_VERSION = "MERCURY-HISTORY-051-1.0";
 export const AMAZON_ASIN_IDENTITY_STATES = Object.freeze({ STRONG_UNIQUE_ASIN: "STRONG_UNIQUE_ASIN", MULTIPLE_COMPATIBLE_ASINS: "MULTIPLE_COMPATIBLE_ASINS", ASIN_VARIANT_CONFLICT: "ASIN_VARIANT_CONFLICT", ASIN_NOT_FOUND: "ASIN_NOT_FOUND", BUNDLE_ASIN: "BUNDLE_ASIN", RENEWED_OR_USED_ASIN: "RENEWED_OR_USED_ASIN", INSUFFICIENT_ASIN_EVIDENCE: "INSUFFICIENT_ASIN_EVIDENCE" });
 const stable = value => Array.isArray(value) ? `[${value.map(stable).join(",")}]` : value && typeof value === "object" ? `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}` : JSON.stringify(value);
 const digest = value => crypto.createHash("sha256").update(stable(value)).digest("hex");

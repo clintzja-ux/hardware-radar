@@ -107,6 +107,7 @@
     "mercury:amazon:acceptance:execute-products": "node --use-system-ca --env-file=.env scripts/mercury-amazon-acceptance-action.mjs --action=execute-products",
     "mercury:amazon:acceptance:retrieve-products": "node --use-system-ca --env-file=.env scripts/mercury-amazon-acceptance-action.mjs --action=retrieve-products",
     "mercury:amazon:acceptance:process-products": "node scripts/mercury-amazon-acceptance-action.mjs --action=process-products",
+    "mercury:amazon:acceptance:reassess-products": "node scripts/mercury-amazon-acceptance-action.mjs --action=reassess-products",
     "mercury:amazon:acceptance:authorize-sellers": "node scripts/mercury-amazon-acceptance-action.mjs --action=authorize-sellers",
     "mercury:amazon:acceptance:execute-sellers": "node --use-system-ca --env-file=.env scripts/mercury-amazon-acceptance-action.mjs --action=execute-sellers",
     "mercury:amazon:acceptance:retrieve-sellers": "node --use-system-ca --env-file=.env scripts/mercury-amazon-acceptance-action.mjs --action=retrieve-sellers",

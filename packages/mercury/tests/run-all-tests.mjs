@@ -85,6 +85,7 @@ const testModules = [
     "./DataForSeoRights.test.mjs",
     "./DataForSeoAmazonFoundation.test.mjs",
     "./DataForSeoAmazonAsinVariantForensics.test.mjs",
+    "./DataForSeoAmazonProductsReassessment.test.mjs",
     "./DataForSeoAmazonTransport.test.mjs",
     "./DataForSeoAmazonHistoricalAdmission.test.mjs",
     "./DataForSeoAmazonAcceptancePreparation.test.mjs",

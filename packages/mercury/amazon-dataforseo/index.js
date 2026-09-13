@@ -10,3 +10,4 @@ export * from "./FileAmazonHistoricalAcceptanceRepository.js";
 export * from "./AmazonAcceptanceExecution.js";
 export * from "./FileAmazonAcceptanceActionRepository.js";
 export * from "./AmazonAcceptanceExecutionService.js";
+export * from "./AmazonProductsIdentityReassessment.js";

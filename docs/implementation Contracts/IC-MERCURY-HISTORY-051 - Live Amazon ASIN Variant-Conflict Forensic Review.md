@@ -12,7 +12,7 @@ An Amazon search result is not an Amazon product variant merely because it appea
 
 ## Corrected invariant
 
-The H046 assessment first identifies candidates carrying the exact canonical MPN under its existing token-boundary rule. Bundle, renewed/used, material-contradiction, compatibility, and multiplicity decisions are then evaluated within that exact-MPN candidate set. Therefore:
+The corrected H051 identity policy, `MERCURY-HISTORY-051-1.0`, first identifies candidates carrying the exact canonical MPN under H046's existing token-boundary rule. Bundle, renewed/used, material-contradiction, compatibility, and multiplicity decisions are then evaluated within that exact-MPN candidate set. Therefore:
 
 - one contradiction-free exact-MPN ASIN produces `STRONG_UNIQUE_ASIN`;
 - two distinct contradiction-free exact-MPN ASINs remain `MULTIPLE_COMPATIBLE_ASINS`;

@@ -3,12 +3,12 @@
 ```text
 Last updated:                  2026-09-12
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        4a21072952530ccda92f4c8b9d8495c540cc1333 (`fix(mercury): reconcile consumed Amazon recovery authorization state`)
+Current committed HEAD:        2b0972e3e9cc880a83596a10de6674948b2aec51 (`fix(mercury): correct Amazon ASIN exact-MPN assessment`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 77 ahead at MERCURY-HISTORY-050F preflight
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 78 ahead at MERCURY-HISTORY-052 validation
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -154,7 +154,9 @@ MERCURY-HISTORY-049 fixture-certifies an immutable PREPARE-only, single-product 
 
 MERCURY-HISTORY-050/H050A/H050B/H050C/H050D/H050E/H050F fixture-certifies the one-action-at-a-time execution boundary over H049 artifact `mer_amzaccept_fe85419f5ef4b52dc9997843`. Products and Sellers each require separate expiring, operator-attributed, single-use authorization and exact execution confirmation; task, spend, consumption, retrieval, immutable result, ASIN assessment, retention, and history remain with existing owners. H050C permits append-only recovery only for deterministic `SAFE_NO_PROVIDER_TASK` assessments with zero spend and no task. H050D separates stable logical `paidActionIntentId` from deterministic recovery `planId`; H050E defines active authority as executable rather than merely unexpired. H050B/H050F consistently select `DataForSeoAmazonMerchantApiClient` for Amazon POST and GET operations, while Google remains isolated. Corrected recovery execution created Products task `09130222-2304-0209-0000-b10932d7d33d`, run `acqrun_01d9b873-b7a4-417c-86e0-09c928a587ec`, for `ram_corsair_cmh32gx5m2b6000c38`, with `$0.0015` spend. Retrieval later persisted immutable result `mer_providerresult_cf4506268ee32ecc59c63e95`; initial H046 processing produced immutable outcome `mer_amzoutcome_5c0dfb2cdd6e7618bdab9374` / assessment `mer_amzasin_2ffa3b712fcc8f44f0c4b8fa` as `ASIN_VARIANT_CONFLICT`.
 
-MERCURY-HISTORY-051 identifies that result as an H046 implementation bug: the reducer allowed non-exact-MPN Amazon search rows to create target variant conflicts. The corrected product-generic rule evaluates bundle, condition, contradictions, compatibility, and multiplicity within exact canonical-MPN candidates. Offline replay now derives `STRONG_UNIQUE_ASIN` with ASIN `B0CQQVNCB6` from one clean exact-MPN candidate among 26 results; rank, price, destination, retailer, and unrelated rows have no selection authority. Multiple clean exact ASINs and materially contradictory exact-MPN variants remain fail closed. The original durable outcome and assessment remain unchanged; no reassessment record, Sellers task, downstream authority, or production mutation was created. The next safe action is design/implementation of an append-only reassessment action over the existing immutable result, followed by operator review; do not rerun Products.
+MERCURY-HISTORY-051 identifies that result as an H046 implementation bug: the reducer allowed non-exact-MPN Amazon search rows to create target variant conflicts. Corrected policy `MERCURY-HISTORY-051-1.0` evaluates bundle, condition, contradictions, compatibility, and multiplicity within exact canonical-MPN candidates. Offline replay derives assessment `mer_amzasin_63ee7d6cd20944771fc87da6`, `STRONG_UNIQUE_ASIN`, with ASIN `B0CQQVNCB6` from one clean exact-MPN candidate among 26 results; rank, price, destination, retailer, and unrelated rows have no selection authority. Multiple clean exact ASINs and materially contradictory exact-MPN variants remain fail closed. Original outcome and assessment remain immutable.
+
+MERCURY-HISTORY-052 fixture-certifies an append-only, zero-cost Products identity reassessment in the existing Amazon acceptance action repository. It derives artifact, original outcome, Products task, immutable result/digest, product, source, operation, policy, and ASIN from durable lineage; the operator supplies only artifact ID, attribution, reason, and exact confirmation. One validated reassessment becomes the effective local Products state; competing records fail closed. Existing Sellers authority/task or dependent history blocks reassessment. A strong reassessment permits only future separate Sellers authorization review and creates no Sellers authority, provider work, history, Current Display, or public authority. Production readiness is `REAL_AMAZON_PRODUCTS_REASSESSMENT_READY`: one original outcome, zero reassessments, zero Sellers authorizations/tasks, and zero dependent history. The command was not run during certification. The next safe action is operator review and explicit execution of the zero-cost H052 reassessment command, then stop and inspect its record before considering Sellers authorization.
 
 ## Current platform status
 
@@ -170,13 +172,13 @@ MERCURY-HISTORY-051 identifies that result as an H046 implementation bug: the re
 
 ## Current test baseline
 
-The current runners declare **284 subsystem test files**:
+The current runners declare **285 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 231 |
+| Mercury | 232 |
 | Beacon | 7 |
 | Gateway | 17 |
 
