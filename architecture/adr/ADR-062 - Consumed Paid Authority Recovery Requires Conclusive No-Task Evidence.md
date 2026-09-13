@@ -15,7 +15,9 @@ Mercury classifies recovery from consumed paid authority using all durable autho
 - `PROVIDER_TASK_STATUS_UNKNOWN` covers every ambiguous delivery outcome or nonzero spend without authoritative task lineage and requires reconciliation rather than retry.
 - `PROVIDER_TASK_CREATED` applies when any durable provider task or provider task ID exists; the existing task must be retrieved or reconciled.
 
-Safe recovery is never automatic. Explicit operator review may append a new expiring authorization bound to the consumed predecessor, failed execution, recovery assessment, reviewer, reason, current rights, and current spend. The predecessor remains immutable. The successor retains the same logical `paidActionIntentId`, so the canonical task ledger remains the exactly-once guard for the logical paid action. At most one active authorization may exist for an action, and execution remains a separate confirmed operation.
+Safe recovery is never automatic. Explicit operator review may append a new expiring authorization bound to the consumed predecessor, failed execution, recovery assessment, reviewer, reason, current rights, and current spend. The predecessor remains immutable. The successor retains the same logical `paidActionIntentId`, so the canonical task ledger remains the exactly-once guard for the logical paid action, but receives a new deterministic execution `planId` bound to its recovery lineage. Logical paid-action identity, reviewed execution-attempt identity, and provider-task identity are separate. At most one active authorization may exist for an action, and execution remains a separate confirmed operation.
+
+“Active” means currently executable authority, not merely an unexpired immutable record. A consumed authorization is not active even before its expiry, but its recovery eligibility remains a separate fail-closed assessment. Atomic successor persistence may exclude only consumed IDs proven to belong to the exact action lineage; every unconsumed, unexpired authorization continues to block a parallel successor.
 
 ## Consequences
 
@@ -23,4 +25,5 @@ Safe recovery is never automatic. Explicit operator review may append a new expi
 - Ambiguous transport outcomes fail closed and cannot be blindly retried.
 - Auditors can reconstruct the original authority, consumption, failure, recovery assessment, reviewed successor, and any later execution.
 - The rule is reusable for controlled DataForSEO acquisition where equivalent durable evidence exists; it is not tied to Amazon, a product, an artifact, or a particular client method.
+- Every additional recovery hop requires a new conclusive assessment and explicit review; neither a failed attempt nor a prior safe classification creates standing retry authority.
 - Recovery creates no provider call, spend, evidence, history, Current Display, publication, or public-price authority.

@@ -3,12 +3,12 @@
 ```text
 Last updated:                  2026-09-12
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        1e16f4781dbb242ef571eef987d95d7d57d86285 (`fix(mercury): correct DataForSEO Amazon production client wiring`)
+Current committed HEAD:        d98a42dd558362278509e2356f2f5bc1e8019ed3 (`feat(mercury): certify paid-action recovery governance`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 75 ahead at MERCURY-HISTORY-050C preflight
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 76 ahead at MERCURY-HISTORY-050D preflight
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -152,7 +152,7 @@ MERCURY-HISTORY-048 fixture-certifies the source-typed Amazon Sellers retention 
 
 MERCURY-HISTORY-049 fixture-certifies an immutable PREPARE-only, single-product `DATAFORSEO_AMAZON` acceptance artifact selected deterministically from active/ready Atlas products with reviewed Amazon destinations and no Amazon-source history. The current deterministic candidate is `ram_corsair_cmh32gx5m2b6000c38`; the artifact binds Atlas identity, destination corroboration, rights, H046/H047 policies, explicit assessment time, current durable UTC-day spend, and the three-task/`$0.0045` maximum with zero retries. Ambiguous Products identity stops because ASIN enrichment is not yet a certified escalation; strong unique ASIN permits only later separate Sellers authorization. PREPARE and INSPECT are zero-cost and create no paid authorization, provider task, evidence, history, Current Display, or downstream authority. The next safe action is operator execution of PREPARE and INSPECT only, followed by review and stop; paid execution remains unauthorized.
 
-MERCURY-HISTORY-050/H050A/H050B/H050C fixture-certifies the one-action-at-a-time execution boundary over H049 artifact `mer_amzaccept_fe85419f5ef4b52dc9997843`. Products and Sellers each require separate expiring, operator-attributed, single-use authorization and exact execution confirmation; task, spend, consumption, retrieval, immutable result, ASIN assessment, retention, and history remain with existing owners. Expired-unused authority and reviewed consumed-without-task recovery both create append-only successors; neither revives a predecessor nor retries automatically. H050C permits recovery only for deterministic `SAFE_NO_PROVIDER_TASK` assessments with a consumed predecessor, zero spend, no task lineage, and conclusive pre-request or provider-rejected-no-task evidence. Ambiguous request outcomes fail closed as `PROVIDER_TASK_STATUS_UNKNOWN`; any durable task is `PROVIDER_TASK_CREATED` and must be retrieved/reconciled. Recovery successors preserve the logical `paidActionIntentId`, rebind current spend and rights, bind the predecessor execution and review attribution, and preserve one-active-authorization concurrency. H050B corrects the production task-owner composition so `AMAZON_*` operations use `DataForSeoAmazonMerchantApiClient`; all three Amazon POST contracts are fixture-certified without changing Google or Creators paths. `AMAZON_ASIN` escalation remains unavailable. Real Products authorization `mer_amzactauth_4352cadcddff7ba6a43620ee` remains consumed and immutable; run `acqrun_6fd3ab05-e95e-4c58-946a-c170512912d5` is certified `SAFE_NO_PROVIDER_TASK` because its local missing-method failure occurred before HTTP dispatch, with no task and `$0` spend. No real recovery authorization was created during certification.
+MERCURY-HISTORY-050/H050A/H050B/H050C/H050D/H050E fixture-certifies the one-action-at-a-time execution boundary over H049 artifact `mer_amzaccept_fe85419f5ef4b52dc9997843`. Products and Sellers each require separate expiring, operator-attributed, single-use authorization and exact execution confirmation; task, spend, consumption, retrieval, immutable result, ASIN assessment, retention, and history remain with existing owners. H050C permits append-only recovery only for deterministic `SAFE_NO_PROVIDER_TASK` assessments with a consumed predecessor, zero spend, no task lineage, and conclusive pre-request or provider-rejected-no-task evidence. H050D separates stable logical `paidActionIntentId` from a recovery-specific deterministic execution `planId`, allowing one reviewed new attempt while the task ledger still prevents two tasks for one logical action. H050E defines active authority as executable—unexpired and unconsumed—not merely present with future expiry; consumed IDs are excluded only through validated exact-lineage consumption supplied to atomic persistence. Ambiguous outcomes fail closed, any durable task stops recovery, every hop requires a fresh explicit review, concurrent successors preserve one-active authority, and no retry is automatic. H050B's corrected Amazon client composition remains unchanged. Real Products authorization `mer_amzactauth_4352cadcddff7ba6a43620ee` and first recovery authorization `mer_amzactauth_ba353efabf9802657d6e7f8b` are each consumed and immutable; the first recovery replayed original failed run `acqrun_6fd3ab05-e95e-4c58-946a-c170512912d5` without a new provider call, task, or spend because the old model reused its plan. Auth2 is `CONSUMED_NO_PROVIDER_TASK`, not active. No Amazon task exists and total spend remains `$0`, so a third reviewed authorization is safe after H050E certification, but none was created during certification. `AMAZON_ASIN` escalation and all downstream authority remain unavailable.
 
 ## Current platform status
 
@@ -168,13 +168,13 @@ MERCURY-HISTORY-050/H050A/H050B/H050C fixture-certifies the one-action-at-a-time
 
 ## Current test baseline
 
-The current runners declare **280 subsystem test files**:
+The current runners declare **282 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 7 |
 | Atlas | 22 |
-| Mercury | 227 |
+| Mercury | 229 |
 | Beacon | 7 |
 | Gateway | 17 |
 
