@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import {mkdtemp} from "node:fs/promises";
 import {tmpdir} from "node:os";
 import {join} from "node:path";
-import {assessHistoricalFactEligibility,createHistoricalObservation,FileHistoricalObservationRepository,HistoricalObservationIntelligence,validateHistoricalObservation} from "../index.js";
+import {assessHistoricalFactEligibility,createHistoricalObservation,FileHistoricalObservationRepository,HistoricalObservationIntelligence,projectIdentityReviewState,validateHistoricalObservation} from "../index.js";
 
 const record={evidenceId:"dfev_fixture",candidate:{identity:{atlasProductId:"ram_fixture"},marketEvidence:{atlasProductId:"ram_fixture",pricing:{basePrice:100,currency:"USD"},provenance:{observedAt:"2026-09-13T00:00:00Z",sourceTaskId:"task-1",rawPayloadReference:"fixture:1"}}}};
 const verified={state:"VERIFIED",atlasProductId:"ram_fixture"};
@@ -16,6 +16,12 @@ assert.equal(eligible.publicationEligible,false);
 for(const [mutate,reason] of [[r=>{r.candidate.marketEvidence.pricing.basePrice=null;},"HISTORICAL_FACT_ITEM_PRICE_INVALID"],[r=>{r.candidate.marketEvidence.pricing.currency="usd";},"HISTORICAL_FACT_CURRENCY_INVALID"],[r=>{r.candidate.marketEvidence.provenance.rawPayloadReference=null;},"HISTORICAL_FACT_PROVENANCE_INCOMPLETE"]]){const invalid=structuredClone(record);mutate(invalid);assert.ok(assessHistoricalFactEligibility({record:invalid,productProjection:verified}).reasons.includes(reason));}
 assert.ok(assessHistoricalFactEligibility({record,productProjection:{state:"PROBABLE",atlasProductId:"ram_fixture"}}).reasons.includes("HISTORICAL_FACT_PRODUCT_NOT_VERIFIED"));
 assert.ok(assessHistoricalFactEligibility({record,productProjection:verified,criticalContradiction:true}).reasons.includes("HISTORICAL_FACT_CRITICAL_PRODUCT_CONTRADICTION"));
+assert.equal(assessHistoricalFactEligibility({record,productProjection:{state:"CONFIRMED",atlasProductId:"ram_fixture"}}).factLevelHistoricalEligible,true);
+const domainless={...structuredClone(record),candidate:{...structuredClone(record.candidate),marketEvidence:{...structuredClone(record.candidate.marketEvidence),seller:{name:"Amazon.com",domain:null,url:null}},identity:{outcome:"CONFIRMED",atlasProductId:"ram_fixture"}},merchantResolution:{outcome:"DISCOVERED"}};
+const domainlessProjection=projectIdentityReviewState({record:domainless,decisions:[],remediations:[],atlasRetailers:[]});
+assert.equal(domainlessProjection.product.state,"CONFIRMED");
+assert.equal(domainlessProjection.merchant.state,"DISCOVERED");
+assert.equal(domainlessProjection.merchant.canonicalDomain,null);
 
 const observation=createHistoricalObservation({factLevel:true,observationId:"mer_hist_0123456789abcdef",atlasProductId:"ram_fixture",retailerId:null,marketplace:"amazon.com",observationTime:"2026-09-13T00:00:00Z",admittedAt:"2026-09-13T01:00:00Z",market:{sellerName:"Observed Seller",sourceUrl:null,basePrice:100,totalPrice:null,shipping:null,tax:null,currency:"USD",condition:null,availability:null,delivery:{delivery_message:"FREE delivery",delivery_price:null}},observedMerchant:{sellerName:"Observed Seller",suppliedDomain:"amazon.com",resolutionState:"DISCOVERED",canonicalRetailerId:null,canonicalMerchantName:null,canonicalDomain:null,decisionId:null},comparability:{policyVersion:"MERCURY-HISTORY-018-1.0",assessmentId:"mer_histcompare_fixture",classification:"UNKNOWN_COMPARABILITY",reasons:["HISTORICAL_OFFER_COMPARABILITY_UNKNOWN"],standaloneEligible:false},provenance:{retainedEvidenceId:"dfev_fixture",provider:"DATAFORSEO",source:"DATAFORSEO_AMAZON",rawPayloadReference:"fixture:1",acquisition:{type:"AMAZON_INITIAL_ACQUISITION",productsTaskId:"p",sellersTaskId:"s",governedAsin:"B000000000",immutableSellersResultId:"result",immutableSellersResultDigest:"digest",sourceRightsProfileDigest:"rights"},rights:{sourceId:"DATAFORSEO_AMAZON",profileHash:"hash"},identityReview:{productDecisionId:null,productRemediationId:null,merchantDecisionId:null,merchantRemediationId:null}},admittedBy:"fixture",idempotencyKey:"fixture"});
 assert.equal(validateHistoricalObservation(observation).valid,true);

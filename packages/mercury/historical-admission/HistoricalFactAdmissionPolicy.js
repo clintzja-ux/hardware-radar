@@ -11,7 +11,7 @@ export function assessHistoricalFactEligibility({record,productProjection,critic
   const evidence=record?.candidate?.marketEvidence,reasons=[];
   if(!record||typeof record!=="object"||!evidence||typeof evidence!=="object")reasons.push("HISTORICAL_FACT_EVIDENCE_INVALID");
   if(criticalContradiction)reasons.push("HISTORICAL_FACT_CRITICAL_PRODUCT_CONTRADICTION");
-  if(productProjection?.state!=="VERIFIED"||!nonBlank(productProjection?.atlasProductId))reasons.push("HISTORICAL_FACT_PRODUCT_NOT_VERIFIED");
+  if(!["VERIFIED","CONFIRMED"].includes(productProjection?.state)||!nonBlank(productProjection?.atlasProductId))reasons.push("HISTORICAL_FACT_PRODUCT_NOT_VERIFIED");
   if(!validTime(evidence?.provenance?.observedAt))reasons.push("HISTORICAL_FACT_OBSERVATION_TIME_INVALID");
   if(!nonBlank(evidence?.provenance?.sourceTaskId)||!nonBlank(evidence?.provenance?.rawPayloadReference))reasons.push("HISTORICAL_FACT_PROVENANCE_INCOMPLETE");
   if(!(typeof evidence?.pricing?.basePrice==="number"&&Number.isFinite(evidence.pricing.basePrice)&&evidence.pricing.basePrice>0))reasons.push("HISTORICAL_FACT_ITEM_PRICE_INVALID");

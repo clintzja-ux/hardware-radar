@@ -1,4 +1,3 @@
 ﻿
 > hardware-radar@0.1.0 mercury:amazon:acceptance:retrieve-products
 > node --use-system-ca --env-file=.env scripts/mercury-amazon-acceptance-action.mjs --action=retrieve-products --artifact-id=mer_amzaccept_42131547f913a924f0842467
-

@@ -177,6 +177,8 @@ const testModules = [
     "./AtlasBackedMerchantRegistration.test.mjs",
     "./HistoricalOfferComparabilityAssessment.test.mjs",
     "./HistoricalFactAdmissionPolicy.test.mjs",
+    "./HistoricalFactReplayPreparation.test.mjs",
+    "./HistoricalFactReplayExecution.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",
