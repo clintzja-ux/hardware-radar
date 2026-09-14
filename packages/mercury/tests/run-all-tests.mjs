@@ -185,6 +185,7 @@ const testModules = [
     "./RepeatObservationProductionComposition.test.mjs",
     "./BoundedRepeatObservationRun.test.mjs",
     "./NeutralBoundedPaidActionCoordinator.test.mjs",
+    "./NeutralProductsPrerequisites.test.mjs",
     "./ReusableIdentityAcquisitionLineage.test.mjs",
     "./BoundedRepeatObservationProductionPipeline.test.mjs",
     "./BoundedRepeatObservationCli.test.mjs",
