@@ -100,6 +100,7 @@ Do NOT create ADRs for:
 | ADR-061 | Atlas Corroboration Is Separate From Provider Product Grouping |
 | ADR-062 | Consumed Paid Authority Recovery Requires Conclusive No-Task Evidence |
 | ADR-063 | Historical Facts Precede Stronger Merchant and Comparability Authority |
+| ADR-064 | Bounded Paid Execution Is Shared While Domain Authority Remains Local |
 
 ADR-005 through ADR-007 are intentionally unused. Accepted identifiers are never reassigned, and an ADR's own status remains authoritative for whether it is accepted, superseded, or otherwise inactive.
 
