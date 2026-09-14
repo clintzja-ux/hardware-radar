@@ -139,7 +139,15 @@ export function createProductionDataForSeoTaskOwner({
         maxSpendUsd: request.maxSpendUsd,
         maxPaidTasks: request.maxPaidTasks
       });
-      return singleUse.execute({ plan: request.plan, authorization });
+      const outcome=await singleUse.execute({ plan: request.plan, authorization });
+      if(outcome.status==="COMPLETED"){
+        const expected=request.plan.decisions.filter(entry=>entry.decision==="APPROVED").map(entry=>entry.execution).filter(execution=>execution.paidActionIntentId?.startsWith("mer_repeatintent_"));
+        if(expected.length){
+          const providerTaskIds=(outcome.execution?.run?.tasks??[]).filter(task=>task.outcome==="COMPLETED"&&task.providerTaskId&&expected.some(execution=>execution.paidActionIntentId===task.paidActionIntentId)).map(task=>task.providerTaskId),ledger=new FileDataForSeoTaskLedger(taskLedgerPath),rows=ledger.getAll().filter(task=>providerTaskIds.includes(task.taskId));
+          if(expected.length!==providerTaskIds.length||rows.length!==providerTaskIds.length||rows.some(task=>!expected.some(execution=>execution.paidActionIntentId===task.paidActionIntentId&&execution.preparedObservationId===task.preparedObservationId&&execution.acquisitionCycleId===task.acquisitionCycleId&&execution.repeatAuthorizationId===task.repeatAuthorizationId&&execution.parentRunAuthorizationId===task.parentRunAuthorizationId)))throw new Error("REPEAT_OBSERVATION_CANONICAL_TASK_PERSISTENCE_FAILED");
+        }
+      }
+      return outcome;
     }
   });
 }

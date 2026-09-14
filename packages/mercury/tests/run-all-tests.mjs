@@ -186,6 +186,8 @@ const testModules = [
     "./BoundedRepeatObservationRun.test.mjs",
     "./ReusableIdentityAcquisitionLineage.test.mjs",
     "./BoundedRepeatObservationProductionPipeline.test.mjs",
+    "./BoundedRepeatObservationCli.test.mjs",
+    "./BoundedRepeatObservationRecovery.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",

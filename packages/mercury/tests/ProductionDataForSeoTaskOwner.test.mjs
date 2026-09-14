@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { createProductionDataForSeoTaskOwner } from "../index.js";
 
 const at = "2026-09-11T12:00:00.000Z";
@@ -58,6 +60,16 @@ const ordinaryOwner = createProductionDataForSeoTaskOwner({
 const ordinaryPlan = { schemaVersion: "1.0", planId: "ordinary-plan", plannedAt: at, policy: { enabled: true, maxPaidTasksPerRun: 1, maxSpendPerRunUsd: 0.001, maxSpendPerDayUsd: 0.01, automaticPaidRetries: 0 }, spentTodayUsd: 0, approvedTaskCount: 1, estimatedApprovedSpendUsd: 0.001, decisions: [{ candidateId: "p1", estimatedCostUsd: 0.001, decision: "APPROVED", execution: { kind: "PRODUCTS", keyword: "MPN" } }] };
 await ordinaryOwner.execute({ request: { requestId: "ordinary-auth", planId: ordinaryPlan.planId, plan: ordinaryPlan, expiresAt: "2026-09-11T12:15:00.000Z", maxSpendUsd: 0.001, maxPaidTasks: 1 } });
 assert.equal("paidActionIntentId" in ordinaryCalls[0], false);
+
+const missingTaskRoot = await mkdtemp(path.join(tmpdir(), "repeat-task-persistence-"));
+try {
+  const repeatExecution = { kind: "SELLERS", dataDocId: "doc-repeat", paidActionIntentId: "mer_repeatintent_fixture", preparedObservationId: "mer_repeatprep_fixture", acquisitionCycleId: "mer_repeatcycle_fixture", repeatAuthorizationId: "mer_repeatauth_fixture", parentRunAuthorizationId: "mer_repeatrunauth_fixture" };
+  const repeatPlan = { ...ordinaryPlan, planId: "repeat-plan", decisions: [{ candidateId: "repeat", estimatedCostUsd: 0.001, decision: "APPROVED", execution: repeatExecution }] };
+  const owner = createProductionDataForSeoTaskOwner({ operation: "SELLERS", stateRoot: missingTaskRoot, acquisitionService: { createSellersTask: async () => ({ taskId: "repeat-task", costUsd: 0.001, createdStatus: 20100 }) }, executionRepository: { getAll: async () => [], findByPlanId: async () => null, append: async (run) => ({ status: "RECORDED", run }) }, consumptionRepository: { isConsumed: async () => false, consume: async () => ({ status: "CONSUMED" }) }, runLock: { runExclusive: async (fn) => ({ status: "ACQUIRED", result: await fn() }) }, now: () => at });
+  await assert.rejects(() => owner.execute({ request: { requestId: "repeat-auth", planId: repeatPlan.planId, plan: repeatPlan, expiresAt: "2026-09-11T12:15:00.000Z", maxSpendUsd: 0.001, maxPaidTasks: 1 } }), /REPEAT_OBSERVATION_CANONICAL_TASK_PERSISTENCE_FAILED/);
+} finally {
+  await rm(missingTaskRoot, { recursive: true, force: true });
+}
 assert.throws(() => createProductionDataForSeoTaskOwner({ operation: "UNKNOWN" }), /OPERATION_INVALID/);
 
-console.log("Production DataForSEO task owner tests passed (20 cases).");
+console.log("Production DataForSEO task owner tests passed (21 cases).");

@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import {mkdtemp,rm} from "node:fs/promises";
 import {join} from "node:path";
 import {tmpdir} from "node:os";
-import {BoundedRepeatObservationRunService,BOUNDED_REPEAT_RUN_AUTHORIZE_CONFIRMATION,BOUNDED_REPEAT_RUN_START_CONFIRMATION,createAmazonRepeatObservationIdentity,createGoogleRepeatObservationIdentity,createProductionRepeatObservationService,defaultSourceRightsRegistry,DataForSeoTaskLedger,FileHistoricalBootstrapProviderResultRepository,ProductionRepeatObservationResultPipeline,SqliteRepeatObservationRepository} from "../index.js";
+import {BoundedRepeatObservationRunService,BOUNDED_REPEAT_RUN_AUTHORIZE_CONFIRMATION,BOUNDED_REPEAT_RUN_START_CONFIRMATION,BOUNDED_REPEAT_RUN_RESUME_CONFIRMATION,createAmazonRepeatObservationIdentity,createGoogleRepeatObservationIdentity,createProductionRepeatObservationService,defaultSourceRightsRegistry,DataForSeoTaskLedger,FileHistoricalBootstrapProviderResultRepository,ProductionRepeatObservationResultPipeline,SqliteRepeatObservationRepository} from "../index.js";
 
 let cases=0;const at="2026-09-14T00:00:00.000Z",expires="2026-09-14T01:00:00.000Z",sha=v=>crypto.createHash("sha256").update(v).digest("hex"),root=await mkdtemp(join(tmpdir(),"hr-bounded-prod-"));
 try{
@@ -14,8 +14,8 @@ try{
  const planned=await bounded.prepareRun({observationCycle:at,cohort:[{atlasProductId:"ram-google",source:"DATAFORSEO_GOOGLE_SHOPPING"},{atlasProductId:"ram-amazon",source:"DATAFORSEO_AMAZON"}]});assert.equal(planned.status,"PREPARED");assert.equal(planned.value.ready.length,2);cases+=2;
  const authorized=await bounded.authorizeRun({runPlanId:planned.value.runPlanId,operator:"operator:fixture",reason:"fixture",expiresAt:expires,confirmation:BOUNDED_REPEAT_RUN_AUTHORIZE_CONFIRMATION});assert.equal(authorized.status,"AUTHORIZED");cases++;
  const started=await bounded.startRun({runAuthorizationId:authorized.value.runAuthorizationId,startedBy:"operator:fixture",confirmation:BOUNDED_REPEAT_RUN_START_CONFIRMATION});assert.equal(started.state,"WAITING_FOR_PROVIDER");assert.equal(started.paidTasksCreated,2);assert.equal(started.completed,1);assert.equal(started.pending,1);assert.equal(taskLedger.getAll().length,2);assert.deepEqual(processed,["AMAZON_SELLERS"]);cases+=6;
- pending.clear();const resumed=await bounded.resumeRun({runId:started.runId});assert.equal(resumed.state,"COMPLETED");assert.equal(resumed.completed,2);assert.equal(resumed.pending,0);assert.equal(resumed.paidTasksCreated,2);assert.equal(taskLedger.getAll().length,2);assert.deepEqual(processed.sort(),["AMAZON_SELLERS","SELLERS"]);assert.equal(facts.length,2);assert.equal(resumed.currentPriceWrites,0);assert.equal(resumed.publicationWrites,0);cases+=9;
- const replay=await bounded.resumeRun({runId:started.runId});assert.equal(replay.state,"COMPLETED");assert.equal(taskLedger.getAll().length,2);assert.equal(facts.length,2);cases+=3;
+ pending.clear();const resumed=await bounded.resumeRun({runId:started.runId,resumedBy:"operator:fixture",confirmation:BOUNDED_REPEAT_RUN_RESUME_CONFIRMATION});assert.equal(resumed.state,"COMPLETED");assert.equal(resumed.completed,2);assert.equal(resumed.pending,0);assert.equal(resumed.paidTasksCreated,2);assert.equal(taskLedger.getAll().length,2);assert.deepEqual(processed.sort(),["AMAZON_SELLERS","SELLERS"]);assert.equal(facts.length,2);assert.equal(resumed.currentPriceWrites,0);assert.equal(resumed.publicationWrites,0);cases+=9;
+ const replay=await bounded.resumeRun({runId:started.runId,resumedBy:"operator:fixture",confirmation:BOUNDED_REPEAT_RUN_RESUME_CONFIRMATION});assert.equal(replay.state,"COMPLETED");assert.equal(taskLedger.getAll().length,2);assert.equal(facts.length,2);cases+=3;
  repeat.close();
 }finally{await rm(root,{recursive:true,force:true});}
 console.log(`Bounded repeat production pipeline tests passed: ${cases} cases.`);

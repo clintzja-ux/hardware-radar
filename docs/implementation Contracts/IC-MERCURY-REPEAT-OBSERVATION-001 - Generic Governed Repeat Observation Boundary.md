@@ -2,7 +2,7 @@
 
 ## Status
 
-Fixture-certified. Production composition and operator commands are not exposed by this increment.
+Fixture-certified, including the thin production bounded-run operator command surface. No production bounded run was created during certification.
 
 ## Boundary
 
@@ -54,7 +54,13 @@ The thin commands are `mercury:repeat-observation:prepare`, `mercury:repeat-obse
 
 Run plans, authorizations, runs, and minimal member progress use indexed tables in the same `repeat-observations.sqlite` database. `WAITING_FOR_PROVIDER` is durable and RESUME retrieves only already-created tasks. Product-local evidence/offer failures become isolated exceptions; rights, binding, budget, repository, authorization, SQLite, or task-owner integrity failures stop the run. The small states are `PREPARED`, `AUTHORIZED`, `RUNNING`, `WAITING_FOR_PROVIDER`, `COMPLETED`, `COMPLETED_WITH_EXCEPTIONS`, and `FAILED`.
 
-The fixture service exposes `prepareRun`, `authorizeRun`, `startRun`, `inspectRun`, and `resumeRun` directly; neither shell spawning nor per-product operator actions belong in the service contract. Production commands are intentionally not exposed.
+Canonical provider-task resolution is by the exact repeat preparation, paid-action intent, acquisition cycle, Atlas product, source, operation, reusable-identity digest, rights digest, repeat authorization, and parent run authorization. Zero or multiple matches fail closed; an older bootstrap task for the same product is never a substitute. File-backed task-ledger readers reload canonical state for each lookup, and writers merge the latest durable state before replacement so independently composed Google and Amazon task owners cannot overwrite one another's rows.
+
+After a successful repeat execution, `paidTaskCreated=true` requires an exact, durably recoverable canonical provider-task identity. The production task owner requires the canonical task row to be resolvable before returning success. Successful provider execution whose canonical task lineage cannot be recovered is a systemic integrity failure, never a product-local exception. Bounded-run paid-task and spend totals are derived from authoritative resolved task/execution accounting, not authorization ceilings or attempted work.
+
+RESUME has one narrow terminal-exception recovery: a member stopped solely by `REPEAT_OBSERVATION_PROVIDER_TASK_NOT_FOUND` may return to `EXECUTED` only when the immutable preparation, its single authorization, and exactly one completed execution ledger entry prove the complete lineage and provider task ID. The missing canonical task row is reconstructed in the existing `DataForSeoTaskLedger`; no task is posted and no authorization is created or consumed. RESUME must reuse the existing provider task and may never recreate paid work. Other terminal exceptions remain terminal. Exact recovery replay is idempotent, while missing, changed, or ambiguous execution lineage fails closed. Amazon and Google task owners must produce the same canonical repeat-task lineage fields even though their provider operations and costs differ.
+
+The service exposes `prepareRun`, `authorizeRun`, `startRun`, `inspectRun`, and `resumeRun` directly; neither shell spawning nor per-product operator actions belong in the service contract.
 
 ## Governed reusable-identity lineage
 
@@ -64,6 +70,18 @@ Amazon reuse remains limited to strong unique or operator-confirmed ASIN identit
 
 The production result pipeline resolves tasks by indexed paid-action intent, retrieves through existing source owners, persists immutable canonical results in the existing provider-result repository, retains through existing Amazon or Google DF003 boundaries, and presents the validated repeat lineage to H058. Exact replay is duplicate-safe; changed material under the same acquisition identity is a conflict. Source retention and H058 preserve unresolved merchant evidence and grant no downstream authority.
 
-Fixtures certify complete Amazon and Google bounded-run paths, including one provider-pending member that resumes against the same task without new paid work. The lineage model is product-neutral and keyed by indexed IDs/digests; it introduces no new identity, task, evidence, or history repository. Production bounded-run commands remain deliberately unavailable pending a separate command-surface authorization increment.
+Fixtures certify complete Amazon and Google bounded-run paths, including one provider-pending member that resumes against the same task without new paid work. The lineage model is product-neutral and keyed by indexed IDs/digests; it introduces no new identity, task, evidence, or history repository.
 
-Production command composition remains a separate increment. Persistence certification uses temporary fixture databases and creates no production preparation or authorization.
+## Bounded-run operator commands
+
+The production runtime composes `BoundedRepeatObservationRunService` over the existing production repeat-observation factory and its SQLite store, identity, rights, spend, task, result, retention, and H058 owners. Scripts contain argument validation and rendering only; future Forge callers may invoke the service directly.
+
+- `mercury:repeat-run:prepare -- --cohort-file=<JSON> --observation-cycle=<ISO-UTC>`
+- `mercury:repeat-run:inspect -- --run-plan-id=<ID>` or `--run-id=<ID>`
+- `mercury:repeat-run:authorize -- --run-plan-id=<ID> --operator=<LABEL> --reason=<TEXT> --expires-at=<ISO-UTC> --confirm=AUTHORIZE-BOUNDED-REPEAT-RUN`
+- `mercury:repeat-run:start -- --run-authorization-id=<ID> --executed-by=<LABEL> --confirm=START-BOUNDED-REPEAT-RUN`
+- `mercury:repeat-run:resume -- --run-id=<ID> --resumed-by=<LABEL> --confirm=RESUME-BOUNDED-REPEAT-RUN`
+
+The cohort file is a JSON array whose elements contain exactly `atlasProductId` and `source`. PREPARE, INSPECT, and AUTHORIZE perform no provider operation or paid task. START revalidates every READY identity and rights binding plus aggregate durable spend before paid work. RESUME is explicitly attributed and retrieves only already-created tasks. Neither command accepts raw provider identity, provider task, result, policy, cost, repository, or downstream-authority overrides.
+
+Persistence certification uses temporary fixture databases and creates no production preparation or authorization.

@@ -1,0 +1,25 @@
+import {readFile} from "node:fs/promises";
+import {createBoundedRepeatObservationRuntime,parseRepeatArgs} from "./mercury-repeat-observation-runtime.mjs";
+
+const actions=Object.freeze({
+ prepare:{allowed:["--cohort-file","--observation-cycle"],required:["--cohort-file","--observation-cycle"]},
+ inspect:{allowed:["--run-plan-id","--run-id"],required:[]},
+ authorize:{allowed:["--run-plan-id","--operator","--reason","--expires-at","--confirm"],required:["--run-plan-id","--operator","--reason","--expires-at","--confirm"]},
+ start:{allowed:["--run-authorization-id","--executed-by","--confirm"],required:["--run-authorization-id","--executed-by","--confirm"]},
+ resume:{allowed:["--run-id","--resumed-by","--confirm"],required:["--run-id","--resumed-by","--confirm"]}
+});
+const money=value=>`$${Number(value??0).toFixed(4)}`;
+const yes=value=>value?"YES":"NO";
+function validate(action,args){const contract=actions[action];if(!contract)throw new Error("REPEAT_RUN_ACTION_INVALID");for(const key of args.keys())if(!contract.allowed.includes(key))throw new Error(`REPEAT_RUN_ARGUMENT_NOT_ALLOWED:${key}`);for(const key of contract.required)if(typeof args.get(key)!=="string"||!args.get(key).trim())throw new Error(`REPEAT_RUN_ARGUMENT_REQUIRED:${key}`);if(action==="inspect"&&Boolean(args.get("--run-plan-id"))===Boolean(args.get("--run-id")))throw new Error("REPEAT_RUN_INSPECT_ID_REQUIRED");}
+function printPlan(value,write){write("BOUNDED REPEAT RUN");write(`Run plan: ${value.runPlanId}`);write(`Observation cycle: ${value.observationCycle}`);write(`Requested pairs: ${value.requested?.length??0}`);write(`READY pairs: ${value.ready?.length??0}`);write(`Blocked pairs: ${value.blocked?.length??0}`);for(const row of value.blocked??[])write(`BLOCKED ${row.atlasProductId} ${row.source}: ${row.state} (${row.reason})`);write(`Maximum paid tasks: ${value.maximumPaidTasks}`);write(`Maximum spend: ${money(value.maximumSpendUsd)}`);write(`Automatic retries: ${value.automaticPaidRetries}`);write(`Authorization: ${value.authorizationState??"NOT_AUTHORIZED"}`);}
+function printSummary(value,write){write("BOUNDED REPEAT RUN");if(value.runPlanId)write(`Run plan: ${value.runPlanId}`);if(value.runId)write(`Run: ${value.runId}`);if(value.runAuthorizationId)write(`Authorization: ${value.runAuthorizationId}`);if(value.state)write(`State: ${value.state}`);if(value.runState)write(`Run state: ${value.runState}`);if(value.currentUtcDaySpendUsd!==undefined){write(`UTC-day spend: ${money(value.currentUtcDaySpendUsd)}`);write(`UTC-day ceiling: ${money(value.dailySpendCeilingUsd)}`);write(`Remaining capacity: ${money(value.remainingUtcDayCapacityUsd)}`);}if(value.paidTasksCreated!==undefined){write(`Paid tasks created: ${value.paidTasksCreated}`);write(`Completed: ${value.completed}`);write(`Pending: ${value.pending}`);write(`Exceptions: ${value.failed}`);write(`Evidence retained: ${value.evidenceRetained}`);write(`Historical facts admitted: ${value.historicalFactsAdmitted}`);}write(`Downstream authority: ${yes(value.downstreamAuthority===true)}`);}
+
+export async function runBoundedRepeatRunCli(action,{values=process.argv.slice(2),runtimeFactory=createBoundedRepeatObservationRuntime,readText=path=>readFile(path,"utf8"),write=console.log}={}){
+ const args=parseRepeatArgs(values);validate(action,args);const runtime=runtimeFactory(args);
+ try{
+  if(action==="prepare"){const cohort=JSON.parse(await readText(args.get("--cohort-file")));if(!Array.isArray(cohort))throw new Error("REPEAT_RUN_COHORT_FILE_INVALID");const result=await runtime.service.prepareRun({cohort,observationCycle:args.get("--observation-cycle")});printPlan(result.value,write);write("Provider calls: 0");write("Paid tasks: 0");write("Actual spend: $0.000");return result;}
+  if(action==="inspect"){const result=await runtime.service.inspectRun({runPlanId:args.get("--run-plan-id")||undefined,runId:args.get("--run-id")||undefined});if(result.requested)printPlan(result,write);printSummary(result,write);write("Provider calls: 0");write("Writes: 0");return result;}
+  if(action==="authorize"){const result=await runtime.service.authorizeRun({runPlanId:args.get("--run-plan-id"),operator:args.get("--operator"),reason:args.get("--reason"),expiresAt:args.get("--expires-at"),confirmation:args.get("--confirm")});write("BOUNDED REPEAT RUN AUTHORIZE");write(`Status: ${result.status}`);write(`Authorization: ${result.value.runAuthorizationId}`);write(`Maximum paid tasks: ${result.value.maximumPaidTasks}`);write(`Maximum spend: ${money(result.value.maximumSpendUsd)}`);write("Provider calls: 0");write("Paid tasks: 0");write("Actual spend: $0.000");return result;}
+  const result=action==="start"?await runtime.service.startRun({runAuthorizationId:args.get("--run-authorization-id"),startedBy:args.get("--executed-by"),confirmation:args.get("--confirm")}):await runtime.service.resumeRun({runId:args.get("--run-id"),resumedBy:args.get("--resumed-by"),confirmation:args.get("--confirm")});printSummary(result,write);return result;
+ }finally{runtime.close();}
+}
