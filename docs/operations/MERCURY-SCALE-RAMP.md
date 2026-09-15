@@ -8,6 +8,32 @@ Current classification: `READY_FOR_25_WITH_PRECONDITIONS`.
 
 There is no P0 engineering blocker. Before paid work, the operator must select and review a diverse 25-product Atlas cohort, project product/source readiness, divide READY work into bounded daily slices under the unchanged `$0.025` UTC-day ceiling, approve a canary and stop conditions, and define the measurement report below. Creating or reviewing that material remains zero-provider work; each paid run still requires its existing bounded authorization.
 
+The zero-provider design step is complete. The non-executable review artifacts are [25-product-candidate-cohort.json](../../config/mercury/scale-ramp/25-product-candidate-cohort.json) and [25-product-canary-candidate.json](../../config/mercury/scale-ramp/25-product-canary-candidate.json). They are deliberately object-shaped `REVIEW_ONLY` documents, not inputs accepted by production planning commands, and confer no authority.
+
+## Selected 25-product candidate cohort
+
+The canonical Atlas RAM corpus contains 103 products; the separate 115-record Atlas release-governance total includes non-product records. All 103 RAM products validate, and all selected records are `ACTIVE + READY` with valid capacity arithmetic. Selection is deterministic: five products per registered manufacturer, comprising 15 DDR5 DIMMs, five DDR4 DIMMs, and five SODIMMs, with four pilot controls and 21 new products. The exact ordered identifiers are owned by the review artifact above.
+
+Across the 50 prospective product/source pairs, the current projection is:
+
+| Operation class | Pairs | Interpretation |
+|---|---:|---|
+| Repeat observation ready | 6 | Two Google Shopping identities and four Amazon identities already reusable |
+| Products identity discovery ready | 19 | Amazon Products paths with active reviewed destinations |
+| Manual review only | 0 | No H052 decision is presently ready; results may create later review work |
+| Currently blocked / intentionally unscheduled | 25 | 23 Google paths lack justified reusable identity; two Amazon paths lack an active reviewed destination |
+| No operation needed | 0 | — |
+
+Google Products is not scheduled merely because identity is absent. The existing discovery-readiness owner reports `PORTFOLIO_PROVIDER_IDENTITY_BINDING_INVALID` for the two established Google control identities in mixed historical state, while the canonical repeat resolver confirms both are reusable. This is a diagnostic limitation to measure and reconcile before 100, not authority for rediscovery and not a blocker to their repeat path.
+
+The maximum presently justified breadth work is 19 Amazon Products tasks (`$0.0285`). The selected controls add two Google Sellers and four Amazon Sellers repeat tasks (`$0.0080`). These `$0.0365` illustrative totals are separate lifecycle envelopes, not one authorization; successful Products discovery also does not automatically authorize later Sellers work.
+
+The proposed canary covers five products and six tasks: three Amazon Products onboarding cases, one Google Sellers repeat, and two Amazon Sellers repeats. Its separate illustrative envelopes are `$0.0045` for identity discovery and `$0.0040` for repeat observation. The combined planning amount is `$0.0085`, but the operations must retain separate plans and authorizations.
+
+Recommended clean-UTC-day slices are: canary identity discovery (3 tasks, `$0.0045`); remaining identity discovery slice one (10 tasks, `$0.0150`); remaining identity discovery slice two (6 tasks, `$0.0090`); and the separate six-task repeat-control stage (`$0.0080`). Current September 15 authoritative spend is `$0.0040`, leaving `$0.0210`; even the canary would remain below the unchanged ceiling if separately authorized today. Every slice must re-read durable spend before authorization and execution.
+
+The seven-pair longitudinal experiment should run **after the 25-product canary**, as a separate bounded authority, so the canary first validates the mixed repeat/onboarding operating surface. Neither review artifact creates that authority.
+
 Stage numbers mean **Atlas products under review**, not interchangeable counts of product/source pairs or paid tasks. The governed work unit is a product/source pair. A product may contribute zero, one, or two ready pairs, and each ready repeat pair normally creates one paid Sellers task per observation cycle.
 
 ## Certified baseline
@@ -228,6 +254,4 @@ No new architectural owner is accepted by this plan. Promotion between stages us
 
 ## Next actions
 
-Recommended next longitudinal action: **both, as separate bounded stages**. First prepare (but do not yet execute) a new repeat cycle for the seven currently ready pairs to test longitudinal stability. Separately select and project a diverse 25-product breadth cohort and its source/task/cost/canary slices. Do not merge these into one authority.
-
-Exact next zero-provider action: select the candidate 25-product Atlas cohort, project product/source readiness, calculate daily slices and the canary, and review the resulting measurement/stop plan. No P0 engineering increment is required.
+Recommended next action: operator review of the checked-in 25-product cohort, readiness projection, canary, stop conditions, and separated cost envelopes. If accepted, prepare only the canary's bounded identity-discovery and repeat plans through their existing owners; preparation remains a later explicit action and still grants no spend authority. Run the seven-pair longitudinal experiment only after inspecting the canary, under a separate bounded authority. No P0 engineering increment is required.
