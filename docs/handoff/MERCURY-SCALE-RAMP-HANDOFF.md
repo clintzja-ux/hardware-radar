@@ -8,20 +8,21 @@ Retailer/feed identity never owns Atlas identity. A source SKU, provider product
 
 ## Current scale-ramp checkpoint
 
-The selected stage contains 25 Atlas products. Amazon identity breadth comprises 19 prospective discovery members. Canary A completed 3 and Slice 1 completed 10, so 13/19 breadth attempts are terminal:
+The selected stage contains 25 Atlas products. All 19 Amazon Products identity-breadth members are terminal across Canary A, Slice 1, and Slice 2:
 
-- 9 `STRONG_UNIQUE_ASIN` (69.2%);
-- 3 `MULTIPLE_COMPATIBLE_ASINS`;
-- 1 `ASIN_VARIANT_CONFLICT`;
+- 14 `STRONG_UNIQUE_ASIN` (73.7%);
+- 3 `MULTIPLE_COMPATIBLE_ASINS` (15.8%);
+- 1 `ASIN_VARIANT_CONFLICT` (5.3%);
+- 1 `INSUFFICIENT_ASIN_EVIDENCE` (5.3%);
 - 0 provider failures, systemic failures, retries, or engineering interventions.
 
 Canary A: plan `mer_iddiscplan_e47c662645df252dfdf00afa`, run `mer_iddiscrun_81e0ab6faed84de5ba5f93f3`, three unfamiliar products, one strong and two multiple-compatible, three tasks, `$0.0045`.
 
 Slice 1: plan `mer_iddiscplan_5426b3781c0774286442ad01`, run `mer_iddiscrun_bfcdfbce45853a42add00506`, 10/10 terminal, eight strong, one multiple-compatible, one variant conflict, 10 tasks, `$0.0150`. The pending continuation reused its original task and finalized without new authority or spend. Member-local isolation passed.
 
-The sample is operational acceptance evidence, not a catalog-wide forecast (`n=13`). Canonical repeat resolution currently derives 19 product/source pairs: 2 Google Shopping and 17 Amazon. Use the canonical resolver; do not reconstruct or guess the pairs.
+The sample is operational acceptance evidence, not a catalog-wide forecast (`n=19`). Use the canonical repeat resolver; do not reconstruct or guess eligible product/source pairs.
 
-Authoritative September 15 spend was `$0.0235` under the then-current `$0.025` UTC-day ceiling. That historical spend snapshot does not carry into later UTC days. Current governed policy uses a `$0.0500` UTC-day ceiling; it grants no acquisition authority.
+Authoritative September 15 spend is `$0.0325` under the current `$0.0500` UTC-day ceiling. That historical spend snapshot does not carry into later UTC days, and remaining capacity grants no acquisition authority.
 
 ## Reserved Slice 2
 
@@ -36,7 +37,9 @@ The reserved six, last assessed 6/6 `READY_FOR_DISCOVERY`, are:
 | `ram_teamgroup_ctced532g6400hc32adc01` | `CTCED532G6400HC32ADC01` |
 | `ram_teamgroup_tlzgd432g3200hc16fdc01` | `TLZGD432G3200HC16FDC01` |
 
-Their maximum future envelope is six Amazon Products tasks at `$0.0015` each, `$0.0090` total, with zero automatic paid retries. The exact checked-in cohort is `config/mercury/scale-ramp/25-product-slice-2-amazon-identity.json`. Plan `mer_iddiscplan_e0ec35a7e9f99bd15f824e60` has 6 requested, 6 READY, and 0 blocked. Current reassessment preserved all plan/member/rights/destination bindings, and single-use authorization `mer_iddiscauth_7521266859ea7c8df1ee71da` is `AUTHORIZED` until `2026-09-15T23:12:04.9798952Z`. It recorded `$0.0235` current-day spend with `$0.0265` remaining under the `$0.0500` ceiling. The run remains `NOT_STARTED`; authorization created no provider call, paid task, execution, or spend. The next action is separate operator review before any START.
+The exact checked-in cohort is `config/mercury/scale-ramp/25-product-slice-2-amazon-identity.json`. Plan `mer_iddiscplan_e0ec35a7e9f99bd15f824e60`, single-use authorization `mer_iddiscauth_7521266859ea7c8df1ee71da`, and run `mer_iddiscrun_9d4088c5bc66e361978c27dc` are terminal `COMPLETED`: 6 requested, 6 terminal, 5 `STRONG_UNIQUE_ASIN`, 1 `INSUFFICIENT_ASIN_EVIDENCE`, 6 unique tasks/results, zero retries/failures, and exact spend of `$0.0090`. The insufficient-evidence member exposes H052 review availability; no H052 or Sellers action was performed. September 15 daily spend is `$0.0325` under the `$0.0500` ceiling.
+
+Across Canary A, Slice 1, and Slice 2, all 19 Amazon Products breadth attempts are terminal: 14 strong, 3 multiple-compatible, 1 variant conflict, and 1 insufficient-evidence outcome. The stage used 19 unique tasks and `$0.0285`, with zero provider/systemic failures, duplicate tasks, retries, or engineering interventions. This is stage acceptance evidence, not a catalog-wide yield forecast. Stop before longitudinal acquisition; next perform a separately reviewed stage-gate and exception/operations assessment.
 
 ## Source roles and exception doctrine
 
