@@ -34,6 +34,12 @@ Recommended clean-UTC-day slices are: canary identity discovery (3 tasks, `$0.00
 
 The seven-pair longitudinal experiment should run **after the 25-product canary**, as a separate bounded authority, so the canary first validates the mixed repeat/onboarding operating surface. Neither review artifact creates that authority.
 
+### Canary A observed result
+
+The first identity-breadth canary is terminal `COMPLETED`: plan `mer_iddiscplan_e47c662645df252dfdf00afa`, run `mer_iddiscrun_81e0ab6faed84de5ba5f93f3`, three Amazon Products tasks, exact authorized/actual spend of `$0.0045`, zero retry, zero pending/provider/systemic failure, and no Sellers, evidence/history, or downstream authority. TeamGroup `ram_teamgroup_ctced532g6000hc30dc01` resolved `STRONG_UNIQUE_ASIN`; Crucial `ram_crucial_ct16g56c46s5` and G.SKILL `ram_g_skill_f5_6000j3038f16gx2_fx5` terminated `MULTIPLE_COMPATIBLE_ASINS`. The two member-local ambiguities did not block the third member and require no per-SKU engineering change.
+
+Observed identity yield is one automatic strong identity and two ambiguous identities from three attempts (`33.3%` and `66.7%`, respectively), with zero immediately available H052 review. This `n=3` canary is operational evidence, not a statistically predictive rate. All 16 remaining reviewed Amazon Products members still project `READY_FOR_DISCOVERY` with unchanged rights. No systemic stop gate fired, so the scale decision is `PROCEED_WITH_REMAINING_16_AS_DESIGNED`, preserving separate 10-task (`$0.015`) and 6-task (`$0.009`) slices. Current September 15 spend is `$0.0085`, leaving `$0.0165`; only the 10-task slice fits today, and no later slice inherits authority.
+
 Stage numbers mean **Atlas products under review**, not interchangeable counts of product/source pairs or paid tasks. The governed work unit is a product/source pair. A product may contribute zero, one, or two ready pairs, and each ready repeat pair normally creates one paid Sellers task per observation cycle.
 
 ## Certified baseline
@@ -254,4 +260,4 @@ No new architectural owner is accepted by this plan. Promotion between stages us
 
 ## Next actions
 
-Recommended next action: operator review of the checked-in 25-product cohort, readiness projection, canary, stop conditions, and separated cost envelopes. If accepted, prepare only the canary's bounded identity-discovery and repeat plans through their existing owners; preparation remains a later explicit action and still grants no spend authority. Run the seven-pair longitudinal experiment only after inspecting the canary, under a separate bounded authority. No P0 engineering increment is required.
+Recommended next action: operator review of Canary A's terminal evidence and the still-ready 16-member projection. If accepted, prepare—but do not automatically authorize—the first remaining 10-member Amazon Products slice through the existing owner. The final six-member slice and the seven-pair longitudinal experiment remain separate future authorities. No P0 engineering increment is required.
