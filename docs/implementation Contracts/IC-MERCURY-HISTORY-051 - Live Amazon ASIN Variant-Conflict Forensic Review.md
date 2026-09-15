@@ -20,6 +20,8 @@ The corrected H051 identity policy, `MERCURY-HISTORY-051-1.0`, first identifies 
 - exact-MPN bundle and renewed/used candidates retain their existing fail-closed outcomes;
 - rows without the exact canonical MPN cannot create target identity, corroboration, or conflict.
 
+Amazon Products responses are heterogeneous search documents. Only product candidate rows (`amazon_serp` and `amazon_paid`, plus the legacy fixture shape with no explicit type) enter strict product-evidence normalization. Non-product containers such as `related_searches` are excluded before ASIN validation; malformed ASINs on actual product rows still fail closed. This preserves strict ASIN grammar without allowing an unrelated response container to terminate evaluation of valid immutable candidates.
+
 Parent ASIN and modification/product-ASIN data remain evidence, not automatic equivalence. H051 does not invent parent/child authority. When an exact-MPN candidate in an explicitly linked family also contradicts material Atlas facts, the existing material-conflict rule still fails closed.
 
 ## Destination and downstream authority
