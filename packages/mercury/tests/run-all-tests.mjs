@@ -191,6 +191,7 @@ const testModules = [
     "./ProductsIdentityDiscoveryDomainAdapter.test.mjs",
     "./ProductionProductsDiscoverySourceOwners.test.mjs",
     "./ProductionAmazonProductsDiscoveryRecoveryOwner.test.mjs",
+    "./ProductsIdentityDiscoveryExistingResultRecovery.test.mjs",
     "./GoogleProductsChildAuthorizationRecovery.test.mjs",
     "./ReusableIdentityAcquisitionLineage.test.mjs",
     "./BoundedRepeatObservationProductionPipeline.test.mjs",
