@@ -4,7 +4,7 @@ import {createDataForSeoPrepareArtifact} from "../acquisition/operations/FileDat
 
 export const PRODUCTS_DISCOVERY_POLICY_VERSION="MERCURY-PRODUCTS-IDENTITY-DISCOVERY-1.0";
 export const PRODUCTS_DISCOVERY_STATES=Object.freeze({READY:"READY_FOR_DISCOVERY",RESOLVED:"ALREADY_RESOLVED",REVIEW:"REVIEW_REQUIRED",RIGHTS:"RIGHTS_BLOCKED",UNSUPPORTED:"UNSUPPORTED"});
-export const PRODUCTS_DISCOVERY_CONFIRMATIONS=Object.freeze({AUTHORIZE:"AUTHORIZE-PRODUCTS-IDENTITY-DISCOVERY",START:"START-PRODUCTS-IDENTITY-DISCOVERY",RESUME:"RESUME-PRODUCTS-IDENTITY-DISCOVERY"});
+export const PRODUCTS_DISCOVERY_CONFIRMATIONS=Object.freeze({AUTHORIZE:"AUTHORIZE-BOUNDED-IDENTITY-DISCOVERY",START:"START-BOUNDED-IDENTITY-DISCOVERY",RESUME:"RESUME-BOUNDED-IDENTITY-DISCOVERY"});
 const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
 const digest=value=>crypto.createHash("sha256").update(stable(value)).digest("hex");
 const freeze=value=>Object.freeze(structuredClone(value));

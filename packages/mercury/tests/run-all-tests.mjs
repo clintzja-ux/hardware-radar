@@ -257,6 +257,7 @@ const testModules = [
     ,"./RakutenProductCatalogFieldMap.test.mjs"
     ,"./RakutenDeltaMultiplicity.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
+    ,"./ProductionProductsIdentityDiscovery.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
