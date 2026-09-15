@@ -8,6 +8,7 @@ const assess=(owner,source="DATAFORSEO_GOOGLE_SHOPPING",id="ram_fixture")=>owner
 let cases=0;
 assert.equal((await assess(make())).readinessState,"READY_FOR_DISCOVERY"); cases++;
 const reusable={status:"REUSABLE",productId:"p",dataDocId:"d",gid:"g",bindingDigest:"a".repeat(64)}, first=await assess(make({google:reusable})), replay=await assess(make({google:reusable})); assert.equal(first.readinessState,"ALREADY_RESOLVED"); assert.equal(first.readinessBindingDigest,replay.readinessBindingDigest); cases+=2;
+const later=await make({google:reusable}).assess({atlasProductId:"ram_fixture",sourceId:"DATAFORSEO_GOOGLE_SHOPPING",asOf:"2026-09-14T13:00:00.000Z"}); assert.equal(first.readinessBindingDigest,later.readinessBindingDigest); assert.notEqual(first.assessedAt,later.assessedAt); cases+=2;
 assert.equal((await assess(make({google:{status:"REVIEW_REQUIRED",reason:"CONFLICTING_GOVERNED_PROVIDER_IDENTITIES"}}))).readinessState,"REVIEW_REQUIRED"); cases++;
 assert.equal((await assess(make({rights:{DATAFORSEO_GOOGLE_SHOPPING:blocked}}))).readinessState,"RIGHTS_BLOCKED"); cases++;
 assert.equal((await assess(make(),"UNKNOWN_SOURCE")).readinessState,"UNSUPPORTED"); assert.equal((await assess(make({exists:false}))).readinessState,"UNSUPPORTED"); cases+=2;

@@ -27,14 +27,14 @@ export class ProductsIdentityDiscoveryDomainAdapter{
     if(!request||Object.keys(request).some(key=>!["atlasProductId","sourceId"].includes(key)))throw new Error("PRODUCTS_DISCOVERY_COHORT_MEMBER_INVALID");
     const identity=createProductsDiscoveryDomainIdentity({...request,discoveryCycle:cycle}),config=sourceConfig(identity.sourceId);if(!config)throw new Error("PRODUCTS_DISCOVERY_UNSUPPORTED");
     const product=await this.productRepository.getById(identity.atlasProductId);if(!product)throw new Error("PRODUCTS_DISCOVERY_PRODUCT_NOT_FOUND");
-    const readiness=await this.readinessOwner.assess({atlasProduct:product,sourceId:identity.sourceId,asOf:cycle});if(readiness?.state!==PRODUCTS_DISCOVERY_STATES.READY)throw new Error(`PRODUCTS_DISCOVERY_NOT_READY:${readiness?.state??"UNKNOWN"}`);
+    const readiness=await this.readinessOwner.assess({atlasProductId:identity.atlasProductId,sourceId:identity.sourceId,asOf:cycle});if(readiness?.state!==PRODUCTS_DISCOVERY_STATES.READY)throw new Error(`PRODUCTS_DISCOVERY_NOT_READY:${readiness?.state??"UNKNOWN"}`);
     const rights=this.rightsRegistry.require(identity.sourceId),prepared=await this.sourceOwners[identity.sourceId].prepare({atlasProduct:product,cycle,rightsProfile:rights,readiness});
-    const material={...identity,source:identity.sourceId,operation:config.operation,taskCeilingUsd:config.ceiling,atlasProductId:identity.atlasProductId,canonicalMpn:text(product.identity?.manufacturerPartNumber,"PRODUCTS_DISCOVERY_MPN_REQUIRED"),identityStateDigest:text(readiness.bindingDigest,"PRODUCTS_DISCOVERY_IDENTITY_STATE_INVALID"),rightsDigest:text(prepared.rightsDigest,"PRODUCTS_DISCOVERY_RIGHTS_INVALID"),requestIdentity:text(prepared.requestIdentity,"PRODUCTS_DISCOVERY_REQUEST_INVALID"),sourcePayload:prepared.sourcePayload??null};
+    const material={...identity,source:identity.sourceId,operation:config.operation,taskCeilingUsd:config.ceiling,atlasProductId:identity.atlasProductId,canonicalMpn:text(product.identity?.manufacturerPartNumber,"PRODUCTS_DISCOVERY_MPN_REQUIRED"),identityStateDigest:text(readiness.readinessBindingDigest,"PRODUCTS_DISCOVERY_IDENTITY_STATE_INVALID"),rightsDigest:text(prepared.rightsDigest,"PRODUCTS_DISCOVERY_RIGHTS_INVALID"),requestIdentity:text(prepared.requestIdentity,"PRODUCTS_DISCOVERY_REQUEST_INVALID"),sourcePayload:prepared.sourcePayload??null};
     return freeze({...material,domainBindingDigest:digest(material),outcome:null,paidTaskCreated:false,providerTaskId:null});
   }
   async revalidateMember({member,authorization}){
-    const product=await this.productRepository.getById(member.atlasProductId),readiness=await this.readinessOwner.assess({atlasProduct:product,sourceId:member.source,asOf:authorization.authorizedAt});
-    if(readiness?.state!==PRODUCTS_DISCOVERY_STATES.READY||readiness.bindingDigest!==member.identityStateDigest)throw new Error("PRODUCTS_DISCOVERY_IDENTITY_STATE_CHANGED");
+    const product=await this.productRepository.getById(member.atlasProductId),readiness=await this.readinessOwner.assess({atlasProductId:member.atlasProductId,sourceId:member.source,asOf:authorization.authorizedAt});
+    if(!product||readiness?.state!==PRODUCTS_DISCOVERY_STATES.READY||readiness.readinessBindingDigest!==member.identityStateDigest)throw new Error("PRODUCTS_DISCOVERY_IDENTITY_STATE_CHANGED");
     const rights=this.rightsRegistry.require(member.source);if((rights.bindingDigest??rights.profileDigest)!==member.rightsDigest)throw new Error("PRODUCTS_DISCOVERY_RIGHTS_CHANGED");return true;
   }
   async advanceMember({member,authorization,createChildBinding,checkpoint}){

@@ -10,8 +10,10 @@ const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value))
 const clone=value=>structuredClone(value);
 
 export class GovernedProviderIdentityResolver {
-  constructor({ historicalRepository, evidenceRepository }={}) { if(!historicalRepository?.getAll||!evidenceRepository?.getById)throw new TypeError("PROVIDER_IDENTITY_OWNER_REQUIRED");this.history=historicalRepository;this.evidence=evidenceRepository; }
+  constructor({ historicalRepository, evidenceRepository, neutralFinalizationRepository=null }={}) { if(!historicalRepository?.getAll||!evidenceRepository?.getById)throw new TypeError("PROVIDER_IDENTITY_OWNER_REQUIRED");this.history=historicalRepository;this.evidence=evidenceRepository;this.neutral=neutralFinalizationRepository; }
   async resolve(atlasProductId) {
+    const finalized=this.neutral?.getNeutralProductsFinalizationsForProduct?await this.neutral.getNeutralProductsFinalizationsForProduct(atlasProductId):[];
+    if(finalized.length){const resolved=finalized.filter(x=>x.state==="IDENTITY_RESOLVED"&&[x.providerIdentity?.productId,x.providerIdentity?.dataDocId,x.providerIdentity?.gid].some(Boolean));if(resolved.length){const unique=new Map(resolved.map(x=>[stable(x.providerIdentity),x.providerIdentity]));if(unique.size!==1)return freeze({status:"REVIEW_REQUIRED",reason:"CONFLICTING_GOVERNED_PROVIDER_IDENTITIES"});const id=[...unique.values()][0];return freeze({status:"REUSABLE",...id,bindingDigest:hash({atlasProductId,finalizations:resolved.map(x=>({finalizationId:x.finalizationId,bindingDigest:x.bindingDigest}))})});}return freeze({status:"REVIEW_REQUIRED",reason:finalized.at(-1).state,finalizationId:finalized.at(-1).finalizationId,bindingDigest:finalized.at(-1).bindingDigest});}
     const observations=(await this.history.getAll()).filter(x=>x.atlasProductId===atlasProductId&&x.provenance?.provider==="DATAFORSEO"&&x.provenance?.source==="DATAFORSEO_GOOGLE_SHOPPING");
     if(!observations.length)return freeze({status:"ABSENT"});
     const identities=[];

@@ -51,8 +51,7 @@ export class ProductsIdentityDiscoveryReadinessOwner {
   #result({ atlasProductId, sourceId, asOf, state, reasons, rights, identityReferences }) {
     const sourceRightsDigest = rights ? digest(rights) : null;
     const identityStateDigest = digest(identityReferences);
-    const binding = { policyVersion: PRODUCTS_IDENTITY_READINESS_POLICY_VERSION, atlasProductId, sourceId, state, reasons, identityReferences, sourceRightsDigest, identityStateDigest, asOf };
-    return freeze({ ...binding, readinessState: state, currentGovernedIdentityReferences: identityReferences, readinessBindingDigest: digest(binding), assessedAt: asOf, providerCallPerformed: false });
+    const binding = { policyVersion: PRODUCTS_IDENTITY_READINESS_POLICY_VERSION, atlasProductId, sourceId, state, reasons, identityReferences, sourceRightsDigest, identityStateDigest };
+    return freeze({ ...binding, asOf, readinessState: state, currentGovernedIdentityReferences: identityReferences, readinessBindingDigest: digest(binding), assessedAt: asOf, providerCallPerformed: false });
   }
 }
-

@@ -10,6 +10,8 @@ HISTORY-032 defined a source-neutral result reference and dispatcher, but real p
 
 ## Repository ownership
 
+The same repository accepts an additive neutral Google Products finalization variant because it already owns immutable identity progression alongside canonical provider results. The neutral record binds an already-canonical result and unchanged progression to honest neutral bounded plan/run/member authority. It stores only identity references and digests, does not duplicate provider payloads, and does not fabricate historical-bootstrap or acquisition-portfolio checkpoint lineage.
+
 PRODUCT_INFO's existing repository remains authoritative for its ordinary reviewed result workflow, but there was no suitable immutable repository shared by PRODUCTS and SELLERS. `FileHistoricalBootstrapProviderResultRepository` is therefore a narrow Mercury bootstrap orchestration repository—not a provider-task ledger, DF003 evidence store, workflow database, or second historical repository.
 
 Each `mer_providerresult_*` identity is deterministic from source, operation, provider task, and paid-action intent. Its immutable record additionally binds checkpoint, Atlas product, cohort index, provider status, retrieval time, exact operation-native result, and content digest. The corresponding `MERCURY-HISTORY-032-1.0` `mer_resultref_*` record contains only canonical result ID, operation, provider task, digest, status, intent, and recording time. Checkpoints reference the compact record, never provider payload.
