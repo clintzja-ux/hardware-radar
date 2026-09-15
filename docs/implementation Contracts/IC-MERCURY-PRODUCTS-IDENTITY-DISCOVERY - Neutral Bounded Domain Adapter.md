@@ -2,7 +2,7 @@
 
 ## Status
 
-Fixture-certified through durable Google and Amazon child-authorization recovery and the canonical read-only Products identity-discovery readiness owner. Amazon pre-execution recovery is implemented by the non-test `createProductionAmazonProductsDiscoverySourceOwner()` composition over the existing Amazon acceptance action, canonical task, execution, consumption, rights, and paid-execution owners. No production discovery plan, authorization, task, retrieval, or identity decision has been created, and production commands remain unavailable pending final production-factory composition.
+Fixture-certified with complete non-test Google and Amazon production source owners. Each owner supplies `prepare`, `authorize`, `execute`, `resolveTask`, `retrieve`, `finalize`, and `recoverPreExecution` by composing the existing canonical owners; callers inject infrastructure and provider transport, not source-domain callbacks. No production discovery plan, authorization, task, retrieval, or identity decision has been created, and production commands remain unavailable pending final lifecycle-factory and command composition.
 
 ## Canonical readiness owner
 
@@ -17,6 +17,12 @@ The Google neutral-lineage finalization boundary is an additive progression vari
 `ProductsIdentityDiscoveryDomainAdapter` is the typed domain adapter over `NeutralBoundedPaidActionCoordinator`. It derives deterministic member identity from source, Atlas product, and explicit discovery cycle; asks an injected canonical identity owner for current readiness; delegates source preparation, child authorization, execution, task resolution, retrieval, and identity finalization to existing Google or Amazon owners; and stops when the Products identity outcome is durable.
 
 It owns no parent authority, aggregate budget, transport, rights registry, task ledger, provider-result repository, or identity interpretation. Google uses `PRODUCTS` with a `$0.001` ceiling. Amazon uses `AMAZON_PRODUCTS`, its required acceptance-artifact lineage, and a `$0.0015` ceiling. Destination ASINs remain corroboration only.
+
+## Complete production source owners
+
+`createProductionGoogleProductsDiscoverySourceOwner()` composes the production Products PREPARE owner, neutral-derived child authorization, H032 artifact handoff, single-use task execution, exact plan/execution/task resolution, Products retrieval, H034 canonical result persistence, `NeutralGoogleProductsFinalizationService`, and the existing Products identity progression owner. `createProductionAmazonProductsDiscoverySourceOwner()` composes product-scoped acceptance preparation, the immutable acceptance artifact, neutral-derived Amazon action authority, `AmazonAcceptanceExecutionService`, canonical task and execution ledgers, H047 retrieval/result persistence, H051 processing/effective projection, and the previously certified pre-execution recovery boundary. H052 is exposed only as review availability and is never executed automatically.
+
+Both constructors are product-generic and use repository lookups keyed by exact durable lineage. They add no product-specific policy, repository, queue, workflow engine, retry authority, Sellers transition, or downstream write authority. The canonical rights profile digest is derived from the complete registry profile when the registry does not expose a precomputed digest; revalidation recomputes that same digest and continues to fail closed on drift.
 
 ## Lifecycle
 

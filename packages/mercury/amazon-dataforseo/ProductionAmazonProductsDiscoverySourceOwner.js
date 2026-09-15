@@ -1,5 +1,12 @@
 import { amazonAcceptanceDigest } from "./AmazonHistoricalAcceptancePreparation.js";
 import { AMAZON_ACCEPTANCE_ACTION_CONFIRMATIONS, validateAmazonAcceptanceActionAuthorization } from "./AmazonAcceptanceExecution.js";
+import { selectAmazonHistoricalAcceptanceProduct, prepareAmazonHistoricalAcceptance } from "./AmazonHistoricalAcceptancePreparation.js";
+import { createAmazonAcceptanceActionAuthorization } from "./AmazonAcceptanceExecution.js";
+import { AmazonAcceptanceExecutionService } from "./AmazonAcceptanceExecutionService.js";
+import { DataForSeoAmazonResultRetrievalService } from "./DataForSeoAmazonResults.js";
+import { createProductionDataForSeoTaskOwner } from "../acquisition/operations/ProductionDataForSeoTaskOwner.js";
+import { createProductionDataForSeoRetrievalOwner } from "../acquisition/operations/ProductionDataForSeoRetrievalOwner.js";
+import { createNeutralParentAuthorityInput } from "../bounded/NeutralParentAuthority.js";
 
 const requiredMethods = ["prepare", "authorize", "execute", "resolveTask", "retrieve", "finalize"];
 const fail = code => { throw new Error(code); };
@@ -43,7 +50,22 @@ function validateNeutralLineage({ member, parentAuthorization, childAuthority, a
  * operations. It adds recovery only; policy and durable state remain owned by
  * AmazonAcceptanceExecutionService and its canonical repositories.
  */
-export function createProductionAmazonProductsDiscoverySourceOwner({ sourceOwner, executionService, actionRepository, taskLedger, executionRepository, consumptionRepository, now = () => new Date().toISOString() } = {}) {
+export function createProductionAmazonProductsDiscoverySourceOwner({ sourceOwner=null, atlas=null, destinationRepository=null, historicalRepository=null, boundedRepository=null, artifactRepository=null, actionRepository, taskLedger, executionRepository, consumptionRepository, resultRepository=null, rightsRegistry=null, spendResolver=null, credentialLoader, httpTransport, acquisitionService, runLock, stateRoot, executionService=null, now = () => new Date().toISOString() } = {}) {
+  if(!sourceOwner){
+    if(!atlas?.products?.getById||!destinationRepository?.getAll||!historicalRepository?.getAll||!boundedRepository?.getPlan||!artifactRepository?.record||!actionRepository?.recordAuthorization||!resultRepository?.record||!rightsRegistry?.require||typeof spendResolver!=="function")fail("AMAZON_PRODUCTS_DISCOVERY_DEPENDENCIES_REQUIRED");
+    const taskOwner=createProductionDataForSeoTaskOwner({operation:"AMAZON_PRODUCTS",stateRoot,credentialLoader,httpTransport,acquisitionService,executionRepository,consumptionRepository,runLock,now});
+    const providerRetrieval=createProductionDataForSeoRetrievalOwner({operation:"AMAZON_PRODUCTS",credentialLoader,httpTransport,acquisitionService}),retrievalAcquisition=acquisitionService??{getAmazonProductsResult:providerTaskId=>providerRetrieval.retrieve({providerTaskId})};
+    const retrievalService=new DataForSeoAmazonResultRetrievalService({taskLedger,acquisitionService:retrievalAcquisition,resultRepository,now});
+    executionService=new AmazonAcceptanceExecutionService({artifactRepository,actionRepository,productRepository:atlas.products,rightsRegistry,spendResolver,taskOwners:{AMAZON_PRODUCTS:taskOwner},retrievalServices:{AMAZON_PRODUCTS:retrievalService},resultRepository,taskLedger,consumptionRepository,executionRepository,now});
+    sourceOwner={
+      async prepare({atlasProduct,cycle,rightsProfile}={}){const selection=selectAmazonHistoricalAcceptanceProduct({atlasProducts:[atlasProduct],destinations:await destinationRepository.getAll(),historicalObservations:await historicalRepository.getAll()}),artifact=prepareAmazonHistoricalAcceptance({asOf:cycle,selection,rightsProfile,currentUtcDaySpendUsd:await spendResolver(cycle)});await artifactRepository.record(artifact);return{rightsDigest:artifact.sourceRightsProfileDigest,requestIdentity:artifact.acceptanceArtifactId,sourcePayload:{acceptanceArtifactId:artifact.acceptanceArtifactId}};},
+      async authorize({member,parentAuthorization}={}){const artifact=await artifactRepository.getById(member.sourcePayload?.acceptanceArtifactId),product=await atlas.products.getById(member.atlasProductId),plan=boundedRepository.getPlan(parentAuthorization.planId),neutralParentAuthority=createNeutralParentAuthorityInput({parentAuthorization,plan,member}),authorization=createAmazonAcceptanceActionAuthorization({artifact,operation:"AMAZON_PRODUCTS",atlasProduct:product,operator:"machine:bounded-products-discovery",reason:"Neutral bounded Products identity discovery",authorizedAt:parentAuthorization.authorizedAt,expiresAt:parentAuthorization.expiresAt,currentUtcDaySpendUsd:await spendResolver(parentAuthorization.authorizedAt),neutralParentAuthority,boundedRepository});await actionRepository.recordAuthorization(authorization,{asOf:authorization.authorizedAt,expectedPredecessorIds:[]});return{authorizationId:authorization.authorizationId,authorizationDigest:amazonAcceptanceDigest(authorization),expiresAt:authorization.expiresAt,durableAuthority:true};},
+      async execute({member,authorizationId}={}){return executionService.execute({artifactId:member.sourcePayload?.acceptanceArtifactId,authorizationId,operation:"AMAZON_PRODUCTS",confirmation:AMAZON_ACCEPTANCE_ACTION_CONFIRMATIONS.EXECUTE_PRODUCTS});},
+      async resolveTask({member}={}){const rows=(await taskLedger.getAll()).filter(row=>row.kind==="AMAZON_PRODUCTS"&&row.checkpointId===member.sourcePayload?.acceptanceArtifactId);if(rows.length>1)fail("AMAZON_PRODUCTS_TASK_LINEAGE_CONFLICT");if(!rows.length)return null;const runs=await executionRepository.getAll(),matches=runs.flatMap(run=>(run.tasks??[]).filter(task=>task.providerTaskId===rows[0].taskId));if(matches.length!==1)fail("AMAZON_PRODUCTS_TASK_EXECUTION_CONFLICT");return{providerTaskId:rows[0].taskId,actualSpendUsd:matches[0].actualCostUsd??rows[0].costUsd};},
+      async retrieve({member}={}){return executionService.retrieve({artifactId:member.sourcePayload?.acceptanceArtifactId,operation:"AMAZON_PRODUCTS"});},
+      async finalize({member}={}){const outcome=await executionService.processProducts({artifactId:member.sourcePayload?.acceptanceArtifactId,authorizationId:member.authorizationId}),effective=actionRepository.getEffectiveOutcomeForArtifact?await actionRepository.getEffectiveOutcomeForArtifact(outcome.artifactId):outcome;return{state:effective.state,assessmentId:effective.assessmentId,providerResultId:effective.canonicalResultId,h052ReviewAvailable:effective.state==="INSUFFICIENT_ASIN_EVIDENCE"};}
+    };
+  }
   for (const method of requiredMethods) if (typeof sourceOwner?.[method] !== "function") fail("AMAZON_PRODUCTS_DISCOVERY_SOURCE_OWNER_REQUIRED");
   if (!executionService?.artifact || !executionService?.execute || !actionRepository?.getAuthorization || !taskLedger?.getAll || !executionRepository?.getAll || !consumptionRepository?.getAll) fail("AMAZON_PRODUCTS_RECOVERY_DEPENDENCIES_REQUIRED");
 

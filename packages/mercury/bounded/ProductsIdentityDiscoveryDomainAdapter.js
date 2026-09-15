@@ -35,7 +35,7 @@ export class ProductsIdentityDiscoveryDomainAdapter{
   async revalidateMember({member,authorization}){
     const product=await this.productRepository.getById(member.atlasProductId),readiness=await this.readinessOwner.assess({atlasProductId:member.atlasProductId,sourceId:member.source,asOf:authorization.authorizedAt});
     if(!product||readiness?.state!==PRODUCTS_DISCOVERY_STATES.READY||readiness.readinessBindingDigest!==member.identityStateDigest)throw new Error("PRODUCTS_DISCOVERY_IDENTITY_STATE_CHANGED");
-    const rights=this.rightsRegistry.require(member.source);if((rights.bindingDigest??rights.profileDigest)!==member.rightsDigest)throw new Error("PRODUCTS_DISCOVERY_RIGHTS_CHANGED");return true;
+    const rights=this.rightsRegistry.require(member.source);if((rights.bindingDigest??rights.profileDigest??digest(rights))!==member.rightsDigest)throw new Error("PRODUCTS_DISCOVERY_RIGHTS_CHANGED");return true;
   }
   async advanceMember({member,authorization,createChildBinding,checkpoint}){
     const owner=this.sourceOwners[member.source];let current=member;

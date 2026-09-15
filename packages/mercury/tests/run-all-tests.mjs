@@ -189,6 +189,7 @@ const testModules = [
     "./NeutralBoundedPaidActionCoordinator.test.mjs",
     "./NeutralProductsPrerequisites.test.mjs",
     "./ProductsIdentityDiscoveryDomainAdapter.test.mjs",
+    "./ProductionProductsDiscoverySourceOwners.test.mjs",
     "./ProductionAmazonProductsDiscoveryRecoveryOwner.test.mjs",
     "./GoogleProductsChildAuthorizationRecovery.test.mjs",
     "./ReusableIdentityAcquisitionLineage.test.mjs",
