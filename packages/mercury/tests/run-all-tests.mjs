@@ -258,6 +258,7 @@ const testModules = [
     ,"./RakutenDeltaMultiplicity.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
+    ,"./BoundedSpendProgression.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

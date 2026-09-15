@@ -18,11 +18,11 @@ export function createProductionGoogleProductsDiscoverySourceOwner({
   atlas, boundedRepository, childArtifactRepository, taskLedger, executionRepository,
   consumptionRepository, resultRepository, rightsRegistry, acceptanceRepository=null,
   evidenceRepository=null, credentialLoader, httpTransport, acquisitionService,
-  runLock, stateRoot, progressionOwner=createProductsIdentityProgressionOwner(), now=()=>new Date().toISOString()
+  runLock, stateRoot, boundedSpendProgressionResolver=null, progressionOwner=createProductsIdentityProgressionOwner(), now=()=>new Date().toISOString()
 }={}){
   if(!atlas?.products?.getById||!boundedRepository?.getPlan||!childArtifactRepository?.getById||!taskLedger?.getAll||!executionRepository?.getAll||!resultRepository?.record||!resultRepository?.findByTask||!rightsRegistry?.require)fail("GOOGLE_PRODUCTS_DISCOVERY_DEPENDENCIES_REQUIRED");
   const prepareOwner=createProductionProductsPrepareOwner({atlas,acceptanceRepository,evidenceRepository,executionRepository,now});
-  const taskOwner=createProductionDataForSeoTaskOwner({operation:"PRODUCTS",stateRoot,credentialLoader,httpTransport,acquisitionService,executionRepository,consumptionRepository,runLock,now});
+  const taskOwner=createProductionDataForSeoTaskOwner({operation:"PRODUCTS",stateRoot,credentialLoader,httpTransport,acquisitionService,executionRepository,consumptionRepository,runLock,boundedSpendProgressionResolver,now});
   const retrievalOwner=createProductionDataForSeoRetrievalOwner({operation:"PRODUCTS",credentialLoader,httpTransport,acquisitionService});
   const finalization=new NeutralGoogleProductsFinalizationService({boundedRepository,childArtifactRepository,taskLedger,resultRepository,productRepository:atlas.products,progressionOwner,rightsRegistry,now});
 

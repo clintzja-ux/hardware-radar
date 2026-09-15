@@ -20,6 +20,7 @@ import { ProductsIdentityDiscoveryDomainAdapter, ProductsIdentityDiscoveryServic
 import { ProductsIdentityDiscoveryReadinessOwner } from "./ProductsIdentityDiscoveryReadinessOwner.js";
 import { createProductionGoogleProductsDiscoverySourceOwner } from "./ProductionGoogleProductsDiscoverySourceOwner.js";
 import { createProductionAmazonProductsDiscoverySourceOwner } from "../amazon-dataforseo/ProductionAmazonProductsDiscoverySourceOwner.js";
+import { createBoundedSpendProgressionResolver } from "./BoundedSpendProgression.js";
 
 /** Composition root only. All decisions and durable writes remain with certified owners. */
 export function createProductionProductsIdentityDiscoveryService({
@@ -44,9 +45,10 @@ export function createProductionProductsIdentityDiscoveryService({
   spendResolver??=(evaluationTime=>readGovernedSpendForUtcDay({executionRepository,evaluationTime}));
   const atlas={products:productRepository};
   readinessOwner??=new ProductsIdentityDiscoveryReadinessOwner({productRepository,rightsRegistry,googleIdentityResolver,amazonArtifactRepository,amazonActionRepository});
+  const boundedSpendProgressionResolver=createBoundedSpendProgressionResolver({boundedRepository,executionRepository});
   sourceOwners??={
-    DATAFORSEO_GOOGLE_SHOPPING:createProductionGoogleProductsDiscoverySourceOwner({atlas,boundedRepository,childArtifactRepository,taskLedger,executionRepository,consumptionRepository,resultRepository,rightsRegistry,credentialLoader,httpTransport,acquisitionService,stateRoot:acquisitionRoot,now}),
-    DATAFORSEO_AMAZON:createProductionAmazonProductsDiscoverySourceOwner({atlas,destinationRepository,historicalRepository,boundedRepository,artifactRepository:amazonArtifactRepository,actionRepository:amazonActionRepository,taskLedger,executionRepository,consumptionRepository,resultRepository,rightsRegistry,spendResolver,credentialLoader,httpTransport,acquisitionService,stateRoot:acquisitionRoot,now})
+    DATAFORSEO_GOOGLE_SHOPPING:createProductionGoogleProductsDiscoverySourceOwner({atlas,boundedRepository,childArtifactRepository,taskLedger,executionRepository,consumptionRepository,resultRepository,rightsRegistry,boundedSpendProgressionResolver,credentialLoader,httpTransport,acquisitionService,stateRoot:acquisitionRoot,now}),
+    DATAFORSEO_AMAZON:createProductionAmazonProductsDiscoverySourceOwner({atlas,destinationRepository,historicalRepository,boundedRepository,artifactRepository:amazonArtifactRepository,actionRepository:amazonActionRepository,taskLedger,executionRepository,consumptionRepository,resultRepository,rightsRegistry,spendResolver,boundedSpendProgressionResolver,credentialLoader,httpTransport,acquisitionService,stateRoot:acquisitionRoot,now})
   };
   const domainAdapter=new ProductsIdentityDiscoveryDomainAdapter({productRepository,readinessOwner,rightsRegistry,sourceOwners,boundedRepository,childAuthorizationArtifactRepository:childArtifactRepository,now});
   const coordinator=new NeutralBoundedPaidActionCoordinator({repository:boundedRepository,domainAdapter,spendResolver,now,dailySpendCeilingUsd:.025,policyVersion:PRODUCTS_DISCOVERY_POLICY_VERSION,idPrefixes:{plan:"mer_iddiscplan",authorization:"mer_iddiscauth",run:"mer_iddiscrun"}}),service=new ProductsIdentityDiscoveryService({coordinator});

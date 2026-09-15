@@ -31,13 +31,13 @@ export class ControlledAcquisitionExecutor {
     if(currentDaySpendResolver!=null&&typeof currentDaySpendResolver!=="function")throw new TypeError("currentDaySpendResolver must be a function.");
     this.runLock=runLock; this.ledgerRepository=ledgerRepository; this.transport=transport; this.resultProcessor=resultProcessor;this.currentDaySpendResolver=currentDaySpendResolver??(ledgerRepository.getAll?evaluationTime=>readGovernedSpendForUtcDay({executionRepository:ledgerRepository,evaluationTime}):null); this.now=now; this.runIdFactory=runId;
   }
-  async execute(plan){
+  async execute(plan,{spendProgression=null}={}){
     const approved = validatePlan(plan);
     const locked = await this.runLock.runExclusive(async()=>{
       const prior = await this.ledgerRepository.findByPlanId(plan.planId);
       if (prior) return { duplicate:true, prior };
       const startedAt=this.now(); if(!validIso(startedAt)) throw new TypeError("now() must return ISO timestamps.");
-      if(this.currentDaySpendResolver){const current=money(await this.currentDaySpendResolver(startedAt));if(current!==money(plan.spentTodayUsd))throw new Error("ACQUISITION_DAILY_SPEND_SNAPSHOT_DRIFT");if(money(current+plan.estimatedApprovedSpendUsd)>money(plan.policy.maxSpendPerDayUsd))throw new Error("ACQUISITION_DAILY_BUDGET_EXCEEDED");}
+      if(this.currentDaySpendResolver){const current=money(await this.currentDaySpendResolver(startedAt)),snapshot=money(plan.spentTodayUsd);if(current!==snapshot){const valid=spendProgression?.authorityOrigin==="NEUTRAL_BOUNDED_PARENT"&&spendProgression.automaticPaidRetries===0&&money(spendProgression.snapshotSpendUsd)===snapshot&&money(spendProgression.expectedCurrentSpendUsd)===current&&money(snapshot+spendProgression.attributableSpendUsd)===current&&spendProgression.attributableSpendUsd>=0&&money(spendProgression.attributableSpendUsd+spendProgression.memberMaximumSpendUsd)<=money(spendProgression.parentMaximumSpendUsd);if(!valid)throw new Error("ACQUISITION_DAILY_SPEND_SNAPSHOT_DRIFT");}if(money(current+plan.estimatedApprovedSpendUsd)>money(plan.policy.maxSpendPerDayUsd))throw new Error("ACQUISITION_DAILY_BUDGET_EXCEEDED");}
       const executionRunId=this.runIdFactory();
       const tasks=[]; let actualSpend=0; let stopReason=null;
       for(const task of approved){

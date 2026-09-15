@@ -14,3 +14,5 @@ HIGH, NORMAL, LOW, and PAUSED are operational acquisition priorities only. They 
 
 ## Safety
 The kill switch (`enabled`) defaults to false. `automaticPaidRetries` must remain zero. Budget limits are configurable rather than production policy constants. Plan IDs are deterministic for identical plan inputs and timestamps, supporting auditability and idempotent downstream execution design.
+
+Ordinary single-task execution requires exact equality between the plan's immutable `spentTodayUsd` snapshot and authoritative durable UTC-day spend. A certified neutral bounded-parent execution may recognize only actual spend from earlier completed members of the same exact parent authorization, plan, run, and authorized member set. Recognition requires exact child and provider-task lineage, canonical execution-ledger attribution, each member ceiling, the parent aggregate ceiling, zero retries, and the unchanged daily ceiling. Any remainder—including unrelated or interleaved DataForSEO spend—remains `ACQUISITION_DAILY_SPEND_SNAPSHOT_DRIFT`. This adds no spend ledger or reservation owner.

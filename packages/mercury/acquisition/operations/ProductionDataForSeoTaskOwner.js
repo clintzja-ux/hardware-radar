@@ -43,7 +43,8 @@ export function createProductionDataForSeoTaskOwner({
   acquisitionService,
   executionRepository,
   consumptionRepository,
-  runLock
+  runLock,
+  boundedSpendProgressionResolver=null
 } = {}) {
   if (!METHODS[operation]) throw new TypeError("DATAFORSEO_PRODUCTION_OPERATION_INVALID");
   const canonicalHttpTransport = httpTransport ?? (async ({ method, url, headers, body }) => {
@@ -139,7 +140,8 @@ export function createProductionDataForSeoTaskOwner({
         maxSpendUsd: request.maxSpendUsd,
         maxPaidTasks: request.maxPaidTasks
       });
-      const outcome=await singleUse.execute({ plan: request.plan, authorization });
+      const spendProgression=boundedSpendProgressionResolver&&request.neutralParentAuthority?await boundedSpendProgressionResolver({request,operation}):null;
+      const outcome=await singleUse.execute({ plan: request.plan, authorization, spendProgression });
       if(outcome.status==="COMPLETED"){
         const expected=request.plan.decisions.filter(entry=>entry.decision==="APPROVED").map(entry=>entry.execution).filter(execution=>execution.paidActionIntentId?.startsWith("mer_repeatintent_"));
         if(expected.length){
