@@ -2,7 +2,13 @@
 
 ## Status
 
-Fixture-certified through durable Google child-authorization recovery. No production discovery plan, authorization, task, retrieval, or identity decision has been created, and production commands remain unavailable pending production-owner composition.
+Fixture-certified through durable Google child-authorization recovery and the canonical read-only Products identity-discovery readiness owner. No production discovery plan, authorization, task, retrieval, or identity decision has been created, and production commands remain unavailable pending final production-factory composition.
+
+## Canonical readiness owner
+
+`ProductsIdentityDiscoveryReadinessOwner` accepts only an Atlas product ID, supported source ID, and explicit assessment time. It derives Atlas existence, current source rights, and source-native identity state. Google resolution is delegated to `GovernedProviderIdentityResolver`, which validates admitted-history/evidence/task lineage and returns reusable, absent, or conflicting-review state. Amazon resolution is delegated to the acceptance artifact and effective acceptance-action projection, including H051 reassessment and H052 operator confirmation. Retailer destinations never become identity authority.
+
+The canonical states are `READY_FOR_DISCOVERY`, `ALREADY_RESOLVED`, `REVIEW_REQUIRED`, `RIGHTS_BLOCKED`, and `UNSUPPORTED`. An H052-eligible `INSUFFICIENT_ASIN_EVIDENCE` outcome remains `REVIEW_REQUIRED`; it does not authorize redundant discovery. The deterministic readiness binding covers product, source, state/reasons, identity references/digests, current rights digest, policy version, and explicit `asOf`. This makes the projection suitable both for PREPARE selection and START drift detection without creating economic or execution authority.
 
 ## Boundary
 
@@ -26,4 +32,4 @@ The terminal boundary is Products identity only. `STRONG_UNIQUE_ASIN` and `INSUF
 
 The five-pair fixture produces five ready members, five maximum tasks, `$0.006` maximum spend, zero retries, and `$0.0125` projected UTC-day spend from a `$0.0065` starting fixture. Deterministic replay, single-start behavior, pending/resume, indexed neutral persistence, source-owned child lineage, downstream isolation, and 10/100/1,000/10,000-member planning are covered. Recovery fixtures cover interruption before and after `AUTHORIZED`, existing-task-first behavior, exact artifact replay/conflict, source parity, single-use replay, and downstream isolation. The immutable full-cohort and H032 JSON payloads remain observed storage-size concerns; identities and member lookups are direct and no per-product shell workflow is required, but storage migration should be considered before sustained workloads approach roughly 1,000 concurrent authorization artifacts.
 
-Executable production commands remain intentionally unavailable until a production composition binds the adapter to canonical Google/Amazon readiness, task, retrieval, and identity owners. This contract does not authorize that composition or any provider operation.
+Executable production commands remain intentionally unavailable until a production factory binds the adapter, this readiness owner, and the already-certified Google/Amazon task, retrieval, and identity owners. This contract does not authorize that composition or any provider operation.
