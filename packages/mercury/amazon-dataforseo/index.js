@@ -10,6 +10,7 @@ export * from "./FileAmazonHistoricalAcceptanceRepository.js";
 export * from "./AmazonAcceptanceExecution.js";
 export * from "./FileAmazonAcceptanceActionRepository.js";
 export * from "./AmazonAcceptanceExecutionService.js";
+export * from "./ProductionAmazonProductsDiscoverySourceOwner.js";
 export * from "./AmazonProductsIdentityReassessment.js";
 export * from "./AmazonOperatorIdentityConfirmation.js";
 export * from "./AmazonPilotPreparation.js";
