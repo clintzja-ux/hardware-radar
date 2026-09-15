@@ -36,7 +36,7 @@ The reserved six, last assessed 6/6 `READY_FOR_DISCOVERY`, are:
 | `ram_teamgroup_ctced532g6400hc32adc01` | `CTCED532G6400HC32ADC01` |
 | `ram_teamgroup_tlzgd432g3200hc16fdc01` | `TLZGD432G3200HC16FDC01` |
 
-Their maximum future envelope is six Amazon Products tasks at `$0.0015` each, `$0.0090` total, with zero automatic paid retries. The exact checked-in cohort is `config/mercury/scale-ramp/25-product-slice-2-amazon-identity.json`. Production PREPARE/INSPECT at `2026-09-15T22:28:02.044Z` created plan `mer_iddiscplan_e0ec35a7e9f99bd15f824e60`: 6 requested, 6 READY, 0 blocked, `$0.0235` current-day spend, `$0.0265` remaining under the `$0.0500` ceiling, `NOT_AUTHORIZED`, and `NOT_STARTED`. No provider call, paid task, or spend occurred. The next action is separate operator review before any authorization.
+Their maximum future envelope is six Amazon Products tasks at `$0.0015` each, `$0.0090` total, with zero automatic paid retries. The exact checked-in cohort is `config/mercury/scale-ramp/25-product-slice-2-amazon-identity.json`. Plan `mer_iddiscplan_e0ec35a7e9f99bd15f824e60` has 6 requested, 6 READY, and 0 blocked. Current reassessment preserved all plan/member/rights/destination bindings, and single-use authorization `mer_iddiscauth_7521266859ea7c8df1ee71da` is `AUTHORIZED` until `2026-09-15T23:12:04.9798952Z`. It recorded `$0.0235` current-day spend with `$0.0265` remaining under the `$0.0500` ceiling. The run remains `NOT_STARTED`; authorization created no provider call, paid task, execution, or spend. The next action is separate operator review before any START.
 
 ## Source roles and exception doctrine
 
