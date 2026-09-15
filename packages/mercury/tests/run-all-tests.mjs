@@ -259,6 +259,7 @@ const testModules = [
     ,"./RetailLifecycleHeldReassessment.test.mjs"
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
     ,"./TasklessChildAuthorityDisposition.test.mjs"
+    ,"./DispositionAwareExistingTaskContinuation.test.mjs"
     ,"./BoundedSpendProgression.test.mjs"
 ];
 
