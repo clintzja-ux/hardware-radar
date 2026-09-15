@@ -274,4 +274,6 @@ No new architectural owner is accepted by this plan. Promotion between stages us
 
 ## Next actions
 
-Recommended next action: wait for a fresh UTC budget day, then perform a separate zero-provider PREPARE and INSPECT for the exact reserved six-member Slice 2 cohort. Do not authorize it in the same action. The longitudinal experiment remains a separate future authority after the 25-member identity breadth stage. No P0 engineering increment is required.
+First-party Rakuten clarification received September 14, 2026 confirms distinct-SKU, same-SKU delta-order, and later-full reconciliation semantics. The current parser preserves distinct ordered rows, but the production adapter has no source-state projection for last-same-SKU-wins or authoritative full replacement. This is a contained Rakuten runtime correctness gap, not a change to the Amazon identity scale-ramp design. Complete that separately reviewed correction first while Slice 2 remains untouched.
+
+After certification, wait for a fresh UTC budget day, then perform a separate zero-provider PREPARE and INSPECT for the exact reserved six-member Slice 2 cohort. Do not authorize it in the same action. The longitudinal experiment remains a separate future authority after the 25-member identity breadth stage.
