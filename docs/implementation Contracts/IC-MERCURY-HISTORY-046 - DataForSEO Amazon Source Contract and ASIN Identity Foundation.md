@@ -28,6 +28,8 @@ Outcomes are `STRONG_UNIQUE_ASIN`, `MULTIPLE_COMPATIBLE_ASINS`, `ASIN_VARIANT_CO
 
 Bundles cannot establish standalone product identity or component price. Renewed, used, refurbished, open-box, and pre-owned identity remains distinct from new. Multiple compatible ASINs remain unresolved unless later governed variant evidence resolves the exact Atlas variant.
 
+For unresolved SKU identity, this source is the preferred automated discovery route when current rights, an active reviewed Amazon destination, budget, and the H049-H052 boundaries permit it. That preference is not identity authority: provider evidence must still satisfy H051, and ambiguous or insufficient evidence remains fail closed. H052 provides the narrow exception path when an existing immutable Amazon result is insufficient but an exact active operator-reviewed destination supplies independently reviewable ASIN evidence. With no Amazon result, H052 cannot manufacture identity; a fresh, separately authorized Amazon Products acquisition is the only automated way to add provider evidence.
+
 ## Existing Amazon destinations
 
 Checked-in Amazon destinations include ASIN-shaped `retailerListingId` and `/dp/<ASIN>` evidence. H046 may pass those identifiers into the assessment as sorted corroborating evidence, but destination navigation review did not grant canonical provider-identity authority. They never select or override an ASIN automatically.

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { performance } from "node:perf_hooks";
 import { ProductsIdentityDiscoveryReadinessOwner as Owner } from "../bounded/ProductsIdentityDiscoveryReadinessOwner.js";
+import { GovernedProviderIdentityResolver } from "../acquisition/portfolio/ProductionAcquisitionPortfolio.js";
 
 const asOf="2026-09-14T12:00:00.000Z", product=id=>({identity:{atlasProductId:id}}), allowed={sourceId:"SOURCE",acquisition:{api:"ALLOWED"},retention:{historical:"ALLOWED",durableAuditMetadata:"ALLOWED"}}, blocked={...allowed,acquisition:{api:"BLOCKED"}};
 function make({google={status:"ABSENT"},artifacts=[],outcomes={},rights=allowed,exists=true}={}){return new Owner({productRepository:{getById:async id=>exists?product(id):null},rightsRegistry:{require:source=>rights[source]??rights},googleIdentityResolver:{resolve:async()=>structuredClone(google)},amazonArtifactRepository:{getAll:async()=>structuredClone(artifacts)},amazonActionRepository:{getEffectiveOutcomeForArtifact:async id=>structuredClone(outcomes[id]??null)}})}
@@ -20,5 +21,8 @@ assert.equal((await assess(make({rights:{DATAFORSEO_AMAZON:blocked}}),"DATAFORSE
 let amazonReads=0;const isolated=new Owner({productRepository:{getById:async id=>product(id)},rightsRegistry:{require:()=>allowed},googleIdentityResolver:{resolve:async()=>({status:"ABSENT"})},amazonArtifactRepository:{getAll:async()=>{amazonReads++;return[artifact];}},amazonActionRepository:{getEffectiveOutcomeForArtifact:async()=>({state:"STRONG_UNIQUE_ASIN",governedAsin:"B000000001"})}});assert.equal((await assess(isolated)).readinessState,"READY_FOR_DISCOVERY");assert.equal(amazonReads,0);cases+=2;
 assert.notEqual(first.readinessBindingDigest,(await assess(make({google:{...reusable,bindingDigest:"b".repeat(64)}}))).readinessBindingDigest); cases++;
 assert.notEqual((await assess(make())).readinessBindingDigest,(await assess(make({rights:{...allowed,status:"DRIFT"}}))).readinessBindingDigest); cases++;
+const terminalFinalization={state:"NO_USABLE_IDENTITY",finalizationId:"mer_googleidfinal_terminal",bindingDigest:"c".repeat(64)};
+const productionResolver=new GovernedProviderIdentityResolver({historicalRepository:{getAll:async()=>[]},evidenceRepository:{getById:async()=>null},neutralFinalizationRepository:{getNeutralProductsFinalizationsForProduct:async()=>[terminalFinalization]}});
+const terminalReadiness=await assess(make({google:await productionResolver.resolve("ram_fixture")}));assert.equal(terminalReadiness.readinessState,"REVIEW_REQUIRED");assert.deepEqual(terminalReadiness.reasons,["NO_USABLE_IDENTITY"]);cases++;
 for(const size of [10,100,1000,10000]){const owner=make(),start=performance.now();const results=await Promise.all(Array.from({length:size},(_,i)=>assess(owner,"DATAFORSEO_GOOGLE_SHOPPING",`ram_${i}`)));assert.equal(results.length,size);assert.ok(results.every(x=>x.readinessState==="READY_FOR_DISCOVERY"));console.log(`Products identity readiness scale ${size}: ${(performance.now()-start).toFixed(2)} ms`);cases++;}
 console.log(`Products identity discovery readiness owner tests passed (${cases} cases).`);

@@ -45,7 +45,7 @@ export function createProductionProductsIdentityDiscoveryService({
   resultRepository??=new FileHistoricalBootstrapProviderResultRepository({statePath:path.join(stateRoot,"canonical-provider-results.json")});
   amazonArtifactRepository??=new FileAmazonHistoricalAcceptanceRepository({statePath:path.join(mercuryRoot,"amazon-acceptance-artifacts.json")});
   amazonActionRepository??=new FileAmazonAcceptanceActionRepository({statePath:path.join(mercuryRoot,"amazon-acceptance-actions.json")});
-  googleIdentityResolver??=new GovernedProviderIdentityResolver({historicalRepository,evidenceRepository});
+  googleIdentityResolver??=new GovernedProviderIdentityResolver({historicalRepository,evidenceRepository,neutralFinalizationRepository:resultRepository});
   spendResolver??=(evaluationTime=>readGovernedSpendForUtcDay({executionRepository,evaluationTime}));
   const atlas={products:productRepository};
   readinessOwner??=new ProductsIdentityDiscoveryReadinessOwner({productRepository,rightsRegistry,googleIdentityResolver,amazonArtifactRepository,amazonActionRepository});
