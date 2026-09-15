@@ -46,6 +46,14 @@ The deterministic first 10 members of the reviewed 16-member remainder are check
 
 Measured on the production-composed local boundary, PREPARE took 700.231 ms and INSPECT took 622.645 ms. The immutable plan payload is 11,354 bytes versus 3,823 bytes for the three-member Canary A plan. The indexed identity-discovery store grew from 176,128 to 200,704 bytes, adding one plan and 10 plan-member rows; authorizations, runs, run members, child authorities, and dispositions did not grow. The existing Amazon acceptance artifact store grew from 11 to 21 artifacts (41,107 to 78,305 bytes) because PREPARE materializes one zero-authority source preparation per member. These bounded measurements expose no blocker at 10 members; they do not replace the planned 25/100 measurement gates.
 
+### Amazon identity Slice 1 terminal result
+
+The real Slice 1 run `mer_iddiscrun_bfcdfbce45853a42add00506` is terminal `COMPLETED`: 10/10 members terminal, 10 unique paid tasks and canonical results, zero retries, zero pending/provider/systemic failures, and exact spend of `$0.0150`. Eight members established `STRONG_UNIQUE_ASIN`; `ram_crucial_ct2k32g56c46s5` ended `MULTIPLE_COMPATIBLE_ASINS`, and `ram_crucial_ct16g4dfra32a` ended `ASIN_VARIANT_CONFLICT`. Both exceptions are member-local governed domain ambiguity, expose no H052 action, and did not impede later members. The previously pending G.SKILL member reused its original task on the second RESUME, added no spend or authority, and finalized once as `STRONG_UNIQUE_ASIN`.
+
+Across Canary A and Slice 1, 13 attempts produced nine strong identities (`69.2%`), three multiple-compatible outcomes (`23.1%`), and one variant conflict (`7.7%`), with zero provider/systemic failures, duplicate tasks, or engineering interventions. This small cohort is operational acceptance evidence, not a catalog-wide yield forecast. Canonical repeat resolution now exposes 19 durable product/source pairs, including the eight new Slice 1 Amazon identities.
+
+The reserved final six remain exactly the committed deterministic partition and reassess 6/6 `READY_FOR_DISCOVERY` with unchanged Amazon rights. Their six-task / `$0.0090` envelope does not fit September 15: authoritative spend is `$0.0235`, leaving `$0.0015`. On a clean UTC day it would leave `$0.0160` under the unchanged `$0.025` ceiling. Therefore the current decision is `READY_TO_PREPARE_SLICE_2_ON_FRESH_BUDGET_DAY`; no Slice 2 plan or authority exists yet. The separate longitudinal control should wait until `AFTER_25_IDENTITY_STAGE` so it does not compete for the final breadth slice's budget.
+
 Stage numbers mean **Atlas products under review**, not interchangeable counts of product/source pairs or paid tasks. The governed work unit is a product/source pair. A product may contribute zero, one, or two ready pairs, and each ready repeat pair normally creates one paid Sellers task per observation cycle.
 
 ## Certified baseline
@@ -266,4 +274,4 @@ No new architectural owner is accepted by this plan. Promotion between stages us
 
 ## Next actions
 
-Recommended next action: operator review of prepared Slice 1 plan `mer_iddiscplan_5426b3781c0774286442ad01`. If accepted, issue a separate bounded authorization through the existing command; do not start it in the same action. The final six-member slice and the seven-pair longitudinal experiment remain separate future authorities. No P0 engineering increment is required.
+Recommended next action: wait for a fresh UTC budget day, then perform a separate zero-provider PREPARE and INSPECT for the exact reserved six-member Slice 2 cohort. Do not authorize it in the same action. The longitudinal experiment remains a separate future authority after the 25-member identity breadth stage. No P0 engineering increment is required.
