@@ -24,6 +24,7 @@ import { createProductionAmazonProductsDiscoverySourceOwner } from "../amazon-da
 import { createBoundedSpendProgressionResolver } from "./BoundedSpendProgression.js";
 import { FileSingleWriterRunLock } from "../runtime/FileSingleWriterRunLock.js";
 import { TasklessChildAuthorityDispositionService } from "./TasklessChildAuthorityDisposition.js";
+import { BoundedExistingTaskProgressionService } from "./BoundedExistingTaskProgression.js";
 import { amazonAcceptanceDigest } from "../amazon-dataforseo/AmazonHistoricalAcceptancePreparation.js";
 import crypto from "node:crypto";
 
@@ -57,7 +58,7 @@ export function createProductionProductsIdentityDiscoveryService({
     DATAFORSEO_AMAZON:createProductionAmazonProductsDiscoverySourceOwner({atlas,destinationRepository,historicalRepository,boundedRepository,artifactRepository:amazonArtifactRepository,actionRepository:amazonActionRepository,taskLedger,executionRepository,consumptionRepository,resultRepository,rightsRegistry,spendResolver,boundedSpendProgressionResolver,credentialLoader,httpTransport,acquisitionService,runLock,stateRoot:acquisitionRoot,now})
   };
   const domainAdapter=new ProductsIdentityDiscoveryDomainAdapter({productRepository,readinessOwner,rightsRegistry,sourceOwners,boundedRepository,childAuthorizationArtifactRepository:childArtifactRepository,now});
-  const coordinator=new NeutralBoundedPaidActionCoordinator({repository:boundedRepository,domainAdapter,spendResolver,now,dailySpendCeilingUsd:DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD,policyVersion:PRODUCTS_DISCOVERY_POLICY_VERSION,idPrefixes:{plan:"mer_iddiscplan",authorization:"mer_iddiscauth",run:"mer_iddiscrun"}}),service=new ProductsIdentityDiscoveryService({coordinator});
+  const coordinator=new NeutralBoundedPaidActionCoordinator({repository:boundedRepository,domainAdapter,spendResolver,now,dailySpendCeilingUsd:DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD,policyVersion:PRODUCTS_DISCOVERY_POLICY_VERSION,idPrefixes:{plan:"mer_iddiscplan",authorization:"mer_iddiscauth",run:"mer_iddiscrun"}}),service=new ProductsIdentityDiscoveryService({coordinator}),pendingProgression=new BoundedExistingTaskProgressionService({coordinator,now});
   const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value),sha=value=>crypto.createHash("sha256").update(stable(value)).digest("hex");
   const lineageResolver=async({member,child})=>{
     let authorization,authorizationArtifactId=null,authorizationArtifactDigest=null,taskMatches;
@@ -71,5 +72,5 @@ export function createProductionProductsIdentityDiscoveryService({
     return{authorizationId:authorization.authorizationId??authorization.requestId,authorizationDigest,authorizationPlanId,expiresAt:authorization.expiresAt,authorizationArtifactId,authorizationArtifactDigest,tasks:taskMatches,executions,results};
   };
   const tasklessDispositionService=new TasklessChildAuthorityDispositionService({boundedRepository,consumptionRepository,lineageResolver,runLock,now});
-  return Object.freeze({service,prepareDiscovery:input=>service.prepare(input),inspectDiscovery:input=>service.inspect(input),authorizeDiscovery:input=>service.authorize(input),startDiscovery:input=>service.start(input),resumeDiscovery:input=>service.resume(input),assessTasklessDisposition:input=>tasklessDispositionService.assess(input),disposeTasklessChild:input=>tasklessDispositionService.dispose(input),tasklessDispositionService,readinessOwner,coordinator,repositories:Object.freeze({boundedRepository,taskLedger,executionRepository,resultRepository})});
+  return Object.freeze({service,prepareDiscovery:input=>service.prepare(input),inspectDiscovery:input=>service.inspect(input),authorizeDiscovery:input=>service.authorize(input),startDiscovery:input=>service.start(input),resumeDiscovery:input=>service.resume(input),progressExistingDiscovery:input=>pendingProgression.progress(input),pendingProgression,assessTasklessDisposition:input=>tasklessDispositionService.assess(input),disposeTasklessChild:input=>tasklessDispositionService.dispose(input),tasklessDispositionService,readinessOwner,coordinator,repositories:Object.freeze({boundedRepository,taskLedger,executionRepository,resultRepository})});
 }

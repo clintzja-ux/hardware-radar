@@ -64,7 +64,7 @@ The identity-breadth stage is complete and accepted as operational evidence. Can
 
 The five non-strong outcomes are legitimate member-local exceptions. Four expose no H052 action; `ram_kingston_kf432c16bbk2_16` exposes H052 review availability. None authorizes H052, Sellers, evidence retention, history, publication, or public-price state. They remain explicit Forge-owned exception work rather than blockers to unrelated products or evidence of a reusable implementation defect.
 
-Promotion toward 100 is `READY_FOR_100_WITH_PRECONDITIONS`. Before a 100-product breadth run, add bounded existing-task pending/retrieval progression, produce a cohort-level exception and metric report, and make any file-store migration decision from measured latency/rewrite/memory/contention evidence. Run a separately prepared longitudinal observation stage over the canonical repeat-ready projection to measure recurrence, evidence amplification, recovery, and cadence without conflating identity breadth with observation acquisition. No provider call or downstream authority is granted by this assessment.
+Promotion toward 100 is `READY_FOR_100_WITH_PRECONDITIONS`. P1-A fixture-certifies Mercury-owned bounded existing-task pending/retrieval progression: callers provide a finite attempt count and interval, only already-created task IDs may advance, and the service has no paid executor or task-creation authority. It is not scheduled/background operation and provider timing remains `MEASURE`. P1-B must still produce the Forge cohort exception/metric report, and any file-store migration decision remains driven by measured latency/rewrite/memory/contention evidence. A separately prepared longitudinal observation stage should measure recurrence, evidence amplification, recovery, and cadence without conflating identity breadth with observation acquisition. No provider call or downstream authority is granted by this assessment.
 
 ## Certified baseline
 
@@ -275,7 +275,7 @@ The RED item is operational automation, not a safety defect and not a blocker fo
 | Priority | Limitation | Type |
 |---|---|---|
 | P0 before 25 | None | — |
-| P1 before 100 | Bounded pending/retrieval progression without repeated manual RESUME; cohort exception/metric report; measurement-driven file-store decision | Operations / observability / performance |
+| P1 before 100 | P1-A bounded pending/retrieval progression fixture-certified; P1-B cohort exception/metric report remains; measurement-driven file-store decision | Operations / observability / performance |
 | P2 before 1,000 | Forge batch exception management; durable cross-run metrics; remove ordinary per-ID recovery; migrate measured file bottlenecks | Operations / observability / implementation |
 | P3 before 10,000 | Production-like storage/concurrency/backup benchmarks and indexed storage wherever triggered | Performance / operations |
 | MEASURE | Provider rate/completion latency, identity resolution/review rate, evidence amplification, file latency/memory/contention | Provider/domain / performance / operations |
@@ -286,4 +286,4 @@ No new architectural owner is accepted by this plan. Promotion between stages us
 
 First-party Rakuten clarification received September 14, 2026 confirms distinct-SKU, same-key delta-order, and later-full reconciliation semantics. The source-local `RakutenCatalogStateProjection` now fixture-certifies these rules inside the existing current-display adapter boundary, with no new persistence, identity, rights, or downstream authority. This correction does not alter the Amazon identity scale-ramp design.
 
-Implement and fixture-certify the bounded existing-task pending/retrieval progression and cohort exception/metric report without creating provider work. Then prepare a separate longitudinal observation stage from the canonical 24-pair repeat-readiness projection. Do not authorize or start that stage in the same increment.
+Implement P1-B as a Forge-owned cohort operations/exception projection without provider work or duplicated policy. Then prepare a separate longitudinal observation stage from the canonical 24-pair repeat-readiness projection. Do not authorize or start that stage in the same increment.

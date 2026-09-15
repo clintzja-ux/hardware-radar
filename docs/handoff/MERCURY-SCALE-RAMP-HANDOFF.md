@@ -41,7 +41,7 @@ The exact checked-in cohort is `config/mercury/scale-ramp/25-product-slice-2-ama
 
 Across Canary A, Slice 1, and Slice 2, all 19 Amazon Products breadth attempts are terminal: 14 strong, 3 multiple-compatible, 1 variant conflict, and 1 insufficient-evidence outcome. The stage used 19 unique tasks and `$0.0285`, with zero provider/systemic failures, duplicate tasks, retries, or engineering interventions. This is stage acceptance evidence, not a catalog-wide yield forecast. Stop before longitudinal acquisition; next perform a separately reviewed stage-gate and exception/operations assessment.
 
-That stage-gate assessment is now complete. Promotion is `READY_FOR_100_WITH_PRECONDITIONS`: identity correctness, bounded spend, recovery, and member-local isolation passed; before a 100-product breadth run, Mercury needs bounded existing-task pending/retrieval progression, Forge needs a cohort exception/metric report, and file-store decisions must remain measurement-driven. The canonical repeat-readiness owner projects 24 pairs (22 DataForSEO Amazon, two Google Shopping) for a separately prepared longitudinal stage. This assessment grants no provider, H052, Sellers, repeat, or downstream authority.
+That stage-gate assessment is now complete. Promotion is `READY_FOR_100_WITH_PRECONDITIONS`: identity correctness, bounded spend, recovery, and member-local isolation passed. P1-A now fixture-certifies Mercury-owned finite progression of already-created pending tasks for identity discovery and bounded repeat runs. It reuses exact task IDs, creates no authorization/task/spend, and composes existing source retrieval/processing owners; it is not a scheduler or production background loop. P1-B Forge cohort operations/exception projection remains, and file-store decisions remain measurement-driven. The canonical repeat-readiness owner projects 24 pairs (22 DataForSEO Amazon, two Google Shopping) for a separately prepared longitudinal stage. This assessment grants no provider, H052, Sellers, repeat, or downstream authority.
 
 ## Source roles and exception doctrine
 
@@ -138,7 +138,7 @@ Atlas independence from retailer feeds; source capability separation; affiliate 
 
 ## Exact next safe action
 
-Implement and fixture-certify bounded progression of already-created pending tasks plus a cohort exception/metric report, without creating paid work. Then prepare and inspect a separate longitudinal stage from the canonical repeat-ready projection and stop before authorization.
+Implement P1-B as a Forge-owned cohort operations/exception projection without provider work or duplicated Mercury policy. Then prepare and inspect a separate longitudinal stage from the canonical repeat-ready projection and stop before authorization.
 
 ## NEW CHAT BOOTSTRAP
 
