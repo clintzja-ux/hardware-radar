@@ -44,7 +44,7 @@ Amazon Products is the preferred automated unresolved-SKU identity route when ri
 
 Operator review is not engineering intervention. `MULTIPLE_COMPATIBLE_ASINS`, `ASIN_VARIANT_CONFLICT`, `NO_USABLE_IDENTITY`, `INSUFFICIENT_ASIN_EVIDENCE`, and provider pending are expected domain outcomes unless they reveal a reusable correctness or integrity defect. Member-local exceptions do not block unrelated members. Shared lineage, repository, spend, rights, or authority corruption is systemic and stops the bounded run.
 
-## Rakuten source semantics and required correction
+## Rakuten source semantics
 
 First-party Rakuten clarification received September 14, 2026 establishes:
 
@@ -54,7 +54,7 @@ First-party Rakuten clarification received September 14, 2026 establishes:
 
 The state sequence is `FULL(N) → DELTA(N+1) → … → FULL(M) → DELTA(M+1)`. A later full's absence makes a Rakuten source entry inactive/absent. It never deletes or rewrites Atlas products, Mercury retained evidence/history, canonical observations, other-source identities, or audit history.
 
-The current parser preserves distinct ordered records and the adapter does not URL-deduplicate, so R1 is safe. Production has no current source-catalog projection that folds repeated same-SKU deltas or authoritatively replaces membership from later full files. R2 and R3 therefore require a separate narrow runtime correction inside the existing Rakuten boundary before Rakuten current-state activation. Do not treat a Rakuten SKU as Atlas identity or hide this gap in documentation.
+The parser preserves distinct ordered records and the adapter does not URL-deduplicate. The source-local `RakutenCatalogStateProjection` now fixture-certifies R1, folds repeated same-key delta rows in physical order for R2, and replaces complete derived source membership from each later full for R3. It is a deterministic in-memory projection inside the existing adapter boundary, not a new identity or persistence owner. Production current-data retention and downstream Rakuten activation remain fail closed under the unchanged rights profile.
 
 Distinct source SKUs do not automatically establish standalone comparability. Bundles do not compete with standalone Cheapest or establish standalone product history. `UNKNOWN_COMPARABILITY` remains isolated. Unknown shipping, tax, and mandatory fees are not zero.
 
@@ -134,7 +134,7 @@ Atlas independence from retailer feeds; source capability separation; affiliate 
 
 ## Exact next safe action
 
-Because R2/R3 expose a Rakuten runtime correctness gap, the next engineering increment is the narrow source-local catalog-state projection and its R1/R2/R3 fixtures. Slice 2 remains untouched. After that correction is certified, wait for a fresh UTC budget day, verify branch/HEAD/clean tree and authoritative current spend, reassess only the six reserved Amazon pairs and their rights/destinations, create the exact Slice 2 artifact if still legitimate, run PREPARE then INSPECT, and STOP. Do not authorize or start Slice 2 in that increment.
+Wait for a fresh UTC budget day, verify branch/HEAD/clean tree and authoritative current spend, reassess only the six reserved Amazon pairs and their rights/destinations, create the exact Slice 2 artifact if still legitimate, run PREPARE then INSPECT, and STOP. Do not authorize or start Slice 2 in that increment.
 
 ## NEW CHAT BOOTSTRAP
 

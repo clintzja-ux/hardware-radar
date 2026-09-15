@@ -45,7 +45,9 @@ The adapter preserves the header-supported feed timestamp as `observedAt`; impor
 
 ## Full, delta, and source-loss strategy
 
-A future production integration should periodically stream the full Newegg feed for reconciliation and routinely stream deltas, discarding every row that does not exactly match a known destination. Category feeds are excluded from initial identity design. Source failure preserves prior evidence at its original time so it expires naturally; unaffected and manual sources remain available, consistent with ADR-060.
+`RakutenCatalogStateProjection` derives current source-local membership from an ordered full/delta sequence. The exact `[productId, sku]` pair is the source key; destination URL is never identity. Delta records apply in physical sequence with the last same-key record winning. A later full replaces complete current Rakuten membership, after which later deltas apply. Category feeds remain excluded from initial identity design. Source failure preserves prior display evidence at its original time so it expires naturally; unaffected and manual sources remain available, consistent with ADR-060.
+
+The projection is ephemeral and creates no new persistence owner because current-data retention rights remain unresolved. Full replacement or delta deletion changes only derived Rakuten source state; it cannot delete Atlas products, destinations, Mercury retained evidence/history, canonical observations, or other-source state.
 
 ## Future live transport
 

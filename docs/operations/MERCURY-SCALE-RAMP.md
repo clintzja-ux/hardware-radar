@@ -274,6 +274,6 @@ No new architectural owner is accepted by this plan. Promotion between stages us
 
 ## Next actions
 
-First-party Rakuten clarification received September 14, 2026 confirms distinct-SKU, same-SKU delta-order, and later-full reconciliation semantics. The current parser preserves distinct ordered rows, but the production adapter has no source-state projection for last-same-SKU-wins or authoritative full replacement. This is a contained Rakuten runtime correctness gap, not a change to the Amazon identity scale-ramp design. Complete that separately reviewed correction first while Slice 2 remains untouched.
+First-party Rakuten clarification received September 14, 2026 confirms distinct-SKU, same-key delta-order, and later-full reconciliation semantics. The source-local `RakutenCatalogStateProjection` now fixture-certifies these rules inside the existing current-display adapter boundary, with no new persistence, identity, rights, or downstream authority. This correction does not alter the Amazon identity scale-ramp design.
 
-After certification, wait for a fresh UTC budget day, then perform a separate zero-provider PREPARE and INSPECT for the exact reserved six-member Slice 2 cohort. Do not authorize it in the same action. The longitudinal experiment remains a separate future authority after the 25-member identity breadth stage.
+Wait for a fresh UTC budget day, then perform a separate zero-provider PREPARE and INSPECT for the exact reserved six-member Slice 2 cohort. Do not authorize it in the same action. The longitudinal experiment remains a separate future authority after the 25-member identity breadth stage.

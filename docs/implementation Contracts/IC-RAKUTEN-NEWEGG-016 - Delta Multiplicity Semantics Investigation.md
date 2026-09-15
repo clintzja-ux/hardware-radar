@@ -50,7 +50,7 @@ Product ID and SKU remain preserved source evidence; neither replaces Atlas iden
 
 The parser already preserves every physical record and its ordinal, so distinct Product IDs/SKUs sharing one URL are not parser-deduplicated. The destination adapter also refuses to collapse multiple source entries into one observation. This satisfies R1's source-entry preservation and remains compatible with offer-comparability fail-closed behavior.
 
-The production path does **not** yet own a Rakuten current source-catalog projection. It parses a selected delta into an ordered record array and refreshes one destination from that array, but it neither folds repeated same-SKU records with last-physical-record precedence nor replaces current membership from a later full catalog. R2 and R3 are therefore `RUNTIME_CORRECTNESS_GAP`, not documentation-only gaps. The smallest correction is one source-local, deterministic catalog-state projection within the existing Rakuten adapter boundary that:
+`RakutenCatalogStateProjection` now provides the source-local, deterministic current-catalog projection inside the existing Mercury Rakuten current-display adapter boundary. It:
 
 1. keys entries by the documented Rakuten Product ID/SKU identity rather than destination URL;
 2. folds delta records in preserved physical order so the last same-key record wins;
@@ -58,7 +58,9 @@ The production path does **not** yet own a Rakuten current source-catalog projec
 4. marks absent/deleted source entries inactive without deleting Atlas products, retained Mercury evidence, historical observations, or other-source state; and
 5. feeds the existing destination/identity/comparability boundaries without granting downstream authority.
 
-This correction requires a separately reviewed runtime increment and explicit R1/R2/R3 fixtures. It is intentionally not implemented during the scale-ramp handoff reconciliation.
+The source-entry key is the exact pair `[productId, sku]`; changing either preserves a distinct source entry, irrespective of URL. Full inputs fail closed on duplicate exact source keys. Delta inputs are consumed in array/physical-record order without sorting; each `I` or `U` replaces that key and `D` removes it. A later full replaces the complete derived source membership before later deltas apply. The resulting projection is immutable, deterministically digested, and does not mutate its inputs.
+
+The projection is derived and in-memory. No durable Rakuten source-state repository was introduced because the current rights profile authorizes acquisition and ephemeral processing but not production current-data retention. `RakutenNeweggProductFeedAdapter` accepts an ordered `catalogFiles` sequence when source-state reconciliation is required and uses the projection before its existing destination, price, condition, and rights checks. Its `MAIN_DELTA` single-file path also applies same-key last-record precedence while retaining the existing delete outcome behavior. Legacy fixture profiles remain compatible.
 
 ## Historical and offer safety
 
@@ -74,4 +76,6 @@ The previously prepared question was answered by the September 14, 2026 first-pa
 
 ## Certification
 
-Existing fixture coverage proves that two distinct provider Product IDs and SKUs resolving through one exact destination URL remain separate parsed records, fail closed at destination observation, do not mutate their inputs, and gain no display, comparison, or historical authority. Explicit R2 last-record-wins and R3 authoritative-full reconciliation fixtures remain required with the runtime correction.
+Fixture coverage proves R1 same-URL distinct-source preservation; R2 same-key and interleaved last-physical-record precedence; R3 later-full replacement and subsequent-delta behavior; exact deterministic replay; input immutability; and Atlas/evidence/history isolation. Existing destination behavior remains fail closed where multiple distinct source entries still map to one destination. No public display, comparison, historical, identity, or affiliate authority is added.
+
+**Certification:** R1 preserved and fixture-certified; R2 runtime-correct and fixture-certified; R3 runtime-correct and fixture-certified.

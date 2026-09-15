@@ -257,6 +257,7 @@ const testModules = [
     ,"./RakutenLineOrientedQuoteSemantics.test.mjs"
     ,"./RakutenProductCatalogFieldMap.test.mjs"
     ,"./RakutenDeltaMultiplicity.test.mjs"
+    ,"./RakutenCatalogStateProjection.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
     ,"./TasklessChildAuthorityDisposition.test.mjs"

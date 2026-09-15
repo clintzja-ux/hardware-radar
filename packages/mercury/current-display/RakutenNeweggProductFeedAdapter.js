@@ -1,7 +1,8 @@
 import crypto from "node:crypto";
+import { projectRakutenCatalogState, reduceRakutenDeltaRecords } from "./RakutenCatalogStateProjection.js";
 
 export const RAKUTEN_NEWEGG_SOURCE = "RAKUTEN_NEWEGG_PRODUCT_CATALOG";
-export const RAKUTEN_NEWEGG_PROFILES = Object.freeze(["MAIN", "NEWEGG_MKPL", "ADDITIONAL_UNCLASSIFIED"]);
+export const RAKUTEN_NEWEGG_PROFILES = Object.freeze(["MAIN", "MAIN_FULL", "MAIN_DELTA", "NEWEGG_MKPL", "ADDITIONAL_UNCLASSIFIED"]);
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const hash = value => crypto.createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const money = value => value === null || value === "" ? null : Number(value);
@@ -48,11 +49,15 @@ function normalizedPrice(record) {
     return { status: "PRICE_RESOLVED", itemPriceUsd: retailPrice, retailPrice, salePrice: Number.isFinite(salePrice) ? salePrice : null };
 }
 
-export function createRakutenNeweggProductFeedAdapter({ records, destinations, feedProfile = "MAIN", feedTimestamp, mode = "AUTOMATED_ALTERNATE", rights = null } = {}) {
-    if (!Array.isArray(records) || !Array.isArray(destinations) || !RAKUTEN_NEWEGG_PROFILES.includes(feedProfile) || !Number.isFinite(Date.parse(feedTimestamp))) throw new TypeError("RAKUTEN_NEWEGG_ADAPTER_INPUT_INVALID");
+export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = null, destinations, feedProfile = "MAIN", feedTimestamp, mode = "AUTOMATED_ALTERNATE", rights = null } = {}) {
+    if ((!Array.isArray(records) && !Array.isArray(catalogFiles)) || !Array.isArray(destinations) || !RAKUTEN_NEWEGG_PROFILES.includes(feedProfile) || !Number.isFinite(Date.parse(feedTimestamp))) throw new TypeError("RAKUTEN_NEWEGG_ADAPTER_INPUT_INVALID");
+    if (Array.isArray(records) && Array.isArray(catalogFiles)) throw new TypeError("RAKUTEN_NEWEGG_ADAPTER_INPUT_CONFLICT");
     const sourceRights = rights ?? { profileId: "FIXTURE_RAKUTEN_NEWEGG_PENDING_PUBLIC_RIGHTS", acquisitionAllowed: true, ephemeralRetentionAllowed: true, publicDisplayAllowed: false, comparisonAllowed: false, historicalRetentionAllowed: false, ttlSeconds: 129600 };
     const destinationSet = destinations.filter(item => item.retailerId === "RETAILER-0004" && item.status === "ACTIVE");
-    const outcomes = records.filter(item => item.recordType === "PRODUCT").map(record => ({ record, match: exactDestination(record, destinationSet) }));
+    const sourceRecords = Array.isArray(catalogFiles)
+        ? projectRakutenCatalogState({ files: catalogFiles }).entries.map(item => item.record)
+        : feedProfile === "MAIN_DELTA" ? reduceRakutenDeltaRecords(records) : records;
+    const outcomes = sourceRecords.filter(item => item.recordType === "PRODUCT").map(record => ({ record, match: exactDestination(record, destinationSet) }));
     return freeze({
         adapterId: "mer_adapter_rakuten_newegg_product_catalog", mode, rights: sourceRights,
         supports: context => context.retailerId === "RETAILER-0004" && destinationSet.some(item => item.destinationId === context.destinationId),
