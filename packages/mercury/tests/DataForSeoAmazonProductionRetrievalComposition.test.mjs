@@ -3,7 +3,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { createProductionDataForSeoRetrievalOwner, defaultSourceRightsRegistry, prepareAmazonHistoricalAcceptance, selectAmazonHistoricalAcceptanceProduct } from "../index.js";
-import { createAmazonAcceptanceExecutionRuntime } from "../../../scripts/mercury-amazon-acceptance-execution-runtime.mjs";
+import { composeAmazonAcceptanceResultRepository, createAmazonAcceptanceExecutionRuntime } from "../../../scripts/mercury-amazon-acceptance-execution-runtime.mjs";
 
 let cases = 0;
 const taskId = "fixture-amazon-task", at = "2026-09-13T03:00:00.000Z";
@@ -16,6 +16,11 @@ for (const [operation, endpoint] of Object.entries(endpoints)) {
 
 const googleCalls = [], google = createProductionDataForSeoRetrievalOwner({ operation: "PRODUCTS", credentialLoader: () => ({ login: "fixture", password: "fixture" }), httpTransport: async request => (googleCalls.push(structuredClone(request)), { status_code: 20000, tasks: [{ id: taskId, status_code: 20000, result: [] }] }) });
 await google.retrieve({ providerTaskId: taskId }); assert.equal(new URL(googleCalls[0].url).pathname, `/v3/merchant/google/products/task_get/advanced/${taskId}`); cases++;
+
+const canonicalLineage = { canonicalResultId: "mer_providerresult_02d5c2b04c915e8ba4cffdd0", providerTaskId: "09151414-2304-0209-0000-87b0af6a0f45", resultDigest: "4fbca5f574978eeba268d74780e8dd689afed3dca82d762a4e565d2271da761b" }, writes = [];
+const primary = { record: async value => (writes.push(value), value), findByTask: async () => null }, discovery = { findByTask: async id => id === canonicalLineage.providerTaskId ? canonicalLineage : null }, composed = composeAmazonAcceptanceResultRepository(primary, [discovery]);
+assert.deepEqual(await composed.findByTask(canonicalLineage.providerTaskId), canonicalLineage); assert.equal(writes.length, 0); cases += 2;
+const conflicting = composeAmazonAcceptanceResultRepository({ ...primary, findByTask: async () => canonicalLineage }, [discovery]); await assert.rejects(() => conflicting.findByTask(canonicalLineage.providerTaskId), /LINEAGE_CONFLICT/); cases++;
 
 const root = await mkdtemp(path.join(os.tmpdir(), "hr-h050f-"));
 try {
