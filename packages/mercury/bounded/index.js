@@ -1,6 +1,7 @@
 export * from "./NeutralBoundedPaidActionCoordinator.js";
 export * from "./NeutralParentAuthority.js";
 export * from "./BoundedSpendProgression.js";
+export * from "./TasklessChildAuthorityDisposition.js";
 export * from "./SqliteNeutralBoundedRepository.js";
 export * from "./ProductsIdentityDiscoveryDomainAdapter.js";
 export * from "./ProductsIdentityDiscoveryReadinessOwner.js";

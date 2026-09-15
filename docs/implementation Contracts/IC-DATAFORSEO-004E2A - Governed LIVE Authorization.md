@@ -18,6 +18,8 @@ Every production PREPARE calculates actual governed spend for the explicit evalu
 
 Immediately before paid transport, `ControlledAcquisitionExecutor` reloads the ledger under the acquisition lock and recalculates the same UTC-day total. The value must exactly equal the authorization plan's snapshot. Any intervening governed spend invalidates the immutable authorization and requires fresh PREPARE; execution does not dynamically rebind it. Budget failure creates no provider task and makes no provider call. Existing single-use, replay, task-count, per-run spend, zero-retry, and confirmation gates remain unchanged.
 
+For a bounded child that is consumed, expired, and conclusively has no canonical task, recoverable execution, or result, the source-neutral taskless disposition boundary may append `EXPIRED_CONSUMED_WITHOUT_TASK` under the same acquisition lock. This is terminal audit reconciliation, not recovery authorization: it does not revive, retry, replace, or alter the original child. Exact task/execution/result absence and immutable parent/member/source/operation binding must be proven; ambiguity fails closed. Future work requires a fresh cycle and fresh reviewed authority.
+
 Forge may later expose this existing configuration as a `Daily acquisition budget` operator setting with configured ceiling, durable current spend, and remaining capacity. No Forge UI or new spend owner is introduced here.
 
 ## Operator states

@@ -258,6 +258,7 @@ const testModules = [
     ,"./RakutenDeltaMultiplicity.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
+    ,"./TasklessChildAuthorityDisposition.test.mjs"
     ,"./BoundedSpendProgression.test.mjs"
 ];
 

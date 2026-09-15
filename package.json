@@ -118,6 +118,8 @@
     "mercury:identity-discovery:authorize": "node scripts/mercury-products-identity-discovery-authorize.mjs",
     "mercury:identity-discovery:start": "node --use-system-ca --env-file=.env scripts/mercury-products-identity-discovery-start.mjs",
     "mercury:identity-discovery:resume": "node --use-system-ca --env-file=.env scripts/mercury-products-identity-discovery-resume.mjs",
+    "mercury:identity-discovery:assess-taskless-disposition": "node scripts/mercury-products-identity-discovery-assess-taskless-disposition.mjs",
+    "mercury:identity-discovery:dispose-taskless": "node scripts/mercury-products-identity-discovery-dispose-taskless.mjs",
     "mercury:amazon:acceptance:prepare": "node scripts/mercury-amazon-acceptance-prepare.mjs",
     "mercury:amazon:acceptance:inspect": "node scripts/mercury-amazon-acceptance-inspect.mjs",
     "mercury:amazon:acceptance:authorize-products": "node scripts/mercury-amazon-acceptance-action.mjs --action=authorize-products",
