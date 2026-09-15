@@ -4,9 +4,9 @@
 
 This document governs evidence-based promotion of Mercury longitudinal acquisition from the completed five-product production-certification cohort. It is an operations plan, not acquisition authority, a budget change, or downstream market/publication authority.
 
-Current classification: `READY_FOR_25_WITH_PRECONDITIONS`.
+Current classification: `READY_FOR_100_WITH_PRECONDITIONS`.
 
-There is no P0 engineering blocker. Before paid work, the operator must select and review a diverse 25-product Atlas cohort, project product/source readiness, divide READY work into bounded daily slices under the governed `$0.0500` UTC-day ceiling, approve a canary and stop conditions, and define the measurement report below. Creating or reviewing that material remains zero-provider work; each paid run still requires its existing bounded authorization.
+There is no P0 engineering blocker. The supervised 25-product identity-breadth stage is complete. Before a 100-product breadth stage, Hardware Radar must close the P1 operating preconditions recorded below, then the operator must review the future Atlas cohort, its product/source readiness, bounded UTC-day slices under the governed `$0.0500` ceiling, canary, stop conditions, and measurement report. Planning remains zero-provider work; each paid run still requires its existing bounded authorization.
 
 The zero-provider design step is complete. The non-executable review artifacts are [25-product-candidate-cohort.json](../../config/mercury/scale-ramp/25-product-candidate-cohort.json) and [25-product-canary-candidate.json](../../config/mercury/scale-ramp/25-product-canary-candidate.json). They are deliberately object-shaped `REVIEW_ONLY` documents, not inputs accepted by production planning commands, and confer no authority.
 
@@ -14,7 +14,7 @@ The zero-provider design step is complete. The non-executable review artifacts a
 
 The canonical Atlas RAM corpus contains 103 products; the separate 115-record Atlas release-governance total includes non-product records. All 103 RAM products validate, and all selected records are `ACTIVE + READY` with valid capacity arithmetic. Selection is deterministic: five products per registered manufacturer, comprising 15 DDR5 DIMMs, five DDR4 DIMMs, and five SODIMMs, with four pilot controls and 21 new products. The exact ordered identifiers are owned by the review artifact above.
 
-Across the 50 prospective product/source pairs, the current projection is:
+Across the 50 prospective product/source pairs, the pre-stage planning projection was:
 
 | Operation class | Pairs | Interpretation |
 |---|---:|---|
@@ -32,7 +32,7 @@ The proposed canary covers five products and six tasks: three Amazon Products on
 
 Recommended clean-UTC-day slices are: canary identity discovery (3 tasks, `$0.0045`); remaining identity discovery slice one (10 tasks, `$0.0150`); remaining identity discovery slice two (6 tasks, `$0.0090`); and the separate six-task repeat-control stage (`$0.0080`). At that September 15 checkpoint, authoritative spend was `$0.0085`, leaving `$0.0165` under the then-current `$0.025` ceiling. Every slice must re-read durable spend before authorization and execution; current governed policy uses `$0.0500`.
 
-The seven-pair longitudinal experiment should run **after the 25-product canary**, as a separate bounded authority, so the canary first validates the mixed repeat/onboarding operating surface. Neither review artifact creates that authority.
+The longitudinal experiment should run **after the completed 25-product identity-breadth gate**, as a separate bounded authority. The canonical repeat-readiness owner currently projects 24 reusable product/source pairs: 22 DataForSEO Amazon and two Google Shopping. Neither review artifact nor this gate creates repeat-observation authority.
 
 ### Canary A observed result
 
@@ -58,9 +58,17 @@ The complete 19-attempt breadth stage produced 14 strong identities (`73.7%`), t
 
 Stage numbers mean **Atlas products under review**, not interchangeable counts of product/source pairs or paid tasks. The governed work unit is a product/source pair. A product may contribute zero, one, or two ready pairs, and each ready repeat pair normally creates one paid Sellers task per observation cycle.
 
+## 25-product identity-breadth stage gate
+
+The identity-breadth stage is complete and accepted as operational evidence. Canary A, Slice 1, and Slice 2 produced 19 terminal attempts: 14 `STRONG_UNIQUE_ASIN`, three `MULTIPLE_COMPATIBLE_ASINS`, one `ASIN_VARIANT_CONFLICT`, and one `INSUFFICIENT_ASIN_EVIDENCE`. The stage used 19 unique paid tasks and `$0.0285`, with zero retries, duplicate tasks, provider failures, systemic failures, engineering interventions, lineage conflicts, unauthorized spend, or downstream leakage.
+
+The five non-strong outcomes are legitimate member-local exceptions. Four expose no H052 action; `ram_kingston_kf432c16bbk2_16` exposes H052 review availability. None authorizes H052, Sellers, evidence retention, history, publication, or public-price state. They remain explicit Forge-owned exception work rather than blockers to unrelated products or evidence of a reusable implementation defect.
+
+Promotion toward 100 is `READY_FOR_100_WITH_PRECONDITIONS`. Before a 100-product breadth run, add bounded existing-task pending/retrieval progression, produce a cohort-level exception and metric report, and make any file-store migration decision from measured latency/rewrite/memory/contention evidence. Run a separately prepared longitudinal observation stage over the canonical repeat-ready projection to measure recurrence, evidence amplification, recovery, and cadence without conflating identity breadth with observation acquisition. No provider call or downstream authority is granted by this assessment.
+
 ## Certified baseline
 
-The production pilot covered five Atlas products. Durable owner projections currently expose seven repeat-ready pairs:
+The original production pilot covered five Atlas products. The canonical owner now projects 24 repeat-ready product/source pairs across the expanded governed identity corpus: 22 DataForSEO Amazon and two Google Shopping. The original five-product controls remain:
 
 | Product | Google Shopping | DataForSEO Amazon |
 |---|---|---|
@@ -253,7 +261,7 @@ Provider task-rate limits and completion distributions are not established by re
 | Pending recovery | GREEN for 25 | Exact existing-task RESUME, no paid retry | Automate bounded polling before 100 |
 | Exception isolation | GREEN | Member-local continuation and systemic stop fixtures | Verify rates at 25 |
 | Operator review | YELLOW | Auditable H052/Forge artifacts; no unified queue | Summary before 100; queue before 1,000 |
-| Repeat observation | GREEN | Production recovery completed; seven pairs project ready | Run a separate longitudinal stage |
+| Repeat observation | GREEN | Production recovery completed; canonical owner projects 24 pairs (22 Amazon, 2 Google) | Run a separate longitudinal stage |
 | Historical admission | GREEN | H058 fact-level, replay-safe, downstream false | Measure amplification |
 | Storage scalability | YELLOW | SQLite evidence strong; growing immutable file stores unmeasured | Measure 25/100; migrate by evidence |
 | Command scalability | YELLOW | Cohort-first commands exist; repeated RESUME/manual IDs remain | Accept 25; improve before 100/1,000 |
@@ -278,4 +286,4 @@ No new architectural owner is accepted by this plan. Promotion between stages us
 
 First-party Rakuten clarification received September 14, 2026 confirms distinct-SKU, same-key delta-order, and later-full reconciliation semantics. The source-local `RakutenCatalogStateProjection` now fixture-certifies these rules inside the existing current-display adapter boundary, with no new persistence, identity, rights, or downstream authority. This correction does not alter the Amazon identity scale-ramp design.
 
-Wait for a fresh UTC budget day, then perform a separate zero-provider PREPARE and INSPECT for the exact reserved six-member Slice 2 cohort. Do not authorize it in the same action. The longitudinal experiment remains a separate future authority after the 25-member identity breadth stage.
+Implement and fixture-certify the bounded existing-task pending/retrieval progression and cohort exception/metric report without creating provider work. Then prepare a separate longitudinal observation stage from the canonical 24-pair repeat-readiness projection. Do not authorize or start that stage in the same increment.

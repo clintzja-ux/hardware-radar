@@ -41,6 +41,8 @@ The exact checked-in cohort is `config/mercury/scale-ramp/25-product-slice-2-ama
 
 Across Canary A, Slice 1, and Slice 2, all 19 Amazon Products breadth attempts are terminal: 14 strong, 3 multiple-compatible, 1 variant conflict, and 1 insufficient-evidence outcome. The stage used 19 unique tasks and `$0.0285`, with zero provider/systemic failures, duplicate tasks, retries, or engineering interventions. This is stage acceptance evidence, not a catalog-wide yield forecast. Stop before longitudinal acquisition; next perform a separately reviewed stage-gate and exception/operations assessment.
 
+That stage-gate assessment is now complete. Promotion is `READY_FOR_100_WITH_PRECONDITIONS`: identity correctness, bounded spend, recovery, and member-local isolation passed; before a 100-product breadth run, Mercury needs bounded existing-task pending/retrieval progression, Forge needs a cohort exception/metric report, and file-store decisions must remain measurement-driven. The canonical repeat-readiness owner projects 24 pairs (22 DataForSEO Amazon, two Google Shopping) for a separately prepared longitudinal stage. This assessment grants no provider, H052, Sellers, repeat, or downstream authority.
+
 ## Source roles and exception doctrine
 
 Amazon Products is the preferred automated unresolved-SKU identity route when rights and reviewed destination prerequisites hold. Google Shopping is observation/corroboration evidence and promotes identity only under existing strong rules; terminal noisy Google identities are not blindly rediscovered. H052 is a narrow operator exception over existing immutable Amazon evidence, not a general identity override. Unresolved identity remains unresolved.
@@ -129,15 +131,14 @@ Atlas independence from retailer feeds; source capability separation; affiliate 
 
 ## Open questions
 
-- The terminal outcomes and final automatic-resolution rate after Slice 2.
-- Operator-review rate once the 25-product stage is complete.
-- Longitudinal repeat-cycle behavior after identity breadth.
-- Whether manual `RESUME` becomes P1 before 100.
-- Measured file-store growth/latency and Forge/Beacon improvements needed before 100/1,000.
+- Longitudinal repeat-cycle behavior, evidence amplification, and cadence over the canonical 24-pair projection.
+- Measured file-store growth/latency and the evidence threshold for indexed migration.
+- Provider completion distributions and the bounded polling schedule for existing-task progression.
+- Forge exception aging and operator handling time once the cohort summary exists.
 
 ## Exact next safe action
 
-Wait for a fresh UTC budget day, verify branch/HEAD/clean tree and authoritative current spend, reassess only the six reserved Amazon pairs and their rights/destinations, create the exact Slice 2 artifact if still legitimate, run PREPARE then INSPECT, and STOP. Do not authorize or start Slice 2 in that increment.
+Implement and fixture-certify bounded progression of already-created pending tasks plus a cohort exception/metric report, without creating paid work. Then prepare and inspect a separate longitudinal stage from the canonical repeat-ready projection and stop before authorization.
 
 ## NEW CHAT BOOTSTRAP
 
