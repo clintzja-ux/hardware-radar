@@ -8,6 +8,8 @@
 
 The checked-in source `packages/mercury/destinations/production-destinations.json` contains canonical GROWTH-005A records directly. It is separate from Atlas, observations, operator state, and generated public files. The empty manifest is valid; malformed JSON or any invalid record, Atlas binding, URL, lifecycle chain, prohibited field, or parallel effective head fails the public build.
 
+`loadRetailerDestinationSource()` is the canonical reader and validator for this checked-in `{ schemaVersion, records: [] }` contract. `FileRetailerDestinationRepository` owns a separate private indexed persistence shape and must not be pointed at this source file. Production consumers needing repository-like reads adapt the canonical loader output without duplicating destination policy or exposing private indexes in checked-in configuration.
+
 No production destination may be inferred. A real record requires an operator-supplied exact HTTPS product URL and explicit review evidence satisfying GROWTH-005A. Git review is the V1 authoring approval boundary.
 
 ## Public projection and rendering

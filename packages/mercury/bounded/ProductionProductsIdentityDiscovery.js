@@ -9,7 +9,7 @@ import { readGovernedSpendForUtcDay } from "../acquisition/planning/GovernedDail
 import { GovernedProviderIdentityResolver } from "../acquisition/portfolio/ProductionAcquisitionPortfolio.js";
 import { FileDataForSeoMarketEvidenceRepository } from "../market/dataforseo/persistence/FileDataForSeoMarketEvidenceRepository.js";
 import { FileHistoricalObservationRepository } from "../historical-admission/persistence/FileHistoricalObservationRepository.js";
-import { FileRetailerDestinationRepository } from "../destinations/FileRetailerDestinationRepository.js";
+import { loadRetailerDestinationSource } from "../destinations/RetailerDestinationSource.js";
 import { FileAmazonHistoricalAcceptanceRepository } from "../amazon-dataforseo/FileAmazonHistoricalAcceptanceRepository.js";
 import { FileAmazonAcceptanceActionRepository } from "../amazon-dataforseo/FileAmazonAcceptanceActionRepository.js";
 import { FileHistoricalBootstrapProviderResultRepository } from "../portfolio/FileHistoricalBootstrapProviderResultRepository.js";
@@ -28,7 +28,7 @@ import crypto from "node:crypto";
 
 /** Composition root only. All decisions and durable writes remain with certified owners. */
 export function createProductionProductsIdentityDiscoveryService({
-  stateRoot=path.resolve(".forge-review/mercury/products-identity-discovery"), acquisitionRoot=path.resolve(".forge-review/acquisition"), mercuryRoot=path.resolve(".forge-review/mercury"),
+  stateRoot=path.resolve(".forge-review/mercury/products-identity-discovery"), acquisitionRoot=path.resolve(".forge-review/acquisition"), mercuryRoot=path.resolve(".forge-review/mercury"), destinationSourcePath=path.resolve("packages/mercury/destinations/production-destinations.json"),
   productRepository,retailerRepository,destinationRepository,historicalRepository,evidenceRepository,boundedRepository,childArtifactRepository,taskLedger,executionRepository,consumptionRepository,resultRepository,amazonArtifactRepository,amazonActionRepository,
   rightsRegistry=defaultSourceRightsRegistry,googleIdentityResolver,readinessOwner,sourceOwners,spendResolver,runLock,now=()=>new Date().toISOString(),credentialLoader,httpTransport,acquisitionService
 }={}){
@@ -36,7 +36,7 @@ export function createProductionProductsIdentityDiscoveryService({
   productRepository??=new ProductRepository({readJson});retailerRepository??=new RetailerRepository({readJson});
   evidenceRepository??=new FileDataForSeoMarketEvidenceRepository({statePath:path.join(acquisitionRoot,"dataforseo-market-evidence.json")});
   historicalRepository??=new FileHistoricalObservationRepository({statePath:path.join(mercuryRoot,"historical-observations.json")});
-  destinationRepository??=new FileRetailerDestinationRepository({statePath:path.resolve("packages/mercury/destinations/production-destinations.json"),productRepository,retailerRepository});
+  if(!destinationRepository){let sourcePromise;destinationRepository=Object.freeze({async getAll(){sourcePromise??=Promise.all([productRepository.getAll(),retailerRepository.getAll()]).then(([products,retailers])=>loadRetailerDestinationSource({sourcePath:destinationSourcePath,products,retailers}));return(await sourcePromise).records;}});}
   boundedRepository??=new SqliteNeutralBoundedRepository({databasePath:path.join(stateRoot,"identity-discovery.sqlite")});
   childArtifactRepository??=new FileDataForSeoPrepareArtifactRepository({statePath:path.join(stateRoot,"child-authorization-artifacts.json")});
   taskLedger??=new FileDataForSeoTaskLedger(path.join(acquisitionRoot,"dataforseo-task-ledger.json"));
