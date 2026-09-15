@@ -21,7 +21,7 @@ Slice 1: plan `mer_iddiscplan_5426b3781c0774286442ad01`, run `mer_iddiscrun_bfcd
 
 The sample is operational acceptance evidence, not a catalog-wide forecast (`n=13`). Canonical repeat resolution currently derives 19 product/source pairs: 2 Google Shopping and 17 Amazon. Use the canonical resolver; do not reconstruct or guess the pairs.
 
-Authoritative September 15 spend is `$0.0235` under the unchanged `$0.025` UTC-day ceiling. This value does not carry into later UTC days.
+Authoritative September 15 spend was `$0.0235` under the then-current `$0.025` UTC-day ceiling. That historical spend snapshot does not carry into later UTC days. Current governed policy uses a `$0.0500` UTC-day ceiling; it grants no acquisition authority.
 
 ## Reserved Slice 2
 

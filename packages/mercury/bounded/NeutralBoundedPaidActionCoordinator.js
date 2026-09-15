@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import {DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD} from "../acquisition/planning/AcquisitionBudgetPolicy.js";
 
 const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
 const digest=value=>crypto.createHash("sha256").update(stable(value)).digest("hex");
@@ -17,7 +18,7 @@ export function createBoundedChildAuthorityBinding({parentAuthorization,member,c
 }
 
 export class NeutralBoundedPaidActionCoordinator{
-  constructor({repository,domainAdapter,spendResolver=async()=>0,now=()=>new Date().toISOString(),dailySpendCeilingUsd=.025,policyVersion,idPrefixes={plan:"mer_boundedplan",authorization:"mer_boundedauth",run:"mer_boundedrun"}}={}){
+  constructor({repository,domainAdapter,spendResolver=async()=>0,now=()=>new Date().toISOString(),dailySpendCeilingUsd=DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD,policyVersion,idPrefixes={plan:"mer_boundedplan",authorization:"mer_boundedauth",run:"mer_boundedrun"}}={}){
     for(const method of["recordPlan","getPlan","recordAuthorization","getAuthorization","findAuthorizationsByPlan","startRun","getRun","findRunByPlan","updateMember","updateRun"])if(typeof repository?.[method]!=="function")throw new Error("BOUNDED_COORDINATOR_REPOSITORY_REQUIRED");
     for(const method of["prepareMember","revalidateMember","advanceMember","classifyFailure","summarize"])if(typeof domainAdapter?.[method]!=="function")throw new Error("BOUNDED_COORDINATOR_DOMAIN_ADAPTER_REQUIRED");
     for(const key of["plan","authorization","run"])required(idPrefixes?.[key],"BOUNDED_ID_PREFIX_REQUIRED");Object.assign(this,{repository,domainAdapter,spendResolver,now,dailySpendCeilingUsd,policyVersion:required(policyVersion,"BOUNDED_POLICY_REQUIRED"),idPrefixes:freeze(idPrefixes)});

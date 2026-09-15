@@ -15,6 +15,7 @@ import { FileAmazonAcceptanceActionRepository } from "../amazon-dataforseo/FileA
 import { FileHistoricalBootstrapProviderResultRepository } from "../portfolio/FileHistoricalBootstrapProviderResultRepository.js";
 import { defaultSourceRightsRegistry } from "../rights/SourceRightsRegistry.js";
 import { NeutralBoundedPaidActionCoordinator } from "./NeutralBoundedPaidActionCoordinator.js";
+import { DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD } from "../acquisition/planning/AcquisitionBudgetPolicy.js";
 import { SqliteNeutralBoundedRepository } from "./SqliteNeutralBoundedRepository.js";
 import { ProductsIdentityDiscoveryDomainAdapter, ProductsIdentityDiscoveryService, PRODUCTS_DISCOVERY_POLICY_VERSION } from "./ProductsIdentityDiscoveryDomainAdapter.js";
 import { ProductsIdentityDiscoveryReadinessOwner } from "./ProductsIdentityDiscoveryReadinessOwner.js";
@@ -56,7 +57,7 @@ export function createProductionProductsIdentityDiscoveryService({
     DATAFORSEO_AMAZON:createProductionAmazonProductsDiscoverySourceOwner({atlas,destinationRepository,historicalRepository,boundedRepository,artifactRepository:amazonArtifactRepository,actionRepository:amazonActionRepository,taskLedger,executionRepository,consumptionRepository,resultRepository,rightsRegistry,spendResolver,boundedSpendProgressionResolver,credentialLoader,httpTransport,acquisitionService,runLock,stateRoot:acquisitionRoot,now})
   };
   const domainAdapter=new ProductsIdentityDiscoveryDomainAdapter({productRepository,readinessOwner,rightsRegistry,sourceOwners,boundedRepository,childAuthorizationArtifactRepository:childArtifactRepository,now});
-  const coordinator=new NeutralBoundedPaidActionCoordinator({repository:boundedRepository,domainAdapter,spendResolver,now,dailySpendCeilingUsd:.025,policyVersion:PRODUCTS_DISCOVERY_POLICY_VERSION,idPrefixes:{plan:"mer_iddiscplan",authorization:"mer_iddiscauth",run:"mer_iddiscrun"}}),service=new ProductsIdentityDiscoveryService({coordinator});
+  const coordinator=new NeutralBoundedPaidActionCoordinator({repository:boundedRepository,domainAdapter,spendResolver,now,dailySpendCeilingUsd:DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD,policyVersion:PRODUCTS_DISCOVERY_POLICY_VERSION,idPrefixes:{plan:"mer_iddiscplan",authorization:"mer_iddiscauth",run:"mer_iddiscrun"}}),service=new ProductsIdentityDiscoveryService({coordinator});
   const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value),sha=value=>crypto.createHash("sha256").update(stable(value)).digest("hex");
   const lineageResolver=async({member,child})=>{
     let authorization,authorizationArtifactId=null,authorizationArtifactDigest=null,taskMatches;

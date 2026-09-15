@@ -6,7 +6,7 @@ This document governs evidence-based promotion of Mercury longitudinal acquisiti
 
 Current classification: `READY_FOR_25_WITH_PRECONDITIONS`.
 
-There is no P0 engineering blocker. Before paid work, the operator must select and review a diverse 25-product Atlas cohort, project product/source readiness, divide READY work into bounded daily slices under the unchanged `$0.025` UTC-day ceiling, approve a canary and stop conditions, and define the measurement report below. Creating or reviewing that material remains zero-provider work; each paid run still requires its existing bounded authorization.
+There is no P0 engineering blocker. Before paid work, the operator must select and review a diverse 25-product Atlas cohort, project product/source readiness, divide READY work into bounded daily slices under the governed `$0.0500` UTC-day ceiling, approve a canary and stop conditions, and define the measurement report below. Creating or reviewing that material remains zero-provider work; each paid run still requires its existing bounded authorization.
 
 The zero-provider design step is complete. The non-executable review artifacts are [25-product-candidate-cohort.json](../../config/mercury/scale-ramp/25-product-candidate-cohort.json) and [25-product-canary-candidate.json](../../config/mercury/scale-ramp/25-product-canary-candidate.json). They are deliberately object-shaped `REVIEW_ONLY` documents, not inputs accepted by production planning commands, and confer no authority.
 
@@ -30,7 +30,7 @@ The maximum presently justified breadth work is 19 Amazon Products tasks (`$0.02
 
 The proposed canary covers five products and six tasks: three Amazon Products onboarding cases, one Google Sellers repeat, and two Amazon Sellers repeats. Its separate illustrative envelopes are `$0.0045` for identity discovery and `$0.0040` for repeat observation. The combined planning amount is `$0.0085`, but the operations must retain separate plans and authorizations.
 
-Recommended clean-UTC-day slices are: canary identity discovery (3 tasks, `$0.0045`); remaining identity discovery slice one (10 tasks, `$0.0150`); remaining identity discovery slice two (6 tasks, `$0.0090`); and the separate six-task repeat-control stage (`$0.0080`). Current September 15 authoritative spend is `$0.0085`, leaving `$0.0165` under the unchanged `$0.025` ceiling. Every slice must re-read durable spend before authorization and execution.
+Recommended clean-UTC-day slices are: canary identity discovery (3 tasks, `$0.0045`); remaining identity discovery slice one (10 tasks, `$0.0150`); remaining identity discovery slice two (6 tasks, `$0.0090`); and the separate six-task repeat-control stage (`$0.0080`). At that September 15 checkpoint, authoritative spend was `$0.0085`, leaving `$0.0165` under the then-current `$0.025` ceiling. Every slice must re-read durable spend before authorization and execution; current governed policy uses `$0.0500`.
 
 The seven-pair longitudinal experiment should run **after the 25-product canary**, as a separate bounded authority, so the canary first validates the mixed repeat/onboarding operating surface. Neither review artifact creates that authority.
 
@@ -52,7 +52,7 @@ The real Slice 1 run `mer_iddiscrun_bfcdfbce45853a42add00506` is terminal `COMPL
 
 Across Canary A and Slice 1, 13 attempts produced nine strong identities (`69.2%`), three multiple-compatible outcomes (`23.1%`), and one variant conflict (`7.7%`), with zero provider/systemic failures, duplicate tasks, or engineering interventions. This small cohort is operational acceptance evidence, not a catalog-wide yield forecast. Canonical repeat resolution now exposes 19 durable product/source pairs, including the eight new Slice 1 Amazon identities.
 
-The reserved final six remain exactly the committed deterministic partition and reassess 6/6 `READY_FOR_DISCOVERY` with unchanged Amazon rights. Their six-task / `$0.0090` envelope does not fit September 15: authoritative spend is `$0.0235`, leaving `$0.0015`. On a clean UTC day it would leave `$0.0160` under the unchanged `$0.025` ceiling. Therefore the current decision is `READY_TO_PREPARE_SLICE_2_ON_FRESH_BUDGET_DAY`; no Slice 2 plan or authority exists yet. The separate longitudinal control should wait until `AFTER_25_IDENTITY_STAGE` so it does not compete for the final breadth slice's budget.
+The reserved final six remain exactly the committed deterministic partition and reassess 6/6 `READY_FOR_DISCOVERY` with unchanged Amazon rights. Their six-task / `$0.0090` envelope did not fit the September 15 snapshot under the then-current `$0.025` ceiling: authoritative spend was `$0.0235`, leaving `$0.0015`. No Slice 2 plan or authority exists yet. Under current `$0.0500` governance, a separate increment must freshly read authoritative UTC-day spend and revalidate the exact cohort before PREPARE; this documentation change itself authorizes nothing. The separate longitudinal control should wait until `AFTER_25_IDENTITY_STAGE` so it does not compete for the final breadth slice's budget.
 
 Stage numbers mean **Atlas products under review**, not interchangeable counts of product/source pairs or paid tasks. The governed work unit is a product/source pair. A product may contribute zero, one, or two ready pairs, and each ready repeat pair normally creates one paid Sellers task per observation cycle.
 
@@ -131,7 +131,7 @@ Sequential execution is not an architectural blocker for 25 or 100 under the cur
 
 ## Spend and illustrative cost ceilings
 
-The authoritative execution ledger owns actual spend. Authorization and execution both revalidate durable UTC-day spend. The operational ceiling remains `$0.025`; Google `PRODUCTS`/`SELLERS` is capped at `$0.001` per task and Amazon `AMAZON_PRODUCTS`/`AMAZON_SELLERS` at `$0.0015` per task. The ceiling is intentionally conservative, not an architectural maximum.
+The authoritative execution ledger owns actual spend. Authorization and execution both revalidate durable UTC-day spend. The operational ceiling is `$0.0500`; Google `PRODUCTS`/`SELLERS` remains capped at `$0.001` per task and Amazon `AMAZON_PRODUCTS`/`AMAZON_SELLERS` at `$0.0015` per task. Automatic paid retries remain zero. The ceiling is intentionally conservative, is not an architectural maximum, and creates no authority to spend.
 
 | Task count | All Google | All Amazon | Approximate 50/50 mix |
 |---:|---:|---:|---:|
@@ -140,7 +140,7 @@ The authoritative execution ledger owns actual spend. Authorization and executio
 | 1,000 | $1.0000 | $1.5000 | $1.2500 |
 | 10,000 | $10.0000 | $15.0000 | $12.5000 |
 
-At `$0.025` per UTC day, the theoretical maximum is 25 Google tasks, 16 Amazon tasks, or 20 tasks in an even mix. Actual bounded slices must also fit remaining ledger capacity. A 25-product stage therefore uses source prioritization and, when necessary, multiple reviewed daily slices. A future ceiling change requires a separate governance decision supported by observed cost accuracy, zero unauthorized/duplicate spend, stable recovery, provider latency, and operator workload; convenience alone is insufficient.
+At `$0.0500` per UTC day, the theoretical maximum is 50 Google tasks, 33 Amazon tasks, or 40 tasks in an even mix. Actual bounded slices must also fit remaining ledger capacity and their own cohort limits. A 25-product stage therefore still uses source prioritization and separately reviewed bounded slices. A future ceiling change requires another governance decision supported by observed cost accuracy, zero unauthorized/duplicate spend, stable recovery, provider latency, and operator workload; convenience alone is insufficient.
 
 ## Persistence and scale evidence
 
@@ -245,7 +245,7 @@ Provider task-rate limits and completion distributions are not established by re
 | Bounded planning | GREEN | Deterministic data-driven plans and 10,000-member fixtures | Measure real payload/latency at 25 |
 | Authorization | GREEN | Immutable parent/child binding, expiry, single-use start | No action |
 | Paid execution | GREEN | Shared lock, exact task lineage, source owners | Measure sequential throughput |
-| Spend governance | GREEN | Ledger-owned actual spend, same-parent progression, dual revalidation | Keep `$0.025`; slice work |
+| Spend governance | GREEN | Ledger-owned actual spend, same-parent progression, dual revalidation | Keep `$0.0500`; slice work |
 | Task persistence | YELLOW | Stale-writer defect fixed; JSON still rewrites and relies on shared writer topology | Measure at 25/100; indexed migration if evidence requires |
 | Result persistence | YELLOW | Immutable/replay-safe but whole-file and payload-heavy | Measure at 25/100 |
 | Pending recovery | GREEN for 25 | Exact existing-task RESUME, no paid retry | Automate bounded polling before 100 |
