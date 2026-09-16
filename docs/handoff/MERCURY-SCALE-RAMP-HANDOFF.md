@@ -1,6 +1,16 @@
 # Mercury Scale-Ramp Handoff
 
-## 100-product stage gate
+## 100-product membership and readiness checkpoint
+
+The zero-provider 100-product checkpoint is complete. Review-only artifact [100-product-candidate-cohort.json](../../config/mercury/scale-ramp/100-product-candidate-cohort.json) fixes the first 100 `ACTIVE + READY`, validation-clean RAM products in canonical Atlas manifest order. This neutral rule excludes the final three manifest entries—TeamGroup `TF3D432G3200HC16FDC01`, `TF3D416G3200HC16FDC01`, and `FF4D516G6000HC38ADC01`—for selection order only, not source convenience. Selected diversity remains five manufacturers, DDR4/DDR5, DIMM/SO-DIMM, 8/16/32/64/96 GB, and one-/two-module products.
+
+At `2026-09-16T23:13:37.133Z`, canonical readiness projected Amazon as 22 reusable identities, 77 identity-absent products, and one H052-review product. Of the 77, exactly 65 also have the required reviewed Amazon destination and are paid-discovery eligible; 12 fail closed before task creation because that Amazon destination is absent. Google projected 97 discovery-ready, one terminal `NO_USABLE_IDENTITY` review state, and the two known reusable-control products as `PORTFOLIO_PROVIDER_IDENTITY_BINDING_INVALID` in the discovery projection; current doctrine does not schedule blind Google discovery, their canonical repeat path remains reusable, and they must not be rediscovered. The cohort has 180 effective checked-in destinations over 99 products (88 Amazon, 92 Newegg); the sole destination-free member is `ram_corsair_cmk96gx5m2b6000c30`. Rakuten remains read-only/source-local and is not a paid participant.
+
+Projected currently legitimate work is up to 65 Amazon Products tasks (`$0.0975`) plus 24 separately selected Sellers-repeat pairs—22 Amazon (`$0.0330`) and two Google (`$0.0020`)—for a theoretical `$0.1325` maximum across at least three `$0.0500` UTC-day windows. These are separate derived envelopes, not one plan or authorization. Current authoritative September 16 spend is `$0.0080`. The proposed first paid canary is intentionally deferred for operator review of the full matrix because no canonical policy deterministically selects members from the 65 paid-discovery-eligible products; the exact next checkpoint is therefore `100_PRODUCT_MEMBERSHIP_AND_READINESS_READY_FOR_CHECKPOINT`.
+
+No paid plan, PREPARE, authorization, provider task, H052 decision, reprocessing, or downstream authority was created. Dynamic readiness remains derived rather than persisted as canonical truth. Existing P1-A/P1-B are sufficient for supervised execution visibility after future authorization; Forge does not yet own this pre-PREPARE 100-product readiness view, a non-blocking `MEASURE_DURING_100` usability gap.
+
+## Prior 100-product stage gate
 
 The zero-provider Post-25 Longitudinal Canary assessment classifies Mercury as `READY_TO_BEGIN_100_STAGED_RAMP`. This permits only the next zero-provider increment: select exactly 100 of the 103 current `ACTIVE + READY` Atlas RAM products and produce a deterministic read-only source-readiness/task-demand projection with diversity, reusable-identity, destination, blocker, and projected bounded-cost reporting. It does not authorize creation of a paid plan, PREPARE, authorization, provider task, retrieval, reprocessing, H052 decision, publication, Current Price, Cheapest, Pick, deployment, or spend.
 
