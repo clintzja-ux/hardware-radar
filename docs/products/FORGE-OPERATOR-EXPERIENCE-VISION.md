@@ -93,6 +93,8 @@ The current Forge surface proves useful foundations:
 
 The operator has confirmed that the HTTP-served generated Forge surface loads the explicitly selected schema-1.1 artifact and makes P1-B understandable. The present long page and compact cohort cards are certification-grade and technically useful. They are acceptable at current scale, but their success does not make continuous panel accumulation the mature UX strategy.
 
+Internal operational money must retain enough decimal precision to represent the governed owner's value without material display rounding. Where Mercury governs acquisition values at four-decimal USD precision, Forge displays at least four decimals and preserves any legitimate greater precision. This applies to operational spend, ceilings, envelopes, and remaining capacity—not shopper-facing retail, shipping, or historical-price presentation.
+
 Current certification uses an explicit local artifact-import boundary. Private `.forge-review` operational state is not automatically published into public assets. This is an intentional safety boundary today, not a permanent deployment decision. Any future transport must preserve private-state safety through separately governed architecture.
 
 ## Core mature UX principle

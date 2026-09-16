@@ -26,6 +26,8 @@ The existing Forge certified Mercury panel always exposes a visible `Cohort Oper
 
 The production exporter reads canonical SQLite state in read-only mode and produces the existing replaceable projection artifact; the artifact is not a source of truth. Its operator output reports the artifact path, schema, explicit `asOf`, cohort count, and total member count. The browser consumes only the file explicitly selected by the operator, so exporting does not silently update an open Forge page.
 
+P1-B operational spend presentation preserves Mercury's governed precision. Current acquisition values render with at least four decimal places, retain legitimate precision beyond four decimals, and show unavailable rather than manufacturing zero for invalid or missing operational money. This Forge-only rule does not alter Mercury arithmetic, authorization, budget policy, or shopper-facing historical/retail price formatting.
+
 Local operator verification uses the HTTP-served generated Forge surface at `public/forge/index.html` through the existing local HTTP server or Live Server workflow. `apps/forge/` remains canonical source, not the browser verification entry point. Opening `apps/forge/index.html` directly with `file://` is not a supported verification workflow. The operator must explicitly select `.forge-review/forge/certified-mercury-operations.json`; the private artifact is not copied into public assets, automatically loaded, or persisted by Forge.
 
 P1-B does not invoke P1-A, H052, providers, authorization, paid work, Sellers, repeat observation, publication, or deployment. It creates no mutable state and grants no action authority.
