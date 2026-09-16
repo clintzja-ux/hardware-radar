@@ -8,9 +8,11 @@ For repeat cohorts, Forge lifecycle counts reflect original canonical member sta
 
 This document governs evidence-based promotion of Mercury longitudinal acquisition from the completed five-product production-certification cohort. It is an operations plan, not acquisition authority, a budget change, or downstream market/publication authority.
 
-Current classification: `READY_FOR_100_WITH_PRECONDITIONS`.
+Current classification: `READY_TO_BEGIN_100_STAGED_RAMP`.
 
-There is no P0 engineering blocker. The supervised 25-product identity-breadth stage is complete. Before a 100-product breadth stage, Hardware Radar must close the P1 operating preconditions recorded below, then the operator must review the future Atlas cohort, its product/source readiness, bounded UTC-day slices under the governed `$0.0500` ceiling, canary, stop conditions, and measurement report. Planning remains zero-provider work; each paid run still requires its existing bounded authorization.
+The zero-provider Post-25 Longitudinal Canary stage-gate assessment found no open P0 or P1 correctness/operations blocker. The supervised 25-product identity-breadth stage is complete; P1-A is production-proven for one finite exact-task progression with zero new paid work, and P1-B/D2 is fixture-certified and operator-visibility-confirmed. D1 and immutable-result reprocessing closed the observed recurring Amazon structured-delivery-money defect without rewriting original results or run history. The canonical Atlas RAM corpus already contains 103 `ACTIVE + READY` products, so a legitimate 100-product population can be selected without Atlas mutation. Hardware Radar may begin a separate zero-provider 100-product candidate-selection and source-readiness projection increment. This classification does not create a cohort artifact, PREPARE, authorization, task, provider call, spend, publication, Current Price, Cheapest, or Pick authority; every future paid slice remains separately reviewed and authorized.
+
+Provider timing, file-store latency/growth, review demand, reprocessing frequency, and operating cadence remain `MEASURE_DURING_100`. Current finite bounds, exact-task recovery, zero automatic retries, member-local exception isolation, systemic-stop behavior, and the `$0.0500` UTC-day ceiling preserve correctness while those measurements accumulate. Rakuten participation is not required for the first 100-product paid ramp: its source-local catalog projection may remain read-only and its partially established rights remain authoritative.
 
 The zero-provider design step is complete. The non-executable review artifacts are [25-product-candidate-cohort.json](../../config/mercury/scale-ramp/25-product-candidate-cohort.json) and [25-product-canary-candidate.json](../../config/mercury/scale-ramp/25-product-canary-candidate.json). They are deliberately object-shaped `REVIEW_ONLY` documents, not inputs accepted by production planning commands, and confer no authority.
 
@@ -68,7 +70,7 @@ The identity-breadth stage is complete and accepted as operational evidence. Can
 
 The five non-strong outcomes are legitimate member-local exceptions. Four expose no H052 action; `ram_kingston_kf432c16bbk2_16` exposes H052 review availability. None authorizes H052, Sellers, evidence retention, history, publication, or public-price state. They remain explicit Forge-owned exception work rather than blockers to unrelated products or evidence of a reusable implementation defect.
 
-Promotion toward 100 is `READY_FOR_100_WITH_PRECONDITIONS`. P1-A implements and fixture-certifies Mercury-owned bounded existing-task progression. P1-B is implemented, fixture-certified, and operator-visibility-confirmed as a read-only cohort operations/exception view over canonical Mercury and Atlas owners; it distinguishes routine, pending, reviewable, safely unresolved, and systemic states without adding action authority or persistence. Local verification uses the HTTP-served generated `public/forge/index.html` surface with explicit certified-file selection, not direct `file://` use of canonical source under `apps/forge/`. Provider timing remains `MEASURE`, and file-store migration remains driven by measured latency/rewrite/memory/contention evidence. A separately prepared longitudinal observation stage should measure recurrence, evidence amplification, recovery, and cadence without conflating identity breadth with observation acquisition.
+Promotion toward 100 is `READY_TO_BEGIN_100_STAGED_RAMP`. P1-A implements, fixture-certifies, and has production-exercised Mercury-owned bounded existing-task progression. P1-B is implemented, fixture-certified, and operator-visibility-confirmed as a read-only cohort operations/exception view over canonical Mercury and Atlas owners; it distinguishes routine, pending, reviewable, safely unresolved, and systemic states without adding action authority or persistence. Local verification uses the HTTP-served generated `public/forge/index.html` surface with explicit certified-file selection, not direct `file://` use of canonical source under `apps/forge/`. Provider timing remains `MEASURE_DURING_100`, and file-store migration remains driven by measured latency/rewrite/memory/contention evidence.
 
 ## Certified baseline
 
@@ -139,7 +141,7 @@ Stopping a stage means creating no further paid tasks, preventing the next cohor
 
 Current bounded advancement is sequential within a process. A shared acquisition single-writer lock serializes paid execution and protects authoritative execution/spend accounting. SQLite bounded/repeat stores use WAL, `synchronous=FULL`, foreign keys, `busy_timeout=5000`, transactions, uniqueness, and indexed identifiers. Independent products have deterministic member/child identities; same-parent spend progression accounts for earlier member execution. Member-local exceptions are isolated; systemic faults stop the run.
 
-START may advance all members until they are terminal or pending. RESUME may retrieve/finalize existing tasks but is forbidden from creating new paid work. Exact replay is idempotent, canonical task/result ambiguity fails closed, and automatic paid retries are zero. Operators currently need run IDs and may need repeated RESUME commands for pending work. That is acceptable for 25, becomes an operational precondition before 100, and is not acceptable as the ordinary surface by 1,000.
+START may advance all members until they are terminal or pending. RESUME may retrieve/finalize existing tasks but is forbidden from creating new paid work. Exact replay is idempotent, canonical task/result ambiguity fails closed, and automatic paid retries are zero. P1-A now provides bounded finite progression of exact existing tasks and was exercised once in production with zero new paid work. Operators still need run IDs and an explicit progression invocation; that supervised surface is sufficient for staged 100-product canaries/slices, remains a `MEASURE_DURING_100` operational concern, and is not acceptable as the ordinary surface by 1,000.
 
 Sequential execution is not an architectural blocker for 25 or 100 under the current daily spend ceiling. Measure it at 25. Introduce concurrency only with proof that provider latency/throughput requires it and without weakening the single-writer and spend invariants.
 
@@ -190,7 +192,7 @@ Provider credentials remain environment-bound. Plans, artifacts, state, and comm
 
 ## Operator surface, review, and observability
 
-Current review artifacts are individually addressable, immutable/idempotent, attributed, and auditable. H052 and Forge projections provide adequate early-stage visibility, but review work is not yet a unified sortable/filterable durable exception queue. Raw CLI/JSON remains acceptable for a canaried 25-product stage with a prepared review worksheet/report; before 100, Forge should summarize cohorts, grouped exceptions, and backlog. Before 1,000, cohort/exception-driven Forge review is required. At 1,000+, ordinary operation must not require searching raw ledgers or knowing individual task/authorization IDs.
+Current review artifacts are individually addressable, immutable/idempotent, attributed, and auditable. H052 and Forge projections provide adequate supervised 100-stage visibility, but review work is not yet a unified sortable/filterable durable exception queue. Forge now summarizes cohort membership and grouped member classifications; review/backlog demand should be measured during 100. Before 1,000, cohort/exception-driven Forge review is required. At 1,000+, ordinary operation must not require searching raw ledgers or knowing individual task/authorization IDs.
 
 Before 100, the operator report/Beacon projection must cover:
 
@@ -202,7 +204,7 @@ Before 100, the operator report/Beacon projection must cover:
 
 Existing CLI summaries cover cohort counts, spend, pending/completed/exceptions, retained evidence, and admitted facts. They do not yet provide a durable cross-run metric series, backlog management, latency distributions, or systemic alerting. Beacon production transport remains deferred; do not couple scale readiness to a new telemetry authority.
 
-"Unattended" means an operator approves a bounded cohort and spend envelope, Mercury advances ordinary pending/retrieval work within that exact envelope, isolates member exceptions, performs no scope expansion or unapproved retry, stops on systemic integrity failure, and queues review work. It does not mean unrestricted autonomous spending. Current Mercury has the correctness boundaries but lacks scheduling/background progression and a cohort-level exception/metric surface. Repeated manual RESUME is acceptable at 25, a P1 operations gap before 100, and a blocker before 1,000.
+"Unattended" means an operator approves a bounded cohort and spend envelope, Mercury advances ordinary pending/retrieval work within that exact envelope, isolates member exceptions, performs no scope expansion or unapproved retry, stops on systemic integrity failure, and queues review work. It does not mean unrestricted autonomous spending. Current Mercury has the correctness boundaries, P1-A finite progression, and P1-B cohort projection, but lacks scheduling/background progression and durable cross-run metrics. Explicit supervised progression is acceptable during 100 and should be measured there; ordinary scheduling remains required before 1,000.
 
 ## Stage gates
 
@@ -262,15 +264,15 @@ Provider task-rate limits and completion distributions are not established by re
 | Spend governance | GREEN | Ledger-owned actual spend, same-parent progression, dual revalidation | Keep `$0.0500`; slice work |
 | Task persistence | YELLOW | Stale-writer defect fixed; JSON still rewrites and relies on shared writer topology | Measure at 25/100; indexed migration if evidence requires |
 | Result persistence | YELLOW | Immutable/replay-safe but whole-file and payload-heavy | Measure at 25/100 |
-| Pending recovery | GREEN for 25 | Exact existing-task RESUME, no paid retry | Automate bounded polling before 100 |
+| Pending recovery | GREEN for supervised 100 | P1-A exact existing-task progression is fixture-certified and production-exercised once with no paid retry | Measure timing/invocations at 100; automate ordinary scheduling before 1,000 |
 | Exception isolation | GREEN | Member-local continuation and systemic stop fixtures | Verify rates at 25 |
-| Operator review | YELLOW | Auditable H052/Forge artifacts; no unified queue | Summary before 100; queue before 1,000 |
-| Repeat observation | GREEN | Canonical owner projects 24 pairs (22 Amazon, 2 Google); six-pair plan `mer_repeatrunplan_3ca259b43b481fddd89e4759` is authorized by `mer_repeatrunauth_4b0db03039226f7f3aee0881` but not started | Separately approve exact START before expiry, or allow authorization to expire |
+| Operator review | YELLOW | Auditable H052/Forge cohort artifacts; no unified queue | Measure demand at 100; queue before 1,000 |
+| Repeat observation | GREEN | Canonical owner projected 24 pairs (22 Amazon, 2 Google); six-pair run `mer_repeatrun_e3d2417b9e15058c2b44b649` is terminal with three original successes and three preserved exceptions, all three now effectively reprocessed | Measure recurrence/amplification during 100; no replay or new paid task implied |
 | Historical admission | GREEN | H058 fact-level, replay-safe, downstream false | Measure amplification |
 | Storage scalability | YELLOW | SQLite evidence strong; growing immutable file stores unmeasured | Measure 25/100; migrate by evidence |
-| Command scalability | YELLOW | Cohort-first commands exist; repeated RESUME/manual IDs remain | Accept 25; improve before 100/1,000 |
-| Observability | YELLOW | Per-run summaries exist; cross-run metrics/backlog/latency absent | Define report at 25; durable metrics before 100 |
-| Unattended readiness | RED | No scheduler/background pending progression; bounded authority is present | Not needed for 25; P1 before 100, required before 1,000 |
+| Command scalability | YELLOW | Cohort-first commands and P1-A finite progression exist; explicit run IDs remain | Accept supervised 100; improve before 1,000 |
+| Observability | YELLOW | Per-run Forge summaries exist; cross-run metrics/backlog/latency absent | Measure at 100; durable metrics before 1,000 |
+| Unattended readiness | RED | No scheduler/background progression; bounded authority and finite P1-A progression are present | Not needed for supervised 100; required before 1,000 |
 
 The RED item is operational automation, not a safety defect and not a blocker for a deliberately supervised 25-product certification stage.
 
@@ -279,7 +281,7 @@ The RED item is operational automation, not a safety defect and not a blocker fo
 | Priority | Limitation | Type |
 |---|---|---|
 | P0 before 25 | None | — |
-| P1 before 100 | P1-A bounded pending/retrieval progression and P1-B Forge cohort operations/exception projection fixture-certified; measurement-driven file-store decision remains | Operations / observability / performance |
+| P1 before 100 | None open: P1-A is production-exercised; P1-B/D2 is fixture-certified and operator-visibility-confirmed; D1/reprocessing is closed | — |
 | P2 before 1,000 | Forge batch exception management; durable cross-run metrics; remove ordinary per-ID recovery; migrate measured file bottlenecks | Operations / observability / implementation |
 | P3 before 10,000 | Production-like storage/concurrency/backup benchmarks and indexed storage wherever triggered | Performance / operations |
 | MEASURE | Provider rate/completion latency, identity resolution/review rate, evidence amplification, file latency/memory/contention | Provider/domain / performance / operations |
