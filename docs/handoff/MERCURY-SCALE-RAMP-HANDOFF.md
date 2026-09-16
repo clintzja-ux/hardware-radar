@@ -124,6 +124,7 @@ Read these before acting:
 - Canary A production cohort: `config/mercury/scale-ramp/25-product-canary-a-amazon-identity.json`
 - Slice 1 production cohort: `config/mercury/scale-ramp/25-product-slice-1-amazon-identity.json`
 - Reserved Slice 2 membership source: the remaining deterministic six documented above and in `docs/operations/MERCURY-SCALE-RAMP.md`; no production artifact exists.
+- Post-25 Longitudinal Canary 1: `config/mercury/longitudinal/post-25-longitudinal-canary-1.json`; prepared plan `mer_repeatrunplan_3ca259b43b481fddd89e4759`, cycle `2026-09-16T02:20:00.000Z`.
 
 ## Decisions not to reopen casually
 
@@ -136,9 +137,15 @@ Atlas independence from retailer feeds; source capability separation; affiliate 
 - Provider completion distributions and the bounded polling schedule for existing-task progression.
 - Forge exception aging and operator handling time once the cohort summary exists.
 
+## Prepared longitudinal checkpoint
+
+Fresh canonical-owner assessment on `2026-09-16` found 24 repeat-ready pairs across 22 Atlas products: 22 Amazon and two Google Shopping. Post-25 Longitudinal Canary 1 is the first longitudinal canary after the completed 25-product identity-breadth gate, not the first bounded repeat run. MERCURY-HISTORY-056 remains the earlier five-product historical pilot, and the September 14 plan/run remains the first production bounded repeat. This six-pair canary has two same-product cross-source controls plus DDR4/DDR5, DIMM/SODIMM, kit/single-module, three manufacturers, and existing-history/zero-history baselines. Plan `mer_repeatrunplan_3ca259b43b481fddd89e4759` is six READY, zero blocked, four Amazon plus two Google tasks, `$0.0080` maximum spend, zero retries, `NOT_AUTHORIZED`, and `NOT_STARTED`. At inspection, current UTC-day spend was `$0.0000` under `$0.0500`.
+
+The future run must measure provider completion/pending/retrieval duration, P1-A invocation/attempt/bound outcomes with zero new paid work, authorized versus actual spend, evidence and history amplification/replay, relevant store growth and safe latency, operator actions and exception classes, and whether Forge is sufficient without raw reconstruction. P1-B currently projects started repeat runs, not prepared-only plans; this plan is therefore not visible in the certified Forge artifact before START.
+
 ## Exact next safe action
 
-With P1-B operator visibility confirmed, next reassess the canonical repeat-ready projection, select a bounded representative longitudinal cohort, PREPARE it, INSPECT it, and stop before authorization. Do not combine that separately reviewed action with provider execution.
+Perform a separate operator review of the exact paid authorization envelope for `mer_repeatrunplan_3ca259b43b481fddd89e4759`. Do not authorize or start it until that review explicitly approves the six members and `$0.0080` maximum.
 
 ## NEW CHAT BOOTSTRAP
 
