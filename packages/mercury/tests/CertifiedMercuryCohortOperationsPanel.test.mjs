@@ -1,0 +1,15 @@
+import assert from "node:assert/strict";
+import {readFile} from "node:fs/promises";
+import {CertifiedMercuryOperationsPanel} from "../../../apps/forge/components/CertifiedMercuryOperationsPanel.js";
+
+class Element{constructor(){this.textContent="";this.className="";this.children=[];this.files=[];}addEventListener(){}replaceChildren(...children){this.children=children;}querySelector(selector){return this.map[selector];}}
+const root=new Element();root.map={"#certifiedMercuryProjectionFile":new Element(),"#certifiedMercuryProjectionStatus":new Element(),"#certifiedMercuryProjectionSummary":new Element(),"#certifiedMercuryProjectionCohortStatus":new Element(),"#certifiedMercuryProjectionCohorts":new Element(),"#certifiedMercuryProjectionProducts":new Element(),"#certifiedMercuryProjectionDetails":new Element()};globalThis.document={createElement:()=>new Element()};
+const panel=new CertifiedMercuryOperationsPanel(root),base={projectionType:"CERTIFIED_MERCURY_OPERATIONS_PROJECTION",readOnly:true,mutationAuthorized:false,networkOperation:"NONE",asOf:"2026-09-15T12:00:00Z",semantics:{canonicalOperationalView:true,historicalValueSemantics:"HISTORICAL_OBSERVATION",currentPrice:false,livePrice:false,publicPrice:false,publicationAuthority:false},summary:{retainedEvidenceCount:0,totalHistoricalObservations:0},products:[]};
+
+assert.match(root.map["#certifiedMercuryProjectionCohortStatus"].textContent,/No certified projection loaded/);
+panel.render({...base,schemaVersion:"1.0"});assert.match(root.map["#certifiedMercuryProjectionCohortStatus"].textContent,/does not contain cohort operations/);assert.equal(root.map["#certifiedMercuryProjectionCohorts"].children.length,0);
+panel.render({...base,schemaVersion:"1.1",cohortOperations:{schemaVersion:"1.0",projectionType:"CERTIFIED_MERCURY_COHORT_OPERATIONS",cohorts:[]}});assert.equal(root.map["#certifiedMercuryProjectionCohortStatus"].textContent,"No bounded Mercury cohorts are present in this certified projection.");
+const cohort={cohortType:"PRODUCTS_IDENTITY_DISCOVERY",identity:{planId:"plan",runId:"run"},membership:{requested:1,completed:0,pending:0,exceptions:1},cost:{actualSpendUsd:.0015,authorizedMaximumSpendUsd:.003},safety:{systemicFailure:false},members:[{atlasProduct:{atlasProductId:"ram_fixture",displayName:"Fixture RAM"},classification:"GOVERNED_REVIEW_AVAILABLE",review:{eligible:true,type:"H052"}}]};
+panel.render({...base,schemaVersion:"1.1",cohortOperations:{schemaVersion:"1.0",projectionType:"CERTIFIED_MERCURY_COHORT_OPERATIONS",cohorts:[cohort]}});assert.equal(root.map["#certifiedMercuryProjectionCohorts"].children.length,1);assert.match(root.map["#certifiedMercuryProjectionCohortStatus"].textContent,/1 certified bounded Mercury cohort/);assert.match(root.map["#certifiedMercuryProjectionCohorts"].children[0].textContent,/H052/);assert.match(root.map["#certifiedMercuryProjectionCohorts"].children[0].textContent,/No downstream authority/);
+const html=await readFile(new URL("../../../apps/forge/index.html",import.meta.url),"utf8");assert.match(html,/Cohort Operations &amp; Exceptions/);
+console.log("Certified Mercury cohort operations panel tests passed (10 cases).");

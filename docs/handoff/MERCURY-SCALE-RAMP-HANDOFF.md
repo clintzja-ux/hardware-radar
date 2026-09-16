@@ -41,7 +41,7 @@ The exact checked-in cohort is `config/mercury/scale-ramp/25-product-slice-2-ama
 
 Across Canary A, Slice 1, and Slice 2, all 19 Amazon Products breadth attempts are terminal: 14 strong, 3 multiple-compatible, 1 variant conflict, and 1 insufficient-evidence outcome. The stage used 19 unique tasks and `$0.0285`, with zero provider/systemic failures, duplicate tasks, retries, or engineering interventions. This is stage acceptance evidence, not a catalog-wide yield forecast. Stop before longitudinal acquisition; next perform a separately reviewed stage-gate and exception/operations assessment.
 
-That stage-gate assessment is now complete. Promotion is `READY_FOR_100_WITH_PRECONDITIONS`: identity correctness, bounded spend, recovery, and member-local isolation passed. P1-A now fixture-certifies Mercury-owned finite progression of already-created pending tasks for identity discovery and bounded repeat runs. It reuses exact task IDs, creates no authorization/task/spend, and composes existing source retrieval/processing owners; it is not a scheduler or production background loop. P1-B Forge cohort operations/exception projection remains, and file-store decisions remain measurement-driven. The canonical repeat-readiness owner projects 24 pairs (22 DataForSEO Amazon, two Google Shopping) for a separately prepared longitudinal stage. This assessment grants no provider, H052, Sellers, repeat, or downstream authority.
+That stage-gate assessment is now complete. Promotion is `READY_FOR_100_WITH_PRECONDITIONS`: identity correctness, bounded spend, recovery, and member-local isolation passed. P1-A implements and fixture-certifies Mercury-owned finite progression of already-created pending tasks. P1-B is implemented, fixture-certified, and operator-visibility-confirmed as a Forge-owned read-only projection of canonical cohort state, including routine/pending work, governed review availability, safely unresolved cases, spend/safety, and systemic failures. Human verification used the HTTP-served generated `public/forge/index.html` surface and explicit selection of the current schema-1.1 artifact; `apps/forge/` remains canonical source, while direct `file://` source-page use is not the supported verification path. Forge creates no task, progression, review, or downstream authority, and no second exception store exists. File-store decisions remain measurement-driven. A fresh read-only canonical-owner assessment projects 24 pairs (22 DataForSEO Amazon, two Google Shopping) for a separately prepared longitudinal stage.
 
 ## Source roles and exception doctrine
 
@@ -138,7 +138,7 @@ Atlas independence from retailer feeds; source capability separation; affiliate 
 
 ## Exact next safe action
 
-Implement P1-B as a Forge-owned cohort operations/exception projection without provider work or duplicated Mercury policy. Then prepare and inspect a separate longitudinal stage from the canonical repeat-ready projection and stop before authorization.
+With P1-B operator visibility confirmed, next reassess the canonical repeat-ready projection, select a bounded representative longitudinal cohort, PREPARE it, INSPECT it, and stop before authorization. Do not combine that separately reviewed action with provider execution.
 
 ## NEW CHAT BOOTSTRAP
 

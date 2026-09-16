@@ -941,6 +941,29 @@ input[readonly] {
     font-weight: 750;
 }
 
+.certified-mercury-cohort-section {
+    margin: 22px 0;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface-muted);
+}
+
+.certified-mercury-cohorts {
+    display: grid;
+    gap: 12px;
+}
+
+.certified-mercury-cohort {
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
 .review-workflow-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
