@@ -5,12 +5,14 @@ const DOMAIN_EXCEPTION=new Set(["MULTIPLE_COMPATIBLE_ASINS","ASIN_VARIANT_CONFLI
 const SUCCESS=new Set(["STRONG_UNIQUE_ASIN","IDENTITY_RESOLVED","ADMITTED","DUPLICATE"]);
 
 function classify(member,run){
- const reason=member.systemicFailureReason??member.failure?.reason??member.failure?.failureClass??null;
+ const reason=member.systemicFailureReason??member.exception??member.failure?.reason??member.failure?.failureClass??null;
  if(member.systemicFailure===true||SYSTEMIC.has(reason))return "SYSTEMIC_ATTENTION";
  if(member.state==="WAITING_FOR_PROVIDER"||member.state==="PENDING")return "PENDING_ROUTINE_WORK";
  if(member.reviewEligibility?.eligible===true)return "GOVERNED_REVIEW_AVAILABLE";
+ if(run.cohortType==="REPEAT_OBSERVATION"&&member.state==="EXCEPTION")return "EXPECTED_DOMAIN_EXCEPTION";
  if(DOMAIN_EXCEPTION.has(member.outcome))return member.reviewEligibility?.eligible===false?"SAFELY_UNRESOLVED":"EXPECTED_DOMAIN_EXCEPTION";
  if(member.state==="COMPLETED"&&SUCCESS.has(member.outcome))return "ROUTINE_SUCCESS";
+ if(run.cohortType==="REPEAT_OBSERVATION"&&member.state==="COMPLETED")return "ROUTINE_SUCCESS";
  if(member.state==="COMPLETED")return "EXPECTED_DOMAIN_EXCEPTION";
  return "PENDING_ROUTINE_WORK";
 }
@@ -19,7 +21,7 @@ function projectMember(member,run,atlas){
  const atlasProduct=atlas.get(member.atlasProductId);if(!atlasProduct)throw new Error("FORGE_COHORT_ATLAS_BINDING_INVALID");
  const classification=classify(member,run),review=member.reviewEligibility??{eligible:false,reviewType:null,permittedDecisions:[]};
  if(review.eligible===true&&typeof review.owner!=="string")throw new Error("FORGE_COHORT_REVIEW_OWNER_REQUIRED");
- return {memberKey:member.memberKey??member.preparedObservationId??member.atlasProductId,atlasProduct:{atlasProductId:member.atlasProductId,displayName:atlasProduct.identity?.displayName??null,manufacturerPartNumber:atlasProduct.identity?.manufacturerPartNumber??null},source:member.source??null,operation:member.operation??null,state:member.state,outcome:member.outcome??null,classification,providerTaskId:member.providerTaskId??null,canonicalResultId:member.providerResultId??member.canonicalResultId??null,assessmentId:member.assessmentId??null,automationStopReason:member.automationStopReason??member.outcome??member.failure?.reason??member.failure?.failureClass??null,review:{eligible:review.eligible===true,owner:review.owner??null,type:review.reviewType??null,permittedDecisions:clone(review.permittedDecisions??[]),evidenceReferences:clone(review.evidenceReferences??[]),actionExecutable:false},unresolvedIsLegitimate:classification==="SAFELY_UNRESOLVED",progression:{status:member.progression?.status??null,attemptCount:member.progression?.attemptCount??null,bounded:member.progression?.bounded??null},repeatObservation:clone(member.repeatObservation??null),downstreamAuthority:{sellers:false,history:false,canonical:false,reviewMutation:false,publication:false,currentPrice:false,cheapest:false,picks:false},systemicFailureReason:classification==="SYSTEMIC_ATTENTION"?(member.systemicFailureReason??member.failure?.reason??member.failure?.failureClass??run.systemicFailureReason??"SYSTEMIC_FAILURE"):null};
+ return {memberKey:member.memberKey??member.preparedObservationId??member.atlasProductId,atlasProduct:{atlasProductId:member.atlasProductId,displayName:atlasProduct.identity?.displayName??null,manufacturerPartNumber:atlasProduct.identity?.manufacturerPartNumber??null},source:member.source??null,operation:member.operation??null,state:member.state,outcome:member.outcome??null,originalException:member.originalException??member.exception??null,classification,providerTaskId:member.providerTaskId??null,canonicalResultId:member.providerResultId??member.canonicalResultId??null,assessmentId:member.assessmentId??null,automationStopReason:member.automationStopReason??member.exception??member.outcome??member.failure?.reason??member.failure?.failureClass??null,review:{eligible:review.eligible===true,owner:review.owner??null,type:review.reviewType??null,permittedDecisions:clone(review.permittedDecisions??[]),evidenceReferences:clone(review.evidenceReferences??[]),actionExecutable:false},unresolvedIsLegitimate:classification==="SAFELY_UNRESOLVED",progression:{status:member.progression?.status??null,attemptCount:member.progression?.attemptCount??null,bounded:member.progression?.bounded??null},repeatObservation:clone(member.repeatObservation??null),downstreamAuthority:{sellers:false,history:false,canonical:false,reviewMutation:false,publication:false,currentPrice:false,cheapest:false,picks:false},systemicFailureReason:classification==="SYSTEMIC_ATTENTION"?(member.systemicFailureReason??member.exception??member.failure?.reason??member.failure?.failureClass??run.systemicFailureReason??"SYSTEMIC_FAILURE"):null};
 }
 
 export function createCertifiedMercuryCohortOperationsProjection({asOf,atlasProducts,cohorts=[]}={}){

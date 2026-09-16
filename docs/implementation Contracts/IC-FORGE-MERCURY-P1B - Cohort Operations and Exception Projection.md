@@ -1,6 +1,6 @@
 # IC-FORGE-MERCURY-P1B — Cohort Operations and Exception Projection
 
-Status: implemented, fixture-certified, and operator-visibility-confirmed
+Status: implemented, production-shaped repeat projection corrected, fixture-certified, and operator-visibility-confirmed
 
 ## Boundary
 
@@ -16,6 +16,10 @@ Members are classified as `ROUTINE_SUCCESS`, `PENDING_ROUTINE_WORK`, `EXPECTED_D
 
 The same shell supports Products identity discovery and repeat-observation cohorts. Repeat-specific evidence/history counts remain domain details. Every member explicitly has no Sellers, history, canonical, review-mutation, publication, Current Price, Cheapest, or Pick authority from this projection.
 
+Repeat projection uses the canonical durable member shape rather than requiring a synthetic `outcome`. A `COMPLETED` repeat member is routine success; a terminal `EXCEPTION` member is an original execution exception and never pending. Original evidence/history counts derive from the member's durable `evidenceIds` and `historicalObservationIds` arrays. The canonical exception remains the automation stop reason.
+
+Successful immutable-result reprocessing is an additive current-effective dimension. Forge reads the canonical reprocessing action and its append-only events, shows action/status plus effective evidence/history and history-ineligible counts, and continues to show the unchanged original exception and zero original execution effects. Reprocessing never relabels the original run as successful, invents H052 eligibility, or grants downstream authority.
+
 ## Operator surface and safety
 
 The existing Forge certified Mercury panel always exposes a visible `Cohort Operations & Exceptions` subsection before the product/history projection. Before file selection it explains that no certified projection is loaded. A selected schema-1.0 artifact explicitly reports that cohort operations are unavailable and requests a current schema-1.1 export. A schema-1.1 artifact containing zero cohorts reports that legitimate empty state. Populated schema-1.1 artifacts render compact cohort summaries and member classifications. Raw JSON remains available only as supporting detail.
@@ -28,4 +32,4 @@ P1-B does not invoke P1-A, H052, providers, authorization, paid work, Sellers, r
 
 ## Certification
 
-Fixtures cover routine success, pending progression, H052-reviewable exception, non-reviewable unresolved state, variant conflict, multiple-compatible results, systemic failure, cost/safety, downstream isolation, Atlas identity, determinism, repeat cohorts, empty/normal cohorts, mixed cohorts, all four visible panel states, and the canonical repository-to-provider-to-exporter-to-artifact-to-panel path. Human operator verification subsequently confirmed the HTTP-served generated Forge surface visibly renders the selected current schema-1.1 projection with six cohorts, understandable member classifications, H052 availability, safely unresolved and systemic states, spend/safety information, and explicit downstream-authority exclusion.
+Fixtures cover routine success, pending progression, H052-reviewable exception, non-reviewable unresolved state, variant conflict, multiple-compatible results, systemic failure, cost/safety, downstream isolation, Atlas identity, determinism, repeat cohorts, empty/normal cohorts, mixed cohorts, all four visible panel states, and the canonical repository-to-provider-to-exporter-to-artifact-to-panel path. Production-shaped repeat fixtures additionally cover completed members without `outcome`, terminal exceptions, exception preservation, durable-array counts, recovered original exceptions, the Crucial 7-evidence/6-history case, genuine pending work, systemic attention, and no invented review/downstream authority. Human operator verification through the supported HTTP-served generated Forge surface confirmed the D2 lifecycle counts, original exception visibility, separate 7/6, 14/14, and 3/3 reprocessing effects, `Systemic: NO`, and no downstream authority.

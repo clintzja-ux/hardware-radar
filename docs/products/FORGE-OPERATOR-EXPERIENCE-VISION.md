@@ -1,7 +1,7 @@
 # Hardware Radar Forge Operator Experience Vision
 
-**Status:** VISION / DIRECTION — NOT A CURRENT IMPLEMENTATION CONTRACT  
-**Scope:** Durable product and UX direction for Hardware Radar's internal operator experience  
+**Status:** VISION / DIRECTION — NOT A CURRENT IMPLEMENTATION CONTRACT
+**Scope:** Durable product and UX direction for Hardware Radar's internal operator experience
 **Current implementation authority:** Existing source, policies, contracts, ADRs, tests, and operator commands
 
 ## Purpose

@@ -4,3 +4,4 @@ export * from "./ProductionRepeatObservation.js";
 export * from "./BoundedRepeatObservationRun.js";
 export * from "./ReusableIdentityAcquisitionLineage.js";
 export * from "./ProductionRepeatObservationResultPipeline.js";
+export * from "./ImmutableProviderResultReprocessing.js";

@@ -6,7 +6,7 @@ Fixture-certified. H048 composes `DATAFORSEO_AMAZON` Sellers evidence through th
 
 ## Retention and identity projection
 
-The source-typed Amazon adapter requires an H046 `STRONG_UNIQUE_ASIN` assessment and an H047 immutable Sellers result with exact task, result, request, rights, and ASIN lineage. It projects documented seller name/URL/ships-from, current and regular prices, currency, condition and description, voucher terms, delivery, delivery price, observation time, and raw provenance into the existing DF003 evidence repository. Missing condition and delivery price remain `null`; numeric zero remains zero. Current Sellers price is the item-price candidate and is preserved as the provider-reported total without inventing shipping, tax, fees, or delivered cost.
+The source-typed Amazon adapter requires an H046 `STRONG_UNIQUE_ASIN` assessment and an H047 immutable Sellers result with exact task, result, request, rights, and ASIN lineage. It projects documented seller name/URL/ships-from, current and regular prices, currency, condition and description, voucher terms, delivery, delivery price, observation time, and raw provenance into the existing DF003 evidence repository. Missing condition and delivery price remain `null`; numeric zero remains zero. Structured delivery money contributes only its unambiguous finite non-negative `current` when it is non-range and its currency matches the item-price currency; malformed, ranged, missing-current, or currency-conflicting shapes fail closed. Current Sellers price is the item-price candidate and is preserved as the provider-reported total without inventing shipping, tax, fees, or delivered cost.
 
 ## Retailer, marketplace, and seller governance
 

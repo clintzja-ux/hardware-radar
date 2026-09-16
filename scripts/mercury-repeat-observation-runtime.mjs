@@ -1,7 +1,7 @@
 import path from "node:path";
 import {readFile} from "node:fs/promises";
 import {ProductRepository,RetailerRepository} from "../packages/atlas/index.js";
-import {BoundedRepeatObservationRunService,FileAmazonAcceptanceActionRepository,FileAmazonHistoricalAcceptanceRepository,FileDataForSeoMarketEvidenceRepository,FileHistoricalObservationRepository,FileIdentityReviewDecisionRepository,FileLiveAuthorizationConsumptionRepository,HistoricalObservationAdmissionService,SqliteRepeatObservationRepository,createProductionRepeatObservationIdentityResolvers,createProductionRepeatObservationResultPipeline,createProductionRepeatObservationService} from "../packages/mercury/index.js";
+import {BoundedRepeatObservationRunService,DATAFORSEO_AMAZON_SELLERS_NORMALIZATION_VERSION,FileAmazonAcceptanceActionRepository,FileAmazonHistoricalAcceptanceRepository,FileDataForSeoMarketEvidenceRepository,FileHistoricalBootstrapProviderResultRepository,FileHistoricalObservationRepository,FileIdentityReviewDecisionRepository,FileLiveAuthorizationConsumptionRepository,HistoricalObservationAdmissionService,ImmutableProviderResultReprocessingService,SqliteRepeatObservationRepository,createProductionRepeatObservationIdentityResolvers,createProductionRepeatObservationResultPipeline,createProductionRepeatObservationService} from "../packages/mercury/index.js";
 
 export const parseRepeatArgs=(values=process.argv.slice(2))=>new Map(values.map(value=>{const i=value.indexOf("=");return i<0?[value,true]:[value.slice(0,i),value.slice(i+1)];}));
 export function createRepeatObservationRuntime(args,{now=()=>new Date().toISOString(),taskOwners,retrievalOwners,processingOwners,historicalAdmissionOwner,taskResolver,resultPipeline,credentialLoader,httpTransport}={}){
@@ -14,4 +14,9 @@ export function createRepeatObservationRuntime(args,{now=()=>new Date().toISOStr
 export function createBoundedRepeatObservationRuntime(args,options={}){
  const repeatService=createRepeatObservationRuntime(args,options),service=new BoundedRepeatObservationRunService({repeatService,repository:repeatService.repository,spendResolver:repeatService.spendResolver,now:options.now});
  return Object.freeze({service,repeatService,close:()=>repeatService.close()});
+}
+export function createImmutableResultReprocessingRuntime(args,options={}){
+ const repeatService=createRepeatObservationRuntime(args,options),location=(key,fallback)=>path.resolve(String(args.get(key)||fallback)),resultRepository=new FileHistoricalBootstrapProviderResultRepository({statePath:location("--result-state",".forge-review/acquisition/historical-bootstrap-provider-results.json")});
+ const processors={"DATAFORSEO_AMAZON:AMAZON_SELLERS":Object.freeze({sourceId:"DATAFORSEO_AMAZON",operation:"AMAZON_SELLERS",version:DATAFORSEO_AMAZON_SELLERS_NORMALIZATION_VERSION,eligibleExceptions:Object.freeze(["DATAFORSEO_AMAZON_MONEY_INVALID"]),process:({assessment})=>repeatService.processRetain({preparedObservationId:assessment.preparedObservationId,canonicalResultId:assessment.canonicalResultId})})};
+ const service=new ImmutableProviderResultReprocessingService({repeatService,resultRepository,repository:repeatService.repository,processors,now:options.now});return Object.freeze({service,repeatService,close:()=>repeatService.close()});
 }

@@ -1,9 +1,20 @@
 export const DATAFORSEO_AMAZON_SOURCE_ID = "DATAFORSEO_AMAZON";
 export const DATAFORSEO_AMAZON_OPERATIONS = Object.freeze({ PRODUCTS: "AMAZON_PRODUCTS", ASIN: "AMAZON_ASIN", SELLERS: "AMAZON_SELLERS" });
+export const DATAFORSEO_AMAZON_SELLERS_NORMALIZATION_VERSION = "DATAFORSEO-AMAZON-SELLERS-D1-1.0";
 
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const text = value => typeof value === "string" && value.trim() ? value.trim() : null;
 const money = value => value == null ? null : Number.isFinite(value) && value >= 0 ? value : (() => { throw new TypeError("DATAFORSEO_AMAZON_MONEY_INVALID"); })();
+const deliveryMoney = (value, itemCurrency) => {
+  if (value == null || Number.isFinite(value)) return money(value);
+  if (typeof value !== "object" || Array.isArray(value)) throw new TypeError("DATAFORSEO_AMAZON_MONEY_INVALID");
+  if (value.is_price_range !== false || value.max_value != null) throw new TypeError("DATAFORSEO_AMAZON_DELIVERY_MONEY_AMBIGUOUS");
+  if (!Object.hasOwn(value, "current") || value.current == null) throw new TypeError("DATAFORSEO_AMAZON_DELIVERY_MONEY_CURRENT_REQUIRED");
+  const currency = text(value.currency), priceCurrency = text(itemCurrency);
+  if (!currency || !priceCurrency) throw new TypeError("DATAFORSEO_AMAZON_DELIVERY_CURRENCY_REQUIRED");
+  if (currency !== priceCurrency) throw new TypeError("DATAFORSEO_AMAZON_DELIVERY_CURRENCY_CONFLICT");
+  return money(value.current);
+};
 const asin = value => { const result = text(value); if (!result || !/^[A-Z0-9]{10}$/.test(result.toUpperCase())) throw new TypeError("DATAFORSEO_AMAZON_ASIN_INVALID"); return result.toUpperCase(); };
 
 export function createAmazonProductsEvidence(input = {}) {
@@ -18,7 +29,8 @@ export function createAmazonAsinEvidence(input = {}) {
 export function createAmazonSellersEvidence(input = {}) {
   const price = input.price && typeof input.price === "object" && !Array.isArray(input.price) ? input.price : null;
   const delivery = input.delivery ?? input.delivery_info ?? null;
-  return freeze({ operation: DATAFORSEO_AMAZON_OPERATIONS.SELLERS, sourceId: DATAFORSEO_AMAZON_SOURCE_ID, dataAsin: asin(input.data_asin ?? input.asin ?? input.dataAsin), sellerName: text(input.seller_name ?? input.sellerName), sellerUrl: text(input.seller_url ?? input.sellerUrl), shipsFrom: text(input.ships_from ?? input.shipsFrom), condition: text(input.condition), conditionDescription: text(input.condition_description ?? input.conditionDescription), currentPrice: money(input.current_price ?? input.currentPrice ?? price?.current ?? (price ? null : input.price)), regularPrice: money(input.regular_price ?? input.regularPrice ?? price?.regular), currency: text(input.currency ?? price?.currency), voucherTerms: input.applicable_vouchers ?? input.voucherTerms ?? null, percentageDiscount: money(input.percentage_discount ?? input.percentageDiscount), sellerRating: input.seller_rating ?? input.sellerRating ?? input.rating ?? null, delivery: delivery == null ? null : structuredClone(delivery), deliveryPrice: money(input.delivery_price ?? input.deliveryPrice ?? delivery?.delivery_price) });
+  const currency = text(input.currency ?? price?.currency);
+  return freeze({ operation: DATAFORSEO_AMAZON_OPERATIONS.SELLERS, sourceId: DATAFORSEO_AMAZON_SOURCE_ID, dataAsin: asin(input.data_asin ?? input.asin ?? input.dataAsin), sellerName: text(input.seller_name ?? input.sellerName), sellerUrl: text(input.seller_url ?? input.sellerUrl), shipsFrom: text(input.ships_from ?? input.shipsFrom), condition: text(input.condition), conditionDescription: text(input.condition_description ?? input.conditionDescription), currentPrice: money(input.current_price ?? input.currentPrice ?? price?.current ?? (price ? null : input.price)), regularPrice: money(input.regular_price ?? input.regularPrice ?? price?.regular), currency, voucherTerms: input.applicable_vouchers ?? input.voucherTerms ?? null, percentageDiscount: money(input.percentage_discount ?? input.percentageDiscount), sellerRating: input.seller_rating ?? input.sellerRating ?? input.rating ?? null, delivery: delivery == null ? null : structuredClone(delivery), deliveryPrice: deliveryMoney(input.delivery_price ?? input.deliveryPrice ?? delivery?.delivery_price, currency) });
 }
 
 export function projectAmazonSellerToRetainedEvidence(evidence, { atlasProductId = null, sourceTaskId = null, observedAt = null, rawPayloadReference = null } = {}) {

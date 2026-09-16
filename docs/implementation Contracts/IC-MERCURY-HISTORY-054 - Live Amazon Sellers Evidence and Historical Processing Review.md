@@ -10,6 +10,8 @@ The live DataForSEO Sellers response carries ASIN and observation time on the re
 
 Missing seller, price, condition, delivery, voucher, discount, or shipping values remain null. Text containing “FREE delivery” does not establish numeric zero shipping. Explicit `New` remains explicit provider evidence; null condition never becomes `New`.
 
+Structured non-null `delivery_info.delivery_price` is supported only when it is an unambiguous non-range money object with a finite non-negative `current`, no `max_value`, and a usable currency matching the item-price currency. The adapter extracts only `current`; it never substitutes `regular`, `max_value`, or parsed `displayed_price`. Null remains unknown, explicit numeric zero remains known zero, and the earlier finite non-negative scalar form remains compatible. Missing/malformed current or currency, currency conflict, negative/non-numeric current, and range semantics fail closed. Shipping remains separate from item price; tax, fees, and delivered total are not inferred.
+
 ## Seller identity and retention
 
 Amazon marketplace context is not merchant identity. Seller name, seller token, ships-from, and marketplace URL are retained evidence only. `Newegg Business` is not automatically `RETAILER-0004`, and `Amazon Japan` is not automatically `RETAILER-0001`. Existing Atlas-backed, append-only merchant review remains mandatory and neither inspected seller has a supporting decision for this result.
