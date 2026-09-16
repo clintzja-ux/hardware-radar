@@ -28,6 +28,7 @@ The RAM MVP is Hardware Radar's first product surface within a long-term hardwar
 - A DataForSEO-returned retailer product URL is only a `RetailerDestination` candidate. Market `sourceUrl`/`offerUrl` and admitted navigation `destinationUrl` remain independently governed; only ADR-059/GROWTH-005A admission grants `DESTINATION_NAVIGATION_ELIGIBLE`.
 - Apply **MEASURE → LEARN → EXPAND** to audience and authority work: use contextual Search Console, GA4, retailer-referral, and social evidence to choose bounded priorities, never as an automatic rule or override of integrity, privacy, commercial independence, or subsystem authority.
 - Treat privacy as an architectural boundary: collect the minimum required data, keep private values server-side, and prohibit behavioral evidence from becoming identity or market truth.
+- Evolve Forge toward the governed internal operator experience described in the [Forge Operator Experience Vision](../products/FORGE-OPERATOR-EXPERIENCE-VISION.md): compact routine operation, evidence-prepared bounded exception review, visibly distinct systemic failures, and canonical-owner actions. This is durable direction, not current implementation authority or a fixed final layout.
 - Use explicit, auditable governance and controlled automation. Unknown, malformed, contradictory, or unauthorized state fails closed.
 - Prefer the smallest architecture justified by measured needs. Architecture selection is not configuration, deployment, connection, or authority.
 
