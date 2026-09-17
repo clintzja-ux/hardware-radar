@@ -175,3 +175,32 @@ export function repeatScaleProposalOperations(value) {
     observationCycle: member.observationCycle
   })));
 }
+
+export function repeatScaleProposalProvenance(value) {
+  const proposal = validateRepeatScaleProposal(value);
+  const selectedOperations = repeatScaleProposalOperations(proposal);
+  return deepFreeze({
+    selectionInputType: "SELECTOR_PROPOSAL",
+    proposalId: proposal.proposalId,
+    proposalDigest: proposal.proposalDigest,
+    proposalSchemaVersion: proposal.schemaVersion,
+    proposalArtifactType: proposal.artifactType,
+    stagePolicyId: proposal.stagePolicyId,
+    stagePolicyVersion: proposal.stagePolicyVersion,
+    stageId: proposal.stageId,
+    stageCohortDigest: proposal.stageCohortDigest,
+    experimentPolicyId: proposal.stagePolicyId,
+    experimentPolicyVersion: proposal.stagePolicyVersion,
+    selectorPolicyId: proposal.selectorPolicyId,
+    selectorPolicyVersion: proposal.selectorPolicyVersion,
+    candidateCount: proposal.candidateCount,
+    candidatePoolDigest: proposal.candidatePoolDigest,
+    selectedMemberDigest: proposal.selectedMemberDigest,
+    requestedSelectorSize: proposal.requestedSize,
+    source: proposal.source,
+    operation: proposal.operation,
+    observationCycle: proposal.observationCycle,
+    selectedAtlasProductIds: selectedOperations.map(operation => operation.atlasProductId),
+    selectedOperations
+  });
+}

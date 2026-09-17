@@ -269,6 +269,7 @@ const testModules = [
     ,"./RetailLifecycleHeldReassessment.test.mjs"
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
     ,"./ScaleRampSelectorProposalPrepare.test.mjs"
+    ,"./RepeatProposalPrepareDirectBinding.test.mjs"
     ,"./TasklessChildAuthorityDisposition.test.mjs"
     ,"./DispositionAwareExistingTaskContinuation.test.mjs"
     ,"./BoundedSpendProgression.test.mjs"
