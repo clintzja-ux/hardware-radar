@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "MERCURY_SCALE_RAMP_CANARY_REVIEW",
+  "status": "REVIEW_ONLY",
+  "stagePolicyId": "MERCURY_100_PRODUCT_RAM_FIRST_AMAZON_PRODUCTS_CANARY",
+  "stagePolicyVersion": "1.0",
+  "policyId": "MERCURY_SCALE_RAMP_CANARY_SELECTION",
+  "policyVersion": "1.0",
+  "stageId": "mercury-scale-ramp-100-candidate-2026-09-16",
+  "stageCohortDigest": "470dfadbdb8670de3566826d33eb74cb9d97a1ca6e14bf8b3fac71101ecaaf21",
+  "source": "DATAFORSEO_AMAZON",
+  "operation": "AMAZON_PRODUCTS",
+  "requestedCanarySize": 8,
+  "candidateCount": 65,
+  "candidatePoolDigest": "ed24651aa03dc0d71bb2cd692d8fb25218d08a15240e7d216998655b1ade56cb",
+  "selectedMembers": [
+    {
+      "atlasProductId": "ram_teamgroup_ff3d532g6400hc38jdc01",
+      "manufacturer": "TeamGroup",
+      "memoryGeneration": "DDR5",
+      "formFactor": "DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000c38",
+      "manufacturer": "Corsair",
+      "memoryGeneration": "DDR5",
+      "formFactor": "DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g4dfra32a",
+      "manufacturer": "Crucial",
+      "memoryGeneration": "DDR4",
+      "formFactor": "DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k16g56c46u5",
+      "manufacturer": "Crucial",
+      "memoryGeneration": "DDR5",
+      "formFactor": "DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k16g56c46s5",
+      "manufacturer": "Crucial",
+      "memoryGeneration": "DDR5",
+      "formFactor": "SO_DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bbea_8",
+      "manufacturer": "Kingston",
+      "memoryGeneration": "DDR5",
+      "formFactor": "DIMM",
+      "capacityGb": 8,
+      "moduleCount": 1
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564s38ib_16",
+      "manufacturer": "Kingston",
+      "memoryGeneration": "DDR5",
+      "formFactor": "SO_DIMM",
+      "capacityGb": 16,
+      "moduleCount": 1
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c22d_32grs",
+      "manufacturer": "G.SKILL",
+      "memoryGeneration": "DDR4",
+      "formFactor": "SO_DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    }
+  ],
+  "selectedMemberDigest": "0a17e9ba2e71b1adf8f7f29a4896effe01ac991756dc338c5a2ba86bd8534eb1",
+  "strataSummary": [
+    { "stratumKey": "TeamGroup\u001fDDR5\u001fDIMM", "candidateCount": 6, "selectedCount": 1 },
+    { "stratumKey": "Corsair\u001fDDR5\u001fDIMM", "candidateCount": 4, "selectedCount": 1 },
+    { "stratumKey": "Crucial\u001fDDR4\u001fDIMM", "candidateCount": 2, "selectedCount": 1 },
+    { "stratumKey": "Crucial\u001fDDR5\u001fDIMM", "candidateCount": 9, "selectedCount": 1 },
+    { "stratumKey": "Crucial\u001fDDR5\u001fSO_DIMM", "candidateCount": 4, "selectedCount": 1 },
+    { "stratumKey": "Kingston\u001fDDR5\u001fDIMM", "candidateCount": 9, "selectedCount": 1 },
+    { "stratumKey": "Kingston\u001fDDR5\u001fSO_DIMM", "candidateCount": 5, "selectedCount": 1 },
+    { "stratumKey": "G.SKILL\u001fDDR4\u001fSO_DIMM", "candidateCount": 1, "selectedCount": 1 },
+    { "stratumKey": "G.SKILL\u001fDDR5\u001fDIMM", "candidateCount": 17, "selectedCount": 0 },
+    { "stratumKey": "Crucial\u001fDDR4\u001fSO_DIMM", "candidateCount": 3, "selectedCount": 0 },
+    { "stratumKey": "Kingston\u001fDDR4\u001fSO_DIMM", "candidateCount": 1, "selectedCount": 0 },
+    { "stratumKey": "G.SKILL\u001fDDR5\u001fSO_DIMM", "candidateCount": 2, "selectedCount": 0 },
+    { "stratumKey": "Kingston\u001fDDR4\u001fDIMM", "candidateCount": 2, "selectedCount": 0 }
+  ],
+  "diversitySummary": {
+    "manufacturers": { "Corsair": 1, "Crucial": 3, "G.SKILL": 1, "Kingston": 2, "TeamGroup": 1 },
+    "memoryGeneration": { "DDR4": 2, "DDR5": 6 },
+    "formFactor": { "DIMM": 5, "SO_DIMM": 3 },
+    "capacityGb": { "8": 1, "16": 1, "32": 6 },
+    "moduleCount": { "1": 2, "2": 6 },
+    "primaryStrataRepresented": 8
+  },
+  "stableAtlasAttributes": [
+    "atlasProductId",
+    "manufacturer",
+    "memoryGeneration",
+    "formFactor",
+    "capacityGb",
+    "moduleCount"
+  ],
+  "selectionRationale": "DETERMINISTIC_STRATIFIED_ROUND_ROBIN",
+  "authority": "NONE",
+  "providerCalls": 0,
+  "paidTasks": 0,
+  "actualSpendUsd": 0,
+  "prepareAuthorized": false,
+  "executionAuthorized": false
+}

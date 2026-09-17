@@ -1,6 +1,6 @@
 # IC-MERCURY-SCALE-RAMP-CANARY-SELECTION — Deterministic Paid-Canary Selection
 
-Status: `IMPLEMENTED / FIXTURE-CERTIFIED`  
+Status: `IMPLEMENTED / FIXTURE-CERTIFIED`
 Policy: `MERCURY_SCALE_RAMP_CANARY_SELECTION / 1.0`
 
 Mercury selects review-only paid-canary members from a canonical, already-eligible source/operation pool. Atlas supplies stable product attributes; canonical readiness owners establish eligibility. The selector owns neither readiness, rights, destinations, provider transport, spend, authorization, nor downstream authority.

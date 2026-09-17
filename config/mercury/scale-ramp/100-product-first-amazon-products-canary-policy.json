@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "MERCURY_SCALE_RAMP_STAGE_CANARY_POLICY",
+  "policyId": "MERCURY_100_PRODUCT_RAM_FIRST_AMAZON_PRODUCTS_CANARY",
+  "policyVersion": "1.0",
+  "stageId": "mercury-scale-ramp-100-candidate-2026-09-16",
+  "source": "DATAFORSEO_AMAZON",
+  "operation": "AMAZON_PRODUCTS",
+  "requestedCanarySize": 8,
+  "scope": "100_PRODUCT_RAM_FIRST_AMAZON_PRODUCTS_CANARY_ONLY",
+  "rationale": "Bounded first 100-stage measurement canary with all five manufacturers and multiple memory, form-factor, capacity, and module-count classes in the reviewed size-eight simulation.",
+  "globalDefault": false,
+  "authority": "NONE",
+  "prepareAuthorized": false,
+  "executionAuthorized": false
+}
