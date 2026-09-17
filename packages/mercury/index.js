@@ -100,3 +100,4 @@ export * from "./destinations/index.js";
 export * from "./amazon-dataforseo/index.js";
 export * from "./repeat-observation/index.js";
 export * from "./bounded/index.js";
+export * from "./scale-ramp/index.js";
