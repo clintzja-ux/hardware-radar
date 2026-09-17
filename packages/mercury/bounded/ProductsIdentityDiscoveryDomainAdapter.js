@@ -54,7 +54,7 @@ export class ProductsIdentityDiscoveryDomainAdapter{
 
 export class ProductsIdentityDiscoveryService{
   constructor({coordinator}={}){if(!coordinator?.prepare||!coordinator?.inspect||!coordinator?.authorize||!coordinator?.start||!coordinator?.resume)throw new Error("PRODUCTS_DISCOVERY_COORDINATOR_REQUIRED");this.coordinator=coordinator;}
-  prepare(input={}){if(!Array.isArray(input.cohort)||Object.keys(input).some(key=>!["cycle","cohort"].includes(key)))throw new Error("PRODUCTS_DISCOVERY_PREPARE_INPUT_INVALID");return this.coordinator.prepare(input);}
+  prepare(input={}){if(!Array.isArray(input.cohort)||Object.keys(input).some(key=>!["cycle","cohort","selectionProvenance"].includes(key)))throw new Error("PRODUCTS_DISCOVERY_PREPARE_INPUT_INVALID");return this.coordinator.prepare(input);}
   inspect(input={}){if(Object.keys(input).some(key=>!["planId","runId"].includes(key)))throw new Error("PRODUCTS_DISCOVERY_INSPECT_INPUT_INVALID");return this.coordinator.inspect(input);}
   authorize({planId,operator,reason,expiresAt,confirmation}={}){if(confirmation!==PRODUCTS_DISCOVERY_CONFIRMATIONS.AUTHORIZE)throw new Error("PRODUCTS_DISCOVERY_AUTHORIZE_CONFIRMATION_REQUIRED");return this.coordinator.authorize({planId,operator,reason,expiresAt});}
   start({authorizationId,startedBy,confirmation}={}){if(confirmation!==PRODUCTS_DISCOVERY_CONFIRMATIONS.START)throw new Error("PRODUCTS_DISCOVERY_START_CONFIRMATION_REQUIRED");return this.coordinator.start({authorizationId,startedBy});}

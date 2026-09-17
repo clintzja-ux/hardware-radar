@@ -267,6 +267,7 @@ const testModules = [
     ,"./RakutenCatalogStateProjection.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
+    ,"./ScaleRampSelectorProposalPrepare.test.mjs"
     ,"./TasklessChildAuthorityDisposition.test.mjs"
     ,"./DispositionAwareExistingTaskContinuation.test.mjs"
     ,"./BoundedSpendProgression.test.mjs"
