@@ -185,6 +185,7 @@ const testModules = [
     "./RepeatObservationBoundary.test.mjs",
     "./RepeatObservationPersistence.test.mjs",
     "./RepeatObservationScale.test.mjs",
+    "./RepeatScaleSelectionProposal.test.mjs",
     "./RepeatObservationProductionComposition.test.mjs",
     "./BoundedRepeatObservationRun.test.mjs",
     "./NeutralBoundedPaidActionCoordinator.test.mjs",

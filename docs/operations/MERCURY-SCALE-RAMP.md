@@ -8,7 +8,15 @@ For repeat cohorts, Forge lifecycle counts reflect original canonical member sta
 
 This document governs evidence-based promotion of Mercury longitudinal acquisition from the completed five-product production-certification cohort. It is an operations plan, not acquisition authority, a budget change, or downstream market/publication authority.
 
-Current classification: `CLOSE_CAPABILITY_GAP_BEFORE_LARGER_REPEAT`.
+Current classification: `READY_FOR_REPEAT_PROPOSAL_TO_PREPARE_DIRECT_BINDING_P1`.
+
+### Repeat scale selection and review proposal
+
+`IC-MERCURY-REPEAT-SCALE-SELECTION-001` is `IMPLEMENTED / FIXTURE-CERTIFIED / PRODUCTION-SHAPED-CERTIFIED`. Policy `MERCURY_REPEAT_SCALE_SELECTION / 1.0` uses the shared scale-ramp canonical digest primitive with repeat-specific candidate semantics: exact Atlas product, source, Sellers operation, explicit canonical observation cycle, source-owned identity/rights/destination bindings, and stable Atlas stratification attributes. Exact same-cycle duplicates fail closed; historical participation in a different cycle is not a permanent exclusion. Source readiness and current-cycle conflicts remain with existing repeat owners.
+
+V1 proposals are `SINGLE_SOURCE_OPERATION`, immutable `REVIEW_ONLY`, and `authority: NONE`. Amazon Sellers and Google Shopping Sellers therefore remain separately diagnosable proposals. Candidate permutation cannot alter selection. Requested size is explicit and cannot exceed the pool. Affiliate/commercial state, expected price/provider outcome, prior yield, manual favorites, wall time, and current spend cannot influence selection. Strict replay validation protects pool, selection, stage/policy, cycle, source/operation, and all zero-authority fields. Fixtures certify local mechanics at 6/24/43/100/1,000 candidates; this is not provider-throughput evidence.
+
+No real repeat cohort or proposal was created. The checkpoint population remains 43 production-shaped repeat-ready pairs—41 Amazon and two Google—and only read-only compatibility was established. The current repeat PREPARE command still requires `--cohort-file` plus `--observation-cycle`; consequently the next increment is `ZERO-PROVIDER REPEAT PROPOSAL → PREPARE DIRECT-BINDING P1`, which must consume a validated proposal, revalidate current readiness without substitution, and bind proposal provenance into the existing plan without adding a repository or paid authority.
 
 ### Deterministic paid-canary selector
 
