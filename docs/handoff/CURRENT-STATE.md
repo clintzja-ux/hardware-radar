@@ -3,12 +3,12 @@
 ```text
 Last updated:                  2026-09-18
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        d6e8dc6de2165decbed380d3e1fa49ecd970af08 (`docs(mercury): close longitudinal 100-stage gate`)
+Current committed HEAD:        c7cc11359b6281f57e0eca8b814ae38e5f2c857d (`docs(hardware-radar): complete 100-product operational stage`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 158 ahead at the formal 100-stage assessment preflight; branch is synchronized with `origin/hardware-radar-growth-1`
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 159 ahead at the post-100 production-connection planning preflight; branch is synchronized with `origin/hardware-radar-growth-1`
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -24,6 +24,7 @@ Current acquisition selection increment: B-004 — product-scoped initial acquis
 Current acquisition operation: B-014A — governed initial-acquisition E2P/E2Q composition fixture-certified; production E2P reassessment not rerun
 Current budget correction:     shared DataForSEO UTC-day spend governance remains ledger-backed and execution-revalidated; operator-approved operational default `$0.0750`, Google `$0.0010` and Amazon `$0.0015` per-task ceilings unchanged, zero automatic paid retries; the higher ceiling grants no acquisition authority
 Formal 100-product stage:      100_PRODUCT_STAGE_COMPLETE — fixed cohort integrity, Products identity discovery, bounded repeat acquisition, historical memory, recovery, supervised operations, and authority isolation satisfy the canonical stage criteria; no separate promotion artifact is required
+Current post-100 gate:         READY_FOR_CERTIFIED_STATIC_PUBLICATION_RELEASE_CONTROL_P1 — static-first canary planning complete; Beacon/Gateway/publication remain unconnected and unauthorized
 Current retailer-strategy increment: C-001 — RAM Launch Retailer Portfolio and Relationship Strategy complete
 Current outreach reconciliation: C-001A — MemoryC and Adorama outreach recorded
 Current commercial reconciliation: Rakuten publisher account reactivated; Newegg approved through Rakuten; Product Feed access requires enablement/support and its fields/current-display/comparison rights remain uninspected; Adorama pending; B&H declined without a stated specific reason
@@ -364,6 +365,8 @@ Actual spend:                             $0.000
 - The current DF005-W authorization expires; if it expires before a later authorized operation, fail closed and require a fresh DF005-W PREPARE rather than extending or rewriting it.
 
 ## Next recommended actions by track
+
+- **Post-100 production connection:** implement and fixture-certify only `CERTIFIED_STATIC_PUBLICATION_RELEASE_CONTROL_P1` as defined in [the post-100 production connection plan](../products/HARDWARE-RADAR-POST-100-PRODUCTION-CONNECTION.md). Reuse existing Mercury public projections and fail-closed site consumers; add no provider work, publication decision, production configuration, deployment, Beacon connection, or Gateway connection. Fresh current-market evidence and publication/deployment approval remain later independent gates.
 
 - **A — Public Product / Launch:** continue truthful UX, mobile, SEO, methodology, comparison, and empty-state work using governed outputs; do not manufacture prices, Picks, or publication authority.
 - **B — Mercury / Market Data:** plan governed observation coverage against the finite A-001 slots and public-coverage floors; continue automated coverage and condition-evidence work independently, and do not run curated production operations without their separate approvals.

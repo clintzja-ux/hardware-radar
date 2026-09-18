@@ -52,6 +52,8 @@ The accepted ownership direction remains:
 - **Beacon** owns governed product-centric first-party interest evidence and retention, including the metrics derived within that boundary.
 - **Gateway** owns external and public APIs and platform interfaces.
 
+The fixed supervised 100-product RAM operational stage is complete. The active post-100 consumer-production plan is [HARDWARE-RADAR-POST-100-PRODUCTION-CONNECTION.md](./HARDWARE-RADAR-POST-100-PRODUCTION-CONNECTION.md): begin with a certified static publication release control, retain separate publication and deployment approvals, and connect Beacon/Gateway only through their existing authority boundaries. This transition does not authorize live data, analytics transport, deployment, or the next Atlas scale stage.
+
 This doctrine does not redesign those boundaries or claim that future subsystems are currently implemented.
 
 ## 2. Vision versus MVP scope
