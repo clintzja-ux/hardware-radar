@@ -19,6 +19,7 @@ import { generateEditorialSite, generateSitemap } from "./editorial-publishing.m
 import { generateRamProductPages } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { FileCurrentDisplaySnapshotRepository, createEmptyPublicCurrentRetailProjection, createPublicCurrentRetailProjection } from "../packages/mercury/current-display/index.js";
+import { loadStaticPublicationRelease } from "./static-publication-release-runtime.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -87,6 +88,12 @@ try {
 } catch {
     currentRetail = createEmptyPublicCurrentRetailProjection({ asOf: generatedAt });
 }
+const staticRelease = await loadStaticPublicationRelease({
+    manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json")),
+    targetEnvironment: (process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT || "PREVIEW").toUpperCase(),
+    evaluatedAt: generatedAt
+});
+currentRetail = staticRelease.exposed ? staticRelease.projection : createEmptyPublicCurrentRetailProjection({ asOf: generatedAt, state: "NO_CURRENT_RETAIL_STATE" });
 await writeFile(path.join(root, "public", "data", "ram-current-retail.json"), `${JSON.stringify(currentRetail, null, 2)}\n`);
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, disclosure: currentRetail.disclosure, outputDir: path.join(root, "public") });

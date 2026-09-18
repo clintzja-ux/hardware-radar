@@ -1,7 +1,7 @@
 # Hardware Radar — Post-100 Production Connection Plan
 
-**Status:** PLANNING / READINESS COMPLETE
-**Active gate:** `READY_FOR_CERTIFIED_STATIC_PUBLICATION_RELEASE_CONTROL_P1`
+**Status:** STATIC RELEASE CONTROL IMPLEMENTED / FIXTURE-CERTIFIED
+**Active gate:** `READY_FOR_READ_ONLY_PUBLICATION_CANARY_CANDIDATE_READINESS`
 **Baseline:** `100_PRODUCT_STAGE_COMPLETE`
 
 ## Purpose
@@ -74,9 +74,9 @@ certified static publication release control
 → broader source-neutral retailer/commerce coverage and independently governed market-intelligence depth
 ```
 
-## First implementation gate
+## First implementation gate — completed
 
-Implement `CERTIFIED_STATIC_PUBLICATION_RELEASE_CONTROL_P1` as the smallest checkpointable prerequisite. Reuse the existing Mercury projections, validators, build, and public consumers. Add no source, acquisition, truth, publication-decision, or analytics owner.
+`CERTIFIED_STATIC_PUBLICATION_RELEASE_CONTROL_P1` is implemented and fixture-certified as the smallest checkpointable prerequisite. It reuses the existing Mercury current-retail projection, Sentinel validation, public build, and public consumers and adds no source, acquisition, truth, publication-decision, or analytics owner.
 
 The boundary should provide one strict, versioned, repository-native release manifest or equivalent existing-pattern control that binds:
 
@@ -90,7 +90,7 @@ The boundary should provide one strict, versioned, repository-native release man
 - validation that the referenced artifact is currently eligible and contains no private fields;
 - deterministic replay and conflict rejection.
 
-It must be fixture-certified using existing governed snapshots and must make zero provider calls, production publication decisions, deployment changes, or public-state mutations. A complex feature-flag platform is not warranted.
+The default repository state has no manifest and therefore remains `OFF`. No real artifact is bound, no real publication authority exists, and no deployment or production configuration changed. The next separate gate is a zero-provider read-only candidate-readiness assessment; it must not manufacture a candidate through acquisition.
 
 ## First publication canary design
 
@@ -126,8 +126,8 @@ Beacon owns product analytics and may later retain governed hybrid-acquisition/c
 
 ## Ordered implementation slices
 
-1. **Static release control P1:** strict release manifest/switch, validator, build composition, fixtures, rollback proof; no provider/publication/deployment action.
-2. **Canary readiness assessment:** read-only resolution of currently eligible candidates and exact source-specific rights, identity, offer, freshness, condition, destination, shipping-knownness, marketplace, comparability, and conflict blockers.
+1. **Static release control P1 — complete:** strict release manifest/switch, validator, build composition, fixtures, rollback proof; no provider/publication/deployment action.
+2. **Canary readiness assessment — next:** read-only resolution of currently eligible candidates and exact source-specific rights, identity, offer, freshness, condition, destination, shipping-knownness, marketplace, comparability, and conflict blockers.
 3. **Separate acquisition/publication operation:** only if explicitly authorized; obtain fresh evidence and use existing qualification/PREPARE/EXECUTE owners.
 4. **Preview and production canary:** explicit deployment authorization, live verification, GA4 measurement, rollback/promotion decision.
 5. **Beacon/Gateway implementation:** Worker/D1, monitoring, retention operations, then separately approved browser wiring.

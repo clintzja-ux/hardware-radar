@@ -6,6 +6,8 @@ import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjecti
 import { createRamProductSitemapRoutes, renderRamProductPage } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { validatePublicCurrentRetailProjection } from "../packages/mercury/current-display/PublicCurrentRetailProjection.js";
+import { createEmptyPublicCurrentRetailProjection } from "../packages/mercury/current-display/PublicCurrentRetailProjection.js";
+import { loadStaticPublicationRelease } from "./static-publication-release-runtime.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const canonicalText = (contents) => contents.toString("utf8").replaceAll("\r\n", "\n");
@@ -74,6 +76,13 @@ try {
     const currentRetail = JSON.parse(await readFile(path.join(root, "public", "data", "ram-current-retail.json"), "utf8"));
     const currentRetailReport = validatePublicCurrentRetailProjection(currentRetail);
     if (!currentRetailReport.valid) errors.push(`Current retail: ${currentRetailReport.errors.join(",")}.`);
+    const staticRelease = await loadStaticPublicationRelease({
+        manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json")),
+        targetEnvironment: (process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT || "PREVIEW").toUpperCase(),
+        evaluatedAt: currentRetail.asOf
+    });
+    const expectedReleasedRetail = staticRelease.exposed ? staticRelease.projection : createEmptyPublicCurrentRetailProjection({ asOf: currentRetail.asOf, state: "NO_CURRENT_RETAIL_STATE" });
+    if (JSON.stringify(currentRetail) !== JSON.stringify(expectedReleasedRetail)) errors.push("Current retail: public artifact does not match the certified static release-control result.");
     const productIds = new Set(products.map(item => item.identity.atlasProductId));
     const retailerIds = new Set(retailers.map(item => item.id));
     const destinationIds = new Set(destinations.map(item => item.destinationId));

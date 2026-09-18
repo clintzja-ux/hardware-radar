@@ -1,4 +1,5 @@
 const testModules = [
+  "./StaticPublicationReleaseControl.test.mjs",
     "./DecisionAggregator.test.mjs",
     "./RuleRegistry.test.mjs",
     "./ValidationRunner.test.mjs",

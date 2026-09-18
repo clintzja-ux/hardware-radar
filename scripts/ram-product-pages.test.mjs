@@ -94,9 +94,16 @@ assert.match(styles, /@media\(max-width:650px\)[^}]*\.ram-product-main/s);
 assert.match(styles, /\.ram-product-specs\{grid-template-columns:1fr\}/);
 assert.match(styles, /\.ram-product-current-retail/);
 assert.match(styles, /@media\(max-width:650px\)[^}]*\.ram-product-current-retail/s);
-const pricedPage = catalog.products.find(product => currentRetailByProduct.has(product.atlasProductId));
+assert.equal(currentRetail.products.length, 0, "Default-OFF release control must preserve catalog pages without exposing market data.");
+for (const product of catalog.products) {
+    const html = await read(path.join("public", product.publicPath.slice(1), "index.html"));
+    assert.doesNotMatch(html, /Current tracked prices/);
+}
+const pricedPage = catalog.products.find(product => destinations.some(destination => destination.atlasProductId === product.atlasProductId));
 assert.ok(pricedPage);
-const pricedHtml = await read(path.join("public", pricedPage.publicPath.slice(1), "index.html"));
+const pricedDestination = destinations.find(destination => destination.atlasProductId === pricedPage.atlasProductId);
+const fixtureRetail = { offers: [{ retailerName: pricedDestination.retailerDisplayName, itemPriceUsd: 100, observedAt: "2026-09-18T11:00:00.000Z", destinationUrl: pricedDestination.destinationUrl }] };
+const pricedHtml = renderRamProductPage(pricedPage, [pricedDestination], fixtureRetail, currentRetail.disclosure);
 assert.match(pricedHtml, /Current tracked prices/);
 assert.match(pricedHtml, /Prices shown exclude applicable shipping, taxes, and fees\./);
 assert.doesNotMatch(pricedHtml, /"@type":"Offer"/);
