@@ -123,7 +123,7 @@ The repository distinguishes `implemented`, `tested`, `selected`, `configured`, 
 
 ## Roadmap
 
-- **Current:** trusted RAM catalog and public static experience; governed Mercury market/history pipeline with a certified Forge operations projection; Beacon/Gateway product-interest and operational governance through DF005-X (production onboarding remains fail closed).
+- **Current:** trusted RAM catalog and public static experience; the fixed 100-product RAM operational stage is formally complete, with a governed Mercury market/history pipeline and certified Forge operations projection; Beacon/Gateway product-interest and operational governance through DF005-X remains fail closed for production onboarding.
 - **Near-term:** complete explicit alert sender/domain onboarding decisions, then design separately authorized Cloudflare/DNS/binding deployment steps; build the selected Worker/D1 backend before any browser connection.
 - **Medium-term:** connect governed first-party interest collection, expand historical-price and filtering experiences, add retailers only through rights/identity/promotion governance, and continue moving Forge workflows onto certified Mercury boundaries.
 - **Long-term:** expand beyond RAM to SSDs, CPUs, GPUs, motherboards, and other hardware; develop compatibility, recommendation, explanation, API, and conversational-assistant capabilities on the same ownership boundaries.
