@@ -27,7 +27,7 @@ assert.equal(extractRakutenMerchantUrl("https://click.example.invalid/?murl=http
 
 const adapter=adapterFor([parsed[1]]), portfolio=createCurrentRetailRefreshPortfolio({products:[product],destinations:[destination],retailers,adapters:[adapter],asOf});
 const run=await new CurrentRetailRefreshOrchestrator({adapters:[adapter]}).run({portfolio});
-assert.equal(run.outcomes[0].status,"CONDITION_UNKNOWN"); assert.equal(run.snapshot.offers[0].itemPriceEligible,false); assert.ok(run.snapshot.offers[0].comparisonReasons.includes("CONDITION_NOT_ELIGIBLE")); assert.ok(run.snapshot.offers[0].comparisonReasons.includes("SOURCE_PUBLIC_DISPLAY_NOT_ALLOWED")); cases++;
+assert.equal(run.outcomes[0].status,"CONDITION_UNKNOWN"); assert.equal(run.snapshot.offers[0].itemPriceEligible,false); assert.deepEqual(run.snapshot.offers[0].comparisonReasons,["CONDITION_NOT_ELIGIBLE"]); cases++;
 for(const modification of ["I","U"]){const record=(await parse([fixtureRow({modification})]))[1];assert.equal((await adapterFor([record]).refresh(context)).type,"OBSERVATION");} cases++;
 const deleted=(await parse([sanitizedCases.deletedRam]))[1], deleteAdapter=adapterFor([deleted]); assert.equal((await deleteAdapter.refresh(context)).status,"SOURCE_WITHDRAWN"); cases++;
 
@@ -61,6 +61,6 @@ const effective=[...new Map(state.records.filter(x=>x.status==="ACTIVE").map(x=>
 const rows=effective.map((x,i)=>({recordType:"PRODUCT",sku:x.retailerListingId,productUrl:`https://click.example.invalid/track?murl=${encodeURIComponent(x.destinationUrl)}`,productId:`fixture-${i}`,manufacturerPartNumber:x.binding.manufacturerPartNumber,upc:null,modification:"U",retailPrice:"100",salePrice:"100",shipping:"0.00",availability:"in-stock",currency:"USD"}));
 const coverage=createRakutenNeweggProductFeedAdapter({records:rows,destinations:effective,feedTimestamp:parsed[0].feedTimestamp});
 for(const x of effective)assert.equal((await coverage.refresh({atlasProductId:x.atlasProductId,retailerId:x.retailerId,retailer:"NEWEGG",destinationId:x.destinationId,destinationUrl:x.destinationUrl,retailerListingId:x.retailerListingId,marketplace:x.marketplace,asOf})).type,"OBSERVATION"); cases++;
-assert.equal(adapter.rights.historicalRetentionAllowed,false); assert.equal(run.externalOperations,0); assert.equal(run.actualSpendUsd,0); cases++;
+assert.equal(adapter.rights.profileId,"RAKUTEN_NEWEGG_PRODUCT_CATALOG"); assert.equal(adapter.rights.publicDisplayAllowed,true); assert.equal(adapter.rights.comparisonAllowed,true); assert.equal(adapter.rights.historicalRetentionAllowed,false); assert.equal(run.externalOperations,0); assert.equal(run.actualSpendUsd,0); cases++;
 assert.equal(JSON.stringify({parsed,result}).match(/password|username|host.?key/i),null); cases++;
 console.log(`RAKUTEN-NEWEGG-002 fixture adapter tests passed: ${cases} cases.`);

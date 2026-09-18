@@ -60,13 +60,13 @@ The parser already preserves every physical record and its ordinal, so distinct 
 
 The source-entry key is the exact pair `[productId, sku]`; changing either preserves a distinct source entry, irrespective of URL. Full inputs fail closed on duplicate exact source keys. Delta inputs are consumed in array/physical-record order without sorting; each `I` or `U` replaces that key and `D` removes it. A later full replaces the complete derived source membership before later deltas apply. The resulting projection is immutable, deterministically digested, and does not mutate its inputs.
 
-The projection is derived and in-memory. No durable Rakuten source-state repository was introduced because the current rights profile authorizes acquisition and ephemeral processing but not production current-data retention. `RakutenNeweggProductFeedAdapter` accepts an ordered `catalogFiles` sequence when source-state reconciliation is required and uses the projection before its existing destination, price, condition, and rights checks. Its `MAIN_DELTA` single-file path also applies same-key last-record precedence while retaining the existing delete outcome behavior. Legacy fixture profiles remain compatible.
+The projection is derived and in-memory. No durable Rakuten source-state repository was introduced by this increment. `IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001` subsequently permits bounded current/ephemeral retention, but production source-state persistence and refresh composition remain unimplemented. `RakutenNeweggProductFeedAdapter` accepts an ordered `catalogFiles` sequence when source-state reconciliation is required and uses the projection before its existing destination, price, condition, and rights checks. Its `MAIN_DELTA` single-file path also applies same-key last-record precedence while retaining the existing delete outcome behavior. Legacy fixture profiles remain compatible.
 
 ## Historical and offer safety
 
 Rakuten full/delta state is current source state, not Hardware Radar knowledge deletion. A missing SKU in a later full cannot erase Atlas knowledge, retained evidence, history, canonical observations, or cross-source identities. Distinct variants and bundles remain source offers until governed identity and comparability establish otherwise. Bundles do not compete with standalone Cheapest or establish standalone history; `UNKNOWN_COMPARABILITY` remains isolated; unknown shipping and fees are not zero.
 
-The technical clarification does not broaden the rights profile recorded by `IC-RAKUTEN-RIGHTS-017`.
+The technical clarification itself did not broaden rights. The later, independently evidenced current-commerce reconciliation is recorded by `IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001`.
 
 ## Provider question (resolved)
 

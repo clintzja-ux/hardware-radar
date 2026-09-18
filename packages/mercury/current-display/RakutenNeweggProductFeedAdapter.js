@@ -1,11 +1,24 @@
 import crypto from "node:crypto";
 import { projectRakutenCatalogState, reduceRakutenDeltaRecords } from "./RakutenCatalogStateProjection.js";
+import defaultSourceRightsRegistry from "../rights/SourceRightsRegistry.js";
 
 export const RAKUTEN_NEWEGG_SOURCE = "RAKUTEN_NEWEGG_PRODUCT_CATALOG";
 export const RAKUTEN_NEWEGG_PROFILES = Object.freeze(["MAIN", "MAIN_FULL", "MAIN_DELTA", "NEWEGG_MKPL", "ADDITIONAL_UNCLASSIFIED"]);
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const hash = value => crypto.createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const money = value => value === null || value === "" ? null : Number(value);
+const canonicalCurrentRights = () => {
+    const profile = defaultSourceRightsRegistry.require(RAKUTEN_NEWEGG_SOURCE);
+    return Object.freeze({
+        profileId: profile.sourceId,
+        acquisitionAllowed: profile.acquisition.import === "ALLOWED",
+        ephemeralRetentionAllowed: profile.processing.ephemeral === "ALLOWED" && profile.retention.current === "ALLOWED",
+        publicDisplayAllowed: profile.live.publicDisplay === "ALLOWED",
+        comparisonAllowed: profile.live.comparison === "ALLOWED",
+        historicalRetentionAllowed: profile.retention.historical === "ALLOWED",
+        ttlSeconds: profile.retention.contentTtlMs / 1000
+    });
+};
 
 export function extractRakutenMerchantUrl(value) {
     try {
@@ -52,7 +65,7 @@ function normalizedPrice(record) {
 export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = null, destinations, feedProfile = "MAIN", feedTimestamp, mode = "AUTOMATED_ALTERNATE", rights = null } = {}) {
     if ((!Array.isArray(records) && !Array.isArray(catalogFiles)) || !Array.isArray(destinations) || !RAKUTEN_NEWEGG_PROFILES.includes(feedProfile) || !Number.isFinite(Date.parse(feedTimestamp))) throw new TypeError("RAKUTEN_NEWEGG_ADAPTER_INPUT_INVALID");
     if (Array.isArray(records) && Array.isArray(catalogFiles)) throw new TypeError("RAKUTEN_NEWEGG_ADAPTER_INPUT_CONFLICT");
-    const sourceRights = rights ?? { profileId: "FIXTURE_RAKUTEN_NEWEGG_PENDING_PUBLIC_RIGHTS", acquisitionAllowed: true, ephemeralRetentionAllowed: true, publicDisplayAllowed: false, comparisonAllowed: false, historicalRetentionAllowed: false, ttlSeconds: 129600 };
+    const sourceRights = rights ?? canonicalCurrentRights();
     const destinationSet = destinations.filter(item => item.retailerId === "RETAILER-0004" && item.status === "ACTIVE");
     const sourceRecords = Array.isArray(catalogFiles)
         ? projectRakutenCatalogState({ files: catalogFiles }).entries.map(item => item.record)

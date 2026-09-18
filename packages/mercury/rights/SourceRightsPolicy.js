@@ -15,10 +15,14 @@ export const SOURCE_RIGHTS_CAPABILITIES = Object.freeze({
   LIVE_OBSERVATION: "live.currentObservation",
   PUBLIC_DISPLAY: "live.publicDisplay",
   COMPARISON: "live.comparison",
+  EPHEMERAL_PROCESSING: "processing.ephemeral",
+  CURRENT_RETENTION: "retention.current",
   HISTORICAL_RETENTION: "retention.historical",
   DERIVED_ANALYTICS: "derivation.analytics",
   OFFER_CONDITION: "derivation.offerCondition",
-  HISTORICAL_ANALYTICS: "derivation.historicalAnalytics"
+  HISTORICAL_ANALYTICS: "derivation.historicalAnalytics",
+  RECOMMENDATION: "derivation.recommendation",
+  REDISTRIBUTION: "distribution.api"
 });
 
 export function isExplicitlyAllowed(state) { return state === RIGHTS_STATES.ALLOWED; }

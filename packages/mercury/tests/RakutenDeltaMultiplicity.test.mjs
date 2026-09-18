@@ -16,6 +16,6 @@ const before = structuredClone(records);
 const adapter = createRakutenNeweggProductFeedAdapter({ records, destinations: [destination], feedTimestamp: "2026-09-10T01:21:21.000Z" });
 const result = await adapter.refresh({ atlasProductId: destination.atlasProductId, retailerId: destination.retailerId, retailer: "NEWEGG", destinationId: destination.destinationId, destinationUrl: destination.destinationUrl, retailerListingId: destination.retailerListingId, marketplace: destination.marketplace, asOf: "2026-09-10T02:00:00.000Z" });
 assert.deepEqual(result, { type: "OUTCOME", status: "INVALID_SOURCE_RESULT" }); cases++;
-assert.deepEqual(records, before); assert.equal(adapter.rights.publicDisplayAllowed, false); assert.equal(adapter.rights.comparisonAllowed, false); assert.equal(adapter.rights.historicalRetentionAllowed, false); cases++;
+assert.deepEqual(records, before); assert.equal(adapter.rights.publicDisplayAllowed, true); assert.equal(adapter.rights.comparisonAllowed, true); assert.equal(adapter.rights.historicalRetentionAllowed, false); cases++;
 
 console.log(`RAKUTEN-NEWEGG-016 delta multiplicity fail-closed tests passed: ${cases} cases.`);

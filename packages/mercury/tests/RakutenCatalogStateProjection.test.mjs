@@ -84,7 +84,7 @@ assert.deepEqual(replayAgain, replay); assert.equal(replayAgain.bindingDigest, r
 const destination = { destinationId: `mer_dest_${"a".repeat(24)}`, atlasProductId: "ram_fixture", retailerId: "RETAILER-0004", marketplace: "newegg.com", destinationUrl: "https://newegg.com/p/N82E16820000001", retailerListingId: "N82E16820000001", status: "ACTIVE", binding: { manufacturerPartNumber: "FIXTURE-MPN-1" } };
 const adapter = createRakutenNeweggProductFeedAdapter({ catalogFiles: [{ feedProfile: "MAIN_FULL", records: fullDistinct }, { feedProfile: "MAIN_FULL", records: full2 }, { feedProfile: "MAIN_DELTA", records: delta3 }], destinations: [destination], feedProfile: "MAIN_FULL", feedTimestamp: "2026-09-15T00:00:00.000Z" });
 assert.deepEqual(await adapter.refresh({ ...destination, retailer: "NEWEGG", asOf: "2026-09-15T01:00:00.000Z" }), { type: "OUTCOME", status: "INVALID_SOURCE_RESULT" });
-assert.equal(adapter.rights.publicDisplayAllowed, false); assert.equal(adapter.rights.comparisonAllowed, false); assert.equal(adapter.rights.historicalRetentionAllowed, false); cases++;
+assert.equal(adapter.rights.profileId, "RAKUTEN_NEWEGG_PRODUCT_CATALOG"); assert.equal(adapter.rights.publicDisplayAllowed, true); assert.equal(adapter.rights.comparisonAllowed, true); assert.equal(adapter.rights.historicalRetentionAllowed, false); cases++;
 
 await assert.rejects(async () => projectRakutenCatalogState({ files: [{ feedProfile: "MAIN_FULL", records: [...baseline, ...baseline] }] }), /RAKUTEN_FULL_SOURCE_ENTRY_DUPLICATE/); cases++;
 

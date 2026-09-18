@@ -6,6 +6,8 @@ RAKUTEN-RIGHTS-017 records a documentation-only, capability-separated rights ass
 
 The resulting classification is `RAKUTEN_PRODUCT_CATALOG_RIGHTS_PARTIALLY_ESTABLISHED`.
 
+**Superseded current-commerce posture (2026-09-18):** `IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001` adds operator-confirmed approved Newegg Product Catalog access and current official Rakuten documentation explicitly identifying shopping/price-comparison use. That later evidence establishes current/ephemeral retention, public current-price display, and cross-retailer item-price comparison for the approved US Newegg feed. This contract remains authoritative historical evidence for the still-blocked dimensions: feed-derived history, analytics, recommendation, redistribution, and unsupported offer-condition inference.
+
 ## Evidence and authority boundaries
 
 The reviewed evidence is:

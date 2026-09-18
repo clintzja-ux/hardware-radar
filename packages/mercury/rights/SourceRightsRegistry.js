@@ -74,6 +74,28 @@ const profiles = Object.freeze({
     derivation: { analytics: RIGHTS_STATES.CLARIFICATION_REQUIRED, offerCondition: RIGHTS_STATES.CLARIFICATION_REQUIRED, historicalAnalytics: RIGHTS_STATES.BLOCKED },
     presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
     status: "PROVISIONAL_AWAITING_CLARIFICATION"
+  }),
+  RAKUTEN_NEWEGG_PRODUCT_CATALOG: Object.freeze({
+    sourceId: "RAKUTEN_NEWEGG_PRODUCT_CATALOG", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
+    acquisition: { api: RIGHTS_STATES.BLOCKED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.ALLOWED },
+    processing: { ephemeral: RIGHTS_STATES.ALLOWED },
+    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
+    retention: { storageClass: "EPHEMERAL_CURRENT", contentTtlMs: 36 * HOUR, current: RIGHTS_STATES.ALLOWED, historical: RIGHTS_STATES.BLOCKED, durableAuditMetadata: RIGHTS_STATES.CONDITIONAL },
+    derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.CLARIFICATION_REQUIRED, historicalAnalytics: RIGHTS_STATES.BLOCKED, recommendation: RIGHTS_STATES.BLOCKED },
+    distribution: { api: RIGHTS_STATES.BLOCKED },
+    presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
+    provenance: {
+      program: "RAKUTEN_ADVERTISING_NEWEGG_PRODUCT_CATALOG",
+      relationshipEvidence: "OPERATOR_CONFIRMED_APPROVED_NEWEGG_ADVERTISER_AND_PRODUCT_CATALOG_ACCESS_2026_09_18",
+      references: [
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/4412243602189-Product-Catalog-Overview",
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/7145964532877-Data-Feeds",
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/4412243880333-Download-Product-Catalog-Data-Feed-Files"
+      ],
+      scope: "APPROVED_NEWEGG_US_PRODUCT_CATALOG_CURRENT_COMMERCE",
+      unsupported: ["HISTORICAL_RETENTION", "DERIVED_ANALYTICS", "RECOMMENDATION", "REDISTRIBUTION_API", "OFFER_CONDITION_INFERENCE"]
+    },
+    status: "APPROVED_CURRENT_COMMERCE_2026_09"
   })
 });
 

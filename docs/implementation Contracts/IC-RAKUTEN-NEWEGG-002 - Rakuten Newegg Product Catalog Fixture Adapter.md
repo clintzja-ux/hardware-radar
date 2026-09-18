@@ -37,7 +37,7 @@ Source shipping, including `0.00`, is preserved only as `sourceEvidence.sourceSh
 
 ## Rights and downstream behavior
 
-Fixture rights permit acquisition-shaped parsing and ephemeral retention only. Production public-display and comparison rights remain unconfigured/false; historical retention is false. A valid price with available stock and exact destination remains item-price ineligible because condition is null and source public/comparison rights are not approved.
+`IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001` supersedes the original fixture-only rights posture. The canonical runtime profile now permits approved feed import, ephemeral/current-state retention, public current-price display, and cross-retailer item-price comparison while historical retention remains false. A valid price with available stock and exact destination remains item-price ineligible because condition is null; rights are no longer that fixture's blocker.
 
 The adapter preserves the header-supported feed timestamp as `observedAt`; import runtime never retimestamps it. Existing `PublicCurrentRetailProjection` retains sole ownership of the 36-hour public freshness rule and winner calculation.
 
