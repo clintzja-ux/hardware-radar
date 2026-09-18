@@ -8,7 +8,7 @@ For repeat cohorts, Forge lifecycle counts reflect original canonical member sta
 
 This document governs evidence-based promotion of Mercury longitudinal acquisition from the completed five-product production-certification cohort. It is an operations plan, not acquisition authority, a budget change, or downstream market/publication authority.
 
-Current classification: `READY_FOR_LARGER_REPEAT_POLICY_AND_SELECTION`.
+Current classification: `LARGER_REPEAT_POLICY_SELECTED / REVIEW_PROPOSALS_CREATED / PREPARE_NOT_RUN`.
 
 ### Repeat scale selection and review proposal
 
@@ -18,7 +18,19 @@ Current classification: `READY_FOR_LARGER_REPEAT_POLICY_AND_SELECTION`.
 
 V1 proposals are `SINGLE_SOURCE_OPERATION`, immutable `REVIEW_ONLY`, and `authority: NONE`. Amazon Sellers and Google Shopping Sellers therefore remain separately diagnosable proposals. Candidate permutation cannot alter selection. Requested size is explicit and cannot exceed the pool. Affiliate/commercial state, expected price/provider outcome, prior yield, manual favorites, wall time, and current spend cannot influence selection. Strict replay validation protects pool, selection, stage/policy, cycle, source/operation, and all zero-authority fields. Fixtures certify local mechanics at 6/24/43/100/1,000 candidates; this is not provider-throughput evidence.
 
-No real repeat cohort or proposal was created. The checkpoint population remains 43 production-shaped repeat-ready pairs—41 Amazon and two Google—and only read-only compatibility was established. Direct proposal PREPARE is now certified, while legacy `--cohort-file` plus `--observation-cycle` remains available. The next increment is the zero-provider larger-repeat policy, deterministic selection, and review-proposal gate; it must stop before PREPARE.
+The real zero-authority experiment gate is now represented by [100-stage-larger-longitudinal-repeat-policy.json](../../config/mercury/scale-ramp/100-stage-larger-longitudinal-repeat-policy.json), [100-stage-larger-longitudinal-amazon-review.json](../../config/mercury/scale-ramp/100-stage-larger-longitudinal-amazon-review.json), and [100-stage-larger-longitudinal-google-control-review.json](../../config/mercury/scale-ramp/100-stage-larger-longitudinal-google-control-review.json). Fresh owners produced 41 Amazon and two Google candidates at cycle `2026-09-18T00:00:00.000Z`. The Amazon proposal selects 24; the Google proposal selects both controls. Both remain `REVIEW_ONLY / authority NONE`, and PREPARE has not run.
+
+### Larger longitudinal experiment policy
+
+Amazon Sellers is the primary scale experiment because it owns 41 current identities, exercises the recurring source that produced the structured-delivery-money defect, and provides the missing task/retrieval, normalization, amplification, P1-A, persistence, Forge, and exception-demand evidence. The two Google Shopping Sellers pairs are `USEFUL_BUT_NOT_REQUIRED`: they offer a low-cost cross-source control and repeated-cycle continuity, but they cannot prove Amazon scale and do not block the primary experiment. Source-specific proposals preserve diagnosis and authority boundaries.
+
+Simulations compared 12, 16, 20, 24, and 32 Amazon members. All cover five manufacturers, DDR4/DDR5, DIMM/SO-DIMM, 8/16/32/64 GB, and one-/two-module shapes. Sizes 12, 16, and 20 cover 12, 16, and 20 selection strata. Size 24 is the first to cover all 22 current strata; size 32 adds no new stratum and, with two Google controls, would exceed one clean `$0.0500` UTC-day envelope. Therefore 24 is the evidence-based elbow: five selected pairs have prior repeat-cycle participation and 19 are first-repeat pairs. Google contributes two previously observed controls. Maximum envelope is 26 tasks / `$0.0380`, zero automatic retries, leaving `$0.0120` clean-day headroom.
+
+September 17 durable spend is `$0.0480 / $0.0500`, leaving `$0.0020`. That is insufficient for the Amazon primary and is not a reason to execute controls in isolation. The new cycle starts at the next UTC boundary. Review-proposal creation does not reserve future budget; PREPARE, authorization, and START must independently revalidate state and spend.
+
+Measurement covers task/retrieval scale, recurring normalization and shipping-money variants, evidence/history amplification, cross-cycle idempotency, P1-A zero-paid continuation, SQLite/file-backed growth, Forge operator comprehension, exception/review demand, and ordinary operation without SKU-specific engineering. Systemic integrity, unauthorized spend/task creation, duplicate paid work, rights drift, budget block, or persistence/lineage corruption stops the experiment globally. Member-local offer ambiguity remains isolated. No old-cycle work is resumed and no previous member is excluded merely for legitimate historical participation.
+
+The next step is the existing direct Amazon review-proposal → PREPARE → INSPECT boundary after this checkpoint is committed. Stop after INSPECT. Authorization, START, provider work, Google controls, H052, reprocessing, and downstream authority all require later explicit decisions.
 
 ### Deterministic paid-canary selector
 

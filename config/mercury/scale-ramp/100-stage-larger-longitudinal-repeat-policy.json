@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "MERCURY_100_STAGE_LARGER_LONGITUDINAL_REPEAT_EXPERIMENT_POLICY",
+  "policyId": "MERCURY_100_STAGE_LARGER_LONGITUDINAL_REPEAT_EXPERIMENT",
+  "policyVersion": "1.0",
+  "status": "REVIEW_ONLY",
+  "stageId": "hardware-radar-100-product-stage",
+  "stageCohortDigest": "470dfadbdb8670de3566826d33eb74cb9d97a1ca6e14bf8b3fac71101ecaaf21",
+  "observationCycle": "2026-09-18T00:00:00.000Z",
+  "primarySource": "DATAFORSEO_AMAZON",
+  "primaryOperation": "AMAZON_SELLERS",
+  "primaryRequestedSize": 24,
+  "primarySelectionRationale": "SMALLEST_SIMULATED_SIZE_COVERING_ALL_22_CURRENT_AMAZON_SELECTION_STRATA",
+  "googleControlClassification": "USEFUL_BUT_NOT_REQUIRED",
+  "googleControlRequestedSize": 2,
+  "proposalReferences": [
+    {
+      "role": "PRIMARY",
+      "proposalId": "mer_scaleproposal_ef357b64e0048c3556859fff",
+      "proposalDigest": "ef357b64e0048c3556859fff53359b7d210397fcbc945a90f1d742373b3e6587",
+      "source": "DATAFORSEO_AMAZON",
+      "operation": "AMAZON_SELLERS",
+      "requestedSize": 24
+    },
+    {
+      "role": "CONTROL",
+      "proposalId": "mer_scaleproposal_21625c38f02b1ee6fdc74a30",
+      "proposalDigest": "21625c38f02b1ee6fdc74a30ec8916ae96c03284b62763627db9625acdfdac55",
+      "source": "DATAFORSEO_GOOGLE_SHOPPING",
+      "operation": "SELLERS",
+      "requestedSize": 2
+    }
+  ],
+  "currentCandidatePopulation": {
+    "amazon": {
+      "count": 41,
+      "priorAny": 7,
+      "priorNone": 34,
+      "manufacturers": {
+        "Corsair": 13,
+        "Crucial": 5,
+        "G.SKILL": 7,
+        "Kingston": 10,
+        "TeamGroup": 6
+      },
+      "generations": {
+        "DDR4": 5,
+        "DDR5": 36
+      },
+      "formFactors": {
+        "DIMM": 35,
+        "SO_DIMM": 6
+      },
+      "capacities": {
+        "8": 2,
+        "16": 3,
+        "32": 28,
+        "64": 8
+      },
+      "moduleCounts": {
+        "1": 5,
+        "2": 36
+      },
+      "selectedPreviouslyObserved": 5,
+      "selectedFirstRepeat": 19
+    },
+    "google": {
+      "count": 2,
+      "priorAny": 2,
+      "priorNone": 0,
+      "manufacturers": {
+        "Corsair": 1,
+        "Crucial": 1
+      },
+      "generations": {
+        "DDR5": 2
+      },
+      "formFactors": {
+        "DIMM": 2
+      },
+      "capacities": {
+        "32": 2
+      },
+      "moduleCounts": {
+        "2": 2
+      },
+      "selectedPreviouslyObserved": 2,
+      "selectedFirstRepeat": 0
+    }
+  },
+  "costEnvelope": {
+    "amazonTaskCount": 24,
+    "amazonMaximumSpendUsd": 0.036,
+    "googleTaskCount": 2,
+    "googleMaximumSpendUsd": 0.002,
+    "maximumPaidTasks": 26,
+    "maximumProviderSpendUsd": 0.038,
+    "utcDaySpendCeilingUsd": 0.05,
+    "automaticPaidRetries": 0
+  },
+  "measuredAt": "2026-09-17T23:48:44.374Z",
+  "currentUtcDaySpend": {
+    "utcDay": "2026-09-17",
+    "actualSpendUsd": 0.048,
+    "remainingCapacityUsd": 0.002,
+    "sufficientForPrimaryToday": false,
+    "sufficientForControlToday": true
+  },
+  "executionOrder": [
+    "AMAZON_PRIMARY_FIRST",
+    "GOOGLE_CONTROL_ONLY_AFTER_SEPARATE_REVIEW"
+  ],
+  "stopConditions": [
+    "SYSTEMIC_INTEGRITY_FAILURE",
+    "UNAUTHORIZED_SPEND_OR_TASK",
+    "DUPLICATE_PAID_WORK",
+    "SOURCE_RIGHTS_DRIFT",
+    "DAILY_OR_RUN_BUDGET_BLOCK",
+    "PERSISTENCE_OR_LINEAGE_CORRUPTION"
+  ],
+  "measurementContract": [
+    "TASK_CREATION_AND_RETRIEVAL_SCALE",
+    "NORMALIZATION_AND_SHIPPING_MONEY",
+    "EVIDENCE_AND_HISTORY_AMPLIFICATION",
+    "CROSS_CYCLE_IDEMPOTENCY",
+    "P1_A_ZERO_PAID_CONTINUATION",
+    "SQLITE_AND_FILE_BACKED_GROWTH",
+    "FORGE_OPERATOR_COMPREHENSION",
+    "EXCEPTION_AND_REVIEW_DEMAND",
+    "ZERO_ROUTINE_SKU_ENGINEERING"
+  ],
+  "authority": "NONE",
+  "providerCalls": 0,
+  "providerTasks": 0,
+  "paidTasks": 0,
+  "actualSpendUsd": 0,
+  "prepareAuthorized": false,
+  "authorizationCreated": false,
+  "executionAuthorized": false,
+  "runCreated": false,
+  "downstreamAuthority": "NONE"
+}

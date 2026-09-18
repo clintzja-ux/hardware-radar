@@ -270,6 +270,7 @@ const testModules = [
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
     ,"./ScaleRampSelectorProposalPrepare.test.mjs"
     ,"./RepeatProposalPrepareDirectBinding.test.mjs"
+    ,"./RepeatScaleExperimentPolicy.test.mjs"
     ,"./TasklessChildAuthorityDisposition.test.mjs"
     ,"./DispositionAwareExistingTaskContinuation.test.mjs"
     ,"./BoundedSpendProgression.test.mjs"
