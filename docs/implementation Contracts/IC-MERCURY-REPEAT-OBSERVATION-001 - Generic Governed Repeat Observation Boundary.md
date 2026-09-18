@@ -26,7 +26,7 @@ The generic boundary owns no provider transport, task ledger, spend ledger, prov
 
 ## Economics
 
-Amazon SELLERS is capped at `$0.0015`; Google Shopping SELLERS is capped at `$0.001`. New repeat observations use the canonical `$0.0500` UTC-day ceiling and preserve legacy lower ceilings only as historical audit data. A fixture five-product, dual-source cycle is ten tasks and `$0.0125` maximum spend. No real authorization or task is created by certification.
+Amazon SELLERS is capped at `$0.0015`; Google Shopping SELLERS is capped at `$0.001`. New repeat observations use the canonical `$0.0750` UTC-day ceiling and preserve legacy lower ceilings only as historical audit data. A fixture five-product, dual-source cycle is ten tasks and `$0.0125` maximum spend. No real authorization or task is created by certification.
 
 ## Scalability and exclusions
 

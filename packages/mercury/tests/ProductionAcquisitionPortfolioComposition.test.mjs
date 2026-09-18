@@ -19,7 +19,7 @@ const root=await mkdtemp(join(tmpdir(),"hr-portfolio-production-"));try{
  const first=await service.prepare({asOf}),replay=await service.prepare({asOf});assert.equal(first.status,"PREPARED");assert.equal(replay.status,"DUPLICATE");assert.deepEqual(first.portfolio,replay.portfolio);cases++;
  assert.equal(first.portfolio.counts.canonicalProducts,103);assert.equal(first.portfolio.counts.eligible,11);assert.equal(first.portfolio.counts.excluded,92);cases++;
  assert.equal(first.portfolio.eligibleProducts.filter(x=>x.providerIdentityState==="REUSABLE").length,1);assert.equal(first.portfolio.taskEnvelope.products,10);cases++;
-	 assert.equal(first.portfolio.costEnvelope.currentUtcDaySpendUsd,.002);assert.equal(first.portfolio.costEnvelope.remainingUtcDayCapacityUsd,.048);cases++;
+	 assert.equal(first.portfolio.costEnvelope.currentUtcDaySpendUsd,.002);assert.equal(first.portfolio.costEnvelope.remainingUtcDayCapacityUsd,.073);cases++;
  assert.equal(first.portfolio.providerSpendAuthorized,false);assert.equal(first.portfolio.paidTaskCreated,false);assert.equal(first.report.products.find(x=>x.atlasProductId==="ram_corsair_cmk32gx5m2b6000z30").nextOperation,"SELLERS");cases++;
  const stored=JSON.parse(await readFile(first.artifactPath,"utf8"));assert.deepEqual(stored,first.portfolio);cases++;
  assert.equal((await service.validate(stored)).valid,true);cases++;

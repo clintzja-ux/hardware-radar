@@ -1,5 +1,5 @@
 export const ACQUISITION_PRIORITIES = Object.freeze({ HIGH: "HIGH", NORMAL: "NORMAL", LOW: "LOW", PAUSED: "PAUSED" });
-export const DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD = 0.05;
+export const DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD = 0.075;
 
 function finiteNonNegative(value, field) {
   if (!Number.isFinite(value) || value < 0) throw new TypeError(`${field} must be a finite non-negative number.`);
