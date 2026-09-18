@@ -8,7 +8,7 @@ For repeat cohorts, Forge lifecycle counts reflect original canonical member sta
 
 This document governs evidence-based promotion of Mercury longitudinal acquisition from the completed five-product production-certification cohort. It is an operations plan, not acquisition authority, a budget change, or downstream market/publication authority.
 
-Current classification: `READY_FOR_EXPLICIT_TWO_PLAN_AUTHORIZATION_DECISION / NOT_AUTHORIZED / NOT_STARTED`.
+Current classification: `TWO_PLAN_AUTHORIZED / AWAITING_EXPLICIT_START_APPROVAL / NOT_STARTED`.
 
 ### Repeat scale selection and review proposal
 
@@ -23,6 +23,8 @@ The real zero-authority experiment gate is represented by [100-stage-larger-long
 The immediate PREPARE console rendered membership equivalence as `NO` because that write response does not calculate the INSPECT-only derived field. The persisted plan and canonical INSPECT reconstruct it as `YES`; all 24 selected operations, cycle, source, operation, and selector provenance match exactly. This is a non-authoritative presentation limitation, not a persisted-lineage or production-correctness failure.
 
 Fresh zero-provider authorization-readiness assessment reconstructed both durable plans and proposals, validated their binding/cohort/candidate/selection digests, revalidated all 26 identity and rights bindings, confirmed one active reviewed Amazon destination for every Amazon member, and found no same-cycle task, execution, or immutable result. Amazon and Google are independently `READY_FOR_AUTHORIZATION_DECISION`; they require separate plan-scoped expiring authorizations and separate explicit START decisions. Authorization does not reserve spend. The shared execution ledger remains authoritative, START revalidates the complete plan envelope plus current identity/rights, and each child execution revalidates identity/rights and current per-task spend. At `$0.0000` current spend, Amazon-first and Google-first full-envelope sequences both total `$0.0380` and leave `$0.0370` under the `$0.0750` ceiling. The readiness assessment created no authority or operational work.
+
+The operator subsequently approved both independent authorization decisions. Amazon authorization `mer_repeatrunauth_04a91e61a8c28ba412cfa73c` binds `mer_repeatrunplan_a5195b970ff9a01e05bee625` for 24 tasks / `$0.0360`; Google authorization `mer_repeatrunauth_9c3acfd341c68f9ecadea244` binds `mer_repeatrunplan_77a5d4c60a49f86718d495da` for two tasks / `$0.0020`. Both expire at `2026-09-18T02:00:00.000Z`, permit zero retries, and are single-use for START. Both runs remain `NOT_STARTED`, and current spend remains `$0.0000`. Authorization did not reserve budget or create paid work. The future commands, which must not be run without separate explicit START approval, are `npm run mercury:repeat-run:start -- --run-authorization-id=mer_repeatrunauth_04a91e61a8c28ba412cfa73c --executed-by=Clinton --confirm=START-BOUNDED-REPEAT-RUN` and `npm run mercury:repeat-run:start -- --run-authorization-id=mer_repeatrunauth_9c3acfd341c68f9ecadea244 --executed-by=Clinton --confirm=START-BOUNDED-REPEAT-RUN`.
 
 ### Larger longitudinal experiment policy
 
