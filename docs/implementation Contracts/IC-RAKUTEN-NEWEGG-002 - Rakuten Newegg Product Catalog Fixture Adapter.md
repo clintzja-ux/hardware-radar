@@ -22,7 +22,7 @@ Rakuten tracking URLs remain source metadata. The canonical destination URL and 
 
 ## Price, availability, condition, and shipping
 
-The fixture profile requires USD and performs no currency conversion. `in-stock` maps to `AVAILABLE`; unseen values map to `UNKNOWN`. Main-feed presence establishes neither first-party seller state nor condition, so condition and seller fields remain null.
+The fixture profile requires USD and performs no currency conversion. `in-stock` maps to `AVAILABLE`; unseen values map to `UNKNOWN`. `IC-RAKUTEN-NEWEGG-MAIN-FEED-SEMANTICS-001` confirms that available authoritative evidence does not establish first-party seller, `NEW`, or standalone semantics for the bounded main-feed population. Condition and seller fields therefore remain null; domain, retailer identity, affiliate approval, catalog membership, feed profile, and missing contrary text grant no inference.
 
 Retail price is exposed only when it is a positive ordinary price. A distinct positive sale price produces `PRICE_SEMANTICS_UNRESOLVED` until a separate timing/discount policy exists; the adapter never chooses the lowest number. Source sale timing and price fields remain compact source evidence.
 

@@ -21,6 +21,7 @@ const context={atlasProductId:product.identity.atlasProductId,retailerId:destina
 const adapterFor=(records,options={})=>createRakutenNeweggProductFeedAdapter({records,destinations:[destination],feedTimestamp:parsed[0].feedTimestamp,...options});
 const result=await adapterFor([parsed[1]]).refresh(context);
 assert.deepEqual({type:result.type,price:result.itemPriceUsd,currency:result.currency,availability:result.availability,condition:result.condition,shipping:result.shippingUsd},{type:"OBSERVATION",price:99.99,currency:"USD",availability:"AVAILABLE",condition:null,shipping:null});
+assert.equal(result.sellerType,null); assert.equal(result.sellerName,null); assert.equal(result.sourceEvidence.feedProfile,"MAIN"); cases+=3;
 assert.equal(result.sourceEvidence.sourceShippingUsd,0); assert.equal(result.sourceEvidence.sourceUpc,"000000000001"); cases++;
 assert.match(extractRakutenMerchantUrl(parsed[1].productUrl),/newegg\.com\/p\/N82E16820000001/); assert.equal(result.destinationUrl,destination.destinationUrl); assert.notEqual(result.sourceEvidence.merchantUrl,result.destinationUrl); cases++;
 assert.equal(extractRakutenMerchantUrl("https://click.example.invalid/?murl=https%3A%2F%2Fevilnewegg.com%2Fp%2FN82E16820000001"),null); cases++;
@@ -50,7 +51,11 @@ const mkplRecord=(await collectRakutenProductCatalogFixture(gz(fixtureFeedText({
 assert.equal(mkplRecord.fieldCount,51); assert.equal(mkplRecord.profileFields.length,12);
 const mkpl=await createRakutenNeweggProductFeedAdapter({records:[mkplRecord],destinations:[mkplDestination],feedTimestamp:parsed[0].feedTimestamp,feedProfile:"NEWEGG_MKPL"}).refresh({...context,destinationUrl:mkplDestination.destinationUrl,retailerListingId:mkplDestination.retailerListingId});
 assert.equal(mkpl.sourceEvidence.marketplace,true); assert.equal(mkpl.condition,null); assert.equal(mkpl.sellerName,null); cases++;
-assert.equal((await adapterFor([parsed[1]],{feedProfile:"ADDITIONAL_UNCLASSIFIED"}).refresh(context)).sourceEvidence.marketplace,null); cases++;
+const additional=await adapterFor([parsed[1]],{feedProfile:"ADDITIONAL_UNCLASSIFIED"}).refresh(context);
+assert.equal(additional.sourceEvidence.marketplace,null); assert.equal(additional.condition,null); assert.equal(additional.sellerName,null); cases+=3;
+const directNeweggRecord={...parsed[1],productUrl:destination.destinationUrl,title:"Fixture RAM bundle with accessory"};
+const directNewegg=await adapterFor([directNeweggRecord]).refresh(context);
+assert.equal(directNewegg.condition,null); assert.equal(directNewegg.sellerType,null); assert.equal(directNewegg.sellerName,null); cases+=3;
 const unavailable=adapterFor([]), unavailablePortfolio=createCurrentRetailRefreshPortfolio({products:[product],destinations:[destination],retailers,adapters:[unavailable],asOf});
 const sourceLoss=await new CurrentRetailRefreshOrchestrator({adapters:[unavailable]}).run({portfolio:unavailablePortfolio,priorSnapshot:prior(unavailable.adapterId)});
 assert.equal(sourceLoss.snapshot.offers[0].observedAt,"2026-09-08T11:00:00.000Z"); assert.equal(sourceLoss.outcomes[0].status,"SOURCE_UNAVAILABLE");

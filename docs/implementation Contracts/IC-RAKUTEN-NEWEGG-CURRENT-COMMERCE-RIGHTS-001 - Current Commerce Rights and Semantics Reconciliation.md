@@ -69,7 +69,7 @@ No production adapter registry, ordered source-file checkpoint, current source-s
 
 Rights and deterministic source-state semantics are closed. The immediate current-item-price blocker is offer classification: canonical evidence still does not prove first-party seller plus `NEW` condition for the bounded main-feed population. Shipping additionally blocks total-cost comparison. Historical use remains prohibited.
 
-The next smallest gate is a zero-network **Newegg main-feed seller/condition and offer-classification evidence closure** increment. It must either bind authoritative source/program evidence to a reusable bounded policy or preserve `UNKNOWN` and design the corresponding governed exception input. It requires no feed download, publication, release, or deployment.
+`IC-RAKUTEN-NEWEGG-MAIN-FEED-SEMANTICS-001` completed that zero-network evidence closure. Available authority remains insufficient to establish first-party seller, `NEW`, or standalone semantics for every bounded main-feed row, so the adapter correctly preserves unknown state. The next gate is acquisition of narrowly bound affirmative source/program documentation or per-offer governed seller/condition evidence; production refresh composition must not be used to bypass that evidence gap.
 
 ## Safety
 
