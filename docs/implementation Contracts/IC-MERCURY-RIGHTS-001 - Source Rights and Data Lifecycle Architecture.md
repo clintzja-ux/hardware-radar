@@ -41,6 +41,13 @@ MVP-002 Increment 4 adds the code boundary but no production rights profile. A c
 - production acquisition/use: BLOCKED
 - historical retention/derivation: BLOCKED
 
+### AMAZON / NEWEGG MANUAL PUBLISHER OBSERVATION
+- manual acquisition, current observation, and public item-price display: ALLOWED
+- exact-product current item-price comparison: ALLOWED; unknown ancillary facts remain unknown
+- durable fact-level historical retention and historical item-price analytics: ALLOWED through separate admission
+- condition inference, delivered-cost claims with unknown costs, recommendation, and redistribution API: BLOCKED
+- current-display execution grants no historical admission, publication, Cheapest, Pick, release, or deployment authority
+
 ### BEST_BUY_PRODUCTS_API
 Provisional profile pending Best Buy's written response:
 - API acquisition: ALLOWED as the approved technical mechanism

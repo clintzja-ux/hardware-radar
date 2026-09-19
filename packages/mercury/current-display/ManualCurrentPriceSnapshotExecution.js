@@ -89,7 +89,7 @@ function assertFresh(observedAt, at) {
 }
 
 function assertRights(rights, binding) {
-  if (manualCurrentPriceDigest(rights) !== binding.sourceRightsProfileDigest || rights?.sourceId !== binding.sourceId || rights.acquisition?.manual !== RIGHTS_STATES.ALLOWED || rights.live?.currentObservation !== RIGHTS_STATES.ALLOWED || rights.live?.publicDisplay !== RIGHTS_STATES.ALLOWED || rights.live?.comparison !== RIGHTS_STATES.BLOCKED || rights.retention?.historical !== RIGHTS_STATES.BLOCKED) throw new Error("MANUAL_CURRENT_DISPLAY_RIGHTS_CHANGED");
+  if (manualCurrentPriceDigest(rights) !== binding.sourceRightsProfileDigest || rights?.sourceId !== binding.sourceId || rights.acquisition?.manual !== RIGHTS_STATES.ALLOWED || rights.live?.currentObservation !== RIGHTS_STATES.ALLOWED || rights.live?.publicDisplay !== RIGHTS_STATES.ALLOWED || rights.live?.comparison !== RIGHTS_STATES.ALLOWED || rights.retention?.historical !== RIGHTS_STATES.ALLOWED || rights.derivation?.historicalAnalytics !== RIGHTS_STATES.ALLOWED) throw new Error("MANUAL_CURRENT_DISPLAY_RIGHTS_CHANGED");
 }
 
 export class ManualCurrentPriceSnapshotExecutionService {

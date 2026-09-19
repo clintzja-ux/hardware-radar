@@ -108,10 +108,11 @@ export function createPublicCurrentRetailProjection({ products, retailers, desti
     }
     const publicProducts = [...grouped.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([atlasProductId, offers]) => {
         const comparable = offers.filter(offer => offer.comparisonEligible).sort(orderOffers);
+        const comparableRetailers = new Set(comparable.map(offer => offer.retailerId));
         return {
             atlasProductId,
             status: "CURRENT_PRICE_AVAILABLE",
-            lowerCurrentItemPrice: comparable[0] ?? null,
+            lowerCurrentItemPrice: comparableRetailers.size >= 2 ? comparable[0] : null,
             eligibleOfferCount: offers.length,
             offers
         };
@@ -150,7 +151,8 @@ export function validatePublicCurrentRetailProjection(projection) {
         if (product?.status !== "CURRENT_PRICE_AVAILABLE" || (product.lowerCurrentItemPrice !== null && product?.atlasProductId !== product?.lowerCurrentItemPrice?.atlasProductId) || !Array.isArray(product?.offers) || product.offers.length !== product.eligibleOfferCount) errors.push("PUBLIC_CURRENT_RETAIL_PRODUCT_INVALID");
         allOffers.push(...(product.offers ?? []));
         const comparable = product.offers?.filter(offer => offer.comparisonEligible).sort(orderOffers) ?? [];
-        if ((comparable[0]?.destinationId ?? null) !== (product.lowerCurrentItemPrice?.destinationId ?? null)) errors.push("PUBLIC_CURRENT_RETAIL_PRODUCT_WINNER_INVALID");
+        const expected = new Set(comparable.map(offer => offer.retailerId)).size >= 2 ? comparable[0] : null;
+        if ((expected?.destinationId ?? null) !== (product.lowerCurrentItemPrice?.destinationId ?? null)) errors.push("PUBLIC_CURRENT_RETAIL_PRODUCT_WINNER_INVALID");
     }
     for (const offer of allOffers) {
         if (!/^ram_[a-z0-9_]+$/.test(offer?.atlasProductId ?? "") || !/^RETAILER-\d{4}$/.test(offer?.retailerId ?? "") || !/^mer_dest_[a-f0-9]{24}$/.test(offer?.destinationId ?? "")) errors.push("PUBLIC_CURRENT_RETAIL_IDENTITY_INVALID");

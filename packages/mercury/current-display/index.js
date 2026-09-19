@@ -21,3 +21,4 @@ export * from "./ManualCurrentPriceWorkbookFile.js";
 export * from "./ManualCurrentPriceSnapshotExecution.js";
 export * from "./FileManualCurrentPriceSnapshotExecutionRepository.js";
 export * from "./ProductionManualCurrentPriceSnapshotExecution.js";
+export * from "./ManualCurrentPriceHistory.js";

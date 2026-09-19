@@ -262,6 +262,8 @@ const testModules = [
     ,"./ManualCurrentPriceWorkbook.test.mjs"
     ,"./ManualCurrentPriceWorkbookComposition.test.mjs"
     ,"./ManualCurrentPriceSnapshotExecution.test.mjs"
+    ,"./ManualCurrentPriceHistory.test.mjs"
+    ,"./PracticalCurrentItemPriceComparison.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"

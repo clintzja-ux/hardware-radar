@@ -52,9 +52,9 @@ const profiles = Object.freeze({
     sourceId: "NEWEGG_MANUAL_PUBLISHER_OBSERVATION", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
     acquisition: { api: RIGHTS_STATES.BLOCKED, manual: RIGHTS_STATES.ALLOWED, import: RIGHTS_STATES.BLOCKED },
     processing: { ephemeral: RIGHTS_STATES.ALLOWED },
-    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.BLOCKED },
-    retention: { storageClass: "EPHEMERAL_CURRENT", contentTtlMs: 36 * HOUR, current: RIGHTS_STATES.ALLOWED, historical: RIGHTS_STATES.BLOCKED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
-    derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.BLOCKED, recommendation: RIGHTS_STATES.BLOCKED },
+    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
+    retention: { storageClass: "DURABLE", contentTtlMs: null, current: RIGHTS_STATES.ALLOWED, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.ALLOWED, recommendation: RIGHTS_STATES.BLOCKED },
     distribution: { api: RIGHTS_STATES.BLOCKED },
     presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
     provenance: {
@@ -71,7 +71,7 @@ const profiles = Object.freeze({
       market: "US",
       observationMode: "HUMAN_MANUAL_PUBLIC_PAGE",
       scope: "NEWEGG_US_MANUAL_PUBLISHER_CURRENT_ITEM_PRICE",
-      unsupported: ["AUTOMATED_ACQUISITION", "HISTORICAL_RETENTION", "COMPARISON_WITH_UNKNOWN_CONDITION", "DERIVED_ANALYTICS", "RECOMMENDATION", "REDISTRIBUTION_API"]
+      unsupported: ["AUTOMATED_ACQUISITION", "CONDITION_INFERENCE", "DELIVERED_COST_WITH_UNKNOWN_COSTS", "RECOMMENDATION", "REDISTRIBUTION_API"]
     },
     status: "OPERATOR_APPROVED_MANUAL_PUBLISHER_CURRENT_COMMERCE_2026_09"
   }),
@@ -79,9 +79,9 @@ const profiles = Object.freeze({
     sourceId: "AMAZON_MANUAL_PUBLISHER_OBSERVATION", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
     acquisition: { api: RIGHTS_STATES.BLOCKED, manual: RIGHTS_STATES.ALLOWED, import: RIGHTS_STATES.BLOCKED },
     processing: { ephemeral: RIGHTS_STATES.ALLOWED },
-    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.BLOCKED },
-    retention: { storageClass: "EPHEMERAL_CURRENT", contentTtlMs: 36 * HOUR, current: RIGHTS_STATES.ALLOWED, historical: RIGHTS_STATES.BLOCKED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
-    derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.BLOCKED, recommendation: RIGHTS_STATES.BLOCKED },
+    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
+    retention: { storageClass: "DURABLE", contentTtlMs: null, current: RIGHTS_STATES.ALLOWED, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.ALLOWED, recommendation: RIGHTS_STATES.BLOCKED },
     distribution: { api: RIGHTS_STATES.BLOCKED },
     presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
     provenance: {
@@ -93,7 +93,7 @@ const profiles = Object.freeze({
       market: "US",
       observationMode: "HUMAN_MANUAL_PUBLIC_PAGE",
       scope: "AMAZON_US_MANUAL_PUBLISHER_CURRENT_ITEM_PRICE",
-      unsupported: ["AUTOMATED_ACQUISITION", "HISTORICAL_RETENTION", "COMPARISON_WITH_UNKNOWN_CONDITION", "DERIVED_ANALYTICS", "RECOMMENDATION", "REDISTRIBUTION_API"]
+      unsupported: ["AUTOMATED_ACQUISITION", "CONDITION_INFERENCE", "DELIVERED_COST_WITH_UNKNOWN_COSTS", "RECOMMENDATION", "REDISTRIBUTION_API"]
     },
     status: "OPERATOR_APPROVED_MANUAL_PUBLISHER_CURRENT_COMMERCE_2026_09"
   }),

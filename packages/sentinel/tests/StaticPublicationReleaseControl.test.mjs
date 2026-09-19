@@ -28,7 +28,7 @@ const artifact = {
   comparisonSemantics: "ITEM_PRICE", disclosure: "Prices shown exclude applicable shipping, taxes, and fees.", freshness: { maxAgeHours: 36 },
   counts: { sourceOffers: 1, publicCurrentEligibleOffers: 1, staleOffers: 0 },
   winners: { overall: offer, ddr5: offer, ddr4: null, laptop: null },
-  products: [{ atlasProductId: offer.atlasProductId, status: "CURRENT_PRICE_AVAILABLE", lowerCurrentItemPrice: offer, eligibleOfferCount: 1, offers: [offer] }]
+  products: [{ atlasProductId: offer.atlasProductId, status: "CURRENT_PRICE_AVAILABLE", lowerCurrentItemPrice: null, eligibleOfferCount: 1, offers: [offer] }]
 };
 const artifactText = `${JSON.stringify(artifact, null, 2)}\n`;
 const base = { releaseState: "ON", targetEnvironment: "PREVIEW", reason: "fixture release", reviewedBy: "fixture", createdAt: at, artifactRelativePath: "artifacts/fixture.json", artifactText, expiresAt: expires, authorityReference: "fixture-publication-authority", previousReleaseId: null };
