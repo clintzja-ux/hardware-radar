@@ -1,7 +1,7 @@
 # Hardware Radar — Post-100 Production Connection Plan
 
 **Status:** STATIC RELEASE CONTROL IMPLEMENTED / FIXTURE-CERTIFIED
-**Active gate:** `MANUAL_NEWEGG_FIRST_CANARY_PREPARE_AND_INSPECT`
+**Active gate:** `DUAL_RETAILER_MANUAL_FIRST_CANARY_PREPARE_AND_INSPECT`
 **Baseline:** `100_PRODUCT_STAGE_COMPLETE`
 
 ## Purpose
@@ -43,7 +43,7 @@ Every current-display candidate must pass the applicable source-specific identit
 
 ### Amazon
 
-Amazon destinations and reusable identities exist, and Mercury has immutable evidence/history. Those facts do not establish a current publicable offer. The durable publication workflow's current Amazon source gate requires the authorized API/license context; existing DataForSEO Amazon history does not satisfy it. The current-display stream may publish only a fresh, eligible, exactly bound Amazon observation under its independent source rights and 36-hour policy. No currently checked-in fresh Amazon canary candidate is established.
+Amazon destinations and reusable identities exist, and Mercury has immutable evidence/history. Those facts do not establish a current publicable offer. The durable publication workflow's current Amazon source gate requires the authorized API/license context; existing DataForSEO Amazon history does not satisfy it. Separately, `AMAZON_MANUAL_PUBLISHER_OBSERVATION` now permits bounded human public-page research for ephemeral weak current-item-price display. It grants no Amazon API, DataForSEO, scraping, history, comparison, Cheapest, or publication authority. No currently checked-in fresh Amazon canary candidate is established.
 
 Shortest future path: establish a fresh authorized current observation through the retailer/commerce current-retail lane; validate offer identity, destination, condition, availability, seller/marketplace state, comparability, price, currency, shipping-knownness, rights, and source-specific freshness; create the bounded static release artifact; obtain explicit publication/deployment approval; deploy; verify; measure; then broaden only after review. Existing independent DataForSEO Amazon evidence may corroborate identity and history but cannot confer current-display authority on this lane.
 
@@ -52,6 +52,8 @@ Shortest future path: establish a fresh authorized current observation through t
 Newegg is canonical retailer `RETAILER-0004`, has broad reviewed destination coverage, and the checked-in current-retail artifact contains four formerly eligible offers. At the current date those observations are stale and cannot be reused as current prices. `IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001` establishes acquisition, ephemeral/current-state retention, public current-price display, and cross-retailer item-price comparison for the approved US Product Catalog path. `IC-RAKUTEN-NEWEGG-MAIN-FEED-SEMANTICS-001` separately confirms that available authority does not prove first-party seller, `NEW`, or standalone semantics for every bounded main-feed row. Feed-derived history, analytics, recommendation, redistribution, seller/condition inference, and publication authority remain fail closed. Rakuten parsing and deterministic source-local FULL/DELTA projection are certified; the next gate is affirmative source/program or exactly bound per-offer seller/condition evidence, not production refresh composition.
 
 The source-specific `NEWEGG_MANUAL_PUBLISHER_OBSERVATION` lane now permits a bounded human publisher observation to establish only a fresh factual item-price display when exact product/destination, positive USD price, explicit availability, observation time, rights, and private operator provenance are valid. Condition, seller, shipping, and fees remain unknown. Such an offer is not comparison-eligible and cannot become lower-price comparison or Cheapest. This manual lane is distinct from Product Catalog automation, creates no history, and grants no publication/release authority. Its zero-authority one-product PREPARE/INSPECT boundary is fixture-certified; no production preparation has run.
+
+One dual-retailer operator workbook now supports a single research pass across all canonical Atlas RAM products. Shared product facts appear once; Amazon and Newegg URL/listing references, observed facts, timestamps, unknown fields, notes, reviewer, and ready controls remain independent. The workbook adapter selects one product and one retailer at a time, and both manual retailer lanes may enter the same zero-authority PREPARE/INSPECT boundary under distinct rights and provenance. The workbook never copies old prices into the new price fields.
 
 ## Dependency decision
 

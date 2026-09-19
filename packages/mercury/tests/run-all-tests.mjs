@@ -259,6 +259,7 @@ const testModules = [
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./ManualCurrentPriceQualification.test.mjs"
+    ,"./ManualCurrentPriceWorkbook.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"

@@ -8,6 +8,12 @@
 
 Protect Hardware Radar retailer functionality from dependency on an affiliate relationship or single commerce-data provider while preserving existing subsystem ownership. This increment documents architecture only; it implements no source adapter, refresh orchestration, routing, or provider connection.
 
+## Durable doctrine
+
+**RETAIL COMMERCE SOURCE INDEPENDENCE:** Hardware Radar must not depend on the continued availability of any single retailer feed, affiliate network, API, provider, or acquisition mechanism for continued operation. Automated feeds improve scale and freshness; governed manual observation is a legitimate fallback and bootstrap path where its source-specific rights, identity, evidence, freshness, and current-market requirements are satisfied. Loss of one source degrades only the capabilities that depend on that source. It must not invalidate Atlas, unrelated Mercury evidence, other retailer paths, or the public catalog.
+
+This doctrine does not guarantee that every source has a manual substitute and does not transfer rights or authority between sources. Each automated or manual lane retains its own provenance, rights, freshness, retention, comparison, and publication gates.
+
 ## Ownership contract
 
 - Atlas owns canonical product and retailer identity.

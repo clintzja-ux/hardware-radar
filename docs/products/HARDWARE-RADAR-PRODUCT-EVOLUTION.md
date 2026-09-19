@@ -189,6 +189,8 @@ Both streams must eventually isolate per-product failures within portfolio batch
 
 ### Retail commerce source independence
 
+**RETAIL COMMERCE SOURCE INDEPENDENCE:** Hardware Radar must not depend on the continued availability of any single retailer feed, affiliate network, API, provider, or acquisition mechanism for continued operation. Automated feeds improve scale and freshness; governed manual observation is a legitimate fallback and bootstrap path where supported by its own source rights and governance. Loss of one source degrades only the capabilities dependent on that source. It must not invalidate Atlas, unrelated Mercury evidence, other retailers, or the public catalog.
+
 Retailer functionality must not depend on affiliate status or any single commerce-data provider. Four concerns remain separate:
 
 1. **Retailer identity** is canonically owned by Atlas and answers which retailer an entity represents.
