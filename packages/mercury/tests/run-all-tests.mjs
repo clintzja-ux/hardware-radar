@@ -260,6 +260,7 @@ const testModules = [
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./ManualCurrentPriceQualification.test.mjs"
     ,"./ManualCurrentPriceWorkbook.test.mjs"
+    ,"./ManualCurrentPriceWorkbookComposition.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"

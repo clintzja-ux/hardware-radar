@@ -17,3 +17,4 @@ export * from "./RakutenSftpConnectionAccounting.js";
 export * from "./ManualCurrentPricePreparation.js";
 export * from "./FileManualCurrentPricePreparationRepository.js";
 export * from "./ManualCurrentPriceWorkbook.js";
+export * from "./ManualCurrentPriceWorkbookFile.js";
