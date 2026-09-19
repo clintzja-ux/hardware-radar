@@ -26,10 +26,16 @@ export class FileCurrentDisplaySnapshotRepository {
     }
 
     async replace(snapshot) {
+        return this.replaceIfCurrent(snapshot, {});
+    }
+
+    async replaceIfCurrent(snapshot, { expectedCurrentSnapshotId = undefined, expectedCurrentFingerprint = undefined } = {}) {
         const report = validateCurrentDisplaySnapshot(snapshot);
         if (!report.valid) throw new TypeError(report.errors.join(","));
         const operation = async () => {
             const state = await this._read();
+            if (expectedCurrentSnapshotId !== undefined && (state.current?.snapshotId ?? null) !== expectedCurrentSnapshotId) throw new Error("CURRENT_DISPLAY_PREDECESSOR_CHANGED");
+            if (expectedCurrentFingerprint !== undefined && (state.current?.materialFingerprint ?? null) !== expectedCurrentFingerprint) throw new Error("CURRENT_DISPLAY_PREDECESSOR_CHANGED");
             if (state.current?.snapshotId === snapshot.snapshotId) {
                 if (state.current.materialFingerprint !== snapshot.materialFingerprint) throw new Error("CURRENT_DISPLAY_REPLAY_CONFLICT");
                 return freeze({ status: "DUPLICATE", snapshotId: snapshot.snapshotId, previousSnapshotId: state.previous?.snapshotId ?? null });

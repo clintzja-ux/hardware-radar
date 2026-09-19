@@ -12,7 +12,7 @@ const SOURCE_BY_RETAILER = Object.freeze({
 });
 const HOUR_MS = 60 * 60 * 1000;
 const stable = value => Array.isArray(value) ? `[${value.map(stable).join(",")}]` : value && typeof value === "object" ? `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}` : JSON.stringify(value);
-const digest = value => crypto.createHash("sha256").update(stable(value)).digest("hex");
+export const manualCurrentPriceDigest = value => crypto.createHash("sha256").update(stable(value)).digest("hex");
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const nonBlank = value => typeof value === "string" && value.trim().length > 0;
 
@@ -46,7 +46,7 @@ export function prepareManualCurrentPriceObservation({ input, product, retailer,
   const binding = {
     policyVersion: MANUAL_CURRENT_PRICE_POLICY_VERSION,
     sourceId: source.sourceId,
-    sourceRightsProfileDigest: digest(rightsProfile),
+    sourceRightsProfileDigest: manualCurrentPriceDigest(rightsProfile),
     atlasProductId: input.atlasProductId,
     destinationId: destination.destinationId,
     destinationBindingDigest: destination.materialFingerprint,
@@ -64,7 +64,7 @@ export function prepareManualCurrentPriceObservation({ input, product, retailer,
     itemPriceEligible: true, comparisonEligible: false,
     comparisonReasons: assessment.eligibility.comparisonReasons
   };
-  const bindingDigest = digest(binding);
+  const bindingDigest = manualCurrentPriceDigest(binding);
   return freeze({
     schemaVersion: "1.0", preparationId: `mer_manualpriceprep_${bindingDigest.slice(0, 24)}`,
     preparedAt, binding, bindingDigest,
@@ -74,9 +74,10 @@ export function prepareManualCurrentPriceObservation({ input, product, retailer,
   });
 }
 
-export function projectPreparedManualCurrentOffer(preparation) {
+export function projectPreparedManualCurrentOffer(preparation, { authorizationId = null } = {}) {
   const b = preparation.binding;
   const source = SOURCE_BY_RETAILER[b.retailerId];
   if (!source || source.sourceId !== b.sourceId) throw new Error("MANUAL_CURRENT_PRICE_SOURCE_BINDING_INVALID");
-  return freeze({ atlasProductId: b.atlasProductId, retailer: source.retailer, retailerId: b.retailerId, marketplace: b.marketplace, priceUsd: b.itemPriceUsd, currency: b.currency, availability: b.availability, condition: null, shippingUsd: null, feesUsd: null, researchUrl: null, destinationId: b.destinationId, matchStatus: "OPERATOR_CONFIRMED_EXACT_PRODUCT_PAGE", sourceRow: 1, observedAt: b.observedAt, sellerType: null, sellerName: null, sourceIdentity: { adapterId: source.adapterId, sourceId: b.sourceId, rightsProfileId: b.sourceId, historicalRetentionAllowed: false }, itemPriceEligible: true, comparisonEligible: false, comparisonReasons: [...b.comparisonReasons], deliveredCostEligible: false, deliveredCostReasons: [...b.comparisonReasons] });
+  const executionLineage = authorizationId === null ? null : { preparationId: preparation.preparationId, preparationDigest: preparation.bindingDigest, authorizationId, sourceRightsProfileDigest: b.sourceRightsProfileDigest, destinationBindingDigest: b.destinationBindingDigest };
+  return freeze({ atlasProductId: b.atlasProductId, retailer: source.retailer, retailerId: b.retailerId, marketplace: b.marketplace, priceUsd: b.itemPriceUsd, currency: b.currency, availability: b.availability, condition: null, shippingUsd: null, feesUsd: null, researchUrl: null, destinationId: b.destinationId, matchStatus: "OPERATOR_CONFIRMED_EXACT_PRODUCT_PAGE", sourceRow: 1, observedAt: b.observedAt, sellerType: null, sellerName: null, sourceIdentity: { adapterId: source.adapterId, sourceId: b.sourceId, rightsProfileId: b.sourceId, historicalRetentionAllowed: false }, ...(executionLineage ? { manualExecutionLineage: executionLineage } : {}), itemPriceEligible: true, comparisonEligible: false, comparisonReasons: [...b.comparisonReasons], deliveredCostEligible: false, deliveredCostReasons: [...b.comparisonReasons] });
 }

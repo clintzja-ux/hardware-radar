@@ -1,0 +1,74 @@
+import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { createRetailerDestination } from "../destinations/RetailerDestination.js";
+import { defaultSourceRightsRegistry } from "../rights/SourceRightsRegistry.js";
+import { assessManualCurrentPriceInput, createCurrentDisplaySnapshot, createPublicCurrentRetailProjection, FileCurrentDisplaySnapshotRepository, FileManualCurrentPricePreparationRepository, FileManualCurrentPriceSnapshotExecutionRepository, ManualCurrentPriceSnapshotExecutionService, MANUAL_SNAPSHOT_AUTHORIZE_CONFIRMATION, MANUAL_SNAPSHOT_EXECUTE_CONFIRMATION, prepareManualCurrentPriceObservation, projectPreparedManualCurrentOffer } from "../current-display/index.js";
+
+let cases=0;const eq=(a,b)=>{assert.deepEqual(a,b);cases++},ok=v=>{assert.equal(v,true);cases++};
+const t0="2026-09-19T16:00:00.000Z",authAt="2026-09-19T17:00:00.000Z",execAt="2026-09-19T17:05:00.000Z";
+const product={identity:{atlasProductId:"ram_fixture_manual_exec",productType:"ram",brand:"Fixture",manufacturerPartNumber:"FIX-EXEC",displayName:"Fixture RAM"},governance:{lifecycleStatus:"ACTIVE",publicationStatus:"READY"},extension:{data:{classification:{memoryType:"DDR5",formFactor:"DIMM"},capacity:{capacityGb:32,moduleCount:2,capacityPerModuleGb:16},performance:{dataRateMtps:6000,casLatency:30}}}};
+const retailers={"RETAILER-0001":{id:"RETAILER-0001",name:"Amazon",websiteUrl:"https://amazon.com",status:"active"},"RETAILER-0004":{id:"RETAILER-0004",name:"Newegg",websiteUrl:"https://newegg.com",status:"active"}};
+const destinations={};for(const [id,market,url,listing] of [["RETAILER-0001","amazon.com","https://amazon.com/dp/B000EXEC01","B000EXEC01"],["RETAILER-0004","newegg.com","https://newegg.com/p/N82EXEC01","N82EXEC01"]]){const retailer=retailers[id];destinations[id]=createRetailerDestination({atlasProductId:product.identity.atlasProductId,retailerId:id,marketplace:market,destinationType:"PRODUCT_PAGE",destinationUrl:url,retailerListingId:listing,binding:{manufacturerPartNumber:"FIX-EXEC",method:"OPERATOR_EXACT_PRODUCT_REVIEW",scope:"EXACT_STANDALONE_PRODUCT",evidenceReferences:["fixture"]},provenance:{sourceType:"OPERATOR_INSPECTED_PUBLIC_PAGE"},reviewedBy:"fixture",reviewedAt:t0,status:"ACTIVE",createdAt:t0,createdBy:"fixture"});}
+const rights={AMAZON_MANUAL_PUBLISHER_OBSERVATION:defaultSourceRightsRegistry.require("AMAZON_MANUAL_PUBLISHER_OBSERVATION"),NEWEGG_MANUAL_PUBLISHER_OBSERVATION:defaultSourceRightsRegistry.require("NEWEGG_MANUAL_PUBLISHER_OBSERVATION")};
+const preparation=(retailerId,price,minute)=>{const retailer=retailers[retailerId],source=retailerId==="RETAILER-0001"?"AMAZON_MANUAL_PUBLISHER_OBSERVATION":"NEWEGG_MANUAL_PUBLISHER_OBSERVATION";return prepareManualCurrentPriceObservation({input:{atlasProductId:product.identity.atlasProductId,destinationId:destinations[retailerId].destinationId,itemPriceUsd:price,currency:"USD",availability:"AVAILABLE",observedAt:`2026-09-19T16:${minute}:00.000Z`,observedBy:"researcher",evidenceReference:`fixture:${source}`},product,retailer,destination:destinations[retailerId],rightsProfile:rights[source],preparedAt:authAt});};
+const amazon=preparation("RETAILER-0001",110,"30"),newegg=preparation("RETAILER-0004",100,"31");
+const automated=(retailerId,price,sourceId,observedAt="2026-09-19T16:32:00.000Z")=>({ ...legacy(retailerId,price), observedAt, sourceIdentity:{adapterId:sourceId==="AMAZON_CREATORS_API"?"mer_adapter_amazon_creators":"mer_adapter_rakuten_newegg_product_feed",sourceId,rightsProfileId:sourceId,historicalRetentionAllowed:false}, matchStatus:"GOVERNED_AUTOMATED_EXACT_PRODUCT", itemPriceEligible:true, comparisonEligible:true, comparisonReasons:[] });
+const legacy=(retailerId,price)=>({atlasProductId:product.identity.atlasProductId,retailer:retailerId==="RETAILER-0001"?"AMAZON":"NEWEGG",retailerId,marketplace:retailerId==="RETAILER-0001"?"amazon.com":"newegg.com",priceUsd:price,currency:"USD",availability:"AVAILABLE",condition:"NEW",shippingUsd:null,feesUsd:null,researchUrl:destinations[retailerId].destinationUrl,destinationId:destinations[retailerId].destinationId,matchStatus:"LEGACY",sourceRow:1,observedAt:"2026-09-01T00:00:00.000Z",itemPriceEligible:true,comparisonEligible:true,comparisonReasons:[],deliveredCostEligible:false,deliveredCostReasons:["SHIPPING_COST_UNKNOWN","FEES_UNKNOWN"]});
+const unrelated={...legacy("RETAILER-0001",80),atlasProductId:"ram_fixture_unrelated",destinationId:null,researchUrl:null};
+
+async function fixture({offers=[legacy("RETAILER-0001",90),legacy("RETAILER-0004",95),unrelated]}={}){const dir=await mkdtemp(path.join(os.tmpdir(),"manual-snapshot-exec-")),prepRepo=new FileManualCurrentPricePreparationRepository({filePath:path.join(dir,"preps.json")}),snapshotRepo=new FileCurrentDisplaySnapshotRepository({statePath:path.join(dir,"snapshots.json")}),executionRepo=new FileManualCurrentPriceSnapshotExecutionRepository({filePath:path.join(dir,"executions.json")});await prepRepo.record(amazon);await prepRepo.record(newegg);const initial=createCurrentDisplaySnapshot({observedAt:t0,importedAt:t0,source:{workbook:"fixture",sheet:"legacy",digest:"a".repeat(64)},offers});await snapshotRepo.replace(initial);const mutable={product:structuredClone(product),destinations:structuredClone(destinations),rights:structuredClone(rights)};const service=new ManualCurrentPriceSnapshotExecutionService({preparationRepository:prepRepo,snapshotRepository:snapshotRepo,executionRepository:executionRepo,productResolver:async()=>mutable.product,retailerResolver:async id=>retailers[id],destinationResolver:async id=>Object.values(mutable.destinations).find(x=>x.destinationId===id),rightsResolver:async id=>mutable.rights[id],now:()=>authAt});return{dir,prepRepo,snapshotRepo,executionRepo,service,mutable,initial,close:()=>rm(dir,{recursive:true,force:true})};}
+const authorize=(service,preparationId,createdAt=authAt)=>service.authorize({preparationId,authorizedBy:"authorizer",reason:"fixture approval",confirmation:MANUAL_SNAPSHOT_AUTHORIZE_CONFIRMATION,createdAt,expiresAt:new Date(Date.parse(createdAt)+10*60000).toISOString()});
+const execute=(service,authorizationId,executedAt=execAt)=>service.execute({authorizationId,executedBy:"executor",confirmation:MANUAL_SNAPSHOT_EXECUTE_CONFIRMATION,executedAt});
+
+{
+ const f=await fixture();try{const preview=await f.service.previewAuthorization({preparationId:amazon.preparationId,asOf:authAt});eq(preview.predecessor.offerState,"PRESENT");eq(preview.predecessor.legacySourceIdentityAbsent,true);ok(preview.authorizationReady);const auth=await authorize(f.service,amazon.preparationId);eq(auth.status,"CREATED");eq(auth.authorization.singleUse,true);eq(auth.authorization.binding.maximumMutation.maximumOfferChanges,1);eq(auth.authorization.binding.authorities,{history:false,comparison:false,cheapest:false,pick:false,publication:false,release:false});const inspected=await f.service.inspectAuthorization({authorizationId:auth.authorization.authorizationId,asOf:authAt});eq(inspected.state,"AUTHORIZED");ok(inspected.whatWillNotChange.includes("HISTORY"));const result=await execute(f.service,auth.authorization.authorizationId);eq(result.status,"EXECUTED");eq(result.execution.delta.offerCountBefore,3);eq(result.execution.delta.offerCountAfter,3);eq(result.execution.delta.targetRecordsChanged,1);eq(result.execution.delta.unrelatedRecordsChanged,0);eq(result.after.sourceIdentity.sourceId,"AMAZON_MANUAL_PUBLISHER_OBSERVATION");eq(result.after.manualExecutionLineage.preparationId,amazon.preparationId);eq(result.after.manualExecutionLineage.authorizationId,auth.authorization.authorizationId);const state=await f.snapshotRepo.getState();eq(state.previous.snapshotId,f.initial.snapshotId);eq(state.current.offers.find(x=>x.retailerId==="RETAILER-0001").priceUsd,110);eq((await execute(f.service,auth.authorization.authorizationId)).status,"ALREADY_EXECUTED");eq((await f.service.inspectExecution({authorizationId:auth.authorization.authorizationId})).preparationConsumed,true);eq((await f.executionRepo.getState()).executions.length,1);}finally{await f.close();}
+}
+{
+ const f=await fixture();try{const a=await authorize(f.service,amazon.preparationId),n0=await authorize(f.service,newegg.preparationId);await execute(f.service,a.authorization.authorizationId);await assert.rejects(()=>execute(f.service,n0.authorization.authorizationId),/PREDECESSOR_STATE_CHANGED/);cases++;const later="2026-09-19T17:06:00.000Z",n1=await authorize(f.service,newegg.preparationId,later);const n=await execute(f.service,n1.authorization.authorizationId,"2026-09-19T17:07:00.000Z");eq(n.status,"EXECUTED");const state=await f.snapshotRepo.getState(),targets=state.current.offers.filter(x=>x.atlasProductId===product.identity.atlasProductId);eq(targets.length,2);eq(targets.find(x=>x.retailerId==="RETAILER-0001").comparisonEligible,false);eq(targets.find(x=>x.retailerId==="RETAILER-0004").sourceIdentity.sourceId,"NEWEGG_MANUAL_PUBLISHER_OBSERVATION");const projection=createPublicCurrentRetailProjection({products:[product],retailers:Object.values(retailers),destinations:Object.values(destinations),currentSnapshot:state.current,asOf:"2026-09-19T17:08:00.000Z"});const target=projection.products.find(x=>x.atlasProductId===product.identity.atlasProductId);eq(target.offers.length,2);eq(target.lowerCurrentItemPrice,null);eq(projection.winners.overall,null);}finally{await f.close();}
+}
+{
+ const f=await fixture({offers:[unrelated]});try{const p=await f.service.previewAuthorization({preparationId:amazon.preparationId,asOf:authAt});eq(p.predecessor.offerState,"ABSENT");const a=await authorize(f.service,amazon.preparationId);await f.snapshotRepo.replace(createCurrentDisplaySnapshot({observedAt:authAt,importedAt:authAt,source:{workbook:"fixture",sheet:"drift",digest:"b".repeat(64)},offers:[unrelated,legacy("RETAILER-0001",88)]}));await assert.rejects(()=>execute(f.service,a.authorization.authorizationId),/PREDECESSOR_STATE_CHANGED/);cases++;}finally{await f.close();}
+}
+for(const [name,mutate,error] of [
+ ["stale",()=>{},/OBSERVATION_STALE_AT_EXECUTION/],
+ ["rights",f=>{f.mutable.rights.AMAZON_MANUAL_PUBLISHER_OBSERVATION.live.publicDisplay="BLOCKED";},/RIGHTS_CHANGED/],
+ ["destination",f=>{f.mutable.destinations["RETAILER-0001"].materialFingerprint="0".repeat(64);},/DESTINATION_CHANGED/],
+ ["atlas",f=>{f.mutable.product.governance.lifecycleStatus="DRAFT";},/ATLAS_NOT_ACTIVE_READY/]
+]){const f=await fixture();try{const created=name==="stale"?"2026-09-21T04:25:00.000Z":authAt,a=await authorize(f.service,amazon.preparationId,created);mutate(f);const when=name==="stale"?"2026-09-21T04:34:59.000Z":execAt;await assert.rejects(()=>execute(f.service,a.authorization.authorizationId,when),error);cases++;eq((await f.executionRepo.getState()).executions.length,0);eq((await f.snapshotRepo.getState()).current.snapshotId,f.initial.snapshotId);}finally{await f.close();}}
+{
+ const f=await fixture();try{const a=await authorize(f.service,amazon.preparationId);await f.snapshotRepo.replace(createCurrentDisplaySnapshot({observedAt:authAt,importedAt:authAt,source:{workbook:"fixture",sheet:"changed",digest:"c".repeat(64)},offers:[legacy("RETAILER-0001",91),legacy("RETAILER-0004",95),unrelated]}));await assert.rejects(()=>execute(f.service,a.authorization.authorizationId),/PREDECESSOR_STATE_CHANGED/);cases++;eq((await f.executionRepo.getState()).executions.length,0);}finally{await f.close();}
+}
+
+// Hybrid acquisition is a common downstream contract with source-specific provenance.
+const manualAmazon=projectPreparedManualCurrentOffer(amazon),manualNewegg=projectPreparedManualCurrentOffer(newegg);
+const automatedAmazon=automated("RETAILER-0001",109,"AMAZON_CREATORS_API"),automatedNewegg=automated("RETAILER-0004",99,"RAKUTEN_NEWEGG_PRODUCT_CATALOG");
+for(const [label,offers,expectedSources] of [
+ ["manual/manual",[manualAmazon,manualNewegg],["AMAZON_MANUAL_PUBLISHER_OBSERVATION","NEWEGG_MANUAL_PUBLISHER_OBSERVATION"]],
+ ["manual/automated",[manualAmazon,automatedNewegg],["AMAZON_MANUAL_PUBLISHER_OBSERVATION","RAKUTEN_NEWEGG_PRODUCT_CATALOG"]],
+ ["automated/manual",[automatedAmazon,manualNewegg],["AMAZON_CREATORS_API","NEWEGG_MANUAL_PUBLISHER_OBSERVATION"]],
+ ["automated/automated",[automatedAmazon,automatedNewegg],["AMAZON_CREATORS_API","RAKUTEN_NEWEGG_PRODUCT_CATALOG"]]
+]){
+ const snapshot=createCurrentDisplaySnapshot({observedAt:authAt,importedAt:authAt,source:{workbook:"fixture",sheet:`hybrid-${label}`,digest:"d".repeat(64)},offers});
+ eq(snapshot.offers.map(value=>value.sourceIdentity.sourceId).sort(),[...expectedSources].sort());
+ const projection=createPublicCurrentRetailProjection({products:[product],retailers:Object.values(retailers),destinations:Object.values(destinations),currentSnapshot:snapshot,asOf:"2026-09-19T17:08:00.000Z"});
+ eq(projection.products[0].offers.length,2);
+}
+{
+ const amazonOnly=createCurrentDisplaySnapshot({observedAt:authAt,importedAt:authAt,source:{workbook:"fixture",sheet:"amazon-current-newegg-stale",digest:"e".repeat(64)},offers:[manualAmazon,automated("RETAILER-0004",99,"RAKUTEN_NEWEGG_PRODUCT_CATALOG","2026-09-17T00:00:00.000Z")]});
+ const projection=createPublicCurrentRetailProjection({products:[product],retailers:Object.values(retailers),destinations:Object.values(destinations),currentSnapshot:amazonOnly,asOf:"2026-09-19T17:08:00.000Z"});
+ eq(projection.products[0].offers.map(value=>value.retailerId),["RETAILER-0001"]);
+}
+{
+ const neweggOnly=createCurrentDisplaySnapshot({observedAt:authAt,importedAt:authAt,source:{workbook:"fixture",sheet:"newegg-current-amazon-absent",digest:"f".repeat(64)},offers:[automatedNewegg]});
+ const projection=createPublicCurrentRetailProjection({products:[product],retailers:Object.values(retailers),destinations:Object.values(destinations),currentSnapshot:neweggOnly,asOf:"2026-09-19T17:08:00.000Z"});
+ eq(projection.products[0].offers.map(value=>value.retailerId),["RETAILER-0004"]);
+}
+{
+ const input={atlasProductId:product.identity.atlasProductId,destinationId:destinations["RETAILER-0004"].destinationId,itemPriceUsd:100,currency:"USD",availability:"AVAILABLE",observedAt:"2026-09-19T16:31:00.000Z",observedBy:"researcher",evidenceReference:"fixture:manual-conflict"};
+ const currentSnapshot={offers:[automatedNewegg]};
+ const assessment=assessManualCurrentPriceInput({input,product,retailer:retailers["RETAILER-0004"],destination:destinations["RETAILER-0004"],rightsProfile:rights.NEWEGG_MANUAL_PUBLISHER_OBSERVATION,preparedAt:authAt,currentSnapshot});
+ eq(assessment.eligible,false);ok(assessment.reasons.includes("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED"));eq(currentSnapshot.offers[0].sourceIdentity.sourceId,"RAKUTEN_NEWEGG_PRODUCT_CATALOG");eq(input.evidenceReference,"fixture:manual-conflict");
+}
+console.log(`Manual current-display snapshot execution tests passed: ${cases} cases.`);
