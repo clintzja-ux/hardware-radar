@@ -48,6 +48,33 @@ const profiles = Object.freeze({
     presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
     status: "BLOCKED_LEGACY_SOURCE"
   }),
+  NEWEGG_MANUAL_PUBLISHER_OBSERVATION: Object.freeze({
+    sourceId: "NEWEGG_MANUAL_PUBLISHER_OBSERVATION", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
+    acquisition: { api: RIGHTS_STATES.BLOCKED, manual: RIGHTS_STATES.ALLOWED, import: RIGHTS_STATES.BLOCKED },
+    processing: { ephemeral: RIGHTS_STATES.ALLOWED },
+    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.BLOCKED },
+    retention: { storageClass: "EPHEMERAL_CURRENT", contentTtlMs: 36 * HOUR, current: RIGHTS_STATES.ALLOWED, historical: RIGHTS_STATES.BLOCKED, durableAuditMetadata: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.BLOCKED, historicalAnalytics: RIGHTS_STATES.BLOCKED, recommendation: RIGHTS_STATES.BLOCKED },
+    distribution: { api: RIGHTS_STATES.BLOCKED },
+    presentation: { attribution: RIGHTS_STATES.NOT_APPLICABLE },
+    provenance: {
+      program: "RAKUTEN_ADVERTISING_NEWEGG_MANUAL_PUBLISHER_RESEARCH",
+      relationshipEvidence: "OPERATOR_APPROVED_NEWEGG_PUBLISHER_MANUAL_CURRENT_COMMERCE_2026_09_18",
+      references: [
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/9536059012621-Links-Overview",
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/9536045477261-Link-Types-Overview",
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/10623933503373-Product-Links",
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/360061672251-Deep-Links-Overview"
+      ],
+      retailerId: "RETAILER-0004",
+      marketplace: "newegg.com",
+      market: "US",
+      observationMode: "HUMAN_MANUAL_PUBLIC_PAGE",
+      scope: "NEWEGG_US_MANUAL_PUBLISHER_CURRENT_ITEM_PRICE",
+      unsupported: ["AUTOMATED_ACQUISITION", "HISTORICAL_RETENTION", "COMPARISON_WITH_UNKNOWN_CONDITION", "DERIVED_ANALYTICS", "RECOMMENDATION", "REDISTRIBUTION_API"]
+    },
+    status: "OPERATOR_APPROVED_MANUAL_PUBLISHER_CURRENT_COMMERCE_2026_09"
+  }),
   DATAFORSEO_GOOGLE_SHOPPING: Object.freeze({
     sourceId: "DATAFORSEO_GOOGLE_SHOPPING", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
     acquisition: { api: RIGHTS_STATES.ALLOWED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.BLOCKED },

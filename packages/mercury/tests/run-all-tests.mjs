@@ -258,6 +258,7 @@ const testModules = [
     ,"./RetailDisplayImport.test.mjs"
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
+    ,"./ManualCurrentPriceQualification.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"

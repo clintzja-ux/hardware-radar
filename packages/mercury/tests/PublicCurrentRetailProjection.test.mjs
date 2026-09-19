@@ -30,9 +30,9 @@ const destinations = [
     destination("c", "ram_laptop_one", "RETAILER-0004"),
     destination("d", "ram_held_one", "RETAILER-0001")
 ];
-const offer = ({ productId, retailerId, destinationId, price, observedAt, itemPriceEligible = true, availability = "AVAILABLE", condition = "NEW" }) => ({
+const offer = ({ productId, retailerId, destinationId, price, observedAt, itemPriceEligible = true, comparisonEligible = itemPriceEligible, availability = "AVAILABLE", condition = "NEW" }) => ({
     atlasProductId: productId, retailerId, destinationId, priceUsd: price, currency: "USD", observedAt,
-    itemPriceEligible, availability, condition, shippingUsd: null, feesUsd: null
+    itemPriceEligible, comparisonEligible, availability, condition, shippingUsd: null, feesUsd: null
 });
 const asOf = "2026-09-07T12:00:00.000Z";
 const source = {

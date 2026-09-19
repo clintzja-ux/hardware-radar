@@ -51,8 +51,8 @@ export function validateCurrentDisplaySnapshot(snapshot) {
         if (typeof offer.comparisonEligible !== "boolean" || !Array.isArray(offer.comparisonReasons) || offer.comparisonReasons.some(reason => !nonBlank(reason))) errors.push("CURRENT_DISPLAY_COMPARISON_INVALID");
         if (offer.comparisonEligible && offer.comparisonReasons.length) errors.push("CURRENT_DISPLAY_COMPARISON_CONTRADICTORY");
         if (offer.comparisonEligible && (offer.condition !== "NEW" || offer.availability !== "AVAILABLE")) errors.push("CURRENT_DISPLAY_COMPARISON_UNSUPPORTED");
-        if (extendedEligibilityPresent && offer.comparisonEligible !== offer.itemPriceEligible) errors.push("CURRENT_DISPLAY_ITEM_PRICE_COMPATIBILITY_INVALID");
-        if (offer.deliveredCostEligible && (offer.deliveredCostReasons.length || !offer.itemPriceEligible || !Number.isFinite(offer.shippingUsd) || offer.shippingUsd < 0 || !Number.isFinite(offer.feesUsd) || offer.feesUsd < 0)) errors.push("CURRENT_DISPLAY_DELIVERED_COST_UNSUPPORTED");
+        if (extendedEligibilityPresent && offer.comparisonEligible && !offer.itemPriceEligible) errors.push("CURRENT_DISPLAY_ITEM_PRICE_COMPATIBILITY_INVALID");
+        if (offer.deliveredCostEligible && (offer.deliveredCostReasons.length || !offer.comparisonEligible || !Number.isFinite(offer.shippingUsd) || offer.shippingUsd < 0 || !Number.isFinite(offer.feesUsd) || offer.feesUsd < 0)) errors.push("CURRENT_DISPLAY_DELIVERED_COST_UNSUPPORTED");
     }
     if (snapshot.snapshotId !== createCurrentDisplaySnapshotId(snapshot)) errors.push("CURRENT_DISPLAY_ID_INVALID");
     if (snapshot.materialFingerprint !== currentDisplaySnapshotFingerprint(snapshot)) errors.push("CURRENT_DISPLAY_FINGERPRINT_INVALID");

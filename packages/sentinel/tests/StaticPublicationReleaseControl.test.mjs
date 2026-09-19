@@ -21,7 +21,7 @@ const offer = {
   speedMtps: 6000, casLatency: 30, retailerId: "RETAILER-0001", retailerName: "Fixture Retailer",
   destinationId: "mer_dest_aaaaaaaaaaaaaaaaaaaaaaaa", destinationUrl: "https://retailer.example/fixture", itemPriceUsd: 100,
   currency: "USD", observedAt: "2026-09-18T11:00:00.000Z", ageHours: 1, freshness: "PUBLIC_CURRENT",
-  comparisonSemantics: "ITEM_PRICE", shippingUsd: null, feesUsd: null, taxesIncluded: false
+  comparisonSemantics: "ITEM_PRICE", comparisonEligible: true, shippingUsd: null, feesUsd: null, taxesIncluded: false
 };
 const artifact = {
   schemaVersion: "1.0", policyVersion: "PUBLIC-RAM-CURRENT-RETAIL-001-1.0", asOf: at, state: "AVAILABLE",

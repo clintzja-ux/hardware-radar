@@ -16,7 +16,7 @@ const freshnessKeys = Object.freeze(["maxAgeHours"]);
 const countKeys = Object.freeze(["sourceOffers", "publicCurrentEligibleOffers", "staleOffers"]);
 const winnerKeys = Object.freeze(["overall", "ddr5", "ddr4", "laptop"]);
 const productKeys = Object.freeze(["atlasProductId", "status", "lowerCurrentItemPrice", "eligibleOfferCount", "offers"]);
-const offerKeys = Object.freeze(["atlasProductId", "brand", "family", "series", "displayName", "ddrGeneration", "formFactor", "totalCapacityGb", "moduleCount", "capacityPerModuleGb", "speedMtps", "casLatency", "retailerId", "retailerName", "destinationId", "destinationUrl", "itemPriceUsd", "currency", "observedAt", "ageHours", "freshness", "comparisonSemantics", "shippingUsd", "feesUsd", "taxesIncluded"]);
+const offerKeys = Object.freeze(["atlasProductId", "brand", "family", "series", "displayName", "ddrGeneration", "formFactor", "totalCapacityGb", "moduleCount", "capacityPerModuleGb", "speedMtps", "casLatency", "retailerId", "retailerName", "destinationId", "destinationUrl", "itemPriceUsd", "currency", "observedAt", "ageHours", "freshness", "comparisonSemantics", "comparisonEligible", "shippingUsd", "feesUsd", "taxesIncluded"]);
 const forbidden = /providerTaskId|authorizationId|evidenceId|operatorNotes|rightsProfile|actualSpend|rawPayload|recovery|secret|credential/i;
 const validTime = value => typeof value === "string" && Number.isFinite(Date.parse(value));
 const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === keys.length && keys.every(key => Object.hasOwn(value, key));
@@ -123,7 +123,7 @@ function validateArtifactAt({ artifact, artifactText, evaluatedAt }) {
     if (!exactKeys(projection, projectionKeys) || !exactKeys(projection.freshness, freshnessKeys) || !exactKeys(projection.counts, countKeys) || !exactKeys(projection.winners, winnerKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");
     const projectedOffers = [];
     for (const product of projection.products ?? []) {
-      if (!exactKeys(product, productKeys) || !exactKeys(product.lowerCurrentItemPrice, offerKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");
+      if (!exactKeys(product, productKeys) || (product.lowerCurrentItemPrice !== null && !exactKeys(product.lowerCurrentItemPrice, offerKeys))) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");
       for (const offer of product.offers ?? []) { if (!exactKeys(offer, offerKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID"); projectedOffers.push(offer); }
     }
     for (const winner of Object.values(projection.winners ?? {})) if (winner !== null && !exactKeys(winner, offerKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");

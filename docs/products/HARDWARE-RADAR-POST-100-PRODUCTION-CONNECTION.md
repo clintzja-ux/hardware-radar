@@ -1,7 +1,7 @@
 # Hardware Radar — Post-100 Production Connection Plan
 
 **Status:** STATIC RELEASE CONTROL IMPLEMENTED / FIXTURE-CERTIFIED
-**Active gate:** `READY_FOR_READ_ONLY_PUBLICATION_CANARY_CANDIDATE_READINESS`
+**Active gate:** `MANUAL_NEWEGG_FIRST_CANARY_PREPARE_AND_INSPECT`
 **Baseline:** `100_PRODUCT_STAGE_COMPLETE`
 
 ## Purpose
@@ -51,7 +51,7 @@ Shortest future path: establish a fresh authorized current observation through t
 
 Newegg is canonical retailer `RETAILER-0004`, has broad reviewed destination coverage, and the checked-in current-retail artifact contains four formerly eligible offers. At the current date those observations are stale and cannot be reused as current prices. `IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001` establishes acquisition, ephemeral/current-state retention, public current-price display, and cross-retailer item-price comparison for the approved US Product Catalog path. `IC-RAKUTEN-NEWEGG-MAIN-FEED-SEMANTICS-001` separately confirms that available authority does not prove first-party seller, `NEW`, or standalone semantics for every bounded main-feed row. Feed-derived history, analytics, recommendation, redistribution, seller/condition inference, and publication authority remain fail closed. Rakuten parsing and deterministic source-local FULL/DELTA projection are certified; the next gate is affirmative source/program or exactly bound per-offer seller/condition evidence, not production refresh composition.
 
-Manual data is publishable only when its contract records exact product, offer, retailer and destination, observed item price/currency, observation time, source/provenance and operator attribution, availability, condition, shipping-knownness, marketplace/seller state, offer class/conditionality, applicable rights, freshness/expiry, and public eligibility. Missing values remain unknown; a destination is never an offer. Rakuten and Newegg therefore require source-specific rights plus a fresh governed observation before a canary. Rakuten/affiliate commerce data remains an input to the same qualification boundary and receives no preference from commercial status.
+The source-specific `NEWEGG_MANUAL_PUBLISHER_OBSERVATION` lane now permits a bounded human publisher observation to establish only a fresh factual item-price display when exact product/destination, positive USD price, explicit availability, observation time, rights, and private operator provenance are valid. Condition, seller, shipping, and fees remain unknown. Such an offer is not comparison-eligible and cannot become lower-price comparison or Cheapest. This manual lane is distinct from Product Catalog automation, creates no history, and grants no publication/release authority. Its zero-authority one-product PREPARE/INSPECT boundary is fixture-certified; no production preparation has run.
 
 ## Dependency decision
 

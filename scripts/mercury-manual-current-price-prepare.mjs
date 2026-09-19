@@ -1,0 +1,18 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import { ProductRepository, RetailerRepository } from "../packages/atlas/index.js";
+import { defaultSourceRightsRegistry } from "../packages/mercury/rights/SourceRightsRegistry.js";
+import { loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
+import { FileCurrentDisplaySnapshotRepository, FileManualCurrentPricePreparationRepository, prepareManualCurrentPriceObservation } from "../packages/mercury/current-display/index.js";
+
+const args=Object.fromEntries(process.argv.slice(2).map(value=>{const match=/^--([^=]+)=(.*)$/.exec(value);if(!match)throw new Error(`ARGUMENT_INVALID:${value}`);return[match[1],match[2]];}));
+if(!args.input||!args["prepared-at"])throw new Error("USAGE: --input=<json-file> --prepared-at=<iso-time>");
+const readJson=async resource=>JSON.parse(await readFile(resource,"utf8"));
+const products=new ProductRepository({readJson}),retailers=new RetailerRepository({readJson});
+const [allProducts,allRetailers,input]=await Promise.all([products.getAll(),retailers.getAll(),readJson(path.resolve(args.input))]);
+const source=await loadRetailerDestinationSource({sourcePath:path.resolve("packages/mercury/destinations/production-destinations.json"),products:allProducts,retailers:allRetailers});
+const product=allProducts.find(value=>value.identity.atlasProductId===input.atlasProductId),retailer=allRetailers.find(value=>value.id==="RETAILER-0004"),destination=source.effective.find(value=>value.destinationId===input.destinationId);
+const current=(await new FileCurrentDisplaySnapshotRepository({statePath:path.resolve(".forge-review/retail-display/current-display-snapshots.json")}).getState()).current;
+const preparation=prepareManualCurrentPriceObservation({input,product,retailer,destination,rightsProfile:defaultSourceRightsRegistry.require("NEWEGG_MANUAL_PUBLISHER_OBSERVATION"),preparedAt:args["prepared-at"],currentSnapshot:current});
+const result=await new FileManualCurrentPricePreparationRepository({filePath:path.resolve(".forge-review/retail-display/manual-current-price-preparations.json")}).record(preparation);
+console.log(JSON.stringify({status:result.status,preparationId:preparation.preparationId,authorizationState:preparation.authorizationState,itemPriceEligible:preparation.binding.itemPriceEligible,comparisonEligible:preparation.binding.comparisonEligible,networkOperation:preparation.networkOperation,paidTaskCreated:false,actualSpendUsd:0},null,2));

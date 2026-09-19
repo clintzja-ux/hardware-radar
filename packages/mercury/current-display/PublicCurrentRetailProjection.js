@@ -54,6 +54,7 @@ function publicOffer({ offer, product, retailer, destination, asOf }) {
         ageHours: Math.round(ageHours * 1000) / 1000,
         freshness: "PUBLIC_CURRENT",
         comparisonSemantics: "ITEM_PRICE",
+        comparisonEligible: offer.comparisonEligible === true,
         shippingUsd: null,
         feesUsd: null,
         taxesIncluded: false
@@ -105,15 +106,19 @@ export function createPublicCurrentRetailProjection({ products, retailers, desti
         if (!grouped.has(offer.atlasProductId)) grouped.set(offer.atlasProductId, []);
         grouped.get(offer.atlasProductId).push(offer);
     }
-    const publicProducts = [...grouped.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([atlasProductId, offers]) => ({
-        atlasProductId,
-        status: "CURRENT_PRICE_AVAILABLE",
-        lowerCurrentItemPrice: offers[0],
-        eligibleOfferCount: offers.length,
-        offers
-    }));
+    const publicProducts = [...grouped.entries()].sort(([left], [right]) => left.localeCompare(right)).map(([atlasProductId, offers]) => {
+        const comparable = offers.filter(offer => offer.comparisonEligible).sort(orderOffers);
+        return {
+            atlasProductId,
+            status: "CURRENT_PRICE_AVAILABLE",
+            lowerCurrentItemPrice: comparable[0] ?? null,
+            eligibleOfferCount: offers.length,
+            offers
+        };
+    });
+    const comparable = eligible.filter(offer => offer.comparisonEligible);
     const winners = {};
-    for (const scope of SCOPES) winners[scope] = eligible.filter(offer => scopeMatches(productById.get(offer.atlasProductId), scope)).sort(orderOffers)[0] ?? null;
+    for (const scope of SCOPES) winners[scope] = comparable.filter(offer => scopeMatches(productById.get(offer.atlasProductId), scope)).sort(orderOffers)[0] ?? null;
     const projection = {
         schemaVersion: PUBLIC_CURRENT_RETAIL_SCHEMA_VERSION,
         policyVersion: PUBLIC_CURRENT_RETAIL_POLICY.version,
@@ -142,21 +147,22 @@ export function validatePublicCurrentRetailProjection(projection) {
     if (!Array.isArray(projection.products) || !SCOPES.every(scope => scope in (projection.winners ?? {}))) errors.push("PUBLIC_CURRENT_RETAIL_CONTENT_INVALID");
     const allOffers = [];
     for (const product of projection.products ?? []) {
-        if (product?.status !== "CURRENT_PRICE_AVAILABLE" || product?.atlasProductId !== product?.lowerCurrentItemPrice?.atlasProductId || !Array.isArray(product?.offers) || product.offers.length !== product.eligibleOfferCount) errors.push("PUBLIC_CURRENT_RETAIL_PRODUCT_INVALID");
+        if (product?.status !== "CURRENT_PRICE_AVAILABLE" || (product.lowerCurrentItemPrice !== null && product?.atlasProductId !== product?.lowerCurrentItemPrice?.atlasProductId) || !Array.isArray(product?.offers) || product.offers.length !== product.eligibleOfferCount) errors.push("PUBLIC_CURRENT_RETAIL_PRODUCT_INVALID");
         allOffers.push(...(product.offers ?? []));
-        if (product.offers?.slice().sort(orderOffers)[0]?.destinationId !== product.lowerCurrentItemPrice?.destinationId) errors.push("PUBLIC_CURRENT_RETAIL_PRODUCT_WINNER_INVALID");
+        const comparable = product.offers?.filter(offer => offer.comparisonEligible).sort(orderOffers) ?? [];
+        if ((comparable[0]?.destinationId ?? null) !== (product.lowerCurrentItemPrice?.destinationId ?? null)) errors.push("PUBLIC_CURRENT_RETAIL_PRODUCT_WINNER_INVALID");
     }
     for (const offer of allOffers) {
         if (!/^ram_[a-z0-9_]+$/.test(offer?.atlasProductId ?? "") || !/^RETAILER-\d{4}$/.test(offer?.retailerId ?? "") || !/^mer_dest_[a-f0-9]{24}$/.test(offer?.destinationId ?? "")) errors.push("PUBLIC_CURRENT_RETAIL_IDENTITY_INVALID");
-        if (!Number.isFinite(offer?.itemPriceUsd) || offer.itemPriceUsd <= 0 || offer.currency !== "USD" || offer.comparisonSemantics !== "ITEM_PRICE") errors.push("PUBLIC_CURRENT_RETAIL_PRICE_INVALID");
+        if (!Number.isFinite(offer?.itemPriceUsd) || offer.itemPriceUsd <= 0 || offer.currency !== "USD" || offer.comparisonSemantics !== "ITEM_PRICE" || typeof offer.comparisonEligible !== "boolean") errors.push("PUBLIC_CURRENT_RETAIL_PRICE_INVALID");
         if (!validTime(offer?.observedAt) || offer?.freshness !== "PUBLIC_CURRENT" || offer?.ageHours < 0 || offer?.ageHours > 36) errors.push("PUBLIC_CURRENT_RETAIL_FRESHNESS_INVALID");
         if (offer?.shippingUsd !== null || offer?.feesUsd !== null || offer?.taxesIncluded !== false) errors.push("PUBLIC_CURRENT_RETAIL_UNKNOWN_COST_INVALID");
         try { if (new URL(offer.destinationUrl).protocol !== "https:") throw new Error(); } catch { errors.push("PUBLIC_CURRENT_RETAIL_DESTINATION_INVALID"); }
     }
     for (const scope of SCOPES) {
         const winner = projection.winners?.[scope];
-        const candidates = allOffers.filter(offer => scope === "overall"
-            || (scope === "laptop" ? offer.formFactor === "SO_DIMM" : offer.ddrGeneration.toLowerCase() === scope && offer.formFactor === "DIMM")).sort(orderOffers);
+        const candidates = allOffers.filter(offer => offer.comparisonEligible && (scope === "overall"
+            || (scope === "laptop" ? offer.formFactor === "SO_DIMM" : offer.ddrGeneration.toLowerCase() === scope && offer.formFactor === "DIMM"))).sort(orderOffers);
         if ((winner?.destinationId ?? null) !== (candidates[0]?.destinationId ?? null)) errors.push("PUBLIC_CURRENT_RETAIL_SCOPE_WINNER_INVALID");
     }
     const serialized = JSON.stringify(projection);
