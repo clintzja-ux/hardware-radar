@@ -54,6 +54,8 @@ The accepted ownership direction remains:
 
 The fixed supervised 100-product RAM operational stage is complete. The active post-100 consumer-production plan is [HARDWARE-RADAR-POST-100-PRODUCTION-CONNECTION.md](./HARDWARE-RADAR-POST-100-PRODUCTION-CONNECTION.md): the certified static publication release control is implemented and defaults `OFF`; the next gate is a separate read-only candidate-readiness assessment. Publication and deployment approvals remain separate, and Beacon/Gateway may connect only through their existing authority boundaries. This transition does not authorize live data, analytics transport, deployment, or the next Atlas scale stage.
 
+Current-display publication now has a certified product-scoped candidate and authorization boundary. Current state is not publication authority, and publication authority is not release authority. The same public contract accepts qualified manual or automated source lanes while preserving internal provenance.
+
 This doctrine does not redesign those boundaries or claim that future subsystems are currently implemented.
 
 ## 2. Vision versus MVP scope

@@ -1,6 +1,7 @@
 import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createStaticPublicationReleaseManifest } from "../packages/sentinel/validators/StaticPublicationReleaseControl.js";
+import { FileCurrentDisplayPublicationRepository } from "../packages/mercury/publication/persistence/FileCurrentDisplayPublicationRepository.js";
 
 const args = Object.fromEntries(process.argv.slice(2).filter(value => value.startsWith("--") && value.includes("=")).map(value => value.slice(2).split(/=(.*)/s).slice(0, 2)));
 const state = (args.state ?? "").toUpperCase();
@@ -9,12 +10,14 @@ if (args.confirmation !== confirmation) throw new Error(`STATIC_RELEASE_EXPLICIT
 const output = path.resolve(args.output ?? "config/publication-release.json");
 const createdAt = args["created-at"] ?? new Date().toISOString();
 let artifactText = null;
+let currentDisplayAuthorization = null;
 let artifactRelativePath = null;
 let sourceArtifact = null;
 if (state === "ON") {
   sourceArtifact = path.resolve(args.artifact ?? "");
   artifactText = await readFile(sourceArtifact, "utf8");
   artifactRelativePath = `artifacts/${path.basename(sourceArtifact)}`;
+  if (/^mer_displaypubauth_/.test(args["authority-reference"] ?? "")) currentDisplayAuthorization = await new FileCurrentDisplayPublicationRepository({ statePath: path.resolve(args["current-display-publication-state"] ?? ".forge-review/retail-display/current-display-publication.json") }).getAuthorization(args["authority-reference"]);
 }
 const manifest = createStaticPublicationReleaseManifest({
   releaseState: state,
@@ -26,6 +29,7 @@ const manifest = createStaticPublicationReleaseManifest({
   artifactText,
   expiresAt: args["expires-at"] ?? null,
   authorityReference: args["authority-reference"] ?? null,
+  currentDisplayAuthorization,
   previousReleaseId: args["previous-release-id"] ?? null
 });
 await mkdir(path.dirname(output), { recursive: true });

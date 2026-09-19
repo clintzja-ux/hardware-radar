@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { validatePublicCurrentRetailProjection } from "../../mercury/current-display/PublicCurrentRetailProjection.js";
+import { verifyCurrentDisplayArtifactAuthority } from "../../mercury/publication/CurrentDisplayPublication.js";
 
 export const STATIC_PUBLICATION_RELEASE_SCHEMA_VERSION = "1.0";
 export const STATIC_PUBLICATION_RELEASE_POLICY_VERSION = "CERTIFIED-STATIC-PUBLICATION-RELEASE-CONTROL-P1-1.0";
@@ -33,7 +34,7 @@ export function staticPublicationCertificationBindingDigest({ artifact, targetEn
   return createHash("sha256").update(JSON.stringify({ artifact, targetEnvironment, targetSurface }), "utf8").digest("hex");
 }
 
-export function createStaticPublicationReleaseManifest({ releaseState, targetEnvironment, reason, reviewedBy, createdAt, artifactRelativePath = null, artifactText = null, expiresAt = null, authorityReference = null, previousReleaseId = null } = {}) {
+export function createStaticPublicationReleaseManifest({ releaseState, targetEnvironment, reason, reviewedBy, createdAt, artifactRelativePath = null, artifactText = null, expiresAt = null, authorityReference = null, currentDisplayAuthorization = null, previousReleaseId = null } = {}) {
   if (!STATIC_PUBLICATION_RELEASE_STATES.includes(releaseState)) throw new TypeError("STATIC_RELEASE_STATE_INVALID");
   let artifact = null;
   let certification = null;
@@ -49,11 +50,14 @@ export function createStaticPublicationReleaseManifest({ releaseState, targetEnv
       evaluatedAt: projection.asOf,
       expiresAt
     };
+    const currentDisplayAuthority = currentDisplayAuthorization !== null;
+    if (currentDisplayAuthority && (authorityReference !== currentDisplayAuthorization.authorizationId || !verifyCurrentDisplayArtifactAuthority({ authorization: currentDisplayAuthorization, artifactProjection: projection, evaluatedAt: createdAt }))) throw new TypeError("STATIC_RELEASE_CURRENT_DISPLAY_AUTHORITY_INVALID");
+    if (!currentDisplayAuthority && /^mer_displaypubauth_/.test(authorityReference ?? "")) throw new TypeError("STATIC_RELEASE_CURRENT_DISPLAY_AUTHORITY_UNVERIFIED");
     certification = {
       state: "CERTIFIED",
       certifiedBy: reviewedBy,
       certifiedAt: createdAt,
-      authorityType: "PUBLICATION_AUTHORIZED_ARTIFACT",
+      authorityType: currentDisplayAuthority ? "CURRENT_DISPLAY_PUBLICATION_AUTHORIZATION" : "PUBLICATION_AUTHORIZED_ARTIFACT",
       authorityReference,
       bindingDigest: staticPublicationCertificationBindingDigest({ artifact, targetEnvironment, targetSurface: STATIC_PUBLICATION_RELEASE_SURFACE })
     };
@@ -103,7 +107,8 @@ export function validateStaticPublicationReleaseManifest(manifest) {
     if (!exactKeys(manifest.certification, certificationKeys)) errors.push("STATIC_RELEASE_CERTIFICATION_INVALID");
     else {
       if (manifest.certification.state !== "CERTIFIED" || !nonEmpty(manifest.certification.certifiedBy) || !validTime(manifest.certification.certifiedAt)) errors.push("STATIC_RELEASE_CERTIFICATION_INVALID");
-      if (manifest.certification.authorityType !== "PUBLICATION_AUTHORIZED_ARTIFACT" || !nonEmpty(manifest.certification.authorityReference) || !/^[a-f0-9]{64}$/.test(manifest.certification.bindingDigest ?? "")) errors.push("STATIC_RELEASE_AUTHORITY_BINDING_INVALID");
+      if (!["PUBLICATION_AUTHORIZED_ARTIFACT","CURRENT_DISPLAY_PUBLICATION_AUTHORIZATION"].includes(manifest.certification.authorityType) || !nonEmpty(manifest.certification.authorityReference) || !/^[a-f0-9]{64}$/.test(manifest.certification.bindingDigest ?? "")) errors.push("STATIC_RELEASE_AUTHORITY_BINDING_INVALID");
+      if (manifest.certification.authorityType === "CURRENT_DISPLAY_PUBLICATION_AUTHORIZATION" && !/^mer_displaypubauth_[a-f0-9]{24}$/.test(manifest.certification.authorityReference)) errors.push("STATIC_RELEASE_CURRENT_DISPLAY_AUTHORITY_INVALID");
       if (manifest.artifact && manifest.certification.bindingDigest !== staticPublicationCertificationBindingDigest({ artifact: manifest.artifact, targetEnvironment: manifest.targetEnvironment, targetSurface: manifest.targetSurface })) errors.push("STATIC_RELEASE_AUTHORITY_BINDING_INVALID");
     }
   }

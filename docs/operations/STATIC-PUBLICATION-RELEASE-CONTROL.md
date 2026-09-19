@@ -10,6 +10,8 @@ npm run publication:release:inspect -- --environment=PREVIEW --evaluated-at=<ISO
 
 Omitting `--manifest` inspects `config/publication-release.json`. An absent manifest reports `OFF`. Use `--manifest=<path>` to inspect a review artifact without changing repository configuration.
 
+For current-display artifacts, `--authority-reference` must identify a persisted, verifiable `CURRENT_DISPLAY_PUBLICATION_AUTHORIZATION`; a free-form lookalike is rejected. Existing unrelated certified authority types remain supported. Publication authorization does not itself enable release.
+
 ## Prepare OFF
 
 ```text
