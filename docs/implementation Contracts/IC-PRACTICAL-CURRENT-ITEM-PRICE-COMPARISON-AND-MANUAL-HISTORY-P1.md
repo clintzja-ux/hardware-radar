@@ -19,3 +19,9 @@ Manual current freshness expiry removes current-display eligibility but does not
 `CurrentDisplayEligibility` owns bounded item-price eligibility. `SourceRightsRegistry` owns source rights. `ManualCurrentPricePreparation` owns immutable manual evidence preparation. `ManualCurrentPriceHistoryService` adapts that evidence into the existing historical contract; it owns no new repository or policy hierarchy. Production S2 and all durable history remain unchanged by fixture certification.
 
 The next gate is `REAL_MANUAL_CANARY_COMPARISON_AND_HISTORY_RECONCILIATION`: read-only comparison proof first, followed only by separately reviewed history admission authority. No publication or release is implied.
+
+## Prior-rights lineage compatibility
+
+`MANUAL_HISTORY_PRIOR_RIGHTS_LINEAGE_COMPATIBILITY_P1` separates immutable original-rights lineage from current action authority. A prior preparation remains usable only when its binding is intact, its original source profile and digest are reconstructable from the versioned rights registry, source/product/retailer/destination/commerce facts remain continuous, and the current profile explicitly permits manual historical retention and historical analytics. Whole-profile digest equality across time is not required.
+
+The historical record preserves both `originalPreparationRightsDigest` and `admissionRightsProfileDigest`. Rights policy evolution does not require rewriting immutable evidence, and current permission does not retroactively validate unknown or corrupted evidence. Current freshness and destination actionability are not historical-fact requirements; the original observation time and exact destination-at-observation lineage remain preserved. Observation identity continues to derive from the preparation ID, so rights evolution cannot duplicate market history.

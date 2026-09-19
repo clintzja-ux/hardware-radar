@@ -11,6 +11,8 @@ Make source rights a first-class Mercury policy so the platform knows not only w
 
 > Anything not explicitly permitted is not implicitly permitted.
 
+Rights evaluation distinguishes **original evidence lineage** from **current action authority**. A consuming action may use verified prior evidence after legitimate policy evolution only when the original profile/digest remains reconstructable and the current profile explicitly permits that claim-specific action. The original digest is never rewritten; the current authorizing digest is recorded separately. Current permission cannot legitimize unverifiable evidence, and unrelated profile changes do not block an otherwise authorized action merely because the whole profile digest changed.
+
 ## Implemented components
 
 - `SourceRightsPolicy` — canonical rights states and capability names.

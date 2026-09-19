@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { defaultSourceRightsRegistry } from "../rights/SourceRightsRegistry.js";
+import { defaultSourceRightsRegistry, SourceRightsRegistry, sourceRightsProfileDigest } from "../rights/SourceRightsRegistry.js";
 import { createRetailerDestination } from "../destinations/RetailerDestination.js";
-import { prepareManualCurrentPriceObservation } from "../current-display/ManualCurrentPricePreparation.js";
+import { manualCurrentPriceDigest, prepareManualCurrentPriceObservation } from "../current-display/ManualCurrentPricePreparation.js";
 import { assessManualCurrentPriceHistoricalEligibility, createManualCurrentPriceHistoricalObservation, ManualCurrentPriceHistoryService } from "../current-display/ManualCurrentPriceHistory.js";
 import { FileHistoricalObservationRepository } from "../historical-admission/persistence/FileHistoricalObservationRepository.js";
 
@@ -23,4 +23,20 @@ const later=prepareManualCurrentPriceObservation({input:{...preparation.binding,
 assert.notEqual(later.preparationId,preparation.preparationId);cases++;
 const blockedRights=structuredClone(rights);blockedRights.retention.historical="BLOCKED";eq(assessManualCurrentPriceHistoricalEligibility({preparation,product,retailer,destination,rightsProfile:blockedRights}).eligible,false);
 const bundled=structuredClone(destination);bundled.binding.scope="BUNDLE";eq(assessManualCurrentPriceHistoricalEligibility({preparation,product,retailer,destination:bundled,rightsProfile:rights}).eligible,false);
+
+// Rights-policy evolution preserves original lineage while current claim-specific authority governs admission.
+const original=defaultSourceRightsRegistry.verifyLineage("AMAZON_MANUAL_PUBLISHER_OBSERVATION","4f28476c3868ee7b4da9508eab850461a6986de0e001226669001db18bd11522").profile;
+const legacyBinding={...structuredClone(preparation.binding),sourceRightsProfileDigest:sourceRightsProfileDigest(original),observedAt:"2025-01-01T00:00:00.000Z"};
+const legacyPreparation={...structuredClone(preparation),preparationId:"mer_manualpriceprep_111111111111111111111111",binding:legacyBinding,bindingDigest:manualCurrentPriceDigest(legacyBinding)};
+const lineage=defaultSourceRightsRegistry.verifyLineage(legacyBinding.sourceId,legacyBinding.sourceRightsProfileDigest);
+const evolved=assessManualCurrentPriceHistoricalEligibility({preparation:legacyPreparation,product,retailer,destination,rightsProfile:rights,originalRightsLineage:lineage});ok(evolved.eligible);eq(evolved.originalRightsLineageState,"HISTORICAL_PROFILE");eq(evolved.originalPreparationRightsDigest,legacyBinding.sourceRightsProfileDigest);eq(evolved.admissionRightsProfileDigest,sourceRightsProfileDigest(rights));
+const evolvedRecord=createManualCurrentPriceHistoricalObservation({preparation:legacyPreparation,product,retailer,destination,rightsProfile:rights,originalRightsLineage:lineage,admittedAt:at,admittedBy:"operator"});eq(evolvedRecord.observationTime,legacyBinding.observedAt);eq(evolvedRecord.admittedAt,at);eq(evolvedRecord.provenance.acquisition.originalPreparationRightsDigest,legacyBinding.sourceRightsProfileDigest);eq(evolvedRecord.provenance.acquisition.admissionRightsProfileDigest,sourceRightsProfileDigest(rights));
+const revoked=structuredClone(rights);revoked.retention.historical="BLOCKED";eq(assessManualCurrentPriceHistoricalEligibility({preparation:legacyPreparation,product,retailer,destination,rightsProfile:revoked,originalRightsLineage:lineage}).reasons.includes("CURRENT_HISTORY_RIGHT_NOT_ALLOWED"),true);
+eq(assessManualCurrentPriceHistoricalEligibility({preparation:legacyPreparation,product,retailer,destination,rightsProfile:rights,originalRightsLineage:{verified:false,state:"UNVERIFIABLE"}}).reasons.includes("ORIGINAL_RIGHTS_LINEAGE_UNVERIFIABLE"),true);
+const otherSource=structuredClone(rights);otherSource.sourceId="OTHER_SOURCE";eq(assessManualCurrentPriceHistoricalEligibility({preparation:legacyPreparation,product,retailer,destination,rightsProfile:otherSource,originalRightsLineage:lineage}).reasons.includes("SOURCE_IDENTITY_MISMATCH"),true);
+const unrelated=structuredClone(rights);unrelated.presentation.attribution="CONDITIONAL";ok(assessManualCurrentPriceHistoricalEligibility({preparation:legacyPreparation,product,retailer,destination,rightsProfile:unrelated,originalRightsLineage:lineage}).eligible);
+const unrelatedRecord=createManualCurrentPriceHistoricalObservation({preparation:legacyPreparation,product,retailer,destination,rightsProfile:unrelated,originalRightsLineage:lineage,admittedAt:at,admittedBy:"operator"});eq(unrelatedRecord.observationId,evolvedRecord.observationId);
+const comparisonBlocked=structuredClone(rights);comparisonBlocked.live.comparison="BLOCKED";ok(assessManualCurrentPriceHistoricalEligibility({preparation:legacyPreparation,product,retailer,destination,rightsProfile:comparisonBlocked,originalRightsLineage:lineage}).eligible);
+const inactiveDestination=structuredClone(destination);inactiveDestination.status="INACTIVE";ok(assessManualCurrentPriceHistoricalEligibility({preparation:legacyPreparation,product,retailer,destination:inactiveDestination,rightsProfile:rights,originalRightsLineage:lineage}).eligible);
+const noHistoryRegistry=new SourceRightsRegistry({sourceProfiles:{[rights.sourceId]:revoked},historicalSourceProfiles:[original]});eq(noHistoryRegistry.verifyLineage(legacyBinding.sourceId,legacyBinding.sourceRightsProfileDigest).verified,true);
 console.log(`Manual current-price history tests passed: ${cases} cases.`);
