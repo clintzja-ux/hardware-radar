@@ -41,6 +41,8 @@ Static versus runtime publication is a delivery and release-control decision, no
 
 `CURRENT_DISPLAY_PUBLICATION_CANDIDATE_AUTHORIZATION_P1` bridges canonical current state to a one-product, claim-specific candidate and separate authorization. It revalidates freshness, rights, destinations, source conflict, and exact facts without consuming history. Lower item-price ordering is legitimate for comparison-eligible offers; it is not a delivered-cost or recommendation claim. Authorization permits later artifact composition but never release.
 
+`AUTHORIZED_CURRENT_DISPLAY_ARTIFACT_BOUNDARY_P1` supplies that composition as a distinct immutable materialize/inspect lifecycle. It reuses the authorized projection and existing product-page renderer, binds exact lineage and rendered-file digests, consumes authority only after successful verification, and permits deterministic exact replay. The artifact remains local and non-live until a separate release PREPARE and deployment decision.
+
 Every current-display candidate must pass the applicable source-specific identity, offer binding, rights, freshness, condition, availability, standalone/bundle and conditional-offer comparability, destination, marketplace/seller, shipping-knownness, conflict, and current-market policies. Unknown shipping is not zero. Source-specific freshness and expiry remain controlling; the existing 36-hour public current-retail ceiling does not create a universal acquisition TTL. Conflicting source observations remain separately provenanced governed conflict state rather than being silently combined or preferred for convenience. No raw provider or feed row may bypass qualification.
 
 ## Readiness by source

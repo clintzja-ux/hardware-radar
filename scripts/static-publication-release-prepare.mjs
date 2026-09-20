@@ -2,6 +2,8 @@ import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createStaticPublicationReleaseManifest } from "../packages/sentinel/validators/StaticPublicationReleaseControl.js";
 import { FileCurrentDisplayPublicationRepository } from "../packages/mercury/publication/persistence/FileCurrentDisplayPublicationRepository.js";
+import { FileCurrentDisplayPublicationArtifactRepository } from "../packages/mercury/publication/persistence/FileCurrentDisplayPublicationArtifactRepository.js";
+import { verifyCurrentDisplayPublicationArtifact } from "../packages/mercury/publication/CurrentDisplayPublicationArtifact.js";
 
 const args = Object.fromEntries(process.argv.slice(2).filter(value => value.startsWith("--") && value.includes("=")).map(value => value.slice(2).split(/=(.*)/s).slice(0, 2)));
 const state = (args.state ?? "").toUpperCase();
@@ -14,10 +16,14 @@ let currentDisplayAuthorization = null;
 let artifactRelativePath = null;
 let sourceArtifact = null;
 if (state === "ON") {
-  sourceArtifact = path.resolve(args.artifact ?? "");
-  artifactText = await readFile(sourceArtifact, "utf8");
-  artifactRelativePath = `artifacts/${path.basename(sourceArtifact)}`;
-  if (/^mer_displaypubauth_/.test(args["authority-reference"] ?? "")) currentDisplayAuthorization = await new FileCurrentDisplayPublicationRepository({ statePath: path.resolve(args["current-display-publication-state"] ?? ".forge-review/retail-display/current-display-publication.json") }).getAuthorization(args["authority-reference"]);
+  if (/^mer_displaypubauth_/.test(args["authority-reference"] ?? "")) {
+    if (!/^mer_displaypubart_[a-f0-9]{24}$/.test(args["artifact-id"] ?? "")) throw new Error("STATIC_RELEASE_CERTIFIED_ARTIFACT_ID_REQUIRED");
+    const publications = new FileCurrentDisplayPublicationRepository({ statePath: path.resolve(args["current-display-publication-state"] ?? ".forge-review/retail-display/current-display-publication.json") });
+    const artifacts = new FileCurrentDisplayPublicationArtifactRepository({ statePath: path.resolve(args["current-display-artifact-state"] ?? ".forge-review/retail-display/current-display-publication-artifacts.json") });
+    currentDisplayAuthorization = await publications.getAuthorization(args["authority-reference"]);const candidate=await publications.getCandidate(currentDisplayAuthorization?.binding?.candidateId),artifact=await artifacts.getArtifact(args["artifact-id"]);
+    if(!artifact||artifact.authorization.authorizationId!==args["authority-reference"]||!verifyCurrentDisplayPublicationArtifact({artifact,authorization:currentDisplayAuthorization,candidate,evaluatedAt:createdAt}))throw new Error("STATIC_RELEASE_CERTIFIED_ARTIFACT_INVALID");
+    artifactText=artifact.content.projectionText;sourceArtifact=null;artifactRelativePath=`artifacts/${artifact.artifactId}.json`;
+  } else {sourceArtifact = path.resolve(args.artifact ?? "");artifactText = await readFile(sourceArtifact, "utf8");artifactRelativePath = `artifacts/${path.basename(sourceArtifact)}`;}
 }
 const manifest = createStaticPublicationReleaseManifest({
   releaseState: state,
@@ -35,7 +41,7 @@ const manifest = createStaticPublicationReleaseManifest({
 await mkdir(path.dirname(output), { recursive: true });
 if (state === "ON") {
   await mkdir(path.join(path.dirname(output), "artifacts"), { recursive: true });
-  await copyFile(sourceArtifact, path.join(path.dirname(output), artifactRelativePath));
+  if(sourceArtifact) await copyFile(sourceArtifact, path.join(path.dirname(output), artifactRelativePath)); else await writeFile(path.join(path.dirname(output), artifactRelativePath),artifactText,"utf8");
 }
 await writeFile(output, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 console.log(JSON.stringify({ status: "STATIC_RELEASE_PREPARED", output, releaseId: manifest.releaseId, releaseState: manifest.releaseState, targetEnvironment: manifest.targetEnvironment, artifactId: manifest.artifact?.artifactId ?? null, artifactDigest: manifest.artifact?.digestSha256 ?? null, providerCalls: 0, paidTasks: 0, actualSpendUsd: 0 }, null, 2));

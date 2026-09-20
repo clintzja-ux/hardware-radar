@@ -6,7 +6,7 @@ Mercury composes one product-scoped `CURRENT_ITEM_PRICE_COMPARISON` candidate fr
 
 Candidate preparation grants no authority. A separate single-use authorization re-derives the current projection and revalidates snapshot, price facts, freshness, rights, eligibility, and destinations. Drift or expiry requires reprepare. Unknown condition, seller, shipping, tax, and fees stay unknown and do not block a bounded item-price claim; known incompatible offers remain excluded. Acquisition mode is provenance, not a public-schema distinction.
 
-The existing static artifact/release owner accepts `CURRENT_DISPLAY_PUBLICATION_AUTHORIZATION` only when the exact authorization verifies the artifact facts. A free-form value shaped like a current-display authorization ID is rejected. Legacy certified authority types remain compatible. Publication authority permits artifact composition only; release and deployment remain separate.
+The separate authorized-artifact owner accepts `CURRENT_DISPLAY_PUBLICATION_AUTHORIZATION` only when the exact authorization verifies the artifact facts. Release PREPARE then accepts current-display authority only through that persisted verified artifact; a free-form file or lookalike authorization ID is rejected. Legacy certified authority types remain compatible. Publication authority permits artifact composition only; release and deployment remain separate.
 
 Commands:
 
@@ -17,4 +17,4 @@ npm run publication:current-display:authorize -- --candidate-id=<id> --authorize
 npm run publication:current-display:authorization:inspect -- --authorization-id=<id>
 ```
 
-No real candidate, authorization, artifact, release, provider operation, or spend was created by certification.
+Certification created no real state. Subsequent governed operations created the real candidate and authorization recorded in `CURRENT-STATE`; artifact materialization remains separately gated.

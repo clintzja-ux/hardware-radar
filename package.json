@@ -43,6 +43,8 @@
     "publication:current-display:inspect": "node scripts/mercury-current-display-publication-inspect.mjs",
     "publication:current-display:authorize": "node scripts/mercury-current-display-publication-authorize.mjs",
     "publication:current-display:authorization:inspect": "node scripts/mercury-current-display-publication-authorization-inspect.mjs",
+    "publication:current-display:artifact:build": "node scripts/mercury-current-display-artifact-build.mjs",
+    "publication:current-display:artifact:inspect": "node scripts/mercury-current-display-artifact-inspect.mjs",
     "curated-offer:prepare": "node scripts/mercury-curated-ram-offer-prepare.mjs",
     "curated-offer:execute": "node scripts/mercury-curated-ram-offer-execute.mjs",
     "market:current:qualify": "node scripts/mercury-current-market-qualify.mjs",
