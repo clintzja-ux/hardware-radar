@@ -15,5 +15,6 @@ export class FileManualCurrentPriceSnapshotExecutionRepository {
   async getAuthorization(id) { const value=(await this.#read()).authorizations.find(row=>row.authorizationId===id);if(!value)throw new Error("MANUAL_CURRENT_DISPLAY_AUTHORIZATION_NOT_FOUND");return freeze(structuredClone(value)); }
   async getExecutionByAuthorization(id) { const value=(await this.#read()).executions.find(row=>row.authorizationId===id);return value?freeze(structuredClone(value)):null; }
   async findForPreparation(preparationId) { const state=await this.#read(),authorizations=state.authorizations.filter(row=>row.binding.preparationId===preparationId),ids=new Set(state.executions.map(row=>row.authorizationId));return freeze({authorizations:structuredClone(authorizations),executionAuthorizationIds:[...ids],executed:state.executions.some(row=>row.preparationId===preparationId)}); }
+  async getExecutionByPreparation(preparationId) { const value=(await this.#read()).executions.find(row=>row.preparationId===preparationId);return value?freeze(structuredClone(value)):null; }
   async getState() { return freeze(structuredClone(await this.#read())); }
 }

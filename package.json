@@ -173,6 +173,7 @@
     "retail-current:manual:authorization:inspect": "node scripts/mercury-manual-current-price-authorization-inspect.mjs",
     "retail-current:manual:execute": "node scripts/mercury-manual-current-price-execute.mjs",
     "retail-current:manual:execution:inspect": "node scripts/mercury-manual-current-price-execution-inspect.mjs",
+    "retail-current:manual:process": "node scripts/mercury-routine-manual-current-price-process.mjs",
     "retail-lifecycle-held:reassess": "node scripts/retail-lifecycle-held-reassess.mjs",
     "rakuten:sftp:inspect": "node --env-file=.env scripts/rakuten-sftp-transport.mjs --operation=inspect",
     "rakuten:sftp:download:delta": "node --env-file=.env scripts/rakuten-sftp-transport.mjs --operation=download-delta",

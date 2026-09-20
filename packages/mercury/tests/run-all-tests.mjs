@@ -263,6 +263,7 @@ const testModules = [
     ,"./ManualCurrentPriceWorkbookComposition.test.mjs"
     ,"./ManualCurrentPriceSnapshotExecution.test.mjs"
     ,"./ManualCurrentPriceHistory.test.mjs"
+    ,"./RoutineManualCurrentPriceProcessing.test.mjs"
     ,"./CurrentDisplayPublication.test.mjs"
     ,"./CurrentDisplayPublicationArtifact.test.mjs"
     ,"./PracticalCurrentItemPriceComparison.test.mjs"

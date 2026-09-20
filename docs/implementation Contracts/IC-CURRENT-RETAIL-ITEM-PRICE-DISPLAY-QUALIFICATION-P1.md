@@ -33,6 +33,20 @@ Workbook observation instants are composed from the separately retained observat
 
 Operator attribution and evidence notes remain in the private preparation repository and are prohibited from the sanitized public projection. Snapshot mutation is separately governed by `IC-MANUAL-CURRENT-DISPLAY-SNAPSHOT-EXECUTION-COMPOSITION-P1`; PREPARE itself remains zero-authority.
 
+## Routine progression and exception review
+
+`Ready = YES` plus complete reviewed operator evidence is the operator's submission for routine processing; it is not authority to bypass validation. `RoutineManualCurrentPriceProcessingService` revalidates the immutable preparation against current Atlas lifecycle, retailer and destination state, rights, freshness, source conflict, item-price eligibility, and the existing manual-history boundary. A routine-valid preparation may then use the existing snapshot authorization/execution records as machine-created audit lineage without requiring a second per-record human authorization ceremony. No new authority type or policy owner is introduced.
+
+Current-state and history outcomes remain independent. A stale observation may remain history-eligible, and an unresolved current-source conflict may preserve an independently eligible historical fact while withholding current-state mutation. Missing submission/review evidence, changed bindings, incompatibility, invalid rights, or other exceptional conditions remain fail-closed for governed human review. Routine processing never grants publication, artifact, release, deployment, Current Price, delivered-cost Cheapest, Pick, or recommendation authority.
+
+The bounded routine command accepts only existing preparation IDs and an explicit processing instant:
+
+```text
+npm run retail-current:manual:process -- --preparation-id=<mer_manualpriceprep_...> [--preparation-id=<mer_manualpriceprep_...>] --processed-at=<ISO-8601> [--processed-by=<operator>]
+```
+
+It processes members sequentially, isolates member-local exceptions, supports deterministic replay, and reports current, history, comparison, and exception outcomes. It performs no provider acquisition or paid work. Existing explicit authorization commands remain available for exceptional or deliberately supervised processing; routine progression does not weaken them.
+
 ## Dual-retailer research workbook
 
 The checkpointed operator workbook `hardware-radar-amazon-newegg-manual-price-research.xlsx` contains all 103 canonical Atlas RAM products once, with visibly separate Newegg and Amazon reference/research groups. Canonical reviewed destinations take precedence as reference data; a canonical/legacy disagreement is explicitly `DESTINATION_REVIEW_REQUIRED`. Prices start blank. Availability, shipping, condition, seller, observation time, notes, reviewer, and ready controls remain independent per retailer, and both ready controls default `NO`.
@@ -45,4 +59,4 @@ The workbook adapter selects exactly one product plus one retailer. Either retai
 
 ## Certification
 
-Fixtures cover bounded display/comparison for both manual retailer lanes, rights separation, freshness, identity/destination binding, invalid input, conflict rejection, deterministic preparation/replay, private provenance, snapshot compatibility, null costs, repository restart, dual-retailer field independence, blank prices, independent ready controls, exact one-product/one-retailer selection, cross-retailer destination isolation, identity preservation, missing-link preparation, routing-link independence from price observations, canonical/affiliate URL round-trip separation, conflicting routing bindings, workbook-file parsing, Excel date/time normalization, `America/Jamaica`, shared attribution, retailer overrides, missing-attribution failure, synthetic workbook-to-PREPARE/INSPECT persistence, and Amazon/Newegg preparation independence. The first two production preparations were consumed by the already recorded S2 executions. This P1 changes no production snapshot or history.
+Fixtures cover bounded display/comparison for both manual retailer lanes, rights separation, freshness, identity/destination binding, invalid input, conflict rejection, deterministic preparation/replay, private provenance, snapshot compatibility, null costs, repository restart, dual-retailer field independence, blank prices, independent ready controls, exact one-product/one-retailer selection, cross-retailer destination isolation, identity preservation, missing-link preparation, routing-link independence from price observations, canonical/affiliate URL round-trip separation, conflicting routing bindings, workbook-file parsing, Excel date/time normalization, `America/Jamaica`, shared attribution, retailer overrides, missing-attribution failure, synthetic workbook-to-PREPARE/INSPECT persistence, Amazon/Newegg preparation independence, routine six-member processing, replay, mixed retailer combinations, stale-current/history admission, source-conflict/history independence, malformed or unsubmitted exceptions, duplicate cohort inputs, and bounded partial success. The first two production preparations were consumed by the already recorded S2 executions. The six later production preparations are read-only assessed as routine-ready and remain unprocessed; this P1 changes no production snapshot or history.

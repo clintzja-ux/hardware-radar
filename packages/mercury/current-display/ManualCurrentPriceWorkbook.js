@@ -125,6 +125,6 @@ export function selectManualCurrentPriceWorkbookObservation({ row, retailer } = 
     retailer,atlasProductId:normalized.atlasProductId,destinationId:reference.destinationId,itemPriceUsd:observation.itemPriceUsd,currency:observation.currency,availability:observation.availability,
     condition,shippingUsd,seller,researchUrl:reference.url,observedAt:observation.observedAt,observedBy,
     evidenceReference:`manual-workbook:${normalized.atlasProductId}:${key}:${observation.observedAt}`,evidenceNotes:observation.evidenceNotes,
-    operatorEvidence:{acquisitionMode:"MANUAL",rawCondition:observation.condition,normalizedCondition:condition,rawShipping:observation.shipping,normalizedShippingUsd:shippingUsd,rawSeller:observation.seller,normalizedSeller:seller,researchUrl:reference.url,observedDate:observation.observedDate,observedTime:observation.observedTime,timezone:observation.timezone,enteredObservedAt:observation.observedAt}
+    operatorEvidence:{acquisitionMode:"MANUAL",rawCondition:observation.condition,normalizedCondition:condition,rawShipping:observation.shipping,normalizedShippingUsd:shippingUsd,rawSeller:observation.seller,normalizedSeller:seller,researchUrl:reference.url,observedDate:observation.observedDate,observedTime:observation.observedTime,timezone:observation.timezone,enteredObservedAt:observation.observedAt,rawReadyForImport:observation.readyForImport,submittedForProcessing:true}
   }});
 }

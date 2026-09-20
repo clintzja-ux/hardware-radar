@@ -1,14 +1,14 @@
 # Hardware Radar current state
 
 ```text
-Last updated:                  2026-09-19
+Last updated:                  2026-09-20
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        7340c63ef4b17e55a48b7acbf613f18d3548f1be (`fix(public): restore shopper experience and governed preview`)
+Current committed HEAD:        17873a4f376a47ee2cf5fe7f355d2f84f809eac5 (`fix(mercury): preserve manual retailer research evidence`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 178 ahead; branch is synchronized with `origin/hardware-radar-growth-1`
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 179 ahead; branch is synchronized with `origin/hardware-radar-growth-1`
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -24,7 +24,7 @@ Current acquisition selection increment: B-004 — product-scoped initial acquis
 Current acquisition operation: B-014A — governed initial-acquisition E2P/E2Q composition fixture-certified; production E2P reassessment not rerun
 Current budget correction:     shared DataForSEO UTC-day spend governance remains ledger-backed and execution-revalidated; operator-approved operational default `$0.0750`, Google `$0.0010` and Amazon `$0.0015` per-task ceilings unchanged, zero automatic paid retries; the higher ceiling grants no acquisition authority
 Formal 100-product stage:      100_PRODUCT_STAGE_COMPLETE — fixed cohort integrity, Products identity discovery, bounded repeat acquisition, historical memory, recovery, supervised operations, and authority isolation satisfy the canonical stage criteria; no separate promotion artifact is required
-Current post-100 gate:         `PUBLIC_SITE_PRODUCT_EXPERIENCE_RECOVERY_P1` is implemented, locally fixture-certified, and operator-accepted. `PRESERVE_MANUAL_RESEARCH_EVIDENCE_AND_FIX_WORKBOOK_FIELDS` corrects the existing manual workbook/preparation owners so valid operator-observed condition, shipping, seller, URL provenance, and raw/normalized evidence are preserved while claim authority remains separately governed. No real observation processing, current-state/history mutation, publication, artifact, release, or deployment is part of this correction.
+Current post-100 gate:         `ROUTINE_MANUAL_OBSERVATION_PROGRESSION_P1` is implemented and fixture-certified over existing preparation, current-snapshot, and manual-history owners. Complete reviewed `Ready = YES` observations require deterministic revalidation but no second per-record human authorization ceremony; exceptions remain fail-closed for governed review, and current/history outcomes remain independent. The six real prepared observations are read-only assessed `ROUTINE_READY` and remain unprocessed. No production current/history mutation, publication, artifact, release, or deployment occurred. Next gate: `PROCESS_REAL_MANUAL_OPERATIONAL_COHORT_1`.
 Current retailer-strategy increment: C-001 — RAM Launch Retailer Portfolio and Relationship Strategy complete
 Current outreach reconciliation: C-001A — MemoryC and Adorama outreach recorded
 Current commercial reconciliation: Rakuten publisher account active; Newegg advertiser relationship and Product Catalog access operator-confirmed approved; current-commerce display/comparison rights are reconciled without expanding historical/analytics/recommendation/redistribution authority; Adorama pending; B&H declined without a stated specific reason
