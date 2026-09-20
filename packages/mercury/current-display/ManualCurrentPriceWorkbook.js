@@ -5,6 +5,33 @@ export const MANUAL_CURRENT_PRICE_WORKBOOK_RETAILERS = Object.freeze(["NEWEGG", 
 export const MANUAL_CURRENT_PRICE_WORKBOOK_RAKUTEN_LINK_STATUSES = Object.freeze(["READY", "MISSING", "REVIEW_REQUIRED"]);
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const nonBlank = value => typeof value === "string" && value.trim().length > 0;
+const CONDITIONS = new Set(["UNKNOWN", "NEW", "USED", "REFURBISHED", "OPEN_BOX"]);
+
+export function normalizeManualWorkbookCondition(value) {
+  const raw = typeof value === "string" ? value.trim().toUpperCase() : value;
+  if (!CONDITIONS.has(raw)) throw new Error("WORKBOOK_CONDITION_INVALID");
+  return raw === "UNKNOWN" ? null : raw;
+}
+
+export function normalizeManualWorkbookShipping(value) {
+  if (typeof value === "string") {
+    const raw=value.trim().toUpperCase();
+    if (raw === "UNKNOWN" || raw === "") return null;
+    if (raw === "FREE") return 0;
+    if (raw !== "" && Number.isFinite(Number(raw)) && Number(raw) >= 0) return Number(raw);
+    throw new Error("WORKBOOK_SHIPPING_INVALID");
+  }
+  if (value == null) return null;
+  if (!Number.isFinite(value) || value < 0) throw new Error("WORKBOOK_SHIPPING_INVALID");
+  return value;
+}
+
+export function normalizeManualWorkbookSeller(value) {
+  if (value == null) return null;
+  if (typeof value !== "string") throw new Error("WORKBOOK_SELLER_INVALID");
+  const raw=value.trim();
+  return !raw || raw.toUpperCase() === "UNKNOWN" ? null : raw;
+}
 
 const pad = value => String(value).padStart(2, "0");
 const dateParts = value => {
@@ -93,5 +120,11 @@ export function selectManualCurrentPriceWorkbookObservation({ row, retailer } = 
   if (observation?.readyForImport !== "YES") throw new Error("MANUAL_CURRENT_PRICE_WORKBOOK_NOT_READY");
   const observedBy=nonBlank(observation.reviewedBy) ? observation.reviewedBy.trim() : nonBlank(normalized.recordReviewedBy) ? normalized.recordReviewedBy.trim() : null;
   if (!observedBy) throw new Error("OPERATOR_PROVENANCE_REQUIRED");
-  return freeze({productionPrepareEligible:true,reason:null,retailer,preparationInput:{retailer,atlasProductId:normalized.atlasProductId,destinationId:reference.destinationId,itemPriceUsd:observation.itemPriceUsd,currency:observation.currency,availability:observation.availability,observedAt:observation.observedAt,observedBy,evidenceReference:`manual-workbook:${normalized.atlasProductId}:${key}:${observation.observedAt}`,evidenceNotes:observation.evidenceNotes}});
+  const condition=normalizeManualWorkbookCondition(observation.condition), shippingUsd=normalizeManualWorkbookShipping(observation.shipping), seller=normalizeManualWorkbookSeller(observation.seller);
+  return freeze({productionPrepareEligible:true,reason:null,retailer,preparationInput:{
+    retailer,atlasProductId:normalized.atlasProductId,destinationId:reference.destinationId,itemPriceUsd:observation.itemPriceUsd,currency:observation.currency,availability:observation.availability,
+    condition,shippingUsd,seller,researchUrl:reference.url,observedAt:observation.observedAt,observedBy,
+    evidenceReference:`manual-workbook:${normalized.atlasProductId}:${key}:${observation.observedAt}`,evidenceNotes:observation.evidenceNotes,
+    operatorEvidence:{acquisitionMode:"MANUAL",rawCondition:observation.condition,normalizedCondition:condition,rawShipping:observation.shipping,normalizedShippingUsd:shippingUsd,rawSeller:observation.seller,normalizedSeller:seller,researchUrl:reference.url,observedDate:observation.observedDate,observedTime:observation.observedTime,timezone:observation.timezone,enteredObservedAt:observation.observedAt}
+  }});
 }

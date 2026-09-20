@@ -43,7 +43,8 @@ export function validateCurrentDisplaySnapshot(snapshot) {
         if (!nonBlank(offer?.marketplace) || !Number.isFinite(offer?.priceUsd) || offer.priceUsd <= 0 || offer.currency !== "USD") errors.push("CURRENT_DISPLAY_PRICE_INVALID");
         if (!nonBlank(offer?.availability) || !nonBlank(offer?.matchStatus) || !Number.isInteger(offer?.sourceRow) || offer.sourceRow < 1) errors.push("CURRENT_DISPLAY_EVIDENCE_INVALID");
         if ("observedAt" in offer && !validTime(offer.observedAt)) errors.push("CURRENT_DISPLAY_OFFER_TIME_INVALID");
-        if (![null, "NEW", "USED", "REFURBISHED", "OPEN_BOX"].includes(offer.condition) || offer.shippingUsd !== null || offer.feesUsd !== null) errors.push("CURRENT_DISPLAY_UNKNOWN_VALUE_INVALID");
+        const shippingKnownOrUnknown = offer.shippingUsd === null || (Number.isFinite(offer.shippingUsd) && offer.shippingUsd >= 0);
+        if (![null, "NEW", "USED", "REFURBISHED", "OPEN_BOX"].includes(offer.condition) || !shippingKnownOrUnknown || offer.feesUsd !== null) errors.push("CURRENT_DISPLAY_UNKNOWN_VALUE_INVALID");
         if (offer.researchUrl !== null) { try { if (new URL(offer.researchUrl).protocol !== "https:") throw new Error(); } catch { errors.push("CURRENT_DISPLAY_RESEARCH_URL_INVALID"); } }
         if (offer.destinationId !== null && !/^mer_dest_[a-f0-9]{24}$/.test(offer.destinationId)) errors.push("CURRENT_DISPLAY_DESTINATION_ID_INVALID");
         const extendedEligibilityPresent = "itemPriceEligible" in offer || "deliveredCostEligible" in offer || "deliveredCostReasons" in offer;

@@ -34,15 +34,15 @@ export function createManualCurrentPriceHistoricalObservation({ preparation, pro
     marketplace: binding.marketplace,
     observationTime: binding.observedAt,
     admittedAt,
-    market: { basePrice: binding.itemPriceUsd, totalPrice: null, shipping: null, tax: null, currency: binding.currency, condition: null, availability: binding.availability, sourceUrl: destination.destinationUrl, sellerName: null },
+    market: { basePrice: binding.itemPriceUsd, totalPrice: null, shipping: binding.shippingUsd ?? null, tax: null, currency: binding.currency, condition: binding.condition ?? null, availability: binding.availability, sourceUrl: binding.researchUrl ?? destination.destinationUrl, sellerName: binding.seller ?? null },
     provenance: {
       retainedEvidenceId: preparation.preparationId,
       provider: "OPERATOR_MANUAL",
       source: binding.sourceId,
       rawPayloadReference: binding.evidenceReference,
-      acquisition: { type: "MANUAL_PUBLISHER_OBSERVATION", preparationId: preparation.preparationId, preparationDigest: preparation.bindingDigest, sourceId: binding.sourceId, sourceRightsProfileDigest: assessment.admissionRightsProfileDigest, originalPreparationRightsDigest: assessment.originalPreparationRightsDigest, admissionRightsProfileDigest: assessment.admissionRightsProfileDigest, originalRightsLineageState: assessment.originalRightsLineageState, destinationId: binding.destinationId, destinationBindingDigest: binding.destinationBindingDigest, evidenceReference: binding.evidenceReference, observedBy: binding.observedBy }
+      acquisition: { type: "MANUAL_PUBLISHER_OBSERVATION", preparationId: preparation.preparationId, preparationDigest: preparation.bindingDigest, sourceId: binding.sourceId, sourceRightsProfileDigest: assessment.admissionRightsProfileDigest, originalPreparationRightsDigest: assessment.originalPreparationRightsDigest, admissionRightsProfileDigest: assessment.admissionRightsProfileDigest, originalRightsLineageState: assessment.originalRightsLineageState, destinationId: binding.destinationId, destinationBindingDigest: binding.destinationBindingDigest, evidenceReference: binding.evidenceReference, researchUrl: binding.researchUrl ?? destination.destinationUrl, operatorEvidence: binding.operatorEvidence ? structuredClone(binding.operatorEvidence) : null, observedBy: binding.observedBy }
     },
-    observedMerchant: { sellerName: null, suppliedDomain: binding.marketplace, resolutionState: "CANONICAL_RETAILER_DESTINATION", canonicalRetailerId: retailer.id },
+    observedMerchant: { sellerName: binding.seller ?? null, suppliedDomain: binding.marketplace, resolutionState: "CANONICAL_RETAILER_DESTINATION", canonicalRetailerId: retailer.id },
     comparability: { classification: "STANDALONE_COMPARABLE", standaloneEligible: true, reasons: [], policyVersion: MANUAL_CURRENT_PRICE_HISTORY_POLICY_VERSION },
     admittedBy,
     idempotencyKey: `manual-current-price-history:${preparation.preparationId}`

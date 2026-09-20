@@ -15,6 +15,13 @@ const stable = value => Array.isArray(value) ? `[${value.map(stable).join(",")}]
 export const manualCurrentPriceDigest = value => crypto.createHash("sha256").update(stable(value)).digest("hex");
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const nonBlank = value => typeof value === "string" && value.trim().length > 0;
+const CONDITIONS = new Set([null, "NEW", "USED", "REFURBISHED", "OPEN_BOX"]);
+const normalizedFacts = input => {
+  const condition=input?.condition === "UNKNOWN" || input?.condition === undefined ? null : input?.condition;
+  const shippingUsd=input?.shippingUsd === "UNKNOWN" || input?.shippingUsd === undefined ? null : input?.shippingUsd;
+  const seller=typeof input?.seller === "string" && input.seller.trim() && input.seller.trim().toUpperCase() !== "UNKNOWN" ? input.seller.trim() : null;
+  return {condition,shippingUsd,seller,researchUrl:nonBlank(input?.researchUrl)?input.researchUrl.trim():null};
+};
 
 export function assessManualCurrentPriceInput({ input, product, retailer, destination, rightsProfile, preparedAt, currentSnapshot = null } = {}) {
   const reasons = [];
@@ -28,13 +35,17 @@ export function assessManualCurrentPriceInput({ input, product, retailer, destin
   if (input?.currency !== "USD") reasons.push("CURRENCY_NOT_USD");
   if (!["AVAILABLE", "OUT_OF_STOCK"].includes(input?.availability)) reasons.push("AVAILABILITY_INVALID");
   if (!nonBlank(input?.observedBy) || !nonBlank(input?.evidenceReference)) reasons.push("OPERATOR_PROVENANCE_REQUIRED");
+  const facts=normalizedFacts(input);
+  if (!CONDITIONS.has(facts.condition)) reasons.push("CONDITION_INVALID");
+  if (facts.shippingUsd !== null && (!Number.isFinite(facts.shippingUsd) || facts.shippingUsd < 0)) reasons.push("SHIPPING_INVALID");
+  if (input?.seller != null && typeof input.seller !== "string") reasons.push("SELLER_INVALID");
   const observedMs = Date.parse(input?.observedAt), preparedMs = Date.parse(preparedAt);
   if (!Number.isFinite(observedMs) || !Number.isFinite(preparedMs) || observedMs > preparedMs) reasons.push("OBSERVATION_TIME_INVALID");
   else if (preparedMs - observedMs > 36 * HOUR_MS) reasons.push("OBSERVATION_STALE");
   if (rightsProfile?.sourceId !== source?.sourceId || rightsProfile.acquisition?.manual !== RIGHTS_STATES.ALLOWED || rightsProfile.live?.currentObservation !== RIGHTS_STATES.ALLOWED || rightsProfile.live?.publicDisplay !== RIGHTS_STATES.ALLOWED || rightsProfile.live?.comparison !== RIGHTS_STATES.ALLOWED || rightsProfile.retention?.historical !== RIGHTS_STATES.ALLOWED || rightsProfile.derivation?.historicalAnalytics !== RIGHTS_STATES.ALLOWED) reasons.push("SOURCE_RIGHTS_INVALID");
   const current = currentSnapshot?.offers?.find(offer => offer.atlasProductId === input?.atlasProductId && offer.retailerId === retailer?.id);
   if (current?.sourceIdentity?.sourceId && current.sourceIdentity.sourceId !== source?.sourceId) reasons.push("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED");
-  const eligibility = assessCurrentDisplayItemPriceEligibility({ condition: null, conditionReasons: ["CONDITION_UNKNOWN"], availability: input?.availability, destinationId: destination?.destinationId, publicDisplayAllowed: rightsProfile?.live?.publicDisplay === RIGHTS_STATES.ALLOWED, comparisonAllowed: rightsProfile?.live?.comparison === RIGHTS_STATES.ALLOWED, weakItemPriceAllowed: true });
+  const eligibility = assessCurrentDisplayItemPriceEligibility({ condition: facts.condition, conditionReasons: ["CONDITION_UNKNOWN"], availability: input?.availability, destinationId: destination?.destinationId, publicDisplayAllowed: rightsProfile?.live?.publicDisplay === RIGHTS_STATES.ALLOWED, comparisonAllowed: rightsProfile?.live?.comparison === RIGHTS_STATES.ALLOWED, weakItemPriceAllowed: true });
   if (!eligibility.itemPriceEligible) reasons.push(...eligibility.comparisonReasons.filter(reason => reason !== "CONDITION_UNKNOWN" && reason !== "SOURCE_COMPARISON_NOT_ALLOWED"));
   return freeze({ eligible: [...new Set(reasons)].length === 0, reasons: [...new Set(reasons)], eligibility });
 }
@@ -43,6 +54,8 @@ export function prepareManualCurrentPriceObservation({ input, product, retailer,
   const assessment = assessManualCurrentPriceInput({ input, product, retailer, destination, rightsProfile, preparedAt, currentSnapshot });
   if (!assessment.eligible) throw new Error(`MANUAL_CURRENT_PRICE_PREPARE_BLOCKED:${assessment.reasons.join(",")}`);
   const source = SOURCE_BY_RETAILER[retailer.id];
+  const facts=normalizedFacts(input), researchUrl=facts.researchUrl ?? destination.destinationUrl;
+  const operatorEvidence={acquisitionMode:"MANUAL",rawCondition:input?.operatorEvidence?.rawCondition ?? (input?.condition ?? "UNKNOWN"),normalizedCondition:facts.condition,rawShipping:input?.operatorEvidence?.rawShipping ?? (input?.shippingUsd ?? "UNKNOWN"),normalizedShippingUsd:facts.shippingUsd,rawSeller:input?.operatorEvidence?.rawSeller ?? (input?.seller ?? "UNKNOWN"),normalizedSeller:facts.seller,researchUrl,observedDate:input?.operatorEvidence?.observedDate ?? null,observedTime:input?.operatorEvidence?.observedTime ?? null,timezone:input?.operatorEvidence?.timezone ?? null,enteredObservedAt:input?.operatorEvidence?.enteredObservedAt ?? input?.observedAt};
   const binding = {
     policyVersion: MANUAL_CURRENT_PRICE_POLICY_VERSION,
     sourceId: source.sourceId,
@@ -60,7 +73,7 @@ export function prepareManualCurrentPriceObservation({ input, product, retailer,
     observedBy: input.observedBy.trim(),
     evidenceReference: input.evidenceReference.trim(),
     evidenceNotes: nonBlank(input.evidenceNotes) ? input.evidenceNotes.trim() : null,
-    condition: null, seller: null, shippingUsd: null, feesUsd: null,
+    condition: facts.condition, seller: facts.seller, shippingUsd: facts.shippingUsd, feesUsd: null, researchUrl, operatorEvidence,
     itemPriceEligible: assessment.eligibility.itemPriceEligible, comparisonEligible: assessment.eligibility.comparisonEligible,
     comparisonReasons: assessment.eligibility.comparisonReasons
   };
@@ -79,5 +92,5 @@ export function projectPreparedManualCurrentOffer(preparation, { authorizationId
   const source = SOURCE_BY_RETAILER[b.retailerId];
   if (!source || source.sourceId !== b.sourceId) throw new Error("MANUAL_CURRENT_PRICE_SOURCE_BINDING_INVALID");
   const executionLineage = authorizationId === null ? null : { preparationId: preparation.preparationId, preparationDigest: preparation.bindingDigest, authorizationId, sourceRightsProfileDigest: b.sourceRightsProfileDigest, destinationBindingDigest: b.destinationBindingDigest };
-  return freeze({ atlasProductId: b.atlasProductId, retailer: source.retailer, retailerId: b.retailerId, marketplace: b.marketplace, priceUsd: b.itemPriceUsd, currency: b.currency, availability: b.availability, condition: null, shippingUsd: null, feesUsd: null, researchUrl: null, destinationId: b.destinationId, matchStatus: "OPERATOR_CONFIRMED_EXACT_PRODUCT_PAGE", sourceRow: 1, observedAt: b.observedAt, sellerType: null, sellerName: null, sourceIdentity: { adapterId: source.adapterId, sourceId: b.sourceId, rightsProfileId: b.sourceId, historicalRetentionAllowed: true }, ...(executionLineage ? { manualExecutionLineage: executionLineage } : {}), itemPriceEligible: b.itemPriceEligible, comparisonEligible: b.comparisonEligible, comparisonReasons: [...b.comparisonReasons], deliveredCostEligible: false, deliveredCostReasons: b.comparisonEligible ? ["SHIPPING_COST_UNKNOWN", "FEES_UNKNOWN"] : [...b.comparisonReasons] });
+  return freeze({ atlasProductId: b.atlasProductId, retailer: source.retailer, retailerId: b.retailerId, marketplace: b.marketplace, priceUsd: b.itemPriceUsd, currency: b.currency, availability: b.availability, condition: b.condition ?? null, shippingUsd: b.shippingUsd ?? null, feesUsd: null, researchUrl: b.researchUrl ?? null, destinationId: b.destinationId, matchStatus: "OPERATOR_CONFIRMED_EXACT_PRODUCT_PAGE", sourceRow: 1, observedAt: b.observedAt, sellerType: null, sellerName: b.seller ?? null, operatorEvidence: b.operatorEvidence ? structuredClone(b.operatorEvidence) : null, sourceIdentity: { adapterId: source.adapterId, sourceId: b.sourceId, rightsProfileId: b.sourceId, historicalRetentionAllowed: true }, ...(executionLineage ? { manualExecutionLineage: executionLineage } : {}), itemPriceEligible: b.itemPriceEligible, comparisonEligible: b.comparisonEligible, comparisonReasons: [...b.comparisonReasons], deliveredCostEligible: false, deliveredCostReasons: b.comparisonEligible ? [b.shippingUsd == null ? "SHIPPING_COST_UNKNOWN" : "FEES_UNKNOWN", ...(b.shippingUsd == null ? ["FEES_UNKNOWN"] : [])] : [...b.comparisonReasons] });
 }
