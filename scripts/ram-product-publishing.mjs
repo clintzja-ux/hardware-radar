@@ -38,7 +38,8 @@ function retailerDestinations(destinations) {
 function currentRetailSection(currentRetail, disclosure) {
     if (!currentRetail?.offers?.length) return "";
     const offers = currentRetail.offers.map(offer => `<li><div><strong>${escapeHtml(offer.retailerName)}</strong><span>Current tracked price: $${Number(offer.itemPriceUsd).toFixed(2)} USD</span><small>Price checked ${escapeHtml(new Date(offer.observedAt).toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }))} UTC</small></div><a href="${escapeHtml(offer.destinationUrl)}" target="_blank" rel="noopener noreferrer">View retailer listing</a></li>`).join("");
-    return `<section class="ram-product-current-retail" aria-labelledby="current-retail-heading"><h2 id="current-retail-heading">Current tracked prices</h2><p>${escapeHtml(disclosure)}</p><ul>${offers}</ul></section>`;
+    const lower = currentRetail.lowerCurrentItemPrice ? `<p class="ram-product-current-retail__lower">Lower current item price: <strong>${escapeHtml(currentRetail.lowerCurrentItemPrice.retailerName)} — $${Number(currentRetail.lowerCurrentItemPrice.itemPriceUsd).toFixed(2)} USD</strong></p>` : "";
+    return `<section class="ram-product-current-retail" aria-labelledby="current-retail-heading"><h2 id="current-retail-heading">Current tracked prices</h2>${lower}<p>${escapeHtml(disclosure)}</p><ul>${offers}</ul></section>`;
 }
 
 function renderRamProductPageBase(product, destinations = [], currentRetail = null, disclosure = "") {
@@ -60,7 +61,10 @@ function renderRamProductPageBase(product, destinations = [], currentRetail = nu
 }
 
 export function renderRamProductPage(product, destinations = [], currentRetail = null, disclosure = "") {
-    const page = renderRamProductPageBase(product, destinations, currentRetail, disclosure);
+    const page = renderRamProductPageBase(product, destinations, currentRetail, disclosure).replace(
+        "Reference specifications from Hardware Radar's canonical product catalog. This factual reference is separate from market offers and buying guidance.",
+        "Review the product specifications, then compare any current retailer prices shown below."
+    );
     const analytics = `<script async src="https://www.googletagmanager.com/gtag/js?id=G-QF6XJ8GCMY"></script>\n<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-QF6XJ8GCMY");</script>\n`;
     return page.replace('<script type="application/ld+json">', `${analytics}<script type="application/ld+json">`);
 }

@@ -102,9 +102,13 @@ for (const product of catalog.products) {
 const pricedPage = catalog.products.find(product => destinations.some(destination => destination.atlasProductId === product.atlasProductId));
 assert.ok(pricedPage);
 const pricedDestination = destinations.find(destination => destination.atlasProductId === pricedPage.atlasProductId);
-const fixtureRetail = { offers: [{ retailerName: pricedDestination.retailerDisplayName, itemPriceUsd: 100, observedAt: "2026-09-18T11:00:00.000Z", destinationUrl: pricedDestination.destinationUrl }] };
+const fixtureRetail = {
+    offers: [{ retailerName: pricedDestination.retailerDisplayName, itemPriceUsd: 100, observedAt: "2026-09-18T11:00:00.000Z", destinationUrl: pricedDestination.destinationUrl }],
+    lowerCurrentItemPrice: { retailerName: pricedDestination.retailerDisplayName, itemPriceUsd: 100 }
+};
 const pricedHtml = renderRamProductPage(pricedPage, [pricedDestination], fixtureRetail, currentRetail.disclosure);
 assert.match(pricedHtml, /Current tracked prices/);
+assert.match(pricedHtml, /Lower current item price:/);
 assert.match(pricedHtml, /Prices shown exclude applicable shipping, taxes, and fees\./);
 assert.doesNotMatch(pricedHtml, /"@type":"Offer"/);
 

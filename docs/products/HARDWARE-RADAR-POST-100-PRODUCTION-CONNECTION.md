@@ -17,6 +17,19 @@ This document owns the bounded transition from the completed 100-product operati
 | Publication connection | Atlas identity + Mercury-qualified current fact + applicable public policy/decision + destination → sanitized artifact | Product-scoped current-display candidate/authorization implemented and fixture-certified; real S2 is read-only candidate-ready but no candidate exists | Authority is granted only by the applicable Mercury qualification/publication boundary. Invalid, missing, stale, changed, or unauthorized input yields no offer. |
 | Public-site consumption | Certified static artifact → generated homepage/category/catalog/product surfaces | Implemented and fail closed | Catalog/spec pages remain usable when market artifacts are absent or invalid. |
 
+## Local development preview
+
+The shopper experience can be reviewed locally without consuming publication authority or enabling release:
+
+```text
+npm run build:public:development-preview
+npm run serve:public:development-preview
+```
+
+The build writes only the ignored `.forge-review/public-preview/` tree. It projects the canonical Atlas catalog independently from prices and applies the existing current-display rights, freshness, comparison, and public-projection owners to canonical local current state. The server exposes that tree at `http://127.0.0.1:4173/`, so root-relative assets and catalog data resolve as they do in production.
+
+This mode is explicitly non-production: it creates no candidate, authorization, artifact, release, or deployment authority and is not consumed by `npm run build:public`. Production output continues to require the certified artifact and release-manifest path. Missing current prices suppress only unsupported price claims; they do not suppress safe catalog or specification content.
+
 ## Current architecture
 
 The production site is a generated static `public/` tree deployed through Cloudflare Pages from `main`. Atlas builds the catalog and product facts. Mercury creates two intentionally distinct static outputs:

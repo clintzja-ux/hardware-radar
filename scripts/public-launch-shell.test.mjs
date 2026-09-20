@@ -142,8 +142,9 @@ const { winnerToDisplayProduct } = await import(pathToFileURL(path.join(publicRo
 const publicOffer = { atlasProductId: "ram_one", brand: "Example", family: "Winner", displayName: "Example Winner", totalCapacityGb: 32, moduleCount: 2, capacityPerModuleGb: 16, ddrGeneration: "DDR5", formFactor: "DIMM", speedMtps: 6000, itemPriceUsd: 99, currency: "USD", retailerId: "RETAILER-0001", retailerName: "Retailer A", destinationUrl: "https://retailer.example/a", observedAt: "2026-08-31T12:00:00Z", comparisonSemantics: "ITEM_PRICE" };
 const projected = winnerToDisplayProduct({ winners: { ddr5: publicOffer }, products: [{ offers: [publicOffer] }] }, "ddr5", "ddr5", "Cheapest DDR5 Today");
 renderOverallUnavailable("overallSection");
-assert.match(containers.get("overallSection").innerHTML, /No tracked RAM price is available right now/);
-assert.match(containers.get("overallSection").innerHTML, /stay hidden rather than being replaced with estimates/);
+assert.match(containers.get("overallSection").innerHTML, /Compare RAM by type, capacity and speed/);
+assert.match(containers.get("overallSection").innerHTML, /Current prices are temporarily unavailable/);
+assert.match(containers.get("overallSection").innerHTML, /Browse the catalog and product specifications/);
 assert.doesNotMatch(containers.get("overallSection").innerHTML, /publication requirements|governed candidates|E2S/i);
 const { renderOverall } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderOverall.js")));
 renderOverall([{ ...projected, section: "overall" }]);
@@ -153,9 +154,14 @@ assert.doesNotMatch(containers.get("overallSection").innerHTML, /Comparison note
 assert.match(containers.get("overallSection").innerHTML, /DDR5 • 32GB • 6000 MT\/s/);
 
 const { renderCategoryUnavailable } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderCategory.js")));
-renderCategoryUnavailable("ddr5Section", "Cheapest DDR5 we're tracking");
-assert.match(containers.get("ddr5Section").innerHTML, /Price unavailable right now/);
-assert.match(containers.get("ddr5Section").innerHTML, /Check again later/);
+renderCategoryUnavailable("ddr5Section", "DDR5", "ddr5");
+assert.match(containers.get("ddr5Section").innerHTML, /Browse DDR5/);
+assert.match(containers.get("ddr5Section").innerHTML, /Compare products, specifications and available retailer links/);
+assert.match(containers.get("ddr5Section").innerHTML, /href="\/ddr5\.html"/);
+renderCategoryUnavailable("ddr4Section", "DDR4", "ddr4");
+assert.match(containers.get("ddr4Section").innerHTML, /href="\/ddr4\.html"/);
+renderCategoryUnavailable("sodimmSection", "Laptop RAM", "sodimm");
+assert.match(containers.get("sodimmSection").innerHTML, /href="\/sodimm\.html"/);
 const { renderCategory } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderCategory.js")));
 renderCategory([{ ...projected, section: "ddr5", title: "Cheapest DDR5 Today" }], "ddr5", "ddr5Section", "Browse DDR5 RAM");
 assert.match(containers.get("ddr5Section").innerHTML, /Cheapest DDR5 Today/);
@@ -195,8 +201,10 @@ for (const file of ["about.html", "how-we-choose.html", "affiliate-disclosure.ht
 }
 
 const contact = await readPublic("contact.html");
-assert.match(contact, /human correspondence, including outbound retailer outreach/);
-assert.match(contact, /Inbound delivery remains a separate launch QA check/);
+assert.match(contact, /Have a question, spotted an incorrect price, found a broken retailer link, or want to suggest a product/);
+assert.match(contact, /mailto:support@cheapestram\.com/);
+assert.equal((contact.match(/href="mailto:support@cheapestram\.com"/g) ?? []).length, 1);
+assert.doesNotMatch(contact, /launch QA|outbound retailer outreach/);
 
 const privacy = await readPublic("privacy-policy.html");
 assert.match(privacy, /Google Analytics/);

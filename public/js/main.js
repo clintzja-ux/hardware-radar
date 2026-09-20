@@ -20,7 +20,7 @@ async function init() {
             const section = scope === "laptop" ? "sodimm" : scope;
             const product = winnerToDisplayProduct(snapshot, scope, section, title);
             if (product) renderCategory([product], section, containerId, linkText);
-            else renderCategoryUnavailable(containerId, title);
+            else renderCategoryUnavailable(containerId, scope === "laptop" ? "Laptop RAM" : scope.toUpperCase(), section);
         }
         renderTrust();
     } catch (error) {

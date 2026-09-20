@@ -51,14 +51,16 @@
         </article>
     `;
 }
-export function renderCategoryUnavailable(containerId, title) {
+export function renderCategoryUnavailable(containerId, title, sectionName = title.toLowerCase()) {
     const container = document.getElementById(containerId);
     if (!container) return;
+    const categoryPages = { ddr5: "/ddr5.html", ddr4: "/ddr4.html", sodimm: "/sodimm.html" };
+    const pageUrl = categoryPages[sectionName] ?? "/ram/";
     container.innerHTML = `
         <article class="card category-card market-unavailable">
             <p class="category-title">${title}</p>
-            <h3>Price unavailable right now</h3>
-            <p class="best-for">No qualifying current price is available for this category.</p>
-            <div class="category-footer"><p class="mini-verified">Check again later</p></div>
+            <h3>Browse ${title}</h3>
+            <p class="best-for">Compare products, specifications and available retailer links.</p>
+            <div class="category-footer"><a class="more-link" href="${pageUrl}">Browse ${title} →</a></div>
         </article>`;
 }

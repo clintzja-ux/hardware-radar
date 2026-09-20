@@ -92,7 +92,7 @@ export async function initializeRamCatalog({ fetchCatalog = () => fetch("/data/r
         reset.addEventListener("click", () => { form.reset(); render(); form.elements.namedItem("query").focus(); });
         render();
     } catch {
-        status.textContent = "RAM catalog unavailable.";
-        results.innerHTML = `<li class="ram-catalog-empty"><h2>RAM catalog unavailable.</h2><p>The catalog stays hidden when its governed Atlas projection cannot be loaded.</p></li>`;
+        status.textContent = "We couldn't load the RAM catalog.";
+        results.innerHTML = `<li class="ram-catalog-empty"><h2>We couldn't load the products right now.</h2><p>Please try again in a moment.</p></li>`;
     }
 }

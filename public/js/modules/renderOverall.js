@@ -38,9 +38,10 @@ export function renderOverallUnavailable(containerId = "overallSection") {
     container.setAttribute("aria-live", "polite");
     container.innerHTML = `
         <article class="overall-answer market-unavailable" role="status">
-            <p class="eyebrow">CURRENT MARKET STATUS</p>
-            <h2>No tracked RAM price is available right now</h2>
-            <p class="best-for">We don't currently have an offer that qualifies for comparison.</p>
-            <p class="specs">Unavailable or stale prices stay hidden rather than being replaced with estimates. Check again later.</p>
+            <p class="eyebrow">SHOP RAM</p>
+            <h2>Compare RAM by type, capacity and speed</h2>
+            <p class="best-for">Current prices are temporarily unavailable.</p>
+            <p class="specs">Browse the catalog and product specifications while we refresh retailer prices.</p>
+            <a class="price-button" href="/ram/">Browse RAM products →</a>
         </article>`;
 }
