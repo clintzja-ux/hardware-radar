@@ -139,7 +139,7 @@ assert.doesNotMatch(containers.get("recommendation").innerHTML, /Comparison note
 
 const { renderOverallUnavailable } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderOverall.js")));
 const { winnerToDisplayProduct } = await import(pathToFileURL(path.join(publicRoot, "js/modules/marketData.js")));
-const publicOffer = { atlasProductId: "ram_one", brand: "Example", family: "Winner", displayName: "Example Winner", totalCapacityGb: 32, moduleCount: 2, capacityPerModuleGb: 16, ddrGeneration: "DDR5", formFactor: "DIMM", speedMtps: 6000, itemPriceUsd: 99, currency: "USD", retailerId: "RETAILER-0001", retailerName: "Retailer A", destinationUrl: "https://retailer.example/a", observedAt: "2026-08-31T12:00:00Z", comparisonSemantics: "ITEM_PRICE" };
+const publicOffer = { atlasProductId: "ram_one", brand: "Example", family: "Winner", displayName: "Example Winner", publicPath: "ram/example-winner/", totalCapacityGb: 32, moduleCount: 2, capacityPerModuleGb: 16, ddrGeneration: "DDR5", formFactor: "DIMM", speedMtps: 6000, itemPriceUsd: 99, currency: "USD", retailerId: "RETAILER-0001", retailerName: "Retailer A", destinationUrl: "https://retailer.example/a", observedAt: "2026-08-31T12:00:00Z", comparisonSemantics: "ITEM_PRICE" };
 const projected = winnerToDisplayProduct({ winners: { ddr5: publicOffer }, products: [{ offers: [publicOffer] }] }, "ddr5", "ddr5", "Cheapest DDR5 Today");
 renderOverallUnavailable("overallSection");
 assert.match(containers.get("overallSection").innerHTML, /Compare RAM by type, capacity and speed/);
@@ -163,8 +163,9 @@ assert.match(containers.get("ddr4Section").innerHTML, /href="\/ddr4\.html"/);
 renderCategoryUnavailable("sodimmSection", "Laptop RAM", "sodimm");
 assert.match(containers.get("sodimmSection").innerHTML, /href="\/sodimm\.html"/);
 const { renderCategory } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderCategory.js")));
-renderCategory([{ ...projected, section: "ddr5", title: "Cheapest DDR5 Today" }], "ddr5", "ddr5Section", "Browse DDR5 RAM");
-assert.match(containers.get("ddr5Section").innerHTML, /Cheapest DDR5 Today/);
+renderCategory([{ ...projected, publicPath: publicOffer.publicPath, section: "ddr5", title: "Cheapest DDR5 Today" }], "ddr5", "ddr5Section", "Browse DDR5 RAM");
+assert.match(containers.get("ddr5Section").innerHTML, /Lowest current item price/);
+assert.match(containers.get("ddr5Section").innerHTML, /href="ram\/example-winner\/"/);
 assert.match(containers.get("ddr5Section").innerHTML, /Price checked/);
 assert.doesNotMatch(containers.get("ddr5Section").innerHTML, /Comparison note|Item-price comparison/);
 

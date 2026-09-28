@@ -1,4 +1,4 @@
-import { loadCurrentRetailSnapshot, winnerToDisplayProduct } from "./modules/marketData.js";
+import { currentProductsForScope, loadCurrentRetailSnapshot, loadRamCatalog, winnerToDisplayProduct } from "./modules/marketData.js";
 import { renderOverall, renderOverallUnavailable } from "./modules/renderOverall.js";
 import { renderCategory, renderCategoryUnavailable } from "./modules/renderCategory.js";
 import { renderTrust } from "./modules/renderTrust.js";
@@ -7,7 +7,7 @@ import { renderHeader } from "./modules/renderHeader.js";
 
 async function init() {
     try {
-        const snapshot = await loadCurrentRetailSnapshot();
+        const [snapshot, catalog] = await Promise.all([loadCurrentRetailSnapshot(), loadRamCatalog()]);
         const overall = winnerToDisplayProduct(snapshot, "overall", "overall", "Cheapest RAM Today");
         if (overall) renderOverall([overall]); else renderOverallUnavailable("overallSection");
 
@@ -18,8 +18,8 @@ async function init() {
         ];
         for (const [scope, containerId, title, linkText] of categories) {
             const section = scope === "laptop" ? "sodimm" : scope;
-            const product = winnerToDisplayProduct(snapshot, scope, section, title);
-            if (product) renderCategory([product], section, containerId, linkText);
+            const products = currentProductsForScope(snapshot, catalog, scope, section, title);
+            if (products.length) renderCategory(products, section, containerId, linkText);
             else renderCategoryUnavailable(containerId, scope === "laptop" ? "Laptop RAM" : scope.toUpperCase(), section);
         }
         renderTrust();

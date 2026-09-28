@@ -4,6 +4,17 @@ export async function loadCurrentRetailSnapshot() {
     return response.json();
 }
 
+export async function loadRamCatalog() {
+    const response = await fetch("/data/ram-catalog.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("Unable to load the RAM catalog.");
+    return response.json();
+}
+
+export function representativeCurrentOffer(product) {
+    if (product?.lowerCurrentItemPrice) return product.lowerCurrentItemPrice;
+    return product?.eligibleOfferCount === 1 && product.offers?.length === 1 ? product.offers[0] : null;
+}
+
 export function offerToDisplayProduct(item, section, title, coverage = {}) {
     if (!item) return null;
     const observed = new Date(item.observedAt);
@@ -18,8 +29,23 @@ export function offerToDisplayProduct(item, section, title, coverage = {}) {
         retailer: item.retailerName, offerUrl: item.destinationUrl,
         verified: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",
         lastVerifiedTime: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",
-        comparisonSemantics: item.comparisonSemantics
+        comparisonSemantics: item.comparisonSemantics,
+        publicPath: coverage.publicPath ?? null
     };
+}
+
+export function currentProductsForScope(snapshot, catalog, scope, section, title) {
+    const catalogById = new Map((catalog?.products ?? []).map(product => [product.atlasProductId, product]));
+    return (snapshot?.products ?? [])
+        .map(product => ({ product, offer: representativeCurrentOffer(product) }))
+        .filter(({ offer }) => offer && (scope === "laptop"
+            ? offer.formFactor === "SO_DIMM"
+            : offer.formFactor === "DIMM" && offer.ddrGeneration.toLowerCase() === scope))
+        .map(({ product, offer }) => offerToDisplayProduct(offer, section, title, {
+            publicPath: catalogById.get(product.atlasProductId)?.publicPath ?? null
+        }))
+        .filter(product => product.publicPath)
+        .sort((a, b) => Number(a.price) - Number(b.price) || a.displayName.localeCompare(b.displayName));
 }
 
 export function winnerToDisplayProduct(snapshot, scope, section, title) {

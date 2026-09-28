@@ -34,12 +34,27 @@ function populateFilters(catalog, form) {
     ];
     for (const [name, values, label] of definitions) {
         const select = form.elements.namedItem(name);
-        select.insertAdjacentHTML("beforeend", values.map((value) => option(value, label(value))).join(""));
+        if (select) select.insertAdjacentHTML("beforeend", values.map((value) => option(value, label(value))).join(""));
     }
 }
 
+export function representativeCatalogPrice(currentProduct) {
+    return currentProduct?.lowerCurrentItemPrice ?? (currentProduct?.eligibleOfferCount === 1 && currentProduct.offers?.length === 1 ? currentProduct.offers[0] : null);
+}
+
+export function sortRamCatalogProductsByCurrentPrice(products, currentRetailByProduct) {
+    return [...products].sort((a, b) => {
+        const aPrice = representativeCatalogPrice(currentRetailByProduct.get(a.atlasProductId))?.itemPriceUsd;
+        const bPrice = representativeCatalogPrice(currentRetailByProduct.get(b.atlasProductId))?.itemPriceUsd;
+        if (Number.isFinite(aPrice) && Number.isFinite(bPrice)) return aPrice - bPrice || a.displayName.localeCompare(b.displayName);
+        if (Number.isFinite(aPrice)) return -1;
+        if (Number.isFinite(bPrice)) return 1;
+        return a.displayName.localeCompare(b.displayName);
+    });
+}
+
 function card(item, currentRetailByProduct = new Map()) {
-    const current = currentRetailByProduct.get(item.atlasProductId)?.lowerCurrentItemPrice ?? null;
+    const current = representativeCatalogPrice(currentRetailByProduct.get(item.atlasProductId));
     const details = [
         ["Memory", `${item.memoryType} · ${displayFormFactor(item.formFactor)}`],
         ["Capacity", `${item.capacityGb}GB (${item.moduleCount} × ${item.capacityPerModuleGb}GB)`],
@@ -61,11 +76,11 @@ function card(item, currentRetailByProduct = new Map()) {
     </li>`;
 }
 
-function values(form) {
-    return Object.fromEntries(Object.keys(EMPTY_RAM_CATALOG_FILTERS).map((key) => [key, form.elements.namedItem(key).value]));
+function values(form, fixedFilters = {}) {
+    return Object.fromEntries(Object.keys(EMPTY_RAM_CATALOG_FILTERS).map((key) => [key, fixedFilters[key] ?? form.elements.namedItem(key)?.value ?? ""]));
 }
 
-export async function initializeRamCatalog({ fetchCatalog = () => fetch("/data/ram-catalog.json", { cache: "no-store" }), fetchCurrentRetail = () => fetch("/data/ram-current-retail.json", { cache: "no-store" }) } = {}) {
+export async function initializeRamCatalog({ fetchCatalog = () => fetch("/data/ram-catalog.json", { cache: "no-store" }), fetchCurrentRetail = () => fetch("/data/ram-current-retail.json", { cache: "no-store" }), fixedFilters = {}, priceFirst = false } = {}) {
     const form = document.getElementById("ramCatalogControls");
     const results = document.getElementById("ramCatalogResults");
     const status = document.getElementById("ramCatalogStatus");
@@ -83,13 +98,14 @@ export async function initializeRamCatalog({ fetchCatalog = () => fetch("/data/r
         }
         populateFilters(catalog, form);
         const render = () => {
-            const matches = filterRamCatalogProducts(catalog.products, values(form));
+            const matches = filterRamCatalogProducts(catalog.products, values(form, fixedFilters));
+            const ordered = priceFirst ? sortRamCatalogProductsByCurrentPrice(matches, currentRetailByProduct) : matches;
             status.textContent = `${matches.length} RAM product${matches.length === 1 ? "" : "s"} shown.`;
-            results.innerHTML = matches.length ? matches.map(item => card(item, currentRetailByProduct)).join("") : `<li class="ram-catalog-empty"><h2>No RAM products match these filters.</h2><p>Clear the search and filters to browse the complete catalog.</p></li>`;
+            results.innerHTML = ordered.length ? ordered.map(item => card(item, currentRetailByProduct)).join("") : `<li class="ram-catalog-empty"><h2>No RAM products match these filters.</h2><p>Clear the search and filters to browse the complete catalog.</p></li>`;
         };
         form.addEventListener("input", render);
         form.addEventListener("change", render);
-        reset.addEventListener("click", () => { form.reset(); render(); form.elements.namedItem("query").focus(); });
+        reset.addEventListener("click", () => { form.reset(); render(); form.elements.namedItem("query")?.focus(); });
         render();
     } catch {
         status.textContent = "We couldn't load the RAM catalog.";

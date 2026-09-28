@@ -4,10 +4,12 @@ import { spawnSync } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { representativeCurrentOffer } from "../public/js/modules/marketData.js";
+import { representativeCatalogPrice, sortRamCatalogProductsByCurrentPrice } from "../public/js/modules/ramCatalog.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = await mkdtemp(path.join(os.tmpdir(), "hardware-radar-development-preview-"));
-const asOf = "2026-09-19T23:52:04.726Z";
+const asOf = "2026-09-28T16:12:00.000Z";
 
 try {
     const build = spawnSync(process.execPath, ["scripts/build-public-development-preview.mjs"], {
@@ -25,38 +27,53 @@ try {
     const catalog = await readJson("data/ram-catalog.json");
     const currentRetail = await readJson("data/ram-current-retail.json");
     const marker = await readJson("development-preview.json");
-    const target = catalog.products.find((product) => product.atlasProductId === "ram_corsair_cmh32gx5m2b6000c38");
+    const dual = currentRetail.products.find((product) => product.lowerCurrentItemPrice && product.eligibleOfferCount >= 2);
+    const single = currentRetail.products.find((product) => product.lowerCurrentItemPrice === null && product.eligibleOfferCount === 1);
+    const target = catalog.products.find((product) => product.atlasProductId === dual?.atlasProductId);
 
-    assert.ok(target, "The canonical S2 product must remain in the public catalog projection.");
+    assert.ok(target, "A governed dual-retailer product must resolve to its public catalog route.");
+    assert.ok(single, "A governed single-retailer current product must remain useful.");
     assert.equal(catalog.productCount, 103);
     assert.equal(marker.mode, "DEVELOPMENT_PREVIEW");
     assert.equal(marker.productionPublication, false);
     assert.equal(marker.releaseAuthority, false);
     assert.equal(marker.deploymentAuthority, false);
     assert.equal(marker.asOf, asOf);
+    assert.equal(marker.currentPriceProductCount, currentRetail.products.length);
+    assert.ok(marker.currentPriceProductCount > 0);
 
-    const projected = currentRetail.products.find((product) => product.atlasProductId === target.atlasProductId);
-    assert.ok(projected, "The canonical governed S2 snapshot must be visible in development preview.");
-    assert.deepEqual(projected.offers.map((offer) => [offer.retailerName, offer.itemPriceUsd]), [
-        ["Newegg", 569.99],
-        ["Amazon", 587.09]
-    ]);
-    assert.equal(projected.lowerCurrentItemPrice.retailerName, "Newegg");
-    assert.equal(projected.lowerCurrentItemPrice.itemPriceUsd, 569.99);
+    assert.equal(representativeCurrentOffer(dual), dual.lowerCurrentItemPrice);
+    assert.equal(representativeCurrentOffer(single), single.offers[0]);
+    assert.equal(representativeCatalogPrice(single), single.offers[0]);
+    const ordered = sortRamCatalogProductsByCurrentPrice(catalog.products, new Map(currentRetail.products.map(product => [product.atlasProductId, product])));
+    const firstUnpriced = ordered.findIndex(product => !currentRetail.products.some(current => current.atlasProductId === product.atlasProductId));
+    assert.equal(ordered.slice(0, firstUnpriced).length, currentRetail.products.length);
+    assert.ok(ordered.slice(firstUnpriced).every(product => !currentRetail.products.some(current => current.atlasProductId === product.atlasProductId)));
 
     const targetHtml = await readFile(path.join(output, target.publicPath.slice(1), "index.html"), "utf8");
     assert.match(targetHtml, /Current tracked prices/);
-    assert.match(targetHtml, /Lower current item price:[\s\S]*?Newegg — \$569\.99 USD/);
-    assert.match(targetHtml, /Amazon/);
-    assert.match(targetHtml, /\$587\.09/);
-    assert.match(targetHtml, /Newegg/);
-    assert.match(targetHtml, /\$569\.99/);
+    assert.match(targetHtml, new RegExp(`Lower current item price:[\\s\\S]*?\\$${dual.lowerCurrentItemPrice.itemPriceUsd.toFixed(2).replace(".", "\\.")} USD`));
+    for (const offer of dual.offers) {
+        assert.match(targetHtml, new RegExp(offer.retailerName));
+        assert.match(targetHtml, new RegExp(`\\$${offer.itemPriceUsd.toFixed(2).replace(".", "\\.")}`));
+    }
     assert.match(targetHtml, /Prices shown exclude applicable shipping, taxes, and fees/);
     assert.doesNotMatch(targetHtml, /final checkout total|delivered total|condition unknown|seller unknown/i);
 
     const unrelated = catalog.products.find((product) => product.atlasProductId !== target.atlasProductId);
     const unrelatedHtml = await readFile(path.join(output, unrelated.publicPath.slice(1), "index.html"), "utf8");
-    assert.doesNotMatch(unrelatedHtml, /\$569\.99|\$587\.09/);
+    assert.doesNotMatch(unrelatedHtml, new RegExp(dual.offers.map(offer => `\\$${offer.itemPriceUsd.toFixed(2).replace(".", "\\.")}`).join("|")));
+
+    const home = await readFile(path.join(output, "index.html"), "utf8");
+    const homeScript = await readFile(path.join(output, "js/main.js"), "utf8");
+    assert.match(home, /ddr5Section/);
+    assert.match(homeScript, /currentProductsForScope/);
+    assert.match(homeScript, /loadRamCatalog/);
+    for (const page of ["ddr5.html", "ddr4.html", "sodimm.html"]) {
+        const html = await readFile(path.join(output, page), "utf8");
+        assert.match(html, /id="ramCatalogResults"/);
+        assert.match(html, /Prices shown exclude applicable shipping, taxes, and fees/);
+    }
 } finally {
     await rm(output, { recursive: true, force: true });
 }

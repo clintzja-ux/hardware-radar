@@ -4,9 +4,8 @@
     containerId,
     moreLinkText
 ) {
-    const product = items.find(
-        item => item.section === sectionName
-    );
+    const products = items.filter(item => item.section === sectionName);
+    const product = products[0];
 
     const container = document.getElementById(containerId);
 
@@ -22,9 +21,10 @@
 
     container.innerHTML = `
         <article class="card category-card">
-            <p class="category-title">${product.title}</p>
+            <p class="category-title">${sectionName === "sodimm" ? "Laptop RAM" : sectionName.toUpperCase() + " RAM"}</p>
+            <p class="category-price-label">Lowest current item price</p>
 
-            <h3>${product.displayName || `${product.brand} ${product.model}`}</h3>
+            <h3><a class="category-product-link" href="${product.publicPath}">${product.displayName || `${product.brand} ${product.model}`}</a></h3>
 
             <p class="category-specs">
                 ${product.memoryType} • ${product.capacity} • ${product.formFactor === "SO_DIMM" ? "SO-DIMM • " : ""}${product.speed}
@@ -39,6 +39,8 @@
                 <p class="mini-verified">
                     Price checked ${product.verified}
                 </p>
+
+                ${products.length > 1 ? `<div class="category-more-prices"><p>More current prices</p><ul>${products.slice(1, 4).map(item => `<li><a href="${item.publicPath}"><span>${item.displayName}</span><strong>$${item.price}</strong><small>${item.retailer}</small></a></li>`).join("")}</ul></div>` : ""}
 
                 ${
                     pageUrl

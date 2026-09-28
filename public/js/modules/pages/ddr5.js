@@ -6,6 +6,7 @@ import { renderBuyingAdvice } from "../renderBuyingAdvice.js";
 import { renderFAQ } from "../renderFAQ.js";
 import { renderFooter } from "../renderFooter.js";
 import { renderHeader } from "../renderHeader.js";
+import { initializeRamCatalog } from "../ramCatalog.js";
 
 async function init() {
 
@@ -69,6 +70,7 @@ async function init() {
     renderHeader("headerContainer");
 
     renderFooter("footerContainer");
+    initializeRamCatalog({ fixedFilters: { memoryType: "DDR5", formFactor: "DIMM" }, priceFirst: true });
 
 
 }

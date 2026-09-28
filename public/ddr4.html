@@ -97,6 +97,17 @@
 
     <section id="recommendationSection" aria-live="polite"></section>
     <section id="comparisonSection" aria-live="polite"></section>
+    <section class="category-catalog" aria-labelledby="categoryCatalogHeading">
+        <header class="category-catalog__heading"><p class="eyebrow">Browse DDR4 RAM</p><h2 id="categoryCatalogHeading">All DDR4 products</h2><p>Current prices appear first, followed by the rest of the DDR4 catalog.</p></header>
+        <form id="ramCatalogControls" class="ram-catalog-controls" role="search" aria-label="Search and filter DDR4 RAM products">
+            <div class="ram-catalog-search"><label for="ramCatalogQuery">Search DDR4 products</label><input id="ramCatalogQuery" name="query" type="search" placeholder="Brand, model or exact MPN" autocomplete="off"></div>
+            <div class="ram-catalog-filter-grid"><label>Brand<select name="brand"><option value="">All brands</option></select></label><label>Total capacity<select name="capacityGb"><option value="">All capacities</option></select></label><label>Module count<select name="moduleCount"><option value="">All module counts</option></select></label><label>Speed<select name="dataRateMtps"><option value="">All speeds</option></select></label></div>
+            <button id="ramCatalogReset" class="ram-catalog-reset" type="button">Reset filters</button>
+        </form>
+        <p class="current-retail-disclosure">Prices shown exclude applicable shipping, taxes, and fees.</p>
+        <p id="ramCatalogStatus" class="ram-catalog-status" role="status" aria-live="polite">Loading DDR4 products…</p>
+        <ul id="ramCatalogResults" class="ram-catalog-grid" aria-label="DDR4 RAM catalog results"></ul>
+    </section>
     <section id="buyingAdviceSection"></section>
     <section id="faqSection"></section>
 </main>
