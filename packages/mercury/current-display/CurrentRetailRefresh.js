@@ -3,7 +3,7 @@ import { createCurrentDisplaySnapshot } from "./CurrentDisplaySnapshot.js";
 import { assessCurrentDisplayItemPriceEligibility } from "./CurrentDisplayEligibility.js";
 
 export const CURRENT_RETAIL_SOURCE_MODES = Object.freeze(["AUTOMATED_PRIMARY", "AUTOMATED_ALTERNATE", "MANUAL_ONLY", "UNAVAILABLE"]);
-export const CURRENT_RETAIL_REFRESH_OUTCOMES = Object.freeze(["REFRESHED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "DESTINATION_INVALID", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "TIMEOUT", "PROVIDER_ERROR", "INVALID_SOURCE_RESULT"]);
+export const CURRENT_RETAIL_REFRESH_OUTCOMES = Object.freeze(["REFRESHED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "DESTINATION_INVALID", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "TIMEOUT", "PROVIDER_ERROR", "INVALID_SOURCE_RESULT"]);
 
 const stable = value => Array.isArray(value) ? `[${value.map(stable).join(",")}]` : value && typeof value === "object" ? `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}` : JSON.stringify(value);
 const hash = value => crypto.createHash("sha256").update(stable(value)).digest("hex");
@@ -118,6 +118,11 @@ export class CurrentRetailRefreshOrchestrator {
             if (result?.type === "OUTCOME" && CURRENT_RETAIL_REFRESH_OUTCOMES.includes(result.status)) { outcomes.push({ operationId, ...item, status: result.status }); continue; }
             const offer = normalizedObservation(result, item, adapter, operationId);
             if (!offer) { outcomes.push({ operationId, ...item, status: "INVALID_SOURCE_RESULT" }); continue; }
+            const predecessor = offers.get(key);
+            if (predecessor?.sourceIdentity?.sourceId && predecessor.sourceIdentity.sourceId !== offer.sourceIdentity.sourceId) {
+                outcomes.push({ operationId, ...item, status: "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED" });
+                continue;
+            }
             offers.set(key, offer);
             outcomes.push({ operationId, ...item, status: observationOutcome(offer) });
         }
@@ -126,9 +131,9 @@ export class CurrentRetailRefreshOrchestrator {
         const snapshot = createCurrentDisplaySnapshot({ observedAt: portfolio.asOf, importedAt: portfolio.asOf, source: { workbook: `fixture-current-retail-refresh:${portfolio.portfolioId}`, sheet: "Source-neutral fixture refresh", digest: runDigest }, offers: [...offers.values()] });
         const persistence = this.snapshotRepository ? await this.snapshotRepository.replace(snapshot) : { status: "NOT_PERSISTED", snapshotId: snapshot.snapshotId, previousSnapshotId: priorSnapshot?.snapshotId ?? null };
         const count = status => outcomes.filter(outcome => outcome.status === status).length;
-        const successful = new Set(["REFRESHED", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN"]);
+        const successful = new Set(["REFRESHED", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN"]);
         return freeze({ schemaVersion: "1.0", runId: `mer_currefresh_${runDigest.slice(0, 24)}`, runDigest, startedAt, asOf: portfolio.asOf, portfolioId: portfolio.portfolioId, outcomes, snapshot, persistence,
-            counts: { attempted: outcomes.length, refreshed: count("REFRESHED"), failed: outcomes.filter(item => !successful.has(item.status)).length, preservedPrior: outcomes.filter(item => !successful.has(item.status) && offers.has(`${item.atlasProductId}|${item.retailerId}`)).length, outOfStock: count("OUT_OF_STOCK"), priceUnavailable: count("PRICE_NOT_EXPOSED"), conditionUnknown: snapshot.offers.filter(offer => offer.condition === null).length, availabilityUnknown: snapshot.offers.filter(offer => offer.availability === "UNKNOWN").length, marketplaceBlocked: count("MARKETPLACE_ONLY"), sourceUnavailable: count("SOURCE_UNAVAILABLE"), numericOffers: snapshot.offers.length, itemPriceEligibleOffers: snapshot.offers.filter(offer => offer.itemPriceEligible).length },
+            counts: { attempted: outcomes.length, refreshed: count("REFRESHED"), failed: outcomes.filter(item => !successful.has(item.status)).length, preservedPrior: outcomes.filter(item => (!successful.has(item.status) || item.status === "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED") && offers.has(`${item.atlasProductId}|${item.retailerId}`)).length, sourceConflicts: count("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED"), outOfStock: count("OUT_OF_STOCK"), priceUnavailable: count("PRICE_NOT_EXPOSED"), conditionUnknown: snapshot.offers.filter(offer => offer.condition === null).length, availabilityUnknown: snapshot.offers.filter(offer => offer.availability === "UNKNOWN").length, marketplaceBlocked: count("MARKETPLACE_ONLY"), sourceUnavailable: count("SOURCE_UNAVAILABLE"), numericOffers: snapshot.offers.length, itemPriceEligibleOffers: snapshot.offers.filter(offer => offer.itemPriceEligible).length },
             countsByRetailer: Object.fromEntries([...new Set(outcomes.map(item => item.retailerId))].sort().map(id => [id, outcomes.filter(item => item.retailerId === id).length])),
             countsBySource: Object.fromEntries([...new Set(outcomes.map(item => item.sourceAdapterId))].sort().map(id => [id, outcomes.filter(item => item.sourceAdapterId === id).length])),
             historicalObservationsCreated: 0, canonicalObservationsCreated: 0, reviewDecisionsCreated: 0, publicationDecisionsCreated: 0, currentPriceRecordsCreated: 0, externalOperations: 0, providerTasks: 0, actualSpendUsd: 0 });

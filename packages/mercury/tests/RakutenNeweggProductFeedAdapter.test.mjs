@@ -37,11 +37,27 @@ const dp=createCurrentRetailRefreshPortfolio({products:[product],destinations:[d
 assert.equal((await new CurrentRetailRefreshOrchestrator({adapters:[deleteAdapter]}).run({portfolio:dp,priorSnapshot:prior(deleteAdapter.adapterId)})).snapshot.offers.length,0); cases++;
 const manual=await new CurrentRetailRefreshOrchestrator({adapters:[deleteAdapter]}).run({portfolio:dp,priorSnapshot:prior("mer_adapter_operator_curated_ram_offer")});
 assert.equal(manual.snapshot.offers.length,1); assert.deepEqual(product,structuredClone(product)); assert.deepEqual(destination,structuredClone(destination)); cases++;
+const sourceConflict=await new CurrentRetailRefreshOrchestrator({adapters:[adapter]}).run({portfolio,priorSnapshot:prior("mer_adapter_operator_curated_ram_offer")});
+assert.equal(sourceConflict.outcomes[0].status,"CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED"); assert.equal(sourceConflict.counts.sourceConflicts,1); assert.equal(sourceConflict.counts.preservedPrior,1);
+assert.equal(sourceConflict.snapshot.offers[0].sourceIdentity.sourceId,"FIXTURE"); cases++;
 
 const outcome=async overrides=>adapterFor([(await parse([fixtureRow(overrides)]))[1]]).refresh(context);
 assert.equal((await outcome({availability:"unseen"})).availability,"UNKNOWN"); cases++;
 assert.equal((await outcome({currency:"CAD"})).status,"INVALID_SOURCE_RESULT"); cases++;
-assert.equal((await outcome({retailPrice:"109.99",salePrice:"99.99"})).status,"PRICE_SEMANTICS_UNRESOLVED"); cases++;
+const blankWindowSale=await outcome({retailPrice:"109.99",salePrice:"99.99",beginDate:"",endDate:""});
+assert.equal(blankWindowSale.itemPriceUsd,99.99); assert.equal(blankWindowSale.sourceEvidence.selectedPriceField,"SALE_PRICE");
+assert.equal(blankWindowSale.sourceEvidence.rawSalePrice,"99.99"); assert.equal(blankWindowSale.sourceEvidence.rawRetailPrice,"109.99");
+assert.equal(blankWindowSale.sourceEvidence.priceWindow.status,"UNBOUNDED"); cases++;
+const saleWithoutRetail=await outcome({retailPrice:"",salePrice:"99.99",beginDate:"",endDate:""});
+assert.equal(saleWithoutRetail.itemPriceUsd,99.99); assert.equal(saleWithoutRetail.sourceEvidence.selectedPriceField,"SALE_PRICE"); cases++;
+const insideWindow=await outcome({retailPrice:"109.99",salePrice:"99.99",beginDate:"09/01/2026 00:00:00",endDate:"09/30/2026 23:59:59"});
+assert.equal(insideWindow.itemPriceUsd,99.99); assert.equal(insideWindow.sourceEvidence.selectedPriceField,"SALE_PRICE"); assert.equal(insideWindow.sourceEvidence.priceWindow.status,"INSIDE"); cases++;
+const outsideWindow=await outcome({retailPrice:"109.99",salePrice:"99.99",beginDate:"07/01/2026 00:00:00",endDate:"07/31/2026 23:59:59"});
+assert.equal(outsideWindow.itemPriceUsd,109.99); assert.equal(outsideWindow.sourceEvidence.selectedPriceField,"RETAIL_PRICE"); assert.equal(outsideWindow.sourceEvidence.priceWindow.status,"OUTSIDE"); cases++;
+for(const salePrice of ["", "0", "malformed", "-1"]){const fallback=await outcome({retailPrice:"109.99",salePrice,beginDate:"",endDate:""});assert.equal(fallback.itemPriceUsd,109.99);assert.equal(fallback.sourceEvidence.selectedPriceField,"RETAIL_PRICE");} cases++;
+for(const prices of [{retailPrice:"",salePrice:""},{retailPrice:"bad",salePrice:"0"}])assert.equal((await outcome({...prices,beginDate:"",endDate:""})).status,"PRICE_NOT_EXPOSED"); cases++;
+for(const window of [{beginDate:"09/01/2026 00:00:00",endDate:""},{beginDate:"",endDate:"09/30/2026 00:00:00"},{beginDate:"bad",endDate:"09/30/2026 00:00:00"},{beginDate:"09/01/2026 00:00:00",endDate:"bad"},{beginDate:"10/01/2026 00:00:00",endDate:"09/01/2026 00:00:00"}])assert.equal((await outcome({retailPrice:"109.99",salePrice:"99.99",...window})).status,"PRICE_SEMANTICS_UNRESOLVED"); cases++;
+assert.equal((await outcome({retailPrice:"109.99",salePrice:"99.99",beginDate:"09/08/2026 13:00:00",endDate:"09/30/2026 00:00:00"})).status,"PRICE_SEMANTICS_UNRESOLVED"); cases++;
 assert.equal((await outcome({manufacturerPartNumber:"OTHER"})).status,"SOURCE_UNAVAILABLE"); cases++;
 assert.equal((await adapterFor([]).refresh(context)).status,"SOURCE_UNAVAILABLE"); cases++;
 const collision={...destination,destinationId:`mer_dest_${"b".repeat(24)}`};
