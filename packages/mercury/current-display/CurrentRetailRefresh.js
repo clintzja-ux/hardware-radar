@@ -22,6 +22,7 @@ const retailerKey = (retailers, retailerId) => {
 function validateRegistration(registration) {
     if (!registration || typeof registration !== "object" || !/^mer_adapter_[a-z0-9_]+$/.test(registration.adapterId ?? "") || !CURRENT_RETAIL_SOURCE_MODES.includes(registration.mode)) throw new TypeError("CURRENT_RETAIL_SOURCE_REGISTRATION_INVALID");
     if (typeof registration.supports !== "function" || typeof registration.refresh !== "function") throw new TypeError("CURRENT_RETAIL_SOURCE_ADAPTER_INVALID");
+    if (registration.weakItemPriceAllowed !== undefined && typeof registration.weakItemPriceAllowed !== "boolean") throw new TypeError("CURRENT_RETAIL_SOURCE_ADAPTER_INVALID");
     const rights = registration.rights;
     if (!rights || rights.acquisitionAllowed !== true || rights.ephemeralRetentionAllowed !== true || typeof rights.publicDisplayAllowed !== "boolean" || typeof rights.comparisonAllowed !== "boolean" || rights.historicalRetentionAllowed !== false) throw new TypeError("CURRENT_RETAIL_SOURCE_RIGHTS_INVALID");
 }
@@ -55,11 +56,11 @@ export function createCurrentRetailRefreshPortfolio({ products, destinations, re
 function normalizedObservation(result, item, adapter, operationId) {
     if (!result || result.type !== "OBSERVATION" || result.atlasProductId !== item.atlasProductId || result.retailerId !== item.retailerId || result.retailer !== item.retailer || result.destinationId !== item.destinationId || result.destinationUrl !== item.destinationUrl || result.marketplace !== item.marketplace || !validTime(result.observedAt) || Date.parse(result.observedAt) > Date.parse(item.asOf)) return null;
     if (!Number.isFinite(result.itemPriceUsd) || result.itemPriceUsd <= 0 || result.currency !== "USD") return null;
-    if (![null, "NEW", "USED", "REFURBISHED", "OPEN_BOX"].includes(result.condition ?? null) || ![null, "AVAILABLE", "AVAILABLE_MARKETPLACE", "OUT_OF_STOCK"].includes(result.availability ?? null)) return null;
+    if (![null, "NEW", "USED", "REFURBISHED", "OPEN_BOX"].includes(result.condition ?? null) || ![null, "AVAILABLE", "AVAILABLE_MARKETPLACE", "OUT_OF_STOCK", "UNKNOWN"].includes(result.availability ?? null)) return null;
     if (result.shippingUsd !== null || result.feesUsd !== null) return null;
     const condition = result.condition ?? null;
     const availability = result.availability ?? null;
-    const eligibility = assessCurrentDisplayItemPriceEligibility({ condition, availability, destinationId: item.destinationId, publicDisplayAllowed: adapter.rights.publicDisplayAllowed, comparisonAllowed: adapter.rights.comparisonAllowed });
+    const eligibility = assessCurrentDisplayItemPriceEligibility({ condition, availability, destinationId: item.destinationId, publicDisplayAllowed: adapter.rights.publicDisplayAllowed, comparisonAllowed: adapter.rights.comparisonAllowed, weakItemPriceAllowed: adapter.weakItemPriceAllowed === true });
     return {
         atlasProductId: item.atlasProductId, retailer: item.retailer, retailerId: item.retailerId, marketplace: item.marketplace,
         priceUsd: result.itemPriceUsd, currency: result.currency, availability: availability ?? "UNKNOWN", condition,
@@ -74,6 +75,7 @@ function normalizedObservation(result, item, adapter, operationId) {
 
 function observationOutcome(offer) {
     if (offer.availability === "AVAILABLE_MARKETPLACE") return "MARKETPLACE_ONLY";
+    if (offer.availability === "OUT_OF_STOCK") return "OUT_OF_STOCK";
     if (offer.availability === "UNKNOWN") return "AVAILABILITY_UNKNOWN";
     if (offer.condition === null) return "CONDITION_UNKNOWN";
     return "REFRESHED";

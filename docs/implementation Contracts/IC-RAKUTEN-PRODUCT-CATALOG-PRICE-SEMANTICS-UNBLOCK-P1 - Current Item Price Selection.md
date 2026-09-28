@@ -30,6 +30,14 @@ Canonical Rakuten rights still set `historicalRetentionAllowed=false`; this incr
 
 Condition, seller, shipping, availability, destination, currency, rights, freshness, publication, artifact, release, and deployment governance remain independent. A resolved price does not establish `NEW`, availability, publication authority, Cheapest, Pick, savings, or delivered cost.
 
+## Automated item-price eligibility alignment
+
+`RAKUTEN_AUTOMATED_ITEM_PRICE_ELIGIBILITY_ALIGNMENT_P1` aligns the existing automated lane with the certified product-first item-price semantics: unknown condition is preserved as null and does not by itself suppress an otherwise valid, fresh, exactly bound current item-price display or item-price comparison. It grants no affirmative condition or seller claim. Known `USED`, `REFURBISHED`, and `OPEN_BOX` conditions remain incompatible, and existing identity, destination, availability, source-rights, price, freshness, offer-class, and source-conflict gates remain unchanged.
+
+The adapter declares this bounded weak-item-price capability to the existing source-neutral `CurrentRetailRefresh`; no Rakuten-specific eligibility owner exists. Seller, shipping, taxes, and fees remain unknown, so delivered-cost and final-checkout claims remain unavailable. Explicit documented `in-stock` maps to `AVAILABLE`; explicit documented `out-of-stock` maps to `OUT_OF_STOCK`, remains unavailable for purchase, and is not degraded to unknown. Unrecognized availability remains `UNKNOWN` and fails closed.
+
+Canonical Rakuten historical retention and analytics rights remain blocked. The alignment creates no history, publication, artifact, release, deployment, provider task, or production refresh authority.
+
 ## Safety and certification
 
-Fixture coverage includes Sale/Retail precedence, blank dates, complete-window inside/outside evaluation, invalid Sale fallback, absent Retail handling, both-price failure, one-sided and malformed windows, boundary ambiguity, USD validation, availability isolation, raw/selected provenance, current-state compatibility, hybrid comparison compatibility, same-retailer source conflict, and manual-path regression. No feed download, provider call, paid task, production mutation, publication operation, artifact, release, or deployment occurred; spend was `$0.000`.
+Fixture coverage includes Sale/Retail precedence, blank dates, complete-window inside/outside evaluation, invalid Sale fallback, absent Retail handling, both-price failure, one-sided and malformed windows, boundary ambiguity, USD validation, explicit in-stock/out-of-stock/unknown availability, unknown condition/seller/shipping preservation, known-incompatible condition exclusion, public projection, hybrid comparison compatibility, same-retailer source conflict, history isolation, and manual-path regression. No feed download, provider call, paid task, production mutation, publication operation, artifact, release, or deployment occurred; spend was `$0.000`.

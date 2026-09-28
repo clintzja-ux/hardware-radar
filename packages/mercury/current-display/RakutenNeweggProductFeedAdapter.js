@@ -103,7 +103,7 @@ export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = 
         : feedProfile === "MAIN_DELTA" ? reduceRakutenDeltaRecords(records) : records;
     const outcomes = sourceRecords.filter(item => item.recordType === "PRODUCT").map(record => ({ record, match: exactDestination(record, destinationSet) }));
     return freeze({
-        adapterId: "mer_adapter_rakuten_newegg_product_catalog", mode, rights: sourceRights,
+        adapterId: "mer_adapter_rakuten_newegg_product_catalog", mode, rights: sourceRights, weakItemPriceAllowed: true,
         supports: context => context.retailerId === "RETAILER-0004" && destinationSet.some(item => item.destinationId === context.destinationId),
         refresh: async context => {
             const applicable = outcomes.filter(item => item.match.destination?.destinationId === context.destinationId);
@@ -114,7 +114,7 @@ export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = 
             if (record.modification === "D") return { type: "OUTCOME", status: "SOURCE_WITHDRAWN" };
             const price = normalizedPrice(record, context.asOf);
             if (price.status !== "PRICE_RESOLVED") return { type: "OUTCOME", status: price.status };
-            const availability = record.availability === "in-stock" ? "AVAILABLE" : "UNKNOWN";
+            const availability = record.availability === "in-stock" ? "AVAILABLE" : record.availability === "out-of-stock" ? "OUT_OF_STOCK" : "UNKNOWN";
             const marketplace = feedProfile === "NEWEGG_MKPL" ? true : null;
             return freeze({ type: "OBSERVATION", atlasProductId: context.atlasProductId, retailerId: context.retailerId, retailer: "NEWEGG", destinationId: context.destinationId, destinationUrl: context.destinationUrl, marketplace: context.marketplace,
                 itemPriceUsd: price.itemPriceUsd, currency: "USD", condition: null, availability, sellerType: null, sellerName: null, shippingUsd: null, feesUsd: null,
