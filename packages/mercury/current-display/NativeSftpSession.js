@@ -8,6 +8,12 @@ import { Client } from "ssh2";
 import { createRakutenSftpConnectionAccounting } from "./RakutenSftpConnectionAccounting.js";
 
 const error = code => Object.assign(new Error(code), { code });
+const safeListCode = value => {
+    if (Number.isInteger(value)) return value;
+    const code=typeof value==="string"?value.toUpperCase():"";
+    return ["ENOENT","EACCES","EPERM","ECONNRESET","EPIPE","ENOTCONN","ERR_STREAM_DESTROYED"].includes(code)?code:null;
+};
+const safeErrorName = value => ["Error","SystemError"].includes(value?.name)?value.name:null;
 const digest = key => crypto.createHash("sha256").update(key).digest("hex");
 const hostTokens = (host, port) => port === 22 ? [host, `[${host}]:${port}`] : [`[${host}]:${port}`, host];
 const S_IFMT=0o170000,S_IFDIR=0o040000,S_IFREG=0o100000;
@@ -71,6 +77,18 @@ export function classifyNativeSftpFailure(value,{hostMismatch=false}={}){
     return "SFTP_CONNECT_FAILED";
 }
 
+export function classifyNativeSftpListFailure(value){
+    const code=value?.code,normalized=typeof code==="string"?code.toUpperCase():code,status=code===null||code===undefined||code===""?NaN:Number(code);
+    if(normalized==="SFTP_LIST_TIMEOUT")return "SFTP_LIST_TIMEOUT";
+    if(normalized==="SFTP_LIST_CANCELLED")return "SFTP_LIST_CANCELLED";
+    if(Number.isInteger(status))return status===2?"SFTP_NO_SUCH_PATH":status===3?"SFTP_PERMISSION_DENIED":status===4?"SFTP_SERVER_FAILURE":[6,7].includes(status)?"SFTP_CONNECTION_CLOSED":"SFTP_PROTOCOL_FAILURE";
+    if(normalized==="ENOENT")return "SFTP_NO_SUCH_PATH";
+    if(["EACCES","EPERM"].includes(normalized))return "SFTP_PERMISSION_DENIED";
+    if(["ECONNRESET","EPIPE","ENOTCONN","ERR_STREAM_DESTROYED"].includes(normalized)||value?.level==="client-socket")return "SFTP_CONNECTION_CLOSED";
+    if(value?.level==="client-sftp")return "SFTP_CHANNEL_FAILURE";
+    return "SFTP_UNKNOWN_LIST_FAILURE";
+}
+
 export class NativeSftpSession {
     constructor({config,knownHostsPath,trustOnFirstUse=false,clientFactory=()=>new Client(),readyTimeout=30000,cleanupTimeoutMs=2000,connectionAccounting=createRakutenSftpConnectionAccounting()}={}){this.config=config;this.knownHostsPath=path.resolve(knownHostsPath);this.trustOnFirstUse=trustOnFirstUse;this.clientFactory=clientFactory;this.readyTimeout=readyTimeout;this.cleanupTimeoutMs=cleanupTimeoutMs;this.accounting=connectionAccounting;this.client=null;this.sftp=null;this.clientClosed=false;this.hostMismatch=false;this.presentedKey=null;this.connectionsUsed=0;this.closePromise=null;this.secrets=[config?.username,config?.password];}
     async connect(){
@@ -93,7 +111,16 @@ export class NativeSftpSession {
     async list(remotePath,{signal,timeoutMs=30000}={}){
         if(!Number.isFinite(timeoutMs)||timeoutMs<=0)throw error("SFTP_LIST_CONFIG_INVALID");
         try{const entries=await new Promise((resolve,reject)=>{let settled=false,timer;const done=(fn,value)=>{if(settled)return;settled=true;clearTimeout(timer);signal?.removeEventListener?.("abort",cancel);fn(value);},cancel=()=>{void this.close();done(reject,error("SFTP_LIST_CANCELLED"));};if(signal?.aborted)return cancel();signal?.addEventListener?.("abort",cancel,{once:true});timer=setTimeout(()=>{void this.close();done(reject,error("SFTP_LIST_TIMEOUT"));},timeoutMs);this.sftp.readdir(remotePath,(cause,value)=>cause?done(reject,cause):done(resolve,value));});return entries.map(item=>metadata(item.filename,item.attrs));}
-        catch(cause){if(["SFTP_LIST_TIMEOUT","SFTP_LIST_CANCELLED","SFTP_LIST_CONFIG_INVALID"].includes(cause?.code))throw cause;const failure=error("SFTP_LIST_FAILED"),status=Number(cause?.code);if(Number.isInteger(status)){failure.sftpStatusCode=status;failure.sftpStatusCategory=status===2?"PATH_NOT_FOUND":status===3?"PERMISSION_DENIED":status===4?"SERVER_FAILURE":"UNKNOWN_LIST_FAILURE";}else failure.sftpStatusCategory=cause?.code==="ENOENT"?"PATH_NOT_FOUND":cause?.code==="EACCES"?"PERMISSION_DENIED":"UNKNOWN_LIST_FAILURE";throw failure;}
+        catch(cause){
+            if(cause?.code==="SFTP_LIST_CONFIG_INVALID")throw cause;
+            const accounting=this.accounting.snapshot(),classification=classifyNativeSftpListFailure(cause),structuredCode=safeListCode(cause?.code);
+            const listFailure=Object.freeze({operation:"LIST",classification,structuredCode,errorName:safeErrorName(cause),sessionReadyBeforeFailure:accounting.connectionsReady>0,sessionStateBeforeFailure:this.clientClosed?"CLOSED":this.closePromise?"CLOSING":this.sftp?"SFTP_READY":accounting.activeConnectionsAtEnd>0?"CONNECTED":"NOT_CONNECTED",timedOut:classification==="SFTP_LIST_TIMEOUT",cancelled:classification==="SFTP_LIST_CANCELLED"});
+            if(["SFTP_LIST_TIMEOUT","SFTP_LIST_CANCELLED"].includes(cause?.code)){cause.listFailure=listFailure;throw cause;}
+            const failure=error("SFTP_LIST_FAILED"),status=cause?.code===null||cause?.code===undefined||cause?.code===""?NaN:Number(cause.code);failure.listFailure=listFailure;
+            if(Number.isInteger(status)){failure.sftpStatusCode=status;failure.sftpStatusCategory=status===2?"PATH_NOT_FOUND":status===3?"PERMISSION_DENIED":status===4?"SERVER_FAILURE":"UNKNOWN_LIST_FAILURE";}
+            else failure.sftpStatusCategory=classification==="SFTP_NO_SUCH_PATH"?"PATH_NOT_FOUND":classification==="SFTP_PERMISSION_DENIED"?"PERMISSION_DENIED":classification==="SFTP_SERVER_FAILURE"?"SERVER_FAILURE":"UNKNOWN_LIST_FAILURE";
+            throw failure;
+        }
     }
     async stat(remotePath){try{const attrs=await new Promise((resolve,reject)=>this.sftp.stat(remotePath,(cause,value)=>cause?reject(cause):resolve(value)));return metadata(path.posix.basename(remotePath),attrs);}catch{throw error("SFTP_LIST_FAILED");}}
     async download(remotePath,localPath,{signal,stallTimeoutMs=60000,downloadTimeoutMs=1800000,reportedRemoteBytes=null,onProgress=()=>{},now=()=>Date.now()}={}){

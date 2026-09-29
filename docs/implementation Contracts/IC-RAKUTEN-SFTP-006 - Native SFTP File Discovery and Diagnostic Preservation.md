@@ -32,6 +32,8 @@ This metadata prepares—but does not activate—the future sequence of inspecti
 
 Safe exact SFTP codes survive redaction whether supplied as an error code or as the complete error message. `SFTP_FILE_NOT_FOUND`, `SFTP_FILE_AMBIGUOUS`, and `SFTP_LIST_FAILED` therefore remain primary. Unknown or unsafe raw exceptions become `SFTP_OPERATION_FAILED`. RAKUTEN-SFTP-005 connection accounting remains attached to both success and failure output and cleanup cannot replace the primary error.
 
+The later `RAKUTEN_SFTP_LIST_FAILURE_DIAGNOSTIC_P1` correction preserves bounded structured evidence from `ssh2` listing failures before the outer transport replaces the cause with `SFTP_ROOT_LIST_FAILED`. Where the source error supports it, the operator result now distinguishes no-such-path, permission denial, server failure, protocol status, connection closure, and SFTP-channel failure. It also retains the governed directory role, numeric or allowlisted structured code, readiness/session state before failure, and explicit timeout/cancellation flags. `SFTP_UNKNOWN_LIST_FAILURE` remains the last-resort classification. Arbitrary server messages, remote content, credentials, and environment values are not retained or printed. Diagnostic detail grants no retry authority: cleanup, lease release, one-session concurrency, and zero automatic retries remain unchanged.
+
 ## Isolation
 
 Inspection output exposes the selected delta's filename, family, MID, SID, normalized UTC remote timestamp, and informational byte size without downloading it.

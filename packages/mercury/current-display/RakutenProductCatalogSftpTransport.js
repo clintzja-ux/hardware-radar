@@ -94,7 +94,10 @@ const listingSpecs=advertiserMid=>[
     {logicalPath:"GLOBAL",remotePath:"/GLOBAL/",required:false}
 ];
 const listingOutcome=(spec,discovery)=>freeze({...spec,outcome:"SUCCESS",entryCount:discovery.entriesObserved,directoryCount:discovery.directoriesObserved,regularFileCount:discovery.regularFilesObserved,otherCount:discovery.otherEntries,ignoredSpecialCount:discovery.ignoredSpecialEntries,malformedCount:discovery.malformedEntries});
-const failedListingOutcome=(spec,cause)=>freeze({...spec,outcome:cause?.sftpStatusCategory??"UNKNOWN_LIST_FAILURE",sftpStatusCode:Number.isInteger(cause?.sftpStatusCode)?cause.sftpStatusCode:null,entryCount:0,directoryCount:0,regularFileCount:0,otherCount:0,ignoredSpecialCount:0,malformedCount:0});
+const failedListingOutcome=(spec,cause)=>{
+    const diagnostic=cause?.listFailure??{};
+    return freeze({...spec,outcome:cause?.sftpStatusCategory??"UNKNOWN_LIST_FAILURE",stage:`${spec.logicalPath}_LIST`,classification:diagnostic.classification??(cause?.code==="SFTP_LIST_TIMEOUT"?"SFTP_LIST_TIMEOUT":cause?.code==="SFTP_LIST_CANCELLED"?"SFTP_LIST_CANCELLED":"SFTP_UNKNOWN_LIST_FAILURE"),structuredCode:diagnostic.structuredCode??null,errorName:diagnostic.errorName??null,sessionReadyBeforeFailure:diagnostic.sessionReadyBeforeFailure??null,sessionStateBeforeFailure:diagnostic.sessionStateBeforeFailure??"UNKNOWN",timedOut:diagnostic.timedOut??cause?.code==="SFTP_LIST_TIMEOUT",cancelled:diagnostic.cancelled??cause?.code==="SFTP_LIST_CANCELLED",sftpStatusCode:Number.isInteger(cause?.sftpStatusCode)?cause.sftpStatusCode:null,entryCount:0,directoryCount:0,regularFileCount:0,otherCount:0,ignoredSpecialCount:0,malformedCount:0});
+};
 
 export class RakutenProductCatalogSftpTransport {
     constructor({ sessionFactory, stagingRoot, connectionConcurrency = 1, maxAttempts = 1, connectionAccountingFactory=()=>createRakutenSftpConnectionAccounting(),acquisitionLeaseFactory=null } = {}) {
