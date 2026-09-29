@@ -69,6 +69,19 @@ function parseHeader(fields) {
     return freeze({ recordType: "HDR", advertiserMid:fields[1],advertiserName:fields[2],feedTimestamp: new Date(fields[3]).toISOString(), fields: fields.slice(1) });
 }
 
+export function classifyRakutenHeaderTimestampSyntax(value) {
+    const text=typeof value==="string"?value.trim():"";
+    const allNumeric=/^\d+$/.test(text),hasDash=text.includes("-"),hasSlash=text.includes("/"),hasDot=text.includes("."),hasColon=text.includes(":"),hasT=/T/i.test(text),hasWhitespace=/\s/.test(text),hasTrailingZ=/\dZ$/i.test(text),hasNumericUtcOffset=/(?:[+-]\d{2}:?\d{2})$/.test(text),hasAlphabeticTimezoneToken=/\b[A-Za-z]{2,5}$/.test(text)&&hasWhitespace&&!hasTrailingZ;
+    let structuralFamily="UNKNOWN_FORMAT";
+    if(allNumeric)structuralFamily="COMPACT_NUMERIC";
+    else if(hasSlash&&hasColon)structuralFamily="SLASH_DATE_TIME_LIKE";
+    else if(hasDash&&(hasT||hasWhitespace)&&hasColon)structuralFamily="ISO_LIKE";
+    else if(hasDot&&hasColon)structuralFamily="DOT_DATE_TIME_LIKE";
+    else if(hasAlphabeticTimezoneToken)structuralFamily="RFC_STYLE_LIKE";
+    else if(hasColon&&(hasSlash||hasDash||hasDot))structuralFamily="DATE_TIME_LIKE";
+    return freeze({present:text.length>0,trimmedLength:text.length,dateSeparator:hasDash?"DASH":hasSlash?"SLASH":hasDot?"DOT":"NONE",containsTimeSeparator:hasColon,containsTSeparator:hasT,containsWhitespaceSeparator:hasWhitespace,containsTrailingZ:hasTrailingZ,containsNumericUtcOffset:hasNumericUtcOffset,containsAlphabeticTimezoneToken:hasAlphabeticTimezoneToken,allNumeric,compactNumericShape:allNumeric?`DIGITS_${text.length}`:null,structuralFamily});
+}
+
 function parseTrailer(fields) {
     if (fields[0] !== "TRL" || fields.length !== 2 || !/^\d+$/.test(fields[1])) throw parserError("RAKUTEN_TRAILER_INVALID");
     return freeze({ recordType: "TRL", productCount: Number(fields[1]), fields: fields.slice(1) });
@@ -128,12 +141,52 @@ const integrityMapping=Object.freeze({
     RAKUTEN_TRAILER_MISSING:["SFTP_TRAILER_MISSING","TRAILER"],RAKUTEN_TRAILER_INVALID:["SFTP_TRAILER_INVALID","TRAILER"],RAKUTEN_TRAILER_DUPLICATE:["SFTP_TRAILER_INVALID","TRAILER"],RAKUTEN_RECORD_AFTER_TRAILER:["SFTP_TRAILER_INVALID","TRAILER"],RAKUTEN_TRAILER_COUNT_MISMATCH:["SFTP_TRAILER_COUNT_MISMATCH","COUNT"]
 });
 
+async function diagnoseUnsupportedRakutenHeaderTimestamp(input,{feedProfile="MAIN",maxPhysicalRecordCharacters=RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS}={}){
+    const source=Buffer.isBuffer(input)?Readable.from([input]):input,decompressed=source.pipe(createGunzip());
+    let gzipOpened=false,gzipReachedEof=false,decompressionError=false,headerDiagnostic=null,trailerEncountered=false,trailerCountPresent=false,trailerCountObserved=null,productRowsObserved=0,recordsAfterTrailer=false,structuralFailure=null;
+    try{
+        for await(const framed of frameRakutenPhysicalRecords(decompressed,{maxPhysicalRecordCharacters})){
+            gzipOpened=true;
+            try{
+                const {fields}=parseRakutenPipeRecordDetailed(framed.text,recordProperties(framed));
+                if(!headerDiagnostic){
+                    const generalValid=fields[0]==="HDR"&&fields.length===4&&/^\d+$/.test(fields[1])&&Boolean(fields[2]?.trim());
+                    headerDiagnostic=freeze({recordPresent:fields[0]==="HDR",fieldCount:fields.length,generalStructureValid:generalValid,timestampPresent:typeof fields[3]==="string"&&fields[3].trim().length>0,timestampAccepted:Number.isFinite(Date.parse(fields[3])),timestampSyntax:classifyRakutenHeaderTimestampSyntax(fields[3])});
+                    if(!generalValid)structuralFailure="SFTP_HDR_INVALID";
+                    continue;
+                }
+                if(fields[0]==="TRL"){
+                    if(trailerEncountered){structuralFailure??="SFTP_TRAILER_INVALID";continue;}
+                    trailerEncountered=true;recordsAfterTrailer=false;
+                    if(fields.length===2&&/^\d+$/.test(fields[1])){trailerCountPresent=true;trailerCountObserved=Number(fields[1]);}
+                    else structuralFailure??="SFTP_TRAILER_INVALID";
+                    continue;
+                }
+                if(trailerEncountered){recordsAfterTrailer=true;structuralFailure??="SFTP_TRAILER_INVALID";continue;}
+                if(fields[0]==="HDR"||(/^[A-Z]{3}$/.test(fields[0])&&fields[0]!=="TRL")){structuralFailure??="SFTP_PRODUCT_RECORD_UNKNOWN";continue;}
+                parseProduct(fields,{recordOrdinal:framed.recordOrdinal,physicalLineOrdinal:framed.physicalLineOrdinal},feedProfile);productRowsObserved+=1;
+            }catch(cause){
+                structuralFailure??=integrityMapping[cause?.code??cause?.message]?.[0]??"SFTP_INTEGRITY_FAILED";
+            }
+        }
+        gzipReachedEof=true;
+    }catch(cause){
+        decompressionError=true;
+        structuralFailure=integrityMapping[cause?.code??cause?.message]?.[0]??((cause?.code==="Z_BUF_ERROR"||/unexpected end|unexpected eof/i.test(String(cause?.message??"")))?"SFTP_GZIP_TRUNCATED":"SFTP_GZIP_INVALID");
+    }
+    if(gzipReachedEof&&!trailerEncountered)structuralFailure??="SFTP_TRAILER_MISSING";
+    const productCountMatches=trailerCountPresent?trailerCountObserved===productRowsObserved:null;
+    if(gzipReachedEof&&productCountMatches===false)structuralFailure??="SFTP_TRAILER_COUNT_MISMATCH";
+    return freeze({mode:"UNSUPPORTED_HDR_TIMESTAMP_DIAGNOSTIC",accepted:false,semanticFailure:"SFTP_HDR_TIMESTAMP_INVALID",hdr:headerDiagnostic,gzip:{opened:gzipOpened,reachedEof:gzipReachedEof,decompressionError},trailer:{encountered:trailerEncountered,countPresent:trailerCountPresent,countObserved:trailerCountObserved,productRowsObserved,productCountMatches,recordsAfterTrailer},structuralFailure});
+}
+
 export async function validateRakutenProductCatalogGzip(input,options){
     const records=[];
     try{for await(const record of parseRakutenProductCatalogGzip(input,options))records.push(record);}
     catch(cause){
         const [code,integrityStage]=integrityMapping[cause?.code??cause?.message]??["SFTP_INTEGRITY_FAILED","UNKNOWN"],products=records.filter(item=>item.recordType==="PRODUCT"),header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL");
-        const integrity=freeze({status:"FAILED",integrityStage,rowsParsed:records.length,productRowsParsed:cause?.productRowsParsed??products.length,fieldCountsObserved:freeze([...new Set(products.map(item=>item.fieldCount))].sort((a,b)=>a-b)),rowOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,physicalLineOrdinal:Number.isInteger(cause?.physicalLineOrdinal)?cause.physicalLineOrdinal:null,recordOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,productRowOrdinal:Number.isInteger(cause?.productRowOrdinal)?cause.productRowOrdinal:null,physicalRecordByteLength:Number.isInteger(cause?.physicalRecordByteLength)?cause.physicalRecordByteLength:null,quoteStateAtFailure:cause?.quoteStateAtFailure??null,delimiterCountOutsideQuotes:Number.isInteger(cause?.delimiterCountOutsideQuotes)?cause.delimiterCountOutsideQuotes:null,quoteOpenedAtFieldBoundary:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen),fieldOrdinalAtQuoteOpen:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen)?cause.fieldOrdinalAtQuoteOpen:null,literalQuotesObserved:Number.isInteger(cause?.literalQuotesObserved)?cause.literalQuotesObserved:null,structuralQuotesObserved:Number.isInteger(cause?.structuralQuotesObserved)?cause.structuralQuotesObserved:null,recordClassification:cause?.recordClassification??null,startsWithRecognizedRecordToken:typeof cause?.startsWithRecognizedRecordToken==="boolean"?cause.startsWithRecognizedRecordToken:null,observedFieldCount:Number.isInteger(cause?.observedFieldCount)?cause.observedFieldCount:null,trailerCountObserved:Number.isInteger(cause?.trailerCountObserved)?cause.trailerCountObserved:trailer?.productCount??null,headerTimestampPresent:Boolean(header?.feedTimestamp),gzipOpened:cause?.gzipOpened??records.length>0,gzipCompleted:cause?.gzipCompleted??false});
+        const unsupportedTimestampDiagnostic=code==="SFTP_HDR_TIMESTAMP_INVALID"&&Buffer.isBuffer(input)?await diagnoseUnsupportedRakutenHeaderTimestamp(input,options):null;
+        const integrity=freeze({status:"FAILED",integrityStage,rowsParsed:records.length,productRowsParsed:cause?.productRowsParsed??products.length,fieldCountsObserved:freeze([...new Set(products.map(item=>item.fieldCount))].sort((a,b)=>a-b)),rowOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,physicalLineOrdinal:Number.isInteger(cause?.physicalLineOrdinal)?cause.physicalLineOrdinal:null,recordOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,productRowOrdinal:Number.isInteger(cause?.productRowOrdinal)?cause.productRowOrdinal:null,physicalRecordByteLength:Number.isInteger(cause?.physicalRecordByteLength)?cause.physicalRecordByteLength:null,quoteStateAtFailure:cause?.quoteStateAtFailure??null,delimiterCountOutsideQuotes:Number.isInteger(cause?.delimiterCountOutsideQuotes)?cause.delimiterCountOutsideQuotes:null,quoteOpenedAtFieldBoundary:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen),fieldOrdinalAtQuoteOpen:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen)?cause.fieldOrdinalAtQuoteOpen:null,literalQuotesObserved:Number.isInteger(cause?.literalQuotesObserved)?cause.literalQuotesObserved:null,structuralQuotesObserved:Number.isInteger(cause?.structuralQuotesObserved)?cause.structuralQuotesObserved:null,recordClassification:cause?.recordClassification??null,startsWithRecognizedRecordToken:typeof cause?.startsWithRecognizedRecordToken==="boolean"?cause.startsWithRecognizedRecordToken:null,observedFieldCount:Number.isInteger(cause?.observedFieldCount)?cause.observedFieldCount:null,trailerCountObserved:Number.isInteger(cause?.trailerCountObserved)?cause.trailerCountObserved:trailer?.productCount??null,headerTimestampPresent:Boolean(header?.feedTimestamp),gzipOpened:unsupportedTimestampDiagnostic?.gzip.opened??cause?.gzipOpened??records.length>0,gzipCompleted:unsupportedTimestampDiagnostic?.gzip.reachedEof??cause?.gzipCompleted??false,unsupportedTimestampDiagnostic});
         throw Object.assign(new Error(code),{code,integrity});
     }
     const products=records.filter(item=>item.recordType==="PRODUCT"),header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL"),integrity=freeze({status:"PASS",integrityStage:"COMPLETE",rowsParsed:records.length,productRowsParsed:products.length,fieldCountsObserved:freeze([...new Set(products.map(item=>item.fieldCount))].sort((a,b)=>a-b)),rowOrdinal:null,observedFieldCount:null,trailerCountObserved:trailer.productCount,headerTimestampPresent:true,gzipOpened:true,gzipCompleted:true});

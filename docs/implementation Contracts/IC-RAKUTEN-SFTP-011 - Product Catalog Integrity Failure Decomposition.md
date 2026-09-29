@@ -20,7 +20,7 @@ The integrity boundary preserves the stage at which local validation failed with
 
 Unknown parser failures retain the fail-closed fallback `SFTP_INTEGRITY_FAILED`. No failure is converted into success, and informational remote-size disagreement remains distinct from content integrity.
 
-Diagnostics are limited to integrity stage, rows parsed, product rows parsed, observed field counts, safe row ordinal, observed field count, trailer count when available, header-timestamp presence, and gzip-opened/completed state. They never contain a product row, title, URL, description, credential, environment value, or decompressed payload.
+Diagnostics are limited to integrity stage, rows parsed, product rows parsed, observed field counts, safe row ordinal, observed field count, trailer count when available, header-timestamp presence, and gzip-opened/completed state. For an unsupported field-four timestamp, the local buffer validator additionally performs a streaming diagnostic-only pass that reports a sanitized syntax family and independent gzip-EOF/trailer/count results. It never reports the literal timestamp, advertiser name, product row, title, URL, description, credential, environment value, or decompressed payload.
 
 ## Observed header contract
 
@@ -30,6 +30,8 @@ The operator-established Product Catalog header is:
 
 The parser now validates exactly four header fields, a numeric MID, a nonblank advertiser name, and the timestamp in field four. It does not treat the advertiser name as immutable identity. This corrects the sanitized fixture and parser contract; it does not claim that header shape was conclusively the cause of an earlier live failure because the failed partial was correctly deleted.
 
+An unsupported field-four timestamp remains the primary semantic failure `SFTP_HDR_TIMESTAMP_INVALID`. Diagnostic continuation does not make the file acceptable, create parsed catalog output, invoke the adapter, or broaden the timestamp contract. Its only purpose is to distinguish semantic HDR rejection from later gzip corruption, missing or invalid trailer state, and trailer-count mismatch. A structurally complete gzip with an unsupported timestamp remains rejected.
+
 Ordinary product rows retain the certified 38-field shape and delta rows retain the 39-field shape with modification `I`, `U`, or `D`. Quoted pipe characters, doubled quotes, CRLF input, and a trailing blank line are supported. A valid trailer is terminal, has a numeric product-row count, and must match the parsed product count exactly.
 
 ## Local validation and partial lifecycle
@@ -37,6 +39,8 @@ Ordinary product rows retain the certified 38-field shape and delta rows retain 
 `npm run rakuten:feed:validate -- <local-file>` validates one operator-supplied local gzip file without opening SFTP or invoking the Rakuten adapter. Optional `--reported-bytes=<count>` compares the local file size with directory-reported bytes diagnostically only. Output uses the basename and safe counts/status; it does not print feed content.
 
 The production transport keeps the RAKUTEN-SFTP-009 default: a failed attempt partial is deleted. RAKUTEN-SFTP-011 adds no diagnostic-copy or failed-payload retention mode. A successful transfer is still finalized only after gzip, header, product, trailer, and count validation all pass.
+
+Authoritative-sequence validation failures retain the selected lineage, attempted filename/family, transfer summary, and sanitized integrity result before deleting every failed partial. The evidence is bounded metadata; no rejected feed archive is introduced.
 
 ## Separation and safety
 
