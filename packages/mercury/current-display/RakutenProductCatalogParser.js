@@ -65,7 +65,7 @@ export function parseRakutenPipeRecord(line) { return parseRakutenPipeRecordDeta
 
 export function parseRakutenHeaderTimestampUtc(value) {
     if(typeof value!=="string")return null;
-    const match=/^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})$/.exec(value);
+    const match=/^(\d{2})\/(\d{2})\/(\d{4}) (\d{1,2}):(\d{2}):(\d{2})$/.exec(value);
     if(!match)return null;
     const [,monthText,dayText,yearText,hourText,minuteText,secondText]=match,month=Number(monthText),day=Number(dayText),year=Number(yearText),hour=Number(hourText),minute=Number(minuteText),second=Number(secondText);
     if(month<1||month>12||day<1||hour>23||minute>59||second>59)return null;
