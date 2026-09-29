@@ -268,6 +268,7 @@ const testModules = [
     ,"./CurrentDisplayPublicationArtifact.test.mjs"
     ,"./PracticalCurrentItemPriceComparison.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
+    ,"./ProductionRakutenNeweggCurrentRefresh.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
     ,"./RakutenProductRecordFraming.test.mjs"

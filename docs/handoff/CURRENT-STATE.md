@@ -3,12 +3,12 @@
 ```text
 Last updated:                  2026-09-28
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        c9da1f33500f6610f31f17dfd05be151c75e156f (`fix(mercury): resolve Rakuten product catalog price semantics`)
+Current committed HEAD:        f543ccf8bc3393dc2b814ee88d504d6d073e9256 (`fix(mercury): align Rakuten automated item price eligibility`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 183 ahead; branch is synchronized with `origin/hardware-radar-growth-1`
+Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 184 ahead; branch is synchronized with `origin/hardware-radar-growth-1`
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: MVP-002 Increment 4 — Curated RAM Offer Ingestion and Qualification Boundary complete
@@ -33,10 +33,11 @@ Current catalog-resolution increment: D-001 — 24 RAM launch candidates resolve
 Current catalog-balance review: D-001A — brand and retailer relevance reviewed; 22 ready, 2 need evidence
 Current Atlas-admission increment: ATLAS-ACTIVATION-002 — the exact 15 pre-expansion RAM records human-reviewed and activated through a separate Atlas-owned batch boundary; local changes are not yet committed
 Current retail-display increment: RETAIL-LIFECYCLE-REASSESS-001 — lifecycle-held evidence reassessed after full Atlas activation; local checkpoint awaiting operator commit/push
-Current retail-refresh increment: CURRENT-RETAIL-REFRESH-002 — source-neutral portfolio/adapter/orchestrator boundary fixture-certified; no live adapter or production command exists
+Current retail-refresh increment: CURRENT-RETAIL-REFRESH-002 remains the source-neutral portfolio/adapter/orchestrator owner; RAKUTEN_NEWEGG_PRODUCTION_REFRESH_COMPOSITION_P1 now fixture-certifies its production composition and thin local-file command, while real acquisition/execution remains separately unauthorized
 Current Rakuten semantics increment: RAKUTEN_NEWEGG_MAIN_FEED_SELLER_CONDITION_AND_OFFER_CLASSIFICATION_EVIDENCE_CLOSURE — authoritative evidence remains insufficient for population-level first-party seller, `NEW`, or standalone inference; exact seller/condition evidence remains the next gate
 Current Rakuten price-semantics increment: RAKUTEN_PRODUCT_CATALOG_PRICE_SEMANTICS_UNBLOCK_P1 — written Rakuten Advertising Customer Support clarification now establishes valid Sale Price precedence, Retail Price fallback, blank-date Sale validity, and complete-window fallback; the existing adapter implements those rules while one-sided, malformed, reversed, and timezone/boundary-ambiguous windows remain fail-closed. Raw fields and selected-field provenance are preserved, source conflicts require review, canonical historical rights remain disallowed, and no live feed/current/history/publication operation occurred.
 Current Rakuten eligibility increment: RAKUTEN_AUTOMATED_ITEM_PRICE_ELIGIBILITY_ALIGNMENT_P1 — fixture-certified alignment preserves unknown condition/seller/shipping while permitting an otherwise valid bounded automated item-price display and comparison; known-incompatible condition still blocks, explicit `out-of-stock` is known unavailable and ineligible, unrecognized availability remains unknown, and history/publication/release authority remains absent.
+Current Rakuten production composition: RAKUTEN_NEWEGG_PRODUCTION_REFRESH_COMPOSITION_P1 — fixture-certified production service and thin local-file command compose ordered acquired FULL/DELTA files through the existing catalog projection, canonical Atlas/destinations, Rakuten adapter, eligibility, source-neutral refresh, and predecessor-safe current snapshot repository. Routine rows progress mechanically; row-level destination, identity, price, availability, out-of-stock, and source-conflict outcomes remain isolated. Real feed acquisition/execution is not authorized or run; history/publication/release remain untouched.
 Current manual retailer increment: PROCESS_NEXT_READY_MANUAL_PRICE_COHORT — 23 reviewed manual observations progressed routinely into current state and history without per-record human ceremony; nine products now expose dual-retailer item-price comparisons and the remaining progressed products retain valid single-retailer current state. Exact prices, timestamps, condition, shipping, seller, research URL, destination, source, rights, and operator provenance are preserved; publication and release authority remain absent.
 Current dual-retailer research artifact: the earlier two source-distinct preparations and their deterministic historical records remain immutable. Candidate `mer_displaypubcand_3387d03f2ee69221e27a72bf` and authorization `mer_displaypubauth_a3b57845954ad9c5f9482ba3` remain bound to their original current-display projection facts and do not authorize the 23 new observations. History now contains 219 records. The authorization is single-use and freshness-bounded; do not proceed to artifact/publication from this operational run without a separate governed gate.
 Current brand-registration increment: D-002A — four launch brand prerequisites canonically registered
@@ -188,13 +189,13 @@ MERCURY-HISTORY-056 fixture-certified the five-product `DATAFORSEO_AMAZON` pilot
 
 ## Current test baseline
 
-The current runners declare **337 subsystem test files**:
+The current runners declare **338 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 8 |
 | Atlas | 22 |
-| Mercury | 283 |
+| Mercury | 284 |
 | Beacon | 7 |
 | Gateway | 17 |
 

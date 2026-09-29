@@ -38,6 +38,14 @@ The adapter declares this bounded weak-item-price capability to the existing sou
 
 Canonical Rakuten historical retention and analytics rights remain blocked. The alignment creates no history, publication, artifact, release, deployment, provider task, or production refresh authority.
 
+## Production current-refresh composition
+
+`RAKUTEN_NEWEGG_PRODUCTION_REFRESH_COMPOSITION_P1` connects the existing owners without adding acquisition, rights, destination, current-state, comparison, or publication authority. `ProductionRakutenNeweggCurrentRefreshService` accepts an ordered sequence of already-acquired and integrity-validated `MAIN_FULL`/`MAIN_DELTA` Product Catalog records, applies `RakutenCatalogStateProjection`, binds rows only to existing reviewed Newegg destinations and Atlas products, invokes `RakutenNeweggProductFeedAdapter`, delegates eligibility and current-state construction to `CurrentRetailRefresh`, and persists a material delta through `FileCurrentDisplaySnapshotRepository` with exact predecessor revalidation.
+
+The thin `retail-current:rakuten-newegg:refresh` command accepts one or more ordered `--catalog-file=<local-gzip>` inputs, `--evaluated-at=<ISO-8601>`, and `--mode=dry-run|execute`. It parses only already-local files through the certified Product Catalog parser. Dry-run and execution share the same classification path; dry-run performs no snapshot write. Exact material replay is a no-op. Routine rows progress without per-product authorization, while destination absence, identity contradiction, unsupported price windows, unknown availability, out-of-stock state, and same-retailer source conflicts remain independently visible and do not block unrelated rows.
+
+The composition never downloads a feed and never calls SFTP. Real acquisition and real execution remain separately operator-authorized. It writes no Rakuten history while canonical rights remain blocked, creates no publication candidate/authorization/artifact, and does not change manual processing or affiliate routing.
+
 ## Safety and certification
 
 Fixture coverage includes Sale/Retail precedence, blank dates, complete-window inside/outside evaluation, invalid Sale fallback, absent Retail handling, both-price failure, one-sided and malformed windows, boundary ambiguity, USD validation, explicit in-stock/out-of-stock/unknown availability, unknown condition/seller/shipping preservation, known-incompatible condition exclusion, public projection, hybrid comparison compatibility, same-retailer source conflict, history isolation, and manual-path regression. No feed download, provider call, paid task, production mutation, publication operation, artifact, release, or deployment occurred; spend was `$0.000`.

@@ -55,6 +55,11 @@ function exactDestination(record, destinations) {
     return { status: "MATCHED", destination, merchantUrl };
 }
 
+export function assessRakutenNeweggDestination(record, destinations) {
+    if (record?.recordType !== "PRODUCT" || !Array.isArray(destinations)) throw new TypeError("RAKUTEN_DESTINATION_ASSESSMENT_INPUT_INVALID");
+    return freeze(exactDestination(record, destinations));
+}
+
 function rakutenWallClock(value) {
     if (typeof value !== "string" || value.trim() === "") return null;
     const match = value.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}) (\d{1,2}):(\d{2}):(\d{2})$/);
