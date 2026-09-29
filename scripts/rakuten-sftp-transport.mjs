@@ -1,20 +1,21 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadRakutenSftpConfig, NativeSftpSession, RakutenProductCatalogSftpTransport } from "../packages/mercury/current-display/index.js";
+import { createRakutenSftpAcquisitionLease, loadRakutenSftpConfig, NativeSftpSession, RakutenProductCatalogSftpTransport } from "../packages/mercury/current-display/index.js";
 
 const args=new Map(process.argv.slice(2).map(value=>{const i=value.indexOf("=");return i<0?[value,true]:[value.slice(0,i),value.slice(i+1)];}));
 const operation=args.get("--operation");
-if(!["inspect","download-delta"].includes(operation))throw new Error("SFTP_OPERATION_INVALID");
+if(!["inspect","download-delta","download-authoritative"].includes(operation))throw new Error("SFTP_OPERATION_INVALID");
 if(args.get("--confirm-host-key")!=="TRUST-RAKUTEN-HOST-ON-FIRST-USE")throw new Error("SFTP_HOST_VERIFICATION_REQUIRED");
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const config=loadRakutenSftpConfig();
 const sessionFactory=({connectionAccounting})=>new NativeSftpSession({config,knownHostsPath:path.join(root,".forge-review","rakuten-sftp","known_hosts"),trustOnFirstUse:true,connectionAccounting});
-const transport=new RakutenProductCatalogSftpTransport({sessionFactory,stagingRoot:path.join(root,".forge-review","rakuten-sftp","staging"),connectionConcurrency:config.concurrency,maxAttempts:1});
+const transport=new RakutenProductCatalogSftpTransport({sessionFactory,stagingRoot:path.join(root,".forge-review","rakuten-sftp","staging"),connectionConcurrency:config.concurrency,maxAttempts:1,acquisitionLeaseFactory:()=>createRakutenSftpAcquisitionLease({leasePath:path.join(root,".forge-review","rakuten-sftp","acquisition.lock"),operationId:`rakuten-sftp-${operation}`})});
 const controller=new AbortController();let lastProgressPrint=0;
-const cancel=()=>controller.abort();if(operation==="download-delta"){process.once("SIGINT",cancel);process.once("SIGTERM",cancel);}
+const cancel=()=>controller.abort();process.once("SIGINT",cancel);process.once("SIGTERM",cancel);
 const reportProgress=value=>{const current=Date.now();if(current-lastProgressPrint<10000)return;lastProgressPrint=current;console.log(`Download progress: ${value.bytesTransferred} bytes${value.percentCompleteEstimate===null?"":` (${value.percentCompleteEstimate}% estimate)`}`);};
-let result;try{result=operation==="inspect"?await transport.inspect():await transport.downloadAndValidate({signal:controller.signal,onProgress:reportProgress});}catch(error){console.error("RAKUTEN PRODUCT CATALOG SFTP TRANSPORT");console.error("Operation:                   ",error.code??"SFTP_OPERATION_FAILED");printTransfer(error.transfer);printIntegrity(error.integrity,(...args)=>console.error(...args));printDirectories(error.directoryListings);printDiscovery(error.discovery);printAccounting(error.connectionAccounting);console.error("Actual spend:                $0.000");process.exitCode=1;throw error;}finally{process.removeListener("SIGINT",cancel);process.removeListener("SIGTERM",cancel);}
+let result;try{result=operation==="inspect"?await transport.inspect():operation==="download-authoritative"?await transport.downloadAuthoritativeSequence({signal:controller.signal,onProgress:reportProgress}):await transport.downloadAndValidate({signal:controller.signal,onProgress:reportProgress});}catch(error){console.error("RAKUTEN PRODUCT CATALOG SFTP TRANSPORT");console.error("Operation:                   ",error.code??"SFTP_OPERATION_FAILED");printTransfer(error.transfer);printIntegrity(error.integrity,(...args)=>console.error(...args));printDirectories(error.directoryListings);printDiscovery(error.discovery);printAccounting(error.connectionAccounting);printLease(error.lease);console.error("Actual spend:                $0.000");process.exitCode=1;throw error;}finally{process.removeListener("SIGINT",cancel);process.removeListener("SIGTERM",cancel);}
 function printAccounting(value={}){console.log("Connection accounting:");console.log("  opened:                    ",value.connectionsOpened??0);console.log("  ready:                     ",value.connectionsReady??0);console.log("  closed gracefully:         ",value.connectionsClosedGracefully??0);console.log("  destroyed as fallback:     ",value.connectionsDestroyedAsFallback??0);console.log("  active at start:           ",value.activeConnectionsAtStart??0);console.log("  active at end:             ",value.activeConnectionsAtEnd??0);console.log("  peak local concurrent:     ",value.peakLocalConcurrentConnections??0);}
+function printLease(value={}){console.log("Acquisition lease:");console.log("  acquired:                  ",value.leaseAcquired?"YES":"NO");console.log("  contention:                ",value.leaseContention?"YES":"NO");console.log("  stale recovered:           ",value.staleLeaseRecovered?"YES":"NO");console.log("  released:                  ",value.leaseReleased?"YES":"NO");}
 function printDiscovery(value){if(!value)return;console.log("File discovery:");console.log("  logical directory:         ",value.logicalDirectory);console.log("  entries observed:          ",value.entriesObserved);console.log("  directories observed:      ",value.directoriesObserved);console.log("  regular files observed:    ",value.regularFilesObserved);console.log("  other entries:             ",value.otherEntries);console.log("  ignored special entries:   ",value.ignoredSpecialEntries);console.log("  malformed entries:         ",value.malformedEntries);console.log("  recognized feed files:     ",value.recognizedFeedFiles);console.log("  main delta candidates:     ",value.mainDeltaCandidates);console.log("  target MID:                ",value.targetMid);console.log("  recognized entries:        ",value.recognizedEntries.join(", "));}
 function printDirectories(values=[]){if(values.length===0)return;console.log("Directory listing:");for(const value of values)console.log(`  ${value.logicalPath}: ${value.outcome} (required: ${value.required?"YES":"NO"}, entries: ${value.entryCount}, regular: ${value.regularFileCount}, directories: ${value.directoryCount}, other: ${value.otherCount}, malformed: ${value.malformedCount})`);}
 function printTransfer(value){if(!value)return;console.log("Transfer:");console.log("  transferred bytes:         ",value.bytesTransferred);console.log("  reported remote bytes:     ",`${value.reportedRemoteBytes??"UNKNOWN"} (informational only)`);console.log("  progress estimate:         ",value.percentCompleteEstimate===null?"UNKNOWN":`${value.percentCompleteEstimate}%`);console.log("  size difference bytes:     ",value.reportedSizeDifferenceBytes??"UNKNOWN");console.log("  progress events:           ",value.progressEvents);console.log("  remote EOF observed:       ",value.remoteEofObserved?"YES":"NO");console.log("  local write finished:      ",value.localWriteFinished?"YES":"NO");console.log("  completion observed:       ",value.completionObserved?"YES":"NO");}
@@ -23,12 +24,12 @@ console.log("RAKUTEN PRODUCT CATALOG SFTP TRANSPORT");
 console.log("Operation:                  ",operation.toUpperCase());
 console.log("Host:                       ",config.host);
 console.log("Port:                       ",config.port);
-console.log("Selected file:              ",result.selected.filename);
-console.log("Feed family:                ",result.selected.feedFamily);
-console.log("Advertiser MID:             ",result.selected.advertiserMid);
-console.log("Publisher SID:              ",result.selected.publisherSid);
-console.log("Remote timestamp (UTC):     ",result.selected.remoteTimestampUtc);
-console.log("Reported remote bytes:      ",`${result.selected.size} (informational only)`);
+console.log("Selected file(s):           ",result.lineage?.orderedFiles?.join(", ")??result.selected.filename);
+console.log("Feed family:                ",result.selected?.feedFamily??"FULL_PLUS_SUBSEQUENT_DELTAS");
+console.log("Advertiser MID:             ",result.selected?.advertiserMid??"44583");
+console.log("Publisher SID:              ",result.selected?.publisherSid??"LINEAGE_BOUND");
+console.log("Remote timestamp (UTC):     ",result.selected?.remoteTimestampUtc??"PER_FILE");
+console.log("Reported remote bytes:      ",result.selected?`${result.selected.size} (informational only)`:"PER_FILE");
 console.log("Downloaded:                 ",result.downloaded===false?"NO":"YES");
 if(result.status==="DOWNLOADED_AND_VALIDATED"){
  printTransfer(result.transfer);printIntegrity(result.integrity);console.log("Header timestamp:           ",result.headerTimestamp);console.log("Product rows:               ",result.productRows);console.log("Trailer rows:               ",result.trailerRows);console.log("Modification I/U/D:         ",`${result.modifications.I}/${result.modifications.U}/${result.modifications.D}`);console.log("Field counts:               ",result.fieldCounts.join(", "));console.log("Gzip/parser integrity:      PASS");
@@ -41,4 +42,6 @@ console.log("SFTP connections:           ",result.connectionsUsed);
 printDirectories(result.directoryListings);
 printDiscovery(result.discovery);
 printAccounting(result.connectionAccounting);
+printLease(result.lease);
+if(result.filesDownloaded!==undefined){console.log("Files downloaded:            ",result.filesDownloaded);console.log("Downloads sequential:        ",result.downloadsSequential?"YES":"NO");console.log("Network closed before parse: ",result.localProcessingStartedAfterNetworkClose?"YES":"NO");}
 console.log("Actual spend:                $0.000");

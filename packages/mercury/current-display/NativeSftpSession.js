@@ -90,9 +90,10 @@ export class NativeSftpSession {
             this.sftp=await new Promise((resolve,reject)=>this.client.sftp((cause,value)=>cause?reject(error("SFTP_CONNECT_FAILED")):resolve(value)));
         }catch(cause){await this.close();throw cause;}
     }
-    async list(remotePath){
-        try{const entries=await new Promise((resolve,reject)=>this.sftp.readdir(remotePath,(cause,value)=>cause?reject(cause):resolve(value)));return entries.map(item=>metadata(item.filename,item.attrs));}
-        catch(cause){const failure=error("SFTP_LIST_FAILED"),status=Number(cause?.code);if(Number.isInteger(status)){failure.sftpStatusCode=status;failure.sftpStatusCategory=status===2?"PATH_NOT_FOUND":status===3?"PERMISSION_DENIED":status===4?"SERVER_FAILURE":"UNKNOWN_LIST_FAILURE";}else failure.sftpStatusCategory=cause?.code==="ENOENT"?"PATH_NOT_FOUND":cause?.code==="EACCES"?"PERMISSION_DENIED":"UNKNOWN_LIST_FAILURE";throw failure;}
+    async list(remotePath,{signal,timeoutMs=30000}={}){
+        if(!Number.isFinite(timeoutMs)||timeoutMs<=0)throw error("SFTP_LIST_CONFIG_INVALID");
+        try{const entries=await new Promise((resolve,reject)=>{let settled=false,timer;const done=(fn,value)=>{if(settled)return;settled=true;clearTimeout(timer);signal?.removeEventListener?.("abort",cancel);fn(value);},cancel=()=>{void this.close();done(reject,error("SFTP_LIST_CANCELLED"));};if(signal?.aborted)return cancel();signal?.addEventListener?.("abort",cancel,{once:true});timer=setTimeout(()=>{void this.close();done(reject,error("SFTP_LIST_TIMEOUT"));},timeoutMs);this.sftp.readdir(remotePath,(cause,value)=>cause?done(reject,cause):done(resolve,value));});return entries.map(item=>metadata(item.filename,item.attrs));}
+        catch(cause){if(["SFTP_LIST_TIMEOUT","SFTP_LIST_CANCELLED","SFTP_LIST_CONFIG_INVALID"].includes(cause?.code))throw cause;const failure=error("SFTP_LIST_FAILED"),status=Number(cause?.code);if(Number.isInteger(status)){failure.sftpStatusCode=status;failure.sftpStatusCategory=status===2?"PATH_NOT_FOUND":status===3?"PERMISSION_DENIED":status===4?"SERVER_FAILURE":"UNKNOWN_LIST_FAILURE";}else failure.sftpStatusCategory=cause?.code==="ENOENT"?"PATH_NOT_FOUND":cause?.code==="EACCES"?"PERMISSION_DENIED":"UNKNOWN_LIST_FAILURE";throw failure;}
     }
     async stat(remotePath){try{const attrs=await new Promise((resolve,reject)=>this.sftp.stat(remotePath,(cause,value)=>cause?reject(cause):resolve(value)));return metadata(path.posix.basename(remotePath),attrs);}catch{throw error("SFTP_LIST_FAILED");}}
     async download(remotePath,localPath,{signal,stallTimeoutMs=60000,downloadTimeoutMs=900000,reportedRemoteBytes=null,onProgress=()=>{},now=()=>Date.now()}={}){

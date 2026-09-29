@@ -15,6 +15,7 @@ export * from "./RakutenSftpConfig.js";
 export * from "./RakutenProductCatalogSftpTransport.js";
 export * from "./NativeSftpSession.js";
 export * from "./RakutenSftpConnectionAccounting.js";
+export * from "./RakutenSftpAcquisitionLease.js";
 export * from "./ManualCurrentPricePreparation.js";
 export * from "./FileManualCurrentPricePreparationRepository.js";
 export * from "./ManualCurrentPriceWorkbook.js";

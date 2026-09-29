@@ -3,7 +3,7 @@
 ```text
 Last updated:                  2026-09-28
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        f543ccf8bc3393dc2b814ee88d504d6d073e9256 (`fix(mercury): align Rakuten automated item price eligibility`)
+Current committed HEAD:        8a21b792adce5704a98d7d298504b77d30129a6a (`feat(mercury): compose Rakuten Newegg production refresh`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
@@ -38,6 +38,7 @@ Current Rakuten semantics increment: RAKUTEN_NEWEGG_MAIN_FEED_SELLER_CONDITION_A
 Current Rakuten price-semantics increment: RAKUTEN_PRODUCT_CATALOG_PRICE_SEMANTICS_UNBLOCK_P1 — written Rakuten Advertising Customer Support clarification now establishes valid Sale Price precedence, Retail Price fallback, blank-date Sale validity, and complete-window fallback; the existing adapter implements those rules while one-sided, malformed, reversed, and timezone/boundary-ambiguous windows remain fail-closed. Raw fields and selected-field provenance are preserved, source conflicts require review, canonical historical rights remain disallowed, and no live feed/current/history/publication operation occurred.
 Current Rakuten eligibility increment: RAKUTEN_AUTOMATED_ITEM_PRICE_ELIGIBILITY_ALIGNMENT_P1 — fixture-certified alignment preserves unknown condition/seller/shipping while permitting an otherwise valid bounded automated item-price display and comparison; known-incompatible condition still blocks, explicit `out-of-stock` is known unavailable and ineligible, unrecognized availability remains unknown, and history/publication/release authority remains absent.
 Current Rakuten production composition: RAKUTEN_NEWEGG_PRODUCTION_REFRESH_COMPOSITION_P1 — fixture-certified production service and thin local-file command compose ordered acquired FULL/DELTA files through the existing catalog projection, canonical Atlas/destinations, Rakuten adapter, eligibility, source-neutral refresh, and predecessor-safe current snapshot repository. Routine rows progress mechanically; row-level destination, identity, price, availability, out-of-stock, and source-conflict outcomes remain isolated. Real feed acquisition/execution is not authorized or run; history/publication/release remain untouched.
+Current Rakuten SFTP safety hardening: RAKUTEN_SFTP_SINGLE_SESSION_SAFETY_HARDENING_P1 — fixture-certified local cross-process lease protection, bounded/cancellable directory listing, and authoritative FULL-plus-subsequent-DELTA sequential acquisition through one existing `ssh2` session. The network closes before local validation/processing, failure cannot publish partial lineage as authoritative, automatic retries remain zero, and Hardware Radar's normal concurrency target is one despite Rakuten's external ceiling of five. No credentials were inspected and no real SFTP/network/feed/current/history/publication/release operation occurred.
 Current manual retailer increment: PROCESS_NEXT_READY_MANUAL_PRICE_COHORT — 23 reviewed manual observations progressed routinely into current state and history without per-record human ceremony; nine products now expose dual-retailer item-price comparisons and the remaining progressed products retain valid single-retailer current state. Exact prices, timestamps, condition, shipping, seller, research URL, destination, source, rights, and operator provenance are preserved; publication and release authority remain absent.
 Current dual-retailer research artifact: the earlier two source-distinct preparations and their deterministic historical records remain immutable. Candidate `mer_displaypubcand_3387d03f2ee69221e27a72bf` and authorization `mer_displaypubauth_a3b57845954ad9c5f9482ba3` remain bound to their original current-display projection facts and do not authorize the 23 new observations. History now contains 219 records. The authorization is single-use and freshness-bounded; do not proceed to artifact/publication from this operational run without a separate governed gate.
 Current brand-registration increment: D-002A — four launch brand prerequisites canonically registered
@@ -189,13 +190,13 @@ MERCURY-HISTORY-056 fixture-certified the five-product `DATAFORSEO_AMAZON` pilot
 
 ## Current test baseline
 
-The current runners declare **338 subsystem test files**:
+The current runners declare **339 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 8 |
 | Atlas | 22 |
-| Mercury | 284 |
+| Mercury | 285 |
 | Beacon | 7 |
 | Gateway | 17 |
 

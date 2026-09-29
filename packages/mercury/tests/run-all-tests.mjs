@@ -270,6 +270,7 @@ const testModules = [
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./ProductionRakutenNeweggCurrentRefresh.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
+    ,"./RakutenSftpSafetyHardening.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
     ,"./RakutenProductRecordFraming.test.mjs"
     ,"./RakutenLineOrientedQuoteSemantics.test.mjs"
