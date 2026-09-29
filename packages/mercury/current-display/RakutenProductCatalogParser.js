@@ -63,16 +63,27 @@ function parseRakutenPipeRecordDetailed(line,diagnostics={}) {
 
 export function parseRakutenPipeRecord(line) { return parseRakutenPipeRecordDetailed(line).fields; }
 
-export function parseRakutenHeaderTimestampUtc(value) {
-    if(typeof value!=="string")return null;
-    const match=/^(\d{2})\/(\d{2})\/(\d{4}) (\d{1,2}):(\d{2}):(\d{2})$/.exec(value);
-    if(!match)return null;
+const RAKUTEN_HEADER_TIMESTAMP_PATTERN=/^(\d{2})\/(\d{2})\/(\d{4}) (\d{1,2}):(\d{2}):(\d{2})$/;
+const timestampSemanticFailure=(failureComponent,failureReason,observedNumericValue=null)=>freeze({failureComponent,failureReason,observedNumericValue});
+
+function evaluateRakutenHeaderTimestampUtc(value){
+    if(typeof value!=="string")return {instant:null,semanticFailure:null};
+    const match=RAKUTEN_HEADER_TIMESTAMP_PATTERN.exec(value);if(!match)return {instant:null,semanticFailure:null};
     const [,monthText,dayText,yearText,hourText,minuteText,secondText]=match,month=Number(monthText),day=Number(dayText),year=Number(yearText),hour=Number(hourText),minute=Number(minuteText),second=Number(secondText);
-    if(month<1||month>12||day<1||hour>23||minute>59||second>59)return null;
+    if(month<1||month>12)return {instant:null,semanticFailure:timestampSemanticFailure("MONTH","MONTH_OUT_OF_RANGE",month)};
+    if(day<1||day>31)return {instant:null,semanticFailure:timestampSemanticFailure("DAY","DAY_OUT_OF_RANGE",day)};
+    if(hour>23)return {instant:null,semanticFailure:timestampSemanticFailure("HOUR","HOUR_OUT_OF_RANGE",hour)};
+    if(minute>59)return {instant:null,semanticFailure:timestampSemanticFailure("MINUTE","MINUTE_OUT_OF_RANGE",minute)};
+    if(second>59)return {instant:null,semanticFailure:timestampSemanticFailure("SECOND","SECOND_OUT_OF_RANGE",second)};
     const instant=new Date(0);instant.setUTCFullYear(year,month-1,day);instant.setUTCHours(hour,minute,second,0);
-    if(instant.getUTCFullYear()!==year||instant.getUTCMonth()!==month-1||instant.getUTCDate()!==day||instant.getUTCHours()!==hour||instant.getUTCMinutes()!==minute||instant.getUTCSeconds()!==second)return null;
-    return instant.toISOString();
+    if(instant.getUTCFullYear()!==year||instant.getUTCMonth()!==month-1||instant.getUTCDate()!==day||instant.getUTCHours()!==hour||instant.getUTCMinutes()!==minute||instant.getUTCSeconds()!==second){
+        return {instant:null,semanticFailure:timestampSemanticFailure("CALENDAR_DATE",month===2&&day===29?"INVALID_LEAP_DAY":"INVALID_CALENDAR_DATE")};
+    }
+    return {instant:instant.toISOString(),semanticFailure:null};
 }
+
+export function parseRakutenHeaderTimestampUtc(value){return evaluateRakutenHeaderTimestampUtc(value).instant;}
+export function diagnoseRakutenHeaderTimestampSemanticFailure(value){return evaluateRakutenHeaderTimestampUtc(value).semanticFailure;}
 
 function parseHeader(fields) {
     if (fields[0] !== "HDR" || fields.length !== 4 || !/^\d+$/.test(fields[1]) || !fields[2].trim()) throw parserError("RAKUTEN_HEADER_INVALID");
@@ -165,7 +176,7 @@ async function diagnoseUnsupportedRakutenHeaderTimestamp(input,{feedProfile="MAI
                 const {fields}=parseRakutenPipeRecordDetailed(framed.text,recordProperties(framed));
                 if(!headerDiagnostic){
                     const generalValid=fields[0]==="HDR"&&fields.length===4&&/^\d+$/.test(fields[1])&&Boolean(fields[2]?.trim());
-                    headerDiagnostic=freeze({recordPresent:fields[0]==="HDR",fieldCount:fields.length,generalStructureValid:generalValid,timestampPresent:typeof fields[3]==="string"&&fields[3].trim().length>0,timestampAccepted:parseRakutenHeaderTimestampUtc(fields[3])!==null,timestampSyntax:classifyRakutenHeaderTimestampSyntax(fields[3])});
+                    headerDiagnostic=freeze({recordPresent:fields[0]==="HDR",fieldCount:fields.length,generalStructureValid:generalValid,timestampPresent:typeof fields[3]==="string"&&fields[3].trim().length>0,timestampAccepted:parseRakutenHeaderTimestampUtc(fields[3])!==null,timestampSyntax:classifyRakutenHeaderTimestampSyntax(fields[3]),timestampSemanticFailure:diagnoseRakutenHeaderTimestampSemanticFailure(fields[3])});
                     if(!generalValid)structuralFailure="SFTP_HDR_INVALID";
                     continue;
                 }

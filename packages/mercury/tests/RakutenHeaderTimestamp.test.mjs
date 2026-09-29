@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {spawnSync} from "node:child_process";
 import {gzipSync} from "node:zlib";
-import {classifyRakutenHeaderTimestampSyntax,collectRakutenProductCatalogFixture,parseRakutenHeaderTimestampUtc,validateRakutenProductCatalogGzip} from "../current-display/index.js";
+import {classifyRakutenHeaderTimestampSyntax,collectRakutenProductCatalogFixture,diagnoseRakutenHeaderTimestampSemanticFailure,parseRakutenHeaderTimestampUtc,validateRakutenProductCatalogGzip} from "../current-display/index.js";
 import {fixtureFeedText,fixtureRow} from "./fixtures/rakuten-newegg/sanitized-feed-fixtures.js";
 
 let cases=0;
@@ -33,6 +33,20 @@ for(const value of ["09/29/2026 24:04:05","09/29/2026 25:04:05","09/29/2026 99:0
 for(const value of ["9/03/2022 00:02:32","09/3/2022 00:02:32","9/3/2022 00:02:32","09/03/2022 00:2:32","09/03/2022 00:02:3"]){assert.equal(classifyRakutenHeaderTimestampSyntax(value).componentCount,6);invalid(value);}
 assert.doesNotMatch(parseRakutenHeaderTimestampUtc.toString(),/Date\.parse/);cases+=1;
 
+const semanticCases=[
+    ["13/03/2026 12:00:00",{failureComponent:"MONTH",failureReason:"MONTH_OUT_OF_RANGE",observedNumericValue:13}],
+    ["09/00/2026 12:00:00",{failureComponent:"DAY",failureReason:"DAY_OUT_OF_RANGE",observedNumericValue:0}],
+    ["09/32/2026 12:00:00",{failureComponent:"DAY",failureReason:"DAY_OUT_OF_RANGE",observedNumericValue:32}],
+    ["09/03/2026 24:00:00",{failureComponent:"HOUR",failureReason:"HOUR_OUT_OF_RANGE",observedNumericValue:24}],
+    ["09/03/2026 12:60:00",{failureComponent:"MINUTE",failureReason:"MINUTE_OUT_OF_RANGE",observedNumericValue:60}],
+    ["09/03/2026 12:00:60",{failureComponent:"SECOND",failureReason:"SECOND_OUT_OF_RANGE",observedNumericValue:60}],
+    ["02/30/2026 12:00:00",{failureComponent:"CALENDAR_DATE",failureReason:"INVALID_CALENDAR_DATE",observedNumericValue:null}],
+    ["04/31/2026 12:00:00",{failureComponent:"CALENDAR_DATE",failureReason:"INVALID_CALENDAR_DATE",observedNumericValue:null}],
+    ["02/29/2026 12:00:00",{failureComponent:"CALENDAR_DATE",failureReason:"INVALID_LEAP_DAY",observedNumericValue:null}]
+];
+for(const [value,expected] of semanticCases){const diagnostic=diagnoseRakutenHeaderTimestampSemanticFailure(value);assert.deepEqual(diagnostic,expected);assert.equal(JSON.stringify(diagnostic).includes(value),false);cases+=2;}
+for(const value of ["09/03/2022 00:02:32","09/03/2022 0:02:32","9/03/2022 00:02:32","2026-09-03T12:00:00Z"]){equal(diagnoseRakutenHeaderTimestampSemanticFailure(value),null);}
+
 const full=await collectRakutenProductCatalogFixture(gzipSync(fixtureFeedText({timestamp:"09/28/2026 23:41:07",rows:[fixtureRow({}, {delta:false})]})),{feedProfile:"MAIN_FULL"});
 equal(full[0].feedTimestamp,"2026-09-28T23:41:07.000Z");
 equal(full[1].fieldCount,38);
@@ -51,6 +65,7 @@ const moduleUrl=new URL("../current-display/RakutenProductCatalogParser.js",impo
 const utc=spawnSync(process.execPath,["--input-type=module","-e",child],{encoding:"utf8",env:{...process.env,TZ:"UTC"}}),jamaica=spawnSync(process.execPath,["--input-type=module","-e",child],{encoding:"utf8",env:{...process.env,TZ:"America/Jamaica"}}),tokyo=spawnSync(process.execPath,["--input-type=module","-e",child],{encoding:"utf8",env:{...process.env,TZ:"Asia/Tokyo"}});
 equal(utc.status,0);equal(jamaica.status,0);equal(tokyo.status,0);equal(utc.stdout,jamaica.stdout);equal(utc.stdout,tokyo.stdout);equal(utc.stdout,JSON.stringify(["2022-09-03T00:02:32.000Z","2022-09-03T00:02:32.000Z"]));
 
-await assert.rejects(()=>validateRakutenProductCatalogGzip(gzipSync(fixtureFeedText({timestamp:"2026-09-03T12:00:00Z",rows:[fixtureRow()]}))),error=>error.code==="SFTP_HDR_TIMESTAMP_INVALID"&&error.integrity.unsupportedTimestampDiagnostic.hdr.timestampAccepted===false&&error.integrity.unsupportedTimestampDiagnostic.gzip.reachedEof===true&&error.integrity.unsupportedTimestampDiagnostic.trailer.productCountMatches===true);cases+=1;
+await assert.rejects(()=>validateRakutenProductCatalogGzip(gzipSync(fixtureFeedText({timestamp:"2026-09-03T12:00:00Z",rows:[fixtureRow()]}))),error=>error.code==="SFTP_HDR_TIMESTAMP_INVALID"&&error.integrity.unsupportedTimestampDiagnostic.hdr.timestampAccepted===false&&error.integrity.unsupportedTimestampDiagnostic.hdr.timestampSemanticFailure===null&&error.integrity.unsupportedTimestampDiagnostic.gzip.reachedEof===true&&error.integrity.unsupportedTimestampDiagnostic.trailer.productCountMatches===true);cases+=1;
+await assert.rejects(()=>validateRakutenProductCatalogGzip(gzipSync(fixtureFeedText({timestamp:"09/03/2026 24:00:00",rows:[fixtureRow()]}))),error=>{const d=error.integrity.unsupportedTimestampDiagnostic,s=JSON.stringify(error);return error.code==="SFTP_HDR_TIMESTAMP_INVALID"&&d.hdr.timestampAccepted===false&&d.hdr.timestampSemanticFailure.failureComponent==="HOUR"&&d.hdr.timestampSemanticFailure.failureReason==="HOUR_OUT_OF_RANGE"&&d.hdr.timestampSemanticFailure.observedNumericValue===24&&d.gzip.reachedEof===true&&d.trailer.productCountMatches===true&&!s.includes("09/03/2026 24:00:00")&&!s.includes("fixture-product");});cases+=1;
 
 console.log(`Rakuten HDR UTC timestamp contract tests passed: ${cases} cases.`);
