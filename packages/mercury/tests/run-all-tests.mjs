@@ -272,6 +272,7 @@ const testModules = [
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenSftpSafetyHardening.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
+    ,"./RakutenHeaderTimestamp.test.mjs"
     ,"./RakutenProductRecordFraming.test.mjs"
     ,"./RakutenLineOrientedQuoteSemantics.test.mjs"
     ,"./RakutenProductCatalogFieldMap.test.mjs"

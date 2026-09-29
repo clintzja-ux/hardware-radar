@@ -63,10 +63,21 @@ function parseRakutenPipeRecordDetailed(line,diagnostics={}) {
 
 export function parseRakutenPipeRecord(line) { return parseRakutenPipeRecordDetailed(line).fields; }
 
+export function parseRakutenHeaderTimestampUtc(value) {
+    if(typeof value!=="string")return null;
+    const match=/^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})$/.exec(value);
+    if(!match)return null;
+    const [,monthText,dayText,yearText,hourText,minuteText,secondText]=match,month=Number(monthText),day=Number(dayText),year=Number(yearText),hour=Number(hourText),minute=Number(minuteText),second=Number(secondText);
+    if(month<1||month>12||day<1||hour>23||minute>59||second>59)return null;
+    const instant=new Date(0);instant.setUTCFullYear(year,month-1,day);instant.setUTCHours(hour,minute,second,0);
+    if(instant.getUTCFullYear()!==year||instant.getUTCMonth()!==month-1||instant.getUTCDate()!==day||instant.getUTCHours()!==hour||instant.getUTCMinutes()!==minute||instant.getUTCSeconds()!==second)return null;
+    return instant.toISOString();
+}
+
 function parseHeader(fields) {
     if (fields[0] !== "HDR" || fields.length !== 4 || !/^\d+$/.test(fields[1]) || !fields[2].trim()) throw parserError("RAKUTEN_HEADER_INVALID");
-    if (!Number.isFinite(Date.parse(fields[3]))) throw parserError("RAKUTEN_HEADER_TIMESTAMP_INVALID");
-    return freeze({ recordType: "HDR", advertiserMid:fields[1],advertiserName:fields[2],feedTimestamp: new Date(fields[3]).toISOString(), fields: fields.slice(1) });
+    const feedTimestamp=parseRakutenHeaderTimestampUtc(fields[3]);if(feedTimestamp===null)throw parserError("RAKUTEN_HEADER_TIMESTAMP_INVALID");
+    return freeze({ recordType: "HDR", advertiserMid:fields[1],advertiserName:fields[2],feedTimestamp, fields: fields.slice(1) });
 }
 
 export function classifyRakutenHeaderTimestampSyntax(value) {
@@ -151,7 +162,7 @@ async function diagnoseUnsupportedRakutenHeaderTimestamp(input,{feedProfile="MAI
                 const {fields}=parseRakutenPipeRecordDetailed(framed.text,recordProperties(framed));
                 if(!headerDiagnostic){
                     const generalValid=fields[0]==="HDR"&&fields.length===4&&/^\d+$/.test(fields[1])&&Boolean(fields[2]?.trim());
-                    headerDiagnostic=freeze({recordPresent:fields[0]==="HDR",fieldCount:fields.length,generalStructureValid:generalValid,timestampPresent:typeof fields[3]==="string"&&fields[3].trim().length>0,timestampAccepted:Number.isFinite(Date.parse(fields[3])),timestampSyntax:classifyRakutenHeaderTimestampSyntax(fields[3])});
+                    headerDiagnostic=freeze({recordPresent:fields[0]==="HDR",fieldCount:fields.length,generalStructureValid:generalValid,timestampPresent:typeof fields[3]==="string"&&fields[3].trim().length>0,timestampAccepted:parseRakutenHeaderTimestampUtc(fields[3])!==null,timestampSyntax:classifyRakutenHeaderTimestampSyntax(fields[3])});
                     if(!generalValid)structuralFailure="SFTP_HDR_INVALID";
                     continue;
                 }

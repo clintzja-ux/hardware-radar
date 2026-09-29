@@ -28,7 +28,9 @@ The operator-established Product Catalog header is:
 
 `HDR|MID|Advertiser Name|timestamp`
 
-The parser now validates exactly four header fields, a numeric MID, a nonblank advertiser name, and the timestamp in field four. It does not treat the advertiser name as immutable identity. This corrects the sanitized fixture and parser contract; it does not claim that header shape was conclusively the cause of an earlier live failure because the failed partial was correctly deleted.
+The parser validates exactly four header fields, a numeric MID, a nonblank advertiser name, and the timestamp in field four. Rakuten's documented pipe-delimited FULL and DELTA header contract defines field four as the UTC time the Product Catalog file was deposited in the publisher SFTP account, in exact `MM/DD/YYYY HH:mm:ss` form. The parser validates every calendar/time component and constructs the UTC instant directly; generic JavaScript `Date.parse()` interpretation and host-local timezone behavior are not part of this source contract. It does not treat the advertiser name as immutable identity or strengthen the deposit time into product observation time, filename chronology, or FULL/DELTA ordering authority.
+
+For example, `09/03/2022 00:02:32` normalizes to `2022-09-03T00:02:32.000Z`. Impossible dates, missing leading structure, invalid time components, ISO/RFC/compact alternatives, timezone suffixes, and blank values fail as `SFTP_HDR_TIMESTAMP_INVALID`. FULL/DELTA ordering remains based on the separately certified remote SFTP modification metadata.
 
 An unsupported field-four timestamp remains the primary semantic failure `SFTP_HDR_TIMESTAMP_INVALID`. Diagnostic continuation does not make the file acceptable, create parsed catalog output, invoke the adapter, or broaden the timestamp contract. Its only purpose is to distinguish semantic HDR rejection from later gzip corruption, missing or invalid trailer state, and trailer-count mismatch. A structurally complete gzip with an unsupported timestamp remains rejected.
 

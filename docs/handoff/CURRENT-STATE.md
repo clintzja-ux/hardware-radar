@@ -41,6 +41,7 @@ Current Rakuten production composition: RAKUTEN_NEWEGG_PRODUCTION_REFRESH_COMPOS
 Current Rakuten SFTP safety hardening: RAKUTEN_SFTP_SINGLE_SESSION_SAFETY_HARDENING_P1 — fixture-certified local cross-process lease protection, bounded/cancellable directory listing, and authoritative FULL-plus-subsequent-DELTA sequential acquisition through one existing `ssh2` session. The network closes before local validation/processing, failure cannot publish partial lineage as authoritative, automatic retries remain zero, and Hardware Radar's normal concurrency target is one despite Rakuten's external ceiling of five. No credentials were inspected and no real SFTP/network/feed/current/history/publication/release operation occurred.
 Current Rakuten large-feed correction: RAKUTEN_LARGE_FEED_TRANSFER_TIMEOUT_ALIGNMENT_P1 — the first real authenticated acquisition continuously transferred 126,779,392 of a reported 161,057,662-byte authoritative FULL before the former 15-minute per-file absolute ceiling expired. The ceiling is now a finite 30 minutes per file; the independent 60-second no-progress limit, cancellation, bounded cleanup, single leased session, sequential downloads, zero retries, and exact partial removal remain unchanged. Failures after lineage selection retain safe FULL/DELTA sequence and attempted-file metadata without treating incomplete acquisition as authoritative. No corrective live rerun occurred; Current, History, publication, and release remain unchanged and release remains OFF.
 Current Rakuten HDR diagnostic hardening: RAKUTEN_HDR_FAILURE_DIAGNOSTIC_HARDENING_P1 — unsupported HDR field-four timestamps remain rejected as `SFTP_HDR_TIMESTAMP_INVALID`, while a bounded second streaming pass over local downloaded bytes now records only a sanitized timestamp syntax family and independent gzip-EOF, trailer, and count diagnostics. It produces no catalog output or Mercury invocation, retains no rejected feed archive, preserves failure cleanup and authoritative-lineage/attempted-file observability, and accepts no new timestamp syntax. Fixture certification is offline; no real Rakuten rerun occurred and release remains OFF.
+Current Rakuten HDR timestamp alignment: RAKUTEN_HDR_UTC_TIMESTAMP_FORMAT_ALIGNMENT_P1 — the existing parser now applies Rakuten's documented exact `MM/DD/YYYY HH:mm:ss` UTC deposit-time contract to both FULL and DELTA headers, validates calendar/time components without generic `Date.parse()` or host-local timezone interpretation, and continues to reject every unsupported format. The retained real DELTA is compatible with the strict contract. Remote SFTP metadata remains the independent FULL/DELTA ordering authority; price, eligibility, source-state, diagnostic, and cleanup semantics are unchanged. Certification is offline; no real network operation occurred and release remains OFF.
 Current manual retailer increment: PROCESS_NEXT_READY_MANUAL_PRICE_COHORT — 23 reviewed manual observations progressed routinely into current state and history without per-record human ceremony; nine products now expose dual-retailer item-price comparisons and the remaining progressed products retain valid single-retailer current state. Exact prices, timestamps, condition, shipping, seller, research URL, destination, source, rights, and operator provenance are preserved; publication and release authority remain absent.
 Current dual-retailer research artifact: the earlier two source-distinct preparations and their deterministic historical records remain immutable. Candidate `mer_displaypubcand_3387d03f2ee69221e27a72bf` and authorization `mer_displaypubauth_a3b57845954ad9c5f9482ba3` remain bound to their original current-display projection facts and do not authorize the 23 new observations. History now contains 219 records. The authorization is single-use and freshness-bounded; do not proceed to artifact/publication from this operational run without a separate governed gate.
 Current brand-registration increment: D-002A — four launch brand prerequisites canonically registered
@@ -192,13 +193,13 @@ MERCURY-HISTORY-056 fixture-certified the five-product `DATAFORSEO_AMAZON` pilot
 
 ## Current test baseline
 
-The current runners declare **339 subsystem test files**:
+The current runners declare **340 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 8 |
 | Atlas | 22 |
-| Mercury | 285 |
+| Mercury | 286 |
 | Beacon | 7 |
 | Gateway | 17 |
 
