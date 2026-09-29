@@ -32,7 +32,7 @@ The directory-reported remote size remains informational. Transfer diagnostics p
 
 ## Bounds, cancellation, and settlement
 
-Each binary data chunk that increases transferred bytes resets the established 60-second no-progress timer. Unrelated socket/session activity does not. The independent 15-minute absolute timeout remains unchanged. Slow throughput is permitted while byte progress continues.
+Each binary data chunk that increases transferred bytes resets the established 60-second no-progress timer. Unrelated socket/session activity does not. The independent absolute timeout is a bounded 30 minutes per file, so a legitimate long FULL does not consume a shared whole-sequence budget that prevents subsequent small DELTAs. Slow throughput is permitted while byte progress continues, but every individual file remains bounded.
 
 `SIGINT` and `SIGTERM` abort the stream pipeline through the existing CLI signal boundary. Cancellation, stall, timeout, read failure, write failure, or premature session closure destroys the pending streams, settles the transfer exactly once, delegates connection release to RAKUTEN-SFTP-005, and removes only the attempt's UUID partial through the transport boundary. There is no automatic retry.
 

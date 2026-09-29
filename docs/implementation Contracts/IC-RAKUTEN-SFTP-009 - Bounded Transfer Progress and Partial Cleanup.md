@@ -21,13 +21,13 @@ Duplicate completion callbacks and non-increasing progress reports are ignored a
 
 ## Bounded failure policy
 
-The default no-progress interval is 60 seconds. Any transfer with no increase in byte count for that interval fails as `SFTP_DOWNLOAD_STALLED`. A separate 15-minute absolute backstop fails as `SFTP_DOWNLOAD_TIMEOUT`, even if small progress continues. These limits measure absence of progress and total wall time respectively; there is no throughput threshold.
+The default no-progress interval is 60 seconds. Any transfer with no increase in byte count for that interval fails as `SFTP_DOWNLOAD_STALLED`. A separate 30-minute per-file absolute ceiling fails as `SFTP_DOWNLOAD_TIMEOUT`, even if small progress continues. These limits measure absence of progress and total wall time respectively; there is no throughput threshold. The per-file ceiling was aligned after the first real authoritative acquisition continuously transferred 126,779,392 of a reported 161,057,662 bytes before the former 15-minute limit expired; that observation proved the old ceiling insufficient without proving a guaranteed future transfer rate.
 
 An abort signal fails as `SFTP_DOWNLOAD_CANCELLED`. Premature SSH or SFTP `close`/`end` fails as `SFTP_DOWNLOAD_SESSION_CLOSED`. Other transfer errors remain `SFTP_DOWNLOAD_FAILED`, while known local filesystem failures remain `SFTP_LOCAL_WRITE_FAILED`. The first failure remains primary; cleanup cannot replace it. No failure is retried automatically.
 
 ## Partial and connection lifecycle
 
-Each attempt uses a uniquely named `<feed>.partial-<uuid>` beneath the existing ignored `.forge-review` staging root. Transfer error, stall, timeout, cancellation, early session close, local exception, or parser/integrity failure removes that exact attempt's partial. Nothing performs broad staging deletion.
+Each attempt uses a uniquely named `<feed>.partial-<uuid>` beneath the existing ignored `.forge-review` staging root. Transfer error, stall, timeout, cancellation, early session close, local exception, or parser/integrity failure removes that exact attempt's partial. Nothing performs broad staging deletion. When authoritative FULL-plus-subsequent-DELTA selection has already succeeded, a later transfer failure preserves the selected filenames, sequence length, attempted filename/classification, reported remote size, transfer progress, and failure code for safe operator diagnosis; the incomplete sequence remains explicitly non-authoritative.
 
 After `fastGet` reports completion, Mercury closes the SFTP/SSH session before reading or parsing the local file. It then requires a nonempty local file, valid gzip, valid HDR, valid product rows, valid TRL, and exact trailer/product count before atomically renaming the partial to the final staged filename. The selected remote timestamp and parser HDR timestamp remain separate.
 

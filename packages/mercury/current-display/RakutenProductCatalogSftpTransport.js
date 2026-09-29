@@ -14,7 +14,7 @@ const mainFeedPattern = /^(\d+)_(\d+)_mp(?:_(delta|deltatemplate)|_template)?\.t
 const validInstant=value=>typeof value==="string"&&Number.isFinite(Date.parse(value));
 
 export const RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS=60000;
-export const RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS=900000;
+export const RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS=1800000;
 export const RAKUTEN_SFTP_LIST_TIMEOUT_MS=30000;
 
 export async function inspectRakutenStalePartials(stagingRoot,{asOf=new Date().toISOString()}={}){
@@ -111,7 +111,7 @@ export class RakutenProductCatalogSftpTransport {
             try { await session.connect(); result=await operation(session,{releaseLease}); }
             catch(error){ last=error;primary=error; }
             finally { await session.close().catch(()=>{});this.lastConnectionAccounting=session.connectionAccounting?.()??accounting.snapshot();await releaseLease(); }
-            if(primary){const safe=redactRakutenSftpError(primary,session.secrets??[]);safe.connectionAccounting=this.lastConnectionAccounting;safe.lease={...leaseState,leaseReleased:true};if(primary.discovery)safe.discovery=primary.discovery;if(primary.directoryListings)safe.directoryListings=primary.directoryListings;if(primary.transfer)safe.transfer=primary.transfer;if(primary.integrity)safe.integrity=primary.integrity;if(primary.authoritativeSequenceComplete===false)safe.authoritativeSequenceComplete=false;throw safe;}
+            if(primary){const safe=redactRakutenSftpError(primary,session.secrets??[]);safe.connectionAccounting=this.lastConnectionAccounting;safe.lease={...leaseState,leaseReleased:true};if(primary.discovery)safe.discovery=primary.discovery;if(primary.directoryListings)safe.directoryListings=primary.directoryListings;if(primary.transfer)safe.transfer=primary.transfer;if(primary.integrity)safe.integrity=primary.integrity;if(primary.lineage)safe.lineage=primary.lineage;if(primary.attemptedFile)safe.attemptedFile=primary.attemptedFile;if(primary.authoritativeSequenceComplete===false)safe.authoritativeSequenceComplete=false;throw safe;}
             return freeze({...result,connectionAccounting:this.lastConnectionAccounting,connectionsUsed:this.lastConnectionAccounting.connectionsOpened,lease:{...leaseState,leaseReleased:true}});
         }
         throw redactRakutenSftpError(last);
@@ -154,14 +154,15 @@ export class RakutenProductCatalogSftpTransport {
     async downloadAuthoritativeSequence({advertiserMid="44583",signal,listTimeoutMs=RAKUTEN_SFTP_LIST_TIMEOUT_MS,stallTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS,downloadTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS,onProgress=()=>{}}={}){
         return this.withSession(async (session,{releaseLease})=>{
             const discovery=await this.discoverAvailable(session,{advertiserMid,signal,listTimeoutMs});let lineage;try{lineage=selectRakutenNeweggAuthoritativeLineage(discovery.listings,{advertiserMid});}catch(cause){cause.discovery=discovery.discovery;cause.directoryListings=discovery.directoryListings;throw cause;}
+            const failureLineage=freeze({full:lineage.full.filename,deltas:lineage.deltas.map(item=>item.filename),orderedFiles:lineage.files.map(item=>item.filename),sequenceLength:lineage.files.length});
             await mkdir(this.stagingRoot,{recursive:true});const staged=[];
             try{
-                for(let index=0;index<lineage.files.length;index+=1){const selected=lineage.files[index],finalPath=path.join(this.stagingRoot,selected.filename),temporaryPath=`${finalPath}.partial-${crypto.randomUUID()}`;try{const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress:value=>onProgress({index,filename:selected.filename,...value})});staged.push({selected,finalPath,temporaryPath,transfer});}catch(cause){await rm(temporaryPath,{force:true});throw cause;}}
+                for(let index=0;index<lineage.files.length;index+=1){const selected=lineage.files[index],finalPath=path.join(this.stagingRoot,selected.filename),temporaryPath=`${finalPath}.partial-${crypto.randomUUID()}`;try{const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress:value=>onProgress({index,filename:selected.filename,...value})});staged.push({selected,finalPath,temporaryPath,transfer});}catch(cause){await rm(temporaryPath,{force:true});cause.lineage=failureLineage;cause.attemptedFile=freeze({index,filename:selected.filename,classification:selected.feedFamily,reportedRemoteBytes:selected.size??null});throw cause;}}
                 await session.close();await releaseLease();const validated=[];
                 for(const item of staged){const bytes=await readFile(item.temporaryPath),validation=await validateRakutenProductCatalogGzip(bytes,{feedProfile:item.selected.feedFamily==="DELTA"?"MAIN_DELTA":"MAIN_FULL"});validated.push({...item,bytes,validation});}
                 const files=[];for(const item of validated){await rename(item.temporaryPath,item.finalPath);files.push({filename:item.selected.filename,feedFamily:item.selected.feedFamily,localPath:item.finalPath,localBytes:item.bytes.length,sha256:crypto.createHash("sha256").update(item.bytes).digest("hex"),transfer:item.transfer,integrity:item.validation.integrity});}
                 return freeze({status:"AUTHORITATIVE_SEQUENCE_DOWNLOADED_AND_VALIDATED",lineage:{full:lineage.full.filename,deltas:lineage.deltas.map(item=>item.filename),orderedFiles:lineage.files.map(item=>item.filename)},files,filesDownloaded:files.length,downloadsSequential:true,directoryListings:discovery.directoryListings,discovery:discovery.discovery,localProcessingStartedAfterNetworkClose:true,actualSpendUsd:0});
-            }catch(cause){for(const item of staged)await rm(item.temporaryPath,{force:true});const failure=String(cause?.code??cause?.message??"").startsWith("SFTP_")?cause:error("SFTP_SEQUENCE_INCOMPLETE");failure.authoritativeSequenceComplete=false;throw failure;}
+            }catch(cause){for(const item of staged)await rm(item.temporaryPath,{force:true});const failure=String(cause?.code??cause?.message??"").startsWith("SFTP_")?cause:error("SFTP_SEQUENCE_INCOMPLETE");failure.lineage??=failureLineage;failure.authoritativeSequenceComplete=false;throw failure;}
         });
     }
 }
