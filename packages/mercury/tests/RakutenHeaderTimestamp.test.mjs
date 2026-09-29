@@ -46,6 +46,11 @@ const semanticCases=[
 ];
 for(const [value,expected] of semanticCases){const diagnostic=diagnoseRakutenHeaderTimestampSemanticFailure(value);assert.deepEqual(diagnostic,expected);assert.equal(JSON.stringify(diagnostic).includes(value),false);cases+=2;}
 for(const value of ["09/03/2022 00:02:32","09/03/2022 0:02:32","9/03/2022 00:02:32","2026-09-03T12:00:00Z"]){equal(diagnoseRakutenHeaderTimestampSemanticFailure(value),null);}
+for(const [value,expected,accepted] of [
+    ["09/29/2026 10:11:12",[9,29,2026],true],
+    ["29/09/2026 10:11:12",[29,9,2026],false],
+    ["09/10/2026 10:11:12",[9,10,2026],true]
+]){const diagnostic=classifyRakutenHeaderTimestampSyntax(value);assert.deepEqual([diagnostic.firstDateComponent,diagnostic.secondDateComponent,diagnostic.yearComponent],expected);assert.equal(parseRakutenHeaderTimestampUtc(value)!==null,accepted);assert.equal("hourComponent" in diagnostic||"minuteComponent" in diagnostic||"secondComponent" in diagnostic,false);assert.equal(JSON.stringify(diagnostic).includes(value),false);cases+=4;}
 
 const full=await collectRakutenProductCatalogFixture(gzipSync(fixtureFeedText({timestamp:"09/28/2026 23:41:07",rows:[fixtureRow({}, {delta:false})]})),{feedProfile:"MAIN_FULL"});
 equal(full[0].feedTimestamp,"2026-09-28T23:41:07.000Z");
@@ -67,5 +72,6 @@ equal(utc.status,0);equal(jamaica.status,0);equal(tokyo.status,0);equal(utc.stdo
 
 await assert.rejects(()=>validateRakutenProductCatalogGzip(gzipSync(fixtureFeedText({timestamp:"2026-09-03T12:00:00Z",rows:[fixtureRow()]}))),error=>error.code==="SFTP_HDR_TIMESTAMP_INVALID"&&error.integrity.unsupportedTimestampDiagnostic.hdr.timestampAccepted===false&&error.integrity.unsupportedTimestampDiagnostic.hdr.timestampSemanticFailure===null&&error.integrity.unsupportedTimestampDiagnostic.gzip.reachedEof===true&&error.integrity.unsupportedTimestampDiagnostic.trailer.productCountMatches===true);cases+=1;
 await assert.rejects(()=>validateRakutenProductCatalogGzip(gzipSync(fixtureFeedText({timestamp:"09/03/2026 24:00:00",rows:[fixtureRow()]}))),error=>{const d=error.integrity.unsupportedTimestampDiagnostic,s=JSON.stringify(error);return error.code==="SFTP_HDR_TIMESTAMP_INVALID"&&d.hdr.timestampAccepted===false&&d.hdr.timestampSemanticFailure.failureComponent==="HOUR"&&d.hdr.timestampSemanticFailure.failureReason==="HOUR_OUT_OF_RANGE"&&d.hdr.timestampSemanticFailure.observedNumericValue===24&&d.gzip.reachedEof===true&&d.trailer.productCountMatches===true&&!s.includes("09/03/2026 24:00:00")&&!s.includes("fixture-product");});cases+=1;
+await assert.rejects(()=>validateRakutenProductCatalogGzip(gzipSync(fixtureFeedText({timestamp:"29/09/2026 10:11:12",rows:[fixtureRow()]}))),error=>{const d=error.integrity.unsupportedTimestampDiagnostic,syntax=d.hdr.timestampSyntax,s=JSON.stringify(error);return error.code==="SFTP_HDR_TIMESTAMP_INVALID"&&d.hdr.timestampSemanticFailure.failureReason==="MONTH_OUT_OF_RANGE"&&syntax.firstDateComponent===29&&syntax.secondDateComponent===9&&syntax.yearComponent===2026&&!("hourComponent" in syntax)&&!("minuteComponent" in syntax)&&!("secondComponent" in syntax)&&d.gzip.reachedEof===true&&d.trailer.productCountMatches===true&&!s.includes("29/09/2026 10:11:12")&&!s.includes("fixture-product");});cases+=1;
 
 console.log(`Rakuten HDR UTC timestamp contract tests passed: ${cases} cases.`);
