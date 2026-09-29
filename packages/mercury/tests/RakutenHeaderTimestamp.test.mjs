@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {spawnSync} from "node:child_process";
 import {gzipSync} from "node:zlib";
-import {collectRakutenProductCatalogFixture,parseRakutenHeaderTimestampUtc,validateRakutenProductCatalogGzip} from "../current-display/index.js";
+import {classifyRakutenHeaderTimestampSyntax,collectRakutenProductCatalogFixture,parseRakutenHeaderTimestampUtc,validateRakutenProductCatalogGzip} from "../current-display/index.js";
 import {fixtureFeedText,fixtureRow} from "./fixtures/rakuten-newegg/sanitized-feed-fixtures.js";
 
 let cases=0;
@@ -27,6 +27,7 @@ invalid("");
 invalid("not-a-time");
 invalid("2026-09-03T12:00:00Z");
 invalid("Thu, 03 Sep 2026 12:00:00 GMT");
+for(const value of ["9/03/2022 00:02:32","09/3/2022 00:02:32","9/3/2022 00:02:32","09/03/2022 0:02:32","09/03/2022 00:2:32","09/03/2022 00:02:3"]){assert.equal(classifyRakutenHeaderTimestampSyntax(value).componentCount,6);invalid(value);}
 
 const full=await collectRakutenProductCatalogFixture(gzipSync(fixtureFeedText({timestamp:"09/28/2026 23:41:07",rows:[fixtureRow({}, {delta:false})]})),{feedProfile:"MAIN_FULL"});
 equal(full[0].feedTimestamp,"2026-09-28T23:41:07.000Z");

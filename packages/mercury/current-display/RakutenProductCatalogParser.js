@@ -81,8 +81,11 @@ function parseHeader(fields) {
 }
 
 export function classifyRakutenHeaderTimestampSyntax(value) {
-    const text=typeof value==="string"?value.trim():"";
+    const rawText=typeof value==="string"?value:"",text=rawText.trim();
     const allNumeric=/^\d+$/.test(text),hasDash=text.includes("-"),hasSlash=text.includes("/"),hasDot=text.includes("."),hasColon=text.includes(":"),hasT=/T/i.test(text),hasWhitespace=/\s/.test(text),hasTrailingZ=/\dZ$/i.test(text),hasNumericUtcOffset=/(?:[+-]\d{2}:?\d{2})$/.test(text),hasAlphabeticTimezoneToken=/\b[A-Za-z]{2,5}$/.test(text)&&hasWhitespace&&!hasTrailingZ;
+    const componentMatch=/^(\d{1,8})\/(\d{1,8})\/(\d{1,8}) (\d{1,8}):(\d{1,8}):(\d{1,8})$/.exec(rawText);
+    const componentWidths=componentMatch?componentMatch.slice(1).map(component=>component.length):null;
+    const separatorPattern=componentWidths?`${"M".repeat(componentWidths[0])}/${"D".repeat(componentWidths[1])}/${"Y".repeat(componentWidths[2])} ${"H".repeat(componentWidths[3])}:${"m".repeat(componentWidths[4])}:${"s".repeat(componentWidths[5])}`:null;
     let structuralFamily="UNKNOWN_FORMAT";
     if(allNumeric)structuralFamily="COMPACT_NUMERIC";
     else if(hasSlash&&hasColon)structuralFamily="SLASH_DATE_TIME_LIKE";
@@ -90,7 +93,7 @@ export function classifyRakutenHeaderTimestampSyntax(value) {
     else if(hasDot&&hasColon)structuralFamily="DOT_DATE_TIME_LIKE";
     else if(hasAlphabeticTimezoneToken)structuralFamily="RFC_STYLE_LIKE";
     else if(hasColon&&(hasSlash||hasDash||hasDot))structuralFamily="DATE_TIME_LIKE";
-    return freeze({present:text.length>0,trimmedLength:text.length,dateSeparator:hasDash?"DASH":hasSlash?"SLASH":hasDot?"DOT":"NONE",containsTimeSeparator:hasColon,containsTSeparator:hasT,containsWhitespaceSeparator:hasWhitespace,containsTrailingZ:hasTrailingZ,containsNumericUtcOffset:hasNumericUtcOffset,containsAlphabeticTimezoneToken:hasAlphabeticTimezoneToken,allNumeric,compactNumericShape:allNumeric?`DIGITS_${text.length}`:null,structuralFamily});
+    return freeze({present:text.length>0,trimmedLength:text.length,dateSeparator:hasDash?"DASH":hasSlash?"SLASH":hasDot?"DOT":"NONE",containsTimeSeparator:hasColon,containsTSeparator:hasT,containsWhitespaceSeparator:hasWhitespace,containsTrailingZ:hasTrailingZ,containsNumericUtcOffset:hasNumericUtcOffset,containsAlphabeticTimezoneToken:hasAlphabeticTimezoneToken,allNumeric,compactNumericShape:allNumeric?`DIGITS_${text.length}`:null,structuralFamily,monthDigits:componentWidths?.[0]??null,dayDigits:componentWidths?.[1]??null,yearDigits:componentWidths?.[2]??null,hourDigits:componentWidths?.[3]??null,minuteDigits:componentWidths?.[4]??null,secondDigits:componentWidths?.[5]??null,componentCount:componentWidths?.length??null,separatorPattern,unsupportedExtraCharacters:componentMatch===null});
 }
 
 function parseTrailer(fields) {
