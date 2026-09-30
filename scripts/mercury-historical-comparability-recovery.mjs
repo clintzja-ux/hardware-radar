@@ -1,0 +1,14 @@
+import {readFile} from "node:fs/promises";
+import {fileURLToPath} from "node:url";
+import path from "node:path";
+import {ProductRepository} from "../packages/atlas/index.js";
+import {FileDataForSeoMarketEvidenceRepository,FileHistoricalObservationRepository,FileHistoricalBootstrapProviderResultRepository,FileHistoricalComparabilityReassessmentRepository,HistoricalComparabilityRecoveryService,defaultSourceRightsRegistry} from "../packages/mercury/index.js";
+
+const args=new Map(process.argv.slice(2).map(value=>{const i=value.indexOf("=");return i<0?[value,true]:[value.slice(0,i),value.slice(i+1)]})),action=String(args.get("--action")||"");
+const location=(name,fallback)=>path.resolve(String(args.get(name)||fallback)),readJson=async resource=>JSON.parse(await readFile(resource instanceof URL?fileURLToPath(resource):resource,"utf8"));
+const repositories=[new FileHistoricalBootstrapProviderResultRepository({statePath:location("--amazon-results",".forge-review/mercury/amazon-provider-results.json")}),new FileHistoricalBootstrapProviderResultRepository({statePath:location("--bootstrap-results",".forge-review/acquisition/historical-bootstrap-provider-results.json")})];
+const resultResolver={async getCanonicalResultById(id){const rows=(await Promise.all(repositories.map(repo=>repo.getCanonicalResultById(id)))).filter(Boolean);if(rows.length!==1)throw new Error(rows.length?"HISTORICAL_COMPARABILITY_RESULT_CONFLICT":"HISTORICAL_COMPARABILITY_RESULT_NOT_FOUND");return rows[0]}};
+const reassessmentRepository=new FileHistoricalComparabilityReassessmentRepository({statePath:location("--reassessment-state",".forge-review/mercury/historical-comparability-reassessments.json")});
+const service=new HistoricalComparabilityRecoveryService({historicalRepository:new FileHistoricalObservationRepository({statePath:location("--historical-state",".forge-review/mercury/historical-observations.json")}),evidenceRepository:new FileDataForSeoMarketEvidenceRepository({statePath:location("--evidence-state",".forge-review/acquisition/dataforseo-market-evidence.json")}),resultResolver,productRepository:new ProductRepository({readJson}),reassessmentRepository,rightsRegistry:defaultSourceRightsRegistry});
+let output;if(action==="prepare")output=await service.prepare();else if(action==="inspect")output=await service.inspect({planId:String(args.get("--plan-id")||"")});else if(action==="authorize")output=await service.authorize({planId:String(args.get("--plan-id")||""),operator:String(args.get("--operator")||""),reason:String(args.get("--reason")||""),confirmation:String(args.get("--confirm")||"")});else if(action==="execute")output=await service.execute({planId:String(args.get("--plan-id")||""),authorizationId:String(args.get("--authorization-id")||""),confirmation:String(args.get("--confirm")||"")});else throw new Error("HISTORICAL_COMPARABILITY_RECOVERY_ACTION_INVALID");
+console.log(JSON.stringify(output,null,2));

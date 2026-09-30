@@ -29,6 +29,7 @@ const testModules = [
     "./HistoricalValidator.test.mjs",
     "./HistoricalIntelligence.test.mjs",
     "./HistoricalComparability.test.mjs",
+    "./HistoricalComparabilityRecovery.test.mjs",
     "./HistoricalIntegration.test.mjs",
     "./PublicationEligibility.test.mjs",
     "./MarketPublicationService.test.mjs",

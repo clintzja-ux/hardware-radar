@@ -5,11 +5,20 @@ import {validateReusableIdentityAcquisitionLineage} from "../repeat-observation/
 const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
 const text=value=>typeof value==="string"&&value.trim()?value.trim():null;
 const domain=value=>{try{return new URL(value).hostname.toLowerCase().replace(/^www\./,"");}catch{return null;}};
+const immutableProductTitle=(immutableResult,asin)=>{
+ if(immutableResult?.operation!=="AMAZON_SELLERS"||immutableResult?.sourceId!==DATAFORSEO_AMAZON_SOURCE_ID)return null;
+ const rows=immutableResult?.operationResult?.result;
+ if(!Array.isArray(rows)||rows.length!==1)return null;
+ const resultAsin=text(rows[0]?.asin)?.toUpperCase(),title=text(rows[0]?.title);
+ if(resultAsin!==asin||!title)return null;
+ return title;
+};
 export function projectAmazonSellerRetention({sellerItem,atlasProductId,identityAssessment,sellersTaskId,immutableResult,observedAt,rawPayloadReference,reusableIdentityLineage=null}={}){
  const evidence=createAmazonSellersEvidence(sellerItem);
  const repeat=reusableIdentityLineage!==null;if(repeat){const report=validateReusableIdentityAcquisitionLineage(reusableIdentityLineage);if(!report.valid||reusableIdentityLineage.sourceId!==DATAFORSEO_AMAZON_SOURCE_ID||reusableIdentityLineage.atlasProductId!==atlasProductId||reusableIdentityLineage.providerTaskId!==sellersTaskId||reusableIdentityLineage.providerIdentity.asin!==evidence.dataAsin)throw new Error("AMAZON_REPEAT_LINEAGE_INVALID");}else if(identityAssessment?.state!=="STRONG_UNIQUE_ASIN"||identityAssessment?.providerAnchor?.asin!==evidence.dataAsin)throw new Error("AMAZON_RETAINED_IDENTITY_NOT_STRONG");
  if(immutableResult?.sourceId!==DATAFORSEO_AMAZON_SOURCE_ID||immutableResult?.operation!=="AMAZON_SELLERS"||immutableResult?.providerTaskId!==sellersTaskId||!text(immutableResult?.canonicalResultId)||!text(immutableResult?.resultDigest))throw new Error("AMAZON_IMMUTABLE_RESULT_LINEAGE_INVALID");
  const marketEvidence=structuredClone(projectAmazonSellerToRetainedEvidence(evidence,{atlasProductId,sourceTaskId:sellersTaskId,observedAt,rawPayloadReference}));
+ const productTitle=immutableProductTitle(immutableResult,evidence.dataAsin);if(productTitle)marketEvidence.productEvidence={title:productTitle};
  marketEvidence.seller.domain=domain(evidence.sellerUrl);marketEvidence.pricing.totalPrice=evidence.currentPrice;
  marketEvidence.offer.details=[evidence.conditionDescription,Array.isArray(evidence.voucherTerms)?evidence.voucherTerms.map(value=>JSON.stringify(value)).join(" "):text(evidence.voucherTerms)].filter(Boolean).join(" ")||null;
  Object.assign(marketEvidence.provenance,{immutableProviderResultId:immutableResult.canonicalResultId,immutableProviderResultDigest:immutableResult.resultDigest,sourceRightsProfileDigest:immutableResult.sourceRightsProfileDigest});

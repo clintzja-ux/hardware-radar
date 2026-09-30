@@ -45,7 +45,7 @@ try {
     assert.equal(terminal.lenses.ALL_RAM.coverage.productsTracked, 103);
     assert.equal(terminal.lenses.ALL_RAM.coverage.productsCurrentlyPriced, marker.currentPriceProductCount);
     assert.equal(terminal.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 329);
-    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 132);
+    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 329);
     assert.equal(terminal.lenses.DDR4.currentMarket.state, "INSUFFICIENT_MARKET_COHORT");
     assert.equal(terminal.lenses.LAPTOP_SODIMM.currentMarket.medianCurrentItemPrice, 442.42);
     const terminalHtml = await readFile(path.join(output, "ram", "terminal", "index.html"), "utf8");
