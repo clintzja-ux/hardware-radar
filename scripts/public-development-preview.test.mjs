@@ -9,7 +9,7 @@ import { representativeCatalogPrice, sortRamCatalogProductsByCurrentPrice } from
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = await mkdtemp(path.join(os.tmpdir(), "hardware-radar-development-preview-"));
-const asOf = "2026-09-28T16:12:00.000Z";
+const asOf = "2026-09-30T01:00:00.000Z";
 
 try {
     const build = spawnSync(process.execPath, ["scripts/build-public-development-preview.mjs"], {
