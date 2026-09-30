@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { createRamCatalogProjection, createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { formatProductName } from "../public/js/modules/ramTerminal.js";
-import { createRamProductSitemapRoutes, renderRamProductPage } from "./ram-product-publishing.mjs";
+import { calculatePriceDisplayDomain, createRamProductSitemapRoutes, renderRamProductPage, selectChronologyTickIndexes } from "./ram-product-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
@@ -120,6 +120,9 @@ assert.match(styles, /\.ram-product-specs\{grid-template-columns:1fr\}/);
 assert.match(styles, /\.ram-product-current-retail/);
 assert.match(styles, /@media\(max-width:650px\)[^}]*\.ram-product-current-retail/s);
 assert.match(styles, /\.ram-product-history__metrics/);
+assert.match(styles, /\.ram-price-series__chart/);
+assert.match(styles, /\.ram-price-series__point:focus/);
+assert.match(styles, /@media\(prefers-reduced-motion:reduce\)/);
 assert.match(styles, /@media\(max-width:500px\)\{\.ram-product-history,\.ram-product-methodology\{[^}]+\}\.ram-product-history__metrics\{grid-template-columns:1fr\}\}/);
 assert.equal(currentRetail.products.length, 0, "Default-OFF release control must preserve catalog pages without exposing market data.");
 for (const product of catalog.products) {
@@ -171,6 +174,66 @@ const threeHtml = renderRamProductPage(pricedPage, [], null, currentRetail.discl
 assert.match(threeHtml, /3 distinct times/);
 assert.match(threeHtml, /↑<\/span> \$10\.00/);
 assert.doesNotMatch(threeHtml, /<svg|<canvas|sparkline/);
+
+const series = timestampGroups => ({ schemaVersion: "1.0", methodologyVersion: "MERCURY-PUBLIC-CHRONOLOGICAL-PRICE-SERIES-P1-1.0", atlasProductId: pricedPage.atlasProductId, publicPath: pricedPage.publicPath, comparisonSemantics: "ITEM_PRICE", timestampGroups });
+const domain = calculatePriceDisplayDomain([569.99, 587.09]);
+assert.equal(domain.observedMinimum, 569.99);
+assert.equal(domain.observedMaximum, 587.09);
+assert.ok(domain.displayMinimum < domain.observedMinimum && domain.displayMaximum > domain.observedMaximum, "Observed bounds need deterministic presentation breathing room.");
+const zeroDomain = calculatePriceDisplayDomain([249.99, 249.99, 249.99]);
+assert.equal(zeroDomain.observedMinimum, zeroDomain.observedMaximum);
+assert.ok(zeroDomain.displayRange > 0 && zeroDomain.displayMinimum < 249.99 && zeroDomain.displayMaximum > 249.99, "A flat series needs a nonzero presentation domain without changing observed prices.");
+const smallDomain = calculatePriceDisplayDomain([100, 100.01]);
+assert.equal(smallDomain.displayMinimum, 99.5);
+assert.equal(smallDomain.displayMaximum, 100.51);
+const largeDomain = calculatePriceDisplayDomain([100, 500]);
+assert.equal(largeDomain.displayMinimum, 40);
+assert.equal(largeDomain.displayMaximum, 560);
+assert.deepEqual(selectChronologyTickIndexes(1), [0]);
+assert.deepEqual(selectChronologyTickIndexes(2), [0, 1]);
+assert.deepEqual(selectChronologyTickIndexes(3), [0, 1, 2]);
+assert.deepEqual(selectChronologyTickIndexes(4), [0, 1, 2, 3]);
+assert.deepEqual(selectChronologyTickIndexes(20), [0, 5, 10, 14, 19]);
+assert.equal(new Set(selectChronologyTickIndexes(20)).size, 5);
+const oneSeriesHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(oneHistory), series([{ observedAt: "2026-09-29T22:35:00.000Z", observations: [{ itemPriceUsd: 128, currency: "USD", retailerId: "RETAILER-0004", retailerName: "Newegg", observationCount: 1 }] }]));
+assert.match(oneSeriesHtml, /<h2 id="price-series-heading">Observed price history<\/h2>/);
+assert.match(oneSeriesHtml, /<table>/);
+assert.doesNotMatch(oneSeriesHtml, /ram-price-series__chart/);
+const multiSeriesHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(twoHistory), series([
+    { observedAt: "2026-09-20T22:35:00.000Z", observations: [{ itemPriceUsd: 100, currency: "USD", retailerId: "RETAILER-0001", retailerName: "Amazon", observationCount: 1 }, { itemPriceUsd: 95, currency: "USD", retailerId: "RETAILER-0004", retailerName: "Newegg", observationCount: 1 }] },
+    { observedAt: "2026-09-29T22:35:00.000Z", observations: [{ itemPriceUsd: 90, currency: "USD", retailerId: null, retailerName: null, observationCount: 2 }] }
+]));
+assert.match(multiSeriesHtml, /<svg class="ram-price-series__chart"/);
+assert.match(multiSeriesHtml, /aria-describedby="price-series-summary-/);
+assert.equal((multiSeriesHtml.match(/class="ram-price-series__point/g) ?? []).length, 3);
+assert.match(multiSeriesHtml, /Amazon, \$100\.00 USD/);
+assert.match(multiSeriesHtml, /Newegg, \$95\.00 USD/);
+assert.match(multiSeriesHtml, /Retailer not canonically attributed/);
+assert.match(multiSeriesHtml, />2<\/td>/);
+assert.doesNotMatch(multiSeriesHtml, /<polyline|<path|prediction|forecast|recommendation/i);
+assert.match(multiSeriesHtml, /tabindex="0" role="img"/);
+assert.match(multiSeriesHtml, /Hardware Radar does not observe prices continuously/);
+assert.match(multiSeriesHtml, /<circle[^>]+aria-label="Amazon[^"]+" cx="68"/);
+assert.match(multiSeriesHtml, /<rect[^>]+aria-label="Newegg[^"]+" x="63"/, "Same-time Amazon circle and Newegg square must share center X=68 without chronological jitter.");
+assert.doesNotMatch(multiSeriesHtml, /y="30"|y="222"/, "Display-domain and plot padding must keep point centers off plot boundaries.");
+const equalSeriesHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(twoHistory), series([
+    { observedAt: "2026-09-20T22:35:00.000Z", observations: [{ itemPriceUsd: 249.99, currency: "USD", retailerId: "RETAILER-0001", retailerName: "Amazon", observationCount: 1 }] },
+    { observedAt: "2026-09-29T22:35:00.000Z", observations: [{ itemPriceUsd: 249.99, currency: "USD", retailerId: "RETAILER-0004", retailerName: "Newegg", observationCount: 1 }] }
+]));
+assert.equal((equalSeriesHtml.match(/\$249\.99 USD/g) ?? []).length >= 2, true);
+assert.doesNotMatch(equalSeriesHtml, /NaN|Infinity|<polyline|<path/);
+const fourGroups = Array.from({ length: 4 }, (_, index) => ({ observedAt: `2026-09-${String(20 + index).padStart(2, "0")}T12:00:00.000Z`, observations: [{ itemPriceUsd: 100 + index, currency: "USD", retailerId: "RETAILER-0001", retailerName: "Amazon", observationCount: 1 }] }));
+const fourSeriesHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(twoHistory), series(fourGroups));
+assert.equal((fourSeriesHtml.match(/class="ram-price-series__x-label"/g) ?? []).length, 4);
+assert.match(fourSeriesHtml, /Sep 20, 2026/);
+assert.match(fourSeriesHtml, /Sep 23, 2026/);
+const denseGroups = Array.from({ length: 20 }, (_, index) => ({ observedAt: `2026-09-${String(index + 1).padStart(2, "0")}T12:00:00.000Z`, observations: [{ itemPriceUsd: 100 + index, currency: "USD", retailerId: "RETAILER-0001", retailerName: "Amazon", observationCount: 1 }] }));
+const denseSeriesHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(twoHistory), series(denseGroups));
+assert.equal((denseSeriesHtml.match(/class="ram-price-series__x-label"/g) ?? []).length, 5, "Dense series must use a bounded representative tick set.");
+assert.match(denseSeriesHtml, /Sep 1, 2026/);
+assert.match(denseSeriesHtml, /Sep 20, 2026/);
+assert.equal(renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(twoHistory), series(fourGroups)), fourSeriesHtml, "Chart coordinates and ticks must rebuild deterministically.");
+assert.throws(() => renderRamProductPage(pricedPage, [], null, "", baseSummary, { ...series([]), atlasProductId: "wrong" }), /RAM_PRODUCT_CHRONOLOGICAL_SERIES_BINDING_INVALID/);
 
 const flatHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary({ ...twoHistory, movement: "FLAT", changeFromPreviousAmount: 0, latestComparableObservation: { ...twoHistory.latestComparableObservation, itemPriceUsd: 100 }, observedMinimumItemPrice: 100 }));
 assert.match(flatHtml, /—<\/span> Unchanged/);

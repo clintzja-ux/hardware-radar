@@ -259,6 +259,7 @@ const testModules = [
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./RamTerminalPublicIntelligence.test.mjs"
+    ,"./PublicChronologicalPriceSeries.test.mjs"
     ,"./ManualCurrentPriceQualification.test.mjs"
     ,"./ManualCurrentPriceWorkbook.test.mjs"
     ,"./ManualCurrentPriceWorkbookComposition.test.mjs"
