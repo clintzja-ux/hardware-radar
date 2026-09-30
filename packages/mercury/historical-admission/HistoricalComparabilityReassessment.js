@@ -22,4 +22,3 @@ export function projectEffectiveHistoricalObservation(observation,reassessments=
  const latest=[...applicable].sort((a,b)=>Date.parse(a.recordedAt)-Date.parse(b.recordedAt)||a.reassessmentId.localeCompare(b.reassessmentId)).at(-1);if(latest.retainedEvidenceId!==observation.provenance?.retainedEvidenceId||latest.atlasProductId!==observation.atlasProductId||latest.priorClassification!==observation.comparability?.classification)throw new Error("HISTORICAL_COMPARABILITY_REASSESSMENT_LINEAGE_CONFLICT");
  const projected=structuredClone(observation);projected.comparability={policyVersion:latest.newAssessment.policyVersion,assessmentId:latest.newAssessment.assessmentId,classification:latest.newAssessment.classification,reasons:[...latest.newAssessment.reasons],standaloneEligible:latest.newAssessment.historicalStandaloneEligible,effectiveReassessmentId:latest.reassessmentId};return freeze(projected);
 }
-

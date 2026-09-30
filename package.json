@@ -20,6 +20,7 @@
     "test:public-development-preview": "node scripts/public-development-preview.test.mjs",
     "test:ram-comparison": "node scripts/ram-comparison.test.mjs",
     "test:ram-terminal": "node scripts/ram-terminal.test.mjs",
+    "test:ram-market-snapshot": "node packages/mercury/tests/RamMarketSnapshotProjection.test.mjs && node scripts/public-development-preview.test.mjs",
     "test:retailer-destinations": "node scripts/retailer-destination-publishing.test.mjs",
     "test:sentinel": "node packages/sentinel/tests/run-all-tests.mjs",
     "test:aggregator": "node packages/sentinel/tests/DecisionAggregator.test.mjs",

@@ -5,6 +5,7 @@ export * from "./FileHistoricalAdmissionAuthorizationRepository.js";
 export * from "./HistoricalAdmissionOperatorService.js";
 export * from "./HistoricalObservationIntelligence.js";
 export * from "./RamTerminalPublicIntelligence.js";
+export * from "./RamMarketSnapshotProjection.js";
 export * from "./PublicChronologicalPriceSeries.js";
 export * from "./HistoricalOfferComparabilityAssessment.js";
 export * from "./HistoricalComparabilityReassessment.js";

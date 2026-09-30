@@ -38,4 +38,3 @@ Condition, shipping, availability, price, observation time, seller, marketplace,
 ## Authority and operations
 
 Provider calls: 0. Paid tasks: 0. Spend: `$0.000`. Mercury Current, Atlas, destinations, publication, release, deployment, URLs, affiliate links, and the operator workbook are outside this boundary. The release remains OFF.
-

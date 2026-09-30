@@ -4,4 +4,3 @@ export class EffectiveHistoricalObservationRepository{
  async getAll(){const[rows,reassessments]=await Promise.all([this.historicalRepository.getAll(),this.reassessmentRepository.getAllReassessments()]);return Object.freeze(rows.map(x=>projectEffectiveHistoricalObservation(x,reassessments)))}
  async getById(id){const rows=await this.getAll();return rows.find(x=>x.observationId===id)??null}
 }
-

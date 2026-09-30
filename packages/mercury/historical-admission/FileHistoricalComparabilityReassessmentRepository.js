@@ -13,4 +13,3 @@ export class FileHistoricalComparabilityReassessmentRepository{
  async recordReassessments(values){for(const x of values)validateHistoricalComparabilityReassessment(x);return this._mutate(s=>{for(const x of values){const prior=s.reassessments[x.reassessmentId],same=Object.values(s.reassessments).find(y=>y.observationId===x.observationId&&y.migrationVersion===x.migrationVersion);if(prior&&stable(prior)!==stable(x)||same&&same.reassessmentId!==x.reassessmentId)throw new Error("HISTORICAL_COMPARABILITY_REASSESSMENT_CONFLICT")}let added=0;for(const x of values)if(!s.reassessments[x.reassessmentId]){s.reassessments[x.reassessmentId]=clone(x);added++}return{status:added?"RECORDED":"DUPLICATE",added,total:Object.keys(s.reassessments).length}})}
  async getAllReassessments(){return freeze(Object.values((await this._read()).reassessments))}
 }
-
