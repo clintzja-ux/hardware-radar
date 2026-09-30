@@ -9,7 +9,7 @@ import { representativeCatalogPrice, sortRamCatalogProductsByCurrentPrice } from
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = await mkdtemp(path.join(os.tmpdir(), "hardware-radar-development-preview-"));
-const asOf = "2026-09-30T01:00:00.000Z";
+const asOf = "2026-09-30T17:00:00.000Z";
 
 try {
     const build = spawnSync(process.execPath, ["scripts/build-public-development-preview.mjs"], {
@@ -44,10 +44,10 @@ try {
     assert.ok(marker.currentPriceProductCount > 0);
     assert.equal(terminal.lenses.ALL_RAM.coverage.productsTracked, 103);
     assert.equal(terminal.lenses.ALL_RAM.coverage.productsCurrentlyPriced, marker.currentPriceProductCount);
-    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 305);
-    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 108);
+    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 329);
+    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 132);
     assert.equal(terminal.lenses.DDR4.currentMarket.state, "INSUFFICIENT_MARKET_COHORT");
-    assert.equal(terminal.lenses.LAPTOP_SODIMM.currentMarket.medianCurrentItemPrice, null);
+    assert.equal(terminal.lenses.LAPTOP_SODIMM.currentMarket.medianCurrentItemPrice, 442.42);
     const terminalHtml = await readFile(path.join(output, "ram", "terminal", "index.html"), "utf8");
     assert.match(terminalHtml, /RAM Market Terminal/);
     assert.match(terminalHtml, />103<\/strong>/);
