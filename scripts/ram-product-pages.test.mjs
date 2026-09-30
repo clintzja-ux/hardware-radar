@@ -86,7 +86,7 @@ const productRoutes = createRamProductSitemapRoutes(products);
 assert.equal(productRoutes.length, 103);
 for (const route of productRoutes) assert.equal((sitemap.match(new RegExp(`<loc>https://cheapestram\\.com${route.path}</loc>`, "g")) ?? []).length, 1);
 const ramChildRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]);
-assert.equal(ramChildRoutes.filter((route) => route !== "/ram/compare/").length, 103);
+assert.equal(ramChildRoutes.filter((route) => !["/ram/compare/", "/ram/terminal/"].includes(route)).length, 103);
 
 const styles = await read("public/css/styles.css");
 assert.match(styles, /\.ram-product-heading h1[^}]*overflow-wrap:anywhere/);

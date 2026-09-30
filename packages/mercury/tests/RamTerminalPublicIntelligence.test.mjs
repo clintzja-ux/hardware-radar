@@ -1,0 +1,81 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { createHistoricalObservation, createHistoricalObservationId, createRamTerminalPublicIntelligence, FileHistoricalObservationRepository, validateRamTerminalPublicIntelligence } from "../index.js";
+
+const catalog = JSON.parse(await readFile("public/data/ram-catalog.json", "utf8"));
+const history = new FileHistoricalObservationRepository({ statePath: ".forge-review/mercury/historical-observations.json" });
+const currentState = JSON.parse(await readFile(".forge-review/retail-display/current-display-snapshots.json", "utf8"));
+const { ProductRepository, RetailerRepository } = await import("../../atlas/index.js");
+const { loadRetailerDestinationSource, createPublicRetailerDestinationProjection } = await import("../destinations/RetailerDestinationSource.js");
+const { createPublicCurrentRetailProjection } = await import("../current-display/PublicCurrentRetailProjection.js");
+const { deriveCurrentDisplayPublicationEligibleSnapshot } = await import("../publication/CurrentDisplayPublication.js");
+const { defaultSourceRightsRegistry } = await import("../rights/SourceRightsRegistry.js");
+const readJson = async path => JSON.parse(await readFile(path, "utf8"));
+const products = await new ProductRepository({ readJson }).getAll(), retailers = await new RetailerRepository({ readJson }).getAll();
+const source = await loadRetailerDestinationSource({ sourcePath: "packages/mercury/destinations/production-destinations.json", products, retailers });
+const destinations = createPublicRetailerDestinationProjection({ source, retailers });
+const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) }, rightsRegistry: defaultSourceRightsRegistry });
+const asOf = "2026-09-30T00:00:00.000Z";
+const currentRetail = createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: eligible, asOf });
+const projection = await createRamTerminalPublicIntelligence({ catalog, currentRetail, historicalRepository: history, asOf, currentSnapshotId: currentState.current.snapshotId });
+assert.equal(validateRamTerminalPublicIntelligence(projection).valid, true);
+assert.deepEqual(Object.fromEntries(Object.entries(projection.lenses).map(([key, lens]) => [key, lens.coverage.productsTracked])), { ALL_RAM: 103, DDR5: 74, DDR4: 10, LAPTOP_SODIMM: 19 });
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 305);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 108);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.productsWithComparableHistory, 25);
+assert.equal(projection.lenses.ALL_RAM.coverage.productsCurrentlyPriced, 25);
+assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.every(row => row.formFactor === "SO_DIMM"), true);
+assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.some(row => row.memoryType === "DDR4"), true);
+assert.doesNotMatch(JSON.stringify(projection), /destinationUrl|sourceUrl|rawPayload|providerTask|evidenceId|affiliate/i);
+assert.deepEqual(await createRamTerminalPublicIntelligence({ catalog, currentRetail, historicalRepository: history, asOf, currentSnapshotId: currentState.current.snapshotId }), projection);
+const movementDirection = amount => amount > 0 ? "UP" : amount < 0 ? "DOWN" : "FLAT";
+for (const lens of Object.values(projection.lenses)) {
+    const movements = lens.productRows.filter(row => row.history.changeFromPreviousAmount !== undefined);
+    for (const row of movements) {
+        const expected = Math.round((row.history.latestComparableObservation.itemPriceUsd - row.history.previousComparableObservation.itemPriceUsd) * 100) / 100;
+        assert.equal(row.history.changeFromPreviousAmount, expected);
+        assert.equal(row.history.movement, movementDirection(expected));
+    }
+    assert.equal(lens.signalSummary.productsDownFromPrevious, movements.filter(row => row.history.movement === "DOWN").length);
+    assert.equal(lens.signalSummary.productsUpFromPrevious, movements.filter(row => row.history.movement === "UP").length);
+    assert.equal(lens.signalSummary.productsFlatFromPrevious, movements.filter(row => row.history.movement === "FLAT").length);
+    assert.equal(lens.signalSummary.productsAtObservedLow, lens.productRows.filter(row => row.history.atObservedLow === true).length);
+    for (const row of lens.productRows.filter(row => row.history.observedMinimumItemPrice !== undefined)) assert.equal(row.history.observedMinimumItemPrice <= row.history.observedMaximumItemPrice, true);
+    for (const row of lens.productRows.filter(row => row.history.atObservedLow === true)) assert.equal(row.history.latestComparableObservation.itemPriceUsd, row.history.observedMinimumItemPrice);
+}
+
+const miniProducts = Array.from({ length: 6 }, (_, index) => ({ atlasProductId: `ram_fixture_${index}`, publicPath: `/ram/fixture-${index}/`, brand: "Fixture", displayName: `Fixture ${index}`, memoryType: "DDR5", formFactor: "DIMM", capacityGb: 16, moduleCount: 2, capacityPerModuleGb: 8, dataRateMtps: 6000 }));
+const miniCatalog = { products: miniProducts };
+const offer = (index, price, retailerId = "RETAILER-0001") => ({ atlasProductId: `ram_fixture_${index}`, status: "CURRENT_PRICE_AVAILABLE", eligibleOfferCount: 1, lowerCurrentItemPrice: null, offers: [{ atlasProductId: `ram_fixture_${index}`, retailerId, itemPriceUsd: price, currency: "USD", comparisonEligible: true }] });
+const odd = await createRamTerminalPublicIntelligence({ catalog: { products: miniProducts.slice(0, 5) }, currentRetail: { state: "AVAILABLE", products: [10, 20, 30, 40, 50].map((price, index) => offer(index, price)) }, historicalRepository: { getAll: async () => [] }, asOf });
+assert.equal(odd.lenses.ALL_RAM.currentMarket.medianCurrentItemPrice, 30);
+const even = await createRamTerminalPublicIntelligence({ catalog: miniCatalog, currentRetail: { state: "AVAILABLE", products: [10, 20, 30, 40, 50, 60].map((price, index) => offer(index, price)) }, historicalRepository: { getAll: async () => [] }, asOf });
+assert.equal(even.lenses.ALL_RAM.currentMarket.medianCurrentItemPrice, 35);
+assert.equal(even.lenses.ALL_RAM.currentMarket.currentItemPriceMinimum, 10);
+assert.equal(even.lenses.ALL_RAM.currentMarket.currentItemPriceMaximum, 60);
+const sparse = await createRamTerminalPublicIntelligence({ catalog: miniCatalog, currentRetail: { state: "AVAILABLE", products: [offer(0, 10)] }, historicalRepository: { getAll: async () => [] }, asOf });
+assert.equal(sparse.lenses.ALL_RAM.currentMarket.state, "INSUFFICIENT_MARKET_COHORT");
+assert.equal(sparse.lenses.ALL_RAM.currentMarket.medianCurrentItemPrice, null);
+assert.equal(sparse.lenses.ALL_RAM.currentMarket.lowestCurrentItemPrice, 10);
+
+const historical = ({ id, time, price, comparable = true, source = "DATAFORSEO_AMAZON", condition = "NEW" }) => createHistoricalObservation({ factLevel: true, observationId: createHistoricalObservationId(id), atlasProductId: "ram_fixture_0", retailerId: "RETAILER-0001", marketplace: "amazon.com", observationTime: time, admittedAt: time, market: { sellerName: "Amazon", sourceUrl: "https://example.com", basePrice: price, totalPrice: null, shipping: null, tax: null, currency: "USD", condition, availability: "in_stock" }, provenance: { retainedEvidenceId: id, provider: "DATAFORSEO", source, rawPayloadReference: `fixture:${id}`, acquisition: { type: "REUSABLE_IDENTITY_REPEAT", atlasProductId: "ram_fixture_0", sourceId: source, operation: "AMAZON_SELLERS", reusableIdentityRecordId: "identity", reusableIdentityDigest: "digest", sourceRightsProfileDigest: "rights", preparedObservationId: "prepared", repeatAuthorizationId: "auth", paidActionIntentId: "intent", acquisitionCycleId: "cycle", observationCycle: "obs-cycle", providerTaskId: "task", canonicalResultId: "result", canonicalResultDigest: "result-digest", lineageBindingDigest: "lineage" } }, observedMerchant: { resolutionState: "RESOLVED" }, comparability: { classification: comparable ? "STANDALONE_COMPARABLE" : "UNKNOWN_COMPARABILITY", standaloneEligible: comparable, reasons: comparable ? [] : ["UNKNOWN"] }, admittedBy: "test", idempotencyKey: id });
+const historyRows = [historical({ id: "h1", time: "2026-09-01T00:00:00Z", price: 100 }), historical({ id: "h2", time: "2026-09-02T00:00:00Z", price: 90 }), historical({ id: "h3", time: "2026-09-02T00:00:00Z", price: 80 }), historical({ id: "h4", time: "2026-09-03T00:00:00Z", price: 70, comparable: false }), historical({ id: "rakuten", time: "2026-09-04T00:00:00Z", price: 1, source: "RAKUTEN_SAMPLE_RESEARCH" })];
+const signals = await createRamTerminalPublicIntelligence({ catalog: { products: miniProducts.slice(0, 1) }, currentRetail: { state: "NO_QUALIFYING_CURRENT_PRICE", products: [] }, historicalRepository: { getAll: async () => historyRows }, asOf });
+const signal = signals.lenses.ALL_RAM.productRows[0].history;
+assert.equal(signal.admittedObservationCount, 4);
+assert.equal(signal.comparableObservationCount, 3);
+assert.equal(signal.distinctComparableTimestampCount, 2);
+assert.equal(signal.movement, "DOWN");
+assert.equal(signal.previousComparableObservation.itemPriceUsd, 100);
+assert.equal(signal.latestComparableObservation.itemPriceUsd, 90);
+assert.equal(signal.observedMinimumItemPrice, 80);
+assert.equal(signal.atObservedLow, false);
+const independentCurrent = await createRamTerminalPublicIntelligence({ catalog: { products: miniProducts.slice(0, 1) }, currentRetail: { state: "AVAILABLE", products: [offer(0, 60)] }, historicalRepository: { getAll: async () => historyRows }, asOf });
+const independentRow = independentCurrent.lenses.ALL_RAM.productRows[0];
+assert.equal(independentRow.current.itemPriceUsd, 60);
+assert.equal(independentRow.history.latestComparableObservation.itemPriceUsd, 90);
+assert.equal(independentRow.history.previousComparableObservation.itemPriceUsd, 100);
+assert.equal(independentRow.history.changeFromPreviousAmount, -10);
+assert.equal(independentRow.history.movement, "DOWN");
+assert.equal(independentRow.current.itemPriceUsd < independentRow.history.observedMinimumItemPrice, true);
+console.log("Mercury RAM Terminal public intelligence contract passed.");

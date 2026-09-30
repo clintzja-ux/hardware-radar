@@ -258,6 +258,7 @@ const testModules = [
     ,"./RetailDisplayImport.test.mjs"
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
+    ,"./RamTerminalPublicIntelligence.test.mjs"
     ,"./ManualCurrentPriceQualification.test.mjs"
     ,"./ManualCurrentPriceWorkbook.test.mjs"
     ,"./ManualCurrentPriceWorkbookComposition.test.mjs"

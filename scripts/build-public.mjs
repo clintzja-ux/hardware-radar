@@ -20,6 +20,8 @@ import { generateRamProductPages } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { FileCurrentDisplaySnapshotRepository, createEmptyPublicCurrentRetailProjection, createPublicCurrentRetailProjection } from "../packages/mercury/current-display/index.js";
 import { loadStaticPublicationRelease } from "./static-publication-release-runtime.mjs";
+import { createRamTerminalPublicIntelligence } from "../packages/mercury/historical-admission/RamTerminalPublicIntelligence.js";
+import { generateRamTerminalPage } from "./ram-terminal-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -95,8 +97,11 @@ const staticRelease = await loadStaticPublicationRelease({
 });
 currentRetail = staticRelease.exposed ? staticRelease.projection : createEmptyPublicCurrentRetailProjection({ asOf: generatedAt, state: "NO_CURRENT_RETAIL_STATE" });
 await writeFile(path.join(root, "public", "data", "ram-current-retail.json"), `${JSON.stringify(currentRetail, null, 2)}\n`);
+const terminal = await createRamTerminalPublicIntelligence({ catalog: ramCatalog, currentRetail, historicalRepository: { getAll: async () => [] }, asOf: generatedAt });
+await writeFile(path.join(root, "public", "data", "ram-terminal.json"), `${JSON.stringify(terminal, null, 2)}\n`);
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, disclosure: currentRetail.disclosure, outputDir: path.join(root, "public") });
+await generateRamTerminalPage({ artifact: terminal, outputDir: path.join(root, "public") });
 const staticRoutes = await json(path.join(root, "content", "site-routes.json"));
 await writeFile(path.join(root, "public", "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
 const mercury = new Mercury();

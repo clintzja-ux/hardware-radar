@@ -79,7 +79,7 @@ assert.match(productGenerator, /Compare this RAM/);
 const sitemap = await read("public/sitemap.xml");
 assert.equal((sitemap.match(/<loc>https:\/\/cheapestram\.com\/ram\/compare\/<\/loc>/g) ?? []).length, 1);
 assert.equal((sitemap.match(/<loc>https:\/\/cheapestram\.com\/ram\/compare\/\?products=/g) ?? []).length, 0);
-const detailRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]).filter((route) => route !== "/ram/compare/");
+const detailRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]).filter((route) => !["/ram/compare/", "/ram/terminal/"].includes(route));
 assert.equal(detailRoutes.length, 103);
 
 const styles = await read("public/css/styles.css");

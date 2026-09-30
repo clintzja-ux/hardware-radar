@@ -27,6 +27,7 @@ try {
     const catalog = await readJson("data/ram-catalog.json");
     const currentRetail = await readJson("data/ram-current-retail.json");
     const marker = await readJson("development-preview.json");
+    const terminal = await readJson("data/ram-terminal.json");
     const dual = currentRetail.products.find((product) => product.lowerCurrentItemPrice && product.eligibleOfferCount >= 2);
     const single = currentRetail.products.find((product) => product.lowerCurrentItemPrice === null && product.eligibleOfferCount === 1);
     const target = catalog.products.find((product) => product.atlasProductId === dual?.atlasProductId);
@@ -41,6 +42,15 @@ try {
     assert.equal(marker.asOf, asOf);
     assert.equal(marker.currentPriceProductCount, currentRetail.products.length);
     assert.ok(marker.currentPriceProductCount > 0);
+    assert.equal(terminal.lenses.ALL_RAM.coverage.productsTracked, 103);
+    assert.equal(terminal.lenses.ALL_RAM.coverage.productsCurrentlyPriced, marker.currentPriceProductCount);
+    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 305);
+    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 108);
+    assert.equal(terminal.lenses.DDR4.currentMarket.state, "INSUFFICIENT_MARKET_COHORT");
+    assert.equal(terminal.lenses.LAPTOP_SODIMM.currentMarket.medianCurrentItemPrice, null);
+    const terminalHtml = await readFile(path.join(output, "ram", "terminal", "index.html"), "utf8");
+    assert.match(terminalHtml, /RAM Market Terminal/);
+    assert.match(terminalHtml, />103<\/strong>/);
 
     assert.equal(representativeCurrentOffer(dual), dual.lowerCurrentItemPrice);
     assert.equal(representativeCurrentOffer(single), single.offers[0]);

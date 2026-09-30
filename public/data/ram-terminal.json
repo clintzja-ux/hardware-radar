@@ -1,0 +1,4280 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "MERCURY_RAM_TERMINAL_PUBLIC_INTELLIGENCE",
+  "methodologyVersion": "MERCURY-RAM-TERMINAL-P1-1.0",
+  "asOf": "2026-09-30T00:00:00.000Z",
+  "currentState": "NO_CURRENT_RETAIL_STATE",
+  "currentSnapshotId": null,
+  "comparisonSemantics": "ITEM_PRICE",
+  "disclosure": "Prices exclude applicable shipping, taxes, and fees.",
+  "lenses": {
+    "ALL_RAM": {
+      "lens": "ALL_RAM",
+      "coverage": {
+        "productsTracked": 103,
+        "productsCurrentlyPriced": 0,
+        "currentCoverageNumerator": 0,
+        "currentCoverageDenominator": 103,
+        "qualifiedCurrentOfferCount": 0
+      },
+      "currentMarket": {
+        "state": "NO_QUALIFYING_CURRENT_PRICE",
+        "minimumProductsRequired": 5,
+        "lowestCurrentItemPrice": null,
+        "medianCurrentItemPrice": null,
+        "currentItemPriceMinimum": null,
+        "currentItemPriceMaximum": null,
+        "retailerCoverage": 0
+      },
+      "historyCoverage": {
+        "productsWithAnyHistory": 0,
+        "productsWithComparableHistory": 0,
+        "totalAdmittedObservationCount": 0,
+        "comparableObservationCount": 0,
+        "earliestComparableObservationAt": null,
+        "latestComparableObservationAt": null,
+        "comparableHistorySpanDays": null
+      },
+      "signalSummary": {
+        "productsDownFromPrevious": 0,
+        "productsUpFromPrevious": 0,
+        "productsFlatFromPrevious": 0,
+        "productsAtObservedLow": 0,
+        "productsWithInsufficientComparableHistory": 103
+      },
+      "productRows": [
+        {
+          "atlasProductId": "ram_corsair_cmk16gx5m2b5200z40",
+          "publicPath": "/ram/corsair-vengeance-cmk16gx5m2b5200z40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 16GB (2×8GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmsx32gx5m1a5600c48",
+          "publicPath": "/ram/corsair-vengeance-cmsx32gx5m1a5600c48/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (1×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx5m2b6000c30",
+          "publicPath": "/ram/corsair-vengeance-cmk32gx5m2b6000c30/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+          "publicPath": "/ram/corsair-vengeance-ddr5-32gb-6000-cl30-grey/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx5m2b6000c38",
+          "publicPath": "/ram/corsair-vengeance-cmk32gx5m2b6000c38/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx5m2b6400c36",
+          "publicPath": "/ram/corsair-vengeance-cmk32gx5m2b6400c36/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (2×16GB) 6400 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk64gx5m2b5200c40",
+          "publicPath": "/ram/corsair-vengeance-cmk64gx5m2b5200c40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 64GB (2×32GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk64gx5m2b5600c40",
+          "publicPath": "/ram/corsair-vengeance-cmk64gx5m2b5600c40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 64GB (2×32GB) 5600 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk96gx5m2b6000c30",
+          "publicPath": "/ram/corsair-vengeance-cmk96gx5m2b6000c30/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 96GB (2×48GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 96,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 48,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx4m2e3200c16",
+          "publicPath": "/ram/corsair-vengeance-lpx-cmk32gx4m2e3200c16/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance LPX DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh16gx5m2b5200z40",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh16gx5m2b5200z40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 16GB (2×8GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh16gx5m2e6000z36",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh16gx5m2e6000z36/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 16GB (2×8GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2b6000z30wcb",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2b6000z30wcb/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2e6000c36w",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2e6000c36w/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2f6000z36",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2f6000z36/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2b6000c38",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2b6000c38/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2b6400c36",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2b6400c36/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6400 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh64gx5m2d5600z40",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh64gx5m2d5600z40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 64GB (2×32GB) 5600 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh64gx5m2n6400c32w",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh64gx5m2n6400c32w/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 64GB (2×32GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct16g4dfra32a",
+          "publicPath": "/ram/crucial-crucial-ct16g4dfra32a/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR4 16GB (1×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k16g4sfra32a",
+          "publicPath": "/ram/crucial-crucial-ct2k16g4sfra32a/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k32g4sfd832a",
+          "publicPath": "/ram/crucial-crucial-ct2k32g4sfd832a/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR4 64GB (2×32GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct8g4sfra32a",
+          "publicPath": "/ram/crucial-crucial-ct8g4sfra32a/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR4 8GB (1×8GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 8,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct16g56c46s5",
+          "publicPath": "/ram/crucial-crucial-ct16g56c46s5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 16GB (1×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct16g56c46u5",
+          "publicPath": "/ram/crucial-crucial-ct16g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 16GB (1×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct32g56c46s5",
+          "publicPath": "/ram/crucial-crucial-ct32g56c46s5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 32GB (1×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct32g56c46u5",
+          "publicPath": "/ram/crucial-crucial-ct32g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 32GB (1×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k16g56c46s5",
+          "publicPath": "/ram/crucial-crucial-ct2k16g56c46s5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k16g56c46u5",
+          "publicPath": "/ram/crucial-crucial-ct2k16g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k32g56c46s5",
+          "publicPath": "/ram/crucial-crucial-ct2k32g56c46s5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 64GB (2×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k32g56c46u5",
+          "publicPath": "/ram/crucial-crucial-ct2k32g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 64GB (2×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k16g56c46u5",
+          "publicPath": "/ram/crucial-crucial-pro-cp2k16g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial Pro DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k32g56c46u5",
+          "publicPath": "/ram/crucial-crucial-pro-cp2k32g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial Pro DDR5 64GB (2×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k16g4dfra32a",
+          "publicPath": "/ram/crucial-pro-cp2k16g4dfra32a/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k16g60c36u5b",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k16g60c36u5b/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k16g64c32u5b",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k16g64c32u5b/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 32GB (2×16GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k32g60c40u5b",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k32g60c40u5b/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 64GB (2×32GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k32g60c40u5w",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k32g60c40u5w/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 64GB (2×32GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k32g64c40u5w",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k32g64c40u5w/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 64GB (2×32GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3038f16gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3038f16gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j2836g16gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j2836g16gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s CL28",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3036f16gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3036f16gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3038f16gh2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3038f16gh2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3636f16gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3636f32gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 64GB (2×32GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f4_3200c22d_32grs",
+          "publicPath": "/ram/g-skill-ripjaws-f4-3200c22d-32grs/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5600s4040a16gx2_rs",
+          "publicPath": "/ram/g-skill-ripjaws-f5-5600s4040a16gx2-rs/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f16gx1_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3636f16gx1-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 16GB (1×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-5200j4040a16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5w",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-5200j4040a16gx2-rs5w/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3040f16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5w",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3040f16gx2-rs5w/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3238f16gx2_rs5w",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3238f16gx2-rs5w/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3636f16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6400j3239g16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6400j3239g16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6800j3445g16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6800j3445g16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6800 MT/s CL34",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6800,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5600j3636d32gx2_rs5w",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-5600j3636d32gx2-rs5w/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 64GB (2×32GB) 5600 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3636f32gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 64GB (2×32GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5600s4645a16gx2_rs",
+          "publicPath": "/ram/g-skill-ripjaws-so-dimm-f5-5600s4645a16gx2-rs/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws SO-DIMM DDR5 32GB (2×16GB) 5600 MT/s CL46",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5600s4645a32gx2_rs",
+          "publicPath": "/ram/g-skill-ripjaws-so-dimm-f5-5600s4645a32gx2-rs/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws SO-DIMM DDR5 64GB (2×32GB) 5600 MT/s CL46",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f4_3200c16d_32gvk",
+          "publicPath": "/ram/g-skill-ripjaws-v-f4-3200c16d-32gvk/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws V DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3040g32gx2_tz5n",
+          "publicPath": "/ram/g-skill-trident-z5-neo-f5-6000j3040g32gx2-tz5n/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Trident Z5 Neo DDR5 64GB (2×32GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_7600j3646g16gx2_tz5rk",
+          "publicPath": "/ram/g-skill-trident-z5-rgb-f5-7600j3646g16gx2-tz5rk/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Trident Z5 RGB DDR5 32GB (2×16GB) 7600 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 7600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6400j3239g32gx2_tz5rk",
+          "publicPath": "/ram/g-skill-trident-z5-rgb-f5-6400j3239g32gx2-tz5rk/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Trident Z5 RGB DDR5 64GB (2×32GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kcp556sd8_32",
+          "publicPath": "/ram/kingston-client-premier-kcp556sd8-32/",
+          "brand": "Kingston",
+          "productName": "Kingston Client Premier DDR5 32GB (1×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf432c16bbk2_16",
+          "publicPath": "/ram/kingston-fury-beast-kf432c16bbk2-16/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR4 16GB (2×8GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c30bbek2_32",
+          "publicPath": "/ram/kingston-fury-beast-kf560c30bbek2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bbe2k2_32",
+          "publicPath": "/ram/kingston-fury-beast-kf560c36bbe2k2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bwe2k2_32",
+          "publicPath": "/ram/kingston-fury-beast-kf560c36bwe2k2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564c32bbek2_32",
+          "publicPath": "/ram/kingston-fury-beast-kf564c32bbek2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c30bbeak2_16",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c30bbeak2-16/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 16GB (2×8GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bbeak2_16",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c36bbeak2-16/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 16GB (2×8GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c30bweak2_32",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c30bweak2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bbe2ak2_32",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c36bbe2ak2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564c32bbeak2_32",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf564c32bbeak2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c30bbea_8",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c30bbea-8/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 8GB (1×8GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 8,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bbea_8",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c36bbea-8/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 8GB (1×8GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 8,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564s38ib_16",
+          "publicPath": "/ram/kingston-fury-impact-kf564s38ib-16/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 16GB (1×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf556s40ibk2_32",
+          "publicPath": "/ram/kingston-fury-impact-kf556s40ibk2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560s38ibk2_32",
+          "publicPath": "/ram/kingston-fury-impact-kf560s38ibk2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564s38ibk2_32",
+          "publicPath": "/ram/kingston-fury-impact-kf564s38ibk2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf556s40ibk2_64",
+          "publicPath": "/ram/kingston-fury-impact-kf556s40ibk2-64/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 64GB (2×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf436c16rb12k2_32",
+          "publicPath": "/ram/kingston-fury-renegade-kf436c16rb12k2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Renegade DDR4 32GB (2×16GB) 3600 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf572c38rsk2_32",
+          "publicPath": "/ram/kingston-fury-renegade-kf572c38rsk2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Renegade DDR5 32GB (2×16GB) 7200 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 7200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564c32rsak2_32",
+          "publicPath": "/ram/kingston-fury-renegade-rgb-kf564c32rsak2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Renegade RGB DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kvr32s22s8_16",
+          "publicPath": "/ram/kingston-valueram-kvr32s22s8-16/",
+          "brand": "Kingston",
+          "productName": "Kingston ValueRAM DDR4 16GB (1×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kvr32n22d8_32",
+          "publicPath": "/ram/kingston-valueram-kvr32n22d8-32/",
+          "brand": "Kingston",
+          "productName": "Kingston ValueRAM DDR4 32GB (1×32GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ctced532g6000hc30dc01",
+          "publicPath": "/ram/teamgroup-t-create-expert-ctced532g6000hc30dc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-CREATE EXPERT DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ctced532g6000hc38adc01",
+          "publicPath": "/ram/teamgroup-t-create-expert-ctced532g6000hc38adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-CREATE EXPERT DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ctced532g6400hc32adc01",
+          "publicPath": "/ram/teamgroup-t-create-expert-ctced532g6400hc32adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-CREATE EXPERT DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff2d532g6400hc32adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-eco-ff2d532g6400hc32adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta ECO DDR5 32GB (2×16GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_tf3d416g3200hc16fdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-tf3d416g3200hc16fdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR4 16GB (2×8GB) 3200 MT/s CL16",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_tf3d432g3200hc16fdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-tf3d432g3200hc16fdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d516g6000hc38adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d516g6000hc38adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 16GB (2×8GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d532g5200hc40cdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d532g5200hc40cdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d532g6000hc30dc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d532g6000hc30dc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff3d532g6000hc38jdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff3d532g6000hc38jdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d532g6000hc38adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d532g6000hc38adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d532g6400hc32adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d532g6400hc32adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff3d532g6400hc38jdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff3d532g6400hc38jdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6400 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff3d564g5200hc40cdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff3d564g5200hc40cdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 64GB (2×32GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff3d564g6000hc38adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff3d564g6000hc38adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 64GB (2×32GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_tlzgd432g3200hc16fdc01",
+          "publicPath": "/ram/teamgroup-t-force-vulcan-z-tlzgd432g3200hc16fdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-FORCE VULCAN Z DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        }
+      ]
+    },
+    "DDR5": {
+      "lens": "DDR5",
+      "coverage": {
+        "productsTracked": 74,
+        "productsCurrentlyPriced": 0,
+        "currentCoverageNumerator": 0,
+        "currentCoverageDenominator": 74,
+        "qualifiedCurrentOfferCount": 0
+      },
+      "currentMarket": {
+        "state": "NO_QUALIFYING_CURRENT_PRICE",
+        "minimumProductsRequired": 5,
+        "lowestCurrentItemPrice": null,
+        "medianCurrentItemPrice": null,
+        "currentItemPriceMinimum": null,
+        "currentItemPriceMaximum": null,
+        "retailerCoverage": 0
+      },
+      "historyCoverage": {
+        "productsWithAnyHistory": 0,
+        "productsWithComparableHistory": 0,
+        "totalAdmittedObservationCount": 0,
+        "comparableObservationCount": 0,
+        "earliestComparableObservationAt": null,
+        "latestComparableObservationAt": null,
+        "comparableHistorySpanDays": null
+      },
+      "signalSummary": {
+        "productsDownFromPrevious": 0,
+        "productsUpFromPrevious": 0,
+        "productsFlatFromPrevious": 0,
+        "productsAtObservedLow": 0,
+        "productsWithInsufficientComparableHistory": 74
+      },
+      "productRows": [
+        {
+          "atlasProductId": "ram_corsair_cmk16gx5m2b5200z40",
+          "publicPath": "/ram/corsair-vengeance-cmk16gx5m2b5200z40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 16GB (2×8GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx5m2b6000c30",
+          "publicPath": "/ram/corsair-vengeance-cmk32gx5m2b6000c30/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+          "publicPath": "/ram/corsair-vengeance-ddr5-32gb-6000-cl30-grey/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx5m2b6000c38",
+          "publicPath": "/ram/corsair-vengeance-cmk32gx5m2b6000c38/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk32gx5m2b6400c36",
+          "publicPath": "/ram/corsair-vengeance-cmk32gx5m2b6400c36/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (2×16GB) 6400 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk64gx5m2b5200c40",
+          "publicPath": "/ram/corsair-vengeance-cmk64gx5m2b5200c40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 64GB (2×32GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk64gx5m2b5600c40",
+          "publicPath": "/ram/corsair-vengeance-cmk64gx5m2b5600c40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 64GB (2×32GB) 5600 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmk96gx5m2b6000c30",
+          "publicPath": "/ram/corsair-vengeance-cmk96gx5m2b6000c30/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 96GB (2×48GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 96,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 48,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh16gx5m2b5200z40",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh16gx5m2b5200z40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 16GB (2×8GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh16gx5m2e6000z36",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh16gx5m2e6000z36/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 16GB (2×8GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2b6000z30wcb",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2b6000z30wcb/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2e6000c36w",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2e6000c36w/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2f6000z36",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2f6000z36/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2b6000c38",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2b6000c38/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh32gx5m2b6400c36",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh32gx5m2b6400c36/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 32GB (2×16GB) 6400 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh64gx5m2d5600z40",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh64gx5m2d5600z40/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 64GB (2×32GB) 5600 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_corsair_cmh64gx5m2n6400c32w",
+          "publicPath": "/ram/corsair-vengeance-rgb-cmh64gx5m2n6400c32w/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance RGB DDR5 64GB (2×32GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct16g56c46u5",
+          "publicPath": "/ram/crucial-crucial-ct16g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 16GB (1×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct32g56c46u5",
+          "publicPath": "/ram/crucial-crucial-ct32g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 32GB (1×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k16g56c46u5",
+          "publicPath": "/ram/crucial-crucial-ct2k16g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k32g56c46u5",
+          "publicPath": "/ram/crucial-crucial-ct2k32g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 64GB (2×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k16g56c46u5",
+          "publicPath": "/ram/crucial-crucial-pro-cp2k16g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial Pro DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k32g56c46u5",
+          "publicPath": "/ram/crucial-crucial-pro-cp2k32g56c46u5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial Pro DDR5 64GB (2×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k16g60c36u5b",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k16g60c36u5b/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k16g64c32u5b",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k16g64c32u5b/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 32GB (2×16GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k32g60c40u5b",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k32g60c40u5b/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 64GB (2×32GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k32g60c40u5w",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k32g60c40u5w/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 64GB (2×32GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k32g64c40u5w",
+          "publicPath": "/ram/crucial-pro-overclocking-cp2k32g64c40u5w/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro Overclocking DDR5 64GB (2×32GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3038f16gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3038f16gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j2836g16gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j2836g16gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s CL28",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3036f16gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3036f16gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3038f16gh2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3038f16gh2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3636f16gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_fx5",
+          "publicPath": "/ram/g-skill-flare-x5-f5-6000j3636f32gx2-fx5/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Flare X5 DDR5 64GB (2×32GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f16gx1_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3636f16gx1-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 16GB (1×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-5200j4040a16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5w",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-5200j4040a16gx2-rs5w/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3040f16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5w",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3040f16gx2-rs5w/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3238f16gx2_rs5w",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3238f16gx2-rs5w/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3636f16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6400j3239g16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6400j3239g16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6800j3445g16gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6800j3445g16gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 32GB (2×16GB) 6800 MT/s CL34",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6800,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5600j3636d32gx2_rs5w",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-5600j3636d32gx2-rs5w/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 64GB (2×32GB) 5600 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_rs5k",
+          "publicPath": "/ram/g-skill-ripjaws-s5-f5-6000j3636f32gx2-rs5k/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws S5 DDR5 64GB (2×32GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6000j3040g32gx2_tz5n",
+          "publicPath": "/ram/g-skill-trident-z5-neo-f5-6000j3040g32gx2-tz5n/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Trident Z5 Neo DDR5 64GB (2×32GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_7600j3646g16gx2_tz5rk",
+          "publicPath": "/ram/g-skill-trident-z5-rgb-f5-7600j3646g16gx2-tz5rk/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Trident Z5 RGB DDR5 32GB (2×16GB) 7600 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 7600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_6400j3239g32gx2_tz5rk",
+          "publicPath": "/ram/g-skill-trident-z5-rgb-f5-6400j3239g32gx2-tz5rk/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Trident Z5 RGB DDR5 64GB (2×32GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c30bbek2_32",
+          "publicPath": "/ram/kingston-fury-beast-kf560c30bbek2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bbe2k2_32",
+          "publicPath": "/ram/kingston-fury-beast-kf560c36bbe2k2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bwe2k2_32",
+          "publicPath": "/ram/kingston-fury-beast-kf560c36bwe2k2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564c32bbek2_32",
+          "publicPath": "/ram/kingston-fury-beast-kf564c32bbek2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c30bbeak2_16",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c30bbeak2-16/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 16GB (2×8GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bbeak2_16",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c36bbeak2-16/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 16GB (2×8GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c30bweak2_32",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c30bweak2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bbe2ak2_32",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c36bbe2ak2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564c32bbeak2_32",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf564c32bbeak2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c30bbea_8",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c30bbea-8/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 8GB (1×8GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 8,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560c36bbea_8",
+          "publicPath": "/ram/kingston-fury-beast-rgb-kf560c36bbea-8/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast RGB DDR5 8GB (1×8GB) 6000 MT/s CL36",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 8,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf572c38rsk2_32",
+          "publicPath": "/ram/kingston-fury-renegade-kf572c38rsk2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Renegade DDR5 32GB (2×16GB) 7200 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 7200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564c32rsak2_32",
+          "publicPath": "/ram/kingston-fury-renegade-rgb-kf564c32rsak2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Renegade RGB DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ctced532g6000hc30dc01",
+          "publicPath": "/ram/teamgroup-t-create-expert-ctced532g6000hc30dc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-CREATE EXPERT DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ctced532g6000hc38adc01",
+          "publicPath": "/ram/teamgroup-t-create-expert-ctced532g6000hc38adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-CREATE EXPERT DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ctced532g6400hc32adc01",
+          "publicPath": "/ram/teamgroup-t-create-expert-ctced532g6400hc32adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-CREATE EXPERT DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff2d532g6400hc32adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-eco-ff2d532g6400hc32adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta ECO DDR5 32GB (2×16GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d516g6000hc38adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d516g6000hc38adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 16GB (2×8GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d532g5200hc40cdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d532g5200hc40cdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d532g6000hc30dc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d532g6000hc30dc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6000 MT/s CL30",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff3d532g6000hc38jdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff3d532g6000hc38jdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d532g6000hc38adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d532g6000hc38adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff4d532g6400hc32adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff4d532g6400hc32adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6400 MT/s CL32",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff3d532g6400hc38jdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff3d532g6400hc38jdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 32GB (2×16GB) 6400 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff3d564g5200hc40cdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff3d564g5200hc40cdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 64GB (2×32GB) 5200 MT/s CL40",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_ff3d564g6000hc38adc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-ff3d564g6000hc38adc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR5 64GB (2×32GB) 6000 MT/s CL38",
+          "memoryType": "DDR5",
+          "formFactor": "DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        }
+      ]
+    },
+    "DDR4": {
+      "lens": "DDR4",
+      "coverage": {
+        "productsTracked": 10,
+        "productsCurrentlyPriced": 0,
+        "currentCoverageNumerator": 0,
+        "currentCoverageDenominator": 10,
+        "qualifiedCurrentOfferCount": 0
+      },
+      "currentMarket": {
+        "state": "NO_QUALIFYING_CURRENT_PRICE",
+        "minimumProductsRequired": 5,
+        "lowestCurrentItemPrice": null,
+        "medianCurrentItemPrice": null,
+        "currentItemPriceMinimum": null,
+        "currentItemPriceMaximum": null,
+        "retailerCoverage": 0
+      },
+      "historyCoverage": {
+        "productsWithAnyHistory": 0,
+        "productsWithComparableHistory": 0,
+        "totalAdmittedObservationCount": 0,
+        "comparableObservationCount": 0,
+        "earliestComparableObservationAt": null,
+        "latestComparableObservationAt": null,
+        "comparableHistorySpanDays": null
+      },
+      "signalSummary": {
+        "productsDownFromPrevious": 0,
+        "productsUpFromPrevious": 0,
+        "productsFlatFromPrevious": 0,
+        "productsAtObservedLow": 0,
+        "productsWithInsufficientComparableHistory": 10
+      },
+      "productRows": [
+        {
+          "atlasProductId": "ram_corsair_cmk32gx4m2e3200c16",
+          "publicPath": "/ram/corsair-vengeance-lpx-cmk32gx4m2e3200c16/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance LPX DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct16g4dfra32a",
+          "publicPath": "/ram/crucial-crucial-ct16g4dfra32a/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR4 16GB (1×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_cp2k16g4dfra32a",
+          "publicPath": "/ram/crucial-pro-cp2k16g4dfra32a/",
+          "brand": "Crucial",
+          "productName": "Crucial Pro DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f4_3200c16d_32gvk",
+          "publicPath": "/ram/g-skill-ripjaws-v-f4-3200c16d-32gvk/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws V DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf432c16bbk2_16",
+          "publicPath": "/ram/kingston-fury-beast-kf432c16bbk2-16/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Beast DDR4 16GB (2×8GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf436c16rb12k2_32",
+          "publicPath": "/ram/kingston-fury-renegade-kf436c16rb12k2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Renegade DDR4 32GB (2×16GB) 3600 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kvr32n22d8_32",
+          "publicPath": "/ram/kingston-valueram-kvr32n22d8-32/",
+          "brand": "Kingston",
+          "productName": "Kingston ValueRAM DDR4 32GB (1×32GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_tf3d416g3200hc16fdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-tf3d416g3200hc16fdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR4 16GB (2×8GB) 3200 MT/s CL16",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 16,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_tf3d432g3200hc16fdc01",
+          "publicPath": "/ram/teamgroup-t-force-delta-rgb-tf3d432g3200hc16fdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-Force Delta RGB DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_teamgroup_tlzgd432g3200hc16fdc01",
+          "publicPath": "/ram/teamgroup-t-force-vulcan-z-tlzgd432g3200hc16fdc01/",
+          "brand": "TeamGroup",
+          "productName": "TeamGroup T-FORCE VULCAN Z DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        }
+      ]
+    },
+    "LAPTOP_SODIMM": {
+      "lens": "LAPTOP_SODIMM",
+      "coverage": {
+        "productsTracked": 19,
+        "productsCurrentlyPriced": 0,
+        "currentCoverageNumerator": 0,
+        "currentCoverageDenominator": 19,
+        "qualifiedCurrentOfferCount": 0
+      },
+      "currentMarket": {
+        "state": "NO_QUALIFYING_CURRENT_PRICE",
+        "minimumProductsRequired": 5,
+        "lowestCurrentItemPrice": null,
+        "medianCurrentItemPrice": null,
+        "currentItemPriceMinimum": null,
+        "currentItemPriceMaximum": null,
+        "retailerCoverage": 0
+      },
+      "historyCoverage": {
+        "productsWithAnyHistory": 0,
+        "productsWithComparableHistory": 0,
+        "totalAdmittedObservationCount": 0,
+        "comparableObservationCount": 0,
+        "earliestComparableObservationAt": null,
+        "latestComparableObservationAt": null,
+        "comparableHistorySpanDays": null
+      },
+      "signalSummary": {
+        "productsDownFromPrevious": 0,
+        "productsUpFromPrevious": 0,
+        "productsFlatFromPrevious": 0,
+        "productsAtObservedLow": 0,
+        "productsWithInsufficientComparableHistory": 19
+      },
+      "productRows": [
+        {
+          "atlasProductId": "ram_corsair_cmsx32gx5m1a5600c48",
+          "publicPath": "/ram/corsair-vengeance-cmsx32gx5m1a5600c48/",
+          "brand": "Corsair",
+          "productName": "Corsair Vengeance DDR5 32GB (1×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k16g4sfra32a",
+          "publicPath": "/ram/crucial-crucial-ct2k16g4sfra32a/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k32g4sfd832a",
+          "publicPath": "/ram/crucial-crucial-ct2k32g4sfd832a/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR4 64GB (2×32GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct8g4sfra32a",
+          "publicPath": "/ram/crucial-crucial-ct8g4sfra32a/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR4 8GB (1×8GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 8,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 8,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct16g56c46s5",
+          "publicPath": "/ram/crucial-crucial-ct16g56c46s5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 16GB (1×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct32g56c46s5",
+          "publicPath": "/ram/crucial-crucial-ct32g56c46s5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 32GB (1×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k16g56c46s5",
+          "publicPath": "/ram/crucial-crucial-ct2k16g56c46s5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_crucial_ct2k32g56c46s5",
+          "publicPath": "/ram/crucial-crucial-ct2k32g56c46s5/",
+          "brand": "Crucial",
+          "productName": "Crucial Crucial DDR5 64GB (2×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f4_3200c22d_32grs",
+          "publicPath": "/ram/g-skill-ripjaws-f4-3200c22d-32grs/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws DDR4 32GB (2×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5600s4040a16gx2_rs",
+          "publicPath": "/ram/g-skill-ripjaws-f5-5600s4040a16gx2-rs/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5600s4645a16gx2_rs",
+          "publicPath": "/ram/g-skill-ripjaws-so-dimm-f5-5600s4645a16gx2-rs/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws SO-DIMM DDR5 32GB (2×16GB) 5600 MT/s CL46",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_g_skill_f5_5600s4645a32gx2_rs",
+          "publicPath": "/ram/g-skill-ripjaws-so-dimm-f5-5600s4645a32gx2-rs/",
+          "brand": "G.SKILL",
+          "productName": "G.SKILL Ripjaws SO-DIMM DDR5 64GB (2×32GB) 5600 MT/s CL46",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kcp556sd8_32",
+          "publicPath": "/ram/kingston-client-premier-kcp556sd8-32/",
+          "brand": "Kingston",
+          "productName": "Kingston Client Premier DDR5 32GB (1×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564s38ib_16",
+          "publicPath": "/ram/kingston-fury-impact-kf564s38ib-16/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 16GB (1×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf556s40ibk2_32",
+          "publicPath": "/ram/kingston-fury-impact-kf556s40ibk2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 32GB (2×16GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf560s38ibk2_32",
+          "publicPath": "/ram/kingston-fury-impact-kf560s38ibk2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 32GB (2×16GB) 6000 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6000,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf564s38ibk2_32",
+          "publicPath": "/ram/kingston-fury-impact-kf564s38ibk2-32/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 32GB (2×16GB) 6400 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 32,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 6400,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kf556s40ibk2_64",
+          "publicPath": "/ram/kingston-fury-impact-kf556s40ibk2-64/",
+          "brand": "Kingston",
+          "productName": "Kingston FURY Impact DDR5 64GB (2×32GB) 5600 MT/s",
+          "memoryType": "DDR5",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 64,
+          "moduleCount": 2,
+          "capacityPerModuleGb": 32,
+          "dataRateMtps": 5600,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        },
+        {
+          "atlasProductId": "ram_kingston_kvr32s22s8_16",
+          "publicPath": "/ram/kingston-valueram-kvr32s22s8-16/",
+          "brand": "Kingston",
+          "productName": "Kingston ValueRAM DDR4 16GB (1×16GB) 3200 MT/s",
+          "memoryType": "DDR4",
+          "formFactor": "SO_DIMM",
+          "capacityGb": 16,
+          "moduleCount": 1,
+          "capacityPerModuleGb": 16,
+          "dataRateMtps": 3200,
+          "current": null,
+          "history": {
+            "status": "NO_HISTORY",
+            "admittedObservationCount": 0,
+            "comparableObservationCount": 0,
+            "distinctComparableTimestampCount": 0,
+            "movement": "INSUFFICIENT_HISTORY"
+          }
+        }
+      ]
+    }
+  }
+}
