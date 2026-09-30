@@ -61,7 +61,8 @@ try {
     assert.ok(ordered.slice(firstUnpriced).every(product => !currentRetail.products.some(current => current.atlasProductId === product.atlasProductId)));
 
     const targetHtml = await readFile(path.join(output, target.publicPath.slice(1), "index.html"), "utf8");
-    assert.match(targetHtml, /Current tracked prices/);
+    assert.match(targetHtml, /<h2 id="current-retail-heading">Current market<\/h2>/);
+    assert.match(targetHtml, /Hardware Radar-observed price history/);
     assert.match(targetHtml, new RegExp(`Lower current item price:[\\s\\S]*?\\$${dual.lowerCurrentItemPrice.itemPriceUsd.toFixed(2).replace(".", "\\.")} USD`));
     for (const offer of dual.offers) {
         assert.match(targetHtml, new RegExp(offer.retailerName));

@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRamCatalogProjection, createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
+import { formatProductName } from "../public/js/modules/ramTerminal.js";
 import { createRamProductSitemapRoutes, renderRamProductPage } from "./ram-product-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -15,6 +16,8 @@ const destinationSource = await loadRetailerDestinationSource({ sourcePath: path
 const destinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
 const currentRetail = JSON.parse(await read("public/data/ram-current-retail.json"));
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
+const terminal = JSON.parse(await read("public/data/ram-terminal.json"));
+const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
 const catalog = createRamCatalogProjection(products);
 const replay = createRamCatalogProjection([...products].reverse());
 
@@ -33,6 +36,26 @@ for (const product of products) {
     assert.equal(identity.publicSlug, product.identity.slug, "Public routing reuses the canonical Atlas slug.");
 }
 
+const duplicateBrandProducts = catalog.products.filter((product) => formatProductName(product.brand, product.displayName) !== product.displayName);
+assert.equal(duplicateBrandProducts.length, 14);
+const observedDuplicate = duplicateBrandProducts.find((product) => product.atlasProductId === "ram_crucial_ct16g4dfra32a");
+assert.ok(observedDuplicate);
+const observedDuplicateHtml = renderRamProductPage(observedDuplicate);
+assert.match(observedDuplicateHtml, /<h1>Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s<\/h1>/);
+assert.match(observedDuplicateHtml, /aria-current="page">Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s<\/span>/);
+assert.match(observedDuplicateHtml, /<meta name="description" content="Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s specifications:/);
+assert.doesNotMatch(observedDuplicateHtml, /<h1>Crucial Crucial|aria-current="page">Crucial Crucial|content="Crucial Crucial/);
+assert.match(observedDuplicateHtml, /"@type":"Product","name":"Crucial Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s"/, "Structured canonical identity must remain unchanged.");
+assert.equal(observedDuplicate.publicPath, "/ram/crucial-crucial-ct16g4dfra32a/");
+assert.equal(observedDuplicate.atlasProductId, "ram_crucial_ct16g4dfra32a");
+
+const corsairFixture = { ...catalog.products.find((product) => product.brand === "Corsair"), displayName: "Corsair Corsair Vengeance DDR5" };
+const corsairFixtureHtml = renderRamProductPage(corsairFixture);
+assert.match(corsairFixtureHtml, /<h1>Corsair Vengeance DDR5<\/h1>/);
+assert.doesNotMatch(corsairFixtureHtml, /<h1>Corsair Corsair/);
+const legitimateRepeatFixture = { ...corsairFixture, displayName: "Corsair Vengeance Vengeance DDR5" };
+assert.match(renderRamProductPage(legitimateRepeatFixture), /<h1>Corsair Vengeance Vengeance DDR5<\/h1>/);
+
 const collision = structuredClone(products[1]);
 collision.identity.slug = products[0].identity.slug;
 assert.throws(() => createRamCatalogProjection([products[0], collision]), /RAM_CATALOG_DUPLICATE_PUBLIC_SLUG/);
@@ -46,11 +69,13 @@ for (const product of catalog.products) {
     const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
     await stat(output);
     const html = await readFile(output, "utf8");
-    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure), `${product.publicPath} must match its canonical generator.`);
+    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(product.atlasProductId)), `${product.publicPath} must match its canonical generator.`);
     assert.equal((html.match(/<h1>/g) ?? []).length, 1);
     assert.match(html, new RegExp(`data-atlas-product-id="${product.atlasProductId}"`));
     assert.ok(html.includes(product.manufacturerPartNumber));
     assert.match(html, /href="\/ram\/">Back to the RAM catalog<\/a>/);
+    assert.match(html, /href="\/ram\/terminal\/">View RAM Market Terminal<\/a>/);
+    assert.match(html, /<h2 id="observed-history-heading">Hardware Radar-observed price history<\/h2>/);
     assert.doesNotMatch(html, /"@type":"(?:Offer|AggregateOffer|Review|AggregateRating)"/);
     assert.doesNotMatch(html, /"(?:offers|price|priceCurrency|availability|seller|review|aggregateRating|merchantReturnPolicy|shippingDetails|retailer|affiliateUrl|sourceUrl)"\s*:/i);
     assert.doesNotMatch(html, />[^<]*(?:\bCheapest\b|\bPick\b|we tested|our testing|recommended|recommendation)[^<]*</i);
@@ -94,6 +119,8 @@ assert.match(styles, /@media\(max-width:650px\)[^}]*\.ram-product-main/s);
 assert.match(styles, /\.ram-product-specs\{grid-template-columns:1fr\}/);
 assert.match(styles, /\.ram-product-current-retail/);
 assert.match(styles, /@media\(max-width:650px\)[^}]*\.ram-product-current-retail/s);
+assert.match(styles, /\.ram-product-history__metrics/);
+assert.match(styles, /@media\(max-width:500px\)\{\.ram-product-history,\.ram-product-methodology\{[^}]+\}\.ram-product-history__metrics\{grid-template-columns:1fr\}\}/);
 assert.equal(currentRetail.products.length, 0, "Default-OFF release control must preserve catalog pages without exposing market data.");
 for (const product of catalog.products) {
     const html = await read(path.join("public", product.publicPath.slice(1), "index.html"));
@@ -107,10 +134,50 @@ const fixtureRetail = {
     lowerCurrentItemPrice: { retailerName: pricedDestination.retailerDisplayName, itemPriceUsd: 100 }
 };
 const pricedHtml = renderRamProductPage(pricedPage, [pricedDestination], fixtureRetail, currentRetail.disclosure);
-assert.match(pricedHtml, /Current tracked prices/);
+assert.match(pricedHtml, /<h2 id="current-retail-heading">Current market<\/h2>/);
 assert.match(pricedHtml, /Lower current item price:/);
 assert.match(pricedHtml, /Prices shown exclude applicable shipping, taxes, and fees\./);
 assert.doesNotMatch(pricedHtml, /"@type":"Offer"/);
+
+const baseSummary = terminalByProduct.get(pricedPage.atlasProductId);
+const summary = (history) => ({ ...baseSummary, atlasProductId: pricedPage.atlasProductId, publicPath: pricedPage.publicPath, history });
+const noHistoryHtml = renderRamProductPage(pricedPage, [], fixtureRetail, currentRetail.disclosure, summary({ status: "NO_HISTORY", admittedObservationCount: 0, comparableObservationCount: 0, distinctComparableTimestampCount: 0, movement: "INSUFFICIENT_HISTORY" }));
+assert.match(noHistoryHtml, /Hardware Radar does not yet have comparable price history for this product\./);
+assert.match(noHistoryHtml, /<h2 id="current-retail-heading">Current market<\/h2>/, "Current must remain useful without History.");
+assert.doesNotMatch(noHistoryHtml, /<svg|<canvas|price-history-chart/);
+
+const nonComparableHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary({ status: "NO_COMPARABLE_HISTORY", admittedObservationCount: 3, comparableObservationCount: 0, distinctComparableTimestampCount: 0, movement: "INSUFFICIENT_HISTORY" }));
+assert.match(nonComparableHtml, /none currently qualify as a public-comparable price series/);
+assert.doesNotMatch(nonComparableHtml, /<h2 id="current-retail-heading">Current market<\/h2>/);
+
+const oneHistory = { status: "INSUFFICIENT_HISTORY", admittedObservationCount: 2, comparableObservationCount: 2, distinctComparableTimestampCount: 1, latestComparableObservation: { observedAt: "2026-09-29T17:35:00-05:00", itemPriceUsd: 128 }, historySpanDays: 0, movement: "INSUFFICIENT_HISTORY" };
+const oneHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(oneHistory));
+assert.match(oneHtml, /Latest comparable/);
+assert.match(oneHtml, /Sep 29, 2026/);
+assert.match(oneHtml, /2 distinct time|1 distinct time/);
+assert.match(oneHtml, /Insufficient history for movement\./);
+assert.doesNotMatch(oneHtml, /Previous comparable|Comparable observed range|Observed history span/);
+
+const twoHistory = { status: "COMPARABLE_HISTORY", admittedObservationCount: 2, comparableObservationCount: 2, distinctComparableTimestampCount: 2, latestComparableObservation: { observedAt: "2026-09-29T17:35:00-05:00", itemPriceUsd: 90 }, previousComparableObservation: { observedAt: "2026-09-20T17:35:00-05:00", itemPriceUsd: 100 }, historySpanDays: 9, observedMinimumItemPrice: 90, observedMaximumItemPrice: 100, movement: "DOWN", changeFromPreviousAmount: -10, atObservedLow: true };
+const twoHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(twoHistory));
+assert.match(twoHtml, /Previous comparable/);
+assert.match(twoHtml, /Historical movement/);
+assert.match(twoHtml, /↓<\/span> \$10\.00/);
+assert.match(twoHtml, /\$90\.00–\$100\.00/);
+assert.match(twoHtml, /Latest at observed low/);
+assert.match(twoHtml, /9 days/);
+
+const threeHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary({ ...twoHistory, admittedObservationCount: 4, comparableObservationCount: 4, distinctComparableTimestampCount: 3, movement: "UP", changeFromPreviousAmount: 10, atObservedLow: false }));
+assert.match(threeHtml, /3 distinct times/);
+assert.match(threeHtml, /↑<\/span> \$10\.00/);
+assert.doesNotMatch(threeHtml, /<svg|<canvas|sparkline/);
+
+const flatHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary({ ...twoHistory, movement: "FLAT", changeFromPreviousAmount: 0, latestComparableObservation: { ...twoHistory.latestComparableObservation, itemPriceUsd: 100 }, observedMinimumItemPrice: 100 }));
+assert.match(flatHtml, /—<\/span> Unchanged/);
+assert.match(flatHtml, /Current market prices and historical observations are independently qualified evidence\./);
+assert.match(flatHtml, /Unknown shipping or fees are never treated as zero\./);
+assert.doesNotMatch(flatHtml, /all-time low|best ever|good price|bad price|prediction|recommendation/i);
+assert.throws(() => renderRamProductPage(pricedPage, [], null, "", { ...baseSummary, atlasProductId: "wrong" }), /RAM_PRODUCT_TERMINAL_SUMMARY_BINDING_INVALID/);
 
 const [homepage, ddr5, ddr4, sodimm, guides] = await Promise.all([read("public/index.html"), read("public/ddr5.html"), read("public/ddr4.html"), read("public/sodimm.html"), read("public/guides/index.html")]);
 assert.match(homepage, /<h1>Compare RAM Prices<\/h1>/);

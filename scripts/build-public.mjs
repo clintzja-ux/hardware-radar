@@ -100,7 +100,8 @@ await writeFile(path.join(root, "public", "data", "ram-current-retail.json"), `$
 const terminal = await createRamTerminalPublicIntelligence({ catalog: ramCatalog, currentRetail, historicalRepository: { getAll: async () => [] }, asOf: generatedAt });
 await writeFile(path.join(root, "public", "data", "ram-terminal.json"), `${JSON.stringify(terminal, null, 2)}\n`);
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
-const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, disclosure: currentRetail.disclosure, outputDir: path.join(root, "public") });
+const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
+const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, terminalByProduct, disclosure: currentRetail.disclosure, outputDir: path.join(root, "public") });
 await generateRamTerminalPage({ artifact: terminal, outputDir: path.join(root, "public") });
 const staticRoutes = await json(path.join(root, "content", "site-routes.json"));
 await writeFile(path.join(root, "public", "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
