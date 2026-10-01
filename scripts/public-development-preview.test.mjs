@@ -9,7 +9,7 @@ import { representativeCatalogPrice, sortRamCatalogProductsByCurrentPrice } from
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = await mkdtemp(path.join(os.tmpdir(), "hardware-radar-development-preview-"));
-const asOf = "2026-09-30T17:00:00.000Z";
+const asOf = "2026-10-01T06:10:00.000Z";
 
 try {
     const build = spawnSync(process.execPath, ["scripts/build-public-development-preview.mjs"], {
@@ -29,6 +29,7 @@ try {
     const marker = await readJson("development-preview.json");
     const terminal = await readJson("data/ram-terminal.json");
     const marketSnapshot = await readJson("data/ram-market-snapshot-2026-09-30.json");
+    const frozenMarketSnapshot = JSON.parse(await readFile(path.join(root, ".forge-review", "public-preview", "data", "ram-market-snapshot-2026-09-30.json"), "utf8"));
     const dual = currentRetail.products.find((product) => product.lowerCurrentItemPrice && product.eligibleOfferCount >= 2);
     const single = currentRetail.products.find((product) => product.lowerCurrentItemPrice === null && product.eligibleOfferCount === 1);
     const target = catalog.products.find((product) => product.atlasProductId === dual?.atlasProductId);
@@ -45,10 +46,11 @@ try {
     assert.ok(marker.currentPriceProductCount > 0);
     assert.equal(terminal.lenses.ALL_RAM.coverage.productsTracked, 103);
     assert.equal(terminal.lenses.ALL_RAM.coverage.productsCurrentlyPriced, marker.currentPriceProductCount);
-    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 329);
-    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 329);
+    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 410);
+    assert.equal(terminal.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 410);
     assert.equal(terminal.lenses.DDR4.currentMarket.state, "INSUFFICIENT_MARKET_COHORT");
-    assert.equal(terminal.lenses.LAPTOP_SODIMM.currentMarket.medianCurrentItemPrice, 442.42);
+    assert.equal(terminal.lenses.LAPTOP_SODIMM.currentMarket.medianCurrentItemPrice, 474.99);
+    assert.deepEqual(marketSnapshot, frozenMarketSnapshot);
     assert.equal(marketSnapshot.snapshotType, "POINT_IN_TIME_MARKET_SNAPSHOT");
     assert.equal(marketSnapshot.coverage.productsTracked, 103);
     assert.equal(marketSnapshot.coverage.productsCurrentlyPriced, 40);
@@ -93,6 +95,14 @@ try {
     }
     assert.match(targetHtml, /Prices shown exclude applicable shipping, taxes, and fees/);
     assert.doesNotMatch(targetHtml, /final checkout total|delivered total|condition unknown|seller unknown/i);
+
+    const affiliateOffers = currentRetail.products.flatMap(product => product.offers).filter(offer => offer.retailerId === "RETAILER-0004" && new URL(offer.destinationUrl).hostname === "click.linksynergy.com");
+    assert.equal(affiliateOffers.length, 42);
+    for (const offer of affiliateOffers) {
+        const product = catalog.products.find(item => item.atlasProductId === offer.atlasProductId);
+        const html = await readFile(path.join(output, product.publicPath.slice(1), "index.html"), "utf8");
+        assert.ok(html.includes(`href="${offer.destinationUrl.replaceAll("&", "&amp;")}"`));
+    }
 
     const unrelated = catalog.products.find((product) => product.atlasProductId !== target.atlasProductId);
     const unrelatedHtml = await readFile(path.join(output, unrelated.publicPath.slice(1), "index.html"), "utf8");

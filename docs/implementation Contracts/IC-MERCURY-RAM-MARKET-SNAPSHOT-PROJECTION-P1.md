@@ -44,3 +44,5 @@ It is marked `noindex, nofollow`, includes no fabricated publication date or str
 ## Certification
 
 Focused fixtures cover deterministic identity, `asOf` versus `generatedAt`, Atlas/Current/History/comparability binding, late-evidence exclusion, reassessment isolation, later-Current isolation, sparse suppression, public-field safety, and the production-shaped development preview. The first preview derives 103 tracked products, 40 currently priced products, 64 qualified Current offers, 329 comparable observations across 54 products, and 124 distinct product timestamp groups without hard-coded metric values.
+
+Subsequent development-preview rebuilds validate and reuse the existing frozen snapshot artifact before clearing generated output. They do not recompute the September 30 snapshot from newer Current or History. First creation remains possible only when no frozen artifact exists and the original time/binding invariants pass. The P3 regression proves newer Current/History rebuilds Terminal, chronology, and product intelligence while the frozen snapshot remains byte-semantically identical.

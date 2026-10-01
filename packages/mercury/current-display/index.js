@@ -20,6 +20,7 @@ export * from "./ManualCurrentPricePreparation.js";
 export * from "./FileManualCurrentPricePreparationRepository.js";
 export * from "./ManualCurrentPriceWorkbook.js";
 export * from "./ManualCurrentPriceWorkbookFile.js";
+export * from "./NeweggAffiliatePublicAction.js";
 export * from "./ManualCurrentPriceSnapshotExecution.js";
 export * from "./FileManualCurrentPriceSnapshotExecutionRepository.js";
 export * from "./ProductionManualCurrentPriceSnapshotExecution.js";

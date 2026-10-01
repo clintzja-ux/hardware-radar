@@ -267,6 +267,7 @@ const testModules = [
     ,"./ManualCurrentPriceWorkbookComposition.test.mjs"
     ,"./ManualCurrentPriceSnapshotExecution.test.mjs"
     ,"./ManualCurrentPriceHistory.test.mjs"
+    ,"./NeweggAffiliatePublicAction.test.mjs"
     ,"./RoutineManualCurrentPriceProcessing.test.mjs"
     ,"./CurrentDisplayPublication.test.mjs"
     ,"./CurrentDisplayPublicationArtifact.test.mjs"
