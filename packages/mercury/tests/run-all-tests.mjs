@@ -270,6 +270,7 @@ const testModules = [
     ,"./RoutineManualCurrentPriceProcessing.test.mjs"
     ,"./CurrentDisplayPublication.test.mjs"
     ,"./CurrentDisplayPublicationArtifact.test.mjs"
+    ,"./RamPublicIntelligenceReleasePortfolio.test.mjs"
     ,"./PracticalCurrentItemPriceComparison.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./ProductionRakutenNeweggCurrentRefresh.test.mjs"

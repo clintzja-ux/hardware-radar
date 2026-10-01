@@ -21,9 +21,9 @@
                 </a>
 
                 <nav class="header-nav" aria-label="Primary navigation">
-                    <a href="${basePath}ddr5.html">DDR5</a>
-                    <a href="${basePath}ddr4.html">DDR4</a>
-                    <a href="${basePath}sodimm.html">Laptop RAM</a>
+                    <a href="${basePath}ram/">RAM Catalog</a>
+                    <a href="${basePath}ram/compare/">Compare</a>
+                    <a href="${basePath}ram/terminal/">Market Terminal</a>
                     <a href="${basePath}guides/">Guides</a>
                     <a href="${basePath}about.html">About</a>
                 </nav>
