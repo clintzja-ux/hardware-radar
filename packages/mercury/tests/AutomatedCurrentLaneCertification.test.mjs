@@ -1,0 +1,11 @@
+import assert from "node:assert/strict";
+import { AUTOMATED_CURRENT_LANE_CERTIFICATIONS, CURRENT_REQUIREMENT_MATRIX } from "../current-refresh/AutomatedCurrentLaneCertification.js";
+
+assert.equal(CURRENT_REQUIREMENT_MATRIX.destinationReadiness, "REQUIRED_FOR_PUBLIC_ACTION");
+assert.equal(CURRENT_REQUIREMENT_MATRIX.itemPrice, "REQUIRED_FOR_CURRENT_FACT");
+assert.equal(CURRENT_REQUIREMENT_MATRIX.sourceRights, "REQUIRED_FOR_BOTH");
+assert.equal(AUTOMATED_CURRENT_LANE_CERTIFICATIONS.DATAFORSEO_AMAZON_PRODUCTS.currentFactCapable, false);
+assert.deepEqual(AUTOMATED_CURRENT_LANE_CERTIFICATIONS.DATAFORSEO_AMAZON_SELLERS.blockers, ["CANONICAL_RETAILER_IDENTITY_NOT_BOUND", "AVAILABILITY_NOT_RETAINED"]);
+assert.deepEqual(AUTOMATED_CURRENT_LANE_CERTIFICATIONS.DATAFORSEO_GOOGLE_SHOPPING.retailerIds, ["RETAILER-0002", "RETAILER-0003"]);
+assert.equal(AUTOMATED_CURRENT_LANE_CERTIFICATIONS.RAKUTEN_NEWEGG.historicalRetentionAllowed, false);
+console.log("Automated Current lane certification tests passed.");

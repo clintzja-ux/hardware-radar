@@ -1,5 +1,7 @@
 # Hardware Radar current state
 
+Automated Current lane certification P1 is fixture-certified at `AUTOMATED-CURRENT-REFRESH-LANE-CERTIFICATION-P1-1.0`. The common Current qualification owner remains unchanged. Retained Amazon Products is identity-only; retained Amazon Sellers remains Current-blocked because canonical retailer binding and availability are absent. Google Shopping remains scoped Current-capable only for registered Platinummicro and MemoryC policy scopes. Rakuten Newegg remains Current-capable and History-prohibited. The refresh plan now binds these certifications plus identity readiness and selection reason. No provider call, paid task, Current/History mutation, release, or deployment occurred.
+
 ```text
 Last updated:                  2026-10-01
 Branch:                        main

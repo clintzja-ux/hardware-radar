@@ -15,6 +15,10 @@ const manualInventory = products.flatMap(product => ["AMAZON", "NEWEGG"].map(ret
 const plan = prepareCurrentRefreshPlan({ products, currentSnapshot, destinations, manualInventory, reusableAmazonProductIds: ["one"], asOf, currentUtcDaySpendUsd: 0.074, requestedMaximumMembers: 6 });
 assert.equal(validateCurrentRefreshPlan(plan), true);
 assert.equal(plan.authority, "NONE");
+assert.equal(plan.laneCertificationPolicyVersion, "AUTOMATED-CURRENT-REFRESH-LANE-CERTIFICATION-P1-1.0");
+assert.ok(plan.selectedMembers.every(value => typeof value.selectionReason === "string" && typeof value.identityReadiness === "string"));
+const amazon = [...plan.selectedMembers, ...plan.blockedMembers].find(value => value.retailer === "AMAZON");
+assert.equal(amazon.lanes.find(value => value.lane === "DATAFORSEO_AMAZON_PRODUCTS_PLUS_SELLERS").state, "BLOCKED");
 assert.equal(plan.providerCalls, 0);
 assert.equal(plan.paidTasksCreated, 0);
 assert.equal(plan.actualSpendUsd, 0);

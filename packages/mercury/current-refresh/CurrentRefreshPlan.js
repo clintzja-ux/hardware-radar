@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { AUTOMATED_CURRENT_LANE_CERTIFICATIONS, AUTOMATED_CURRENT_LANE_CERTIFICATION_POLICY_VERSION } from "./AutomatedCurrentLaneCertification.js";
 
 export const CURRENT_REFRESH_PLAN_SCHEMA_VERSION = "1.0";
 export const CURRENT_REFRESH_PLAN_POLICY_VERSION = "CURRENT-REFRESH-AND-STATIC-RECOMPOSITION-P1-1.0";
@@ -22,13 +23,13 @@ const stateForManual = item => item?.classification === "DESTINATION_EXCEPTION" 
 function lanesFor({ atlasProductId, retailer, inventoryItem, destinationReady, reusableAmazonIdentity }) {
   if (retailer === "AMAZON") return [
     { lane: "MANUAL_AMAZON", state: stateForManual(inventoryItem), maximumTasks: 0, maximumSpendUsd: 0 },
-    { lane: "DATAFORSEO_AMAZON_SELLERS", state: reusableAmazonIdentity && destinationReady ? "ROUTINE_READY" : reusableAmazonIdentity ? "READY_WITH_REVIEW" : "NOT_APPLICABLE", maximumTasks: reusableAmazonIdentity ? 1 : 0, maximumSpendUsd: reusableAmazonIdentity ? AMAZON_TASK_USD : 0 },
-    { lane: "DATAFORSEO_AMAZON_PRODUCTS_PLUS_SELLERS", state: destinationReady ? "ROUTINE_READY" : "READY_WITH_REVIEW", maximumTasks: 2, maximumSpendUsd: 2 * AMAZON_TASK_USD },
-    { lane: "DATAFORSEO_GOOGLE_SHOPPING", state: destinationReady ? "RESEARCH_ONLY" : "BLOCKED", maximumTasks: 1, maximumSpendUsd: GOOGLE_TASK_USD }
+    { lane: "DATAFORSEO_AMAZON_SELLERS", state: reusableAmazonIdentity ? "BLOCKED" : "NOT_APPLICABLE", maximumTasks: reusableAmazonIdentity ? 1 : 0, maximumSpendUsd: reusableAmazonIdentity ? AMAZON_TASK_USD : 0, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.DATAFORSEO_AMAZON_SELLERS },
+    { lane: "DATAFORSEO_AMAZON_PRODUCTS_PLUS_SELLERS", state: "BLOCKED", maximumTasks: 2, maximumSpendUsd: 2 * AMAZON_TASK_USD, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.DATAFORSEO_AMAZON_PRODUCTS_PLUS_SELLERS },
+    { lane: "DATAFORSEO_GOOGLE_SHOPPING", state: "NOT_APPLICABLE", maximumTasks: 1, maximumSpendUsd: GOOGLE_TASK_USD, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.DATAFORSEO_GOOGLE_SHOPPING }
   ];
   return [
     { lane: "MANUAL_NEWEGG", state: stateForManual(inventoryItem), maximumTasks: 0, maximumSpendUsd: 0 },
-    { lane: "RAKUTEN_NEWEGG", state: destinationReady ? "ROUTINE_READY" : "READY_WITH_REVIEW", maximumTasks: 0, maximumSpendUsd: 0, historicalRetentionAllowed: false }
+    { lane: "RAKUTEN_NEWEGG", state: destinationReady ? "ROUTINE_READY" : "READY_WITH_REVIEW", maximumTasks: 0, maximumSpendUsd: 0, historicalRetentionAllowed: false, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.RAKUTEN_NEWEGG }
   ];
 }
 
@@ -68,7 +69,9 @@ export function prepareCurrentRefreshPlan({ products, currentSnapshot, destinati
       const destinationReady = destinationKeys.has(key(atlasProductId, retailer));
       const lanes = lanesFor({ atlasProductId, retailer, inventoryItem: inventory.get(key(atlasProductId, retailer)), destinationReady, reusableAmazonIdentity: reusable.has(atlasProductId) });
       const preferred = lanes.find(value => value.state === "ROUTINE_READY") ?? lanes.find(value => value.state === "READY_WITH_REVIEW") ?? lanes[0];
-      candidates.push({ atlasProductId, retailer, urgency, priority, nextExpiry, freshnessState: retailerOffers.length ? "FRESH" : stale ? "STALE" : "UNCOVERED", destinationReady, manualReviewRequired: preferred.state === "READY_WITH_REVIEW" || lanes.some(value => value.state === "RESEARCH_ONLY"), lanes, proposedLane: preferred.lane, laneState: preferred.state, expectedTaskCount: preferred.maximumTasks, maximumSpendUsd: preferred.maximumSpendUsd });
+      const existingSource = retailerOffers[0]?.sourceIdentity?.sourceId ?? null;
+      const selectionReason = preferred.lane.startsWith("MANUAL_") && existingSource?.includes("MANUAL") ? "EXISTING_CURRENT_SOURCE_CONTINUITY" : "FIRST_CERTIFIED_ROUTINE_LANE";
+      candidates.push({ atlasProductId, retailer, urgency, priority, nextExpiry, freshnessState: retailerOffers.length ? "FRESH" : stale ? "STALE" : "UNCOVERED", destinationReady, identityReadiness: retailer === "AMAZON" ? reusable.has(atlasProductId) ? "REUSABLE_ASIN" : "DISCOVERY_REQUIRED" : "CANONICAL_SKU_BINDING_REQUIRED", manualReviewRequired: preferred.state === "READY_WITH_REVIEW" || lanes.some(value => value.state === "RESEARCH_ONLY"), lanes, proposedLane: preferred.lane, selectionReason, laneState: preferred.state, expectedTaskCount: preferred.maximumTasks, maximumSpendUsd: preferred.maximumSpendUsd });
     }
   }
   candidates.sort((a, b) => a.priority - b.priority || (a.nextExpiry ?? "9999").localeCompare(b.nextExpiry ?? "9999") || a.atlasProductId.localeCompare(b.atlasProductId) || a.retailer.localeCompare(b.retailer));
@@ -80,13 +83,13 @@ export function prepareCurrentRefreshPlan({ products, currentSnapshot, destinati
     if (money(spend + candidate.maximumSpendUsd) > remaining) continue;
     selected.push(candidate); spend = money(spend + candidate.maximumSpendUsd);
   }
-  const material = { policyVersion: CURRENT_REFRESH_PLAN_POLICY_VERSION, asOf, currentSnapshotId: currentSnapshot.snapshotId, currentSnapshotObservedAt: currentSnapshot.observedAt, expiryBuckets, destinationExceptions, requestedMaximumMembers, selectedMembers: selected, blockedMembers: candidates.filter(value => !selected.includes(value)), costEnvelope: { maximumPaidTasks: selected.reduce((sum, value) => sum + value.expectedTaskCount, 0), maximumSpendUsd: spend, utcDayCeilingUsd: DAILY_CEILING_USD, currentUtcDaySpendUsd: money(currentUtcDaySpendUsd), remainingUtcDayCapacityUsd: remaining, automaticPaidRetries: 0 }, recomposition: { state: "REQUIRED_AFTER_GOVERNED_REFRESH_OR_BEFORE_CURRENT_EXPIRY", releaseAuthority: false, deploymentAuthority: false }, authority: "NONE" };
+  const material = { policyVersion: CURRENT_REFRESH_PLAN_POLICY_VERSION, laneCertificationPolicyVersion: AUTOMATED_CURRENT_LANE_CERTIFICATION_POLICY_VERSION, asOf, currentSnapshotId: currentSnapshot.snapshotId, currentSnapshotObservedAt: currentSnapshot.observedAt, expiryBuckets, destinationExceptions, requestedMaximumMembers, selectedMembers: selected, blockedMembers: candidates.filter(value => !selected.includes(value)), costEnvelope: { maximumPaidTasks: selected.reduce((sum, value) => sum + value.expectedTaskCount, 0), maximumSpendUsd: spend, utcDayCeilingUsd: DAILY_CEILING_USD, currentUtcDaySpendUsd: money(currentUtcDaySpendUsd), remainingUtcDayCapacityUsd: remaining, automaticPaidRetries: 0 }, recomposition: { state: "REQUIRED_AFTER_GOVERNED_REFRESH_OR_BEFORE_CURRENT_EXPIRY", releaseAuthority: false, deploymentAuthority: false }, authority: "NONE" };
   const bindingDigest = digest(material);
   return freeze({ schemaVersion: CURRENT_REFRESH_PLAN_SCHEMA_VERSION, planType: "CURRENT_REFRESH_PLAN", planId: `mer_currentrefresh_${bindingDigest.slice(0, 24)}`, bindingDigest, ...material, providerCalls: 0, paidTasksCreated: 0, actualSpendUsd: 0 });
 }
 
 export function validateCurrentRefreshPlan(plan) {
-  const material = { policyVersion: plan?.policyVersion, asOf: plan?.asOf, currentSnapshotId: plan?.currentSnapshotId, currentSnapshotObservedAt: plan?.currentSnapshotObservedAt, expiryBuckets: plan?.expiryBuckets, destinationExceptions: plan?.destinationExceptions, requestedMaximumMembers: plan?.requestedMaximumMembers, selectedMembers: plan?.selectedMembers, blockedMembers: plan?.blockedMembers, costEnvelope: plan?.costEnvelope, recomposition: plan?.recomposition, authority: plan?.authority };
+  const material = { policyVersion: plan?.policyVersion, laneCertificationPolicyVersion: plan?.laneCertificationPolicyVersion, asOf: plan?.asOf, currentSnapshotId: plan?.currentSnapshotId, currentSnapshotObservedAt: plan?.currentSnapshotObservedAt, expiryBuckets: plan?.expiryBuckets, destinationExceptions: plan?.destinationExceptions, requestedMaximumMembers: plan?.requestedMaximumMembers, selectedMembers: plan?.selectedMembers, blockedMembers: plan?.blockedMembers, costEnvelope: plan?.costEnvelope, recomposition: plan?.recomposition, authority: plan?.authority };
   if (plan?.schemaVersion !== CURRENT_REFRESH_PLAN_SCHEMA_VERSION || plan?.planType !== "CURRENT_REFRESH_PLAN" || plan?.policyVersion !== CURRENT_REFRESH_PLAN_POLICY_VERSION || plan?.bindingDigest !== digest(material) || plan?.planId !== `mer_currentrefresh_${plan.bindingDigest.slice(0, 24)}` || plan?.authority !== "NONE" || plan?.providerCalls !== 0 || plan?.paidTasksCreated !== 0 || plan?.actualSpendUsd !== 0 || plan?.costEnvelope?.automaticPaidRetries !== 0 || plan?.recomposition?.releaseAuthority !== false || plan?.recomposition?.deploymentAuthority !== false) throw new Error("CURRENT_REFRESH_PLAN_INVALID");
   return true;
 }

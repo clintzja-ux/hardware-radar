@@ -293,6 +293,7 @@ const testModules = [
     ,"./DispositionAwareExistingTaskContinuation.test.mjs"
     ,"./BoundedSpendProgression.test.mjs"
     ,"./CurrentRefreshPlan.test.mjs"
+    ,"./AutomatedCurrentLaneCertification.test.mjs"
     ,"./CurrentRefreshStaticRecomposition.test.mjs"
 ];
 
