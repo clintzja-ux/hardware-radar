@@ -8,4 +8,4 @@ const manifestPath = path.resolve(args.manifest ?? path.join(root, "config", "pu
 const targetEnvironment = (args.environment ?? process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT ?? "PREVIEW").toUpperCase();
 const evaluatedAt = args["evaluated-at"] ?? process.env.HARDWARE_RADAR_GENERATED_AT ?? new Date().toISOString();
 const result = await loadStaticPublicationRelease({ manifestPath, targetEnvironment, evaluatedAt });
-console.log(JSON.stringify({ manifestPath, evaluatedAt, ...result, projection: undefined }, null, 2));
+console.log(JSON.stringify({ manifestPath, evaluatedAt, ...result, projection: undefined, portfolio: undefined }, null, 2));

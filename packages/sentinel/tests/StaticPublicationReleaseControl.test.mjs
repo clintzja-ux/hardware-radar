@@ -9,6 +9,12 @@ import {
   validateStaticPublicationReleaseManifest
 } from "../validators/StaticPublicationReleaseControl.js";
 import { loadStaticPublicationRelease } from "../../../scripts/static-publication-release-runtime.mjs";
+import { readFile } from "node:fs/promises";
+import { ProductRepository, RetailerRepository, createRamCatalogProjection } from "../../atlas/index.js";
+import { createEmptyPublicCurrentRetailProjection } from "../../mercury/current-display/PublicCurrentRetailProjection.js";
+import { createRamTerminalPublicIntelligence } from "../../mercury/historical-admission/RamTerminalPublicIntelligence.js";
+import { createPublicChronologicalPriceSeries } from "../../mercury/historical-admission/PublicChronologicalPriceSeries.js";
+import { createRamPublicIntelligencePortfolioManifest, certifyRamPublicIntelligencePortfolio, portfolioFileDigest } from "../../mercury/publication/RamPublicIntelligenceReleasePortfolio.js";
 
 let cases = 0;
 const ok = value => { assert.equal(value, true); cases += 1; };
@@ -78,4 +84,27 @@ try {
 const replay = createStaticPublicationReleaseManifest(base);
 assert.deepEqual(replay, manifest); cases += 1;
 eq(createStaticPublicationReleaseManifest({ releaseState: "OFF", targetEnvironment: "PREVIEW", reason: "fixture rollback", reviewedBy: "fixture", createdAt: at, previousReleaseId: manifest.releaseId }).rollback.previousReleaseId, manifest.releaseId);
+
+const readJson = async file => JSON.parse(await readFile(file, "utf8"));
+const [atlasProducts, atlasRetailers] = await Promise.all([new ProductRepository({ readJson }).getAll(), new RetailerRepository({ readJson }).getAll()]);
+const portfolioCatalog = createRamCatalogProjection(atlasProducts), portfolioCurrent = createEmptyPublicCurrentRetailProjection({ asOf: at });
+const emptyHistory = { getAll: async () => [] };
+const portfolioTerminal = await createRamTerminalPublicIntelligence({ catalog: portfolioCatalog, currentRetail: portfolioCurrent, historicalRepository: emptyHistory, asOf: at });
+const portfolioChronology = await createPublicChronologicalPriceSeries({ catalog: portfolioCatalog, retailers: atlasRetailers, historicalRepository: emptyHistory });
+const portfolioText = value => `${JSON.stringify(value, null, 2)}\n`;
+const portfolioFileTexts = { catalog: portfolioText(portfolioCatalog), current: portfolioText(portfolioCurrent), terminal: portfolioText(portfolioTerminal), staleCurrent: portfolioText(portfolioCurrent), staleTerminal: portfolioText(portfolioTerminal), chronology: portfolioText(portfolioChronology), destinations: "[]\n" };
+const portfolioFiles = Object.fromEntries(Object.entries(portfolioFileTexts).map(([name, value]) => [name, { file: `${name}.json`, digestSha256: portfolioFileDigest(value), bytes: Buffer.byteLength(value) }]));
+const portfolioManifest = createRamPublicIntelligencePortfolioManifest({ preparedAt: at, preparedBy: "fixture", inputs: { fixture: "a".repeat(64) }, routes: { total: 122, staticRoutes: 14, editorialArticleRoutes: 5, productRoutes: 103, snapshotRoutes: 0 }, files: portfolioFiles, counts: { products: 103, freshCurrentProducts: 0, freshCurrentOffers: 0, staleCurrentOffers: 0, comparableHistoryObservations: 0, historyProducts: 0, timestampGroups: 0, governedDestinations: 0 }, currentValidUntil: expires });
+const portfolioCertification = certifyRamPublicIntelligencePortfolio({ manifest: portfolioManifest, fileTexts: portfolioFileTexts, evaluatedAt: at, certifiedBy: "fixture" });
+const portfolioBundleText = portfolioText({ manifest: portfolioManifest, certification: portfolioCertification, fileTexts: portfolioFileTexts });
+const portfolioRelease = createStaticPublicationReleaseManifest({ releaseState: "ON", targetEnvironment: "PREVIEW", targetSurface: "PUBLIC_RAM_INTELLIGENCE_PORTFOLIO", reason: "fixture portfolio", reviewedBy: "fixture", createdAt: at, artifactRelativePath: `artifacts/${portfolioManifest.candidateId}.json`, artifactText: portfolioBundleText, authorityReference: portfolioCertification.certificationId });
+ok(validateStaticPublicationReleaseManifest(portfolioRelease).valid);
+eq(evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: at }).portfolio.manifest.candidateId, portfolioManifest.candidateId);
+eq(evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: "2026-09-19T00:00:00.001Z" }).reason, "STATIC_RELEASE_CERTIFICATION_EXPIRED");
+const wrongPortfolio = structuredClone(portfolioRelease); wrongPortfolio.artifact.candidateId = "mer_ramreleasecand_" + "b".repeat(24);
+eq(evaluateStaticPublicationRelease({ manifest: wrongPortfolio, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: at }).exposed, false);
+const wrongCertification = JSON.parse(portfolioBundleText); wrongCertification.certification.candidateId = "mer_ramreleasecand_" + "c".repeat(24);
+eq(evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioText(wrongCertification), targetEnvironment: "PREVIEW", evaluatedAt: at }).exposed, false);
+const routeMismatch = structuredClone(portfolioRelease); routeMismatch.artifact.routesDigest = "d".repeat(64);
+eq(evaluateStaticPublicationRelease({ manifest: routeMismatch, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: at }).exposed, false);
 console.log(`Static publication release control tests passed: ${cases} cases.`);

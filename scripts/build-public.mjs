@@ -76,12 +76,16 @@ const [products, retailers] = await Promise.all([
     loadManifestRecords(atlasRoot, atlasManifest.products),
     loadManifestRecords(atlasRoot, atlasManifest.retailers)
 ]);
-const ramCatalog = createRamCatalogProjection(products);
-await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
+let ramCatalog = createRamCatalogProjection(products);
 const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
-const publicDestinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
+let publicDestinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
 const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();
-let currentRetail;
+const staticRelease = await loadStaticPublicationRelease({
+    manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json")),
+    targetEnvironment: (process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT || "PREVIEW").toUpperCase(),
+    evaluatedAt: generatedAt
+});
+let currentRetail, terminal, chronological;
 try {
     const currentDisplayPath = process.env.HARDWARE_RADAR_CURRENT_DISPLAY_STATE || path.join(root, ".forge-review", "retail-display", "current-display-snapshots.json");
     const currentDisplayState = await new FileCurrentDisplaySnapshotRepository({ statePath: currentDisplayPath }).getState();
@@ -91,15 +95,22 @@ try {
 } catch {
     currentRetail = createEmptyPublicCurrentRetailProjection({ asOf: generatedAt });
 }
-const staticRelease = await loadStaticPublicationRelease({
-    manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json")),
-    targetEnvironment: (process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT || "PREVIEW").toUpperCase(),
-    evaluatedAt: generatedAt
-});
-currentRetail = staticRelease.exposed ? staticRelease.projection : createEmptyPublicCurrentRetailProjection({ asOf: generatedAt, state: "NO_CURRENT_RETAIL_STATE" });
+if (staticRelease.exposed && staticRelease.portfolio) {
+    const files = staticRelease.portfolio.fileTexts;
+    ramCatalog = JSON.parse(files.catalog);
+    currentRetail = JSON.parse(files.current);
+    terminal = JSON.parse(files.terminal);
+    chronological = JSON.parse(files.chronology);
+    publicDestinations = JSON.parse(files.destinations);
+    await rm(path.join(root, "public", "ram", "market-snapshots"), { recursive: true, force: true });
+    await rm(path.join(root, "public", "data", "ram-market-snapshot-2026-09-30.json"), { force: true });
+} else {
+    currentRetail = staticRelease.exposed ? staticRelease.projection : createEmptyPublicCurrentRetailProjection({ asOf: generatedAt, state: "NO_CURRENT_RETAIL_STATE" });
+    terminal = await createRamTerminalPublicIntelligence({ catalog: ramCatalog, currentRetail, historicalRepository: { getAll: async () => [] }, asOf: generatedAt });
+    chronological = await createPublicChronologicalPriceSeries({ catalog: ramCatalog, retailers, historicalRepository: { getAll: async () => [] } });
+}
+await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
 await writeFile(path.join(root, "public", "data", "ram-current-retail.json"), `${JSON.stringify(currentRetail, null, 2)}\n`);
-const terminal = await createRamTerminalPublicIntelligence({ catalog: ramCatalog, currentRetail, historicalRepository: { getAll: async () => [] }, asOf: generatedAt });
-const chronological = await createPublicChronologicalPriceSeries({ catalog: ramCatalog, retailers, historicalRepository: { getAll: async () => [] } });
 await writeFile(path.join(root, "public", "data", "ram-terminal.json"), `${JSON.stringify(terminal, null, 2)}\n`);
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
