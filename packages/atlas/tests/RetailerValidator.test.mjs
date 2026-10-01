@@ -28,6 +28,11 @@ assert.equal(new URL(memoryc.websiteUrl).hostname, "www.memoryc.com");
 assert.equal(memoryc.affiliateProgram.available, false);
 assert.equal(memoryc.affiliateProgram.status, "unknown");
 assert.equal(validateRetailerRepository([retailer, platinummicro, memoryc]).valid, true);
+const newegg = JSON.parse(await readFile(fileURLToPath(new URL("../retailers/RETAILER-0004-newegg.json", import.meta.url)), "utf8"));
+assert.equal(validateRetailer(newegg).valid, true);
+assert.equal(newegg.id, "RETAILER-0004");
+assert.equal(newegg.affiliateProgram.status, "unknown");
+assert.equal(validateRetailerRepository([retailer, platinummicro, memoryc, newegg]).valid, true);
 
 const invalid = structuredClone(retailer);
 invalid.websiteUrl = "http://amazon.com";

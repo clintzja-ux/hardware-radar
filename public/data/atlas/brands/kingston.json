@@ -8,7 +8,10 @@
   "website": "https://www.kingston.com/",
   "manufacturerType": "HARDWARE_MANUFACTURER",
   "status": "ACTIVE",
-  "aliases": [],
+  "aliases": [
+    "Kingston Technology",
+    "Kingston Technology Corp."
+  ],
   "supportedCategories": [
     "CAT-RAM"
   ],

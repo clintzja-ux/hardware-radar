@@ -1,0 +1,1 @@
+import {args,runtime} from "./mercury-current-display-publication-runtime.mjs";const a=args(),r=await runtime(a),u=await r.repository.getAuthorization(a.get("--authorization-id"));if(!u)throw new Error("CURRENT_DISPLAY_PUBLICATION_AUTHORIZATION_NOT_FOUND");console.log(JSON.stringify(u,null,2));

@@ -14,6 +14,8 @@ const manifest = await json(path.join(root, "packages/atlas/atlas-manifest.json"
 const products = await Promise.all(manifest.products.map(entry => json(path.join(root, "packages/atlas", entry.path))));
 const retailers = await Promise.all(manifest.retailers.map(entry => json(path.join(root, "packages/atlas", entry.path))));
 const catalog = createRamCatalogProjection(products);
+const currentRetail = await json(path.join(root, "public/data/ram-current-retail.json"));
+const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const product = products.find(item => item.identity.atlasProductId === "ram_corsair_cmk32gx5m2b6000z30");
 const publicProduct = catalog.products.find(item => item.atlasProductId === product.identity.atlasProductId);
 const retailer = retailers.find(item => item.id === "RETAILER-0002");
@@ -74,16 +76,24 @@ const productionProjection = createPublicRetailerDestinationProjection({ source:
 const expectedProduction = new Map([
     ["ram_kingston_kf560c30bbea_8", { mpn: "KF560C30BBEA-8", listing: "B0CYM3TYCR", id: "mer_dest_a09300f14e011c9edac43a0d", url: "https://amazon.com/Kingston-6000MT-Desktop-Memory-KF560C30BBEA-8/dp/B0CYM3TYCR" }],
     ["ram_corsair_cmk16gx5m2b5200z40", { mpn: "CMK16GX5M2B5200Z40", listing: "B0D2P1CVQD", id: "mer_dest_47a09c16a1755fe032dddf33", url: "https://amazon.com/CORSAIR-Vengeance-5200MHz-Compatible-Computer/dp/B0D2P1CVQD" }],
-    ["ram_g_skill_f5_6000j3636f16gx1_rs5k", { mpn: "F5-6000J3636F16GX1-RS5K", listing: "B0G7Q6R7N5", id: "mer_dest_f77afb296ff8e32efabaa489", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0G7Q6R7N5" }]
+    ["ram_g_skill_f5_6000j3636f16gx1_rs5k", { mpn: "F5-6000J3636F16GX1-RS5K", listing: "B0G7Q6R7N5", id: "mer_dest_f77afb296ff8e32efabaa489", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0G7Q6R7N5" }],
+    ["ram_crucial_ct2k16g56c46u5", { mpn: "CT2K16G56C46U5", listing: "B0BLTGP2JX", id: "mer_dest_5f753a01eeaf3eaea11bfbde", url: "https://amazon.com/Crucial-5600MHz-5200MHz-4800MHz-CT2K16G56C46U5/dp/B0BLTGP2JX", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }],
+    ["ram_crucial_ct2k32g56c46s5", { mpn: "CT2K32G56C46S5", listing: "B0H4QH584J", id: "mer_dest_7e524652d53a840a3106bace", url: "https://amazon.com/Crucial-2x32GB-5600MHz-262-Pin-CT2K32G56C46S5/dp/B0H4QH584J", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }],
+    ["ram_corsair_cmh32gx5m2f6000z36", { mpn: "CMH32GX5M2F6000Z36", listing: "B0FV3M2PGJ", id: "mer_dest_4232b39beaf37f8da51556d9", url: "https://amazon.com/CORSAIR-Vengeance-2x16GB-6000MHz-Desktop/dp/B0FV3M2PGJ", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }],
+    ["ram_g_skill_f5_6000j3636f32gx2_rs5k", { mpn: "F5-6000J3636F32GX2-RS5K", listing: "B0C6HWKGWV", id: "mer_dest_5206bc4c58f5cdf145699f85", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0C6HWKGWV", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }]
 ]);
-assert.equal(production.recordCount, 3);
-assert.equal(production.effective.length, 3);
-assert.equal(productionProjection.length, 3);
-assert.equal(new Set(production.records.map(item => item.destinationId)).size, 3);
-assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 3);
+assert.equal(production.recordCount, 186);
+assert.equal(production.effective.length, 185);
+assert.equal(productionProjection.length, 185);
+assert.equal(new Set(production.records.map(item => item.destinationId)).size, 186);
+assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 186);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 91);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 95);
+assert.equal(production.records.some(item => item.destinationUrl.includes("/p/pl?")), false);
 for (const destination of production.records) {
     const expected = expectedProduction.get(destination.atlasProductId);
-    assert.ok(expected, `Unexpected production destination ${destination.destinationId}.`);
+    assert.equal(validateRetailerDestination(destination).valid, true);
+    if (!expected || destination.retailerId !== "RETAILER-0001") continue;
     assert.equal(destination.destinationId, expected.id);
     assert.equal(destination.binding.manufacturerPartNumber, expected.mpn);
     assert.equal(destination.retailerListingId, expected.listing);
@@ -93,14 +103,13 @@ for (const destination of production.records) {
     assert.equal(destination.status, "ACTIVE");
     assert.equal(destination.binding.method, "OPERATOR_EXACT_PRODUCT_REVIEW");
     assert.equal(destination.binding.scope, "EXACT_STANDALONE_PRODUCT");
-    assert.equal(destination.provenance.sourceType, "OPERATOR_INSPECTED_PUBLIC_PAGE");
+    assert.equal(destination.provenance.sourceType, expected.sourceType ?? "OPERATOR_INSPECTED_PUBLIC_PAGE");
     assert.equal(destination.reviewedBy, "operator:Clinton_Ramsook");
     assert.equal(destination.destinationUrl.startsWith("https://amazon.com/"), true);
     assert.equal(new URL(destination.destinationUrl).search, "");
     assert.equal(new URL(destination.destinationUrl).hash, "");
     assert.equal(destination.destinationUrl.includes("tag="), false);
     assert.equal(destination.destinationUrl.endsWith(`/dp/${expected.listing}`), true);
-    assert.equal(validateRetailerDestination(destination).valid, true);
     assert.equal(createRetailerDestination({
         atlasProductId: destination.atlasProductId, retailerId: destination.retailerId, marketplace: destination.marketplace,
         destinationType: destination.destinationType, destinationUrl: destination.destinationUrl, retailerListingId: destination.retailerListingId,
@@ -111,28 +120,28 @@ for (const destination of production.records) {
 }
 for (const productPage of catalog.products) {
     const destinations = productionProjection.filter(item => item.atlasProductId === productPage.atlasProductId);
-    const rendered = renderRamProductPage(productPage, destinations);
+    const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);
     assert.equal((rendered.match(/googletagmanager\.com\/gtag\/js/g) ?? []).length, 1);
     assert.equal((rendered.match(/gtag\("config","G-QF6XJ8GCMY"\)/g) ?? []).length, 1);
-    if (expectedProduction.has(productPage.atlasProductId)) {
+    if (destinations.length) {
         assert.match(rendered, /<h2 id="retailer-links-heading">Retailer links<\/h2>/);
-        assert.match(rendered, />Amazon<\/span><a href="https:\/\/amazon\.com\//);
+        for (const destination of destinations) assert.match(rendered, new RegExp(`>${destination.retailerDisplayName}<\\/span><a href="${destination.destinationUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
         assert.match(rendered, /target="_blank" rel="noopener noreferrer">Visit retailer<\/a>/);
         assert.doesNotMatch(rendered, /onclick=|sendBeacon\(|fetch\(|gtag\("event"|data-(?:analytics|event|destination)/i);
         assert.match(rendered, /do not indicate current price or availability/);
         assert.doesNotMatch(rendered, /rel="[^"]*sponsored|affiliate|"@type":"(?:Offer|AggregateOffer)"|"price(?:Currency)?"|"availability"|"seller"/i);
     } else {
-        assert.doesNotMatch(rendered, /Retailer links|amazon\.com/);
+        assert.doesNotMatch(rendered, /Retailer links|amazon\.com|newegg\.com/);
     }
 }
-assert.equal(catalog.products.length - expectedProduction.size, 23);
+assert.equal(catalog.products.filter(product => !productionProjection.some(destination => destination.atlasProductId === product.atlasProductId)).length, 1);
 const marketData = await readFile(path.join(root, "public/js/modules/marketData.js"), "utf8");
-assert.match(marketData, /offerUrl: item\.sourceUrl/);
+assert.match(marketData, /offerUrl: item\.destinationUrl/);
 assert.doesNotMatch(marketData, /affiliateUrl/);
 const catalogClient = await readFile(path.join(root, "public/js/modules/ramCatalog.js"), "utf8");
 const comparisonClient = await readFile(path.join(root, "public/js/modules/ramComparison.js"), "utf8");
-assert.doesNotMatch(catalogClient, /destinationUrl|retailerListingId|amazon\.com/);
+assert.doesNotMatch(catalogClient, /retailerListingId|amazon\.com/);
 assert.doesNotMatch(comparisonClient, /destinationUrl|retailerListingId|amazon\.com/);
 console.log("GROWTH-005B retailer destination source and rendering tests passed.");

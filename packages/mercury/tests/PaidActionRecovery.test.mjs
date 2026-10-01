@@ -1,0 +1,15 @@
+import assert from "node:assert/strict";
+import { assessPaidActionRecovery, PAID_ACTION_RECOVERY_STATES } from "../index.js";
+let cases=0;
+const authorization={authorizationId:"auth-1",plan:{planId:"plan-1",decisions:[{execution:{paidActionIntentId:"mer_histbootintent_aaaaaaaaaaaaaaaaaaaaaaaa"}}]}};
+const failure=(overrides={})=>({schemaVersion:"1.0",runId:"run-1",planId:"plan-1",status:"FAILED",actualSpendUsd:0,tasks:[{paidActionIntentId:"mer_histbootintent_aaaaaaaaaaaaaaaaaaaaaaaa",providerTaskId:null,actualCostUsd:0,failure:{failureStage:"DURING_PROVIDER_REQUEST",failureClass:"UNKNOWN",causeChain:[{name:"TypeError",message:"client method is not a function"}],...overrides}}]});
+const local=assessPaidActionRecovery({authorization,executionRun:failure(),taskLedger:[]});assert.equal(local.state,PAID_ACTION_RECOVERY_STATES.SAFE_NO_PROVIDER_TASK);assert.equal(local.recoveryAuthorizationEligible,true);cases+=2;
+const timeout=assessPaidActionRecovery({authorization,executionRun:failure({causeChain:[{name:"Error",message:"request timed out"}]}),taskLedger:[]});assert.equal(timeout.state,PAID_ACTION_RECOVERY_STATES.PROVIDER_TASK_STATUS_UNKNOWN);assert.equal(timeout.recoveryAuthorizationEligible,false);cases+=2;
+const rejected=assessPaidActionRecovery({authorization,executionRun:failure({failureStage:"PROVIDER_REJECTED",failureClass:"PROVIDER_REJECTION",providerTaskCreationCertainty:"NO_TASK",causeChain:[{name:"Error",message:"HTTP_400"}]}),taskLedger:[]});assert.equal(rejected.state,PAID_ACTION_RECOVERY_STATES.SAFE_NO_PROVIDER_TASK);cases++;
+const durable=assessPaidActionRecovery({authorization,executionRun:failure(),taskLedger:[{taskId:"provider-task",paidActionIntentId:"mer_histbootintent_aaaaaaaaaaaaaaaaaaaaaaaa"}]});assert.equal(durable.state,PAID_ACTION_RECOVERY_STATES.PROVIDER_TASK_CREATED);assert.equal(durable.recoveryAuthorizationEligible,false);cases+=2;
+const taskInRun=failure();taskInRun.tasks[0].providerTaskId="provider-task";assert.equal(assessPaidActionRecovery({authorization,executionRun:taskInRun,taskLedger:[]}).state,PAID_ACTION_RECOVERY_STATES.PROVIDER_TASK_CREATED);cases++;
+const paid=failure();paid.actualSpendUsd=.0015;assert.equal(assessPaidActionRecovery({authorization,executionRun:paid,taskLedger:[]}).state,PAID_ACTION_RECOVERY_STATES.PROVIDER_TASK_STATUS_UNKNOWN);cases++;
+assert.equal(assessPaidActionRecovery({authorization,executionRun:failure({failureStage:"BEFORE_PROVIDER_REQUEST",providerRequestDispatched:false,causeChain:[{name:"Error",message:"serialization"}]}),taskLedger:[]}).state,PAID_ACTION_RECOVERY_STATES.SAFE_NO_PROVIDER_TASK);cases++;
+assert.throws(()=>assessPaidActionRecovery({authorization,executionRun:{...failure(),planId:"other"},taskLedger:[]}),/INPUT_INVALID/);cases++;
+assert.equal(local.paidActionIntentId,authorization.plan.decisions[0].execution.paidActionIntentId);assert.match(local.assessmentId,/^mer_paidrecovery_[a-f0-9]{24}$/);cases+=2;
+console.log(`Paid-action recovery tests passed: ${cases} cases.`);

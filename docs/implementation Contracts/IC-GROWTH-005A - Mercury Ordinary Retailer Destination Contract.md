@@ -41,6 +41,12 @@ The strict validator rejects unknown fields and any nested market or commercial 
 
 No network request or link-health assertion participates in validation.
 
+## Market-source candidate input
+
+A URL retained as DataForSEO market `sourceUrl` or `offerUrl` may be submitted as evidence for a future destination review. It is a candidate only. Admission must create and validate the existing complete `RetailerDestination` record, including exact standalone product/MPN, Atlas retailer, marketplace, URL, provenance, operator review, and lifecycle fields; it must never relabel the raw market URL as `destinationUrl` automatically.
+
+The independently evaluated outcomes are: both market evidence and destination qualify; market evidence qualifies while destination fails; destination remains effective while market evidence later becomes stale or unqualified; or neither qualifies. No outcome transfers authority between the two boundaries. Manual curation remains valid for gaps, ambiguous or failed candidates, and operator-selected coverage; provider-returned candidates may reduce URL discovery work but never reduce review requirements.
+
 ## Repository and lifecycle
 
 `FileRetailerDestinationRepository` is the sole GROWTH-005A persistence boundary. It uses immutable append-only records and validated indexes for destination ID, product, retailer, and product/retailer/marketplace binding.
@@ -60,6 +66,8 @@ The repository validates all stored records and indexes on read. Invalid persist
 Queries support ID, product, retailer, composite binding, all records, and the effective active record. Returned objects are defensive immutable copies. Neutral public ordering, when later authorized, is retailer display name then retailer ID; price and affiliate state cannot affect it.
 
 The Beacon projection contains only destination ID, product ID, retailer ID, marketplace, destination type, and status. It excludes the destination URL and all unauthorized market or commercial data.
+
+If a provider-derived candidate is eventually admitted, future Beacon collection identifies the canonical `destinationId`, not the raw provider URL as business identity. Affiliate transformation remains a separate downstream capability and cannot change destination legitimacy, price qualification, neutral ordering, Cheapest, or recommendation authority.
 
 ## Fixture certification
 

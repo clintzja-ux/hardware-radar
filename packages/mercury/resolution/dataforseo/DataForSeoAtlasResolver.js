@@ -2,7 +2,10 @@ import { createDataForSeoProductEvidence } from "./DataForSeoProductEvidence.js"
 
 export const DATAFORSEO_RESOLUTION_OUTCOMES = Object.freeze({ CONFIRMED:"CONFIRMED", PROBABLE:"PROBABLE", AMBIGUOUS:"AMBIGUOUS", REJECTED:"REJECTED" });
 const O=DATAFORSEO_RESOLUTION_OUTCOMES;
-function norm(v){return typeof v==="string"?v.toLowerCase().replace(/[^a-z0-9]/g,""):null;}
+export function normalizeManufacturerKey(value){return typeof value==="string"?value.trim().toLowerCase().replace(/[^a-z0-9]/g,"")||null:null;}
+export function normalizeManufacturerPartNumber(value){return typeof value==="string"?value.trim().toUpperCase()||null:null;}
+const norm=normalizeManufacturerKey;
+export function canonicalizeBrand(value,{canonicalBrand,aliases=[]}={}){const normalized=norm(value);if(!normalized)return null;const canonical=norm(canonicalBrand);if(normalized===canonical||aliases.some(alias=>norm(alias)===normalized))return canonicalBrand;return String(value).trim();}
 function textNorm(v){return typeof v==="string"?v.toLowerCase().replace(/[^a-z0-9]+/g," ").trim():"";}
 function eq(a,b){return a!=null&&b!=null&&norm(String(a))===norm(String(b));}
 function expected(product){ const d=product.extension?.data??{}; return {
@@ -11,21 +14,21 @@ function expected(product){ const d=product.extension?.data??{}; return {
   memoryType:d.classification?.memoryType, dataRateMtps:d.performance?.dataRateMtps, casLatency:d.performance?.casLatency, formFactor:d.classification?.formFactor
 }; }
 function pushEvidence(list, field, status, external, atlas){ list.push(Object.freeze({field,status,external:external??null,atlas:atlas??null})); }
-function assess(e,p){ const x=expected(p), ev=[]; let deterministic=false, conflict=false, structuredMatches=0, structuredKnown=0;
+function assess(e,p,{brandAliases=[]}={}){ const x=expected(p), ev=[]; let deterministic=false, conflict=false, structuredMatches=0, structuredKnown=0;
   const knownIds=[x.mpn,...x.alternates].filter(Boolean);
-  if(e.manufacturerPartNumbers.length){ deterministic=e.manufacturerPartNumbers.some(v=>knownIds.some(k=>eq(v,k))); pushEvidence(ev,"manufacturerPartNumber",deterministic?"MATCH":"CONFLICT",e.manufacturerPartNumbers,x.mpn); if(!deterministic) conflict=true; }
+  if(e.manufacturerPartNumbers.length){ deterministic=e.manufacturerPartNumbers.some(v=>knownIds.some(k=>normalizeManufacturerPartNumber(v)===normalizeManufacturerPartNumber(k))); pushEvidence(ev,"manufacturerPartNumber",deterministic?"MATCH":"CONFLICT",e.manufacturerPartNumbers,x.mpn); if(!deterministic) conflict=true; }
   for(const [field,external,atlas] of [["gtin",e.gtin,x.gtin],["upc",e.upc,x.upc]]) if(external&&atlas){ const m=eq(external,atlas); deterministic ||= m; conflict ||= !m; pushEvidence(ev,field,m?"MATCH":"CONFLICT",external,atlas); }
-  const attrs=[["brand",e.brand,x.brand],["capacityGb",e.capacityGb,x.capacityGb],["moduleCount",e.moduleCount,x.moduleCount],["capacityPerModuleGb",e.capacityPerModuleGb,x.capacityPerModuleGb],["memoryType",e.memoryType,x.memoryType],["dataRateMtps",e.dataRateMtps,x.dataRateMtps],["casLatency",e.casLatency,x.casLatency],["formFactor",e.formFactor,x.formFactor]];
+  const attrs=[["brand",e.brand==null?null:canonicalizeBrand(e.brand,{canonicalBrand:x.brand,aliases:brandAliases}),x.brand],["capacityGb",e.capacityGb,x.capacityGb],["moduleCount",e.moduleCount,x.moduleCount],["capacityPerModuleGb",e.capacityPerModuleGb,x.capacityPerModuleGb],["memoryType",e.memoryType,x.memoryType],["dataRateMtps",e.dataRateMtps,x.dataRateMtps],["casLatency",e.casLatency,x.casLatency],["formFactor",e.formFactor,x.formFactor]];
   for(const [field,external,atlas] of attrs){ if(external!=null&&atlas!=null){ structuredKnown++; const m=eq(external,atlas); if(m) structuredMatches++; else conflict=true; pushEvidence(ev,field,m?"MATCH":"CONFLICT",external,atlas); } }
   if(e.capacityGb!=null&&e.moduleCount!=null&&e.capacityPerModuleGb!=null&&e.capacityGb!==e.moduleCount*e.capacityPerModuleGb){ conflict=true; pushEvidence(ev,"capacityInvariant","CONFLICT",`${e.capacityGb} != ${e.moduleCount} x ${e.capacityPerModuleGb}`,`${x.capacityGb} = ${x.moduleCount} x ${x.capacityPerModuleGb}`); }
   const title=textNorm(e.title); const titleSupport=[x.brand,x.family,x.mpn].filter(Boolean).filter(v=>title.includes(textNorm(v))).length;
   return {product:p,evidence:ev,deterministic,conflict,structuredMatches,structuredKnown,titleSupport};
 }
 const contradictionCode=field=>({manufacturerPartNumber:"MPN_CONFLICT",gtin:"GTIN_CONFLICT",upc:"UPC_CONFLICT",brand:"BRAND_CONFLICT",capacityGb:"CAPACITY_CONFLICT",moduleCount:"MODULE_CONFIGURATION_CONFLICT",capacityPerModuleGb:"MODULE_CONFIGURATION_CONFLICT",memoryType:"MEMORY_GENERATION_CONFLICT",dataRateMtps:"SPEED_CONFLICT",casLatency:"CAS_LATENCY_CONFLICT",formFactor:"FORM_FACTOR_CONFLICT",capacityInvariant:"MODULE_CONFIGURATION_CONFLICT"}[field]??`${String(field).toUpperCase()}_CONFLICT`);
-export function assessDataForSeoProductEvidenceAgainstAtlas(rawItem,atlasProduct){
+export function assessDataForSeoProductEvidenceAgainstAtlas(rawItem,atlasProduct,{brandAliases=[]}={}){
   if(!atlasProduct?.identity?.atlasProductId)throw new TypeError("atlasProduct is required.");
   if(!rawItem||typeof rawItem!=="object")throw new TypeError("rawItem is required.");
-  const external=createDataForSeoProductEvidence(rawItem),assessment=assess(external,atlasProduct),contradictions=[...new Set(assessment.evidence.filter(entry=>entry.status==="CONFLICT").map(entry=>contradictionCode(entry.field)))];
+  const external=createDataForSeoProductEvidence(rawItem),assessment=assess(external,atlasProduct,{brandAliases}),contradictions=[...new Set(assessment.evidence.filter(entry=>entry.status==="CONFLICT").map(entry=>contradictionCode(entry.field)))];
   const fields=["manufacturerPartNumber","brand","memoryType","capacityGb","moduleCount","capacityPerModuleGb","dataRateMtps","casLatency","formFactor"];
   const evidence=fields.map(field=>assessment.evidence.find(entry=>entry.field===field)??Object.freeze({field,status:"UNKNOWN",external:null,atlas:expected(atlasProduct)[field==="manufacturerPartNumber"?"mpn":field]??null}));
   return Object.freeze({schemaVersion:"1.0",atlasProductId:atlasProduct.identity.atlasProductId,status:contradictions.length?"CONTRADICTION":evidence.some(entry=>entry.status==="UNKNOWN")?"COMPATIBLE_WITH_UNKNOWNS":"MATCH",contradictions:Object.freeze(contradictions),evidence:Object.freeze(evidence),priceUsedForIdentity:false});

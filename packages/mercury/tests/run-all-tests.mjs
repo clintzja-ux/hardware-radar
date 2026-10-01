@@ -1,5 +1,7 @@
 process.env.HARDWARE_RADAR_TEST_MODE = "1";
 const testModules = [
+    "./ProductsIdentityDiscoveryReadinessOwner.test.mjs",
+    "./NeutralGoogleProductsFinalization.test.mjs",
     "./SchemaContract.test.mjs",
     "./CanonicalObservation.test.mjs",
     "./ObservationValidator.test.mjs",
@@ -27,6 +29,7 @@ const testModules = [
     "./HistoricalValidator.test.mjs",
     "./HistoricalIntelligence.test.mjs",
     "./HistoricalComparability.test.mjs",
+    "./HistoricalComparabilityRecovery.test.mjs",
     "./HistoricalIntegration.test.mjs",
     "./PublicationEligibility.test.mjs",
     "./MarketPublicationService.test.mjs",
@@ -83,6 +86,25 @@ const testModules = [
     "./LiveMarketRanking.test.mjs",
     "./LiveMarketWorkflow.test.mjs",
     "./DataForSeoRights.test.mjs",
+    "./DataForSeoAmazonFoundation.test.mjs",
+    "./DataForSeoAmazonAsinVariantForensics.test.mjs",
+    "./DataForSeoAmazonProductsReassessment.test.mjs",
+    "./DataForSeoAmazonOperatorIdentityConfirmation.test.mjs",
+    "./DataForSeoAmazonSellersReassessmentReadiness.test.mjs",
+    "./DataForSeoAmazonLiveSellersProcessing.test.mjs",
+    "./DataForSeoAmazonStructuredDeliveryMoney.test.mjs",
+    "./DataForSeoAmazonTransport.test.mjs",
+    "./DataForSeoAmazonHistoricalAdmission.test.mjs",
+    "./DataForSeoAmazonAcceptancePreparation.test.mjs",
+    "./DataForSeoAmazonPilotPreparation.test.mjs",
+    "./DataForSeoAmazonPilotProjection.test.mjs",
+    "./DataForSeoAmazonAcceptanceExecution.test.mjs",
+    "./DataForSeoAmazonAcceptanceAuthorizationSuccessor.test.mjs",
+    "./DataForSeoAmazonRecoveryExecutionIdentity.test.mjs",
+    "./DataForSeoAmazonRecoveryAuthorizationState.test.mjs",
+    "./DataForSeoAmazonProductionTransportComposition.test.mjs",
+    "./DataForSeoAmazonProductionRetrievalComposition.test.mjs",
+    "./PaidActionRecovery.test.mjs",
     "./DataForSeoConfig.test.mjs",
     "./DataForSeoClient.test.mjs",
     "./DataForSeoRetrieval.test.mjs",
@@ -119,6 +141,8 @@ const testModules = [
     "./AcquisitionPlanningBudget.test.mjs",
     "./SharedCurrentDaySpendGovernance.test.mjs",
     "./ControlledAcquisitionExecutor.test.mjs",
+    "./AcquisitionFailureReconciliation.test.mjs",
+    "./DataForSeoSystemCaTransport.test.mjs",
     "./ControlledAcquisitionDf003Integration.test.mjs",
     "./AcquisitionDryRunOperatorVisibility.test.mjs",
     "./ScheduledDryRunOperation.test.mjs",
@@ -132,10 +156,20 @@ const testModules = [
     "./ProductEnrichmentRealEvidencePrepare.test.mjs",
     "./ProductEnrichmentCliNodeCompatibility.test.mjs",
     "./ProductCandidateResolverEvidenceEnhancement.test.mjs",
+    "./ExactMpnBoundaryCorrection.test.mjs",
+    "./LayeredProviderIdentity.test.mjs",
+    "./ProviderDocumentEquivalenceExperiment.test.mjs",
+    "./EquivalentProviderIdentitySelectionExperiment.test.mjs",
+    "./ProviderIdentityGovernance.test.mjs",
     "./ProductInfoEnrichmentSingleUseAuthorization.test.mjs",
     "./ProductInfoEnrichmentPrepareEnvelope.test.mjs",
     "./GovernedSellersEnrichmentProposal.test.mjs",
     "./ProductInfoResultBoundaryGovernance.test.mjs",
+    "./GovernedProductInfoResultRetrieval.test.mjs",
+    "./ProductInfoResultOutput.test.mjs",
+    "./KingstonBrandAliasNormalization.test.mjs",
+    "./MercuryDefaultAcquisitionRouting.test.mjs",
+    "./DirectProductsSellersLineage.test.mjs",
     "./SellersEnrichmentSingleUseAuthorization.test.mjs",
     "./SellersResultDf003Retention.test.mjs",
     "./SellersResultRetentionBoundaryGovernance.test.mjs",
@@ -145,6 +179,29 @@ const testModules = [
     "./EvidencePromotionAssessmentCliWiring.test.mjs",
     "./IdentityReviewAuditRemediation.test.mjs",
     "./AtlasBackedMerchantRegistration.test.mjs",
+    "./HistoricalOfferComparabilityAssessment.test.mjs",
+    "./HistoricalFactAdmissionPolicy.test.mjs",
+    "./HistoricalFactReplayPreparation.test.mjs",
+    "./HistoricalFactReplayExecution.test.mjs",
+    "./RepeatObservationBoundary.test.mjs",
+    "./RepeatObservationPersistence.test.mjs",
+    "./RepeatObservationScale.test.mjs",
+    "./RepeatScaleSelectionProposal.test.mjs",
+    "./RepeatObservationProductionComposition.test.mjs",
+    "./BoundedRepeatObservationRun.test.mjs",
+    "./NeutralBoundedPaidActionCoordinator.test.mjs",
+    "./BoundedExistingTaskProgression.test.mjs",
+    "./NeutralProductsPrerequisites.test.mjs",
+    "./ProductsIdentityDiscoveryDomainAdapter.test.mjs",
+    "./ProductionProductsDiscoverySourceOwners.test.mjs",
+    "./ProductionAmazonProductsDiscoveryRecoveryOwner.test.mjs",
+    "./ProductsIdentityDiscoveryExistingResultRecovery.test.mjs",
+    "./GoogleProductsChildAuthorizationRecovery.test.mjs",
+    "./ReusableIdentityAcquisitionLineage.test.mjs",
+    "./BoundedRepeatObservationProductionPipeline.test.mjs",
+    "./BoundedRepeatObservationCli.test.mjs",
+    "./BoundedRepeatObservationRecovery.test.mjs",
+    "./ImmutableProviderResultReprocessing.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",
@@ -160,17 +217,81 @@ const testModules = [
     ,"./HistoricalRefreshCadenceCli.test.mjs"
     ,"./InitialProductionHistoricalRefreshCadence.test.mjs"
     ,"./HistoricalObservationPortfolio.test.mjs"
+    ,"./HistoricalBootstrapPreparation.test.mjs"
+    ,"./HistoricalBootstrapExecution.test.mjs"
+    ,"./HistoricalBootstrapProductionComposition.test.mjs"
+    ,"./HistoricalBootstrapCheckpoint.test.mjs"
+    ,"./HistoricalBootstrapOwnership.test.mjs"
+    ,"./HistoricalBootstrapContinuation.test.mjs"
+    ,"./PaidActionIntentLineage.test.mjs"
+    ,"./HistoricalBootstrapLifecycleService.test.mjs"
+    ,"./ProductionDataForSeoTaskOwner.test.mjs"
+    ,"./ProductionDataForSeoPrepareOwners.test.mjs"
+    ,"./HistoricalBootstrapArtifactResolution.test.mjs"
+    ,"./HistoricalBootstrapResultDispatcher.test.mjs"
+    ,"./ProductionHistoricalBootstrapResultBridge.test.mjs"
+    ,"./HistoricalBootstrapFinalCompositionReadiness.test.mjs"
+    ,"./HistoricalBootstrapOperatorCommands.test.mjs"
+    ,"./HistoricalBootstrapProductsReviewBinding.test.mjs"
+    ,"./HistoricalBootstrapRightsPropagation.test.mjs"
+    ,"./HistoricalBootstrapProductionLifecycle.test.mjs"
+    ,"./HistoricalBootstrapImmutableProposalHandoff.test.mjs"
+    ,"./ProductionDataForSeoRetrievalOwners.test.mjs"
+    ,"./ProductionHistoricalBootstrapLocalOwners.test.mjs"
     ,"./HistoricalObservationPortfolioCli.test.mjs"
     ,"./MultiProductCadencePolicy.test.mjs"
     ,"./MultiProductCadencePolicyCli.test.mjs"
     ,"./CertifiedMercuryOperationsProjection.test.mjs"
+    ,"./CertifiedMercuryCohortOperationsProjection.test.mjs"
     ,"./CertifiedMercuryOperationsPanel.test.mjs"
+    ,"./CertifiedMercuryCohortOperationsPanel.test.mjs"
+    ,"./ProductionForgeCohortOperationsProvider.test.mjs"
+    ,"./ForgeCohortOperationsEndToEnd.test.mjs"
     ,"./CertifiedMercuryOperationsExporter.test.mjs"
     ,"./CertifiedMercuryOperationsExporterCli.test.mjs"
     ,"./PublicationOperatorGovernance.test.mjs"
     ,"./RamComparisonSnapshotProjection.test.mjs"
     ,"./CuratedRamOfferGovernance.test.mjs"
     ,"./RetailerDestination.test.mjs"
+    ,"./AcquisitionPortfolioOrchestration.test.mjs"
+    ,"./ProductionAcquisitionPortfolioComposition.test.mjs"
+    ,"./AcquisitionCheckpointExecutionComposition.test.mjs"
+    ,"./RetailDisplayImport.test.mjs"
+    ,"./CurrentRetailRefreshOrchestrator.test.mjs"
+    ,"./PublicCurrentRetailProjection.test.mjs"
+    ,"./RamTerminalPublicIntelligence.test.mjs"
+    ,"./RamMarketSnapshotProjection.test.mjs"
+    ,"./PublicChronologicalPriceSeries.test.mjs"
+    ,"./ManualCurrentPriceQualification.test.mjs"
+    ,"./ManualCurrentPriceWorkbook.test.mjs"
+    ,"./ManualCurrentPriceWorkbookComposition.test.mjs"
+    ,"./ManualCurrentPriceSnapshotExecution.test.mjs"
+    ,"./ManualCurrentPriceHistory.test.mjs"
+    ,"./NeweggAffiliatePublicAction.test.mjs"
+    ,"./RoutineManualCurrentPriceProcessing.test.mjs"
+    ,"./CurrentDisplayPublication.test.mjs"
+    ,"./CurrentDisplayPublicationArtifact.test.mjs"
+    ,"./RamPublicIntelligenceReleasePortfolio.test.mjs"
+    ,"./PracticalCurrentItemPriceComparison.test.mjs"
+    ,"./RakutenNeweggProductFeedAdapter.test.mjs"
+    ,"./ProductionRakutenNeweggCurrentRefresh.test.mjs"
+    ,"./RakutenSftpTransport.test.mjs"
+    ,"./RakutenSftpSafetyHardening.test.mjs"
+    ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
+    ,"./RakutenHeaderTimestamp.test.mjs"
+    ,"./RakutenProductRecordFraming.test.mjs"
+    ,"./RakutenLineOrientedQuoteSemantics.test.mjs"
+    ,"./RakutenProductCatalogFieldMap.test.mjs"
+    ,"./RakutenDeltaMultiplicity.test.mjs"
+    ,"./RakutenCatalogStateProjection.test.mjs"
+    ,"./RetailLifecycleHeldReassessment.test.mjs"
+    ,"./ProductionProductsIdentityDiscovery.test.mjs"
+    ,"./ScaleRampSelectorProposalPrepare.test.mjs"
+    ,"./RepeatProposalPrepareDirectBinding.test.mjs"
+    ,"./RepeatScaleExperimentPolicy.test.mjs"
+    ,"./TasklessChildAuthorityDisposition.test.mjs"
+    ,"./DispositionAwareExistingTaskContinuation.test.mjs"
+    ,"./BoundedSpendProgression.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

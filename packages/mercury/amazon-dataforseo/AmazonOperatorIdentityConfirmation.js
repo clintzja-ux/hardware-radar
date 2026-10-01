@@ -1,0 +1,43 @@
+import crypto from "node:crypto";
+import { AMAZON_ASIN_IDENTITY_POLICY_VERSION, AMAZON_ASIN_IDENTITY_STATES } from "./AmazonAsinIdentityAssessment.js";
+
+export const AMAZON_OPERATOR_IDENTITY_POLICY_VERSION = "MERCURY-HISTORY-052-1.1";
+export const AMAZON_OPERATOR_IDENTITY_CONFIRMATION = "CONFIRM-DATAFORSEO-AMAZON-DESTINATION-IDENTITY";
+export const AMAZON_OPERATOR_IDENTITY_STATE = "STRONG_OPERATOR_CONFIRMED_ASIN";
+const stable = value => Array.isArray(value) ? `[${value.map(stable).join(",")}]` : value && typeof value === "object" ? `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}` : JSON.stringify(value);
+const digest = value => crypto.createHash("sha256").update(stable(value)).digest("hex");
+const required = (value, code) => { if (typeof value !== "string" || !value.trim()) throw new Error(code); return value.trim(); };
+const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
+
+export function amazonAsinFromDestination(destination) {
+  const listingId = String(destination?.retailerListingId ?? "").toUpperCase();
+  if (!/^[A-Z0-9]{10}$/.test(listingId)) throw new Error("AMAZON_OPERATOR_IDENTITY_ASIN_INVALID");
+  let url;
+  try { url = new URL(destination.destinationUrl); } catch { throw new Error("AMAZON_OPERATOR_IDENTITY_DESTINATION_URL_INVALID"); }
+  if (url.hostname.replace(/^www\./, "").toLowerCase() !== "amazon.com" || !new RegExp(`(?:/dp/|/gp/product/)${listingId}(?:/|$)`, "i").test(url.pathname)) throw new Error("AMAZON_OPERATOR_IDENTITY_DESTINATION_ASIN_MISMATCH");
+  return listingId;
+}
+
+export function createAmazonOperatorIdentityConfirmation({ artifact, originalOutcome, canonicalResult, atlasProduct, destination, reviewer, reason, decidedAt } = {}) {
+  if (originalOutcome?.artifactId !== artifact?.acceptanceArtifactId || originalOutcome?.state !== AMAZON_ASIN_IDENTITY_STATES.INSUFFICIENT_ASIN_EVIDENCE || originalOutcome?.canonicalResultId !== canonicalResult?.canonicalResultId || originalOutcome?.resultDigest !== canonicalResult?.resultDigest || canonicalResult?.checkpointId !== artifact?.acceptanceArtifactId || canonicalResult?.atlasProductId !== artifact?.atlasProductId || canonicalResult?.sourceId !== "DATAFORSEO_AMAZON" || canonicalResult?.operation !== "AMAZON_PRODUCTS" || atlasProduct?.identity?.atlasProductId !== artifact?.atlasProductId) throw new Error("AMAZON_OPERATOR_IDENTITY_LINEAGE_INVALID");
+  if (destination?.status !== "ACTIVE" || destination?.destinationId !== artifact.destinationId || destination?.atlasProductId !== artifact.atlasProductId || destination?.retailerId !== "RETAILER-0001" || destination?.marketplace !== "amazon.com" || destination?.binding?.manufacturerPartNumber !== atlasProduct.identity.manufacturerPartNumber || !destination?.materialFingerprint) throw new Error("AMAZON_OPERATOR_IDENTITY_DESTINATION_INVALID");
+  const governedAsin = amazonAsinFromDestination(destination);
+  if (artifact.corroboratingDestinationAsins?.length && !artifact.corroboratingDestinationAsins.includes(governedAsin)) throw new Error("AMAZON_OPERATOR_IDENTITY_CORROBORATION_CONFLICT");
+  const reviewedBy = required(reviewer, "AMAZON_OPERATOR_IDENTITY_REVIEWER_REQUIRED"), decisionReason = required(reason, "AMAZON_OPERATOR_IDENTITY_REASON_REQUIRED");
+  if (!Number.isFinite(Date.parse(decidedAt))) throw new Error("AMAZON_OPERATOR_IDENTITY_TIME_INVALID");
+  const binding = { artifactId: artifact.acceptanceArtifactId, originalOutcomeId: originalOutcome.outcomeId, originalState: originalOutcome.state, originalAssessmentId: originalOutcome.assessmentId, canonicalResultId: canonicalResult.canonicalResultId, resultDigest: canonicalResult.resultDigest, atlasProductId: artifact.atlasProductId, manufacturerPartNumber: atlasProduct.identity.manufacturerPartNumber, destinationId: destination.destinationId, destinationBindingDigest: destination.materialFingerprint, retailerId: destination.retailerId, marketplace: destination.marketplace, governedAsin, destinationUrl: destination.destinationUrl, destinationEvidenceReferences: structuredClone(destination.binding.evidenceReferences), destinationReviewedBy: destination.reviewedBy, destinationReviewedAt: destination.reviewedAt, sourceRightsProfileDigest: artifact.sourceRightsProfileDigest, identityPolicyVersion: AMAZON_ASIN_IDENTITY_POLICY_VERSION, confirmationPolicyVersion: AMAZON_OPERATOR_IDENTITY_POLICY_VERSION, reviewedBy, reason: decisionReason };
+  const bindingDigest = digest(binding);
+  return freeze({ schemaVersion: "1.0", confirmationId: `mer_amzidconfirm_${bindingDigest.slice(0, 24)}`, decision: "OPERATOR_VERIFIED_PUBLIC_OBSERVATION", projectedState: AMAZON_OPERATOR_IDENTITY_STATE, ...binding, decidedAt, bindingDigest, sellersAuthorizationEligible: true, nextPermittedAction: "OPERATOR_REVIEW_FOR_SELLERS", providerExecutionAuthorized: false, providerSpendAuthorized: false, providerCallPerformed: false, paidTaskCreated: false, actualSpendUsd: 0 });
+}
+
+export function validateAmazonOperatorIdentityConfirmation(value, { originalOutcome = null } = {}) {
+  const binding = { artifactId: value?.artifactId, originalOutcomeId: value?.originalOutcomeId, originalState: value?.originalState, originalAssessmentId: value?.originalAssessmentId, canonicalResultId: value?.canonicalResultId, resultDigest: value?.resultDigest, atlasProductId: value?.atlasProductId, manufacturerPartNumber: value?.manufacturerPartNumber, destinationId: value?.destinationId, destinationBindingDigest: value?.destinationBindingDigest, retailerId: value?.retailerId, marketplace: value?.marketplace, governedAsin: value?.governedAsin, destinationUrl: value?.destinationUrl, destinationEvidenceReferences: value?.destinationEvidenceReferences, destinationReviewedBy: value?.destinationReviewedBy, destinationReviewedAt: value?.destinationReviewedAt, sourceRightsProfileDigest: value?.sourceRightsProfileDigest, identityPolicyVersion: value?.identityPolicyVersion, confirmationPolicyVersion: value?.confirmationPolicyVersion, reviewedBy: value?.reviewedBy, reason: value?.reason };
+  if (value?.schemaVersion !== "1.0" || value?.decision !== "OPERATOR_VERIFIED_PUBLIC_OBSERVATION" || value?.projectedState !== AMAZON_OPERATOR_IDENTITY_STATE || value?.originalState !== AMAZON_ASIN_IDENTITY_STATES.INSUFFICIENT_ASIN_EVIDENCE || value?.identityPolicyVersion !== AMAZON_ASIN_IDENTITY_POLICY_VERSION || value?.confirmationPolicyVersion !== AMAZON_OPERATOR_IDENTITY_POLICY_VERSION || !/^[A-Z0-9]{10}$/.test(value?.governedAsin ?? "") || !Array.isArray(value?.destinationEvidenceReferences) || !value.destinationEvidenceReferences.length || !Number.isFinite(Date.parse(value?.decidedAt)) || value?.bindingDigest !== digest(binding) || value?.confirmationId !== `mer_amzidconfirm_${value.bindingDigest.slice(0, 24)}` || value?.sellersAuthorizationEligible !== true || value?.nextPermittedAction !== "OPERATOR_REVIEW_FOR_SELLERS" || value?.providerExecutionAuthorized !== false || value?.providerSpendAuthorized !== false || value?.providerCallPerformed !== false || value?.paidTaskCreated !== false || value?.actualSpendUsd !== 0) throw new Error("AMAZON_OPERATOR_IDENTITY_CONFIRMATION_INVALID");
+  if (originalOutcome && (value.originalOutcomeId !== originalOutcome.outcomeId || value.artifactId !== originalOutcome.artifactId || value.canonicalResultId !== originalOutcome.canonicalResultId || value.resultDigest !== originalOutcome.resultDigest || value.originalAssessmentId !== originalOutcome.assessmentId || value.originalState !== originalOutcome.state)) throw new Error("AMAZON_OPERATOR_IDENTITY_LINEAGE_INVALID");
+  return true;
+}
+
+export function projectOperatorConfirmedAmazonProductsOutcome(originalOutcome, confirmation) {
+  validateAmazonOperatorIdentityConfirmation(confirmation, { originalOutcome });
+  return freeze({ schemaVersion: "1.0", outcomeId: originalOutcome.outcomeId, artifactId: confirmation.artifactId, authorizationId: originalOutcome.authorizationId, canonicalResultId: confirmation.canonicalResultId, resultDigest: confirmation.resultDigest, state: AMAZON_ASIN_IDENTITY_STATES.STRONG_UNIQUE_ASIN, identityResolution: AMAZON_OPERATOR_IDENTITY_STATE, assessmentId: confirmation.originalAssessmentId, governedAsin: confirmation.governedAsin, nextPermittedAction: confirmation.nextPermittedAction, sellersAuthorizationEligible: true, asinEnrichmentAuthorized: false, providerCallPerformed: false, actualSpendUsd: 0, effectiveRecordType: "OPERATOR_IDENTITY_CONFIRMATION", confirmationId: confirmation.confirmationId, originalOutcomeId: originalOutcome.outcomeId });
+}

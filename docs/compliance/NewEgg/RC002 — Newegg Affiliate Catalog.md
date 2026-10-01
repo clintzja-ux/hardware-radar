@@ -1,5 +1,7 @@
 RC002 — Newegg Affiliate Catalog
-Preliminary verdict: CONDITIONAL / CLARIFICATION REQUIRED 🟡
+Current-commerce verdict: APPROVED / CAPABILITY-SEPARATED 🟢
+
+Supersession note (2026-09-18): the earlier current-display and comparison uncertainty below is retained as historical research context but is superseded by `IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001`. Operator-confirmed approved Newegg Product Catalog access plus current official Rakuten Product Catalog documentation now establish feed acquisition, ephemeral/current-state processing and retention, public current-price display, and cross-retailer item-price comparison for the approved US Newegg feed path. Historical retention, analytics, recommendation, redistribution, and automatic offer-condition inference remain blocked or unresolved. No Newegg scraping or Marketplace seller API is authorized.
 
 Newegg explicitly advertises its affiliate program as providing publishers with:
 

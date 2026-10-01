@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "MERCURY_REPEAT_SCALE_REVIEW_PROPOSAL",
+  "status": "REVIEW_ONLY",
+  "stageId": "hardware-radar-100-product-stage",
+  "stageCohortDigest": "470dfadbdb8670de3566826d33eb74cb9d97a1ca6e14bf8b3fac71101ecaaf21",
+  "stagePolicyId": "MERCURY_100_STAGE_LARGER_LONGITUDINAL_REPEAT_EXPERIMENT",
+  "stagePolicyVersion": "1.0",
+  "selectorPolicyId": "MERCURY_REPEAT_SCALE_SELECTION",
+  "selectorPolicyVersion": "1.0",
+  "sourceScope": "SINGLE_SOURCE_OPERATION",
+  "source": "DATAFORSEO_GOOGLE_SHOPPING",
+  "operation": "SELLERS",
+  "observationCycle": "2026-09-18T00:00:00.000Z",
+  "requestedSize": 2,
+  "candidateCount": 2,
+  "candidatePool": [
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+      "source": "DATAFORSEO_GOOGLE_SHOPPING",
+      "operation": "SELLERS",
+      "observationCycle": "2026-09-18T00:00:00.000Z",
+      "reusableIdentityDigest": "9c5acbb9b610214f7a0ac995d974302dff6228ad8b7a0a4e90373acbb86de9bc",
+      "sourceRightsProfileDigest": "1bbbfb12fa8621e424a473b1e599d0e510717fdcca4a928bdda448791ce0ca57",
+      "destinationBindingDigest": null,
+      "manufacturer": "Corsair",
+      "memoryGeneration": "DDR5",
+      "formFactor": "DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g56c46u5",
+      "source": "DATAFORSEO_GOOGLE_SHOPPING",
+      "operation": "SELLERS",
+      "observationCycle": "2026-09-18T00:00:00.000Z",
+      "reusableIdentityDigest": "c2272817e646e6dda7466509dbea7b1d8db837e1cf4ce00f1a6621d3f1ebb37b",
+      "sourceRightsProfileDigest": "1bbbfb12fa8621e424a473b1e599d0e510717fdcca4a928bdda448791ce0ca57",
+      "destinationBindingDigest": null,
+      "manufacturer": "Crucial",
+      "memoryGeneration": "DDR5",
+      "formFactor": "DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    }
+  ],
+  "candidatePoolDigest": "28ce66de25630f4b23bcab7a163285dd3304ce7de5882397bb0b941abf40152d",
+  "selectedMembers": [
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+      "source": "DATAFORSEO_GOOGLE_SHOPPING",
+      "operation": "SELLERS",
+      "observationCycle": "2026-09-18T00:00:00.000Z",
+      "reusableIdentityDigest": "9c5acbb9b610214f7a0ac995d974302dff6228ad8b7a0a4e90373acbb86de9bc",
+      "sourceRightsProfileDigest": "1bbbfb12fa8621e424a473b1e599d0e510717fdcca4a928bdda448791ce0ca57",
+      "destinationBindingDigest": null,
+      "manufacturer": "Corsair",
+      "memoryGeneration": "DDR5",
+      "formFactor": "DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g56c46u5",
+      "source": "DATAFORSEO_GOOGLE_SHOPPING",
+      "operation": "SELLERS",
+      "observationCycle": "2026-09-18T00:00:00.000Z",
+      "reusableIdentityDigest": "c2272817e646e6dda7466509dbea7b1d8db837e1cf4ce00f1a6621d3f1ebb37b",
+      "sourceRightsProfileDigest": "1bbbfb12fa8621e424a473b1e599d0e510717fdcca4a928bdda448791ce0ca57",
+      "destinationBindingDigest": null,
+      "manufacturer": "Crucial",
+      "memoryGeneration": "DDR5",
+      "formFactor": "DIMM",
+      "capacityGb": 32,
+      "moduleCount": 2
+    }
+  ],
+  "selectedMemberDigest": "bd9ac3f4ef89010d3e25b70682e4a5e527f6354bf34d20b804c899a2902d8ee3",
+  "selectionRationale": "DETERMINISTIC_STRATIFIED_ROUND_ROBIN",
+  "authority": "NONE",
+  "providerCalls": 0,
+  "existingResultRetrievals": 0,
+  "providerTasks": 0,
+  "paidTasks": 0,
+  "actualSpendUsd": 0,
+  "prepareAuthorized": false,
+  "executionAuthorized": false,
+  "runCreated": false,
+  "downstreamAuthority": "NONE",
+  "strataSummary": [
+    {
+      "stratumKey": "Corsair\u001fDDR5\u001fDIMM\u001f32\u001f2\u001fDATAFORSEO_GOOGLE_SHOPPING\u001fSELLERS",
+      "candidateCount": 1,
+      "selectedCount": 1
+    },
+    {
+      "stratumKey": "Crucial\u001fDDR5\u001fDIMM\u001f32\u001f2\u001fDATAFORSEO_GOOGLE_SHOPPING\u001fSELLERS",
+      "candidateCount": 1,
+      "selectedCount": 1
+    }
+  ],
+  "proposalId": "mer_scaleproposal_21625c38f02b1ee6fdc74a30",
+  "proposalDigest": "21625c38f02b1ee6fdc74a30ec8916ae96c03284b62763627db9625acdfdac55"
+}

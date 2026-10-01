@@ -25,7 +25,7 @@ export function validateProductInfoRetrievalLineage({productInfoTaskId,productIn
   if(decision.candidateId!==`enrichment:${productInfoAuthorization.atlasProductId}:${productInfoAuthorization.proposalId}`)throw new Error("PRODUCT_INFO_AUTHORIZATION_CANDIDATE_BINDING_MISMATCH");
   const sourceTask=one(taskLedger.filter(entry=>entry?.taskId===productInfoAuthorization.sourceTaskId),"PRODUCT_INFO_SOURCE_PRODUCTS_TASK_LINEAGE_NOT_UNIQUE");
   if(sourceTask.kind!=="PRODUCTS")throw new Error("PRODUCT_INFO_SOURCE_TASK_OPERATION_MISMATCH");
-  return freeze({schemaVersion:"1.0",status:"VALIDATED",productInfoTaskId,productInfoAuthorizationId:productInfoAuthorization.requestId,productInfoPlanId:productInfoAuthorization.planId,productInfoProposalId:productInfoAuthorization.proposalId,atlasProductId:productInfoAuthorization.atlasProductId,sourceProductsTaskId:productInfoAuthorization.sourceTaskId,executionRunId:run.runId,providerIdentity:structuredClone(productInfoAuthorization.providerIdentity)});
+  return freeze({schemaVersion:"1.0",status:"VALIDATED",productInfoTaskId,productInfoAuthorizationId:productInfoAuthorization.requestId,productInfoPlanId:productInfoAuthorization.planId,productInfoProposalId:productInfoAuthorization.proposalId,atlasProductId:productInfoAuthorization.atlasProductId,sourceProductsTaskId:productInfoAuthorization.sourceTaskId,executionRunId:run.runId,providerIdentity:structuredClone(productInfoAuthorization.providerIdentity),providerSelectionLineage:structuredClone(productInfoAuthorization.providerSelectionLineage??null),governanceBinding:structuredClone(productInfoAuthorization.governanceBinding??null)});
 }
 
 export function validateProductInfoProviderIdentity({authorizedIdentity,resultIdentity}={}){
@@ -35,7 +35,7 @@ export function validateProductInfoProviderIdentity({authorizedIdentity,resultId
   return freeze({status:"VALIDATED",comparisons});
 }
 
-export function createGovernedSellersEnrichmentProposal({lineage,productInfoResult,productInfoAuthorization,atlasProduct,createdAt,estimatedCostUsd=.001}={}){
+export function createGovernedSellersEnrichmentProposal({lineage,productInfoResult,productInfoAuthorization,atlasProduct,brandAliases=[],createdAt,estimatedCostUsd=.001}={}){
   if(lineage?.status!=="VALIDATED"||lineage.productInfoAuthorizationId!==productInfoAuthorization?.requestId)throw new Error("SELLERS_PRODUCT_INFO_LINEAGE_REQUIRED");
   if(atlasProduct?.identity?.atlasProductId!==lineage.atlasProductId)throw new Error("SELLERS_PRODUCT_INFO_ATLAS_PRODUCT_BINDING_MISMATCH");
   const items=productInfoResult?.result?.[0]?.items;
@@ -43,7 +43,7 @@ export function createGovernedSellersEnrichmentProposal({lineage,productInfoResu
   if(Number(productInfoResult?.cost??0)!==0)throw new Error("SELLERS_PREPARE_RETRIEVAL_MUST_BE_ZERO_COST");
   const item=items[0],resultIdentity={productId:item.product_id??null,dataDocId:item.data_docid??null,gid:item.gid??null};
   const providerIdentityValidation=validateProductInfoProviderIdentity({authorizedIdentity:productInfoAuthorization.providerIdentity,resultIdentity});
-  const atlasValidation=assessDataForSeoProductEvidenceAgainstAtlas(item,atlasProduct);
+  const atlasValidation=assessDataForSeoProductEvidenceAgainstAtlas(item,atlasProduct,{brandAliases});
   if(atlasValidation.status==="CONTRADICTION")throw new Error(`SELLERS_PRODUCT_INFO_ATLAS_CONTRADICTION:${atlasValidation.contradictions.join(",")}`);
   const validation={schemaVersion:"1.0",status:"VALIDATED",lineage,providerIdentity:providerIdentityValidation,atlas:atlasValidation};
   const proposal=createSellersEnrichmentProposal({productInfoTaskId:lineage.productInfoTaskId,productInfoResult,productInfoAuthorization,createdAt,estimatedCostUsd});

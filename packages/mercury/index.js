@@ -82,8 +82,10 @@ export * from "./acquisition/scheduling/index.js";
 export * from "./acquisition/operations/index.js";
 
 export * from "./acquisition/authorization/index.js";
+export * from "./acquisition/recovery/PaidActionRecovery.js";
 
 export * from "./acquisition/enrichment/index.js";
+export * from "./acquisition/portfolio/index.js";
 export * from "./identity-review/index.js";
 export * from "./promotion/index.js";
 export * from "./historical-admission/index.js";
@@ -95,3 +97,7 @@ export * from "./current-market/index.js";
 export * from "./curated-offer/index.js";
 export * from "./condition-evidence/index.js";
 export * from "./destinations/index.js";
+export * from "./amazon-dataforseo/index.js";
+export * from "./repeat-observation/index.js";
+export * from "./bounded/index.js";
+export * from "./scale-ramp/index.js";

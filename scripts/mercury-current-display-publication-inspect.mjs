@@ -1,0 +1,1 @@
+import {args,runtime} from "./mercury-current-display-publication-runtime.mjs";const a=args(),r=await runtime(a),c=await r.repository.getCandidate(a.get("--candidate-id"));if(!c)throw new Error("CURRENT_DISPLAY_PUBLICATION_CANDIDATE_NOT_FOUND");console.log(JSON.stringify(c,null,2));

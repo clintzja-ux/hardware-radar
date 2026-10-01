@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "MERCURY_SCALE_RAMP_CANARY_REVIEW",
+  "status": "REVIEW_ONLY",
+  "canaryId": "mercury-scale-ramp-25-canary-2026-09-15",
+  "authority": {
+    "planCreated": false,
+    "authorizationCreated": false,
+    "executionAuthorized": false,
+    "providerSpendAuthorized": false,
+    "providerCalls": 0,
+    "paidTasks": 0,
+    "actualSpendUsd": 0
+  },
+  "members": [
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
+      "operations": ["GOOGLE_SELLERS_REPEAT", "AMAZON_SELLERS_REPEAT"],
+      "role": "DUAL_SOURCE_KNOWN_CONTROL"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2b6400c36",
+      "operations": ["AMAZON_SELLERS_REPEAT"],
+      "role": "STRONG_UNIQUE_AMAZON_CONTROL"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3038f16gx2_fx5",
+      "operations": ["AMAZON_PRODUCTS_IDENTITY_DISCOVERY"],
+      "role": "NEW_MANUFACTURER_ONBOARDING"
+    },
+    {
+      "atlasProductId": "ram_crucial_ct16g56c46s5",
+      "operations": ["AMAZON_PRODUCTS_IDENTITY_DISCOVERY"],
+      "role": "NEW_SODIMM_ONBOARDING"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ctced532g6000hc30dc01",
+      "operations": ["AMAZON_PRODUCTS_IDENTITY_DISCOVERY"],
+      "role": "LESS_COMMON_NEW_ONBOARDING"
+    }
+  ],
+  "projectedEnvelope": {
+    "identityDiscoveryTasks": 3,
+    "identityDiscoveryMaximumSpendUsd": 0.0045,
+    "repeatTasks": 3,
+    "repeatMaximumSpendUsd": 0.004,
+    "combinedPlanningMaximumUsd": 0.0085,
+    "separatePlansAndAuthorizationsRequired": true
+  },
+  "stopConditions": [
+    "UNAUTHORIZED_SPEND",
+    "DUPLICATE_PAID_TASK",
+    "LINEAGE_OR_RESULT_CONFLICT",
+    "RIGHTS_OR_BINDING_INTEGRITY_FAILURE",
+    "REPOSITORY_CORRUPTION",
+    "DOWNSTREAM_AUTHORITY_LEAKAGE"
+  ]
+}

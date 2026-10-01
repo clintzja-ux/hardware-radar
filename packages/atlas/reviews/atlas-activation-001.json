@@ -1,0 +1,569 @@
+{
+  "schemaVersion": "1.0",
+  "decisionId": "atlas_batchreview_98f141fb764e58ac1772e0f7",
+  "policyVersion": "ATLAS-ACTIVATION-001-1.0",
+  "subjectType": "ATLAS_PRODUCT_LIFECYCLE_BATCH",
+  "sourceSet": "system:atlas-ram-expansion-002",
+  "reviewedBy": "human:Clinton_Ramsook",
+  "reviewedAt": "2026-09-04T18:00:00.000Z",
+  "reason": "ATLAS-ACTIVATION-001 authorized manufacturer-verified batch lifecycle review; no acquisition, market, price, or publication authority implied.",
+  "products": [
+    {
+      "atlasProductId": "ram_corsair_cmh16gx5m2b5200z40",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh16gx5m2e6000z36",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2b6000c38",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2b6000z30wcb",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2b6400c36",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2e6000c36w",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh32gx5m2f6000z36",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh64gx5m2d5600z40",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh64gx5m2n6400c32w",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000c30",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6000c38",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk32gx5m2b6400c36",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk64gx5m2b5200c40",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk64gx5m2b5600c40",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g4dfra32a",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g60c36u5b",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k16g64c32u5b",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5b",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k32g60c40u5w",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k32g64c40u5w",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct16g56c46u5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k16g4sfra32a",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k16g56c46s5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k16g56c46u5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k32g4sfd832a",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k32g56c46s5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct2k32g56c46u5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_crucial_ct32g56c46s5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5k",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5w",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600j3636d32gx2_rs5w",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600s4645a16gx2_rs",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600s4645a32gx2_rs",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j2836g16gx2_fx5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3036f16gx2_fx5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3038f16gh2_fx5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5k",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3040f16gx2_rs5w",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3238f16gx2_rs5w",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_fx5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_rs5k",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_fx5",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3636f32gx2_rs5k",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6400j3239g16gx2_rs5k",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6400j3239g32gx2_tz5rk",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6800j3445g16gx2_rs5k",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_7600j3646g16gx2_tz5rk",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kcp556sd8_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf556s40ibk2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c30bbeak2_16",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c30bbek2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c30bweak2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bbe2ak2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bbe2k2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bbeak2_16",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560c36bwe2k2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf560s38ibk2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564c32bbeak2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564c32bbek2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564c32rsak2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564s38ib_16",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_kingston_kf564s38ibk2_32",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ctced532g6000hc38adc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ctced532g6400hc32adc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff2d532g6400hc32adc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff3d532g6000hc38jdc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff3d532g6400hc38jdc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff3d564g5200hc40cdc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff3d564g6000hc38adc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d516g6000hc38adc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d532g5200hc40cdc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d532g6000hc30dc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d532g6000hc38adc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ff4d532g6400hc32adc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tf3d416g3200hc16fdc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tf3d432g3200hc16fdc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tlzgd432g3200hc16fdc01",
+      "status": "ACTIVATED",
+      "blockers": [],
+      "priorRevision": 1,
+      "resultingRevision": 2
+    }
+  ],
+  "counts": {
+    "requested": 77,
+    "activated": 77,
+    "blocked": 0
+  },
+  "downstreamAuthority": {
+    "acquisition": false,
+    "historical": false,
+    "canonical": false,
+    "review": false,
+    "publication": false,
+    "currentPrice": false,
+    "cheapest": false,
+    "pick": false,
+    "affiliate": false
+  },
+  "providerOperations": 0,
+  "actualSpendUsd": 0
+}

@@ -7,7 +7,7 @@ export async function resolveGovernedInitialAcquisitionPromotionContext({record,
   if(typeof requestedAtlasProductId!=="string"||!requestedAtlasProductId)throw new Error("INITIAL_ACQUISITION_CONTEXT_PRODUCT_MISSING");
   const atlasProduct=await productRepository.getById(requestedAtlasProductId),composition=composeInitialAcquisitionPromotionAssessment({records:evidenceRecords,requestedAtlasProductId,retentionAudit,sellersProposalEnvelope,atlasProduct}),projection=composition.initialAcquisitionIdentityProjections.find(value=>value.evidenceId===record.evidenceId);
   if(composition.mode!=="GOVERNED_INITIAL_ACQUISITION_BINDING"||!projection)throw new Error("INITIAL_ACQUISITION_CONTEXT_PROJECTION_MISSING");
-  const proposal=sellersProposalEnvelope?.proposal??sellersProposalEnvelope,acquisitionChain={productsTaskId:proposal?.sourceProductsTaskId,productInfoTaskId:retentionAudit.productInfoTaskId,sellersTaskId:retentionAudit.sellersTaskId};
+  const proposal=sellersProposalEnvelope?.proposal??sellersProposalEnvelope,direct=proposal?.identityLineageType==="DIRECT_PRODUCTS_STRONG_IDENTITY",acquisitionChain=direct?{identityLineageType:"DIRECT_PRODUCTS_STRONG_IDENTITY",productsTaskId:proposal?.sourceProductsTaskId,productInfoTaskId:null,sellersTaskId:retentionAudit.sellersTaskId}:{productsTaskId:proposal?.sourceProductsTaskId,productInfoTaskId:retentionAudit.productInfoTaskId,sellersTaskId:retentionAudit.sellersTaskId};
   return Object.freeze({contextVersion:"1.0",mode:composition.mode,atlasProductId:requestedAtlasProductId,initialAcquisitionIdentityProjections:Object.freeze([projection]),acquisitionChain:Object.freeze(acquisitionChain)});
 }
 

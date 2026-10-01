@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "MERCURY_SCALE_RAMP_COHORT_REVIEW",
+  "status": "REVIEW_ONLY",
+  "cohortId": "mercury-scale-ramp-25-candidate-2026-09-15",
+  "createdAsOf": "2026-09-15T00:00:00.000Z",
+  "authority": {
+    "planCreated": false,
+    "authorizationCreated": false,
+    "executionAuthorized": false,
+    "providerSpendAuthorized": false,
+    "providerCalls": 0,
+    "paidTasks": 0,
+    "actualSpendUsd": 0
+  },
+  "selection": {
+    "atlasRamCorpusSize": 103,
+    "candidateCount": 25,
+    "manufacturerCount": 5,
+    "manufacturerAllocation": "5_PER_MANUFACTURER",
+    "formFactorAndGenerationAllocation": {
+      "DDR5_DIMM": 15,
+      "DDR4_DIMM": 5,
+      "SODIMM": 5
+    },
+    "pilotControls": 4,
+    "newProducts": 21,
+    "criteria": [
+      "ACTIVE_AND_READY",
+      "CAPACITY_INVARIANT_VALID",
+      "MANUFACTURER_BALANCE",
+      "DDR5_DDR4_SODIMM_COVERAGE",
+      "CAPACITY_MODULE_SPEED_LATENCY_RGB_VARIATION",
+      "PILOT_CONTROL_AND_NEW_PRODUCT_MIX"
+    ]
+  },
+  "atlasProductIds": [
+    "ram_corsair_cmk32gx5m2b6000z30",
+    "ram_corsair_cmh32gx5m2b6400c36",
+    "ram_corsair_cmk16gx5m2b5200z40",
+    "ram_corsair_cmk32gx4m2e3200c16",
+    "ram_corsair_cmsx32gx5m1a5600c48",
+    "ram_crucial_cp2k16g56c46u5",
+    "ram_crucial_cp2k32g56c46u5",
+    "ram_crucial_ct16g4dfra32a",
+    "ram_crucial_ct16g56c46s5",
+    "ram_crucial_ct2k32g56c46s5",
+    "ram_g_skill_f5_6000j3038f16gx2_fx5",
+    "ram_g_skill_f5_6400j3239g32gx2_tz5rk",
+    "ram_g_skill_f5_6000j3636f16gx1_rs5k",
+    "ram_g_skill_f4_3200c16d_32gvk",
+    "ram_g_skill_f5_5600s4645a32gx2_rs",
+    "ram_kingston_kf572c38rsk2_32",
+    "ram_kingston_kf560c30bbea_8",
+    "ram_kingston_kf560c30bweak2_32",
+    "ram_kingston_kf432c16bbk2_16",
+    "ram_kingston_kf556s40ibk2_64",
+    "ram_teamgroup_ctced532g6000hc30dc01",
+    "ram_teamgroup_ff3d564g6000hc38adc01",
+    "ram_teamgroup_ff2d532g6400hc32adc01",
+    "ram_teamgroup_ctced532g6400hc32adc01",
+    "ram_teamgroup_tlzgd432g3200hc16fdc01"
+  ]
+}

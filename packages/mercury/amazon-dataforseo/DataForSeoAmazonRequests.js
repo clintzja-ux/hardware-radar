@@ -1,0 +1,14 @@
+import crypto from "node:crypto";
+import { DATAFORSEO_AMAZON_OPERATIONS, DATAFORSEO_AMAZON_SOURCE_ID } from "./DataForSeoAmazonContracts.js";
+
+export const DATAFORSEO_AMAZON_TASK_COST_USD = 0.0015;
+export const DATAFORSEO_AMAZON_ACCEPTANCE_ENVELOPE = Object.freeze({ maximumTasks:3, maximumProviderSpendUsd:0.0045, perTaskCostCeilingUsd:DATAFORSEO_AMAZON_TASK_COST_USD, automaticPaidRetries:0 });
+const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
+const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
+const required=(value,code)=>{if(typeof value!=="string"||!value.trim())throw new TypeError(code);return value.trim();};
+const asin=value=>{const result=required(value,"DATAFORSEO_AMAZON_ASIN_REQUIRED").toUpperCase();if(!/^[A-Z0-9]{10}$/.test(result))throw new TypeError("DATAFORSEO_AMAZON_ASIN_INVALID");return result;};
+function request(operation,providerPayload,internal){const requestDigest=crypto.createHash("sha256").update(stable({sourceId:DATAFORSEO_AMAZON_SOURCE_ID,operation,providerPayload})).digest("hex");return freeze({sourceId:DATAFORSEO_AMAZON_SOURCE_ID,operation,providerPayload,requestDigest,internalLineage:structuredClone(internal)});}
+
+export function buildAmazonProductsRequest({atlasProduct,locationName="United States",languageName="English (United States)"}={}){const atlasProductId=required(atlasProduct?.identity?.atlasProductId,"ATLAS_PRODUCT_ID_REQUIRED"),keyword=required(atlasProduct?.identity?.manufacturerPartNumber,"ATLAS_PRODUCT_MPN_REQUIRED");return request(DATAFORSEO_AMAZON_OPERATIONS.PRODUCTS,{keyword,location_name:required(locationName,"LOCATION_REQUIRED"),language_name:required(languageName,"LANGUAGE_REQUIRED"),priority:1},{atlasProductId});}
+export function buildAmazonAsinRequest({atlasProductId,dataAsin,locationName="United States",languageName="English (United States)"}={}){return request(DATAFORSEO_AMAZON_OPERATIONS.ASIN,{asin:asin(dataAsin),location_name:required(locationName,"LOCATION_REQUIRED"),language_name:required(languageName,"LANGUAGE_REQUIRED"),priority:1},{atlasProductId:required(atlasProductId,"ATLAS_PRODUCT_ID_REQUIRED")});}
+export function buildAmazonSellersRequest({atlasProductId,dataAsin,locationName="United States",languageName="English (United States)"}={}){return request(DATAFORSEO_AMAZON_OPERATIONS.SELLERS,{asin:asin(dataAsin),location_name:required(locationName,"LOCATION_REQUIRED"),language_name:required(languageName,"LANGUAGE_REQUIRED"),priority:1},{atlasProductId:required(atlasProductId,"ATLAS_PRODUCT_ID_REQUIRED")});}

@@ -18,6 +18,11 @@ import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjecti
 import { generateEditorialSite, generateSitemap } from "./editorial-publishing.mjs";
 import { generateRamProductPages } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
+import { FileCurrentDisplaySnapshotRepository, createEmptyPublicCurrentRetailProjection, createPublicCurrentRetailProjection } from "../packages/mercury/current-display/index.js";
+import { loadStaticPublicationRelease } from "./static-publication-release-runtime.mjs";
+import { createRamTerminalPublicIntelligence } from "../packages/mercury/historical-admission/RamTerminalPublicIntelligence.js";
+import { createPublicChronologicalPriceSeries } from "../packages/mercury/historical-admission/PublicChronologicalPriceSeries.js";
+import { generateRamTerminalPage } from "./ram-terminal-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -71,14 +76,49 @@ const [products, retailers] = await Promise.all([
     loadManifestRecords(atlasRoot, atlasManifest.products),
     loadManifestRecords(atlasRoot, atlasManifest.retailers)
 ]);
-const ramCatalog = createRamCatalogProjection(products);
-await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
+let ramCatalog = createRamCatalogProjection(products);
 const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
-const publicDestinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
-const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, outputDir: path.join(root, "public") });
+let publicDestinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
+const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();
+const staticRelease = await loadStaticPublicationRelease({
+    manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json")),
+    targetEnvironment: (process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT || "PREVIEW").toUpperCase(),
+    evaluatedAt: generatedAt
+});
+let currentRetail, terminal, chronological;
+try {
+    const currentDisplayPath = process.env.HARDWARE_RADAR_CURRENT_DISPLAY_STATE || path.join(root, ".forge-review", "retail-display", "current-display-snapshots.json");
+    const currentDisplayState = await new FileCurrentDisplaySnapshotRepository({ statePath: currentDisplayPath }).getState();
+    currentRetail = currentDisplayState.current
+        ? createPublicCurrentRetailProjection({ products, retailers, destinations: publicDestinations, currentSnapshot: currentDisplayState.current, asOf: generatedAt })
+        : createEmptyPublicCurrentRetailProjection({ asOf: generatedAt });
+} catch {
+    currentRetail = createEmptyPublicCurrentRetailProjection({ asOf: generatedAt });
+}
+if (staticRelease.exposed && staticRelease.portfolio) {
+    const files = staticRelease.portfolio.fileTexts;
+    ramCatalog = JSON.parse(files.catalog);
+    currentRetail = JSON.parse(files.current);
+    terminal = JSON.parse(files.terminal);
+    chronological = JSON.parse(files.chronology);
+    publicDestinations = JSON.parse(files.destinations);
+    await rm(path.join(root, "public", "ram", "market-snapshots"), { recursive: true, force: true });
+    await rm(path.join(root, "public", "data", "ram-market-snapshot-2026-09-30.json"), { force: true });
+} else {
+    currentRetail = staticRelease.exposed ? staticRelease.projection : createEmptyPublicCurrentRetailProjection({ asOf: generatedAt, state: "NO_CURRENT_RETAIL_STATE" });
+    terminal = await createRamTerminalPublicIntelligence({ catalog: ramCatalog, currentRetail, historicalRepository: { getAll: async () => [] }, asOf: generatedAt });
+    chronological = await createPublicChronologicalPriceSeries({ catalog: ramCatalog, retailers, historicalRepository: { getAll: async () => [] } });
+}
+await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
+await writeFile(path.join(root, "public", "data", "ram-current-retail.json"), `${JSON.stringify(currentRetail, null, 2)}\n`);
+await writeFile(path.join(root, "public", "data", "ram-terminal.json"), `${JSON.stringify(terminal, null, 2)}\n`);
+const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
+const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
+const chronologicalSeriesByProduct = new Map(chronological.products.map(item => [item.atlasProductId, item]));
+const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, terminalByProduct, chronologicalSeriesByProduct, disclosure: currentRetail.disclosure, outputDir: path.join(root, "public") });
+await generateRamTerminalPage({ artifact: terminal, outputDir: path.join(root, "public") });
 const staticRoutes = await json(path.join(root, "content", "site-routes.json"));
 await writeFile(path.join(root, "public", "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
-const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();
 const mercury = new Mercury();
 let snapshot;
 

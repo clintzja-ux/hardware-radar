@@ -3,3 +3,4 @@
 .env.*
 !.env.example
 .forge-review/
+node_modules/

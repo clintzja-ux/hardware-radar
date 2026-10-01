@@ -19,6 +19,10 @@ Destination records are append-only. Exact replay is idempotent, conflicting rep
 
 No production destination records and no public rendering are authorized by GROWTH-005A.
 
+DataForSEO or another permitted market source may provide a retailer product URL that becomes input to destination review. The canonical rule is `DATAFORSEO_RETURNED_URL → RETAILER_DESTINATION_CANDIDATE`, never `DATAFORSEO_RETURNED_URL → AUTOMATIC_RETAILER_DESTINATION`. A qualifying observation and an admitted destination are independent outputs: price evidence may remain useful when its URL fails destination review, while an admitted destination may remain navigable after the associated observation becomes stale or otherwise unqualified.
+
+Before receiving `DESTINATION_NAVIGATION_ELIGIBLE`, a candidate must independently satisfy exact Atlas product and MPN identity, canonical retailer and marketplace binding, HTTPS/domain and `PRODUCT_PAGE` rules, exact standalone-product semantics, bundle and condition compatibility, acceptable URL form, provenance and review evidence, and append-only lifecycle/replay/supersession requirements. A qualifying price does not prove durable destination suitability; a destination does not prove price freshness, retailer authorization, affiliate approval, or availability.
+
 ## Consequences
 
 - Ordinary retailer navigation can be introduced without inventing an offer or weakening Mercury publication rules.
@@ -26,3 +30,4 @@ No production destination records and no public rendering are authorized by GROW
 - Beacon may later receive privacy-safe destination/product/retailer/marketplace identifiers, but never needs the destination URL as event authority.
 - Public product identity remains Atlas-owned and canonical at its existing route.
 - Source-controlled destination authoring and public product-page rendering require separately certified increments.
+- Market and navigation may later be composed in one presentation, but the observed price/freshness and **Visit retailer** target retain independent owners and must not be collapsed into one authority-bearing object.

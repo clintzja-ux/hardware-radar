@@ -1,0 +1,39 @@
+import assert from "node:assert/strict";
+import {mkdtemp,readFile,rm} from "node:fs/promises";
+import {join} from "node:path";
+import {tmpdir} from "node:os";
+import {FileSingleWriterRunLock,SqliteNeutralBoundedRepository,TasklessChildAuthorityDispositionService,TASKLESS_CHILD_DISPOSITION_CONFIRMATION} from "../index.js";
+
+let cases=0;const ok=value=>{assert.ok(value);cases++},reject=async(p,pattern)=>{await assert.rejects(p,pattern);cases++};
+const at="2026-09-15T03:00:00.000Z",expiry="2026-09-15T02:54:29.003Z";
+const createFixture=async({source="DATAFORSEO_GOOGLE_SHOPPING",state="EXCEPTION",consumed=true,expiresAt=expiry,tasks=[],executions=[],results=[],atlasProductId="ram_fixture",childAuthorizationId="child",memberOverrides={}}={})=>{
+ const root=await mkdtemp(join(tmpdir(),"taskless-disposition-")),repository=new SqliteNeutralBoundedRepository({databasePath:join(root,"bounded.sqlite")});
+ const operation=source==="DATAFORSEO_AMAZON"?"AMAZON_PRODUCTS":"PRODUCTS",plan={schemaVersion:"1.0",planId:"plan",bindingDigest:"a".repeat(64),cycle:"2026-09-15T02:29:36.569Z",ready:[],blocked:[],requested:[],cohortDigest:"b".repeat(64)},member={memberKey:`${source}:${atlasProductId}:member`,domainMemberId:`domain:${atlasProductId}`,atlasProductId,source,operation,taskCeilingUsd:source==="DATAFORSEO_AMAZON"?.0015:.001,state:"READY",paidTaskCreated:false,providerTaskId:null,exception:null};plan.ready=[structuredClone(member)];repository.recordPlan(plan);
+ const parent={schemaVersion:"1.0",authorizationId:"parent",planId:"plan",planBindingDigest:plan.bindingDigest,bindingDigest:"c".repeat(64),authorizedAt:"2026-09-15T02:29:36.569Z",expiresAt,automaticPaidRetries:0};repository.recordAuthorization(parent);
+ const child={parentAuthorizationId:"parent",parentAuthorizationDigest:parent.bindingDigest,planId:"plan",memberKey:member.memberKey,domainMemberId:member.domainMemberId,source,operation,maximumTaskCostUsd:member.taskCeilingUsd,childAuthorizationId,childAuthorizationDigest:"d".repeat(64),automaticPaidRetries:0,expiresAt,bindingDigest:"e".repeat(64),authorizationArtifactId:"artifact",authorizationArtifactDigest:"f".repeat(64)};repository.recordChildAuthority(child);
+ const runMember={...member,...memberOverrides,state,authorizationId:childAuthorizationId,childAuthorityBinding:child,exception:state==="EXCEPTION"?"ACQUISITION_DAILY_SPEND_SNAPSHOT_DRIFT":null};repository.startRun({schemaVersion:"1.0",runId:"run",planId:"plan",authorizationId:"parent",cycle:plan.cycle,state:"COMPLETED_WITH_EXCEPTIONS",startedAt:plan.cycle,members:[runMember]});
+ const consumptions=consumed?[{authorizationId:childAuthorizationId,planId:"child-plan",consumedAt:"2026-09-15T02:30:00.000Z"}]:[],lineage={authorizationId:childAuthorizationId,authorizationDigest:child.childAuthorizationDigest,authorizationPlanId:"child-plan",expiresAt,authorizationArtifactId:"artifact",authorizationArtifactDigest:child.authorizationArtifactDigest,tasks,executions,results};
+ const service=new TasklessChildAuthorityDispositionService({boundedRepository:repository,consumptionRepository:{getAll:async()=>structuredClone(consumptions)},lineageResolver:async()=>structuredClone(lineage),runLock:new FileSingleWriterRunLock({lockPath:join(root,"lock"),now:()=>at,heartbeatIntervalMs:100,staleAfterMs:1000}),now:()=>at});return{root,repository,service,member,lineage,consumptions};
+};
+
+const fixtures=[];try{
+ let f=await createFixture();fixtures.push(f);const before=JSON.stringify(f.repository.getRun("run")),assessment=await f.service.assess({runId:"run",memberKey:f.member.memberKey});ok(assessment.eligible&&assessment.paidAuthority===false&&assessment.providerExecutionAuthority===false&&assessment.retryAuthority===false&&assessment.downstreamAuthority===false);
+ const input={runId:"run",memberKey:f.member.memberKey,operator:"operator:fixture",reason:"Expired consumed taskless authority reconciliation",confirmation:TASKLESS_CHILD_DISPOSITION_CONFIRMATION},first=await f.service.dispose(input),second=await f.service.dispose(input);ok(first.status==="RECORDED"&&second.status==="DUPLICATE"&&first.value.dispositionId===second.value.dispositionId);ok(JSON.stringify(f.repository.getRun("run"))===before);await reject(f.service.dispose({...input,reason:"changed"}),/CONFLICT/);
+ f=await createFixture({consumed:false});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/NOT_CONSUMED/);
+ f=await createFixture({expiresAt:"2026-09-15T04:00:00.000Z"});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/NOT_EXPIRED/);
+ f=await createFixture({tasks:[{taskId:"task"}]});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/TASK_EXISTS/);
+ f=await createFixture({executions:[{tasks:[{outcome:"COMPLETED",providerTaskId:"task"}]}]});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/RECOVERABLE_EXECUTION_EXISTS/);
+ f=await createFixture({state:"WAITING"});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/NOT_TASKLESS_EXCEPTION/);
+ f=await createFixture({memberOverrides:{atlasProductId:"substituted"}});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/LINEAGE_INVALID/);
+ f=await createFixture({tasks:[{taskId:"a"},{taskId:"b"}]});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/AMBIGUOUS/);
+ f=await createFixture({source:"DATAFORSEO_AMAZON"});fixtures.push(f);ok((await f.service.assess({runId:"run",memberKey:f.member.memberKey})).source==="DATAFORSEO_AMAZON");
+ f=await createFixture();fixtures.push(f);const concurrent=await Promise.all([f.service.dispose(input),f.service.dispose(input)]);ok(concurrent.map(x=>x.status).sort().join(",")==="DUPLICATE,RECORDED");
+ f=await createFixture();fixtures.push(f);f.service.runLock={runExclusive:async fn=>{f.lineage.tasks.push({taskId:"raced"});return{status:"COMPLETED",result:await fn()}}};await reject(f.service.dispose(input),/TASK_EXISTS/);
+ f=await createFixture({results:[{canonicalResultId:"result"}]});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/RESULT_EXISTS/);
+ f=await createFixture({executions:[{tasks:[],actualSpendUsd:0}]});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/EXECUTION_EXISTS/);
+ f=await createFixture();fixtures.push(f);await reject(f.service.dispose({...input,confirmation:"wrong"}),/CONFIRMATION/);ok(f.repository.getChildDisposition("child")===null);
+ ok(assessment.replacementAuthority===false&&assessment.sellersAuthority===false);
+ for(const [atlasProductId,childAuthorizationId] of [["ram_corsair_cmh32gx5m2e6000c36w","liveauth_3034a24ce2adef9d977839f1"],["ram_corsair_cmk16gx5m2b5200z40","liveauth_4e117d25a870624d989adee5"]]){f=await createFixture({atlasProductId,childAuthorizationId});fixtures.push(f);const real=await f.service.assess({runId:"run",memberKey:f.member.memberKey});ok(real.eligible&&real.childAuthorizationId===childAuthorizationId&&real.atlasProductId===atlasProductId);}
+ f=await createFixture({atlasProductId:"ram_corsair_cmh32gx5m2b6400c36",childAuthorizationId:"liveauth_aadf216de4a7290ad3bd07a6",state:"WAITING",tasks:[{taskId:"09150240-2304-0179-0000-1a3ea3892cdb"}],executions:[{tasks:[{outcome:"COMPLETED",providerTaskId:"09150240-2304-0179-0000-1a3ea3892cdb"}]}],memberOverrides:{paidTaskCreated:true,providerTaskId:"09150240-2304-0179-0000-1a3ea3892cdb"}});fixtures.push(f);await reject(f.service.assess({runId:"run",memberKey:f.member.memberKey}),/NOT_TASKLESS_EXCEPTION/);
+}finally{for(const f of fixtures){f.repository.close();await rm(f.root,{recursive:true,force:true,maxRetries:5,retryDelay:50});}}
+console.log(`Taskless child authority disposition tests passed: ${cases} cases.`);

@@ -11,6 +11,8 @@ Make source rights a first-class Mercury policy so the platform knows not only w
 
 > Anything not explicitly permitted is not implicitly permitted.
 
+Rights evaluation distinguishes **original evidence lineage** from **current action authority**. A consuming action may use verified prior evidence after legitimate policy evolution only when the original profile/digest remains reconstructable and the current profile explicitly permits that claim-specific action. The original digest is never rewritten; the current authorizing digest is recorded separately. Current permission cannot legitimize unverifiable evidence, and unrelated profile changes do not block an otherwise authorized action merely because the whole profile digest changed.
+
 ## Implemented components
 
 - `SourceRightsPolicy` — canonical rights states and capability names.
@@ -40,6 +42,13 @@ MVP-002 Increment 4 adds the code boundary but no production rights profile. A c
 ### MANUAL_PUBLIC_PAGE_OBSERVATION
 - production acquisition/use: BLOCKED
 - historical retention/derivation: BLOCKED
+
+### AMAZON / NEWEGG MANUAL PUBLISHER OBSERVATION
+- manual acquisition, current observation, and public item-price display: ALLOWED
+- exact-product current item-price comparison: ALLOWED; unknown ancillary facts remain unknown
+- durable fact-level historical retention and historical item-price analytics: ALLOWED through separate admission
+- condition inference, delivered-cost claims with unknown costs, recommendation, and redistribution API: BLOCKED
+- current-display execution grants no historical admission, publication, Cheapest, Pick, release, or deployment authority
 
 ### BEST_BUY_PRODUCTS_API
 Provisional profile pending Best Buy's written response:

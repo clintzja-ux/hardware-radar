@@ -1,46 +1,61 @@
-export async function loadMarketSnapshot() {
-    const response = await fetch("data/market-snapshot.json", { cache: "no-store" });
-    if (!response.ok) throw new Error("Unable to load published market intelligence.");
+export async function loadCurrentRetailSnapshot() {
+    const response = await fetch("/data/ram-current-retail.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("Unable to load current retail prices.");
     return response.json();
 }
 
-function offerToDisplayProduct(item, scope, section, title, rank) {
+export async function loadRamCatalog() {
+    const response = await fetch("/data/ram-catalog.json", { cache: "no-store" });
+    if (!response.ok) throw new Error("Unable to load the RAM catalog.");
+    return response.json();
+}
+
+export function representativeCurrentOffer(product) {
+    if (product?.lowerCurrentItemPrice) return product.lowerCurrentItemPrice;
+    return product?.eligibleOfferCount === 1 && product.offers?.length === 1 ? product.offers[0] : null;
+}
+
+export function offerToDisplayProduct(item, section, title, coverage = {}) {
+    if (!item) return null;
     const observed = new Date(item.observedAt);
-    const shipping = item.shipping?.known === true
-        ? item.shipping.amount === 0 ? "Shipping verified as free" : `Shipping: $${Number(item.shipping.amount).toFixed(2)} ${item.shipping.currency}`
-        : "Shipping not verified";
     return {
-        id: item.atlasProductId,
-        observationId: item.observationId,
-        section,
-        title,
-        brand: item.brand,
-        model: item.modelName,
-        capacity: `${item.capacityGb}GB`,
-        memoryType: item.memoryType,
-        speed: `${item.dataRateMtps} MT/s`,
-        bestFor: "Qualifying monitored listed-price offer",
-        price: item.price.toFixed(2),
-        currency: item.currency,
-        priceBasis: item.priceBasis === "LISTED_PRICE" ? "Listed price" : "Price basis unavailable",
-        shippingMessage: shipping,
-        retailer: item.retailer,
-        offerUrl: item.sourceUrl,
+        id: item.atlasProductId, section, title, brand: item.brand,
+        model: item.family || item.displayName, displayName: item.displayName,
+        capacity: `${item.totalCapacityGb}GB`, memoryType: item.ddrGeneration,
+        speed: `${item.speedMtps} MT/s`, formFactor: item.formFactor,
+        moduleConfiguration: `${item.moduleCount} × ${item.capacityPerModuleGb}GB`,
+        price: Number(item.itemPriceUsd).toFixed(2), currency: item.currency,
+        priceBasis: "Current tracked item price", shippingMessage: "Shipping, taxes and fees excluded",
+        retailer: item.retailerName, offerUrl: item.destinationUrl,
         verified: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",
         lastVerifiedTime: observed.toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }) + " UTC",
-        pricesChecked: scope.coverage.eligibleObservations,
-        retailersMonitored: scope.coverage.retailersRepresented,
-        insight: `✓ ${item.freshness} • ${item.confidence} confidence`,
-        rank
+        comparisonSemantics: item.comparisonSemantics,
+        publicPath: coverage.publicPath ?? null
     };
 }
 
-export function scopeToDisplayProducts(scope, section, title) {
-    if (!scope || scope.status !== "AVAILABLE" || !scope.cheapest) return [];
-    return [scope.cheapest, ...(Array.isArray(scope.alternatives) ? scope.alternatives : [])]
-        .map((item, index) => offerToDisplayProduct(item, scope, section, title, index + 1));
+export function currentProductsForScope(snapshot, catalog, scope, section, title) {
+    const catalogById = new Map((catalog?.products ?? []).map(product => [product.atlasProductId, product]));
+    return (snapshot?.products ?? [])
+        .map(product => ({ product, offer: representativeCurrentOffer(product) }))
+        .filter(({ offer }) => offer && (scope === "laptop"
+            ? offer.formFactor === "SO_DIMM"
+            : offer.formFactor === "DIMM" && offer.ddrGeneration.toLowerCase() === scope))
+        .map(({ product, offer }) => offerToDisplayProduct(offer, section, title, {
+            publicPath: catalogById.get(product.atlasProductId)?.publicPath ?? null
+        }))
+        .filter(product => product.publicPath)
+        .sort((a, b) => Number(a.price) - Number(b.price) || a.displayName.localeCompare(b.displayName));
 }
 
-export function scopeToDisplayProduct(scope, section, title) {
-    return scopeToDisplayProducts(scope, section, title)[0] ?? null;
+export function winnerToDisplayProduct(snapshot, scope, section, title) {
+    const winner = snapshot?.winners?.[scope] ?? null;
+    if (!winner) return null;
+    const offers = snapshot.products?.flatMap(product => product.offers ?? []) ?? [];
+    const scoped = offers.filter(offer => scope === "overall"
+        || (scope === "laptop" ? offer.formFactor === "SO_DIMM" : offer.ddrGeneration.toLowerCase() === scope && offer.formFactor === "DIMM"));
+    return offerToDisplayProduct(winner, section, title, {
+        offerCount: scoped.length,
+        retailerCount: new Set(scoped.map(offer => offer.retailerId)).size
+    });
 }

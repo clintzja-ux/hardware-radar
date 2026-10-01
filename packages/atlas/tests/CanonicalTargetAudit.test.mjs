@@ -19,7 +19,7 @@ assert.equal(generator.includes("legacyAtlasProduct"), false, "Forge result must
 assert.equal(templates.includes("createLegacyAtlasTemplate"), false, "Legacy Atlas templates must be removed.");
 assert.equal(forgeHtml.includes("BRAND-0001"), false, "Forge must not offer legacy brand identifiers.");
 assert.match(forgeHtml, /BRAND-CORSAIR/, "Forge must use canonical Atlas brand identifiers.");
-assert.match(marketData, /market-snapshot\.json/, "Hardware Radar must consume the published intelligence artifact.");
+assert.match(marketData, /ram-current-retail\.json/, "Hardware Radar must consume the certified public current-retail artifact.");
 assert.equal(main.includes("data/atlas/Atlas.js"), false, "Hardware Radar must not execute Atlas directly in the browser.");
 assert.equal(manifest.repositoryStatus, "stable", "Atlas v1.0 manifest must be marked stable.");
 

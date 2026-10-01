@@ -14,9 +14,9 @@ const replay = createRamCatalogProjection([...products].reverse());
 assert.equal(catalog.schemaVersion, "1.0");
 assert.equal(catalog.catalogType, "ATLAS_RAM_PRODUCT_CATALOG");
 assert.equal(catalog.defaultOrder, RAM_CATALOG_ORDER);
-assert.equal(catalog.productCount, 26);
-assert.equal(catalog.products.length, 26);
-assert.equal(new Set(catalog.products.map((item) => item.atlasProductId)).size, 26);
+assert.equal(catalog.productCount, 103);
+assert.equal(catalog.products.length, 103);
+assert.equal(new Set(catalog.products.map((item) => item.atlasProductId)).size, 103);
 assert.deepEqual(replay, catalog, "Catalog projection must not depend on manifest input order.");
 assert.equal(Object.isFrozen(catalog), true);
 assert.ok(catalog.products.every((item) => item.capacityGb === item.moduleCount * item.capacityPerModuleGb));
@@ -52,7 +52,7 @@ assert.equal(filter({ query: "CMK32GX5M2B6000Z30" }).length, 1);
 for (const mpn of ["KF560C30BBEA-8", "KF560C36BBEA-8", "CMK16GX5M2B5200Z40", "F5-6000J3636F16GX1-RS5K"]) {
     assert.equal(filter({ query: mpn }).length, 1, `${mpn} must resolve through exact-MPN catalog search.`);
 }
-assert.equal(filter({ query: "6000z30" }).length, 1);
+assert.equal(filter({ query: "6000z30" }).length, 2);
 assert.ok(filter({ query: "Corsair" }).length >= 3);
 assert.ok(filter({ query: "Crucial Pro" }).length >= 2);
 assert.equal(filter({ query: "  cRuCiAl   pRo  " }).length, filter({ query: "crucial pro" }).length);
@@ -66,7 +66,7 @@ assert.ok(filter({ dataRateMtps: "5600" }).length > 0);
 assert.ok(filter({ brand: "Kingston" }).length > 0);
 assert.equal(filter({ memoryType: "DDR5", formFactor: "SO_DIMM", capacityGb: "32", moduleCount: "1", dataRateMtps: "5600", brand: "Corsair" }).length, 1);
 assert.equal(filter({ query: "does-not-exist" }).length, 0);
-assert.equal(filter(browserModule.EMPTY_RAM_CATALOG_FILTERS).length, 26);
+assert.equal(filter(browserModule.EMPTY_RAM_CATALOG_FILTERS).length, 103);
 
 const [html, script, styles, sitemap, homepage, ddr5, ddr4, sodimm, header, footer] = await Promise.all([
     read("public/ram/index.html"), read("public/js/modules/ramCatalog.js"), read("public/css/styles.css"), read("public/sitemap.xml"),
@@ -86,15 +86,23 @@ assert.match(html, /"@type":"CollectionPage"/);
 assert.doesNotMatch(html, /"@type":"(?:Product|Offer|AggregateOffer|Review|AggregateRating)"/);
 assert.match(script, /No RAM products match these filters\./);
 assert.match(script, /form\.reset\(\)/);
-assert.match(script, /RAM catalog unavailable/);
+assert.match(script, /We couldn't load the RAM catalog/);
+assert.doesNotMatch(script, /governed Atlas projection/);
+assert.match(script, /ram-current-retail\.json/);
+assert.match(script, /Current tracked price/);
+assert.match(html, /Prices shown exclude applicable shipping, taxes, and fees\./);
 assert.match(styles, /@media\(max-width:600px\)[^}]*\.catalog-breadcrumbs/s);
 assert.match(styles, /\.ram-catalog-filter-grid,.ram-catalog-grid\{grid-template-columns:1fr\}/);
 assert.match(sitemap, /<loc>https:\/\/cheapestram\.com\/ram\/<\/loc>[\s\S]*?<lastmod>2026-09-02<\/lastmod>/);
 assert.equal((header.match(/<a href=/g) ?? []).length, 5, "Primary navigation must remain five items.");
+assert.match(header, /ram\/">RAM Catalog/);
+assert.match(header, /ram\/compare\/">Compare/);
+assert.match(header, /ram\/terminal\/">Market Terminal/);
 assert.match(footer, /href="\$\{basePath\}ram\/">RAM Catalog<\/a>/);
+assert.match(footer, /href="\$\{basePath\}ram\/compare\/">Compare RAM<\/a>/);
 assert.match(homepage, /<h1>Compare RAM Prices<\/h1>/);
 assert.match(ddr5, /<h1>Compare DDR5 RAM Prices<\/h1>/);
 assert.match(ddr4, /<h1>Compare DDR4 RAM Prices<\/h1>/);
 assert.match(sodimm, /<h1>Compare Laptop RAM Prices<\/h1>/);
 
-console.log("GROWTH-002 static Atlas RAM catalog contract passed (26 products). ");
+console.log("GROWTH-002 static Atlas RAM catalog contract passed (103 products). ");

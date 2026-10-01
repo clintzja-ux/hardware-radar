@@ -1,5 +1,3 @@
- import { pluralize } from "../utils/text.js";
- 
  export function renderOverall(items) {
     const product = items.find(item => item.section === "overall");
     const container = document.getElementById("overallSection");
@@ -12,42 +10,25 @@
             <div class="overall-topline">
 
                 <p class="eyebrow">
-                    🏆 CHEAPEST RAM WE'RE TRACKING
+                    🏆 CHEAPEST RAM TODAY
                 </p>
-
-                 <div class="verification-block">
-
-                    <p class="verified-time">
-                         Observed ${product.lastVerifiedTime || product.verified}
-                    </p>
-
-                    <p class="verification-details">
-                        ${pluralize(product.pricesChecked, "price")} checked •
-                         ${pluralize(product.retailersMonitored, "trusted retailer")}
-                    </p>
-
-                 </div>
 
             </div>
 
-            <h2>${product.brand} ${product.model} ${product.capacity}</h2>
+            <h2>${product.displayName || `${product.brand} ${product.model}`}</h2>
 
-            <p class="best-for">Comparison note: ${product.bestFor}</p>
-
-            <p class="specs">${product.memoryType} • ${product.speed}</p>
+            <p class="specs">${product.memoryType} • ${product.capacity} • ${product.formFactor === "SO_DIMM" ? "SO-DIMM • " : ""}${product.speed}</p>
 
             <div class="price-row">
                 <span class="price">$${product.price}</span>
                 <span class="retailer">${product.retailer}</span>
             </div>
 
-            <p class="price-basis">${product.priceBasis}. ${product.shippingMessage}. Taxes and other mandatory fees may apply.</p>
-
-            ${product.insight ? `<p class="insight-badge">${product.insight}</p>` : ""}
-
             <a class="price-button" href="${product.offerUrl}" target="_blank" rel="noopener noreferrer">
                 View retailer listing →
             </a>
+
+            <p class="verified-time">Price checked ${product.lastVerifiedTime || product.verified}</p>
         </article>
     `;
 }
@@ -57,9 +38,10 @@ export function renderOverallUnavailable(containerId = "overallSection") {
     container.setAttribute("aria-live", "polite");
     container.innerHTML = `
         <article class="overall-answer market-unavailable" role="status">
-            <p class="eyebrow">CURRENT MARKET STATUS</p>
-            <h2>No tracked RAM price is available right now</h2>
-            <p class="best-for">We don't currently have an offer that qualifies for comparison.</p>
-            <p class="specs">Unavailable or stale prices stay hidden rather than being replaced with estimates. Check again later.</p>
+            <p class="eyebrow">SHOP RAM</p>
+            <h2>Compare RAM by type, capacity and speed</h2>
+            <p class="best-for">Current prices are temporarily unavailable.</p>
+            <p class="specs">Browse the catalog and product specifications while we refresh retailer prices.</p>
+            <a class="price-button" href="/ram/">Browse RAM products →</a>
         </article>`;
 }

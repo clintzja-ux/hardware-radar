@@ -52,6 +52,10 @@ The accepted ownership direction remains:
 - **Beacon** owns governed product-centric first-party interest evidence and retention, including the metrics derived within that boundary.
 - **Gateway** owns external and public APIs and platform interfaces.
 
+The fixed supervised 100-product RAM operational stage is complete. The active post-100 consumer-production plan is [HARDWARE-RADAR-POST-100-PRODUCTION-CONNECTION.md](./HARDWARE-RADAR-POST-100-PRODUCTION-CONNECTION.md): the certified static publication release control is implemented and defaults `OFF`; the next gate is a separate read-only candidate-readiness assessment. Publication and deployment approvals remain separate, and Beacon/Gateway may connect only through their existing authority boundaries. This transition does not authorize live data, analytics transport, deployment, or the next Atlas scale stage.
+
+Current-display publication now has a certified product-scoped candidate and authorization boundary. Current state is not publication authority, and publication authority is not release authority. The same public contract accepts qualified manual or automated source lanes while preserving internal provenance.
+
 This doctrine does not redesign those boundaries or claim that future subsystems are currently implemented.
 
 ## 2. Vision versus MVP scope
@@ -113,6 +117,113 @@ Atlas, Mercury, Compass, Echo, and Aurora may ultimately support grounded questi
 
 Answers should be grounded in governed Hardware Radar knowledge and market evidence rather than unsupported model assertions.
 
+### Future concept — Hardware Radar Market Terminal
+
+**Hardware Radar Market Terminal** is a provisional working name for a possible high-density hardware market-intelligence experience, initially expressible as a **RAM Market Terminal**. It would serve a different interaction mode from the normal consumer product:
+
+```text
+Normal Hardware Radar: “I need hardware. Help me understand it and make a buying decision.”
+Market Terminal:       “I understand hardware. Show me the market.”
+```
+
+The Terminal would complement, never replace, the approachable homepage, catalog, Guides, and buying experience. Its durable design principle is:
+
+> **DENSITY IS EARNED BY DATA.**
+
+High information density, compact tables, rapid scanning, strong hierarchy, keyboard-friendly interaction, and evidence-backed charts or sparklines may create a professional market-monitor feel in Hardware Radar's blue/neutral visual language. The concept draws inspiration from dense professional monitoring, not from Bloomberg's brand: it must not copy Bloomberg's black/orange identity, imitate its interface directly, show fake ticker activity, or use decorative financial metrics without governed meaning. If three destinations are known, show three. If history or qualification is insufficient, show the governed insufficient, unavailable, or unknown state. Synthetic market activity is never acceptable.
+
+Existing ownership remains unchanged:
+
+- **Atlas** may supply the instrument/master-data layer: canonical product, brand, family, model, MPN, generation, capacity, module configuration, form factor, speed, timings, profiles, and factual catalog distributions.
+- **Mercury** may supply the market-observation layer: governed current and historical observations, qualifying offers, retailer coverage, freshness, and legitimately derived movement or historical ranges.
+- **Beacon** may supply aggregate product, comparison, engagement, and outbound-referral interest. Interest never creates market or recommendation authority.
+- **Compass** may supply separately governed interpretation or recommendations, visibly and semantically distinct from raw facts and market evidence.
+- **Gateway** may later own applicable external or API access.
+
+Possible modules—not committed scope—include a RAM Market Overview; evidence-backed 24-hour, 7-day, and 30-day movers; governed historical lows; capacity, speed, timing, generation, and form-factor views; exact retailer coverage; a chronological Product Tape where publication policy permits; and user-selected watchlists. No module may assert Current Price, Cheapest, Pick, Best, recommendation, availability, movement, or historical low without the governing subsystem's authority. Atlas facts alone are not market share, Beacon popularity is not product quality, and a retailer destination is not price or availability.
+
+Hardware Radar is not currently mature enough to justify the full Terminal: live market breadth and history are limited and audience learning is early. A smaller progression may be:
+
+```text
+RAM Catalog
+→ RAM Market Overview
+→ RAM Market Terminal
+→ Hardware Market Terminal
+```
+
+An earlier Atlas-only Market Overview could truthfully show tracked-product count and catalog composition by generation, capacity, speed, form factor, or manufacturer, explicitly labeled as **catalog coverage**, never market share. Later category views may extend to storage, CPUs, GPUs, and other governed hardware without committing their order.
+
+A useful core Terminal may remain free. Long-term optionality for a possible Hardware Radar Pro offering includes extended history, watchlists, alerts, advanced filters, dashboards, and exports; possible professional audiences include enthusiasts, system builders, repair shops, procurement teams, publishers, retailers, manufacturers, and market researchers. This establishes no pricing, paywall, subscription, account, or commercial commitment. Affiliate commission, sponsorship, retailer relationships, advertising spend, and commercial relationship health must not influence Terminal ordering, movement, lows, or intelligence; any future sponsored material must remain visibly separate.
+
+Implementation requires evidence of data maturity or demand, such as sufficient governed observations and historical depth, broader retailer coverage, repeat-user behavior, expressed interest in market monitoring, multi-category expansion, or demonstrated need for professional workflows. Future personalization must preserve privacy by default and must not assume persistent identity; accounts, if ever justified, require separate governance.
+
+This concept capture authorizes none of the following: a route or UI, ticker, charts, synthetic data, user accounts, subscriptions, alerts, watchlists, new scraping, provider spend, acquisition, retailer integration, Beacon production transport, Gateway deployment, or Compass recommendations. It is Category D future direction under the complexity-control doctrine, not an implementation commitment.
+
+### Current display pricing and durable history
+
+Hardware Radar intentionally separates two price streams:
+
+```text
+ATLAS
+= what the product is
+
+DAILY AMAZON + NEWEGG DISPLAY STREAM
+= what the two tracked retailers appear to charge now
+
+MERCURY
+= durable governed market observations and historical evidence
+
+TERMINAL
+= derived current and historical market intelligence
+```
+
+The initial current-display design is a once-daily, batch-capable refresh of exact, governed Amazon and Newegg product destinations. It may show each qualifying actionable offer and the lower qualifying tracked price for the exact Atlas product. If only one offer qualifies, only that retailer may be shown; if neither qualifies, the result remains unavailable or unknown. Affiliate status may affect retailer-button presentation order, but it never changes Cheapest, Current Price, historical intelligence, market ordering, or recommendation authority.
+
+The certified public current-retail projection may describe **Cheapest RAM Today** only as the lowest fresh qualifying displayed **item price** within the tracked current-display coverage. Policy `PUBLIC-RAM-CURRENT-RETAIL-001-1.0` admits observations no more than 36 hours old and requires the disclosure `Prices shown exclude applicable shipping, taxes, and fees.` This bounded comparison is not delivered-cost Cheapest: shipping, tax, and fees remain unknown unless separately established, and no affiliate state may affect selection. Missing, stale, ineligible, malformed, or unavailable current-display state yields no public price rather than an estimate.
+
+Current-display observations are ephemeral. They do not become Mercury history merely because they are displayed, do not accumulate into a daily historical series, and cannot establish historical lows, highs, movement, averages, or volatility. A minimal replaceable previous-display snapshot may support current-session or current-day `CHG` and `CHG%`; that snapshot is transient operational state, not retained market evidence. Derived current low, high, spread, change, and percentage change should be calculated rather than persisted as separate facts.
+
+Exact retailer destination mappings are durable operational identity: each Atlas product may map independently to an operator-governed Amazon destination and Newegg destination. Later display refreshes should revisit those known destinations. A missing or drifting destination becomes unavailable or review-required and is rediscovered only as needed. Atlas remains the product owner and must not store retailer prices, availability, price changes, or historical observations.
+
+DataForSEO remains Mercury's intended durable historical acquisition stream, initially targeted at a separately governed 48-hour cadence. Qualifying observations retain their original retailer/source provenance and observation time and may support reproducible retailer-specific or cross-retailer historical derivations. The daily display cadence and historical cadence are independent; neither implies the other, and not every displayed price must become a durable Mercury observation.
+
+Both streams must eventually isolate per-product failures within portfolio batches. Ordinary current-display refreshes must not require per-product operator intervention, while durable DataForSEO acquisition retains its existing rights, identity, spend, retention, admission, replay, review, qualification, and publication gates. Future authorized retailers may join the display layer without changing these ownership rules.
+
+### Retail commerce source independence
+
+**RETAIL COMMERCE SOURCE INDEPENDENCE:** Hardware Radar must not depend on the continued availability of any single retailer feed, affiliate network, API, provider, or acquisition mechanism for continued operation. Automated feeds improve scale and freshness; governed manual observation is a legitimate fallback and bootstrap path where supported by its own source rights and governance. Loss of one source degrades only the capabilities dependent on that source. It must not invalidate Atlas, unrelated Mercury evidence, other retailers, or the public catalog.
+
+Retailer functionality must not depend on affiliate status or any single commerce-data provider. Four concerns remain separate:
+
+1. **Retailer identity** is canonically owned by Atlas and answers which retailer an entity represents.
+2. **Retailer destination** is owned by Mercury's existing `RetailerDestination` boundary and binds an Atlas product to an exact retailer listing.
+3. **Commerce data source** is a replaceable provider of ephemeral evidence for that known binding, such as an authorized retailer API, affiliate feed or Product Search API, independent commerce provider, or governed operator import.
+4. **Affiliate routing** is an optional downstream monetization mechanism that decides how an already-selected outbound click is routed.
+
+The canonical retailer URL preserves durable retailer/listing identity. An affiliate URL may transform current click routing, but it must not replace or redefine the canonical destination. If affiliate routing becomes unavailable, policy may fall back to the canonical destination without changing product identity, retailer identity, price truth, or market selection.
+
+Affiliate status may affect monetized routing, relationship-health reporting, available integrations, and separately approved neutral presentation ordering. It must not determine observability, trust, recommendability, evidence interpretation, Current Price, Cheapest, Picks, or market ranking. An affiliate feed contributes evidence under its own source-rights profile; its commercial origin gives it no authority over Atlas, `RetailerDestination`, comparison, trust, or recommendations.
+
+A future source-neutral `CurrentRetailSourceAdapter` boundary should normalize source-specific evidence into the existing `CurrentDisplaySnapshot`, including the applicable product, retailer, destination, item price, currency, condition, availability, seller/marketplace state, observation time, source identity, and rights profile. Missing fields remain null or unknown. Examples may include Rakuten feed/search adapters, an authorized Newegg feed/API adapter, an authorized Amazon adapter, an independent provider adapter, and the existing operator/manual path. These are replaceable implementations; none owns current-display semantics and no provider-specific price repository is warranted.
+
+Operationally a retailer/source path may be automated-primary, automated-alternate, manual-only, or unavailable without changing canonical identities or destinations. Precedence must follow authority, provenance, exact binding, rights, freshness, completeness, data quality, and reliability—not commission, conversion, payout, or advertiser preference. This principle does not establish a speculative global ranking.
+
+When a source is lost, preserve Atlas and destination records, preserve the last observation with its original timestamp only where current-display policy and source TTL permit, allow stale public data to expire naturally, continue other retailer/source work, and report the isolated failure. Never fabricate a refresh. Approved manual acquisition is a first-class continuity mode when it preserves exact bindings, explicit operator provenance, null/unknown fields, and current-display-only scope. It may remain available alongside automation.
+
+Every source requires its own machine-readable rights determination for acquisition, current retention, public display, comparison, attribution, TTL, historical retention, and analytics. Affiliate approval alone establishes none of those rights. Current-display authorization never implies durable Mercury-history admission: eligible manual or automated historical facts enter the same durable history contract only through their own governed boundary and retain distinct provenance.
+
+Rakuten account reactivation, approved Newegg Product Catalog access, and Newegg affiliate approval are current commercial facts. `IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001` binds current official Rakuten documentation to the existing rights owner and permits acquisition, ephemeral/current-state processing and retention, public current-price display, and cross-retailer item-price comparison for the approved US feed path. It grants no feed-derived history, analytics, recommendation, redistribution, seller/condition inference, or publication authority. Deep-link transformation belongs after canonical offer selection: Cheapest selects a qualifying canonical retailer offer, then an affiliate router may transform the outbound destination. Commercial routing never selects the winner.
+
+The eventual ownership layer should therefore be `CurrentRetailRefreshPortfolio` plus `CurrentRetailRefreshOrchestrator` plus a source-neutral adapter boundary. Retailer-specific clients remain below it. Forge may later project source mode, health, rights, fallback availability, last success, and affiliate relationship health, but it owns neither source truth nor comparison semantics.
+
+This doctrine applies across Hardware Radar, including future SSD, GPU, CPU, motherboard, storage, and other hardware categories. It protects the architecture while allowing individual source capabilities to be deferred or replaced.
+
+Existing offer-comparability doctrine applies to both streams: standalone offers compete only with comparable standalone offers; bundles and conditional offers remain distinct; used, refurbished, and open-box condition must not silently become new; known mandatory shipping and unavoidable fees must be respected; and unknown costs must never become zero. Every displayed observation carries a freshness timestamp and remains subject to change at the retailer.
+
+The Terminal may eventually combine a clearly labeled current panel from ephemeral display state with historical panels derived exclusively from retained Mercury observations. Historical claims—including period lows/highs, movement, averages, volatility, trends, and retailer histories—belong to Mercury history. **DENSITY IS EARNED BY DATA:** absent or insufficient history remains absent or insufficient rather than being reconstructed from the transient display cache.
+
+This doctrine does not implement Amazon or Newegg retrieval, complete destination mapping, a display cache, scheduling, a 48-hour DataForSEO cycle, public price publication, or Terminal UI. The intended near-term order is: complete Atlas RAM expansion; establish exact Amazon and Newegg destinations and capture the initial display price; implement the lightweight daily display batch and minimal replaceable snapshot; activate separately governed batch-capable DataForSEO history on the initial 48-hour cadence; then derive historical intelligence and add Terminal capability only when the evidence depth earns it.
+
 ## 4. Parallel execution doctrine
 
 Hardware Radar is now developed as a small product program with multiple independent but coordinated execution tracks, not as one serial chain through every subsystem. A blocker in one track should not unnecessarily halt another independent track. Parallel work must preserve subsystem ownership, governance, provenance, authority boundaries, audit truth, and fail-closed behavior.
@@ -172,6 +283,26 @@ Smaller or specialist retailers can be disproportionately useful to Mercury when
 
 The curated bridge bootstraps useful coverage but is not the target architecture. It may be retired progressively per source/product/retailer path after automated Mercury acquisition reaches governed parity. Curated history and provenance must never be rewritten as automated evidence. DataForSEO addresses part of acquisition; it does not eliminate direct relationships. Affiliate relationships address part of commerce; they grant no market-evidence authority. Keep `OBSERVED`, `PUBLICLY COMPARABLE`, `RECOMMENDABLE`, and `AFFILIATE ENABLED` distinct.
 
+DataForSEO Merchant API use for Hardware Radar's confirmed consumer price-intelligence case is settled provider permission and part of Mercury's intended operating model. Mercury's product purpose is not merely defensive provenance or archival storage; it transforms permitted independent observations through governed stages:
+
+Mercury's normal identity rule is **normalize representation differences; escalate material identity contradictions**. Case, surrounding whitespace, conventional manufacturer punctuation/spacing, and explicit Atlas aliases may canonicalize deterministically; missing provider fields remain unknown. Different MPNs, capacities, module configurations, DDR generations, or other material variant evidence fail closed. A single unique provider identity with exact normalized MPN and canonical manufacturer evidence now follows the certified default `PRODUCTS → SELLERS` route. Product Info and manual provider selection remain escalation tools for insufficient, ambiguous, or contradictory identity—not a product-family alias mechanism or a reason to fuzzy-match.
+
+```text
+OBSERVE → RETAIN → QUALIFY → BUILD HISTORY → DERIVE → PUBLISH
+```
+
+Atlas answers “What product is this?” Mercury answers “What is happening in the market for this product?” `RetailerDestination` answers “Where can the shopper go?” Compass may eventually answer what the shopper should choose under governed recommendation policy; Beacon may describe aggregate interest; Aurora may explain governed intelligence. Catalog, content, comparison, social, and navigation support this system but do not replace its market-intelligence purpose.
+
+Hardware Radar began with “Where can I find the cheapest RAM?” Governed price intelligence is therefore foundational product capability, not ornamental future decoration. This does not require prices on every surface or justify immature claims. `DATA USE PERMISSION` is not `PUBLIC CLAIM AUTHORITY`: each observation must still pass identity, rights, retention, history, canonical, freshness, condition, shipping/fee, comparability, publication, and Cheapest governance. DataForSEO evidence and retailer-authorized commerce data remain independent, provenance-specific inputs; neither supersedes the other. DataForSEO market evidence is also distinct from Mercury navigation destinations, and affiliate status neither authorizes nor disqualifies otherwise governed market evidence.
+
+Audience & Authority and bounded Mercury activation may proceed concurrently. The next practical Mercury question is how to begin recurring DataForSEO Merchant API acquisition for canonical Atlas RAM products at controlled cost, including query strategy, tasks, cadence, spend ceilings, identity and merchant resolution, offer/bundle/condition/shipping comparability, freshness, retention, admission, publication, and retry behavior. It is not another generic use-rights investigation.
+
+That activation should treat a returned retailer product URL as a possible second output: independently governed market evidence plus a `RetailerDestination` candidate. The activation plan should define how candidates reach the existing review/admission boundary without building an automatic destination or conflating `sourceUrl`/`offerUrl` with `destinationUrl`.
+
+Future public price presentation should include truthful observation/freshness context and remind shoppers to confirm final price, availability, shipping, taxes, and terms. A disclaimer never rescues stale or unqualified evidence. Cheapest remains the lowest qualifying comparable offer, respecting exact product identity, standalone/bundle and conditional-offer semantics, condition, retailer eligibility, freshness, reliably known mandatory costs, and governed unknown-cost treatment.
+
+DataForSEO/Mercury history may eventually support legitimate Market Terminal trends, averages, lows, movement, and retailer coverage. Permission alone does not make those statistics mature: **DENSITY IS EARNED BY DATA.**
+
 The current finite Track C launch portfolio and relationship approach is maintained in the [RAM Launch Retailer Portfolio](./RAM-LAUNCH-RETAILER-PORTFOLIO.md); it is strategy and operator planning, not retailer identity, rights, or publication authority.
 
 Hardware Radar's editorial direction is **hardware buying intelligence with a price engine**, not a generic technology blog. The [Hardware Radar Content Foundation](./HARDWARE-RADAR-CONTENT-FOUNDATION.md) owns the durable editorial mission, evidence classifications, Guides taxonomy, authorship, maintenance rules, and staged content roadmap. Editorial content supports but never displaces the homepage's immediate governed price answer.
@@ -215,6 +346,8 @@ Governance effort should be proportional to current product risk. Once a boundar
 Hardware Radar should reach real users before attempting to complete the entire hardware-intelligence vision. The RAM product should become useful, launchable, and capable of producing real-world user and market learning.
 
 Actual usage, market evidence, economics, and observed user needs should increasingly influence which advanced capabilities are built next. This is not permission to weaken accepted governance merely to launch faster.
+
+The ongoing operating practice for turning audience evidence into bounded priorities is defined by the [Hardware Radar Weekly Growth Review](./HARDWARE-RADAR-WEEKLY-GROWTH-REVIEW.md). Its governing loop is **MEASURE → LEARN → EXPAND**: evidence informs prioritization but never overrides authority, integrity, privacy, commercial independence, or fail-closed behavior.
 
 ## 7. Interpretation rule for future agents
 

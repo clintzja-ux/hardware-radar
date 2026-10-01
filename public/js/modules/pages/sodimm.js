@@ -6,6 +6,7 @@
  import { renderFAQ } from "../renderFAQ.js";
  import { renderFooter } from "../renderFooter.js";
  import { renderHeader } from "../renderHeader.js";
+ import { initializeRamCatalog } from "../ramCatalog.js";
  
  async function init() {
  
@@ -67,6 +68,7 @@
      );
     renderHeader("headerContainer");
      renderFooter("footerContainer");
+     initializeRamCatalog({ fixedFilters: { formFactor: "SO_DIMM" }, priceFirst: true });
  
  
  }

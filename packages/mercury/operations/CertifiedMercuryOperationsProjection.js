@@ -1,3 +1,5 @@
+import {createCertifiedMercuryCohortOperationsProjection} from "./CertifiedMercuryCohortOperationsProjection.js";
+
 const validDate=value=>typeof value==="string"&&Number.isFinite(Date.parse(value));
 const object=value=>value&&typeof value==="object"&&!Array.isArray(value);
 const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
@@ -6,6 +8,7 @@ const clone=value=>structuredClone(value);
 function requireArray(value,code){if(!Array.isArray(value))throw new TypeError(code);return value;}
 function productId(product){return product?.identity?.atlasProductId;}
 function evidenceProductId(record){return record?.candidate?.identity?.atlasProductId;}
+function evidenceAtlasReferences(record){const resolved=evidenceProductId(record),candidates=record?.candidate?.identity?.candidateAtlasProductIds;return resolved?[resolved]:Array.isArray(candidates)?candidates:[];}
 function unique(values,code){const set=new Set(values);if(set.size!==values.length)throw new Error(code);return set;}
 
 /**
@@ -27,7 +30,7 @@ export function createCertifiedMercuryOperationsProjection(input={}){
 
  const atlasIds=atlasProducts.map(productId);if(atlasIds.some(id=>typeof id!=="string"||!id))throw new Error("CERTIFIED_MERCURY_ATLAS_SOURCE_INVALID");unique(atlasIds,"CERTIFIED_MERCURY_ATLAS_ID_CONFLICT");
  const portfolioIds=portfolio.products.map(x=>x?.atlasProductId);if(portfolioIds.some(id=>!atlasIds.includes(id))||unique(portfolioIds,"CERTIFIED_MERCURY_PORTFOLIO_ID_CONFLICT").size!==atlasIds.length)throw new Error("CERTIFIED_MERCURY_PORTFOLIO_BINDING_INVALID");
- for(const record of evidenceRecords)if(!object(record)||typeof record.evidenceId!=="string"||!atlasIds.includes(evidenceProductId(record)))throw new Error("CERTIFIED_MERCURY_EVIDENCE_SOURCE_INVALID");
+ for(const record of evidenceRecords){const references=evidenceAtlasReferences(record);if(!object(record)||typeof record.evidenceId!=="string"||references.length===0||references.some(id=>!atlasIds.includes(id)))throw new Error("CERTIFIED_MERCURY_EVIDENCE_SOURCE_INVALID");}
  unique(evidenceRecords.map(x=>x.evidenceId),"CERTIFIED_MERCURY_EVIDENCE_ID_CONFLICT");
  for(const projection of identityProjections){const evidence=evidenceRecords.find(x=>x.evidenceId===projection?.evidenceId);if(!object(projection)||projection.projectionVersion!=="1.0"||!evidence||!object(projection.product)||!object(projection.merchant)||projection.product.atlasProductId!==evidenceProductId(evidence))throw new Error("CERTIFIED_MERCURY_IDENTITY_SOURCE_INVALID");}
  unique(identityProjections.map(x=>x.evidenceId),"CERTIFIED_MERCURY_IDENTITY_ID_CONFLICT");
@@ -44,7 +47,8 @@ export function createCertifiedMercuryOperationsProjection(input={}){
   const promotionReasons=promotion?.reasons?.map(reason=>clone(reason))??[],blockers=[...promotionReasons.map(reason=>({...reason,source:"PROMOTION_ASSESSMENT"})),...(portfolioEntry.cycle.blockingReasons??[]).map(code=>({source:"HISTORICAL_PORTFOLIO",code,dimension:"cycle",detail:null}))];
   return {atlasProduct:{atlasProductId,displayName:product.identity?.displayName??null,brand:product.identity?.brand??null,manufacturerPartNumber:product.identity?.manufacturerPartNumber??null,productType:product.identity?.productType??null},evidence:{retainedCount:evidence.length,evidenceIds:evidence.map(x=>x.evidenceId).sort()},history:{...clone(portfolioEntry.history),valueSemantics:"HISTORICAL_OBSERVATION",currentPrice:false,livePrice:false,publicPrice:false},identityReview:{state:identities.length?"AVAILABLE":"NOT_AVAILABLE",evidenceProjections:clone(identities)},promotion:promotion?clone(promotion):{state:"NOT_ASSESSED",historicalEligible:false,canonicalEligible:false,publicationEligible:false,reasons:[]},cadence:clone(portfolioEntry.cadence),cycle:clone(portfolioEntry.cycle),durableWorkflow:{state:workflows.length?"AVAILABLE":"NOT_AVAILABLE",observations:workflows},blockers,nextAction:portfolioEntry.cycle.nextAction??null};
  });
- return freeze({schemaVersion:"1.0",projectionType:"CERTIFIED_MERCURY_OPERATIONS_PROJECTION",asOf:input.asOf,semantics:{canonicalOperationalView:true,legacyPreview:false,historicalValueSemantics:"HISTORICAL_OBSERVATION",currentPrice:false,livePrice:false,publicPrice:false,publicationAuthority:false},summary:{...clone(portfolio.summary),retainedEvidenceCount:evidenceRecords.length},products,readOnly:true,actionExecuted:false,mutationAuthorized:false,networkOperation:"NONE",paidTaskCreated:false,actualSpendUsd:0});
+ const cohortOperations=createCertifiedMercuryCohortOperationsProjection({asOf:input.asOf,atlasProducts,cohorts:input.cohortOperations??[]});
+ return freeze({schemaVersion:"1.1",projectionType:"CERTIFIED_MERCURY_OPERATIONS_PROJECTION",asOf:input.asOf,semantics:{canonicalOperationalView:true,legacyPreview:false,historicalValueSemantics:"HISTORICAL_OBSERVATION",currentPrice:false,livePrice:false,publicPrice:false,publicationAuthority:false},summary:{...clone(portfolio.summary),retainedEvidenceCount:evidenceRecords.length,cohortCount:cohortOperations.cohorts.length},products,cohortOperations,readOnly:true,actionExecuted:false,mutationAuthorized:false,networkOperation:"NONE",paidTaskCreated:false,actualSpendUsd:0});
 }
 
 export default createCertifiedMercuryOperationsProjection;

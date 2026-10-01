@@ -1,0 +1,30 @@
+import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { createCurrentDisplaySnapshot, createPublicCurrentRetailProjection, FileCurrentDisplaySnapshotRepository, ProductionRakutenNeweggCurrentRefreshService } from "../current-display/index.js";
+import { defaultSourceRightsRegistry } from "../rights/SourceRightsRegistry.js";
+
+let cases=0;const eq=(a,b)=>{assert.deepEqual(a,b);cases++;};
+const at="2026-09-28T12:00:00.000Z",feedTimestamp="2026-09-28T11:00:00.000Z";
+const product=id=>({identity:{atlasProductId:`ram_${id}`,productType:"ram",manufacturerPartNumber:`MPN-${id}`,brand:"Fixture",displayName:`Fixture ${id}`},governance:{lifecycleStatus:"ACTIVE",publicationStatus:"READY"},extension:{data:{classification:{memoryType:"DDR5",formFactor:"DIMM"},capacity:{capacityGb:32,moduleCount:2,capacityPerModuleGb:16},performance:{dataRateMtps:6000}}}});
+const products=["one","two","three","five","six","seven"].map(product),retailers=[{id:"RETAILER-0001",name:"Amazon",status:"active"},{id:"RETAILER-0004",name:"Newegg",status:"active"}];
+const destination=(id,suffix)=>({destinationId:`mer_dest_${suffix.repeat(24)}`,atlasProductId:`ram_${id}`,retailerId:"RETAILER-0004",marketplace:"newegg.com",destinationUrl:`https://newegg.com/p/SKU-${id}`,retailerListingId:`SKU-${id}`,status:"ACTIVE",binding:{manufacturerPartNumber:`MPN-${id}`}});
+const destinations=[destination("one","a"),destination("two","b"),destination("three","c"),destination("five","e"),destination("six","f"),destination("seven","7")];
+const row=(id,overrides={})=>({recordType:"PRODUCT",productId:`PID-${id}`,sku:`SKU-${id}`,productUrl:`https://newegg.com/p/SKU-${id}`,buyUrl:"",manufacturerPartNumber:`MPN-${id}`,upc:null,modification:null,retailPrice:"120",salePrice:"100",shipping:"",availability:"in-stock",currency:"USD",beginDate:"",endDate:"",...overrides});
+const records=[row("one"),row("two",{salePrice:"",retailPrice:"110"}),row("three",{availability:"out-of-stock"}),row("four"),row("five",{manufacturerPartNumber:"WRONG"}),row("six",{beginDate:"09/01/2026 00:00:00",endDate:""}),row("seven",{availability:"ambiguous"})];
+const manualOffer=(id,retailerId,sourceId,price,destinationId)=>({atlasProductId:`ram_${id}`,retailer:retailerId==="RETAILER-0001"?"AMAZON":"NEWEGG",retailerId,marketplace:retailerId==="RETAILER-0001"?"amazon.com":"newegg.com",priceUsd:price,currency:"USD",availability:"AVAILABLE",condition:null,shippingUsd:null,feesUsd:null,researchUrl:retailerId==="RETAILER-0001"?"https://amazon.com/dp/FIXTURE":`https://newegg.com/p/SKU-${id}`,destinationId,matchStatus:"MANUAL",sourceRow:1,observedAt:"2026-09-28T10:00:00.000Z",sellerType:null,sellerName:null,sourceIdentity:{adapterId:"mer_adapter_manual_current_price",sourceId,rightsProfileId:sourceId,historicalRetentionAllowed:true},itemPriceEligible:true,comparisonEligible:true,comparisonReasons:[],deliveredCostEligible:false,deliveredCostReasons:["SHIPPING_COST_UNKNOWN","FEES_UNKNOWN"]});
+const amazonDestination={destinationId:`mer_dest_${"d".repeat(24)}`,atlasProductId:"ram_one",retailerId:"RETAILER-0001",marketplace:"amazon.com",destinationUrl:"https://amazon.com/dp/FIXTURE",status:"ACTIVE"};
+const initial=createCurrentDisplaySnapshot({observedAt:at,importedAt:at,source:{workbook:"fixture",sheet:"prior",digest:"a".repeat(64)},offers:[manualOffer("one","RETAILER-0001","AMAZON_MANUAL_PUBLISHER_OBSERVATION",130,amazonDestination.destinationId),manualOffer("two","RETAILER-0004","NEWEGG_MANUAL_PUBLISHER_OBSERVATION",115,destinations[1].destinationId)]});
+const root=await mkdtemp(path.join(os.tmpdir(),"rakuten-production-refresh-"));
+try{
+ const snapshotRepository=new FileCurrentDisplaySnapshotRepository({statePath:path.join(root,"snapshots.json")});await snapshotRepository.replace(initial);
+ const service=new ProductionRakutenNeweggCurrentRefreshService({productRepository:{getAll:async()=>products},retailerRepository:{getAll:async()=>retailers},destinationSourceLoader:async()=>({effective:destinations}),destinationSourcePath:"fixture",snapshotRepository,rightsRegistry:defaultSourceRightsRegistry});
+ const dry=await service.run({catalogFiles:[{feedProfile:"MAIN_FULL",records}],feedTimestamp,evaluatedAt:at,dryRun:true});
+ eq(dry.mode,"DRY_RUN");eq(dry.summary.sourceRowsConsidered,7);eq(dry.summary.destinationNotReady,1);eq(dry.summary.identityMismatch,1);eq(dry.summary.priceSemanticsUnresolved,1);eq(dry.summary.availabilityUnknown,1);eq(dry.summary.outOfStock,1);eq(dry.summary.sourceConflicts,1);eq(dry.summary.routineCurrentUpdates,1);eq(dry.persistence.status,"DRY_RUN");eq((await snapshotRepository.getState()).current.snapshotId,initial.snapshotId);
+ const executed=await service.run({catalogFiles:[{feedProfile:"MAIN_FULL",records}],feedTimestamp,evaluatedAt:at,dryRun:false});eq(executed.persistence.status,"REPLACED");eq(executed.historicalObservationsCreated,0);eq(executed.publicationCandidatesCreated,0);eq(executed.providerCalls,0);
+ const state=await snapshotRepository.getState();eq(state.current.offers.find(x=>x.atlasProductId==="ram_one"&&x.retailerId==="RETAILER-0001").priceUsd,130);eq(state.current.offers.find(x=>x.atlasProductId==="ram_one"&&x.retailerId==="RETAILER-0004").priceUsd,100);eq(state.current.offers.find(x=>x.atlasProductId==="ram_two"&&x.retailerId==="RETAILER-0004").priceUsd,115);eq(state.current.offers.find(x=>x.atlasProductId==="ram_three").itemPriceEligible,false);
+ const projection=createPublicCurrentRetailProjection({products,retailers,destinations:[...destinations,amazonDestination],currentSnapshot:state.current,asOf:at});eq(projection.products.find(x=>x.atlasProductId==="ram_one").lowerCurrentItemPrice.retailerName,"Newegg");
+ const replay=await service.run({catalogFiles:[{feedProfile:"MAIN_FULL",records}],feedTimestamp,evaluatedAt:at,dryRun:false});eq(replay.persistence.status,"NO_CHANGE");eq((await snapshotRepository.getState()).current.snapshotId,state.current.snapshotId);
+}finally{await rm(root,{recursive:true,force:true});}
+console.log(`Production Rakuten/Newegg current refresh tests passed: ${cases} cases.`);

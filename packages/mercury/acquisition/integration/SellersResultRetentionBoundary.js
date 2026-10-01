@@ -8,18 +8,18 @@ const digest=value=>crypto.createHash("sha256").update(JSON.stringify(value)).di
 
 export function validateSellersRetentionLineage({sellersTaskId,productInfoTaskId,sellersAuthorization,sellersProposal,taskLedger,executionRuns,authorizationConsumptions}={}){
   if(typeof sellersTaskId!=="string"||!sellersTaskId.trim())throw new Error("SELLERS_TASK_ID_REQUIRED");
-  if(typeof productInfoTaskId!=="string"||!productInfoTaskId.trim())throw new Error("PRODUCT_INFO_TASK_ID_REQUIRED");
   if(!Array.isArray(taskLedger)||!Array.isArray(executionRuns)||!Array.isArray(authorizationConsumptions))throw new Error("SELLERS_RETENTION_LINEAGE_STATE_MALFORMED");
   assertSellersAuthorizationBinding({request:sellersAuthorization,proposal:sellersProposal});
-  if(sellersAuthorization.sourceProductInfoTaskId!==productInfoTaskId||sellersProposal.sourceProductInfoTaskId!==productInfoTaskId)throw new Error("SELLERS_RETENTION_PRODUCT_INFO_TASK_SUBSTITUTION_BLOCKED");
-  if(sellersAuthorization.atlasProductId!==sellersProposal.atlasProductId||sellersAuthorization.sourceProductsTaskId!==sellersProposal.sourceProductsTaskId||sellersAuthorization.sourceProductInfoAuthorizationId!==sellersProposal.sourceProductInfoAuthorizationId)throw new Error("SELLERS_RETENTION_PROPOSAL_LINEAGE_MISMATCH");
-  const productInfoLineage=sellersProposal.validation?.lineage;
-  if(sellersProposal.validation?.status!=="VALIDATED"||sellersProposal.validationDigest!==digest(sellersProposal.validation)||productInfoLineage?.status!=="VALIDATED"||productInfoLineage.productInfoTaskId!==productInfoTaskId||productInfoLineage.productInfoAuthorizationId!==sellersProposal.sourceProductInfoAuthorizationId||productInfoLineage.productInfoProposalId!==sellersProposal.sourceProductInfoProposalId||productInfoLineage.executionRunId!==sellersProposal.sourceProductInfoExecutionRunId||productInfoLineage.atlasProductId!==sellersProposal.atlasProductId||productInfoLineage.sourceProductsTaskId!==sellersProposal.sourceProductsTaskId)throw new Error("SELLERS_RETENTION_PRODUCT_INFO_LINEAGE_INVALID");
+  const direct=sellersProposal.identityLineageType==="DIRECT_PRODUCTS_STRONG_IDENTITY";
+  if(sellersAuthorization.atlasProductId!==sellersProposal.atlasProductId||sellersAuthorization.sourceProductsTaskId!==sellersProposal.sourceProductsTaskId)throw new Error("SELLERS_RETENTION_PROPOSAL_LINEAGE_MISMATCH");
+  const upstream=sellersProposal.validation?.lineage;
+  if(sellersProposal.validation?.status!=="VALIDATED"||sellersProposal.validationDigest!==digest(sellersProposal.validation)||upstream?.status!=="VALIDATED"||upstream.atlasProductId!==sellersProposal.atlasProductId||upstream.sourceProductsTaskId!==sellersProposal.sourceProductsTaskId)throw new Error("SELLERS_RETENTION_UPSTREAM_LINEAGE_INVALID");
+  if(direct){if(productInfoTaskId!=null||sellersAuthorization.sourceProductInfoTaskId!=null||sellersProposal.sourceProductInfoTaskId!=null||upstream.identityLineageType!=="DIRECT_PRODUCTS_STRONG_IDENTITY"||upstream.sourceProductsReviewId!==sellersProposal.sourceProductsReviewId||sellersAuthorization.sourceProductsReviewId!==sellersProposal.sourceProductsReviewId||sellersAuthorization.sourceProductsReviewMaterialDigest!==sellersProposal.sourceProductsReviewMaterialDigest)throw new Error("SELLERS_RETENTION_DIRECT_PRODUCTS_LINEAGE_INVALID");}
+  else{if(typeof productInfoTaskId!=="string"||!productInfoTaskId.trim())throw new Error("PRODUCT_INFO_TASK_ID_REQUIRED");if(sellersAuthorization.sourceProductInfoTaskId!==productInfoTaskId||sellersProposal.sourceProductInfoTaskId!==productInfoTaskId)throw new Error("SELLERS_RETENTION_PRODUCT_INFO_TASK_SUBSTITUTION_BLOCKED");if(sellersAuthorization.sourceProductInfoAuthorizationId!==sellersProposal.sourceProductInfoAuthorizationId||upstream.productInfoTaskId!==productInfoTaskId||upstream.productInfoAuthorizationId!==sellersProposal.sourceProductInfoAuthorizationId||upstream.productInfoProposalId!==sellersProposal.sourceProductInfoProposalId||upstream.executionRunId!==sellersProposal.sourceProductInfoExecutionRunId)throw new Error("SELLERS_RETENTION_PRODUCT_INFO_LINEAGE_INVALID");}
 
   const sellersTask=one(taskLedger.filter(entry=>entry?.taskId===sellersTaskId),"SELLERS_RETENTION_TASK_LINEAGE_NOT_UNIQUE");
   if(sellersTask.kind!=="SELLERS")throw new Error("SELLERS_RETENTION_TASK_OPERATION_MISMATCH");
-  const productInfoTask=one(taskLedger.filter(entry=>entry?.taskId===productInfoTaskId),"SELLERS_RETENTION_PRODUCT_INFO_TASK_LINEAGE_NOT_UNIQUE");
-  if(productInfoTask.kind!=="PRODUCT_INFO")throw new Error("SELLERS_RETENTION_PRODUCT_INFO_OPERATION_MISMATCH");
+  if(!direct){const productInfoTask=one(taskLedger.filter(entry=>entry?.taskId===productInfoTaskId),"SELLERS_RETENTION_PRODUCT_INFO_TASK_LINEAGE_NOT_UNIQUE");if(productInfoTask.kind!=="PRODUCT_INFO")throw new Error("SELLERS_RETENTION_PRODUCT_INFO_OPERATION_MISMATCH");}
   const productsTask=one(taskLedger.filter(entry=>entry?.taskId===sellersProposal.sourceProductsTaskId),"SELLERS_RETENTION_PRODUCTS_TASK_LINEAGE_NOT_UNIQUE");
   if(productsTask.kind!=="PRODUCTS")throw new Error("SELLERS_RETENTION_PRODUCTS_OPERATION_MISMATCH");
 
@@ -32,20 +32,21 @@ export function validateSellersRetentionLineage({sellersTaskId,productInfoTaskId
   const decision=one((sellersAuthorization.plan?.decisions??[]).filter(entry=>entry?.decision==="APPROVED"),"SELLERS_RETENTION_AUTHORIZATION_PLAN_INVALID");
   if(decision.execution?.kind!=="SELLERS")throw new Error("SELLERS_RETENTION_AUTHORIZATION_OPERATION_MISMATCH");
   if(decision.candidateId!==`sellers:${sellersAuthorization.atlasProductId}:${sellersAuthorization.proposalId}`||completed.candidateId!==decision.candidateId)throw new Error("SELLERS_RETENTION_CANDIDATE_BINDING_MISMATCH");
-  return freeze({schemaVersion:"1.0",status:"VALIDATED",sellersTaskId,productInfoTaskId,sellersAuthorizationId:sellersAuthorization.requestId,sellersPlanId:sellersAuthorization.planId,sellersProposalId:sellersProposal.proposalId,sellersExecutionRunId:run.runId,atlasProductId:sellersAuthorization.atlasProductId,sourceProductsTaskId:sellersAuthorization.sourceProductsTaskId,sourceProductInfoAuthorizationId:sellersAuthorization.sourceProductInfoAuthorizationId,sourceProductInfoExecutionRunId:sellersProposal.sourceProductInfoExecutionRunId,providerIdentity:structuredClone(sellersAuthorization.providerIdentity)});
+  return freeze({schemaVersion:"1.1",status:"VALIDATED",identityLineageType:direct?"DIRECT_PRODUCTS_STRONG_IDENTITY":"PRODUCT_INFO_VALIDATED",sellersTaskId,productInfoTaskId:direct?null:productInfoTaskId,sellersAuthorizationId:sellersAuthorization.requestId,sellersPlanId:sellersAuthorization.planId,sellersProposalId:sellersProposal.proposalId,sellersExecutionRunId:run.runId,atlasProductId:sellersAuthorization.atlasProductId,sourceProductsTaskId:sellersAuthorization.sourceProductsTaskId,sourceProductsReviewId:direct?sellersProposal.sourceProductsReviewId:null,sourceProductsReviewMaterialDigest:direct?sellersProposal.sourceProductsReviewMaterialDigest:null,sourceProductInfoAuthorizationId:direct?null:sellersAuthorization.sourceProductInfoAuthorizationId,sourceProductInfoExecutionRunId:direct?null:sellersProposal.sourceProductInfoExecutionRunId,providerIdentity:structuredClone(sellersAuthorization.providerIdentity)});
 }
 
 export function validateSellersRetentionResults({lineage,sellersResult,productInfoResult}={}){
   if(lineage?.status!=="VALIDATED")throw new Error("SELLERS_RETENTION_VALIDATED_LINEAGE_REQUIRED");
-  if(!sellersResult||typeof sellersResult!=="object"||Array.isArray(sellersResult)||!productInfoResult||typeof productInfoResult!=="object"||Array.isArray(productInfoResult))throw new Error("SELLERS_RETENTION_RESULT_ENVELOPE_MALFORMED");
+  const direct=lineage.identityLineageType==="DIRECT_PRODUCTS_STRONG_IDENTITY";
+  if(!sellersResult||typeof sellersResult!=="object"||Array.isArray(sellersResult)||!direct&&(!productInfoResult||typeof productInfoResult!=="object"||Array.isArray(productInfoResult)))throw new Error("SELLERS_RETENTION_RESULT_ENVELOPE_MALFORMED");
   if(sellersResult.id!==lineage.sellersTaskId)throw new Error("SELLERS_RETENTION_SELLERS_RESPONSE_TASK_MISMATCH");
-  if(productInfoResult.id!==lineage.productInfoTaskId)throw new Error("SELLERS_RETENTION_PRODUCT_INFO_RESPONSE_TASK_MISMATCH");
-  if(Number(sellersResult.cost??0)!==0||Number(productInfoResult.cost??0)!==0)throw new Error("DF003_RETENTION_RETRIEVAL_MUST_BE_ZERO_COST");
+  if(!direct&&productInfoResult.id!==lineage.productInfoTaskId)throw new Error("SELLERS_RETENTION_PRODUCT_INFO_RESPONSE_TASK_MISMATCH");
+  if(Number(sellersResult.cost??0)!==0||!direct&&Number(productInfoResult.cost??0)!==0)throw new Error("DF003_RETENTION_RETRIEVAL_MUST_BE_ZERO_COST");
   if(!Array.isArray(sellersResult.result)||sellersResult.result.length!==1||!sellersResult.result[0]||!Array.isArray(sellersResult.result[0].items))throw new Error("SELLERS_RETENTION_SELLERS_RESULT_MALFORMED");
   const productItems=productInfoResult?.result?.[0]?.items;
-  if(!Array.isArray(productItems)||productItems.length!==1||!productItems[0]||typeof productItems[0]!=="object")throw new Error("SELLERS_RETENTION_PRODUCT_INFO_RESULT_MALFORMED");
+  if(!direct&&(!Array.isArray(productItems)||productItems.length!==1||!productItems[0]||typeof productItems[0]!=="object"))throw new Error("SELLERS_RETENTION_PRODUCT_INFO_RESULT_MALFORMED");
 
-  const expected=identity(lineage.providerIdentity),productInfo=identity(productItems[0]),sellersBlock=identity(sellersResult.result[0]);
+  const expected=identity(lineage.providerIdentity),productInfo=direct?{productId:null,dataDocId:null,gid:null}:identity(productItems[0]),sellersBlock=identity(sellersResult.result[0]);
   const comparisons=[];
   for(const field of ["productId","dataDocId","gid"]){
     const authorized=expected[field],info=productInfo[field],sellers=sellersBlock[field];
@@ -53,6 +54,6 @@ export function validateSellersRetentionResults({lineage,sellersResult,productIn
     if(info!=null&&sellers!=null&&String(info)!==String(sellers))throw new Error(`SELLERS_RETENTION_PROVIDER_${field.toUpperCase()}_CONTRADICTION`);
     comparisons.push({field,authorizationToProductInfo:authorized!=null&&info!=null?"MATCH":"UNKNOWN",authorizationToSellers:authorized!=null&&sellers!=null?"MATCH":"UNKNOWN",productInfoToSellers:info!=null&&sellers!=null?"MATCH":"UNKNOWN",authorized,productInfo:info,sellers});
   }
-  if(!comparisons.some(entry=>entry.authorizationToProductInfo==="MATCH"))throw new Error("SELLERS_RETENTION_PROVIDER_IDENTITY_UNPROVEN");
+  if(!comparisons.some(entry=>direct?entry.authorizationToSellers==="MATCH":entry.authorizationToProductInfo==="MATCH"))throw new Error("SELLERS_RETENTION_PROVIDER_IDENTITY_UNPROVEN");
   return freeze({schemaVersion:"1.0",status:"VALIDATED",lineage,providerIdentity:{status:"VALIDATED",comparisons}});
 }

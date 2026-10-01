@@ -12,6 +12,9 @@ for (const requiredPath of [
     "apps/forge/index.html",
     "public/data/atlas/Atlas.js",
     "public/data/market-snapshot.json",
+    "public/data/ram-current-retail.json",
+    "public/data/ram-terminal.json",
+    "public/ram/terminal/index.html",
     "public/forge/index.html"
 ]) {
     await access(path.join(root, requiredPath));
