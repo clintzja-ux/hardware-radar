@@ -100,7 +100,10 @@ const portfolioBundleText = portfolioText({ manifest: portfolioManifest, certifi
 const portfolioRelease = createStaticPublicationReleaseManifest({ releaseState: "ON", targetEnvironment: "PREVIEW", targetSurface: "PUBLIC_RAM_INTELLIGENCE_PORTFOLIO", reason: "fixture portfolio", reviewedBy: "fixture", createdAt: at, artifactRelativePath: `artifacts/${portfolioManifest.candidateId}.json`, artifactText: portfolioBundleText, authorityReference: portfolioCertification.certificationId });
 ok(validateStaticPublicationReleaseManifest(portfolioRelease).valid);
 eq(evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: at }).portfolio.manifest.candidateId, portfolioManifest.candidateId);
-eq(evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: "2026-09-19T00:00:00.001Z" }).reason, "STATIC_RELEASE_CERTIFICATION_EXPIRED");
+const expiredPortfolio = evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: "2026-09-19T00:00:00.001Z" });
+eq(expiredPortfolio.exposed, true);
+eq(expiredPortfolio.currentMode, "EXPIRED_DURABLE_ONLY");
+eq(expiredPortfolio.reason, "STATIC_RELEASE_DURABLE_PORTFOLIO_EXPOSED_CURRENT_EXPIRED");
 const wrongPortfolio = structuredClone(portfolioRelease); wrongPortfolio.artifact.candidateId = "mer_ramreleasecand_" + "b".repeat(24);
 eq(evaluateStaticPublicationRelease({ manifest: wrongPortfolio, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: at }).exposed, false);
 const wrongCertification = JSON.parse(portfolioBundleText); wrongCertification.certification.candidateId = "mer_ramreleasecand_" + "c".repeat(24);

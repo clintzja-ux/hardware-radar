@@ -292,6 +292,8 @@ const testModules = [
     ,"./TasklessChildAuthorityDisposition.test.mjs"
     ,"./DispositionAwareExistingTaskContinuation.test.mjs"
     ,"./BoundedSpendProgression.test.mjs"
+    ,"./CurrentRefreshPlan.test.mjs"
+    ,"./CurrentRefreshStaticRecomposition.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

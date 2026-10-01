@@ -16,6 +16,13 @@ const retailers = await Promise.all(manifest.retailers.map(entry => json(path.jo
 const catalog = createRamCatalogProjection(products);
 const currentRetail = await json(path.join(root, "public/data/ram-current-retail.json"));
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
+const releaseManifest = await json(path.join(root, "config/publication-release.json"));
+const releaseArtifact = await json(path.join(root, "config", releaseManifest.artifact.relativePath));
+const certifiedDestinations = JSON.parse(releaseArtifact.fileTexts.destinations);
+const certifiedTerminal = JSON.parse(releaseArtifact.fileTexts.terminal);
+const certifiedChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
+const terminalByProduct = new Map(certifiedTerminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
+const chronologyByProduct = new Map(certifiedChronology.products.map(item => [item.atlasProductId, item]));
 const product = products.find(item => item.identity.atlasProductId === "ram_corsair_cmk32gx5m2b6000z30");
 const publicProduct = catalog.products.find(item => item.atlasProductId === product.identity.atlasProductId);
 const retailer = retailers.find(item => item.id === "RETAILER-0002");
@@ -119,15 +126,18 @@ for (const destination of production.records) {
     }).materialFingerprint, destination.materialFingerprint);
 }
 for (const productPage of catalog.products) {
-    const destinations = productionProjection.filter(item => item.atlasProductId === productPage.atlasProductId);
-    const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure);
+    const destinations = certifiedDestinations.filter(item => item.atlasProductId === productPage.atlasProductId);
+    const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(productPage.atlasProductId) ?? null, chronologyByProduct.get(productPage.atlasProductId) ?? null);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);
     assert.equal((rendered.match(/googletagmanager\.com\/gtag\/js/g) ?? []).length, 1);
     assert.equal((rendered.match(/gtag\("config","G-QF6XJ8GCMY"\)/g) ?? []).length, 1);
     if (destinations.length) {
         assert.match(rendered, /<h2 id="retailer-links-heading">Retailer links<\/h2>/);
-        for (const destination of destinations) assert.match(rendered, new RegExp(`>${destination.retailerDisplayName}<\\/span><a href="${destination.destinationUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+        for (const destination of destinations) {
+            const renderedUrl = destination.destinationUrl.replaceAll("&", "&amp;");
+            assert.match(rendered, new RegExp(`>${destination.retailerDisplayName}<\\/span><a href="${renderedUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+        }
         assert.match(rendered, /target="_blank" rel="noopener noreferrer">Visit retailer<\/a>/);
         assert.doesNotMatch(rendered, /onclick=|sendBeacon\(|fetch\(|gtag\("event"|data-(?:analytics|event|destination)/i);
         assert.match(rendered, /do not indicate current price or availability/);
