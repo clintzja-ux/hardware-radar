@@ -20,7 +20,7 @@ const expiry = offer => new Date(Date.parse(offer.observedAt) + 36 * HOUR).toISO
 const live = (offer, asOf) => explicit(offer) && Date.parse(expiry(offer)) >= Date.parse(asOf) && offer.itemPriceEligible === true && offer.comparisonEligible === true;
 const stateForManual = item => item?.classification === "DESTINATION_EXCEPTION" ? "READY_WITH_REVIEW" : ["NEW_ACTIONABLE", "UPDATED_ACTIONABLE"].includes(item?.classification) ? "ROUTINE_READY" : item?.classification === "INCOMPLETE" ? "RESEARCH_ONLY" : "BLOCKED";
 
-function lanesFor({ atlasProductId, retailer, inventoryItem, destinationReady, reusableAmazonIdentity }) {
+function lanesFor({ atlasProductId, retailer, inventoryItem, destinationReady, reusableAmazonIdentity, rakutenReadiness }) {
   if (retailer === "AMAZON") return [
     { lane: "MANUAL_AMAZON", state: stateForManual(inventoryItem), maximumTasks: 0, maximumSpendUsd: 0 },
     { lane: "DATAFORSEO_AMAZON_SELLERS", state: reusableAmazonIdentity ? "BLOCKED" : "NOT_APPLICABLE", maximumTasks: reusableAmazonIdentity ? 1 : 0, maximumSpendUsd: reusableAmazonIdentity ? AMAZON_TASK_USD : 0, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.DATAFORSEO_AMAZON_SELLERS },
@@ -29,11 +29,11 @@ function lanesFor({ atlasProductId, retailer, inventoryItem, destinationReady, r
   ];
   return [
     { lane: "MANUAL_NEWEGG", state: stateForManual(inventoryItem), maximumTasks: 0, maximumSpendUsd: 0 },
-    { lane: "RAKUTEN_NEWEGG", state: destinationReady ? "ROUTINE_READY" : "READY_WITH_REVIEW", maximumTasks: 0, maximumSpendUsd: 0, historicalRetentionAllowed: false, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.RAKUTEN_NEWEGG }
+    { lane: "RAKUTEN_NEWEGG", state: rakutenReadiness?.classification === "DETERMINISTIC_SINGLE_BINDING" ? destinationReady ? "ROUTINE_READY" : "READY_WITH_REVIEW" : rakutenReadiness?.classification === "MULTI_SKU_REVIEW_REQUIRED" ? "READY_WITH_REVIEW" : "BLOCKED", maximumTasks: 0, maximumSpendUsd: 0, historicalRetentionAllowed: false, readiness: rakutenReadiness ?? { classification: "NO_BINDING" }, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.RAKUTEN_NEWEGG }
   ];
 }
 
-export function prepareCurrentRefreshPlan({ products, currentSnapshot, destinations = [], manualInventory = [], reusableAmazonProductIds = [], asOf, currentUtcDaySpendUsd = 0, requestedMaximumMembers = 50 } = {}) {
+export function prepareCurrentRefreshPlan({ products, currentSnapshot, destinations = [], manualInventory = [], reusableAmazonProductIds = [], rakutenReadinessByProduct = {}, asOf, currentUtcDaySpendUsd = 0, requestedMaximumMembers = 50 } = {}) {
   if (!Array.isArray(products) || products.length === 0 || !Array.isArray(currentSnapshot?.offers) || !Number.isFinite(Date.parse(asOf)) || !Number.isFinite(currentUtcDaySpendUsd) || currentUtcDaySpendUsd < 0) throw new TypeError("CURRENT_REFRESH_PLAN_INPUT_INVALID");
   const destinationKeys = new Set(destinations.filter(value => value?.status !== "INACTIVE").map(value => key(value.atlasProductId, value.retailerId === "RETAILER-0001" ? "AMAZON" : value.retailerId === "RETAILER-0004" ? "NEWEGG" : value.retailerId)));
   const inventory = new Map(manualInventory.map(value => [key(value.atlasProductId, value.retailer), value]));
@@ -67,11 +67,12 @@ export function prepareCurrentRefreshPlan({ products, currentSnapshot, destinati
       const urgency = losesAll ? "LOSES_ALL_CURRENT" : losesOne ? "LOSES_ONE_RETAILER" : stale || uncovered ? "STALE_OR_UNCOVERED" : "ROUTINE_REFRESH";
       const priority = { LOSES_ALL_CURRENT: 1, LOSES_ONE_RETAILER: 2, STALE_OR_UNCOVERED: 3, ROUTINE_REFRESH: 4 }[urgency];
       const destinationReady = destinationKeys.has(key(atlasProductId, retailer));
-      const lanes = lanesFor({ atlasProductId, retailer, inventoryItem: inventory.get(key(atlasProductId, retailer)), destinationReady, reusableAmazonIdentity: reusable.has(atlasProductId) });
+      const rakutenReadiness = rakutenReadinessByProduct[atlasProductId] ?? { classification: "NO_BINDING" };
+      const lanes = lanesFor({ atlasProductId, retailer, inventoryItem: inventory.get(key(atlasProductId, retailer)), destinationReady, reusableAmazonIdentity: reusable.has(atlasProductId), rakutenReadiness });
       const preferred = lanes.find(value => value.state === "ROUTINE_READY") ?? lanes.find(value => value.state === "READY_WITH_REVIEW") ?? lanes[0];
       const existingSource = retailerOffers[0]?.sourceIdentity?.sourceId ?? null;
-      const selectionReason = preferred.lane.startsWith("MANUAL_") && existingSource?.includes("MANUAL") ? "EXISTING_CURRENT_SOURCE_CONTINUITY" : "FIRST_CERTIFIED_ROUTINE_LANE";
-      candidates.push({ atlasProductId, retailer, urgency, priority, nextExpiry, freshnessState: retailerOffers.length ? "FRESH" : stale ? "STALE" : "UNCOVERED", destinationReady, identityReadiness: retailer === "AMAZON" ? reusable.has(atlasProductId) ? "REUSABLE_ASIN" : "DISCOVERY_REQUIRED" : "CANONICAL_SKU_BINDING_REQUIRED", manualReviewRequired: preferred.state === "READY_WITH_REVIEW" || lanes.some(value => value.state === "RESEARCH_ONLY"), lanes, proposedLane: preferred.lane, selectionReason, laneState: preferred.state, expectedTaskCount: preferred.maximumTasks, maximumSpendUsd: preferred.maximumSpendUsd });
+      const selectionReason = preferred.lane.startsWith("MANUAL_") && existingSource?.includes("MANUAL") ? "EXISTING_SOURCE_CONTINUITY" : preferred.lane === "RAKUTEN_NEWEGG" ? "RAKUTEN_ROUTINE_READY" : preferred.lane.startsWith("MANUAL_") ? "MANUAL_ONLY_VALID_LANE" : "FIRST_CERTIFIED_ROUTINE_LANE";
+      candidates.push({ atlasProductId, retailer, urgency, priority, nextExpiry, freshnessState: retailerOffers.length ? "FRESH" : stale ? "STALE" : "UNCOVERED", destinationReady, identityReadiness: retailer === "AMAZON" ? reusable.has(atlasProductId) ? "REUSABLE_ASIN" : "DISCOVERY_REQUIRED" : rakutenReadiness.classification, manualReviewRequired: preferred.state === "READY_WITH_REVIEW" || lanes.some(value => value.state === "RESEARCH_ONLY"), lanes, proposedLane: preferred.lane, selectionReason, laneState: preferred.state, expectedTaskCount: preferred.maximumTasks, maximumSpendUsd: preferred.maximumSpendUsd });
     }
   }
   candidates.sort((a, b) => a.priority - b.priority || (a.nextExpiry ?? "9999").localeCompare(b.nextExpiry ?? "9999") || a.atlasProductId.localeCompare(b.atlasProductId) || a.retailer.localeCompare(b.retailer));

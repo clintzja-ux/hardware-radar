@@ -1,5 +1,4 @@
 export const AUTOMATED_CURRENT_LANE_CERTIFICATION_POLICY_VERSION = "AUTOMATED-CURRENT-REFRESH-LANE-CERTIFICATION-P1-1.0";
-
 export const CURRENT_REQUIREMENT_MATRIX = Object.freeze({
   exactAtlasProductIdentity: "REQUIRED_FOR_CURRENT_FACT",
   retailerIdentity: "REQUIRED_FOR_CURRENT_FACT",
@@ -29,4 +28,3 @@ export const AUTOMATED_CURRENT_LANE_CERTIFICATIONS = Object.freeze({
 export function getAutomatedCurrentLaneCertification(lane) {
   return AUTOMATED_CURRENT_LANE_CERTIFICATIONS[lane] ?? null;
 }
-

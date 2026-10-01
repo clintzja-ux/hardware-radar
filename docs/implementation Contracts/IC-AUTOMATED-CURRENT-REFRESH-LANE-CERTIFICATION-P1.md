@@ -24,4 +24,3 @@ Plans bind `AUTOMATED-CURRENT-REFRESH-LANE-CERTIFICATION-P1-1.0`, expose identit
 `REFRESH PLAN -> PREPARE -> INSPECT -> BOUNDED AUTHORIZE -> START -> RETRIEVE/RESUME -> COMMON CURRENT QUALIFICATION -> CANONICAL HISTORY WHERE RIGHTS PERMIT -> STATIC RECOMPOSITION`.
 
 Every paid boundary remains separately governed. This contract authorizes no provider call, paid task, Current mutation, release, or deployment.
-

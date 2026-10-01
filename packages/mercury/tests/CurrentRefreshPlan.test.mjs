@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { prepareCurrentRefreshPlan, validateCurrentRefreshPlan } from "../current-refresh/index.js";
+import { prepareCurrentRefreshPlan, prepareRakutenCurrentRefresh, validateCurrentRefreshPlan, validateRakutenCurrentRefreshPreparation } from "../current-refresh/index.js";
 
 const asOf = "2026-10-01T12:00:00.000Z";
 const products = ["one", "two", "three"].map(atlasProductId => ({ identity: { atlasProductId } }));
@@ -29,4 +29,16 @@ assert.equal(plan.selectedMembers[0].urgency, "LOSES_ALL_CURRENT");
 assert.equal(plan.selectedMembers.every(value => value.maximumSpendUsd === 0), true);
 assert.equal(plan.selectedMembers.some(value => value.atlasProductId === "three" && value.freshnessState === "STALE"), true);
 assert.throws(() => validateCurrentRefreshPlan({ ...plan, authority: "EXECUTE" }), /INVALID/);
+const rakutenPlan = prepareCurrentRefreshPlan({ products, currentSnapshot, destinations, manualInventory: manualInventory.filter(value => value.retailer !== "NEWEGG"), reusableAmazonProductIds: [], rakutenReadinessByProduct: { one: { classification: "DETERMINISTIC_SINGLE_BINDING", retailerListingId: "N82E16800000001", destinationId: "mer_dest_fixture" }, two: { classification: "MULTI_SKU_REVIEW_REQUIRED" }, three: { classification: "NO_BINDING" } }, asOf, requestedMaximumMembers: 6 });
+const rakutenOne = [...rakutenPlan.selectedMembers, ...rakutenPlan.blockedMembers].find(value => value.atlasProductId === "one" && value.retailer === "NEWEGG");
+assert.equal(rakutenOne.proposedLane, "RAKUTEN_NEWEGG");
+assert.equal(rakutenOne.selectionReason, "RAKUTEN_ROUTINE_READY");
+assert.equal([...rakutenPlan.selectedMembers, ...rakutenPlan.blockedMembers].find(value => value.atlasProductId === "two" && value.retailer === "NEWEGG").lanes.find(value => value.lane === "RAKUTEN_NEWEGG").state, "READY_WITH_REVIEW");
+assert.equal([...rakutenPlan.selectedMembers, ...rakutenPlan.blockedMembers].find(value => value.atlasProductId === "three" && value.retailer === "NEWEGG").lanes.find(value => value.lane === "RAKUTEN_NEWEGG").state, "BLOCKED");
+const preparation = prepareRakutenCurrentRefresh({ plan: rakutenPlan, preparedAt: asOf, members: [{ atlasProductId: "one", retailerId: "RETAILER-0004", source: "RAKUTEN_NEWEGG_PRODUCT_CATALOG", identityBinding: "DETERMINISTIC_SINGLE_BINDING", destinationId: "mer_dest_fixture", retailerListingId: "N82E16800000001", freshnessTarget: asOf, sourceRightsProfileId: "RAKUTEN_NEWEGG_PRODUCT_CATALOG_CURRENT_COMMERCE_1_0" }] });
+assert.equal(validateRakutenCurrentRefreshPreparation(preparation), true);
+assert.equal(preparation.authority, "NONE");
+assert.equal(preparation.historyEligibility, false);
+assert.equal(preparation.maximumProviderOperations, 1);
+assert.throws(() => prepareRakutenCurrentRefresh({ plan: rakutenPlan, preparedAt: asOf, members: [{ atlasProductId: "two" }] }), /NOT_ROUTINE_READY/);
 console.log("Current refresh plan tests passed.");
