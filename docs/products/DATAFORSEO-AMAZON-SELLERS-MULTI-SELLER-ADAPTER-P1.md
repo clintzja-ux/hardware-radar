@@ -30,7 +30,7 @@ The canonical Amazon product destination is classified `CHANNEL_PRODUCT_DESTINAT
 
 ## Canonical retained-evidence certification
 
-The certified offline inventory contains 49 tasks/results, 218 retained observations, 32 exact Atlas products, and 32 exact ASINs. Every row resolves to an immutable canonical provider result and an active exact Amazon product destination. It contains 13 Amazon.com rows, 186 known third-party rows, and 19 seller-unresolved rows; 199 rows bear item price/currency. Conditions are 165 new, 17 used-like-new, 13 used-very-good, and 23 unknown. Availability is absent in all 218 rows. Seller URLs are 185 seller-profile pages, one other Amazon path, and 32 absent.
+The certified offline inventory contains 49 tasks/results, 218 retained observations, 32 exact Atlas products, and 32 exact ASINs. Every row resolves to an immutable canonical provider result and an active exact Amazon product destination. It contains 13 Amazon.com rows, 186 known third-party rows, and 19 seller-unresolved rows; 199 rows bear item price/currency. Conditions are 165 new, 17 used-like-new, 13 used-very-good, and 23 unknown. An explicit provider availability field is absent in all 218 rows. The subsequent versioned `DATAFORSEO-AMAZON-SELLERS-OFFER-PRESENCE-P1-1.0` policy establishes narrower source-semantic presence for 199 rows with valid USD seller price, affirmative seller-item delivery message, current-or-future delivery start date, and no malformed or negative delivery evidence. The remaining 19 stay unknown. Seller URLs are 185 seller-profile pages, one other Amazon path, and 32 absent.
 
 The adapter produces 165 distinct deterministic offer identities from the 218 temporal observations. Product coverage is three products with one deterministic seller, five with two, 23 with three or more, seven with Amazon.com plus third-party sellers, 24 third-party-only, and 15 with at least one unresolved-seller row.
 
@@ -42,7 +42,7 @@ The qualification funnel is:
 | Identity-ready | 218 |
 | Seller-ready | 199 |
 | Condition-ready | 195 |
-| Availability-ready | 0 |
+| Offer-presence/availability-ready under the subsequent versioned policy | 199 |
 | Price-corresponding action-ready | 0 |
 | Fresh under an established Amazon Current policy | 0 |
 | Fully Current-qualification-ready | 0 |
@@ -51,7 +51,7 @@ No DataForSEO Amazon Sellers Current freshness policy exists yet, so freshness i
 
 ## Remaining evidence questions
 
-The smallest future provider-contract question is whether an explicit Sellers result field or another governed Amazon endpoint establishes buyability/availability without inference. The smallest actionability question is whether the provider supplies a retained offer identifier or explicit seller-offer/add-to-cart destination that can be validated without URL synthesis. Provider reconnaissance, Amazon Associates compliance, Current progression, and public marketplace display remain separate increments.
+The remaining Current-semantic blocker is a responsible source-specific freshness policy. The separate actionability question remains whether the provider supplies a retained offer identifier or explicit seller-offer/add-to-cart destination that can be validated without URL synthesis. Amazon Associates compliance, Current progression, and public marketplace display remain separate increments.
 
 ## Authority and isolation
 

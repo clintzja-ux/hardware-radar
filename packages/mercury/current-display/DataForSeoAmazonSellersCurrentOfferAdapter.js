@@ -1,6 +1,7 @@
 import { createCurrentOfferProjection } from "./CurrentOfferModel.js";
 
 export const DATAFORSEO_AMAZON_SELLERS_CURRENT_OFFER_ADAPTER_VERSION = "DATAFORSEO-AMAZON-SELLERS-MULTI-SELLER-ADAPTER-P1-1.0";
+export const DATAFORSEO_AMAZON_SELLERS_OFFER_PRESENCE_POLICY_VERSION = "DATAFORSEO-AMAZON-SELLERS-OFFER-PRESENCE-P1-1.0";
 export const AMAZON_COMMERCE_CHANNEL = Object.freeze({ retailer: "AMAZON", retailerId: "RETAILER-0001", marketplace: "amazon.com" });
 
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
@@ -37,6 +38,37 @@ function classifySeller(name) {
   return name === "Amazon.com" ? "KNOWN_FIRST_PARTY_AMAZON" : "KNOWN_THIRD_PARTY";
 }
 
+const NEGATIVE_DELIVERY_SIGNAL = /(?:currently\s+unavailable|cannot\s+(?:ship|deliver)|can['’]?t\s+(?:ship|deliver)|delivery\s+unavailable|out[\s-]*of[\s-]*stock|temporarily\s+unavailable|back[\s-]*order|pre[\s-]*order|does\s+not\s+(?:ship|deliver)|won['’]?t\s+(?:ship|deliver))/i;
+
+export function assessDataForSeoAmazonSellerOfferPresence({ delivery, price, currency, observedAt } = {}) {
+  const message = text(delivery?.delivery_message);
+  const deliveryFrom = text(delivery?.delivery_date_from);
+  const deliveryTo = text(delivery?.delivery_date_to);
+  const fastestFrom = text(delivery?.fastest_delivery_date_from);
+  const fastestTo = text(delivery?.fastest_delivery_date_to);
+  const dates = [deliveryFrom, deliveryTo, fastestFrom, fastestTo].filter(Boolean);
+  const malformedDate = dates.some(value => !validTime(value));
+  const observationTimeValid = validTime(observedAt);
+  const observedUtcDay = observationTimeValid ? Date.parse(`${new Date(observedAt).toISOString().slice(0, 10)}T00:00:00.000Z`) : null;
+  const deliveryDateIsCurrentOrFuture = deliveryFrom !== null && validTime(deliveryFrom) && observationTimeValid && Date.parse(deliveryFrom) >= observedUtcDay;
+  const negative = message !== null && NEGATIVE_DELIVERY_SIGNAL.test(message);
+  const priceReady = Number.isFinite(price) && price >= 0 && currency === "USD";
+  const affirmativeDelivery = message !== null && deliveryDateIsCurrentOrFuture && !malformedDate && !negative;
+  const state = negative ? "NEGATIVELY_EVIDENCED" : malformedDate ? "AMBIGUOUS" : priceReady && affirmativeDelivery ? "EVIDENCED" : "UNKNOWN";
+  return freeze({
+    policyVersion: DATAFORSEO_AMAZON_SELLERS_OFFER_PRESENCE_POLICY_VERSION,
+    state,
+    sellerItemScoped: true,
+    priceReady,
+    affirmativeDelivery,
+    negativeDeliverySignal: negative,
+    malformedDeliveryDate: malformedDate,
+    observationTimeValid,
+    deliveryDateIsCurrentOrFuture,
+    evidence: affirmativeDelivery ? ["SELLER_ITEM_DELIVERY_MESSAGE", "SELLER_ITEM_DELIVERY_DATE_FROM"] : []
+  });
+}
+
 function validateLineage({ record, canonicalResult, destination }) {
   const evidence = record?.candidate?.marketEvidence;
   const identity = record?.candidate?.identity;
@@ -57,16 +89,17 @@ export function composeDataForSeoAmazonSellerOffer({ record, canonicalResult, de
   const sellerName = text(evidence.seller?.name);
   const profile = sellerProfile(evidence.seller?.url);
   const condition = normalizeCondition(evidence.offer?.condition);
-  const availabilityState = evidence.offer?.availability == null ? "ABSENT" : "AMBIGUOUS";
   const price = Number.isFinite(evidence.pricing?.basePrice) && evidence.pricing.basePrice >= 0 ? evidence.pricing.basePrice : null;
   const currency = text(evidence.pricing?.currency);
+  const offerPresence = assessDataForSeoAmazonSellerOfferPresence({ delivery: evidence.offer?.delivery, price, currency, observedAt: evidence.provenance.observedAt });
+  const availabilityState = offerPresence.state === "EVIDENCED" ? "CONTRACTUALLY_DERIVABLE" : offerPresence.state === "NEGATIVELY_EVIDENCED" ? "NEGATIVE" : offerPresence.state === "AMBIGUOUS" ? "AMBIGUOUS" : "ABSENT";
   const offer = createCurrentOfferProjection({
     offer: {
       atlasProductId: evidence.atlasProductId,
       ...AMAZON_COMMERCE_CHANNEL,
       priceUsd: price,
       currency,
-      availability: "UNKNOWN",
+      availability: offerPresence.state === "EVIDENCED" ? "AVAILABLE" : "UNKNOWN",
       condition,
       shippingUsd: Number.isFinite(evidence.pricing?.shippingPrice) && evidence.pricing.shippingPrice >= 0 ? evidence.pricing.shippingPrice : null,
       feesUsd: null,
@@ -102,6 +135,7 @@ export function composeDataForSeoAmazonSellerOffer({ record, canonicalResult, de
     channelDetermination: { state: "ESTABLISHED", evidence: ["PROVIDER_OPERATION_AMAZON_SELLERS", "PROVIDER_ASIN_BINDING", "AMAZON_DOMAIN_RESULT", "CANONICAL_AMAZON_DESTINATION"] },
     sellerClassification: classifySeller(sellerName),
     sellerProfile: profile,
+    offerPresence,
     availabilityState,
     shippingState: offer.shippingUsd === null ? "UNKNOWN" : "EXPLICIT",
     destinationSemantics: "CHANNEL_PRODUCT_DESTINATION",
