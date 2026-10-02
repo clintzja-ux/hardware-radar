@@ -24,7 +24,7 @@ const fullRows = [
   fixtureRow({...base,productId:"P2",sku:"SKU-2",retailPrice:"200.00"},{delta:false}),
   fixtureRow({...base,productId:"P3",sku:"SKU-3",retailPrice:"300.00"},{delta:false})
 ];
-const fullBytes = gzipSync(fixtureFeedText({timestamp:"09/01/2026 12:00:00",rows:fullRows}));
+const fullBytes = gzipSync(fixtureFeedText({timestamp:"01/09/2026 12:00:00",rows:fullRows}));
 await writeFile(fullPath,fullBytes);
 const projection = new RakutenDiskBoundedCatalogStateProjection({stateRoot});
 const expected = {feedFamilyKey:family,filename:path.basename(fullPath),artifactDigest:digest(fullBytes),headerTimestamp:fullAt,remoteModifiedAt:"2026-09-01T12:05:00.000Z",fileSize:fullBytes.length,productRows:3,trailerCount:3};
@@ -41,7 +41,7 @@ const deltaRows = [
   fixtureRow({...base,productId:"P1",sku:"SKU-1",retailPrice:"120.00",modification:"U"}),
   fixtureRow({...base,productId:"P2",sku:"SKU-2",retailPrice:"200.00",modification:"D"})
 ];
-const deltaBytes = gzipSync(fixtureFeedText({timestamp:"09/02/2026 12:00:00",rows:deltaRows}));
+const deltaBytes = gzipSync(fixtureFeedText({timestamp:"02/09/2026 12:00:00",rows:deltaRows}));
 await writeFile(deltaPath,deltaBytes);
 const delta = await projection.applyDelta({parentStateId:baseline.manifest.stateId,artifactPath:deltaPath,artifactDigest:digest(deltaBytes),headerTimestamp:deltaAt,remoteModifiedAt:"2026-09-01T11:00:00.000Z",feedFamilyKey:family});
 assert.equal(delta.status,"MATERIALIZED");assert.equal(delta.manifest.parentStateId,baseline.manifest.stateId);assert.equal(delta.manifest.recordCount,3);assert.equal(delta.manifest.delta.remoteModifiedAt,"2026-09-01T11:00:00.000Z");assert.deepEqual(delta.manifest.delta.modifications,{I:1,U:2,D:1});cases+=5;

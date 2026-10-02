@@ -13,7 +13,7 @@ import { fixtureRow } from "./fixtures/rakuten-newegg/sanitized-feed-fixtures.js
 const count=100_000,root=await mkdtemp(path.join(os.tmpdir(),"hardware-radar-disk-scale-"));
 const stateRoot=path.join(root,".forge-review","rakuten-sftp","catalog-state"),artifactPath=path.join(root,"44583_4746097_mp.txt.gz");
 await mkdir(stateRoot,{recursive:true});
-async function* feed(){yield "HDR|44583|SANITIZED FIXTURE|09/01/2026 12:00:00\n";for(let index=0;index<count;index+=1)yield `${fixtureRow({productId:`P${index}`,sku:`SKU-${String(index).padStart(8,"0")}`,manufacturerPartNumber:`MPN-${index}`,retailPrice:`${100+(index%100)}.00`},{delta:false})}\n`;yield `TRL|${count}`;}
+async function* feed(){yield "HDR|44583|SANITIZED FIXTURE|01/09/2026 12:00:00\n";for(let index=0;index<count;index+=1)yield `${fixtureRow({productId:`P${index}`,sku:`SKU-${String(index).padStart(8,"0")}`,manufacturerPartNumber:`MPN-${index}`,retailPrice:`${100+(index%100)}.00`},{delta:false})}\n`;yield `TRL|${count}`;}
 await pipeline(Readable.from(feed()),createGzip(),createWriteStream(artifactPath));
 const hash=crypto.createHash("sha256");for await(const chunk of createReadStream(artifactPath))hash.update(chunk);
 const baselineRss=process.memoryUsage().rss;let peakRss=baselineRss;const sampler=setInterval(()=>{peakRss=Math.max(peakRss,process.memoryUsage().rss);},10);

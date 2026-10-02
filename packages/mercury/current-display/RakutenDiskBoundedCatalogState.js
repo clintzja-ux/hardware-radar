@@ -68,7 +68,7 @@ export class RakutenDiskBoundedCatalogStateProjection {
     try{
       db=new DatabaseSync(temporary);db.exec("PRAGMA journal_mode=DELETE; PRAGMA synchronous=FULL; PRAGMA temp_store=FILE;");schema(db);
       const insert=db.prepare("INSERT INTO catalog_entries(product_id,sku,record_json) VALUES (?,?,?)");db.exec("BEGIN IMMEDIATE");
-      try{for await(const record of parseRakutenProductCatalogGzip(createReadStream(absolute),{feedProfile:"MAIN_FULL"})){
+      try{for await(const record of parseRakutenProductCatalogGzip(createReadStream(absolute),{feedProfile:"MAIN_FULL",feedFamilyKey:expected.feedFamilyKey})){
         if(record.recordType==="HDR"){header=record;continue;}if(record.recordType==="TRL"){trailer=record;continue;}
         const [productId,sku]=key(record);try{insert.run(productId,sku,JSON.stringify(compactRecord(record)));}catch(error){if(String(error?.message).includes("UNIQUE"))fail("RAKUTEN_FULL_SOURCE_ENTRY_DUPLICATE");throw error;}products+=1;
       }db.exec("COMMIT");}catch(error){try{db.exec("ROLLBACK");}catch{}throw error;}
@@ -93,7 +93,7 @@ export class RakutenDiskBoundedCatalogStateProjection {
     try{
       db=new DatabaseSync(temporary);db.exec("PRAGMA journal_mode=DELETE; PRAGMA synchronous=FULL; PRAGMA temp_store=FILE; BEGIN IMMEDIATE");
       const upsert=db.prepare("INSERT INTO catalog_entries(product_id,sku,record_json) VALUES (?,?,?) ON CONFLICT(product_id,sku) DO UPDATE SET record_json=excluded.record_json"),remove=db.prepare("DELETE FROM catalog_entries WHERE product_id=? AND sku=?");
-      try{for await(const record of parseRakutenProductCatalogGzip(createReadStream(absolute),{feedProfile:"MAIN_DELTA"})){
+      try{for await(const record of parseRakutenProductCatalogGzip(createReadStream(absolute),{feedProfile:"MAIN_DELTA",feedFamilyKey})){
         if(record.recordType==="HDR"){header=record;continue;}if(record.recordType==="TRL"){trailer=record;continue;}const [productId,sku]=key(record);modifications[record.modification]+=1;if(record.modification==="D")remove.run(productId,sku);else upsert.run(productId,sku,JSON.stringify(compactRecord(record)));products+=1;
       }db.exec("COMMIT");}catch(error){try{db.exec("ROLLBACK");}catch{}throw error;}
       if(header?.advertiserMid!=="44583"||header.feedTimestamp!==headerTimestamp||trailer?.actualProductCount!==products)fail("RAKUTEN_DELTA_VALIDATION_MISMATCH");
