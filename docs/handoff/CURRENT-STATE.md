@@ -1,23 +1,25 @@
 # Hardware Radar current state
 
+`DATAFORSEO_AMAZON_SELLERS_MULTI_SELLER_ADAPTER_P1` is implemented and fixture-certified as a zero-authority source-composition projection. It reuses exact retained evidence, immutable provider-result lineage, governed Atlas/ASIN identity, active Amazon product destinations, and `CurrentOfferModel`; it creates no competing owner. Canonical retained state re-derived 218 Sellers observations from 49 tasks across 32 exact products/ASINs: 13 Amazon.com, 186 known third-party, and 19 seller-unresolved rows; 199 are price/currency-bearing, condition is 165 new / 30 used / 23 unknown, and availability is absent in all 218. All rows are representable and produce 165 distinct deterministic schema-1.1 offer identities, while the qualification funnel is 218 identity-ready / 199 seller-ready / 195 condition-ready / 0 availability-ready / 0 price-corresponding-action-ready / 0 fresh under an established Amazon Current policy / 0 fully Current-ready. Every canonical destination remains channel/product-level rather than seller-offer-specific. Canonical Current snapshot `mer_display_18de6e09acecb4ba3c3c3603` (188 offers), History, Atlas, destinations, workbook, public output, Cheapest, Picks, Terminal, affiliate routing, publication, release, and deployment remain unchanged; calls/tasks/spend are `0 / 0 / $0.000`. Of 41 reusable-ASIN products, 32 have retained Sellers evidence and nine remain possible future one-task Sellers candidates. The next separate evidence boundary is bounded provider-contract reconnaissance for explicit availability and offer-specific action references; no provider call or Current/public progression is authorized by this increment.
+
 `MERCURY_CURRENT_SCHEMA_1_1_CANONICAL_MIGRATION_P1` executed the inspected deterministic plan `mer_curmigration_9f99c07ad84fa14f17f83e2f` through the existing atomic Current repository. Canonical Current advanced from schema `1.0` snapshot `mer_display_d5680a1ec2f164f8f860dcc4` to schema `1.1` snapshot `mer_display_18de6e09acecb4ba3c3c3603`, preserving 188/188 offers, 188 unique compatibility identities, 81 known and 107 unknown sellers, and zero collisions, ambiguities, fact/freshness/destination mismatches. The schema-1.0 source remains repository-native `previous` rollback state. Actual public Current projection digest remained `9e80fdbc41a9e0ec28c9b3fcfb1b921ceae845f79f9682bb2d8811d287af311b`, and Terminal current-market semantics remained identical. History, Atlas, destinations, workbook, affiliate routing, public artifacts, publication, production release configuration, and deployment were unchanged. Marketplace acquisition/publication remains unauthorized.
 
 `MERCURY_COMMERCE_CHANNEL_MULTI_SELLER_OFFER_MODEL_P1` is implemented and fixture-certified as a domain/Current-schema capability. Current snapshot schema `1.1` supports offer-level uniqueness for multiple sellers/listings/conditions on one product and commerce channel; schema `1.0` remains readable with deterministic legacy product/channel compatibility identities and no invented seller. Existing Atlas retailer identity owns commerce-channel semantics, seller remains offer attribution outside Atlas, and actionability remains independent of market-fact validity. The 188-offer canonical Current copy simulated to 188 compatibility identities with zero collisions/ambiguities (81 seller-known, 107 seller-unknown), but canonical Current and History were not migrated or mutated. Qualification, destinations, Cheapest, Picks, Terminal, public projection, structured data, publication, release, and deployment remain unchanged; retained Amazon Sellers still lacks independently required availability/actionability authority.
 
-Automated Current lane certification P1 is fixture-certified at `AUTOMATED-CURRENT-REFRESH-LANE-CERTIFICATION-P1-1.0`. The common Current qualification owner remains unchanged. Retained Amazon Products is identity-only; retained Amazon Sellers remains Current-blocked because canonical retailer binding and availability are absent. Google Shopping remains scoped Current-capable only for registered Platinummicro and MemoryC policy scopes. Rakuten Newegg remains Current-capable and History-prohibited. The refresh plan now binds these certifications plus identity readiness and selection reason. No provider call, paid task, Current/History mutation, release, or deployment occurred.
+Automated Current lane certification P1 is fixture-certified at `AUTOMATED-CURRENT-REFRESH-LANE-CERTIFICATION-P1-1.0`. The common Current qualification owner remains unchanged. Retained Amazon Products is identity-only; the later Sellers adapter establishes the Amazon commerce channel and channel/product destination while leaving Current blocked on absent availability, absent price-corresponding seller-offer action, and unestablished source freshness policy. Google Shopping remains scoped Current-capable only for registered Platinummicro and MemoryC policy scopes. Rakuten Newegg remains Current-capable and History-prohibited. The refresh plan binds its certified lane state plus identity readiness and selection reason; the Sellers adapter does not silently activate or rewrite that plan. No provider call, paid task, Current/History mutation, release, or deployment occurred.
 
 ```text
 Last updated:                  2026-10-01
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        8fa6f087b9afefab1ff88e49ffa12424fc42236a (`chore(mercury): reconcile stale Rakuten delta discovery`)
+Current committed HEAD:        1b85a1c63bd22212c33dcd2660f24bfbae873059 (`feat(mercury): migrate Current to offer-level schema 1.1`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 2 behind / 7 ahead; branch was synchronized with `origin/hardware-radar-growth-1` at preflight; the multi-seller offer-model P1 working tree is intentionally uncommitted
+Branch/main relationship:      cached `origin/main...HEAD` is 2 behind / 9 ahead; branch was synchronized with `origin/hardware-radar-growth-1` at preflight; the Amazon Sellers multi-seller adapter P1 working tree is intentionally uncommitted
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
-Current implementation increment: MERCURY_CURRENT_SCHEMA_1_1_CANONICAL_MIGRATION_P1 — canonical local Current migrated atomically with parity; public marketplace publication remains unauthorized
+Current implementation increment: DATAFORSEO_AMAZON_SELLERS_MULTI_SELLER_ADAPTER_P1 — retained Amazon Sellers evidence composes into zero-authority schema-1.1 offer-shaped projections; canonical Current and public marketplace publication remain unchanged/unauthorized
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 Current product-definition increment: A-001 — RAM Launch Catalog and Minimum Useful Coverage complete
 Current public-product increment: RAM_PRODUCT_PRICE_INTELLIGENCE_STATIC_INTEGRATION_P1 — the existing 103 canonical `/ram/<atlas-slug>/` pages now join the already-sanitized Terminal All RAM product summaries by exact `atlasProductId`. They progressively render qualified Current, independently qualified Hardware Radar-observed History, governed retailer actions, methodology, Terminal navigation, and category navigation without creating another route, artifact, history engine, API, recommendation owner, publication authority, or release authority.
@@ -224,13 +226,13 @@ MERCURY-HISTORY-056 fixture-certified the five-product `DATAFORSEO_AMAZON` pilot
 
 ## Current test baseline
 
-The current runners declare **353 subsystem test files**:
+The current runners declare **354 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 8 |
 | Atlas | 22 |
-| Mercury | 299 |
+| Mercury | 300 |
 | Beacon | 7 |
 | Gateway | 17 |
 
