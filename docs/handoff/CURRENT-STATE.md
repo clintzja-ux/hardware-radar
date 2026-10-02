@@ -1,19 +1,21 @@
 # Hardware Radar current state
 
+`MERCURY_COMMERCE_CHANNEL_MULTI_SELLER_OFFER_MODEL_P1` is implemented and fixture-certified as a domain/Current-schema capability. Current snapshot schema `1.1` supports offer-level uniqueness for multiple sellers/listings/conditions on one product and commerce channel; schema `1.0` remains readable with deterministic legacy product/channel compatibility identities and no invented seller. Existing Atlas retailer identity owns commerce-channel semantics, seller remains offer attribution outside Atlas, and actionability remains independent of market-fact validity. The 188-offer canonical Current copy simulated to 188 compatibility identities with zero collisions/ambiguities (81 seller-known, 107 seller-unknown), but canonical Current and History were not migrated or mutated. Qualification, destinations, Cheapest, Picks, Terminal, public projection, structured data, publication, release, and deployment remain unchanged; retained Amazon Sellers still lacks independently required availability/actionability authority.
+
 Automated Current lane certification P1 is fixture-certified at `AUTOMATED-CURRENT-REFRESH-LANE-CERTIFICATION-P1-1.0`. The common Current qualification owner remains unchanged. Retained Amazon Products is identity-only; retained Amazon Sellers remains Current-blocked because canonical retailer binding and availability are absent. Google Shopping remains scoped Current-capable only for registered Platinummicro and MemoryC policy scopes. Rakuten Newegg remains Current-capable and History-prohibited. The refresh plan now binds these certifications plus identity readiness and selection reason. No provider call, paid task, Current/History mutation, release, or deployment occurred.
 
 ```text
 Last updated:                  2026-10-01
 Branch:                        hardware-radar-growth-1
-Current committed HEAD:        9e946cb8239279128e65050050d528cdd14293b7 (`feat(mercury): add disk-bounded Rakuten catalog state`)
+Current committed HEAD:        8fa6f087b9afefab1ff88e49ffa12424fc42236a (`chore(mercury): reconcile stale Rakuten delta discovery`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 2 behind / 6 ahead; branch was synchronized with `origin/hardware-radar-growth-1` at preflight; `RAKUTEN_NEWEGG_DELTA_ONLY_LIVE_DISCOVERY_P1` is the current documentation-only working-tree reconciliation
+Branch/main relationship:      cached `origin/main...HEAD` is 2 behind / 7 ahead; branch was synchronized with `origin/hardware-radar-growth-1` at preflight; the multi-seller offer-model P1 working tree is intentionally uncommitted
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
-Current implementation increment: NEWEGG_AFFILIATE_DESTINATION_PRECEDENCE_P1 — public-action routing corrected and certified; release recomposition remains separately unauthorized
+Current implementation increment: MERCURY_COMMERCE_CHANNEL_MULTI_SELLER_OFFER_MODEL_P1 — domain/Current schema capability implemented and fixture-certified; production migration and public marketplace publication remain unauthorized
 Previous completed increment:  MVP-002 Increment 3 — RAM Comparison Snapshot Projection
 Current product-definition increment: A-001 — RAM Launch Catalog and Minimum Useful Coverage complete
 Current public-product increment: RAM_PRODUCT_PRICE_INTELLIGENCE_STATIC_INTEGRATION_P1 — the existing 103 canonical `/ram/<atlas-slug>/` pages now join the already-sanitized Terminal All RAM product summaries by exact `atlasProductId`. They progressively render qualified Current, independently qualified Hardware Radar-observed History, governed retailer actions, methodology, Terminal navigation, and category navigation without creating another route, artifact, history engine, API, recommendation owner, publication authority, or release authority.

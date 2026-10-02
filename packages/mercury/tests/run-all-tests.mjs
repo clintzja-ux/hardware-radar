@@ -258,6 +258,7 @@ const testModules = [
     ,"./AcquisitionCheckpointExecutionComposition.test.mjs"
     ,"./RetailDisplayImport.test.mjs"
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
+    ,"./CurrentOfferModel.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./RamTerminalPublicIntelligence.test.mjs"
     ,"./RamMarketSnapshotProjection.test.mjs"

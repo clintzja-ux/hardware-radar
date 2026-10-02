@@ -1,6 +1,8 @@
 import crypto from "node:crypto";
+import { CURRENT_OFFER_SCHEMA_VERSION, validateCurrentOfferProjection } from "./CurrentOfferModel.js";
 
 export const CURRENT_DISPLAY_SNAPSHOT_SCHEMA_VERSION = "1.0";
+export const CURRENT_DISPLAY_MULTI_OFFER_SCHEMA_VERSION = "1.1";
 export const CURRENT_DISPLAY_RETAILERS = Object.freeze(["AMAZON", "NEWEGG"]);
 
 const stable = value => Array.isArray(value)
@@ -27,14 +29,15 @@ export const createCurrentDisplaySnapshotId = snapshot => `mer_display_${current
 export function validateCurrentDisplaySnapshot(snapshot) {
     const errors = [];
     if (!snapshot || typeof snapshot !== "object" || Array.isArray(snapshot)) return freeze({ valid: false, errors: ["CURRENT_DISPLAY_SNAPSHOT_REQUIRED"] });
-    if (snapshot.schemaVersion !== CURRENT_DISPLAY_SNAPSHOT_SCHEMA_VERSION) errors.push("CURRENT_DISPLAY_SCHEMA_VERSION_INVALID");
+    if (![CURRENT_DISPLAY_SNAPSHOT_SCHEMA_VERSION, CURRENT_DISPLAY_MULTI_OFFER_SCHEMA_VERSION].includes(snapshot.schemaVersion)) errors.push("CURRENT_DISPLAY_SCHEMA_VERSION_INVALID");
     if (!/^mer_display_[a-f0-9]{24}$/.test(snapshot.snapshotId ?? "") || !/^[a-f0-9]{64}$/.test(snapshot.materialFingerprint ?? "")) errors.push("CURRENT_DISPLAY_IDENTITY_INVALID");
     if (!validTime(snapshot.observedAt) || !validTime(snapshot.importedAt)) errors.push("CURRENT_DISPLAY_TIME_INVALID");
     if (!nonBlank(snapshot.source?.workbook) || !nonBlank(snapshot.source?.sheet) || !/^[a-f0-9]{64}$/.test(snapshot.source?.digest ?? "")) errors.push("CURRENT_DISPLAY_SOURCE_INVALID");
     if (!Array.isArray(snapshot.offers)) errors.push("CURRENT_DISPLAY_OFFERS_INVALID");
     const keys = new Set();
     for (const offer of snapshot.offers ?? []) {
-        const key = `${offer?.atlasProductId}|${offer?.retailer}`;
+        const multiOffer = snapshot.schemaVersion === CURRENT_DISPLAY_MULTI_OFFER_SCHEMA_VERSION;
+        const key = multiOffer ? offer?.offerIdentity : `${offer?.atlasProductId}|${offer?.retailer}`;
         if (keys.has(key)) errors.push("CURRENT_DISPLAY_OFFER_DUPLICATE");
         keys.add(key);
         if (!/^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$/.test(offer?.atlasProductId ?? "")) errors.push("CURRENT_DISPLAY_PRODUCT_INVALID");
@@ -54,20 +57,24 @@ export function validateCurrentDisplaySnapshot(snapshot) {
         if (offer.comparisonEligible && (["USED", "REFURBISHED", "OPEN_BOX"].includes(offer.condition) || offer.availability !== "AVAILABLE")) errors.push("CURRENT_DISPLAY_COMPARISON_UNSUPPORTED");
         if (extendedEligibilityPresent && offer.comparisonEligible && !offer.itemPriceEligible) errors.push("CURRENT_DISPLAY_ITEM_PRICE_COMPATIBILITY_INVALID");
         if (offer.deliveredCostEligible && (offer.deliveredCostReasons.length || !offer.comparisonEligible || !Number.isFinite(offer.shippingUsd) || offer.shippingUsd < 0 || !Number.isFinite(offer.feesUsd) || offer.feesUsd < 0)) errors.push("CURRENT_DISPLAY_DELIVERED_COST_UNSUPPORTED");
+        if (multiOffer) {
+            const offerReport = validateCurrentOfferProjection(offer);
+            if (!offerReport.valid || offer.offerSchemaVersion !== CURRENT_OFFER_SCHEMA_VERSION) errors.push(...offerReport.errors);
+        }
     }
     if (snapshot.snapshotId !== createCurrentDisplaySnapshotId(snapshot)) errors.push("CURRENT_DISPLAY_ID_INVALID");
     if (snapshot.materialFingerprint !== currentDisplaySnapshotFingerprint(snapshot)) errors.push("CURRENT_DISPLAY_FINGERPRINT_INVALID");
     return freeze({ valid: errors.length === 0, errors: [...new Set(errors)] });
 }
 
-export function createCurrentDisplaySnapshot({ observedAt, importedAt, source, offers } = {}) {
+export function createCurrentDisplaySnapshot({ schemaVersion = CURRENT_DISPLAY_SNAPSHOT_SCHEMA_VERSION, observedAt, importedAt, source, offers } = {}) {
     const snapshot = {
-        schemaVersion: CURRENT_DISPLAY_SNAPSHOT_SCHEMA_VERSION,
+        schemaVersion,
         snapshotId: "",
         observedAt,
         importedAt,
         source: structuredClone(source),
-        offers: structuredClone(offers ?? []).sort((left, right) => left.atlasProductId.localeCompare(right.atlasProductId) || left.retailer.localeCompare(right.retailer)),
+        offers: structuredClone(offers ?? []).sort((left, right) => left.atlasProductId.localeCompare(right.atlasProductId) || left.retailer.localeCompare(right.retailer) || (left.offerIdentity ?? "").localeCompare(right.offerIdentity ?? "")),
         materialFingerprint: ""
     };
     snapshot.snapshotId = createCurrentDisplaySnapshotId(snapshot);
