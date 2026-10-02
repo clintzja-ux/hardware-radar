@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { createCurrentDisplaySnapshot } from "./CurrentDisplaySnapshot.js";
 import { assessCurrentDisplayItemPriceEligibility } from "./CurrentDisplayEligibility.js";
+import { projectLegacyCurrentOffer } from "./CurrentOfferModel.js";
 
 export const CURRENT_RETAIL_SOURCE_MODES = Object.freeze(["AUTOMATED_PRIMARY", "AUTOMATED_ALTERNATE", "MANUAL_ONLY", "UNAVAILABLE"]);
 export const CURRENT_RETAIL_REFRESH_OUTCOMES = Object.freeze(["REFRESHED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN", "SOURCE_STALE", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "DESTINATION_INVALID", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "TIMEOUT", "PROVIDER_ERROR", "INVALID_SOURCE_RESULT"]);
@@ -108,7 +109,10 @@ export class CurrentRetailRefreshOrchestrator {
             }
         };
         await Promise.all(Array.from({ length: Math.min(this.concurrency, Math.max(1, portfolio.items.length)) }, worker));
-        const offers = new Map((priorSnapshot?.offers ?? []).map(offer => [`${offer.atlasProductId}|${offer.retailerId}`, structuredClone(offer)]));
+        const priorOffers = priorSnapshot?.offers ?? [];
+        const priorKeys = priorOffers.map(offer => `${offer.atlasProductId}|${offer.retailerId}`);
+        if (new Set(priorKeys).size !== priorKeys.length) throw new Error("CURRENT_RETAIL_REFRESH_MULTI_OFFER_TARGET_REQUIRES_OFFER_IDENTITY");
+        const offers = new Map(priorOffers.map(offer => [`${offer.atlasProductId}|${offer.retailerId}`, structuredClone(offer)]));
         const outcomes = [];
         for (const [index, item] of portfolio.items.entries()) {
             const adapter = this.adapters.get(item.sourceAdapterId);
@@ -118,7 +122,8 @@ export class CurrentRetailRefreshOrchestrator {
             if (result?.type === "OUTCOME" && result.status === "SOURCE_WITHDRAWN") { if (offers.get(key)?.sourceIdentity?.adapterId === adapter.adapterId) offers.delete(key); outcomes.push({ operationId, ...item, status: result.status }); continue; }
             if (result?.type === "OUTCOME" && ["OUT_OF_STOCK", "PRICE_NOT_EXPOSED"].includes(result.status)) { offers.delete(key); outcomes.push({ operationId, ...item, status: result.status }); continue; }
             if (result?.type === "OUTCOME" && CURRENT_RETAIL_REFRESH_OUTCOMES.includes(result.status)) { outcomes.push({ operationId, ...item, status: result.status }); continue; }
-            const offer = normalizedObservation(result, item, adapter, operationId);
+            const normalized = normalizedObservation(result, item, adapter, operationId);
+            const offer = normalized && priorSnapshot?.schemaVersion === "1.1" ? projectLegacyCurrentOffer(normalized) : normalized;
             if (!offer) { outcomes.push({ operationId, ...item, status: "INVALID_SOURCE_RESULT" }); continue; }
             const predecessor = offers.get(key);
             if (predecessor?.sourceIdentity?.sourceId && predecessor.sourceIdentity.sourceId !== offer.sourceIdentity.sourceId) {
@@ -130,7 +135,7 @@ export class CurrentRetailRefreshOrchestrator {
         }
         const runMaterial = { portfolioId: portfolio.portfolioId, asOf: portfolio.asOf, outcomes };
         const runDigest = hash(runMaterial);
-        const snapshot = createCurrentDisplaySnapshot({ observedAt: portfolio.asOf, importedAt: portfolio.asOf, source: { workbook: `fixture-current-retail-refresh:${portfolio.portfolioId}`, sheet: "Source-neutral fixture refresh", digest: runDigest }, offers: [...offers.values()] });
+        const snapshot = createCurrentDisplaySnapshot({ schemaVersion: priorSnapshot?.schemaVersion ?? "1.0", observedAt: portfolio.asOf, importedAt: portfolio.asOf, source: { workbook: `fixture-current-retail-refresh:${portfolio.portfolioId}`, sheet: "Source-neutral fixture refresh", digest: runDigest }, offers: [...offers.values()] });
         const persistence = this.snapshotRepository ? await this.snapshotRepository.replace(snapshot) : { status: "NOT_PERSISTED", snapshotId: snapshot.snapshotId, previousSnapshotId: priorSnapshot?.snapshotId ?? null };
         const count = status => outcomes.filter(outcome => outcome.status === status).length;
         const successful = new Set(["REFRESHED", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN"]);

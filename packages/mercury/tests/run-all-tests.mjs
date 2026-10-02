@@ -259,6 +259,7 @@ const testModules = [
     ,"./RetailDisplayImport.test.mjs"
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
     ,"./CurrentOfferModel.test.mjs"
+    ,"./CurrentSchemaMigration.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./RamTerminalPublicIntelligence.test.mjs"
     ,"./RamMarketSnapshotProjection.test.mjs"

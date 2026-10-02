@@ -1,5 +1,7 @@
 export * from "./CurrentDisplaySnapshot.js";
+export * from "./CurrentOfferModel.js";
 export * from "./FileCurrentDisplaySnapshotRepository.js";
+export * from "./CurrentSchemaMigration.js";
 export * from "./RetailDisplayImportService.js";
 export * from "./ManualRetailReviewImportService.js";
 export * from "./StandardRetailNewConditionPolicy.js";

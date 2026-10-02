@@ -9,6 +9,7 @@ import {
     CurrentRetailRefreshOrchestrator,
     FileCurrentDisplaySnapshotRepository,
     ManualRetailReviewImportService
+    ,projectLegacyCurrentOffer
 } from "../current-display/index.js";
 
 let cases = 0;
@@ -71,6 +72,9 @@ const marketRun = await new CurrentRetailRefreshOrchestrator({ adapters: [market
 assert.equal(marketRun.outcomes[0].status, "MARKETPLACE_ONLY"); assert.equal(marketRun.snapshot.offers[0].itemPriceEligible, false); cases += 1;
 
 const prior = createCurrentDisplaySnapshot({ observedAt: "2026-09-07T00:00:00.000Z", importedAt: "2026-09-07T00:00:00.000Z", source: { workbook: "fixture.xlsx", sheet: "fixture", digest: "a".repeat(64) }, offers: [{ ...observation(unknownItem, { observedAt: "2026-09-07T00:00:00.000Z" }), priceUsd: 99, itemPriceUsd: undefined, type: undefined, destinationUrl: undefined, sourceId: undefined, retailer: "NEWEGG", availability: "AVAILABLE", matchStatus: "EXACT_PRODUCT_PAGE", sourceRow: 1, itemPriceEligible: true, deliveredCostEligible: false, deliveredCostReasons: ["SHIPPING_COST_UNKNOWN", "FEES_UNKNOWN"], comparisonEligible: true, comparisonReasons: [], researchUrl: unknownItem.destinationUrl }] });
+const prior11 = createCurrentDisplaySnapshot({ schemaVersion: "1.1", observedAt: prior.observedAt, importedAt: prior.importedAt, source: prior.source, offers: prior.offers.map(projectLegacyCurrentOffer) });
+const compatible11 = await new CurrentRetailRefreshOrchestrator({ adapters: [fixtureAdapter({ results: { [unknownItem.destinationId]: observation(unknownItem) } })] }).run({ portfolio: createCurrentRetailRefreshPortfolio({ products, destinations: [destinations[0]], adapters: [fixtureAdapter({ results: { [unknownItem.destinationId]: observation(unknownItem) } })], asOf }), priorSnapshot: prior11 });
+assert.equal(compatible11.snapshot.schemaVersion, "1.1"); assert.equal(compatible11.snapshot.offers.length, 1); assert.ok(compatible11.snapshot.offers[0].offerIdentity); cases += 1;
 const outcomes = ["TIMEOUT", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "PROVIDER_ERROR"];
 for (const status of outcomes) {
     const adapter = fixtureAdapter({ results: { [unknownItem.destinationId]: { type: "OUTCOME", status } } });

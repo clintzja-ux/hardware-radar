@@ -1,6 +1,7 @@
 import { assessRetailerDestinationBinding } from "../destinations/RetailerDestination.js";
 import { RIGHTS_STATES } from "../rights/SourceRightsPolicy.js";
 import { createCurrentDisplaySnapshot } from "./CurrentDisplaySnapshot.js";
+import { projectLegacyCurrentOffer } from "./CurrentOfferModel.js";
 import { manualCurrentPriceDigest, projectPreparedManualCurrentOffer } from "./ManualCurrentPricePreparation.js";
 
 export const MANUAL_SNAPSHOT_EXECUTION_POLICY_VERSION = "MANUAL-CURRENT-DISPLAY-SNAPSHOT-EXECUTION-P1-1.0";
@@ -138,11 +139,12 @@ export class ManualCurrentPriceSnapshotExecutionService {
     const predecessor = describeManualSnapshotPredecessor({ snapshot: current, preparation });
     await this.#revalidate({ preparation, authorization, at: executedAt, current, predecessor, requirePredecessor: true });
     const targetKey = key(preparation.binding), before = predecessor.offer;
-    const nextOffer = projectPreparedManualCurrentOffer(preparation, { authorizationId });
+    const projectedOffer = projectPreparedManualCurrentOffer(preparation, { authorizationId });
+    const nextOffer = current?.schemaVersion === "1.1" ? projectLegacyCurrentOffer(projectedOffer) : projectedOffer;
     const unrelatedBefore = (current?.offers ?? []).filter(offer => key(offer) !== targetKey);
     const offers = [...unrelatedBefore, nextOffer];
     const sourceDigest = manualCurrentPriceDigest({ predecessorSnapshotId: predecessor.snapshotId, authorizationId, preparationId: preparation.preparationId, offers });
-    const snapshot = createCurrentDisplaySnapshot({ observedAt: executedAt, importedAt: executedAt, source: { workbook: "manual-current-price-snapshot-execution", sheet: MANUAL_SNAPSHOT_EXECUTION_POLICY_VERSION, digest: sourceDigest }, offers });
+    const snapshot = createCurrentDisplaySnapshot({ schemaVersion: current?.schemaVersion ?? "1.0", observedAt: executedAt, importedAt: executedAt, source: { workbook: "manual-current-price-snapshot-execution", sheet: MANUAL_SNAPSHOT_EXECUTION_POLICY_VERSION, digest: sourceDigest }, offers });
     const replacement = await this.snapshotRepository.replaceIfCurrent(snapshot, { expectedCurrentSnapshotId: predecessor.snapshotId, expectedCurrentFingerprint: predecessor.snapshotFingerprint });
     const unrelatedAfter = snapshot.offers.filter(offer => key(offer) !== targetKey);
     if (manualCurrentPriceDigest(unrelatedBefore) !== manualCurrentPriceDigest(unrelatedAfter)) throw new Error("MANUAL_CURRENT_DISPLAY_UNRELATED_OFFER_CHANGED");
