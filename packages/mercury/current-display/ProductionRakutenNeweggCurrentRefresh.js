@@ -63,6 +63,6 @@ export class ProductionRakutenNeweggCurrentRefreshService {
             failedSafe: refresh.counts.failed
         };
         const exceptions = [...rowAssessments.filter(value => value.classification !== "ROUTINE_CANDIDATE"), ...refresh.outcomes.filter(value => !["REFRESHED", "CONDITION_UNKNOWN"].includes(value.status)).map(value => ({ atlasProductId: value.atlasProductId, destinationId: value.destinationId, classification: value.status, reason: value.status }))];
-        return freeze({ schemaVersion: "1.0", operation: "RAKUTEN_NEWEGG_CURRENT_REFRESH", mode: dryRun ? "DRY_RUN" : "EXECUTE", catalogBindingDigest: catalogState.bindingDigest, portfolioId: portfolio.portfolioId, refreshRunId: refresh.runId, summary, exceptions, snapshot: refresh.snapshot, persistence, historicalObservationsCreated: 0, publicationCandidatesCreated: 0, publicationAuthorizationsCreated: 0, artifactsCreated: 0, providerCalls: 0, paidTasks: 0, actualSpendUsd: 0 });
+        return freeze({ schemaVersion: "1.0", operation: "RAKUTEN_NEWEGG_CURRENT_REFRESH", mode: dryRun ? "DRY_RUN" : "EXECUTE", catalogBindingDigest: catalogState.bindingDigest, portfolioId: portfolio.portfolioId, refreshRunId: refresh.runId, summary, rowAssessments, outcomes: refresh.outcomes, exceptions, snapshot: refresh.snapshot, persistence, historicalObservationsCreated: 0, publicationCandidatesCreated: 0, publicationAuthorizationsCreated: 0, artifactsCreated: 0, providerCalls: 0, paidTasks: 0, actualSpendUsd: 0 });
     }
 }

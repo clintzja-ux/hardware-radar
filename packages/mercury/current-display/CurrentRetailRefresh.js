@@ -134,6 +134,11 @@ export class CurrentRetailRefreshOrchestrator {
                 outcomes.push({ operationId, ...item, status: "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED" });
                 continue;
             }
+            if (multiOffer && !predecessor) {
+                const legacyPredecessors=[...offers.entries()].filter(([,value])=>value.identityMode==="LEGACY_PRODUCT_CHANNEL"&&value.atlasProductId===offer.atlasProductId&&value.retailerId===offer.retailerId&&value.destinationId===offer.destinationId);
+                if (legacyPredecessors.length===1) offers.delete(legacyPredecessors[0][0]);
+                else if (legacyPredecessors.length>1) { outcomes.push({ operationId, ...item, status: "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED" }); continue; }
+            }
             offers.set(key, offer);
             outcomes.push({ operationId, ...item, status: observationOutcome(offer) });
         }

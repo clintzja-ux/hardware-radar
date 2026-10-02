@@ -32,4 +32,3 @@ The Crucial offer `mer_offer_eba86bfe779fd6c9c125ba0c` remains one distinct Newe
 ## Authority and isolation
 
 Eligibility and compatibility create no publication, release, or deployment authority. They do not mutate Current, History, Atlas, destinations, workbook evidence, URLs, or affiliate state and perform no provider operation.
-
