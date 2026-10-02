@@ -39,7 +39,8 @@ async function canonicalInputs(asOf) {
   const currentState = await new FileCurrentDisplaySnapshotRepository({ statePath: currentStatePath }).getState();
   const snapshot = currentState.current ? { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) } : null;
   const eligibleSnapshot = snapshot ? deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot, rightsRegistry: defaultSourceRightsRegistry }) : null;
-  const publicationSnapshot = eligibleSnapshot && currentState.previous ? deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot, predecessorSnapshot: currentState.previous }) : eligibleSnapshot;
+  let publishedProjection = null; try { publishedProjection = await json(path.join(root, "public/data/ram-current-retail.json")); } catch {}
+  const publicationSnapshot = eligibleSnapshot && currentState.previous ? deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot, predecessorSnapshot: currentState.previous, publishedProjection }) : eligibleSnapshot;
   const current = publicationSnapshot ? createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf }) : createEmptyPublicCurrentRetailProjection({ asOf });
   const staleCurrent = createEmptyPublicCurrentRetailProjection({ asOf, state: "NO_QUALIFYING_CURRENT_PRICE" });
   const rawHistoryPath = path.join(stateRoot, "mercury/historical-observations.json");

@@ -200,6 +200,7 @@
     "rakuten:feed:validate": "node scripts/rakuten-feed-validate.mjs",
     "rakuten:catalog-state": "node scripts/rakuten-catalog-state.mjs",
     "mercury:rakuten-full-current:prepare": "node scripts/mercury-rakuten-full-current-refresh-prepare.mjs",
+    "mercury:rakuten-full-current:execute": "node scripts/mercury-rakuten-full-current-refresh-execute.mjs",
     "retail-current:rakuten-newegg:refresh": "node scripts/mercury-rakuten-newegg-current-refresh.mjs",
     "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
     "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",

@@ -15,8 +15,9 @@ const products = await new ProductRepository({ readJson }).getAll(), retailers =
 const source = await loadRetailerDestinationSource({ sourcePath: "packages/mercury/destinations/production-destinations.json", products, retailers });
 const destinations = createPublicRetailerDestinationProjection({ source, retailers });
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) }, rightsRegistry: defaultSourceRightsRegistry });
-const publicationSnapshot = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: currentState.previous });
-const asOf = "2026-10-01T06:10:00.000Z";
+const publishedProjection = JSON.parse(await readFile("public/data/ram-current-retail.json", "utf8"));
+const publicationSnapshot = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: currentState.previous, publishedProjection });
+const asOf = "2026-10-02T22:22:28.595Z";
 const currentRetail = createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf });
 const projection = await createRamTerminalPublicIntelligence({ catalog, currentRetail, historicalRepository: history, asOf, currentSnapshotId: currentState.current.snapshotId });
 assert.equal(validateRamTerminalPublicIntelligence(projection).valid, true);
@@ -24,7 +25,7 @@ assert.deepEqual(Object.fromEntries(Object.entries(projection.lenses).map(([key,
 assert.equal(projection.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 410);
 assert.equal(projection.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 213);
 assert.equal(projection.lenses.ALL_RAM.historyCoverage.productsWithComparableHistory, 49);
-assert.equal(projection.lenses.ALL_RAM.coverage.productsCurrentlyPriced, 49);
+assert.equal(projection.lenses.ALL_RAM.coverage.productsCurrentlyPriced, 59);
 assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.every(row => row.formFactor === "SO_DIMM"), true);
 assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.some(row => row.memoryType === "DDR4"), true);
 assert.doesNotMatch(JSON.stringify(projection), /destinationUrl|sourceUrl|rawPayload|providerTask|evidenceId|affiliate/i);

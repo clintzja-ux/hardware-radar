@@ -20,7 +20,7 @@ export function deriveCurrentDisplayPublicationEligibleSnapshot({snapshot,rights
   return freeze({...snapshot,offers:adjusted});
 }
 
-export function deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot,predecessorSnapshot}={}){
+export function deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot,predecessorSnapshot,publishedProjection=null}={}){
   if(eligibleSnapshot?.schemaVersion!==CURRENT_DISPLAY_MULTI_OFFER_SCHEMA_VERSION||!Array.isArray(eligibleSnapshot?.offers)||!Array.isArray(predecessorSnapshot?.offers))throw new TypeError("CURRENT_DISPLAY_PUBLICATION_COMPATIBILITY_INPUT_INVALID");
   const priorIdentities=new Set(predecessorSnapshot.offers.map(offer=>offer.offerIdentity).filter(Boolean)),groups=new Map();
   for(const offer of eligibleSnapshot.offers){const key=`${offer.atlasProductId}:${offer.retailerId}`;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(offer);}
@@ -28,8 +28,10 @@ export function deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibl
   for(const group of groups.values()){
     if(group.length===1){offers.push(group[0]);continue;}
     const retained=group.filter(offer=>priorIdentities.has(offer.offerIdentity));
-    if(retained.length!==1)throw new Error("CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED");
-    offers.push(retained[0]);
+    if(retained.length===1){offers.push(retained[0]);continue;}
+    const publicOffers=(publishedProjection?.products??[]).flatMap(product=>product.offers??[]),continuity=group.filter(offer=>publicOffers.some(value=>value.atlasProductId===offer.atlasProductId&&value.retailerId===offer.retailerId&&value.destinationId===offer.destinationId&&value.itemPriceUsd===offer.priceUsd&&value.observedAt===offer.observedAt));
+    if(continuity.length!==1)throw new Error("CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED");
+    offers.push(continuity[0]);
   }
   return freeze({...eligibleSnapshot,offers:offers.sort((a,b)=>a.atlasProductId.localeCompare(b.atlasProductId)||a.retailer.localeCompare(b.retailer)||a.offerIdentity.localeCompare(b.offerIdentity))});
 }
