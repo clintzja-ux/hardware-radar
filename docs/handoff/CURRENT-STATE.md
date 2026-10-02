@@ -4,13 +4,13 @@ Automated Current lane certification P1 is fixture-certified at `AUTOMATED-CURRE
 
 ```text
 Last updated:                  2026-10-01
-Branch:                        main
-Current committed HEAD:        3118b442d511c1afffc4eadf902c520a64b5d07d (`Merge branch 'hardware-radar-growth-1'`)
+Branch:                        hardware-radar-growth-1
+Current committed HEAD:        5a7d29e2144d62e1c65c9c2a256d7c8120eaebfe (`fix(mercury): support mutable Rakuten delta lineage`)
 Committed HEAD at R2 preflight: 3f7eece1034564d9386ec9b0af848151db03f2fd
 R2/R2A checkpoint:             committed and pushed at d813641a049a5624a9ca7b2f116f37c8b66a6717 (`fix(release): reconcile promotion-range hygiene`); synchronized with `origin/dataforseo-sprint3-mercury-observation`; final promotion audit subsequently completed against that committed HEAD
 Current release-hardening increment: MAIN-PROMOTION-R2 — promotion-range hygiene and documentation reconciliation fixture-certified
 R1 status:                     committed, pushed, and fixture-certified at 3f7eece1034564d9386ec9b0af848151db03f2fd
-Branch/main relationship:      cached `origin/main...HEAD` is 1 behind / 205 ahead; branch is synchronized with `origin/hardware-radar-growth-1`; the completed P3 stack plus `NEWEGG_AFFILIATE_DESTINATION_PRECEDENCE_P1` are the current uncommitted working-tree increment
+Branch/main relationship:      cached `origin/main...HEAD` is 2 behind / 5 ahead; branch was synchronized with `origin/hardware-radar-growth-1` at preflight; `RAKUTEN_DISK_BOUNDED_CATALOG_STATE_P1` is the current uncommitted working-tree increment
 Main promotion:                NOT AUTHORIZED; repository-controlled R2 blockers are resolved locally, and any future merge/update to `main` requires explicit production-deployment authorization
 Current content-foundation increment: CONTENT-006A — launch QA remains complete; six editorial routes; editorial discovery intentionally remains in Guides navigation, footer, index, and article links
 Current implementation increment: NEWEGG_AFFILIATE_DESTINATION_PRECEDENCE_P1 — public-action routing corrected and certified; release recomposition remains separately unauthorized
@@ -50,6 +50,8 @@ Current Rakuten semantics increment: RAKUTEN_NEWEGG_MAIN_FEED_SELLER_CONDITION_A
 Current Rakuten price-semantics increment: RAKUTEN_PRODUCT_CATALOG_PRICE_SEMANTICS_UNBLOCK_P1 — written Rakuten Advertising Customer Support clarification now establishes valid Sale Price precedence, Retail Price fallback, blank-date Sale validity, and complete-window fallback; the existing adapter implements those rules while one-sided, malformed, reversed, and timezone/boundary-ambiguous windows remain fail-closed. Raw fields and selected-field provenance are preserved, source conflicts require review, canonical historical rights remain disallowed, and no live feed/current/history/publication operation occurred.
 Current Rakuten eligibility increment: RAKUTEN_AUTOMATED_ITEM_PRICE_ELIGIBILITY_ALIGNMENT_P1 — fixture-certified alignment preserves unknown condition/seller/shipping while permitting an otherwise valid bounded automated item-price display and comparison; known-incompatible condition still blocks, explicit `out-of-stock` is known unavailable and ineligible, unrecognized availability remains unknown, and history/publication/release authority remains absent.
 Current Rakuten production composition: RAKUTEN_NEWEGG_PRODUCTION_REFRESH_COMPOSITION_P1 — fixture-certified production service and thin local-file command compose ordered acquired FULL/DELTA files through the existing catalog projection, canonical Atlas/destinations, Rakuten adapter, eligibility, source-neutral refresh, and predecessor-safe current snapshot repository. Routine rows progress mechanically; row-level destination, identity, price, availability, out-of-stock, and source-conflict outcomes remain isolated. Real feed acquisition/execution is not authorized or run; history/publication/release remain untouched.
+Current Rakuten disk-bounded catalog state: `RAKUTEN_DISK_BOUNDED_CATALOG_STATE_P1` extends the existing source-local projection owner with private Node built-in SQLite operational state; no external database or competing authority was added. The exact retained 1,059,018-row FULL deterministically materialized as `rakuten_catalog_09c8dcd7cb31f27eeabe883d` (1,049,341,952 bytes; peak RSS 278,028,288; peak heap 79,901,792; 127.3 seconds). The retained 4,250-row September DELTA (1,010 I / 2,228 U / 1,012 D) produced child `rakuten_catalog_c0947b0a7c5d3e49a86c8671` with 1,059,788 records (1,050,546,176 bytes; peak RSS 112,001,024; peak heap 25,355,488; 18.9 seconds). Readiness is `BASELINE_READY`; CMK64 reflects the retained `U`, while the two absent canaries retain baseline records without false September freshness. FULL/DELTA materialization created zero Current, History, Atlas, destination, affiliate, publication, or release mutation. The next separately authorized provider boundary is one DELTA-only retrieval/validation; no FULL redownload is required unless chain validation fails.
+Rakuten timestamp/identity distinction remains explicit: remote file mtime is retained discovery/change-detection metadata for each mutable remote file and is not required to order after the FULL; validated HDR is UTC provider deposit evidence time; SHA-256 identifies retrieved bytes; deterministic catalog state ID identifies derived Hardware Radar lineage. Remote mtime is excluded from semantic state identity and never substitutes for validated HDR.
 Current Rakuten SFTP safety hardening: RAKUTEN_SFTP_SINGLE_SESSION_SAFETY_HARDENING_P1 — fixture-certified local cross-process lease protection, bounded/cancellable directory listing, and authoritative FULL-plus-subsequent-DELTA sequential acquisition through one existing `ssh2` session. The network closes before local validation/processing, failure cannot publish partial lineage as authoritative, automatic retries remain zero, and Hardware Radar's normal concurrency target is one despite Rakuten's external ceiling of five. No credentials were inspected and no real SFTP/network/feed/current/history/publication/release operation occurred.
 Current Rakuten large-feed correction: RAKUTEN_LARGE_FEED_TRANSFER_TIMEOUT_ALIGNMENT_P1 — the first real authenticated acquisition continuously transferred 126,779,392 of a reported 161,057,662-byte authoritative FULL before the former 15-minute per-file absolute ceiling expired. The ceiling is now a finite 30 minutes per file; the independent 60-second no-progress limit, cancellation, bounded cleanup, single leased session, sequential downloads, zero retries, and exact partial removal remain unchanged. Failures after lineage selection retain safe FULL/DELTA sequence and attempted-file metadata without treating incomplete acquisition as authoritative. No corrective live rerun occurred; Current, History, publication, and release remain unchanged and release remains OFF.
 Current Rakuten HDR diagnostic hardening: RAKUTEN_HDR_FAILURE_DIAGNOSTIC_HARDENING_P1 — unsupported HDR field-four timestamps remain rejected as `SFTP_HDR_TIMESTAMP_INVALID`, while a bounded second streaming pass over local downloaded bytes now records only a sanitized timestamp syntax family and independent gzip-EOF, trailer, and count diagnostics. It produces no catalog output or Mercury invocation, retains no rejected feed archive, preserves failure cleanup and authoritative-lineage/attempted-file observability, and accepts no new timestamp syntax. Fixture certification is offline; no real Rakuten rerun occurred and release remains OFF.
@@ -217,13 +219,13 @@ MERCURY-HISTORY-056 fixture-certified the five-product `DATAFORSEO_AMAZON` pilot
 
 ## Current test baseline
 
-The current runners declare **346 subsystem test files**:
+The current runners declare **353 subsystem test files**:
 
 | Runner | Files |
 |---|---:|
 | Sentinel | 8 |
 | Atlas | 22 |
-| Mercury | 292 |
+| Mercury | 299 |
 | Beacon | 7 |
 | Gateway | 17 |
 

@@ -9,6 +9,7 @@ export * from "./CurrentRetailRefresh.js";
 export * from "./RetailLifecycleHeldReassessment.js";
 export * from "./RakutenProductCatalogParser.js";
 export * from "./RakutenCatalogStateProjection.js";
+export * from "./RakutenDiskBoundedCatalogState.js";
 export * from "./RakutenNeweggProductFeedAdapter.js";
 export * from "./ProductionRakutenNeweggCurrentRefresh.js";
 export * from "./RakutenSftpConfig.js";

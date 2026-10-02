@@ -193,6 +193,7 @@
     "rakuten:sftp:download:delta": "node --env-file=.env scripts/rakuten-sftp-transport.mjs --operation=download-delta",
     "rakuten:sftp:download:authoritative": "node --env-file=.env scripts/rakuten-sftp-transport.mjs --operation=download-authoritative",
     "rakuten:feed:validate": "node scripts/rakuten-feed-validate.mjs",
+    "rakuten:catalog-state": "node scripts/rakuten-catalog-state.mjs",
     "retail-current:rakuten-newegg:refresh": "node scripts/mercury-rakuten-newegg-current-refresh.mjs",
     "review:product-identity:prepare": "node scripts/mercury-product-identity-review-prepare.mjs",
     "review:merchant-identity:prepare": "node scripts/mercury-merchant-identity-review-prepare.mjs",
