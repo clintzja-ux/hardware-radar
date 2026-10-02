@@ -191,6 +191,7 @@
     "retail-current:rakuten-newegg:inspect": "node scripts/mercury-rakuten-current-refresh-inspect.mjs",
     "retail-current:rakuten-newegg:recovery:prepare": "node scripts/mercury-rakuten-legacy-offer-recovery-prepare.mjs",
     "retail-current:rakuten-newegg:recovery:inspect": "node scripts/mercury-rakuten-legacy-offer-recovery-inspect.mjs",
+    "retail-current:rakuten-newegg:recovery:execute": "node scripts/mercury-rakuten-legacy-offer-recovery-execute.mjs",
     "retail-lifecycle-held:reassess": "node scripts/retail-lifecycle-held-reassess.mjs",
     "rakuten:sftp:inspect": "node --env-file=.env scripts/rakuten-sftp-transport.mjs --operation=inspect",
     "rakuten:sftp:download:delta": "node --env-file=.env scripts/rakuten-sftp-transport.mjs --operation=download-delta",

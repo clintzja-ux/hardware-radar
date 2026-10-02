@@ -8,15 +8,16 @@ const currentState = JSON.parse(await readFile(".forge-review/retail-display/cur
 const { ProductRepository, RetailerRepository } = await import("../../atlas/index.js");
 const { loadRetailerDestinationSource, createPublicRetailerDestinationProjection } = await import("../destinations/RetailerDestinationSource.js");
 const { createPublicCurrentRetailProjection } = await import("../current-display/PublicCurrentRetailProjection.js");
-const { deriveCurrentDisplayPublicationEligibleSnapshot } = await import("../publication/CurrentDisplayPublication.js");
+const { deriveCurrentDisplayPublicationEligibleSnapshot, deriveLegacySingleOfferPublicationCompatibilitySnapshot } = await import("../publication/CurrentDisplayPublication.js");
 const { defaultSourceRightsRegistry } = await import("../rights/SourceRightsRegistry.js");
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
 const products = await new ProductRepository({ readJson }).getAll(), retailers = await new RetailerRepository({ readJson }).getAll();
 const source = await loadRetailerDestinationSource({ sourcePath: "packages/mercury/destinations/production-destinations.json", products, retailers });
 const destinations = createPublicRetailerDestinationProjection({ source, retailers });
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) }, rightsRegistry: defaultSourceRightsRegistry });
+const publicationSnapshot = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: currentState.previous });
 const asOf = "2026-10-01T06:10:00.000Z";
-const currentRetail = createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: eligible, asOf });
+const currentRetail = createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf });
 const projection = await createRamTerminalPublicIntelligence({ catalog, currentRetail, historicalRepository: history, asOf, currentSnapshotId: currentState.current.snapshotId });
 assert.equal(validateRamTerminalPublicIntelligence(projection).valid, true);
 assert.deepEqual(Object.fromEntries(Object.entries(projection.lenses).map(([key, lens]) => [key, lens.coverage.productsTracked])), { ALL_RAM: 103, DDR5: 74, DDR4: 10, LAPTOP_SODIMM: 19 });

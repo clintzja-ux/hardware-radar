@@ -1,6 +1,6 @@
 # IC — Rakuten Newegg Legacy Offer Binding and Current Recovery P1
 
-Status: IMPLEMENTED / FIXTURE-CERTIFIED / PRODUCTION PREPARED / ZERO AUTHORITY
+Status: IMPLEMENTED / FIXTURE-CERTIFIED / OPERATOR-AUTHORIZED / CANONICAL CURRENT EXECUTED
 
 ## Ownership and purpose
 
@@ -23,4 +23,6 @@ Plan `mer_currecovery_590cf94f688ad17caa61888b` binds source Current snapshot `m
 
 The proposed semantic diff is 188 → 189 offers: one update, one addition, zero removals, one identity enrichment, and 187 unchanged offers. Preparations are `mer_currecoveryprep_9e7c39f8d36daefb9242154e` and `mer_currecoveryprep_aaa5debdf2c33c508bbbc7f4`.
 
-All artifacts have `authority: NONE`, `currentMutationAuthorized: false`, History/destination/affiliate mutation false, provider calls 0, paid tasks 0, and spend `$0.000`. No execution command is exposed by this increment. Explicit operator authorization and a separately certified progression boundary are required before canonical Current can change.
+The operator explicitly authorized only this plan and its two preparations. `retail-current:rakuten-newegg:recovery:execute` requires all three exact IDs plus their deterministic confirmation, resolves the immutable artifacts, revalidates Current and retained Rakuten lineage, rebuilds the inspected snapshot, and uses `FileCurrentDisplaySnapshotRepository.replaceIfCurrent` for atomic compare-and-swap persistence. Canonical Current advanced to `mer_display_64e9570356f18c96c972e735` with 189 offers. Restart readback reproduced the same snapshot; exact replay returns `ALREADY_EXECUTED` without another write.
+
+Execution changed no History, destination, affiliate, workbook, publication, release, or deployment state. Provider calls and paid tasks were zero and spend was `$0.000`. The unresolved multi-Item case and source-scoped delete remained excluded. The permitted zero-authority RAM portfolio recomposition then failed closed before candidate creation because `deriveCurrentDisplayPublicationEligibleSnapshot` still enforces legacy product/retailer uniqueness and classified the legitimate two-offer G.Skill state as `CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED`. No certification or release authority was created. The next prerequisite is a narrow schema-1.1 multi-offer publication-eligibility correction; release and deployment remain unauthorized.

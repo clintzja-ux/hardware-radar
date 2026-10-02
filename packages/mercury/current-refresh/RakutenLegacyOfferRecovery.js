@@ -61,3 +61,32 @@ export function validateRakutenLegacyOfferRecoveryPlan(plan,{currentSnapshot,ret
   if(retainedRakutenState&&(retainedRakutenState.stateId!==material.retainedRakutenStateId||retainedRakutenState.stateDigest!==material.retainedRakutenStateDigest))throw new Error("CURRENT_RECOVERY_RAKUTEN_STATE_CHANGED");
   return true;
 }
+
+export function validateRakutenLegacyOfferRecoveryPreparation(value) {
+  const {schemaVersion,preparationType,preparationId,...material}=value??{};
+  const preparationDigest=digest(material);
+  if(schemaVersion!==RAKUTEN_LEGACY_OFFER_RECOVERY_SCHEMA_VERSION||preparationType!=="RAKUTEN_NEWEGG_CURRENT_RECOVERY_PREPARATION"||preparationId!==`mer_currecoveryprep_${preparationDigest.slice(0,24)}`||material.authority!=="NONE"||material.currentMutationAuthorized!==false||material.historyMutation!==false||material.destinationMutation!==false||material.affiliateMutation!==false)throw new Error("CURRENT_RECOVERY_PREPARATION_INVALID");
+  return true;
+}
+
+export async function executeRakutenLegacyOfferRecovery({plan,preparations,currentSnapshotRepository,retainedRakutenState,authorizedPlanId,authorizedPreparationIds,confirmation}={}) {
+  validateRakutenLegacyOfferRecoveryPlan(plan);
+  if(plan.planId!==authorizedPlanId||!Array.isArray(authorizedPreparationIds)||authorizedPreparationIds.length!==2||new Set(authorizedPreparationIds).size!==2||authorizedPreparationIds.some(id=>!plan.preparationIds.includes(id))||plan.preparationIds.some(id=>!authorizedPreparationIds.includes(id)))throw new Error("CURRENT_RECOVERY_AUTHORIZATION_SCOPE_INVALID");
+  const expectedConfirmation=`EXECUTE-RAKUTEN-CURRENT-RECOVERY:${plan.planId}:${plan.preparationIds.join(":")}`;
+  if(confirmation!==expectedConfirmation)throw new Error("CURRENT_RECOVERY_CONFIRMATION_INVALID");
+  if(!Array.isArray(preparations)||preparations.length!==2)throw new Error("CURRENT_RECOVERY_PREPARATIONS_REQUIRED");
+  preparations.forEach(validateRakutenLegacyOfferRecoveryPreparation);
+  if(preparations.some(value=>!plan.preparationIds.includes(value.preparationId)||value.bindingDigest!==plan.bindingDigest||value.sourceSnapshotId!==plan.sourceSnapshotId||value.sourceSnapshotFingerprint!==plan.sourceSnapshotFingerprint||value.retainedRakutenStateId!==plan.retainedRakutenStateId||value.retainedDeltaDigest!==plan.retainedDeltaDigest))throw new Error("CURRENT_RECOVERY_PREPARATION_BINDING_INVALID");
+  const currentState=await currentSnapshotRepository.getState(),current=currentState.current;
+  if(current?.snapshotId===plan.proposedSnapshotId&&current?.materialFingerprint===plan.proposedSnapshotFingerprint)return freeze({status:"ALREADY_EXECUTED",planId:plan.planId,snapshotId:current.snapshotId,offerCount:current.offers.length,currentChanged:false});
+  validateRakutenLegacyOfferRecoveryPlan(plan,{currentSnapshot:current,retainedRakutenState});
+  const update=findOne(preparations,value=>value.operation==="SAME_OFFER_REFRESH","CURRENT_RECOVERY_UPDATE_PREPARATION_INVALID");
+  const addition=findOne(preparations,value=>value.operation==="DISTINCT_OFFER_ADDITION","CURRENT_RECOVERY_ADDITION_PREPARATION_INVALID");
+  const offers=current.offers.filter(value=>value.offerIdentity!==update.priorOffer.offerIdentity);
+  if(offers.length!==current.offers.length-1||offers.some(value=>value.offerIdentity===addition.proposedOffer.offerIdentity))throw new Error("CURRENT_RECOVERY_TARGET_STATE_CHANGED");
+  offers.push(update.proposedOffer,addition.proposedOffer);
+  const proposed=createCurrentDisplaySnapshot({schemaVersion:"1.1",observedAt:plan.preparedAt,importedAt:plan.preparedAt,source:{workbook:`rakuten-current-recovery:${plan.retainedRakutenStateId}`,sheet:"Prepared zero-authority recovery",digest:plan.retainedDeltaDigest},offers});
+  if(proposed.snapshotId!==plan.proposedSnapshotId||proposed.materialFingerprint!==plan.proposedSnapshotFingerprint||proposed.offers.length!==plan.exactDiff.newCount)throw new Error("CURRENT_RECOVERY_PROPOSED_STATE_MISMATCH");
+  const persistence=await currentSnapshotRepository.replaceIfCurrent(proposed,{expectedCurrentSnapshotId:plan.sourceSnapshotId,expectedCurrentFingerprint:plan.sourceSnapshotFingerprint});
+  return freeze({status:"EXECUTED",planId:plan.planId,snapshotId:proposed.snapshotId,offerCount:proposed.offers.length,currentChanged:true,persistence,exactDiff:plan.exactDiff,historyRecordsDelta:0,historySequenceDelta:0,destinationDelta:0,affiliateDelta:0,providerCalls:0,paidTasks:0,actualSpendUsd:0});
+}
