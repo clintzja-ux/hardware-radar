@@ -82,7 +82,8 @@ const absentDestination = { ...destination, destinationId: `mer_dest_${"e".repea
 const absentAdapter = createRakutenNeweggProductFeedAdapter({ catalogFiles: [artifact("MAIN_FULL", fullRecords), artifact("MAIN_DELTA", updateRecords)], destinations: [absentDestination], feedTimestamp: deltaAt, rights });
 assert.deepEqual(await absentAdapter.refresh({ ...absentDestination, retailer: "NEWEGG", asOf: "2026-10-02T12:00:00.000Z" }), { type: "OUTCOME", status: "SOURCE_UNAVAILABLE" }); cases++;
 const deleteAdapter = createRakutenNeweggProductFeedAdapter({ catalogFiles: [artifact("MAIN_FULL", fullRecords), artifact("MAIN_DELTA", deleteRecords)], destinations: [destination], feedTimestamp: deltaAt, rights });
-assert.deepEqual(await deleteAdapter.refresh({ ...destination, retailer: "NEWEGG", asOf: "2026-10-02T12:00:00.000Z" }), { type: "OUTCOME", status: "SOURCE_WITHDRAWN" }); cases++;
+const withdrawal=await deleteAdapter.refresh({ ...destination, retailer: "NEWEGG", asOf: "2026-10-02T12:00:00.000Z" });
+assert.equal(withdrawal.type,"OUTCOME");assert.equal(withdrawal.status,"SOURCE_WITHDRAWN");assert.equal(withdrawal.listingIdentity,"N82E16820236839");assert.match(withdrawal.withdrawOfferIdentity,/^mer_offer_[a-f0-9]{24}$/);cases+=4;
 
 const protectedState = { history: [{ id: "history" }], destinations: [destination], affiliateUrl: "https://affiliate.example.invalid/operator-value" };
 const before = structuredClone(protectedState);

@@ -9,7 +9,7 @@ import {
     CurrentRetailRefreshOrchestrator,
     FileCurrentDisplaySnapshotRepository,
     ManualRetailReviewImportService
-    ,projectLegacyCurrentOffer
+    ,createCurrentOfferProjection,projectLegacyCurrentOffer
 } from "../current-display/index.js";
 
 let cases = 0;
@@ -75,6 +75,16 @@ const prior = createCurrentDisplaySnapshot({ observedAt: "2026-09-07T00:00:00.00
 const prior11 = createCurrentDisplaySnapshot({ schemaVersion: "1.1", observedAt: prior.observedAt, importedAt: prior.importedAt, source: prior.source, offers: prior.offers.map(projectLegacyCurrentOffer) });
 const compatible11 = await new CurrentRetailRefreshOrchestrator({ adapters: [fixtureAdapter({ results: { [unknownItem.destinationId]: observation(unknownItem) } })] }).run({ portfolio: createCurrentRetailRefreshPortfolio({ products, destinations: [destinations[0]], adapters: [fixtureAdapter({ results: { [unknownItem.destinationId]: observation(unknownItem) } })], asOf }), priorSnapshot: prior11 });
 assert.equal(compatible11.snapshot.schemaVersion, "1.1"); assert.equal(compatible11.snapshot.offers.length, 1); assert.ok(compatible11.snapshot.offers[0].offerIdentity); cases += 1;
+const manualEvidenceOffer=createCurrentOfferProjection({offer:{...prior.offers[0],sellerName:"SELLER Y",sourceIdentity:{...prior.offers[0].sourceIdentity,sourceId:"MANUAL"}},listingIdentity:"ITEM-X"});
+const evidencePrior=createCurrentDisplaySnapshot({schemaVersion:"1.1",observedAt:prior.observedAt,importedAt:prior.importedAt,source:prior.source,offers:[manualEvidenceOffer]});
+const evidenceAdapter=fixtureAdapter({results:{[unknownItem.destinationId]:observation(unknownItem,{listingIdentity:"ITEM-X",sellerName:"SELLER Y",sourceId:"RAKUTEN",itemPriceUsd:110})}});
+const evidencePortfolio=createCurrentRetailRefreshPortfolio({products,destinations:[destinations[0]],retailers,adapters:[evidenceAdapter],asOf});
+const sameOffer=await new CurrentRetailRefreshOrchestrator({adapters:[evidenceAdapter]}).run({portfolio:evidencePortfolio,priorSnapshot:evidencePrior});
+assert.equal(sameOffer.snapshot.offers.length,1);assert.equal(sameOffer.snapshot.offers[0].offerIdentity,manualEvidenceOffer.offerIdentity);assert.equal(sameOffer.snapshot.offers[0].priceUsd,110);assert.equal(sameOffer.counts.sourceConflicts,0);cases+=4;
+const distinctAdapter=fixtureAdapter({results:{[unknownItem.destinationId]:observation(unknownItem,{listingIdentity:"ITEM-Y",sellerName:"SELLER B",sourceId:"RAKUTEN",itemPriceUsd:90})}});
+const distinctPortfolio=createCurrentRetailRefreshPortfolio({products,destinations:[destinations[0]],retailers,adapters:[distinctAdapter],asOf});
+const distinctOffers=await new CurrentRetailRefreshOrchestrator({adapters:[distinctAdapter]}).run({portfolio:distinctPortfolio,priorSnapshot:evidencePrior});
+assert.equal(distinctOffers.snapshot.offers.length,2);assert.equal(new Set(distinctOffers.snapshot.offers.map(x=>x.offerIdentity)).size,2);cases+=2;
 const outcomes = ["TIMEOUT", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "PROVIDER_ERROR"];
 for (const status of outcomes) {
     const adapter = fixtureAdapter({ results: { [unknownItem.destinationId]: { type: "OUTCOME", status } } });

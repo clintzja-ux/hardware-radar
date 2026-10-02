@@ -4,7 +4,7 @@ import { projectRakutenCatalogState } from "./RakutenCatalogStateProjection.js";
 
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const same = (left, right) => JSON.stringify(left) === JSON.stringify(right);
-const key = value => `${value.atlasProductId}|${value.retailerId}`;
+const key = (value, schemaVersion) => schemaVersion === "1.1" ? value.offerIdentity : `${value.atlasProductId}|${value.retailerId}`;
 
 export class ProductionRakutenNeweggCurrentRefreshService {
     constructor({ productRepository, retailerRepository, destinationSourceLoader, destinationSourcePath, snapshotRepository, rightsRegistry } = {}) {
@@ -40,8 +40,8 @@ export class ProductionRakutenNeweggCurrentRefreshService {
         const adapter = createRakutenNeweggProductFeedAdapter({ catalogFiles, destinations: candidateDestinations, feedTimestamp });
         const portfolio = createCurrentRetailRefreshPortfolio({ products, retailers, destinations: candidateDestinations, adapters: [adapter], asOf: evaluatedAt });
         const refresh = await new CurrentRetailRefreshOrchestrator({ adapters: [adapter] }).run({ portfolio, priorSnapshot: priorState.current });
-        const priorByKey = new Map((priorState.current?.offers ?? []).map(value => [key(value), value]));
-        const nextByKey = new Map(refresh.snapshot.offers.map(value => [key(value), value]));
+        const priorByKey = new Map((priorState.current?.offers ?? []).map(value => [key(value, priorState.current?.schemaVersion), value]));
+        const nextByKey = new Map(refresh.snapshot.offers.map(value => [key(value, refresh.snapshot.schemaVersion), value]));
         const routineUpdates = [...nextByKey].filter(([entryKey, value]) => value.itemPriceEligible === true && !same(priorByKey.get(entryKey), value)).length;
         const unchanged = [...nextByKey].filter(([entryKey, value]) => same(priorByKey.get(entryKey), value)).length;
         const materialChange = !same(priorState.current?.offers ?? [], refresh.snapshot.offers);

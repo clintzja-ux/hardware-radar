@@ -112,7 +112,7 @@ export function reconcileCurrentOffers({ existingOffers = [], incomingOffer, wit
     const report = validateCurrentOfferProjection(incomingOffer);
     if (!report.valid) throw new TypeError(report.errors.join(","));
     const predecessor = offers.get(incomingOffer.offerIdentity);
-    if (predecessor?.sourceIdentity?.sourceId && incomingOffer.sourceIdentity?.sourceId && predecessor.sourceIdentity.sourceId !== incomingOffer.sourceIdentity.sourceId) throw new Error("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED");
+    if (predecessor?.sourceIdentity?.sourceId && incomingOffer.sourceIdentity?.sourceId && predecessor.sourceIdentity.sourceId !== incomingOffer.sourceIdentity.sourceId && Date.parse(incomingOffer.observedAt) <= Date.parse(predecessor.observedAt)) throw new Error("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED");
     offers.set(incomingOffer.offerIdentity, structuredClone(incomingOffer));
     return freeze([...offers.values()].sort((a, b) => a.offerIdentity.localeCompare(b.offerIdentity)));
 }

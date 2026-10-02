@@ -28,6 +28,8 @@ assert.equal(later.offerIdentity, amazon.offerIdentity); cases += 1;
 const automated = createCurrentOfferProjection({ offer: base({ sourceId: "AUTOMATED" }), listingIdentity: "ASIN:B0001", sourceLocalSellerId: "A1" });
 assert.equal(automated.offerIdentity, amazon.offerIdentity); cases += 1;
 assert.throws(() => reconcileCurrentOffers({ existingOffers: [amazon], incomingOffer: automated }), /CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED/); cases += 1;
+const newerAutomated = createCurrentOfferProjection({ offer: { ...base({ sourceId: "AUTOMATED", priceUsd: 310 }), observedAt: "2026-10-01T13:00:00.000Z" }, listingIdentity: "ASIN:B0001", sourceLocalSellerId: "A1" });
+assert.equal(reconcileCurrentOffers({ existingOffers: [amazon], incomingOffer: newerAutomated })[0].priceUsd,310); cases += 1;
 assert.equal(reconcileCurrentOffers({ existingOffers: [amazon], incomingOffer: memoryC }).length, 2); cases += 1;
 assert.equal(reconcileCurrentOffers({ existingOffers: [amazon, memoryC], withdrawOfferIdentity: memoryC.offerIdentity })[0].offerIdentity, amazon.offerIdentity); cases += 1;
 

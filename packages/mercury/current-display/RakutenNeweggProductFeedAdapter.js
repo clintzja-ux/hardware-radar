@@ -1,12 +1,22 @@
 import crypto from "node:crypto";
 import { projectRakutenCatalogState, reduceRakutenDeltaRecords } from "./RakutenCatalogStateProjection.js";
+import { createCurrentOfferIdentity, normalizeSellerAttribution } from "./CurrentOfferModel.js";
 import defaultSourceRightsRegistry from "../rights/SourceRightsRegistry.js";
 
 export const RAKUTEN_NEWEGG_SOURCE = "RAKUTEN_NEWEGG_PRODUCT_CATALOG";
+export const RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION = "RAKUTEN-NEWEGG-CONTEXTUAL-RETAIL-CONDITION-P1-1.0";
 export const RAKUTEN_NEWEGG_PROFILES = Object.freeze(["MAIN", "MAIN_FULL", "MAIN_DELTA", "NEWEGG_MKPL", "ADDITIONAL_UNCLASSIFIED"]);
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const hash = value => crypto.createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const money = value => value === null || value === "" ? null : Number(value);
+const alternativeCondition = /\b(?:used|refurb(?:ished)?|open[ -]?box|renewed|pre[ -]?owned|recertified)\b/i;
+const explicitCondition = value => {
+    const title = typeof value === "string" ? value.trim() : "";
+    if (/^open[ -]?box\s*-/i.test(title)) return "OPEN_BOX";
+    if (/^(?:manufacturer\s+)?refurbished\b/i.test(title)) return "REFURBISHED";
+    if (/^(?:used|pre[ -]?owned)\b/i.test(title)) return "USED";
+    return null;
+};
 const RAKUTEN_WINDOW_TIMEZONE_UNCERTAINTY_MS = 14 * 60 * 60 * 1000;
 const canonicalCurrentRights = () => {
     const profile = defaultSourceRightsRegistry.require(RAKUTEN_NEWEGG_SOURCE);
@@ -98,6 +108,18 @@ function normalizedPrice(record, evaluatedAt) {
     return { status: "PRICE_NOT_EXPOSED", itemPriceUsd: null, ...evidence };
 }
 
+export function assessRakutenNeweggCondition(record, { feedProfile = "MAIN" } = {}) {
+    if (!record || record.recordType !== "PRODUCT" || !RAKUTEN_NEWEGG_PROFILES.includes(feedProfile)) throw new TypeError("RAKUTEN_NEWEGG_CONDITION_INPUT_INVALID");
+    const title = record.productName ?? "";
+    const explicit = explicitCondition(title);
+    if (explicit) return freeze({ condition: explicit, evidenceState: "EXPLICIT_PROVIDER", policyVersion: RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION, reasons: ["STRUCTURED_PRODUCT_TITLE_CONDITION"] });
+    if (alternativeCondition.test(title)) return freeze({ condition: null, evidenceState: "UNKNOWN", policyVersion: RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION, reasons: ["AMBIGUOUS_CONTRARY_CONDITION_TEXT"] });
+    const pricePresent = [record.salePrice, record.retailPrice].some(value => Number.isFinite(money(value)) && money(value) > 0);
+    const ordinaryProfile = ["MAIN", "MAIN_FULL", "MAIN_DELTA", "NEWEGG_MKPL"].includes(feedProfile);
+    if (ordinaryProfile && record.modification !== "D" && record.availability === "in-stock" && pricePresent) return freeze({ condition: "NEW", evidenceState: "CONTEXTUALLY_DERIVED", policyVersion: RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION, reasons: ["NEWEGG_PRODUCT_CATALOG_ACTIVE_PRICED_IN_STOCK", "NO_CONTRARY_CONDITION_EVIDENCE"] });
+    return freeze({ condition: null, evidenceState: "UNKNOWN", policyVersion: RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION, reasons: ["CONTEXT_INSUFFICIENT"] });
+}
+
 export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = null, destinations, feedProfile = "MAIN", feedTimestamp, mode = "AUTOMATED_ALTERNATE", rights = null } = {}) {
     if ((!Array.isArray(records) && !Array.isArray(catalogFiles)) || !Array.isArray(destinations) || !RAKUTEN_NEWEGG_PROFILES.includes(feedProfile) || !Number.isFinite(Date.parse(feedTimestamp))) throw new TypeError("RAKUTEN_NEWEGG_ADAPTER_INPUT_INVALID");
     if (Array.isArray(records) && Array.isArray(catalogFiles)) throw new TypeError("RAKUTEN_NEWEGG_ADAPTER_INPUT_CONFLICT");
@@ -117,7 +139,11 @@ export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = 
             if (applicable.length !== 1) return { type: "OUTCOME", status: "INVALID_SOURCE_RESULT" };
             const { record, evidence, match } = applicable[0];
             if (record.currency !== "USD") return { type: "OUTCOME", status: "INVALID_SOURCE_RESULT" };
-            if (record.modification === "D") return { type: "OUTCOME", status: "SOURCE_WITHDRAWN" };
+            const condition = assessRakutenNeweggCondition(record, { feedProfile: evidence?.feedProfile ?? feedProfile });
+            if (record.modification === "D") {
+                const seller = normalizeSellerAttribution();
+                return { type: "OUTCOME", status: "SOURCE_WITHDRAWN", listingIdentity: record.sku, withdrawOfferIdentity: createCurrentOfferIdentity({ atlasProductId: context.atlasProductId, commerceChannelId: context.retailerId, listingIdentity: record.sku, seller, condition: condition.condition }) };
+            }
             const observedAt = new Date(evidence?.observedAt ?? feedTimestamp).toISOString();
             const ageMs = Date.parse(context.asOf) - Date.parse(observedAt);
             if (ageMs < 0 || ageMs > sourceRights.ttlSeconds * 1000) return { type: "OUTCOME", status: "SOURCE_STALE" };
@@ -126,8 +152,8 @@ export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = 
             const availability = record.availability === "in-stock" ? "AVAILABLE" : record.availability === "out-of-stock" ? "OUT_OF_STOCK" : "UNKNOWN";
             const marketplace = feedProfile === "NEWEGG_MKPL" ? true : null;
             return freeze({ type: "OBSERVATION", atlasProductId: context.atlasProductId, retailerId: context.retailerId, retailer: "NEWEGG", destinationId: context.destinationId, destinationUrl: context.destinationUrl, marketplace: context.marketplace,
-                itemPriceUsd: price.itemPriceUsd, currency: "USD", condition: null, availability, sellerType: null, sellerName: null, shippingUsd: null, feesUsd: null,
-                sourceId: RAKUTEN_NEWEGG_SOURCE, observedAt, sourceEvidence: { feedProfile: evidence?.feedProfile ?? feedProfile, sourceArtifactDigest: evidence?.artifactDigest ?? null, sourceProductId: record.productId, sourceSku: record.sku, sourceMpn: record.manufacturerPartNumber, sourceUpc: record.upc, sourceModification: record.modification, retailPrice: price.retailPrice, sourceSalePrice: price.salePrice, rawRetailPrice: price.rawRetailPrice, rawSalePrice: price.rawSalePrice, selectedPriceField: price.selectedPriceField, priceWindow: price.window, priceEvaluatedAt: context.asOf, sourceShippingUsd: money(record.shipping), merchantUrl: match.merchantUrl, marketplace, digest: hash(record) } });
+                itemPriceUsd: price.itemPriceUsd, currency: "USD", condition: condition.condition, conditionEvidence: condition, availability, sellerType: null, sellerName: null, listingIdentity: record.sku, shippingUsd: null, feesUsd: null,
+                sourceId: RAKUTEN_NEWEGG_SOURCE, observedAt, sourceEvidence: { feedProfile: evidence?.feedProfile ?? feedProfile, sourceArtifactDigest: evidence?.artifactDigest ?? null, sourceProductId: record.productId, sourceSku: record.sku, sourceMpn: record.manufacturerPartNumber, sourceUpc: record.upc, sourceModification: record.modification, retailPrice: price.retailPrice, sourceSalePrice: price.salePrice, rawRetailPrice: price.rawRetailPrice, rawSalePrice: price.rawSalePrice, selectedPriceField: price.selectedPriceField, priceWindow: price.window, priceEvaluatedAt: context.asOf, conditionEvidence: condition, sourceShippingUsd: money(record.shipping), merchantUrl: match.merchantUrl, marketplace, digest: hash(record) } });
         }
     });
 }
