@@ -103,10 +103,11 @@ export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = 
     if (Array.isArray(records) && Array.isArray(catalogFiles)) throw new TypeError("RAKUTEN_NEWEGG_ADAPTER_INPUT_CONFLICT");
     const sourceRights = rights ?? canonicalCurrentRights();
     const destinationSet = destinations.filter(item => item.retailerId === "RETAILER-0004" && item.status === "ACTIVE");
-    const sourceRecords = Array.isArray(catalogFiles)
-        ? projectRakutenCatalogState({ files: catalogFiles }).entries.map(item => item.record)
-        : feedProfile === "MAIN_DELTA" ? reduceRakutenDeltaRecords(records) : records;
-    const outcomes = sourceRecords.filter(item => item.recordType === "PRODUCT").map(record => ({ record, match: exactDestination(record, destinationSet) }));
+    const catalogState = Array.isArray(catalogFiles) ? projectRakutenCatalogState({ files: catalogFiles }) : null;
+    const sourceRecords = catalogState
+        ? catalogState.currentCandidates.map(item => ({ record: item.record, evidence: item.evidence }))
+        : (feedProfile === "MAIN_DELTA" ? reduceRakutenDeltaRecords(records) : records).map(record => ({ record, evidence: null }));
+    const outcomes = sourceRecords.filter(item => item.record.recordType === "PRODUCT").map(({ record, evidence }) => ({ record, evidence, match: exactDestination(record, destinationSet) }));
     return freeze({
         adapterId: "mer_adapter_rakuten_newegg_product_catalog", mode, rights: sourceRights, weakItemPriceAllowed: true,
         supports: context => context.retailerId === "RETAILER-0004" && destinationSet.some(item => item.destinationId === context.destinationId),
@@ -114,16 +115,19 @@ export function createRakutenNeweggProductFeedAdapter({ records, catalogFiles = 
             const applicable = outcomes.filter(item => item.match.destination?.destinationId === context.destinationId);
             if (applicable.length === 0) return { type: "OUTCOME", status: "SOURCE_UNAVAILABLE" };
             if (applicable.length !== 1) return { type: "OUTCOME", status: "INVALID_SOURCE_RESULT" };
-            const { record, match } = applicable[0];
+            const { record, evidence, match } = applicable[0];
             if (record.currency !== "USD") return { type: "OUTCOME", status: "INVALID_SOURCE_RESULT" };
             if (record.modification === "D") return { type: "OUTCOME", status: "SOURCE_WITHDRAWN" };
+            const observedAt = new Date(evidence?.observedAt ?? feedTimestamp).toISOString();
+            const ageMs = Date.parse(context.asOf) - Date.parse(observedAt);
+            if (ageMs < 0 || ageMs > sourceRights.ttlSeconds * 1000) return { type: "OUTCOME", status: "SOURCE_STALE" };
             const price = normalizedPrice(record, context.asOf);
             if (price.status !== "PRICE_RESOLVED") return { type: "OUTCOME", status: price.status };
             const availability = record.availability === "in-stock" ? "AVAILABLE" : record.availability === "out-of-stock" ? "OUT_OF_STOCK" : "UNKNOWN";
             const marketplace = feedProfile === "NEWEGG_MKPL" ? true : null;
             return freeze({ type: "OBSERVATION", atlasProductId: context.atlasProductId, retailerId: context.retailerId, retailer: "NEWEGG", destinationId: context.destinationId, destinationUrl: context.destinationUrl, marketplace: context.marketplace,
                 itemPriceUsd: price.itemPriceUsd, currency: "USD", condition: null, availability, sellerType: null, sellerName: null, shippingUsd: null, feesUsd: null,
-                sourceId: RAKUTEN_NEWEGG_SOURCE, observedAt: new Date(feedTimestamp).toISOString(), sourceEvidence: { feedProfile, sourceProductId: record.productId, sourceSku: record.sku, sourceMpn: record.manufacturerPartNumber, sourceUpc: record.upc, sourceModification: record.modification, retailPrice: price.retailPrice, sourceSalePrice: price.salePrice, rawRetailPrice: price.rawRetailPrice, rawSalePrice: price.rawSalePrice, selectedPriceField: price.selectedPriceField, priceWindow: price.window, priceEvaluatedAt: context.asOf, sourceShippingUsd: money(record.shipping), merchantUrl: match.merchantUrl, marketplace, digest: hash(record) } });
+                sourceId: RAKUTEN_NEWEGG_SOURCE, observedAt, sourceEvidence: { feedProfile: evidence?.feedProfile ?? feedProfile, sourceArtifactDigest: evidence?.artifactDigest ?? null, sourceProductId: record.productId, sourceSku: record.sku, sourceMpn: record.manufacturerPartNumber, sourceUpc: record.upc, sourceModification: record.modification, retailPrice: price.retailPrice, sourceSalePrice: price.salePrice, rawRetailPrice: price.rawRetailPrice, rawSalePrice: price.rawSalePrice, selectedPriceField: price.selectedPriceField, priceWindow: price.window, priceEvaluatedAt: context.asOf, sourceShippingUsd: money(record.shipping), merchantUrl: match.merchantUrl, marketplace, digest: hash(record) } });
         }
     });
 }

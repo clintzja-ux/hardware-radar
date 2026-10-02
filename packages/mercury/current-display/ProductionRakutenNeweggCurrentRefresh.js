@@ -19,9 +19,9 @@ export class ProductionRakutenNeweggCurrentRefreshService {
         const [products, retailers, priorState] = await Promise.all([this.productRepository.getAll(), this.retailerRepository.getAll(), this.snapshotRepository.getState()]);
         const destinationSource = await this.destinationSourceLoader({ sourcePath: this.destinationSourcePath, products, retailers });
         const destinations = destinationSource.effective.filter(value => value.retailerId === "RETAILER-0004" && value.status === "ACTIVE");
-        const catalogState = projectRakutenCatalogState({ files: catalogFiles });
+        const catalogState = projectRakutenCatalogState({ files: catalogFiles, requireLineage: true });
         const productById = new Map(products.map(value => [value.identity?.atlasProductId, value]));
-        const rowAssessments = catalogState.entries.map(({ sourceEntryKey, record }) => {
+        const rowAssessments = catalogState.currentCandidates.map(({ sourceEntryKey, record }) => {
             const binding = assessRakutenNeweggDestination(record, destinations);
             const product = binding.destination ? productById.get(binding.destination.atlasProductId) : null;
             let classification = "ROUTINE_CANDIDATE";
@@ -49,7 +49,7 @@ export class ProductionRakutenNeweggCurrentRefreshService {
         if (!dryRun && materialChange) persistence = await this.snapshotRepository.replaceIfCurrent(refresh.snapshot, { expectedCurrentSnapshotId: priorState.current?.snapshotId ?? null, expectedCurrentFingerprint: priorState.current?.materialFingerprint ?? null });
         const count = status => refresh.outcomes.filter(value => value.status === status).length;
         const summary = {
-            sourceRowsConsidered: catalogState.sourceEntryCount,
+            sourceRowsConsidered: catalogState.currentCandidates.length,
             candidateProducts: new Set(rowAssessments.filter(value => value.atlasProductId).map(value => value.atlasProductId)).size,
             routineCurrentUpdates: routineUpdates,
             unchangedNoOp: unchanged,

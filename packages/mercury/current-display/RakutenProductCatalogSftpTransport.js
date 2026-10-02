@@ -70,8 +70,13 @@ export function selectRakutenNeweggAuthoritativeLineage(entries,{advertiserMid="
     const fulls=candidates.filter(item=>item.feedFamily==="FULL"&&validInstant(item.remoteTimestampUtc)).sort((a,b)=>Date.parse(b.remoteTimestampUtc)-Date.parse(a.remoteTimestampUtc)||a.filename.localeCompare(b.filename));
     if(fulls.length===0)throw error("SFTP_AUTHORITATIVE_FULL_NOT_FOUND");
     const full=fulls[0];if(fulls.filter(item=>item.remoteTimestampUtc===full.remoteTimestampUtc).length!==1)throw error("SFTP_AUTHORITATIVE_FULL_AMBIGUOUS");
-    const deltas=candidates.filter(item=>item.feedFamily==="DELTA"&&item.publisherSid===full.publisherSid&&validInstant(item.remoteTimestampUtc)&&Date.parse(item.remoteTimestampUtc)>Date.parse(full.remoteTimestampUtc)).sort((a,b)=>Date.parse(a.remoteTimestampUtc)-Date.parse(b.remoteTimestampUtc)||a.filename.localeCompare(b.filename));
-    return freeze({full,deltas,files:[full,...deltas],publisherSid:full.publisherSid});
+    // Rakuten exposes one mutable main FULL name and one mutable main DELTA name.
+    // SFTP mtime is transport metadata, not provider feed chronology. Surface the
+    // structurally matching DELTA here; validated HDR/content lineage decides
+    // whether it can be applied after download.
+    const deltas=candidates.filter(item=>item.feedFamily==="DELTA"&&item.publisherSid===full.publisherSid&&validInstant(item.remoteTimestampUtc));
+    if(deltas.length>1)throw error("SFTP_AUTHORITATIVE_DELTA_AMBIGUOUS");
+    return freeze({full,deltas,files:[full,...deltas],advertiserMid:full.advertiserMid,publisherSid:full.publisherSid,feedFamilyKey:`RAKUTEN_MAIN:${full.advertiserMid}:${full.publisherSid}`});
 }
 
 export function summarizeRakutenSftpDiscovery(entries,{advertiserMid="44583",entriesObserved,malformedEntries=0,logicalDirectory="/"}={}){
@@ -164,8 +169,8 @@ export class RakutenProductCatalogSftpTransport {
                 for(let index=0;index<lineage.files.length;index+=1){const selected=lineage.files[index],finalPath=path.join(this.stagingRoot,selected.filename),temporaryPath=`${finalPath}.partial-${crypto.randomUUID()}`;try{const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress:value=>onProgress({index,filename:selected.filename,...value})});staged.push({selected,finalPath,temporaryPath,transfer});}catch(cause){await rm(temporaryPath,{force:true});cause.lineage=failureLineage;cause.attemptedFile=freeze({index,filename:selected.filename,classification:selected.feedFamily,reportedRemoteBytes:selected.size??null});throw cause;}}
                 await session.close();await releaseLease();const validated=[];
                 for(let index=0;index<staged.length;index+=1){const item=staged[index];try{const validation=await validateStagedFile(item.temporaryPath,item.selected.feedFamily==="DELTA"?"MAIN_DELTA":"MAIN_FULL");validated.push({...item,validation,localBytes:(await stat(item.temporaryPath)).size,sha256:await sha256File(item.temporaryPath)});}catch(cause){cause.attemptedFile=freeze({index,filename:item.selected.filename,classification:item.selected.feedFamily,reportedRemoteBytes:item.selected.size??null});cause.transfer=item.transfer;throw cause;}}
-                const files=[];for(const item of validated){await rename(item.temporaryPath,item.finalPath);files.push({filename:item.selected.filename,feedFamily:item.selected.feedFamily,localPath:item.finalPath,localBytes:item.localBytes,sha256:item.sha256,transfer:item.transfer,integrity:item.validation.integrity});}
-                return freeze({status:"AUTHORITATIVE_SEQUENCE_DOWNLOADED_AND_VALIDATED",lineage:{full:lineage.full.filename,deltas:lineage.deltas.map(item=>item.filename),orderedFiles:lineage.files.map(item=>item.filename)},files,filesDownloaded:files.length,downloadsSequential:true,directoryListings:discovery.directoryListings,discovery:discovery.discovery,localProcessingStartedAfterNetworkClose:true,actualSpendUsd:0});
+                const files=[];for(const item of validated){await rename(item.temporaryPath,item.finalPath);files.push({filename:item.selected.filename,feedFamily:item.selected.feedFamily,feedFamilyKey:lineage.feedFamilyKey,remoteModifiedAt:item.selected.remoteTimestampUtc,headerTimestamp:item.validation.summary.header.feedTimestamp,localPath:item.finalPath,localBytes:item.localBytes,sha256:item.sha256,transfer:item.transfer,integrity:item.validation.integrity});}
+                return freeze({status:"AUTHORITATIVE_SEQUENCE_DOWNLOADED_AND_VALIDATED",lineage:{full:lineage.full.filename,deltas:lineage.deltas.map(item=>item.filename),orderedFiles:lineage.files.map(item=>item.filename),feedFamilyKey:lineage.feedFamilyKey},files,filesDownloaded:files.length,downloadsSequential:true,directoryListings:discovery.directoryListings,discovery:discovery.discovery,localProcessingStartedAfterNetworkClose:true,actualSpendUsd:0});
             }catch(cause){for(const item of staged)await rm(item.temporaryPath,{force:true});const failure=String(cause?.code??cause?.message??"").startsWith("SFTP_")?cause:error("SFTP_SEQUENCE_INCOMPLETE");failure.lineage??=failureLineage;failure.authoritativeSequenceComplete=false;throw failure;}
         });
     }

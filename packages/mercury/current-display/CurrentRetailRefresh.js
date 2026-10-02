@@ -3,7 +3,7 @@ import { createCurrentDisplaySnapshot } from "./CurrentDisplaySnapshot.js";
 import { assessCurrentDisplayItemPriceEligibility } from "./CurrentDisplayEligibility.js";
 
 export const CURRENT_RETAIL_SOURCE_MODES = Object.freeze(["AUTOMATED_PRIMARY", "AUTOMATED_ALTERNATE", "MANUAL_ONLY", "UNAVAILABLE"]);
-export const CURRENT_RETAIL_REFRESH_OUTCOMES = Object.freeze(["REFRESHED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "DESTINATION_INVALID", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "TIMEOUT", "PROVIDER_ERROR", "INVALID_SOURCE_RESULT"]);
+export const CURRENT_RETAIL_REFRESH_OUTCOMES = Object.freeze(["REFRESHED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN", "SOURCE_STALE", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "DESTINATION_INVALID", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "TIMEOUT", "PROVIDER_ERROR", "INVALID_SOURCE_RESULT"]);
 
 const stable = value => Array.isArray(value) ? `[${value.map(stable).join(",")}]` : value && typeof value === "object" ? `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}` : JSON.stringify(value);
 const hash = value => crypto.createHash("sha256").update(stable(value)).digest("hex");

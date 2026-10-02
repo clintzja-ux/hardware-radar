@@ -284,6 +284,7 @@ const testModules = [
     ,"./RakutenProductCatalogFieldMap.test.mjs"
     ,"./RakutenDeltaMultiplicity.test.mjs"
     ,"./RakutenCatalogStateProjection.test.mjs"
+    ,"./RakutenMutableDeltaLineage.test.mjs"
     ,"./RakutenMemoryBoundedValidation.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
