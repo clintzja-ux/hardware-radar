@@ -19,7 +19,7 @@ export async function loadStaticPublicationContinuityProjection({ manifestPath }
   if (staticPublicationArtifactDigest(artifactText) !== release.artifact.digestSha256) throw new Error("STATIC_RELEASE_PREDECESSOR_ARTIFACT_DIGEST_MISMATCH");
   const parsed = JSON.parse(artifactText);
   const projection = parsed?.fileTexts?.current ? JSON.parse(parsed.fileTexts.current) : parsed;
-  return { releaseId: release.releaseId, artifact: release.artifact, projection };
+  return { releaseId: release.releaseId, release, artifact: release.artifact, projection };
 }
 
 export async function loadStaticPublicationRelease({ manifestPath, targetEnvironment, evaluatedAt } = {}) {

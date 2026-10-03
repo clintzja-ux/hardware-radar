@@ -8,7 +8,8 @@ import { loadStaticPublicationContinuityProjection } from "../../../scripts/stat
 import { createStaticPublicationReleaseManifest } from "../../sentinel/validators/StaticPublicationReleaseControl.js";
 
 const state = JSON.parse(await readFile(".forge-review/retail-display/current-display-snapshots.json", "utf8"));
-const publishedProjection = (await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" })).projection;
+const publicationContinuity = await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" });
+const publishedProjection = publicationContinuity.projection;
 const before = JSON.stringify(state);
 const current = { ...state.current, offers: state.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) };
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: current, rightsRegistry: defaultSourceRightsRegistry });
@@ -50,8 +51,9 @@ assert.throws(()=>deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligi
 const lineageRoot=await mkdtemp(path.join(os.tmpdir(),"real-publication-lineage-"));
 try{
   await mkdir(path.join(lineageRoot,"artifacts"));
-  const activeManifest=JSON.parse(await readFile("config/publication-release.json","utf8"));
-  const activeArtifactText=await readFile(`config/${activeManifest.artifact.relativePath}`,"utf8");
+  const activeRelease=publicationContinuity.release;
+  const activeArtifactText=await readFile(`config/${activeRelease.artifact.relativePath}`,"utf8");
+  const activeManifest=createStaticPublicationReleaseManifest({releaseState:"ON",targetEnvironment:activeRelease.targetEnvironment,targetSurface:activeRelease.targetSurface,reason:"canonical predecessor fixture",reviewedBy:"fixture",createdAt:activeRelease.certification.certifiedAt,artifactRelativePath:activeRelease.artifact.relativePath,artifactText:activeArtifactText,authorityReference:activeRelease.certification.authorityReference});
   const candidateRoot=".forge-review/publication/ram-intelligence/mer_ramreleasecand_aa1c2eebf59372c9e68608c9";
   const candidateManifest=JSON.parse(await readFile(`${candidateRoot}/manifest.json`,"utf8"));
   const candidateCertification=JSON.parse(await readFile(`${candidateRoot}/certification.json`,"utf8"));

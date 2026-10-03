@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented and fixture-certified. Production use is not proven or authorized.
+Implemented, fixture-certified, and end-to-end replacement-lifecycle certified in isolated production-shaped state. Production release remains separately authorized.
 
 ## Purpose and ownership
 
@@ -53,3 +53,5 @@ Rollback is appendable lineage from a new `OFF` manifest to the prior release ID
 The focused suite covers missing/malformed manifests, strict shape/version/state, explicit OFF, legacy valid ON, portfolio valid ON, candidate/artifact/binding/certification/route mismatches, artifact/digest/path/schema/policy/environment failures, missing and stale artifacts, private-field injection, deterministic replay, repository restart loading, and rollback lineage. Production-shaped clean-checkout proof materializes the certified portfolio and compares its catalog, Current, Terminal, sitemap, affiliate action, ordinary fallback, History, chronology, and snapshot exclusion with the approved exact preview. Public verification recomputes the selected release result and rejects direct artifact substitution.
 
 No provider call, task retrieval, paid task, real publication candidate, real release manifest, production configuration, Gateway/Beacon connection, deployment, or spend occurred.
+
+Replacement lifecycle certification additionally starts from the committed deployed release, creates an isolated replacement manifest through the same release owner, and leaves that replacement active through build, public verification, the complete Mercury and Sentinel suites, release governance, layout, public-shell, RAM-product, and RAM-Terminal validation. The canonical continuity resolver supplies both the resolved predecessor release binding and projection; tests must not reinterpret whichever manifest currently occupies the mutable configuration path as the predecessor. A production-bound manifest is built and verified with `HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT=PRODUCTION`; the default remains fail-safe `PREVIEW`. Two clean-start repetitions are required before another real replacement release attempt.
