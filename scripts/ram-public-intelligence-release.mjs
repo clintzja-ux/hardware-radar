@@ -14,6 +14,7 @@ import { createPublicChronologicalPriceSeries } from "../packages/mercury/histor
 import { createRamPublicIntelligencePortfolioManifest, certifyRamPublicIntelligencePortfolio, portfolioFileDigest, validateRamPublicIntelligencePortfolio } from "../packages/mercury/publication/RamPublicIntelligenceReleasePortfolio.js";
 import { generateRamProductPages } from "./ram-product-publishing.mjs";
 import { generateRamTerminalPage } from "./ram-terminal-publishing.mjs";
+import { loadStaticPublicationContinuityProjection } from "./static-publication-release-runtime.mjs";
 
 const root = path.resolve(".");
 const argv = new Map(process.argv.slice(2).map(value => { const i = value.indexOf("="); return i < 0 ? [value.replace(/^--/, ""), true] : [value.slice(2, i), value.slice(i + 1)]; }));
@@ -39,7 +40,7 @@ async function canonicalInputs(asOf) {
   const currentState = await new FileCurrentDisplaySnapshotRepository({ statePath: currentStatePath }).getState();
   const snapshot = currentState.current ? { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) } : null;
   const eligibleSnapshot = snapshot ? deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot, rightsRegistry: defaultSourceRightsRegistry }) : null;
-  let publishedProjection = null; try { publishedProjection = await json(path.join(root, "public/data/ram-current-retail.json")); } catch {}
+  let publishedProjection = null; try { publishedProjection = (await loadStaticPublicationContinuityProjection({ manifestPath: path.join(root, "config/publication-release.json") })).projection; } catch {}
   const publicationSnapshot = eligibleSnapshot && currentState.previous ? deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot, predecessorSnapshot: currentState.previous, publishedProjection }) : eligibleSnapshot;
   const current = publicationSnapshot ? createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf }) : createEmptyPublicCurrentRetailProjection({ asOf });
   const staleCurrent = createEmptyPublicCurrentRetailProjection({ asOf, state: "NO_QUALIFYING_CURRENT_PRICE" });

@@ -40,6 +40,8 @@ Portfolio validation reuses the existing RAM portfolio validator and requires ex
 
 ## Operation and rollback
 
+Replacement authorization immutably binds the exact active predecessor release in the existing `rollback` lineage. The binding carries the predecessor release ID plus its certified artifact and certification summary; it is captured before `config/publication-release.json` is replaced. The canonical continuity resolver uses that binding after replacement, while a manifest with no predecessor uses its own active artifact. Thus A→B resolves A, A→B→C resolves B, and a discarded uncommitted B leaves A as the predecessor of a later C. This is the same lineage used for rollback; the release being prepared never becomes its own predecessor merely by occupying the manifest path.
+
 `npm run publication:release:inspect` is deterministic and read-only. `npm run publication:release:prepare` creates either an `OFF` manifest or an exact `ON` manifest and copies the already-certified sanitized artifact beneath the manifest's `artifacts/` directory. Current-only operation retains its existing arguments. Portfolio operation supplies the certified candidate directory with `--portfolio-directory`; the command resolves its manifest, certification, and bound files into one integrity-protected bundle. It computes IDs and digests; operators do not calculate them manually. Exact confirmations are `CONFIRM-STATIC-RELEASE-OFF` and `CONFIRM-STATIC-RELEASE-ON`.
 
 Preparing a manifest creates no publication decision or deployment. Production exposure still requires existing publication authority, a production-bound manifest, explicit review, commit/push, Preview verification, and separately authorized merge/deployment. Preview binding cannot authorize Production.

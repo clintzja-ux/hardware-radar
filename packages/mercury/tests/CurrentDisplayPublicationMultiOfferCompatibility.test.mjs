@@ -1,12 +1,14 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { deriveCurrentDisplayPublicationEligibleSnapshot, deriveLegacySingleOfferPublicationCompatibilitySnapshot } from "../publication/CurrentDisplayPublication.js";
 import { defaultSourceRightsRegistry } from "../rights/SourceRightsRegistry.js";
+import { loadStaticPublicationContinuityProjection } from "../../../scripts/static-publication-release-runtime.mjs";
+import { createStaticPublicationReleaseManifest } from "../../sentinel/validators/StaticPublicationReleaseControl.js";
 
 const state = JSON.parse(await readFile(".forge-review/retail-display/current-display-snapshots.json", "utf8"));
-const releaseManifest = JSON.parse(await readFile("config/publication-release.json", "utf8"));
-const releaseBundle = JSON.parse(await readFile(`config/${releaseManifest.artifact.relativePath}`, "utf8"));
-const publishedProjection = JSON.parse(releaseBundle.fileTexts.current);
+const publishedProjection = (await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" })).projection;
 const before = JSON.stringify(state);
 const current = { ...state.current, offers: state.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) };
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: current, rightsRegistry: defaultSourceRightsRegistry });
@@ -45,8 +47,27 @@ assert.throws(()=>deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligi
 const ambiguousProjection={products:[{offers:gskill.map(offer=>({atlasProductId:offer.atlasProductId,retailerId:offer.retailerId,destinationId:offer.destinationId,itemPriceUsd:offer.priceUsd,observedAt:offer.observedAt}))}]};
 assert.throws(()=>deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:{offers:gskill},publishedProjection:ambiguousProjection}),/CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED/);
 
+const lineageRoot=await mkdtemp(path.join(os.tmpdir(),"real-publication-lineage-"));
+try{
+  await mkdir(path.join(lineageRoot,"artifacts"));
+  const activeManifest=JSON.parse(await readFile("config/publication-release.json","utf8"));
+  const activeArtifactText=await readFile(`config/${activeManifest.artifact.relativePath}`,"utf8");
+  const candidateRoot=".forge-review/publication/ram-intelligence/mer_ramreleasecand_aa1c2eebf59372c9e68608c9";
+  const candidateManifest=JSON.parse(await readFile(`${candidateRoot}/manifest.json`,"utf8"));
+  const candidateCertification=JSON.parse(await readFile(`${candidateRoot}/certification.json`,"utf8"));
+  const fileTexts=Object.fromEntries(await Promise.all(Object.entries(candidateManifest.files).map(async([name,binding])=>[name,await readFile(`${candidateRoot}/${binding.file}`,"utf8")])));
+  const candidateBundleText=`${JSON.stringify({manifest:candidateManifest,certification:candidateCertification,fileTexts},null,2)}\n`;
+  const replacement=createStaticPublicationReleaseManifest({releaseState:"ON",targetEnvironment:"PRODUCTION",targetSurface:"PUBLIC_RAM_INTELLIGENCE_PORTFOLIO",reason:"real replacement fixture",reviewedBy:"fixture",createdAt:"2026-10-03T01:28:27.879Z",artifactRelativePath:`artifacts/${candidateManifest.candidateId}.json`,artifactText:candidateBundleText,authorityReference:candidateCertification.certificationId,previousReleaseId:activeManifest.releaseId,previousReleaseManifest:activeManifest});
+  await writeFile(path.join(lineageRoot,activeManifest.artifact.relativePath),activeArtifactText);
+  await writeFile(path.join(lineageRoot,replacement.artifact.relativePath),candidateBundleText);
+  await writeFile(path.join(lineageRoot,"release.json"),`${JSON.stringify(replacement)}\n`);
+  const afterReplacement=(await loadStaticPublicationContinuityProjection({manifestPath:path.join(lineageRoot,"release.json")})).projection;
+  const realContinuity=deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:state.previous,publishedProjection:afterReplacement});
+  assert.equal(realContinuity.offers[0].offerIdentity,"mer_offer_e7e945f7f97c4741a63ee2db");
+}finally{await rm(lineageRoot,{recursive:true,force:true});}
+
 assert.throws(() => deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...current, offers: [gskill[0], gskill[0]] }, rightsRegistry: defaultSourceRightsRegistry }), /CURRENT_DISPLAY_OFFER_DUPLICATE/);
 assert.throws(() => deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...current, schemaVersion: "1.0", offers: gskill }, rightsRegistry: defaultSourceRightsRegistry }), /CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED/);
 assert.throws(() => deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: { ...eligible, offers: gskill }, predecessorSnapshot: { offers: [] } }), /CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED/);
 assert.equal(JSON.stringify(state), before);
-console.log("Current-display schema-1.1 publication compatibility tests passed: 25 assertions.");
+console.log("Current-display schema-1.1 publication compatibility tests passed: 26 assertions.");

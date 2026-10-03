@@ -11,13 +11,12 @@ const { createPublicCurrentRetailProjection } = await import("../current-display
 const { deriveCurrentDisplayPublicationEligibleSnapshot, deriveLegacySingleOfferPublicationCompatibilitySnapshot } = await import("../publication/CurrentDisplayPublication.js");
 const { defaultSourceRightsRegistry } = await import("../rights/SourceRightsRegistry.js");
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
-const releaseManifest = await readJson("config/publication-release.json");
-const releaseBundle = await readJson(`config/${releaseManifest.artifact.relativePath}`);
+const { loadStaticPublicationContinuityProjection } = await import("../../../scripts/static-publication-release-runtime.mjs");
 const products = await new ProductRepository({ readJson }).getAll(), retailers = await new RetailerRepository({ readJson }).getAll();
 const source = await loadRetailerDestinationSource({ sourcePath: "packages/mercury/destinations/production-destinations.json", products, retailers });
 const destinations = createPublicRetailerDestinationProjection({ source, retailers });
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) }, rightsRegistry: defaultSourceRightsRegistry });
-const publishedProjection = JSON.parse(releaseBundle.fileTexts.current);
+const publishedProjection = (await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" })).projection;
 const publicationSnapshot = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: currentState.previous, publishedProjection });
 const asOf = "2026-10-02T22:22:28.595Z";
 const currentRetail = createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf });
