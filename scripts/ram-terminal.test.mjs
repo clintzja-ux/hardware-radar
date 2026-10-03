@@ -17,7 +17,7 @@ assert.equal(html.indexOf("RAM market pulse") < html.indexOf("Current market"), 
 assert.equal(html.indexOf("Current market") < html.indexOf("Evidence supporting this view"), true);
 assert.equal(html.indexOf("Evidence supporting this view") < html.indexOf("Product intelligence"), true);
 assert.match(html, /Current price coverage/);
-assert.match(html, /Market data as of<br><strong>September 30, 2026<\/strong>/);
+assert.ok(html.includes(`Market data as of<br><strong>${formatMarketDate(artifact.asOf)}</strong>`));
 assert.match(html, /RAM historical market pulse/);
 assert.match(html, /Latest comparable/);
 assert.match(html, /Historical movement/);

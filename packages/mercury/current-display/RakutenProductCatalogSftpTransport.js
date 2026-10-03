@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
-import { mkdir, readFile, readdir, rename, rm, stat } from "node:fs/promises";
+import { createReadStream } from "node:fs";
+import { mkdir, readdir, rename, rm, stat } from "node:fs/promises";
 import path from "node:path";
 import { validateRakutenProductCatalogGzip } from "./RakutenProductCatalogParser.js";
 import { redactRakutenSftpError } from "./RakutenSftpConfig.js";
@@ -12,6 +13,8 @@ const safePath = value => typeof value === "string" && value.startsWith("/") && 
 const safeName = value => typeof value === "string" && value.length>0&&!/[\\/\0\r\n]/.test(value);
 const mainFeedPattern = /^(\d+)_(\d+)_mp(?:_(delta|deltatemplate)|_template)?\.txt\.gz$/i;
 const validInstant=value=>typeof value==="string"&&Number.isFinite(Date.parse(value));
+const sha256File=async filePath=>{const hash=crypto.createHash("sha256");for await(const chunk of createReadStream(filePath))hash.update(chunk);return hash.digest("hex");};
+const validateStagedFile=async(filePath,feedProfile,feedFamilyKey)=>validateRakutenProductCatalogGzip(createReadStream(filePath),{feedProfile,feedFamilyKey,collectRecords:false,diagnosticInputFactory:()=>createReadStream(filePath)});
 
 export const RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS=60000;
 export const RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS=1800000;
@@ -62,13 +65,27 @@ export function selectRakutenNeweggMainDelta(entries, { advertiserMid = "44583" 
     return candidates[0];
 }
 
+export function selectRakutenNeweggMainFull(entries, { advertiserMid="44583", publisherSid="4746097" }={}) {
+    if (!/^\d+$/.test(advertiserMid) || !/^\d+$/.test(publisherSid)) throw error("SFTP_FILE_SELECTION_INVALID");
+    const filename=`${advertiserMid}_${publisherSid}_mp.txt.gz`;
+    const candidates=entries.filter(item => item.logicalDirectory==="/" && item.fileType==="REGULAR_FILE" && item.filename===filename && item.advertiserMid===advertiserMid && item.publisherSid===publisherSid && item.feedFamily==="FULL");
+    if (candidates.length===0) throw error("SFTP_FILE_NOT_FOUND");
+    if (candidates.length!==1) throw error("SFTP_FILE_AMBIGUOUS");
+    return candidates[0];
+}
+
 export function selectRakutenNeweggAuthoritativeLineage(entries,{advertiserMid="44583"}={}){
     const candidates=entries.filter(item=>item.logicalDirectory==="/"&&item.fileType==="REGULAR_FILE"&&item.advertiserMid===advertiserMid&&/^\d+$/.test(item.publisherSid??"")&&["FULL","DELTA"].includes(item.feedFamily));
     const fulls=candidates.filter(item=>item.feedFamily==="FULL"&&validInstant(item.remoteTimestampUtc)).sort((a,b)=>Date.parse(b.remoteTimestampUtc)-Date.parse(a.remoteTimestampUtc)||a.filename.localeCompare(b.filename));
     if(fulls.length===0)throw error("SFTP_AUTHORITATIVE_FULL_NOT_FOUND");
     const full=fulls[0];if(fulls.filter(item=>item.remoteTimestampUtc===full.remoteTimestampUtc).length!==1)throw error("SFTP_AUTHORITATIVE_FULL_AMBIGUOUS");
-    const deltas=candidates.filter(item=>item.feedFamily==="DELTA"&&item.publisherSid===full.publisherSid&&validInstant(item.remoteTimestampUtc)&&Date.parse(item.remoteTimestampUtc)>Date.parse(full.remoteTimestampUtc)).sort((a,b)=>Date.parse(a.remoteTimestampUtc)-Date.parse(b.remoteTimestampUtc)||a.filename.localeCompare(b.filename));
-    return freeze({full,deltas,files:[full,...deltas],publisherSid:full.publisherSid});
+    // Rakuten exposes one mutable main FULL name and one mutable main DELTA name.
+    // SFTP mtime is transport metadata, not provider feed chronology. Surface the
+    // structurally matching DELTA here; validated HDR/content lineage decides
+    // whether it can be applied after download.
+    const deltas=candidates.filter(item=>item.feedFamily==="DELTA"&&item.publisherSid===full.publisherSid&&validInstant(item.remoteTimestampUtc));
+    if(deltas.length>1)throw error("SFTP_AUTHORITATIVE_DELTA_AMBIGUOUS");
+    return freeze({full,deltas,files:[full,...deltas],advertiserMid:full.advertiserMid,publisherSid:full.publisherSid,feedFamilyKey:`RAKUTEN_MAIN:${full.advertiserMid}:${full.publisherSid}`});
 }
 
 export function summarizeRakutenSftpDiscovery(entries,{advertiserMid="44583",entriesObserved,malformedEntries=0,logicalDirectory="/"}={}){
@@ -145,13 +162,31 @@ export class RakutenProductCatalogSftpTransport {
                 const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress});
                 await session.close();await releaseLease();
                 const local=await stat(temporaryPath); if(local.size<=0)throw new Error("SFTP_DOWNLOAD_FAILED");
-                const bytes=await readFile(temporaryPath),validation=await validateRakutenProductCatalogGzip(bytes,{feedProfile:selected.feedFamily==="DELTA"?"MAIN_DELTA":"MAIN_FULL"}),records=validation.records;
-                const header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL"),products=records.filter(item=>item.recordType==="PRODUCT");
-                if(!header||!trailer||trailer.actualProductCount!==products.length)throw new Error("SFTP_INTEGRITY_FAILED");
+                const validation=await validateStagedFile(temporaryPath,selected.feedFamily==="DELTA"?"MAIN_DELTA":"MAIN_FULL",`RAKUTEN_MAIN:${selected.advertiserMid}:${selected.publisherSid}`),{header,trailer,products,modifications,fieldCounts}=validation.summary;
+                if(!header||!trailer||trailer.actualProductCount!==products)throw new Error("SFTP_INTEGRITY_FAILED");
                 await rename(temporaryPath,finalPath);
-                const count=value=>products.filter(item=>item.modification===value).length;
-                return freeze({status:"DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,transfer,integrity:validation.integrity,localPath:finalPath,localBytes:local.size,sha256:crypto.createHash("sha256").update(bytes).digest("hex"),headerTimestamp:header.feedTimestamp,productRows:products.length,trailerRows:trailer.productCount,modifications:{I:count("I"),U:count("U"),D:count("D")},fieldCounts:[...new Set(products.map(item=>item.fieldCount))].sort(),connectionsUsed:1,externalOperations:1,actualSpendUsd:0});
+                return freeze({status:"DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,transfer,integrity:validation.integrity,localPath:finalPath,localBytes:local.size,sha256:await sha256File(finalPath),headerTimestamp:header.feedTimestamp,productRows:products,trailerRows:trailer.productCount,modifications,fieldCounts,connectionsUsed:1,externalOperations:1,actualSpendUsd:0});
             } catch(error){await rm(temporaryPath,{force:true});if(String(error?.message??"").startsWith("SFTP_"))throw error;if(["EACCES","ENOSPC","EROFS","EMFILE","ENFILE","ENOENT"].includes(error?.code))throw new Error("SFTP_LOCAL_WRITE_FAILED");throw new Error("SFTP_INTEGRITY_FAILED");}
+        });
+    }
+    async downloadFullAndValidate({ advertiserMid="44583", publisherSid="4746097", signal, listTimeoutMs=RAKUTEN_SFTP_LIST_TIMEOUT_MS, stallTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS, downloadTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS, onProgress=()=>{} }={}) {
+        return this.withSession(async (session,{releaseLease}) => {
+            const discovery=await this.discoverAvailable(session,{advertiserMid,signal,listTimeoutMs});
+            let selected;
+            try { selected=selectRakutenNeweggMainFull(discovery.listings,{advertiserMid,publisherSid}); }
+            catch(cause) { cause.discovery=discovery.discovery; cause.directoryListings=discovery.directoryListings; throw cause; }
+            const acquisitionRoot=path.join(this.stagingRoot,"acquisitions",crypto.randomUUID());
+            await mkdir(acquisitionRoot,{recursive:true});
+            const finalPath=path.join(acquisitionRoot,selected.filename),temporaryPath=`${finalPath}.partial`;
+            try {
+                const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress});
+                await session.close(); await releaseLease();
+                const local=await stat(temporaryPath); if (local.size<=0) throw error("SFTP_DOWNLOAD_FAILED");
+                const validation=await validateStagedFile(temporaryPath,"MAIN_FULL",`RAKUTEN_MAIN:${advertiserMid}:${publisherSid}`),{header,trailer,products,modifications,fieldCounts}=validation.summary;
+                if (!header || !trailer || trailer.actualProductCount!==products) throw error("SFTP_INTEGRITY_FAILED");
+                await rename(temporaryPath,finalPath);
+                return freeze({status:"FULL_DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,transfer,integrity:validation.integrity,localPath:finalPath,localBytes:local.size,sha256:await sha256File(finalPath),headerTimestamp:header.feedTimestamp,productRows:products,trailerRows:trailer.productCount,modifications,fieldCounts,filesDownloaded:1,downloadsSequential:true,localProcessingStartedAfterNetworkClose:true,externalOperations:1,actualSpendUsd:0});
+            } catch(cause) { await rm(temporaryPath,{force:true}); throw cause; }
         });
     }
     async downloadAuthoritativeSequence({advertiserMid="44583",signal,listTimeoutMs=RAKUTEN_SFTP_LIST_TIMEOUT_MS,stallTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS,downloadTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS,onProgress=()=>{}}={}){
@@ -162,9 +197,9 @@ export class RakutenProductCatalogSftpTransport {
             try{
                 for(let index=0;index<lineage.files.length;index+=1){const selected=lineage.files[index],finalPath=path.join(this.stagingRoot,selected.filename),temporaryPath=`${finalPath}.partial-${crypto.randomUUID()}`;try{const transfer=await session.download(selected.remotePath,temporaryPath,{signal,stallTimeoutMs,downloadTimeoutMs,reportedRemoteBytes:selected.size,onProgress:value=>onProgress({index,filename:selected.filename,...value})});staged.push({selected,finalPath,temporaryPath,transfer});}catch(cause){await rm(temporaryPath,{force:true});cause.lineage=failureLineage;cause.attemptedFile=freeze({index,filename:selected.filename,classification:selected.feedFamily,reportedRemoteBytes:selected.size??null});throw cause;}}
                 await session.close();await releaseLease();const validated=[];
-                for(let index=0;index<staged.length;index+=1){const item=staged[index],bytes=await readFile(item.temporaryPath);try{const validation=await validateRakutenProductCatalogGzip(bytes,{feedProfile:item.selected.feedFamily==="DELTA"?"MAIN_DELTA":"MAIN_FULL"});validated.push({...item,bytes,validation});}catch(cause){cause.attemptedFile=freeze({index,filename:item.selected.filename,classification:item.selected.feedFamily,reportedRemoteBytes:item.selected.size??null});cause.transfer=item.transfer;throw cause;}}
-                const files=[];for(const item of validated){await rename(item.temporaryPath,item.finalPath);files.push({filename:item.selected.filename,feedFamily:item.selected.feedFamily,localPath:item.finalPath,localBytes:item.bytes.length,sha256:crypto.createHash("sha256").update(item.bytes).digest("hex"),transfer:item.transfer,integrity:item.validation.integrity});}
-                return freeze({status:"AUTHORITATIVE_SEQUENCE_DOWNLOADED_AND_VALIDATED",lineage:{full:lineage.full.filename,deltas:lineage.deltas.map(item=>item.filename),orderedFiles:lineage.files.map(item=>item.filename)},files,filesDownloaded:files.length,downloadsSequential:true,directoryListings:discovery.directoryListings,discovery:discovery.discovery,localProcessingStartedAfterNetworkClose:true,actualSpendUsd:0});
+                for(let index=0;index<staged.length;index+=1){const item=staged[index];try{const validation=await validateStagedFile(item.temporaryPath,item.selected.feedFamily==="DELTA"?"MAIN_DELTA":"MAIN_FULL",lineage.feedFamilyKey);validated.push({...item,validation,localBytes:(await stat(item.temporaryPath)).size,sha256:await sha256File(item.temporaryPath)});}catch(cause){cause.attemptedFile=freeze({index,filename:item.selected.filename,classification:item.selected.feedFamily,reportedRemoteBytes:item.selected.size??null});cause.transfer=item.transfer;throw cause;}}
+                const files=[];for(const item of validated){await rename(item.temporaryPath,item.finalPath);files.push({filename:item.selected.filename,feedFamily:item.selected.feedFamily,feedFamilyKey:lineage.feedFamilyKey,remoteModifiedAt:item.selected.remoteTimestampUtc,headerTimestamp:item.validation.summary.header.feedTimestamp,localPath:item.finalPath,localBytes:item.localBytes,sha256:item.sha256,transfer:item.transfer,integrity:item.validation.integrity});}
+                return freeze({status:"AUTHORITATIVE_SEQUENCE_DOWNLOADED_AND_VALIDATED",lineage:{full:lineage.full.filename,deltas:lineage.deltas.map(item=>item.filename),orderedFiles:lineage.files.map(item=>item.filename),feedFamilyKey:lineage.feedFamilyKey},files,filesDownloaded:files.length,downloadsSequential:true,directoryListings:discovery.directoryListings,discovery:discovery.discovery,localProcessingStartedAfterNetworkClose:true,actualSpendUsd:0});
             }catch(cause){for(const item of staged)await rm(item.temporaryPath,{force:true});const failure=String(cause?.code??cause?.message??"").startsWith("SFTP_")?cause:error("SFTP_SEQUENCE_INCOMPLETE");failure.lineage??=failureLineage;failure.authoritativeSequenceComplete=false;throw failure;}
         });
     }

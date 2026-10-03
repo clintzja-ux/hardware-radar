@@ -1,0 +1,12 @@
+import path from "node:path";
+import {readFile} from "node:fs/promises";
+import {FileCurrentDisplaySnapshotRepository,RakutenDiskBoundedCatalogStateProjection} from "../packages/mercury/current-display/index.js";
+import {executeRakutenLegacyOfferRecovery,FileRakutenLegacyOfferRecoveryRepository} from "../packages/mercury/current-refresh/index.js";
+const args=new Map(process.argv.slice(2).map(value=>{const at=value.indexOf("=");return at<0?[value,true]:[value.slice(0,at),value.slice(at+1)];}));
+const planId=String(args.get("--plan-id")??""),preparationIds=String(args.get("--preparation-ids")??"").split(",").filter(Boolean),confirmation=String(args.get("--confirm")??"");
+if(!planId||preparationIds.length!==2||!confirmation)throw new Error("CURRENT_RECOVERY_EXECUTE_ARGUMENTS_INVALID");
+const repository=new FileRakutenLegacyOfferRecoveryRepository(),plan=await repository.getPlan(planId);if(!plan)throw new Error("CURRENT_RECOVERY_PLAN_NOT_FOUND");
+const preparations=await Promise.all(preparationIds.map(id=>repository.getPreparation(id)));if(preparations.some(value=>!value))throw new Error("CURRENT_RECOVERY_PREPARATION_NOT_FOUND");
+const stateProjection=new RakutenDiskBoundedCatalogStateProjection({stateRoot:path.resolve(".forge-review/rakuten-sftp/catalog-state")}),retainedRakutenState=await stateProjection.getCurrent();
+const result=await executeRakutenLegacyOfferRecovery({plan,preparations,currentSnapshotRepository:new FileCurrentDisplaySnapshotRepository({statePath:path.resolve(".forge-review/retail-display/current-display-snapshots.json")}),retainedRakutenState,authorizedPlanId:planId,authorizedPreparationIds:preparationIds,confirmation});
+console.log(JSON.stringify({...result,historyMutation:false,destinationMutation:false,affiliateMutation:false,workbookMutation:false,releaseAuthority:false,deploymentAuthority:false},null,2));

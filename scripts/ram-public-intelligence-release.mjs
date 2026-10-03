@@ -4,7 +4,7 @@ import path from "node:path";
 import { ProductRepository, RetailerRepository, createRamCatalogProjection } from "../packages/atlas/index.js";
 import { loadRetailerDestinationSource, createPublicRetailerDestinationProjection } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { FileCurrentDisplaySnapshotRepository, createPublicCurrentRetailProjection, createEmptyPublicCurrentRetailProjection, createPublicRetailerActionProjection, readManualCurrentPriceWorkbookRows } from "../packages/mercury/current-display/index.js";
-import { deriveCurrentDisplayPublicationEligibleSnapshot } from "../packages/mercury/publication/CurrentDisplayPublication.js";
+import { deriveCurrentDisplayPublicationEligibleSnapshot, deriveLegacySingleOfferPublicationCompatibilitySnapshot } from "../packages/mercury/publication/CurrentDisplayPublication.js";
 import { defaultSourceRightsRegistry } from "../packages/mercury/rights/SourceRightsRegistry.js";
 import { FileHistoricalObservationRepository } from "../packages/mercury/historical-admission/persistence/FileHistoricalObservationRepository.js";
 import { EffectiveHistoricalObservationRepository } from "../packages/mercury/historical-admission/EffectiveHistoricalObservationRepository.js";
@@ -14,6 +14,7 @@ import { createPublicChronologicalPriceSeries } from "../packages/mercury/histor
 import { createRamPublicIntelligencePortfolioManifest, certifyRamPublicIntelligencePortfolio, portfolioFileDigest, validateRamPublicIntelligencePortfolio } from "../packages/mercury/publication/RamPublicIntelligenceReleasePortfolio.js";
 import { generateRamProductPages } from "./ram-product-publishing.mjs";
 import { generateRamTerminalPage } from "./ram-terminal-publishing.mjs";
+import { loadStaticPublicationContinuityProjection } from "./static-publication-release-runtime.mjs";
 
 const root = path.resolve(".");
 const argv = new Map(process.argv.slice(2).map(value => { const i = value.indexOf("="); return i < 0 ? [value.replace(/^--/, ""), true] : [value.slice(2, i), value.slice(i + 1)]; }));
@@ -39,7 +40,9 @@ async function canonicalInputs(asOf) {
   const currentState = await new FileCurrentDisplaySnapshotRepository({ statePath: currentStatePath }).getState();
   const snapshot = currentState.current ? { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) } : null;
   const eligibleSnapshot = snapshot ? deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot, rightsRegistry: defaultSourceRightsRegistry }) : null;
-  const current = eligibleSnapshot ? createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: eligibleSnapshot, asOf }) : createEmptyPublicCurrentRetailProjection({ asOf });
+  let publishedProjection = null; try { publishedProjection = (await loadStaticPublicationContinuityProjection({ manifestPath: path.join(root, "config/publication-release.json") })).projection; } catch {}
+  const publicationSnapshot = eligibleSnapshot && currentState.previous ? deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot, predecessorSnapshot: currentState.previous, publishedProjection }) : eligibleSnapshot;
+  const current = publicationSnapshot ? createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf }) : createEmptyPublicCurrentRetailProjection({ asOf });
   const staleCurrent = createEmptyPublicCurrentRetailProjection({ asOf, state: "NO_QUALIFYING_CURRENT_PRICE" });
   const rawHistoryPath = path.join(stateRoot, "mercury/historical-observations.json");
   const reassessmentPath = path.join(stateRoot, "mercury/historical-comparability-reassessments.json");

@@ -8,7 +8,7 @@ import {
   staticPublicationArtifactDigest,
   validateStaticPublicationReleaseManifest
 } from "../validators/StaticPublicationReleaseControl.js";
-import { loadStaticPublicationRelease } from "../../../scripts/static-publication-release-runtime.mjs";
+import { loadStaticPublicationContinuityProjection, loadStaticPublicationRelease } from "../../../scripts/static-publication-release-runtime.mjs";
 import { readFile } from "node:fs/promises";
 import { ProductRepository, RetailerRepository, createRamCatalogProjection } from "../../atlas/index.js";
 import { createEmptyPublicCurrentRetailProjection } from "../../mercury/current-display/PublicCurrentRetailProjection.js";
@@ -85,6 +85,31 @@ const replay = createStaticPublicationReleaseManifest(base);
 assert.deepEqual(replay, manifest); cases += 1;
 eq(createStaticPublicationReleaseManifest({ releaseState: "OFF", targetEnvironment: "PREVIEW", reason: "fixture rollback", reviewedBy: "fixture", createdAt: at, previousReleaseId: manifest.releaseId }).rollback.previousReleaseId, manifest.releaseId);
 
+const lineageDir = await mkdtemp(path.join(os.tmpdir(), "static-release-lineage-"));
+try {
+  await mkdir(path.join(lineageDir, "artifacts"));
+  const artifactB = structuredClone(artifact); artifactB.products[0].offers[0].itemPriceUsd = 101;
+  const artifactBText = `${JSON.stringify(artifactB, null, 2)}\n`;
+  const releaseB = createStaticPublicationReleaseManifest({ ...base, reason: "fixture B", artifactRelativePath: "artifacts/b.json", artifactText: artifactBText, previousReleaseId: manifest.releaseId, previousReleaseManifest: manifest });
+  await writeFile(path.join(lineageDir, "artifacts", "fixture.json"), artifactText);
+  await writeFile(path.join(lineageDir, "artifacts", "b.json"), artifactBText);
+  await writeFile(path.join(lineageDir, "release.json"), `${JSON.stringify(releaseB)}\n`);
+  const predecessorB = await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json") });
+  eq(predecessorB.releaseId, manifest.releaseId);
+  eq(predecessorB.projection.products[0].offers[0].itemPriceUsd, 100);
+  const artifactC = structuredClone(artifact); artifactC.products[0].offers[0].itemPriceUsd = 102;
+  const artifactCText = `${JSON.stringify(artifactC, null, 2)}\n`;
+  const releaseC = createStaticPublicationReleaseManifest({ ...base, reason: "fixture C", artifactRelativePath: "artifacts/c.json", artifactText: artifactCText, previousReleaseId: releaseB.releaseId, previousReleaseManifest: releaseB });
+  await writeFile(path.join(lineageDir, "artifacts", "c.json"), artifactCText);
+  await writeFile(path.join(lineageDir, "release.json"), `${JSON.stringify(releaseC)}\n`);
+  const predecessorC = await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json") });
+  eq(predecessorC.releaseId, releaseB.releaseId);
+  eq(predecessorC.projection.products[0].offers[0].itemPriceUsd, 101);
+  const failedBDiscardedC = createStaticPublicationReleaseManifest({ ...base, reason: "fixture C after failed B", artifactRelativePath: "artifacts/c.json", artifactText: artifactCText, previousReleaseId: manifest.releaseId, previousReleaseManifest: manifest });
+  await writeFile(path.join(lineageDir, "release.json"), `${JSON.stringify(failedBDiscardedC)}\n`);
+  eq((await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json") })).releaseId, manifest.releaseId);
+} finally { await rm(lineageDir, { recursive: true, force: true }); }
+
 const readJson = async file => JSON.parse(await readFile(file, "utf8"));
 const [atlasProducts, atlasRetailers] = await Promise.all([new ProductRepository({ readJson }).getAll(), new RetailerRepository({ readJson }).getAll()]);
 const portfolioCatalog = createRamCatalogProjection(atlasProducts), portfolioCurrent = createEmptyPublicCurrentRetailProjection({ asOf: at });
@@ -100,7 +125,10 @@ const portfolioBundleText = portfolioText({ manifest: portfolioManifest, certifi
 const portfolioRelease = createStaticPublicationReleaseManifest({ releaseState: "ON", targetEnvironment: "PREVIEW", targetSurface: "PUBLIC_RAM_INTELLIGENCE_PORTFOLIO", reason: "fixture portfolio", reviewedBy: "fixture", createdAt: at, artifactRelativePath: `artifacts/${portfolioManifest.candidateId}.json`, artifactText: portfolioBundleText, authorityReference: portfolioCertification.certificationId });
 ok(validateStaticPublicationReleaseManifest(portfolioRelease).valid);
 eq(evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: at }).portfolio.manifest.candidateId, portfolioManifest.candidateId);
-eq(evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: "2026-09-19T00:00:00.001Z" }).reason, "STATIC_RELEASE_CERTIFICATION_EXPIRED");
+const expiredPortfolio = evaluateStaticPublicationRelease({ manifest: portfolioRelease, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: "2026-09-19T00:00:00.001Z" });
+eq(expiredPortfolio.exposed, true);
+eq(expiredPortfolio.currentMode, "EXPIRED_DURABLE_ONLY");
+eq(expiredPortfolio.reason, "STATIC_RELEASE_DURABLE_PORTFOLIO_EXPOSED_CURRENT_EXPIRED");
 const wrongPortfolio = structuredClone(portfolioRelease); wrongPortfolio.artifact.candidateId = "mer_ramreleasecand_" + "b".repeat(24);
 eq(evaluateStaticPublicationRelease({ manifest: wrongPortfolio, artifactText: portfolioBundleText, targetEnvironment: "PREVIEW", evaluatedAt: at }).exposed, false);
 const wrongCertification = JSON.parse(portfolioBundleText); wrongCertification.certification.candidateId = "mer_ramreleasecand_" + "c".repeat(24);

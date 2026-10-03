@@ -3,8 +3,10 @@ import { validatePublicCurrentRetailProjection } from "../current-display/Public
 import { validateRamTerminalPublicIntelligence } from "../historical-admission/RamTerminalPublicIntelligence.js";
 import { validatePublicChronologicalPriceSeries } from "../historical-admission/PublicChronologicalPriceSeries.js";
 
-export const RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION = "1.0";
-export const RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION = "RAM-PUBLIC-INTELLIGENCE-RELEASE-P1-1.0";
+export const RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION = "1.1";
+export const RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION = "RAM-PUBLIC-INTELLIGENCE-RELEASE-P1-1.1";
+export const LEGACY_RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION = "1.0";
+export const LEGACY_RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION = "RAM-PUBLIC-INTELLIGENCE-RELEASE-P1-1.0";
 
 const privatePattern = /\.forge-review|providerTaskId|evidenceId|authorizationId|operator|workbook|rawPayload|researchUrl|sourceUrl|rightsDigest|credential|secret|observationId/i;
 const canonical = value => Array.isArray(value)
@@ -20,7 +22,11 @@ export function portfolioFileDigest(text) { return digest(text); }
 
 export function createRamPublicIntelligencePortfolioManifest({ preparedAt, preparedBy, inputs, routes, files, counts, currentValidUntil } = {}) {
   if (!validTime(preparedAt) || typeof preparedBy !== "string" || !preparedBy.trim()) throw new TypeError("RAM_PUBLIC_INTELLIGENCE_PREPARATION_INVALID");
-  const identity = { schemaVersion: RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION, policyVersion: RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION, preparedAt, inputs, routes, files, counts, currentValidUntil };
+  const authorityDomains = {
+    durablePortfolio: { state: "CERTIFIABLE", expiresAt: null },
+    ephemeralCurrent: { state: currentValidUntil ? "FRESH_UNTIL" : "EMPTY", expiresAt: currentValidUntil ?? null }
+  };
+  const identity = { schemaVersion: RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION, policyVersion: RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION, preparedAt, inputs, routes, files, counts, currentValidUntil, authorityDomains };
   const bindingDigest = digest(identity);
   return freeze({
     schemaVersion: RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION,
@@ -36,6 +42,7 @@ export function createRamPublicIntelligencePortfolioManifest({ preparedAt, prepa
     files,
     counts,
     currentValidUntil,
+    authorityDomains,
     currentFreshnessPolicy: "PUBLIC-RAM-CURRENT-RETAIL-001-1.0",
     historyPolicy: "EFFECTIVE_COMPARABILITY",
     snapshotIncluded: false,
@@ -46,7 +53,9 @@ export function createRamPublicIntelligencePortfolioManifest({ preparedAt, prepa
 
 export function validateRamPublicIntelligencePortfolio({ manifest, fileTexts, evaluatedAt } = {}) {
   const errors = [];
-  if (manifest?.schemaVersion !== RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION || manifest?.policyVersion !== RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION || manifest?.artifactType !== "RAM_PUBLIC_INTELLIGENCE_RELEASE_PORTFOLIO") errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_HEADER_INVALID");
+  const legacy = manifest?.schemaVersion === LEGACY_RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION && manifest?.policyVersion === LEGACY_RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION;
+  const splitAuthority = manifest?.schemaVersion === RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_SCHEMA_VERSION && manifest?.policyVersion === RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION;
+  if ((!legacy && !splitAuthority) || manifest?.artifactType !== "RAM_PUBLIC_INTELLIGENCE_RELEASE_PORTFOLIO") errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_HEADER_INVALID");
   if (!/^mer_ramreleasecand_[a-f0-9]{24}$/.test(manifest?.candidateId ?? "") || !/^mer_ramreleaseart_[a-f0-9]{24}$/.test(manifest?.artifactId ?? "") || !/^[a-f0-9]{64}$/.test(manifest?.bindingDigest ?? "")) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_IDENTITY_INVALID");
   if (!validTime(manifest?.preparedAt) || !validTime(evaluatedAt) || manifest?.releaseAuthority !== false || manifest?.deploymentAuthority !== false || manifest?.snapshotIncluded !== false) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_AUTHORITY_INVALID");
   if (manifest?.counts?.products !== 103 || manifest?.routes?.productRoutes !== 103 || manifest?.routes?.snapshotRoutes !== 0) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_MEMBERSHIP_INVALID");
@@ -67,10 +76,12 @@ export function validateRamPublicIntelligencePortfolio({ manifest, fileTexts, ev
   if (!Array.isArray(destinations)) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_DESTINATIONS_INVALID");
   if (terminal?.lenses?.ALL_RAM?.historyCoverage?.comparableObservationCount !== chronology?.eligibleObservationCount || staleTerminal?.lenses?.ALL_RAM?.historyCoverage?.comparableObservationCount !== chronology?.eligibleObservationCount) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_HISTORY_INDEPENDENCE_INVALID");
   if (staleTerminal?.lenses?.ALL_RAM?.coverage?.productsCurrentlyPriced !== 0 || terminal?.lenses?.ALL_RAM?.coverage?.productsTracked !== 103) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_STALE_CURRENT_INVALID");
+  if (splitAuthority && (manifest?.authorityDomains?.durablePortfolio?.state !== "CERTIFIABLE" || manifest?.authorityDomains?.durablePortfolio?.expiresAt !== null || manifest?.authorityDomains?.ephemeralCurrent?.expiresAt !== (manifest.currentValidUntil ?? null) || !["FRESH_UNTIL", "EMPTY"].includes(manifest?.authorityDomains?.ephemeralCurrent?.state))) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_AUTHORITY_DOMAINS_INVALID");
   if (privatePattern.test(Object.values(fileTexts ?? {}).join("\n"))) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_PRIVATE_DATA_INVALID");
-  const rebuilt = { schemaVersion: manifest?.schemaVersion, policyVersion: manifest?.policyVersion, preparedAt: manifest?.preparedAt, inputs: manifest?.inputs, routes: manifest?.routes, files: manifest?.files, counts: manifest?.counts, currentValidUntil: manifest?.currentValidUntil };
+  const rebuilt = { schemaVersion: manifest?.schemaVersion, policyVersion: manifest?.policyVersion, preparedAt: manifest?.preparedAt, inputs: manifest?.inputs, routes: manifest?.routes, files: manifest?.files, counts: manifest?.counts, currentValidUntil: manifest?.currentValidUntil, ...(splitAuthority ? { authorityDomains: manifest?.authorityDomains } : {}) };
   if (manifest?.bindingDigest !== digest(rebuilt)) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_BINDING_INVALID");
-  return freeze({ valid: errors.length === 0, errors: [...new Set(errors)], currentMode: manifest?.currentValidUntil && Date.parse(evaluatedAt) <= Date.parse(manifest.currentValidUntil) ? "FRESH" : "STALE_FAIL_CLOSED" });
+  const fresh = manifest?.currentValidUntil && Date.parse(evaluatedAt) <= Date.parse(manifest.currentValidUntil);
+  return freeze({ valid: errors.length === 0, errors: [...new Set(errors)], authorityModel: splitAuthority ? "SPLIT_DURABLE_AND_CURRENT" : "LEGACY_COUPLED", durableMode: splitAuthority ? "AVAILABLE" : fresh ? "AVAILABLE" : "UNAVAILABLE", currentMode: fresh ? "FRESH" : splitAuthority ? "EXPIRED_DURABLE_ONLY" : "STALE_FAIL_CLOSED" });
 }
 
 export function certifyRamPublicIntelligencePortfolio({ manifest, fileTexts, evaluatedAt, certifiedBy } = {}) {
@@ -80,7 +91,7 @@ export function certifyRamPublicIntelligencePortfolio({ manifest, fileTexts, eva
   const certificationDigest = digest(binding);
   return freeze({
     schemaVersion: "1.0",
-    policyVersion: RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_POLICY_VERSION,
+    policyVersion: manifest.policyVersion,
     certificationId: `sent_ramreleasecert_${certificationDigest.slice(0, 24)}`,
     status: "CERTIFIED",
     certifiedAt: evaluatedAt,

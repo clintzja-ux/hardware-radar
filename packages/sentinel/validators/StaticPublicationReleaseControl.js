@@ -15,7 +15,9 @@ const manifestKeys = Object.freeze(["schemaVersion", "policyVersion", "releaseId
 const currentArtifactKeys = Object.freeze(["artifactId", "relativePath", "schemaVersion", "policyVersion", "digestSha256", "evaluatedAt", "expiresAt"]);
 const portfolioArtifactKeys = Object.freeze(["artifactId", "candidateId", "relativePath", "schemaVersion", "policyVersion", "digestSha256", "bindingDigest", "certificationId", "evaluatedAt", "expiresAt", "routesDigest"]);
 const certificationKeys = Object.freeze(["state", "certifiedBy", "certifiedAt", "authorityType", "authorityReference", "bindingDigest"]);
-const rollbackKeys = Object.freeze(["previousReleaseId"]);
+const legacyRollbackKeys = Object.freeze(["previousReleaseId"]);
+const rollbackKeys = Object.freeze(["previousReleaseId", "previousRelease"]);
+const predecessorKeys = Object.freeze(["releaseId", "targetEnvironment", "targetSurface", "artifact", "certification"]);
 const projectionKeys = Object.freeze(["schemaVersion", "policyVersion", "asOf", "state", "comparisonSemantics", "disclosure", "freshness", "counts", "winners", "products"]);
 const freshnessKeys = Object.freeze(["maxAgeHours"]);
 const countKeys = Object.freeze(["sourceOffers", "publicCurrentEligibleOffers", "staleOffers"]);
@@ -42,7 +44,7 @@ export function staticPublicationRouteSetDigest(routes) {
   return createHash("sha256").update(JSON.stringify(routes), "utf8").digest("hex");
 }
 
-export function createStaticPublicationReleaseManifest({ releaseState, targetEnvironment, targetSurface = STATIC_PUBLICATION_RELEASE_SURFACE, reason, reviewedBy, createdAt, artifactRelativePath = null, artifactText = null, expiresAt = null, authorityReference = null, currentDisplayAuthorization = null, previousReleaseId = null } = {}) {
+export function createStaticPublicationReleaseManifest({ releaseState, targetEnvironment, targetSurface = STATIC_PUBLICATION_RELEASE_SURFACE, reason, reviewedBy, createdAt, artifactRelativePath = null, artifactText = null, expiresAt = null, authorityReference = null, currentDisplayAuthorization = null, previousReleaseId = null, previousReleaseManifest = null } = {}) {
   if (!STATIC_PUBLICATION_RELEASE_STATES.includes(releaseState)) throw new TypeError("STATIC_RELEASE_STATE_INVALID");
   if (!STATIC_PUBLICATION_RELEASE_SURFACES.includes(targetSurface)) throw new TypeError("STATIC_RELEASE_SURFACE_INVALID");
   let artifact = null;
@@ -71,7 +73,14 @@ export function createStaticPublicationReleaseManifest({ releaseState, targetEnv
       bindingDigest: staticPublicationCertificationBindingDigest({ artifact, targetEnvironment, targetSurface })
     };
   }
-  const identity = { releaseState, targetEnvironment, targetSurface, reason, reviewedBy, createdAt, artifact, certification, previousReleaseId };
+  let previousRelease = null;
+  if (previousReleaseManifest !== null) {
+    const report = validateStaticPublicationReleaseManifest(previousReleaseManifest);
+    if (!report.valid || previousReleaseManifest.releaseState !== "ON" || previousReleaseManifest.releaseId !== previousReleaseId || previousReleaseManifest.targetEnvironment !== targetEnvironment || previousReleaseManifest.targetSurface !== targetSurface) throw new TypeError("STATIC_RELEASE_PREDECESSOR_INVALID");
+    previousRelease = freeze({ releaseId: previousReleaseManifest.releaseId, targetEnvironment: previousReleaseManifest.targetEnvironment, targetSurface: previousReleaseManifest.targetSurface, artifact: structuredClone(previousReleaseManifest.artifact), certification: structuredClone(previousReleaseManifest.certification) });
+  }
+  const rollback = { previousReleaseId, previousRelease };
+  const identity = { releaseState, targetEnvironment, targetSurface, reason, reviewedBy, createdAt, artifact, certification, rollback };
   const manifest = {
     schemaVersion: STATIC_PUBLICATION_RELEASE_SCHEMA_VERSION,
     policyVersion: STATIC_PUBLICATION_RELEASE_POLICY_VERSION,
@@ -84,7 +93,7 @@ export function createStaticPublicationReleaseManifest({ releaseState, targetEnv
     reviewedBy,
     artifact,
     certification,
-    rollback: { previousReleaseId }
+    rollback
   };
   const report = validateStaticPublicationReleaseManifest(manifest);
   if (!report.valid) throw new TypeError(report.errors.join(","));
@@ -101,7 +110,13 @@ export function validateStaticPublicationReleaseManifest(manifest) {
   if (!STATIC_PUBLICATION_RELEASE_ENVIRONMENTS.includes(manifest.targetEnvironment)) errors.push("STATIC_RELEASE_ENVIRONMENT_INVALID");
   if (!STATIC_PUBLICATION_RELEASE_SURFACES.includes(manifest.targetSurface)) errors.push("STATIC_RELEASE_SURFACE_INVALID");
   if (!nonEmpty(manifest.reason) || !validTime(manifest.createdAt) || !nonEmpty(manifest.reviewedBy)) errors.push("STATIC_RELEASE_REVIEW_INVALID");
-  if (!exactKeys(manifest.rollback, rollbackKeys) || (manifest.rollback.previousReleaseId !== null && !/^pubrel_[a-f0-9]{24}$/.test(manifest.rollback.previousReleaseId ?? ""))) errors.push("STATIC_RELEASE_ROLLBACK_INVALID");
+  const legacyRollback = exactKeys(manifest.rollback, legacyRollbackKeys);
+  const currentRollback = exactKeys(manifest.rollback, rollbackKeys);
+  if ((!legacyRollback && !currentRollback) || (manifest.rollback.previousReleaseId !== null && !/^pubrel_[a-f0-9]{24}$/.test(manifest.rollback.previousReleaseId ?? ""))) errors.push("STATIC_RELEASE_ROLLBACK_INVALID");
+  if (currentRollback && manifest.rollback.previousRelease !== null) {
+    const prior = manifest.rollback.previousRelease;
+    if (!exactKeys(prior, predecessorKeys) || prior.releaseId !== manifest.rollback.previousReleaseId || prior.targetEnvironment !== manifest.targetEnvironment || prior.targetSurface !== manifest.targetSurface || !prior.artifact || !prior.certification) errors.push("STATIC_RELEASE_PREDECESSOR_INVALID");
+  }
   if (manifest.releaseState === "OFF") {
     if (manifest.artifact !== null || manifest.certification !== null) errors.push("STATIC_RELEASE_OFF_AUTHORITY_INVALID");
   } else {
@@ -111,7 +126,8 @@ export function validateStaticPublicationReleaseManifest(manifest) {
       if (portfolioScope ? !/^mer_ramreleaseart_[a-f0-9]{24}$/.test(manifest.artifact.artifactId ?? "") : !/^pubart_[a-f0-9]{24}$/.test(manifest.artifact.artifactId ?? "")) errors.push("STATIC_RELEASE_ARTIFACT_ID_INVALID");
       if (portfolioScope && (!/^mer_ramreleasecand_[a-f0-9]{24}$/.test(manifest.artifact.candidateId ?? "") || !/^sent_ramreleasecert_[a-f0-9]{24}$/.test(manifest.artifact.certificationId ?? "") || !/^[a-f0-9]{64}$/.test(manifest.artifact.bindingDigest ?? "") || !/^[a-f0-9]{64}$/.test(manifest.artifact.routesDigest ?? ""))) errors.push("STATIC_RELEASE_PORTFOLIO_BINDING_INVALID");
       if (!/^artifacts\/[a-z0-9][a-z0-9._-]*\.json$/.test(manifest.artifact.relativePath ?? "")) errors.push("STATIC_RELEASE_ARTIFACT_PATH_INVALID");
-      if (manifest.artifact.schemaVersion !== "1.0" || manifest.artifact.policyVersion !== (portfolioScope ? "RAM-PUBLIC-INTELLIGENCE-RELEASE-P1-1.0" : "PUBLIC-RAM-CURRENT-RETAIL-001-1.0")) errors.push("STATIC_RELEASE_ARTIFACT_SCHEMA_INVALID");
+      const portfolioContract = [["1.0","RAM-PUBLIC-INTELLIGENCE-RELEASE-P1-1.0"],["1.1","RAM-PUBLIC-INTELLIGENCE-RELEASE-P1-1.1"]].some(([schema,policy])=>manifest.artifact.schemaVersion===schema&&manifest.artifact.policyVersion===policy);
+      if (portfolioScope ? !portfolioContract : manifest.artifact.schemaVersion !== "1.0" || manifest.artifact.policyVersion !== "PUBLIC-RAM-CURRENT-RETAIL-001-1.0") errors.push("STATIC_RELEASE_ARTIFACT_SCHEMA_INVALID");
       if (!/^[a-f0-9]{64}$/.test(manifest.artifact.digestSha256 ?? "")) errors.push("STATIC_RELEASE_ARTIFACT_DIGEST_INVALID");
       if (!validTime(manifest.artifact.evaluatedAt) || !validTime(manifest.artifact.expiresAt) || Date.parse(manifest.artifact.expiresAt) <= Date.parse(manifest.artifact.evaluatedAt)) errors.push("STATIC_RELEASE_ARTIFACT_TIME_INVALID");
     }
@@ -139,9 +155,9 @@ function validatePortfolioArtifactAt({ artifact, artifactText, evaluatedAt }) {
     const cert = bundle.certification;
     if (bundle.manifest?.candidateId !== artifact.candidateId || bundle.manifest?.artifactId !== artifact.artifactId || bundle.manifest?.bindingDigest !== artifact.bindingDigest || cert?.certificationId !== artifact.certificationId || cert?.candidateId !== artifact.candidateId || cert?.artifactId !== artifact.artifactId || cert?.artifactBindingDigest !== artifact.bindingDigest || cert?.status !== "CERTIFIED") errors.push("STATIC_RELEASE_PORTFOLIO_BINDING_MISMATCH");
     if (staticPublicationRouteSetDigest(bundle.manifest?.routes) !== artifact.routesDigest || bundle.manifest?.routes?.snapshotRoutes !== 0) errors.push("STATIC_RELEASE_PORTFOLIO_ROUTE_MISMATCH");
-    if (report.currentMode !== "FRESH") errors.push("STATIC_RELEASE_PORTFOLIO_CURRENT_STALE");
+    if (report.currentMode !== "FRESH" && report.currentMode !== "EXPIRED_DURABLE_ONLY") errors.push("STATIC_RELEASE_PORTFOLIO_CURRENT_STALE");
   }
-  return { errors, bundle };
+  return { errors, bundle, currentMode: bundle ? validateRamPublicIntelligencePortfolio({ manifest: bundle.manifest, fileTexts: bundle.fileTexts, evaluatedAt }).currentMode : null };
 }
 
 function validateArtifactAt({ artifact, artifactText, evaluatedAt }) {
@@ -178,12 +194,14 @@ export function evaluateStaticPublicationRelease({ manifest = null, artifactText
   if (manifest.releaseState === "OFF") return off("STATIC_RELEASE_EXPLICITLY_OFF");
   if (!STATIC_PUBLICATION_RELEASE_ENVIRONMENTS.includes(targetEnvironment)) return off("STATIC_RELEASE_BUILD_ENVIRONMENT_INVALID");
   if (manifest.targetEnvironment !== targetEnvironment) return off("STATIC_RELEASE_ENVIRONMENT_MISMATCH");
-  if (!validTime(evaluatedAt) || Date.parse(evaluatedAt) < Date.parse(manifest.artifact.evaluatedAt) || Date.parse(evaluatedAt) > Date.parse(manifest.artifact.expiresAt)) return off("STATIC_RELEASE_CERTIFICATION_EXPIRED");
+  if (!validTime(evaluatedAt) || Date.parse(evaluatedAt) < Date.parse(manifest.artifact.evaluatedAt)) return off("STATIC_RELEASE_CERTIFICATION_EXPIRED");
+  const splitPortfolio = manifest.targetSurface === STATIC_PUBLICATION_RELEASE_PORTFOLIO_SURFACE && manifest.artifact.schemaVersion === "1.1";
+  if (!splitPortfolio && Date.parse(evaluatedAt) > Date.parse(manifest.artifact.expiresAt)) return off("STATIC_RELEASE_CERTIFICATION_EXPIRED");
   if (typeof artifactText !== "string") return off("STATIC_RELEASE_ARTIFACT_MISSING");
   if (manifest.targetSurface === STATIC_PUBLICATION_RELEASE_PORTFOLIO_SURFACE) {
     const artifact = validatePortfolioArtifactAt({ artifact: manifest.artifact, artifactText, evaluatedAt });
     if (artifact.errors.length) return off(artifact.errors[0]);
-    return freeze({ releaseState: "ON", exposed: true, reason: "STATIC_RELEASE_CERTIFIED_PORTFOLIO_EXPOSED", releaseId: manifest.releaseId, artifactId: manifest.artifact.artifactId, artifactDigest: manifest.artifact.digestSha256, targetEnvironment, targetSurface: manifest.targetSurface, projection: null, portfolio: artifact.bundle });
+    return freeze({ releaseState: "ON", exposed: true, reason: artifact.currentMode === "EXPIRED_DURABLE_ONLY" ? "STATIC_RELEASE_DURABLE_PORTFOLIO_EXPOSED_CURRENT_EXPIRED" : "STATIC_RELEASE_CERTIFIED_PORTFOLIO_EXPOSED", releaseId: manifest.releaseId, artifactId: manifest.artifact.artifactId, artifactDigest: manifest.artifact.digestSha256, targetEnvironment, targetSurface: manifest.targetSurface, currentMode: artifact.currentMode, projection: null, portfolio: artifact.bundle });
   }
   const artifact = validateArtifactAt({ artifact: manifest.artifact, artifactText, evaluatedAt });
   if (artifact.errors.length) return off(artifact.errors[0]);

@@ -24,7 +24,9 @@ const files = Object.fromEntries(Object.entries(fileTexts).map(([name, value]) =
 const manifest = createRamPublicIntelligencePortfolioManifest({ preparedAt: at, preparedBy: "fixture", inputs: { atlasManifest: "a".repeat(64) }, routes: { total: 122, staticRoutes: 14, editorialArticleRoutes: 5, productRoutes: 103, snapshotRoutes: 0 }, files, counts: { products: 103, freshCurrentProducts: 0, freshCurrentOffers: 0, staleCurrentOffers: 0, comparableHistoryObservations: 0, historyProducts: 0, timestampGroups: 0, governedDestinations: destinations.length }, currentValidUntil: null });
 const report = validateRamPublicIntelligencePortfolio({ manifest, fileTexts, evaluatedAt: at });
 assert.equal(report.valid, true, report.errors.join(","));
-assert.equal(report.currentMode, "STALE_FAIL_CLOSED");
+assert.equal(report.authorityModel, "SPLIT_DURABLE_AND_CURRENT");
+assert.equal(report.currentMode, "EXPIRED_DURABLE_ONLY");
+assert.equal(report.durableMode, "AVAILABLE");
 assert.equal(manifest.releaseAuthority, false);
 assert.equal(manifest.deploymentAuthority, false);
 assert.equal(manifest.snapshotIncluded, false);

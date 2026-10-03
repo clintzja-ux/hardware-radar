@@ -1,3 +1,6 @@
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
 process.env.HARDWARE_RADAR_TEST_MODE = "1";
 const testModules = [
     "./ProductsIdentityDiscoveryReadinessOwner.test.mjs",
@@ -258,8 +261,12 @@ const testModules = [
     ,"./AcquisitionCheckpointExecutionComposition.test.mjs"
     ,"./RetailDisplayImport.test.mjs"
     ,"./CurrentRetailRefreshOrchestrator.test.mjs"
+    ,"./CurrentOfferModel.test.mjs"
+    ,"./DataForSeoAmazonSellersCurrentOfferAdapter.test.mjs"
+    ,"./CurrentSchemaMigration.test.mjs"
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./RamTerminalPublicIntelligence.test.mjs"
+    ,"./CurrentDisplayPublicationMultiOfferCompatibility.test.mjs"
     ,"./RamMarketSnapshotProjection.test.mjs"
     ,"./PublicChronologicalPriceSeries.test.mjs"
     ,"./ManualCurrentPriceQualification.test.mjs"
@@ -275,6 +282,7 @@ const testModules = [
     ,"./PracticalCurrentItemPriceComparison.test.mjs"
     ,"./RakutenNeweggProductFeedAdapter.test.mjs"
     ,"./ProductionRakutenNeweggCurrentRefresh.test.mjs"
+    ,"./RakutenFullCurrentRefreshPlan.test.mjs"
     ,"./RakutenSftpTransport.test.mjs"
     ,"./RakutenSftpSafetyHardening.test.mjs"
     ,"./RakutenFeedIntegrityDiagnostics.test.mjs"
@@ -284,6 +292,11 @@ const testModules = [
     ,"./RakutenProductCatalogFieldMap.test.mjs"
     ,"./RakutenDeltaMultiplicity.test.mjs"
     ,"./RakutenCatalogStateProjection.test.mjs"
+    ,"./RakutenLegacyOfferRecovery.test.mjs"
+    ,"./RakutenLegacyOfferRecoveryExecution.test.mjs"
+    ,"./RakutenDiskBoundedCatalogState.test.mjs"
+    ,"./RakutenMutableDeltaLineage.test.mjs"
+    ,"./RakutenMemoryBoundedValidation.test.mjs"
     ,"./RetailLifecycleHeldReassessment.test.mjs"
     ,"./ProductionProductsIdentityDiscovery.test.mjs"
     ,"./ScaleRampSelectorProposalPrepare.test.mjs"
@@ -292,8 +305,12 @@ const testModules = [
     ,"./TasklessChildAuthorityDisposition.test.mjs"
     ,"./DispositionAwareExistingTaskContinuation.test.mjs"
     ,"./BoundedSpendProgression.test.mjs"
+    ,"./CurrentRefreshPlan.test.mjs"
+    ,"./AutomatedCurrentLaneCertification.test.mjs"
+    ,"./CurrentRefreshStaticRecomposition.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");
 for (const testModule of testModules) await import(testModule);
-console.log(`\nMercury test suite passed: ${testModules.length} files.`);
+execFileSync(process.execPath,[fileURLToPath(new URL("./RakutenDiskBoundedCatalogStateScale.test.mjs",import.meta.url))],{stdio:"inherit",env:process.env});
+console.log(`\nMercury test suite passed: ${testModules.length+1} files.`);

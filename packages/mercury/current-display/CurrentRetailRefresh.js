@@ -1,9 +1,10 @@
 import crypto from "node:crypto";
 import { createCurrentDisplaySnapshot } from "./CurrentDisplaySnapshot.js";
 import { assessCurrentDisplayItemPriceEligibility } from "./CurrentDisplayEligibility.js";
+import { createCurrentOfferProjection, projectLegacyCurrentOffer } from "./CurrentOfferModel.js";
 
 export const CURRENT_RETAIL_SOURCE_MODES = Object.freeze(["AUTOMATED_PRIMARY", "AUTOMATED_ALTERNATE", "MANUAL_ONLY", "UNAVAILABLE"]);
-export const CURRENT_RETAIL_REFRESH_OUTCOMES = Object.freeze(["REFRESHED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "DESTINATION_INVALID", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "TIMEOUT", "PROVIDER_ERROR", "INVALID_SOURCE_RESULT"]);
+export const CURRENT_RETAIL_REFRESH_OUTCOMES = Object.freeze(["REFRESHED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN", "SOURCE_STALE", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "DESTINATION_INVALID", "SOURCE_UNAVAILABLE", "RATE_LIMITED", "TIMEOUT", "PROVIDER_ERROR", "INVALID_SOURCE_RESULT"]);
 
 const stable = value => Array.isArray(value) ? `[${value.map(stable).join(",")}]` : value && typeof value === "object" ? `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}` : JSON.stringify(value);
 const hash = value => crypto.createHash("sha256").update(stable(value)).digest("hex");
@@ -67,6 +68,7 @@ function normalizedObservation(result, item, adapter, operationId) {
         shippingUsd: null, feesUsd: null, researchUrl: item.destinationUrl, destinationId: item.destinationId,
         matchStatus: "CANONICAL_DESTINATION_REFRESH", sourceRow: operationId,
         observedAt: result.observedAt, sellerType: result.sellerType ?? null, sellerName: result.sellerName ?? null,
+        listingIdentity: result.listingIdentity ?? null, sourceLocalSellerId: result.sourceLocalSellerId ?? null, sellerProfileUrl: result.sellerProfileUrl ?? null,
         sourceIdentity: { adapterId: adapter.adapterId, sourceId: result.sourceId, rightsProfileId: adapter.rights.profileId, historicalRetentionAllowed: false },
         sourceEvidence: result.sourceEvidence ? structuredClone(result.sourceEvidence) : null,
         ...eligibility
@@ -108,34 +110,46 @@ export class CurrentRetailRefreshOrchestrator {
             }
         };
         await Promise.all(Array.from({ length: Math.min(this.concurrency, Math.max(1, portfolio.items.length)) }, worker));
-        const offers = new Map((priorSnapshot?.offers ?? []).map(offer => [`${offer.atlasProductId}|${offer.retailerId}`, structuredClone(offer)]));
+        const priorOffers = priorSnapshot?.offers ?? [];
+        const multiOffer = priorSnapshot?.schemaVersion === "1.1";
+        const keyFor = offer => multiOffer ? offer.offerIdentity : `${offer.atlasProductId}|${offer.retailerId}`;
+        const priorKeys = priorOffers.map(keyFor);
+        if (new Set(priorKeys).size !== priorKeys.length) throw new Error("CURRENT_RETAIL_REFRESH_MULTI_OFFER_TARGET_REQUIRES_OFFER_IDENTITY");
+        const offers = new Map(priorOffers.map(offer => [keyFor(offer), structuredClone(offer)]));
         const outcomes = [];
         for (const [index, item] of portfolio.items.entries()) {
             const adapter = this.adapters.get(item.sourceAdapterId);
             const result = results[index];
-            const key = `${item.atlasProductId}|${item.retailerId}`;
+            const legacyKey = `${item.atlasProductId}|${item.retailerId}`;
             const operationId = index + 1;
-            if (result?.type === "OUTCOME" && result.status === "SOURCE_WITHDRAWN") { if (offers.get(key)?.sourceIdentity?.adapterId === adapter.adapterId) offers.delete(key); outcomes.push({ operationId, ...item, status: result.status }); continue; }
-            if (result?.type === "OUTCOME" && ["OUT_OF_STOCK", "PRICE_NOT_EXPOSED"].includes(result.status)) { offers.delete(key); outcomes.push({ operationId, ...item, status: result.status }); continue; }
+            if (result?.type === "OUTCOME" && result.status === "SOURCE_WITHDRAWN") { const key=multiOffer?result.withdrawOfferIdentity:legacyKey;if(key&&offers.get(key)?.sourceIdentity?.adapterId===adapter.adapterId)offers.delete(key);outcomes.push({ operationId, ...item, status: result.status }); continue; }
+            if (result?.type === "OUTCOME" && ["OUT_OF_STOCK", "PRICE_NOT_EXPOSED"].includes(result.status)) { if(!multiOffer)offers.delete(legacyKey);outcomes.push({ operationId, ...item, status: result.status });continue; }
             if (result?.type === "OUTCOME" && CURRENT_RETAIL_REFRESH_OUTCOMES.includes(result.status)) { outcomes.push({ operationId, ...item, status: result.status }); continue; }
-            const offer = normalizedObservation(result, item, adapter, operationId);
+            const normalized = normalizedObservation(result, item, adapter, operationId);
+            const offer = normalized && multiOffer ? (normalized.listingIdentity ? createCurrentOfferProjection({ offer: normalized, listingIdentity: normalized.listingIdentity, sourceLocalSellerId: normalized.sourceLocalSellerId, sellerProfileUrl: normalized.sellerProfileUrl }) : projectLegacyCurrentOffer(normalized)) : normalized;
             if (!offer) { outcomes.push({ operationId, ...item, status: "INVALID_SOURCE_RESULT" }); continue; }
+            const key = keyFor(offer);
             const predecessor = offers.get(key);
-            if (predecessor?.sourceIdentity?.sourceId && predecessor.sourceIdentity.sourceId !== offer.sourceIdentity.sourceId) {
+            if (predecessor?.sourceIdentity?.sourceId && predecessor.sourceIdentity.sourceId !== offer.sourceIdentity.sourceId && Date.parse(offer.observedAt) <= Date.parse(predecessor.observedAt)) {
                 outcomes.push({ operationId, ...item, status: "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED" });
                 continue;
+            }
+            if (multiOffer && !predecessor) {
+                const legacyPredecessors=[...offers.entries()].filter(([,value])=>value.identityMode==="LEGACY_PRODUCT_CHANNEL"&&value.atlasProductId===offer.atlasProductId&&value.retailerId===offer.retailerId&&value.destinationId===offer.destinationId);
+                if (legacyPredecessors.length===1) offers.delete(legacyPredecessors[0][0]);
+                else if (legacyPredecessors.length>1) { outcomes.push({ operationId, ...item, status: "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED" }); continue; }
             }
             offers.set(key, offer);
             outcomes.push({ operationId, ...item, status: observationOutcome(offer) });
         }
         const runMaterial = { portfolioId: portfolio.portfolioId, asOf: portfolio.asOf, outcomes };
         const runDigest = hash(runMaterial);
-        const snapshot = createCurrentDisplaySnapshot({ observedAt: portfolio.asOf, importedAt: portfolio.asOf, source: { workbook: `fixture-current-retail-refresh:${portfolio.portfolioId}`, sheet: "Source-neutral fixture refresh", digest: runDigest }, offers: [...offers.values()] });
+        const snapshot = createCurrentDisplaySnapshot({ schemaVersion: priorSnapshot?.schemaVersion ?? "1.0", observedAt: portfolio.asOf, importedAt: portfolio.asOf, source: { workbook: `fixture-current-retail-refresh:${portfolio.portfolioId}`, sheet: "Source-neutral fixture refresh", digest: runDigest }, offers: [...offers.values()] });
         const persistence = this.snapshotRepository ? await this.snapshotRepository.replace(snapshot) : { status: "NOT_PERSISTED", snapshotId: snapshot.snapshotId, previousSnapshotId: priorSnapshot?.snapshotId ?? null };
         const count = status => outcomes.filter(outcome => outcome.status === status).length;
         const successful = new Set(["REFRESHED", "MARKETPLACE_ONLY", "CONDITION_UNKNOWN", "AVAILABILITY_UNKNOWN", "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED", "OUT_OF_STOCK", "PRICE_NOT_EXPOSED", "PRICE_SEMANTICS_UNRESOLVED", "SOURCE_WITHDRAWN"]);
         return freeze({ schemaVersion: "1.0", runId: `mer_currefresh_${runDigest.slice(0, 24)}`, runDigest, startedAt, asOf: portfolio.asOf, portfolioId: portfolio.portfolioId, outcomes, snapshot, persistence,
-            counts: { attempted: outcomes.length, refreshed: count("REFRESHED"), failed: outcomes.filter(item => !successful.has(item.status)).length, preservedPrior: outcomes.filter(item => (!successful.has(item.status) || item.status === "CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED") && offers.has(`${item.atlasProductId}|${item.retailerId}`)).length, sourceConflicts: count("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED"), outOfStock: count("OUT_OF_STOCK"), priceUnavailable: count("PRICE_NOT_EXPOSED"), conditionUnknown: snapshot.offers.filter(offer => offer.condition === null).length, availabilityUnknown: snapshot.offers.filter(offer => offer.availability === "UNKNOWN").length, marketplaceBlocked: count("MARKETPLACE_ONLY"), sourceUnavailable: count("SOURCE_UNAVAILABLE"), numericOffers: snapshot.offers.length, itemPriceEligibleOffers: snapshot.offers.filter(offer => offer.itemPriceEligible).length },
+            counts: { attempted: outcomes.length, refreshed: count("REFRESHED"), failed: outcomes.filter(item => !successful.has(item.status)).length, preservedPrior: count("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED"), sourceConflicts: count("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED"), outOfStock: count("OUT_OF_STOCK"), priceUnavailable: count("PRICE_NOT_EXPOSED"), conditionUnknown: snapshot.offers.filter(offer => offer.condition === null).length, availabilityUnknown: snapshot.offers.filter(offer => offer.availability === "UNKNOWN").length, marketplaceBlocked: count("MARKETPLACE_ONLY"), sourceUnavailable: count("SOURCE_UNAVAILABLE"), numericOffers: snapshot.offers.length, itemPriceEligibleOffers: snapshot.offers.filter(offer => offer.itemPriceEligible).length },
             countsByRetailer: Object.fromEntries([...new Set(outcomes.map(item => item.retailerId))].sort().map(id => [id, outcomes.filter(item => item.retailerId === id).length])),
             countsBySource: Object.fromEntries([...new Set(outcomes.map(item => item.sourceAdapterId))].sort().map(id => [id, outcomes.filter(item => item.sourceAdapterId === id).length])),
             historicalObservationsCreated: 0, canonicalObservationsCreated: 0, reviewDecisionsCreated: 0, publicationDecisionsCreated: 0, currentPriceRecordsCreated: 0, externalOperations: 0, providerTasks: 0, actualSpendUsd: 0 });

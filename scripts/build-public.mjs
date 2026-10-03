@@ -98,8 +98,9 @@ try {
 if (staticRelease.exposed && staticRelease.portfolio) {
     const files = staticRelease.portfolio.fileTexts;
     ramCatalog = JSON.parse(files.catalog);
-    currentRetail = JSON.parse(files.current);
-    terminal = JSON.parse(files.terminal);
+    const durableOnly = staticRelease.currentMode === "EXPIRED_DURABLE_ONLY";
+    currentRetail = JSON.parse(durableOnly ? files.staleCurrent : files.current);
+    terminal = JSON.parse(durableOnly ? files.staleTerminal : files.terminal);
     chronological = JSON.parse(files.chronology);
     publicDestinations = JSON.parse(files.destinations);
     await rm(path.join(root, "public", "ram", "market-snapshots"), { recursive: true, force: true });

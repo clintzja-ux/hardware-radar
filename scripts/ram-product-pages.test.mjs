@@ -3,7 +3,6 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRamCatalogProjection, createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
-import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { formatProductName } from "../public/js/modules/ramTerminal.js";
 import { calculatePriceDisplayDomain, createRamProductSitemapRoutes, renderRamProductPage, selectChronologyTickIndexes } from "./ram-product-publishing.mjs";
 
@@ -12,8 +11,13 @@ const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
 const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
-const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages/mercury/destinations/production-destinations.json"), products, retailers });
-const destinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
+const releaseManifest = JSON.parse(await read("config/publication-release.json"));
+const releaseArtifact = JSON.parse(
+  await read(path.join("config", releaseManifest.artifact.relativePath)),
+);
+const destinations = JSON.parse(releaseArtifact.fileTexts.destinations);
+const chronology = JSON.parse(releaseArtifact.fileTexts.chronology);
+const chronologicalSeriesByProduct = new Map(chronology.products.map(item => [item.atlasProductId, item]));
 const currentRetail = JSON.parse(await read("public/data/ram-current-retail.json"));
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const terminal = JSON.parse(await read("public/data/ram-terminal.json"));
@@ -69,7 +73,7 @@ for (const product of catalog.products) {
     const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
     await stat(output);
     const html = await readFile(output, "utf8");
-    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(product.atlasProductId)), `${product.publicPath} must match its canonical generator.`);
+    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(product.atlasProductId), chronologicalSeriesByProduct.get(product.atlasProductId) ?? null), `${product.publicPath} must match its canonical generator.`);
     assert.equal((html.match(/<h1>/g) ?? []).length, 1);
     assert.match(html, new RegExp(`data-atlas-product-id="${product.atlasProductId}"`));
     assert.ok(html.includes(product.manufacturerPartNumber));
@@ -124,11 +128,7 @@ assert.match(styles, /\.ram-price-series__chart/);
 assert.match(styles, /\.ram-price-series__point:focus/);
 assert.match(styles, /@media\(prefers-reduced-motion:reduce\)/);
 assert.match(styles, /@media\(max-width:500px\)\{\.ram-product-history,\.ram-product-methodology\{[^}]+\}\.ram-product-history__metrics\{grid-template-columns:1fr\}\}/);
-assert.equal(currentRetail.products.length, 0, "Default-OFF release control must preserve catalog pages without exposing market data.");
-for (const product of catalog.products) {
-    const html = await read(path.join("public", product.publicPath.slice(1), "index.html"));
-    assert.doesNotMatch(html, /Current tracked prices/);
-}
+assert.ok(Array.isArray(currentRetail.products), "Generated current-retail state must expose an explicit product collection.");
 const pricedPage = catalog.products.find(product => destinations.some(destination => destination.atlasProductId === product.atlasProductId));
 assert.ok(pricedPage);
 const pricedDestination = destinations.find(destination => destination.atlasProductId === pricedPage.atlasProductId);

@@ -1,0 +1,28 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { createRamPublicIntelligencePortfolioManifest, certifyRamPublicIntelligencePortfolio, portfolioFileDigest } from "../publication/RamPublicIntelligenceReleasePortfolio.js";
+import { createStaticPublicationReleaseManifest, evaluateStaticPublicationRelease } from "../../sentinel/validators/StaticPublicationReleaseControl.js";
+
+const prior = JSON.parse(await readFile("config/artifacts/mer_ramreleasecand_090b4fd93049199dc149b7d0.json", "utf8"));
+const preparedAt = "2026-10-01T12:28:44.999Z";
+const files = Object.fromEntries(Object.entries(prior.fileTexts).map(([name, text]) => [name, { file: prior.manifest.files[name].file, digestSha256: portfolioFileDigest(text), bytes: Buffer.byteLength(text) }]));
+const manifest = createRamPublicIntelligencePortfolioManifest({ preparedAt, preparedBy: "fixture", inputs: prior.manifest.inputs, routes: prior.manifest.routes, files, counts: prior.manifest.counts, currentValidUntil: prior.manifest.currentValidUntil });
+const certification = certifyRamPublicIntelligencePortfolio({ manifest, fileTexts: prior.fileTexts, evaluatedAt: preparedAt, certifiedBy: "fixture" });
+const artifactText = `${JSON.stringify({ manifest, certification, fileTexts: prior.fileTexts }, null, 2)}\n`;
+const release = createStaticPublicationReleaseManifest({ releaseState: "ON", targetEnvironment: "PRODUCTION", targetSurface: "PUBLIC_RAM_INTELLIGENCE_PORTFOLIO", reason: "fixture split authority", reviewedBy: "fixture", createdAt: preparedAt, artifactRelativePath: `artifacts/${manifest.candidateId}.json`, artifactText, authorityReference: certification.certificationId });
+const afterExpiry = evaluateStaticPublicationRelease({ manifest: release, artifactText, targetEnvironment: "PRODUCTION", evaluatedAt: "2026-10-02T15:01:00.000Z" });
+assert.equal(afterExpiry.exposed, true);
+assert.equal(afterExpiry.currentMode, "EXPIRED_DURABLE_ONLY");
+const emptyCurrent = JSON.parse(afterExpiry.portfolio.fileTexts.staleCurrent);
+const durableTerminal = JSON.parse(afterExpiry.portfolio.fileTexts.staleTerminal);
+const chronology = JSON.parse(afterExpiry.portfolio.fileTexts.chronology);
+assert.equal(emptyCurrent.counts.publicCurrentEligibleOffers, 0);
+assert.equal(emptyCurrent.products.length, 0);
+assert.equal(durableTerminal.lenses.ALL_RAM.coverage.productsTracked, 103);
+assert.equal(durableTerminal.lenses.ALL_RAM.coverage.productsCurrentlyPriced, 0);
+assert.equal(durableTerminal.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 410);
+assert.equal(chronology.eligibleObservationCount, 410);
+assert.equal(durableTerminal.lenses.ALL_RAM.currentMarket.state, "NO_QUALIFYING_CURRENT_PRICE");
+assert.equal(manifest.releaseAuthority, false);
+assert.equal(manifest.deploymentAuthority, false);
+console.log("Current refresh static recomposition tests passed.");

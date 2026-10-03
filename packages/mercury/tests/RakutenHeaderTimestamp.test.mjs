@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {spawnSync} from "node:child_process";
 import {gzipSync} from "node:zlib";
-import {classifyRakutenHeaderTimestampSyntax,collectRakutenProductCatalogFixture,diagnoseRakutenHeaderTimestampSemanticFailure,parseRakutenHeaderTimestampUtc,validateRakutenProductCatalogGzip} from "../current-display/index.js";
+import {classifyRakutenHeaderTimestampSyntax,collectRakutenProductCatalogFixture,diagnoseRakutenHeaderTimestampSemanticFailure,parseRakutenHeaderTimestampUtc,RAKUTEN_NEWEGG_MAIN_FEED_FAMILY,rakutenHeaderDateFormatForFeedFamily,validateRakutenProductCatalogGzip} from "../current-display/index.js";
 import {fixtureFeedText,fixtureRow} from "./fixtures/rakuten-newegg/sanitized-feed-fixtures.js";
 
 let cases=0;
@@ -13,6 +13,15 @@ equal(parseRakutenHeaderTimestampUtc("09/28/2026 23:41:07"),"2026-09-28T23:41:07
 equal(parseRakutenHeaderTimestampUtc("01/01/2026 00:00:00"),"2026-01-01T00:00:00.000Z");
 equal(parseRakutenHeaderTimestampUtc("12/31/2026 23:59:59"),"2026-12-31T23:59:59.000Z");
 equal(parseRakutenHeaderTimestampUtc("02/29/2024 12:34:56"),"2024-02-29T12:34:56.000Z");
+equal(rakutenHeaderDateFormatForFeedFamily(null),"MM/DD/YYYY");
+equal(rakutenHeaderDateFormatForFeedFamily("RAKUTEN_MAIN:OTHER:OTHER"),"MM/DD/YYYY");
+equal(rakutenHeaderDateFormatForFeedFamily(RAKUTEN_NEWEGG_MAIN_FEED_FAMILY),"DD/MM/YYYY");
+equal(parseRakutenHeaderTimestampUtc("10/01/2026 12:25:49"),"2026-10-01T12:25:49.000Z");
+equal(parseRakutenHeaderTimestampUtc("01/10/2026 12:25:49",{feedFamilyKey:RAKUTEN_NEWEGG_MAIN_FEED_FAMILY}),"2026-10-01T12:25:49.000Z");
+equal(parseRakutenHeaderTimestampUtc("29/09/2026 12:23:23",{feedFamilyKey:RAKUTEN_NEWEGG_MAIN_FEED_FAMILY}),"2026-09-29T12:23:23.000Z");
+equal(parseRakutenHeaderTimestampUtc("01/10/2026 20:20:32",{feedFamilyKey:RAKUTEN_NEWEGG_MAIN_FEED_FAMILY}),"2026-10-01T20:20:32.000Z");
+equal(parseRakutenHeaderTimestampUtc("32/10/2026 12:00:00",{feedFamilyKey:RAKUTEN_NEWEGG_MAIN_FEED_FAMILY}),null);
+equal(parseRakutenHeaderTimestampUtc("01/13/2026 12:00:00",{feedFamilyKey:RAKUTEN_NEWEGG_MAIN_FEED_FAMILY}),null);
 for(const hour of ["0","1","9","00","01","09","10","23"]){const expected=`2026-09-29T${hour.padStart(2,"0")}:04:05.000Z`;equal(parseRakutenHeaderTimestampUtc(`09/29/2026 ${hour}:04:05`),expected);}
 equal(parseRakutenHeaderTimestampUtc("09/29/2026 9:04:05"),parseRakutenHeaderTimestampUtc("09/29/2026 09:04:05"));
 invalid("02/29/2026 12:00:00");
@@ -65,6 +74,8 @@ equal(delta[1].fieldCount,39);
 equal(delta[1].modification,"U");
 const observedDelta=await collectRakutenProductCatalogFixture(gzipSync(fixtureFeedText({timestamp:"09/29/2026 9:04:05",rows:[fixtureRow()]})),{feedProfile:"MAIN_DELTA"});
 equal(observedDelta[0].feedTimestamp,"2026-09-29T09:04:05.000Z");equal(observedDelta[1].fieldCount,39);equal(observedDelta[1].modification,"U");
+const neweggFull=await collectRakutenProductCatalogFixture(gzipSync(fixtureFeedText({timestamp:"29/09/2026 12:23:23",rows:[fixtureRow({}, {delta:false})]})),{feedProfile:"MAIN_FULL",feedFamilyKey:RAKUTEN_NEWEGG_MAIN_FEED_FAMILY});
+equal(neweggFull[0].feedTimestamp,"2026-09-29T12:23:23.000Z");equal(neweggFull[0].headerDateFormat,"DD/MM/YYYY");
 
 const moduleUrl=new URL("../current-display/RakutenProductCatalogParser.js",import.meta.url).href,child=`import {parseRakutenHeaderTimestampUtc as parse} from ${JSON.stringify(moduleUrl)};process.stdout.write(JSON.stringify([parse("09/03/2022 00:02:32"),parse("09/03/2022 0:02:32")]));`;
 const utc=spawnSync(process.execPath,["--input-type=module","-e",child],{encoding:"utf8",env:{...process.env,TZ:"UTC"}}),jamaica=spawnSync(process.execPath,["--input-type=module","-e",child],{encoding:"utf8",env:{...process.env,TZ:"America/Jamaica"}}),tokyo=spawnSync(process.execPath,["--input-type=module","-e",child],{encoding:"utf8",env:{...process.env,TZ:"Asia/Tokyo"}});

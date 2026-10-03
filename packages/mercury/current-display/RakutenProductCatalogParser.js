@@ -64,12 +64,15 @@ function parseRakutenPipeRecordDetailed(line,diagnostics={}) {
 export function parseRakutenPipeRecord(line) { return parseRakutenPipeRecordDetailed(line).fields; }
 
 const RAKUTEN_HEADER_TIMESTAMP_PATTERN=/^(\d{2})\/(\d{2})\/(\d{4}) (\d{1,2}):(\d{2}):(\d{2})$/;
+export const RAKUTEN_DEFAULT_HEADER_DATE_FORMAT="MM/DD/YYYY";
+export const RAKUTEN_NEWEGG_MAIN_FEED_FAMILY="RAKUTEN_MAIN:44583:4746097";
+export function rakutenHeaderDateFormatForFeedFamily(feedFamilyKey){return feedFamilyKey===RAKUTEN_NEWEGG_MAIN_FEED_FAMILY?"DD/MM/YYYY":RAKUTEN_DEFAULT_HEADER_DATE_FORMAT;}
 const timestampSemanticFailure=(failureComponent,failureReason,observedNumericValue=null)=>freeze({failureComponent,failureReason,observedNumericValue});
 
-function evaluateRakutenHeaderTimestampUtc(value){
+function evaluateRakutenHeaderTimestampUtc(value,{feedFamilyKey=null}={}){
     if(typeof value!=="string")return {instant:null,semanticFailure:null};
     const match=RAKUTEN_HEADER_TIMESTAMP_PATTERN.exec(value);if(!match)return {instant:null,semanticFailure:null};
-    const [,monthText,dayText,yearText,hourText,minuteText,secondText]=match,month=Number(monthText),day=Number(dayText),year=Number(yearText),hour=Number(hourText),minute=Number(minuteText),second=Number(secondText);
+    const [,firstText,secondText,yearText,hourText,minuteText,secondTimeText]=match,format=rakutenHeaderDateFormatForFeedFamily(feedFamilyKey),month=Number(format==="DD/MM/YYYY"?secondText:firstText),day=Number(format==="DD/MM/YYYY"?firstText:secondText),year=Number(yearText),hour=Number(hourText),minute=Number(minuteText),second=Number(secondTimeText);
     if(month<1||month>12)return {instant:null,semanticFailure:timestampSemanticFailure("MONTH","MONTH_OUT_OF_RANGE",month)};
     if(day<1||day>31)return {instant:null,semanticFailure:timestampSemanticFailure("DAY","DAY_OUT_OF_RANGE",day)};
     if(hour>23)return {instant:null,semanticFailure:timestampSemanticFailure("HOUR","HOUR_OUT_OF_RANGE",hour)};
@@ -82,13 +85,13 @@ function evaluateRakutenHeaderTimestampUtc(value){
     return {instant:instant.toISOString(),semanticFailure:null};
 }
 
-export function parseRakutenHeaderTimestampUtc(value){return evaluateRakutenHeaderTimestampUtc(value).instant;}
-export function diagnoseRakutenHeaderTimestampSemanticFailure(value){return evaluateRakutenHeaderTimestampUtc(value).semanticFailure;}
+export function parseRakutenHeaderTimestampUtc(value,options){return evaluateRakutenHeaderTimestampUtc(value,options).instant;}
+export function diagnoseRakutenHeaderTimestampSemanticFailure(value,options){return evaluateRakutenHeaderTimestampUtc(value,options).semanticFailure;}
 
-function parseHeader(fields) {
+function parseHeader(fields,{feedFamilyKey=null}={}) {
     if (fields[0] !== "HDR" || fields.length !== 4 || !/^\d+$/.test(fields[1]) || !fields[2].trim()) throw parserError("RAKUTEN_HEADER_INVALID");
-    const feedTimestamp=parseRakutenHeaderTimestampUtc(fields[3]);if(feedTimestamp===null)throw parserError("RAKUTEN_HEADER_TIMESTAMP_INVALID");
-    return freeze({ recordType: "HDR", advertiserMid:fields[1],advertiserName:fields[2],feedTimestamp, fields: fields.slice(1) });
+    const feedTimestamp=parseRakutenHeaderTimestampUtc(fields[3],{feedFamilyKey});if(feedTimestamp===null)throw parserError("RAKUTEN_HEADER_TIMESTAMP_INVALID");
+    return freeze({ recordType: "HDR", advertiserMid:fields[1],advertiserName:fields[2],feedTimestamp,headerDateFormat:rakutenHeaderDateFormatForFeedFamily(feedFamilyKey), fields: fields.slice(1) });
 }
 
 export function classifyRakutenHeaderTimestampSyntax(value) {
@@ -123,7 +126,7 @@ function parseProduct(fields, diagnostics, feedProfile) {
     return freeze({ recordType: "PRODUCT", fieldCount: fields.length, lineNumber:diagnostics.recordOrdinal, physicalLineOrdinal:diagnostics.physicalLineOrdinal, ...record });
 }
 
-export async function* parseRakutenProductCatalogGzip(input, { feedProfile = "MAIN",maxPhysicalRecordCharacters=RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS } = {}) {
+export async function* parseRakutenProductCatalogGzip(input, { feedProfile = "MAIN",feedFamilyKey=null,maxPhysicalRecordCharacters=RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS } = {}) {
     if (!(Buffer.isBuffer(input) || input?.[Symbol.asyncIterator] || input?.pipe)) throw parserError("RAKUTEN_GZIP_INPUT_INVALID");
     if (!["MAIN", "MAIN_FULL", "MAIN_DELTA", "NEWEGG_MKPL"].includes(feedProfile)) throw parserError("RAKUTEN_FEED_PROFILE_INVALID");
     const source = Buffer.isBuffer(input) ? Readable.from([input]) : input;
@@ -137,7 +140,7 @@ export async function* parseRakutenProductCatalogGzip(input, { feedProfile = "MA
             const line=framed.text,baseDiagnostics={physicalLineOrdinal:framed.physicalLineOrdinal,recordOrdinal:framed.recordOrdinal,physicalRecordByteLength:framed.physicalRecordByteLength,recordClassification:framed.recordClassification,startsWithRecognizedRecordToken:framed.startsWithRecognizedRecordToken,productRowOrdinal:productCount+1};
             gzipOpened = true;
             const parsed=parseRakutenPipeRecordDetailed(line,baseDiagnostics),fields=parsed.fields,diagnostics=parsed.diagnostics;
-            if (!header) { header = parseHeader(fields); yield header; continue; }
+            if (!header) { header = parseHeader(fields,{feedFamilyKey}); yield header; continue; }
             if(fields[0]==="HDR"||(/^[A-Z]{3}$/.test(fields[0])&&fields[0]!=="TRL"))throw parserError("RAKUTEN_RECORD_CLASSIFICATION_INVALID",{...diagnostics,recordClassification:"UNKNOWN"});
             if (fields[0] === "TRL") { if (trailer) throw parserError("RAKUTEN_TRAILER_DUPLICATE",diagnostics); trailer = parseTrailer(fields); continue; }
             if (trailer) throw parserError("RAKUTEN_RECORD_AFTER_TRAILER",diagnostics);
@@ -167,7 +170,7 @@ const integrityMapping=Object.freeze({
     RAKUTEN_TRAILER_MISSING:["SFTP_TRAILER_MISSING","TRAILER"],RAKUTEN_TRAILER_INVALID:["SFTP_TRAILER_INVALID","TRAILER"],RAKUTEN_TRAILER_DUPLICATE:["SFTP_TRAILER_INVALID","TRAILER"],RAKUTEN_RECORD_AFTER_TRAILER:["SFTP_TRAILER_INVALID","TRAILER"],RAKUTEN_TRAILER_COUNT_MISMATCH:["SFTP_TRAILER_COUNT_MISMATCH","COUNT"]
 });
 
-async function diagnoseUnsupportedRakutenHeaderTimestamp(input,{feedProfile="MAIN",maxPhysicalRecordCharacters=RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS}={}){
+async function diagnoseUnsupportedRakutenHeaderTimestamp(input,{feedProfile="MAIN",feedFamilyKey=null,maxPhysicalRecordCharacters=RAKUTEN_MAX_PHYSICAL_RECORD_CHARACTERS}={}){
     const source=Buffer.isBuffer(input)?Readable.from([input]):input,decompressed=source.pipe(createGunzip());
     let gzipOpened=false,gzipReachedEof=false,decompressionError=false,headerDiagnostic=null,trailerEncountered=false,trailerCountPresent=false,trailerCountObserved=null,productRowsObserved=0,recordsAfterTrailer=false,structuralFailure=null;
     try{
@@ -177,7 +180,7 @@ async function diagnoseUnsupportedRakutenHeaderTimestamp(input,{feedProfile="MAI
                 const {fields}=parseRakutenPipeRecordDetailed(framed.text,recordProperties(framed));
                 if(!headerDiagnostic){
                     const generalValid=fields[0]==="HDR"&&fields.length===4&&/^\d+$/.test(fields[1])&&Boolean(fields[2]?.trim());
-                    headerDiagnostic=freeze({recordPresent:fields[0]==="HDR",fieldCount:fields.length,generalStructureValid:generalValid,timestampPresent:typeof fields[3]==="string"&&fields[3].trim().length>0,timestampAccepted:parseRakutenHeaderTimestampUtc(fields[3])!==null,timestampSyntax:classifyRakutenHeaderTimestampSyntax(fields[3]),timestampSemanticFailure:diagnoseRakutenHeaderTimestampSemanticFailure(fields[3])});
+                    headerDiagnostic=freeze({recordPresent:fields[0]==="HDR",fieldCount:fields.length,generalStructureValid:generalValid,timestampPresent:typeof fields[3]==="string"&&fields[3].trim().length>0,timestampAccepted:parseRakutenHeaderTimestampUtc(fields[3],{feedFamilyKey})!==null,timestampSyntax:classifyRakutenHeaderTimestampSyntax(fields[3]),timestampSemanticFailure:diagnoseRakutenHeaderTimestampSemanticFailure(fields[3],{feedFamilyKey})});
                     if(!generalValid)structuralFailure="SFTP_HDR_INVALID";
                     continue;
                 }
@@ -206,15 +209,28 @@ async function diagnoseUnsupportedRakutenHeaderTimestamp(input,{feedProfile="MAI
     return freeze({mode:"UNSUPPORTED_HDR_TIMESTAMP_DIAGNOSTIC",accepted:false,semanticFailure:"SFTP_HDR_TIMESTAMP_INVALID",hdr:headerDiagnostic,gzip:{opened:gzipOpened,reachedEof:gzipReachedEof,decompressionError},trailer:{encountered:trailerEncountered,countPresent:trailerCountPresent,countObserved:trailerCountObserved,productRowsObserved,productCountMatches,recordsAfterTrailer},structuralFailure});
 }
 
-export async function validateRakutenProductCatalogGzip(input,options){
-    const records=[];
-    try{for await(const record of parseRakutenProductCatalogGzip(input,options))records.push(record);}
+export async function validateRakutenProductCatalogGzip(input,options={}){
+    const {collectRecords=true,targetSkus=null,diagnosticInputFactory=null,...parserOptions}=options;
+    if(typeof collectRecords!=="boolean"||!(targetSkus===null||Array.isArray(targetSkus)||targetSkus instanceof Set)||!(diagnosticInputFactory===null||typeof diagnosticInputFactory==="function"))throw parserError("RAKUTEN_VALIDATION_OPTIONS_INVALID");
+    const wanted=targetSkus===null?null:new Set(targetSkus),records=[],fieldCounts=new Set(),modifications={I:0,U:0,D:0},targetRecords=[];
+    let rowsParsed=0,productRowsParsed=0,header=null,trailer=null;
+    try{for await(const record of parseRakutenProductCatalogGzip(input,parserOptions)){
+        rowsParsed+=1;
+        if(record.recordType==="HDR")header=record;
+        else if(record.recordType==="TRL")trailer=record;
+        else if(record.recordType==="PRODUCT"){
+            productRowsParsed+=1;fieldCounts.add(record.fieldCount);if(record.modification!==null)modifications[record.modification]+=1;
+            if(wanted?.has(record.sku))targetRecords.push(record);
+        }
+        if(collectRecords)records.push(record);
+    }}
     catch(cause){
-        const [code,integrityStage]=integrityMapping[cause?.code??cause?.message]??["SFTP_INTEGRITY_FAILED","UNKNOWN"],products=records.filter(item=>item.recordType==="PRODUCT"),header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL");
-        const unsupportedTimestampDiagnostic=code==="SFTP_HDR_TIMESTAMP_INVALID"&&Buffer.isBuffer(input)?await diagnoseUnsupportedRakutenHeaderTimestamp(input,options):null;
-        const integrity=freeze({status:"FAILED",integrityStage,rowsParsed:records.length,productRowsParsed:cause?.productRowsParsed??products.length,fieldCountsObserved:freeze([...new Set(products.map(item=>item.fieldCount))].sort((a,b)=>a-b)),rowOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,physicalLineOrdinal:Number.isInteger(cause?.physicalLineOrdinal)?cause.physicalLineOrdinal:null,recordOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,productRowOrdinal:Number.isInteger(cause?.productRowOrdinal)?cause.productRowOrdinal:null,physicalRecordByteLength:Number.isInteger(cause?.physicalRecordByteLength)?cause.physicalRecordByteLength:null,quoteStateAtFailure:cause?.quoteStateAtFailure??null,delimiterCountOutsideQuotes:Number.isInteger(cause?.delimiterCountOutsideQuotes)?cause.delimiterCountOutsideQuotes:null,quoteOpenedAtFieldBoundary:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen),fieldOrdinalAtQuoteOpen:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen)?cause.fieldOrdinalAtQuoteOpen:null,literalQuotesObserved:Number.isInteger(cause?.literalQuotesObserved)?cause.literalQuotesObserved:null,structuralQuotesObserved:Number.isInteger(cause?.structuralQuotesObserved)?cause.structuralQuotesObserved:null,recordClassification:cause?.recordClassification??null,startsWithRecognizedRecordToken:typeof cause?.startsWithRecognizedRecordToken==="boolean"?cause.startsWithRecognizedRecordToken:null,observedFieldCount:Number.isInteger(cause?.observedFieldCount)?cause.observedFieldCount:null,trailerCountObserved:Number.isInteger(cause?.trailerCountObserved)?cause.trailerCountObserved:trailer?.productCount??null,headerTimestampPresent:Boolean(header?.feedTimestamp),gzipOpened:unsupportedTimestampDiagnostic?.gzip.opened??cause?.gzipOpened??records.length>0,gzipCompleted:unsupportedTimestampDiagnostic?.gzip.reachedEof??cause?.gzipCompleted??false,unsupportedTimestampDiagnostic});
+        const [code,integrityStage]=integrityMapping[cause?.code??cause?.message]??["SFTP_INTEGRITY_FAILED","UNKNOWN"];
+        const diagnosticInput=code==="SFTP_HDR_TIMESTAMP_INVALID"?(Buffer.isBuffer(input)?input:diagnosticInputFactory?.()):null;
+        const unsupportedTimestampDiagnostic=diagnosticInput?await diagnoseUnsupportedRakutenHeaderTimestamp(diagnosticInput,parserOptions):null;
+        const integrity=freeze({status:"FAILED",integrityStage,rowsParsed,productRowsParsed:cause?.productRowsParsed??productRowsParsed,fieldCountsObserved:freeze([...fieldCounts].sort((a,b)=>a-b)),rowOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,physicalLineOrdinal:Number.isInteger(cause?.physicalLineOrdinal)?cause.physicalLineOrdinal:null,recordOrdinal:Number.isInteger(cause?.recordOrdinal)?cause.recordOrdinal:null,productRowOrdinal:Number.isInteger(cause?.productRowOrdinal)?cause.productRowOrdinal:null,physicalRecordByteLength:Number.isInteger(cause?.physicalRecordByteLength)?cause.physicalRecordByteLength:null,quoteStateAtFailure:cause?.quoteStateAtFailure??null,delimiterCountOutsideQuotes:Number.isInteger(cause?.delimiterCountOutsideQuotes)?cause.delimiterCountOutsideQuotes:null,quoteOpenedAtFieldBoundary:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen),fieldOrdinalAtQuoteOpen:Number.isInteger(cause?.fieldOrdinalAtQuoteOpen)?cause.fieldOrdinalAtQuoteOpen:null,literalQuotesObserved:Number.isInteger(cause?.literalQuotesObserved)?cause.literalQuotesObserved:null,structuralQuotesObserved:Number.isInteger(cause?.structuralQuotesObserved)?cause.structuralQuotesObserved:null,recordClassification:cause?.recordClassification??null,startsWithRecognizedRecordToken:typeof cause?.startsWithRecognizedRecordToken==="boolean"?cause.startsWithRecognizedRecordToken:null,observedFieldCount:Number.isInteger(cause?.observedFieldCount)?cause.observedFieldCount:null,trailerCountObserved:Number.isInteger(cause?.trailerCountObserved)?cause.trailerCountObserved:trailer?.productCount??null,headerTimestampPresent:Boolean(header?.feedTimestamp),gzipOpened:unsupportedTimestampDiagnostic?.gzip.opened??cause?.gzipOpened??rowsParsed>0,gzipCompleted:unsupportedTimestampDiagnostic?.gzip.reachedEof??cause?.gzipCompleted??false,unsupportedTimestampDiagnostic});
         throw Object.assign(new Error(code),{code,integrity});
     }
-    const products=records.filter(item=>item.recordType==="PRODUCT"),header=records.find(item=>item.recordType==="HDR"),trailer=records.find(item=>item.recordType==="TRL"),integrity=freeze({status:"PASS",integrityStage:"COMPLETE",rowsParsed:records.length,productRowsParsed:products.length,fieldCountsObserved:freeze([...new Set(products.map(item=>item.fieldCount))].sort((a,b)=>a-b)),rowOrdinal:null,observedFieldCount:null,trailerCountObserved:trailer.productCount,headerTimestampPresent:true,gzipOpened:true,gzipCompleted:true});
-    return freeze({records,integrity});
+    const integrity=freeze({status:"PASS",integrityStage:"COMPLETE",rowsParsed,productRowsParsed,fieldCountsObserved:freeze([...fieldCounts].sort((a,b)=>a-b)),rowOrdinal:null,observedFieldCount:null,trailerCountObserved:trailer.productCount,headerTimestampPresent:true,gzipOpened:true,gzipCompleted:true});
+    return freeze({records,integrity,summary:{header,products:productRowsParsed,trailer,modifications:freeze(modifications),fieldCounts:integrity.fieldCountsObserved,targetRecords:freeze(targetRecords)}});
 }

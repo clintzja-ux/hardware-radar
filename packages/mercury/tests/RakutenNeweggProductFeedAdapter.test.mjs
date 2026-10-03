@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { gzipSync } from "node:zlib";
 import { readFile } from "node:fs/promises";
-import { collectRakutenProductCatalogFixture, createCurrentDisplaySnapshot, createCurrentRetailRefreshPortfolio, createPublicCurrentRetailProjection, createRakutenNeweggProductFeedAdapter, CurrentRetailRefreshOrchestrator, extractRakutenMerchantUrl, RAKUTEN_PRODUCT_CATALOG_BASE_FIELDS } from "../current-display/index.js";
+import { assessRakutenNeweggCondition, collectRakutenProductCatalogFixture, createCurrentDisplaySnapshot, createCurrentRetailRefreshPortfolio, createPublicCurrentRetailProjection, createRakutenNeweggProductFeedAdapter, CurrentRetailRefreshOrchestrator, extractRakutenMerchantUrl, RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION, RAKUTEN_PRODUCT_CATALOG_BASE_FIELDS } from "../current-display/index.js";
 import { fixtureFeedText, fixtureRow, sanitizedCases } from "./fixtures/rakuten-newegg/sanitized-feed-fixtures.js";
 
 let cases=0; const gz=text=>gzipSync(Buffer.from(text));
@@ -20,7 +20,8 @@ const retailers=[{id:"RETAILER-0004",name:"Newegg",status:"active"}], asOf="2026
 const context={atlasProductId:product.identity.atlasProductId,retailerId:destination.retailerId,retailer:"NEWEGG",destinationId:destination.destinationId,destinationUrl:destination.destinationUrl,retailerListingId:destination.retailerListingId,marketplace:destination.marketplace,asOf};
 const adapterFor=(records,options={})=>createRakutenNeweggProductFeedAdapter({records,destinations:[destination],feedTimestamp:parsed[0].feedTimestamp,...options});
 const result=await adapterFor([parsed[1]]).refresh(context);
-assert.deepEqual({type:result.type,price:result.itemPriceUsd,currency:result.currency,availability:result.availability,condition:result.condition,shipping:result.shippingUsd},{type:"OBSERVATION",price:99.99,currency:"USD",availability:"AVAILABLE",condition:null,shipping:null});
+assert.deepEqual({type:result.type,price:result.itemPriceUsd,currency:result.currency,availability:result.availability,condition:result.condition,shipping:result.shippingUsd},{type:"OBSERVATION",price:99.99,currency:"USD",availability:"AVAILABLE",condition:"NEW",shipping:null});
+assert.equal(result.conditionEvidence.evidenceState,"CONTEXTUALLY_DERIVED");assert.equal(result.conditionEvidence.policyVersion,RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION);cases+=2;
 assert.equal(result.sellerType,null); assert.equal(result.sellerName,null); assert.equal(result.sourceEvidence.feedProfile,"MAIN"); cases+=3;
 assert.equal(result.sourceEvidence.sourceShippingUsd,0); assert.equal(result.sourceEvidence.sourceUpc,"000000000001"); cases++;
 assert.match(extractRakutenMerchantUrl(parsed[1].productUrl),/newegg\.com\/p\/N82E16820000001/); assert.equal(result.destinationUrl,destination.destinationUrl); assert.notEqual(result.sourceEvidence.merchantUrl,result.destinationUrl); cases++;
@@ -28,7 +29,7 @@ assert.equal(extractRakutenMerchantUrl("https://click.example.invalid/?murl=http
 
 const adapter=adapterFor([parsed[1]]), portfolio=createCurrentRetailRefreshPortfolio({products:[product],destinations:[destination],retailers,adapters:[adapter],asOf});
 const run=await new CurrentRetailRefreshOrchestrator({adapters:[adapter]}).run({portfolio});
-assert.equal(run.outcomes[0].status,"CONDITION_UNKNOWN"); assert.equal(run.snapshot.offers[0].condition,null); assert.equal(run.snapshot.offers[0].sellerName,null);
+assert.equal(run.outcomes[0].status,"REFRESHED"); assert.equal(run.snapshot.offers[0].condition,"NEW"); assert.equal(run.snapshot.offers[0].sellerName,null);
 assert.equal(run.snapshot.offers[0].itemPriceEligible,true); assert.equal(run.snapshot.offers[0].comparisonEligible,true); assert.deepEqual(run.snapshot.offers[0].comparisonReasons,[]);
 assert.equal(run.snapshot.offers[0].deliveredCostEligible,false); assert.deepEqual(run.snapshot.offers[0].deliveredCostReasons,["SHIPPING_COST_UNKNOWN","FEES_UNKNOWN"]); cases+=4;
 const automatedProjection=createPublicCurrentRetailProjection({products:[product],retailers,destinations:[destination],currentSnapshot:run.snapshot,asOf});
@@ -48,8 +49,8 @@ assert.equal((await new CurrentRetailRefreshOrchestrator({adapters:[deleteAdapte
 const manual=await new CurrentRetailRefreshOrchestrator({adapters:[deleteAdapter]}).run({portfolio:dp,priorSnapshot:prior("mer_adapter_operator_curated_ram_offer")});
 assert.equal(manual.snapshot.offers.length,1); assert.deepEqual(product,structuredClone(product)); assert.deepEqual(destination,structuredClone(destination)); cases++;
 const sourceConflict=await new CurrentRetailRefreshOrchestrator({adapters:[adapter]}).run({portfolio,priorSnapshot:prior("mer_adapter_operator_curated_ram_offer")});
-assert.equal(sourceConflict.outcomes[0].status,"CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED"); assert.equal(sourceConflict.counts.sourceConflicts,1); assert.equal(sourceConflict.counts.preservedPrior,1);
-assert.equal(sourceConflict.snapshot.offers[0].sourceIdentity.sourceId,"FIXTURE"); cases++;
+assert.equal(sourceConflict.outcomes[0].status,"REFRESHED"); assert.equal(sourceConflict.counts.sourceConflicts,0); assert.equal(sourceConflict.counts.preservedPrior,0);
+assert.equal(sourceConflict.snapshot.offers[0].sourceIdentity.sourceId,"RAKUTEN_NEWEGG_PRODUCT_CATALOG"); cases++;
 
 const outcome=async overrides=>adapterFor([(await parse([fixtureRow(overrides)]))[1]]).refresh(context);
 assert.equal((await outcome({availability:"in-stock"})).availability,"AVAILABLE"); cases++;
@@ -66,7 +67,7 @@ assert.equal(blankWindowSale.sourceEvidence.rawSalePrice,"99.99"); assert.equal(
 assert.equal(blankWindowSale.sourceEvidence.priceWindow.status,"UNBOUNDED"); cases++;
 const blankWindowAdapter=adapterFor([(await parse([fixtureRow({retailPrice:"319.99",salePrice:"299.99",beginDate:"",endDate:"",availability:"in-stock"})]))[1]]),blankWindowPortfolio=createCurrentRetailRefreshPortfolio({products:[product],destinations:[destination],retailers,adapters:[blankWindowAdapter],asOf});
 const blankWindowRun=await new CurrentRetailRefreshOrchestrator({adapters:[blankWindowAdapter]}).run({portfolio:blankWindowPortfolio});
-assert.equal(blankWindowRun.snapshot.offers[0].priceUsd,299.99); assert.equal(blankWindowRun.snapshot.offers[0].sourceEvidence.selectedPriceField,"SALE_PRICE"); assert.equal(blankWindowRun.snapshot.offers[0].condition,null); assert.equal(blankWindowRun.snapshot.offers[0].sellerName,null); assert.equal(blankWindowRun.snapshot.offers[0].itemPriceEligible,true); assert.equal(blankWindowRun.snapshot.offers[0].comparisonEligible,true); cases+=3;
+assert.equal(blankWindowRun.snapshot.offers[0].priceUsd,299.99); assert.equal(blankWindowRun.snapshot.offers[0].sourceEvidence.selectedPriceField,"SALE_PRICE"); assert.equal(blankWindowRun.snapshot.offers[0].condition,"NEW"); assert.equal(blankWindowRun.snapshot.offers[0].sellerName,null); assert.equal(blankWindowRun.snapshot.offers[0].itemPriceEligible,true); assert.equal(blankWindowRun.snapshot.offers[0].comparisonEligible,true); cases+=3;
 const saleWithoutRetail=await outcome({retailPrice:"",salePrice:"99.99",beginDate:"",endDate:""});
 assert.equal(saleWithoutRetail.itemPriceUsd,99.99); assert.equal(saleWithoutRetail.sourceEvidence.selectedPriceField,"SALE_PRICE"); cases++;
 const insideWindow=await outcome({retailPrice:"109.99",salePrice:"99.99",beginDate:"09/01/2026 00:00:00",endDate:"09/30/2026 23:59:59"});
@@ -85,12 +86,17 @@ assert.equal((await createRakutenNeweggProductFeedAdapter({records:[parsed[1]],d
 const mkplRecord=(await collectRakutenProductCatalogFixture(gz(fixtureFeedText({rows:[sanitizedCases.mkpl]})),{feedProfile:"NEWEGG_MKPL"}))[1], mkplDestination={...destination,retailerListingId:"9SIAFIXTURE01",destinationUrl:"https://newegg.com/p/9SIAFIXTURE01"};
 assert.equal(mkplRecord.fieldCount,51); assert.equal(mkplRecord.profileFields.length,12);
 const mkpl=await createRakutenNeweggProductFeedAdapter({records:[mkplRecord],destinations:[mkplDestination],feedTimestamp:parsed[0].feedTimestamp,feedProfile:"NEWEGG_MKPL"}).refresh({...context,destinationUrl:mkplDestination.destinationUrl,retailerListingId:mkplDestination.retailerListingId});
-assert.equal(mkpl.sourceEvidence.marketplace,true); assert.equal(mkpl.condition,null); assert.equal(mkpl.sellerName,null); cases++;
+assert.equal(mkpl.sourceEvidence.marketplace,true); assert.equal(mkpl.condition,"NEW"); assert.equal(mkpl.sellerName,null); cases++;
 const additional=await adapterFor([parsed[1]],{feedProfile:"ADDITIONAL_UNCLASSIFIED"}).refresh(context);
 assert.equal(additional.sourceEvidence.marketplace,null); assert.equal(additional.condition,null); assert.equal(additional.sellerName,null); cases+=3;
 const directNeweggRecord={...parsed[1],productUrl:destination.destinationUrl,title:"Fixture RAM bundle with accessory"};
 const directNewegg=await adapterFor([directNeweggRecord]).refresh(context);
-assert.equal(directNewegg.condition,null); assert.equal(directNewegg.sellerType,null); assert.equal(directNewegg.sellerName,null); cases+=3;
+assert.equal(directNewegg.condition,"NEW"); assert.equal(directNewegg.sellerType,null); assert.equal(directNewegg.sellerName,null); cases+=3;
+const openBoxRecord={...parsed[1],productName:"Open Box - Fixture RAM",sku:"N82E16820000001R"};
+assert.deepEqual(assessRakutenNeweggCondition(openBoxRecord),{condition:"OPEN_BOX",evidenceState:"EXPLICIT_PROVIDER",policyVersion:RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION,reasons:["STRUCTURED_PRODUCT_TITLE_CONDITION"]});cases++;
+const ambiguousCondition={...parsed[1],productName:"Accessory used with Fixture RAM"};
+assert.equal(assessRakutenNeweggCondition(ambiguousCondition).condition,null);assert.equal(assessRakutenNeweggCondition(ambiguousCondition).evidenceState,"UNKNOWN");cases+=2;
+assert.equal(assessRakutenNeweggCondition({...parsed[1],availability:"out-of-stock"}).condition,null);cases++;
 const unavailable=adapterFor([]), unavailablePortfolio=createCurrentRetailRefreshPortfolio({products:[product],destinations:[destination],retailers,adapters:[unavailable],asOf});
 const sourceLoss=await new CurrentRetailRefreshOrchestrator({adapters:[unavailable]}).run({portfolio:unavailablePortfolio,priorSnapshot:prior(unavailable.adapterId)});
 assert.equal(sourceLoss.snapshot.offers[0].observedAt,"2026-09-08T11:00:00.000Z"); assert.equal(sourceLoss.outcomes[0].status,"SOURCE_UNAVAILABLE");

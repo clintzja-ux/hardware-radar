@@ -11,6 +11,10 @@ const confirmation = state === "ON" ? "CONFIRM-STATIC-RELEASE-ON" : "CONFIRM-STA
 if (args.confirmation !== confirmation) throw new Error(`STATIC_RELEASE_EXPLICIT_CONFIRMATION_REQUIRED:${confirmation}`);
 const output = path.resolve(args.output ?? "config/publication-release.json");
 const createdAt = args["created-at"] ?? new Date().toISOString();
+let previousReleaseManifest = null;
+if (args["previous-release-id"]) {
+  try { previousReleaseManifest = JSON.parse(await readFile(output, "utf8")); } catch {}
+}
 let artifactText = null;
 let currentDisplayAuthorization = null;
 let artifactRelativePath = null;
@@ -48,7 +52,8 @@ const manifest = createStaticPublicationReleaseManifest({
   expiresAt: args["expires-at"] ?? null,
   authorityReference: args["authority-reference"] ?? null,
   currentDisplayAuthorization,
-  previousReleaseId: args["previous-release-id"] ?? null
+  previousReleaseId: args["previous-release-id"] ?? null,
+  previousReleaseManifest
 });
 await mkdir(path.dirname(output), { recursive: true });
 if (state === "ON") {

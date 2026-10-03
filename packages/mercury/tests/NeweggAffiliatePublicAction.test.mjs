@@ -46,11 +46,11 @@ const state = await new FileCurrentDisplaySnapshotRepository({statePath:fileURLT
 const current = {...state.current,offers:state.current.offers.filter(offer=>offer?.sourceIdentity?.sourceId)};
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({snapshot:current,rightsRegistry:defaultSourceRightsRegistry});
 const actionableNewegg = eligible.offers.filter(offer=>offer.retailerId==="RETAILER-0004" && rows.find(row=>row.atlasProductId===offer.atlasProductId)?.rakutenRouting?.affiliateUrl);
-assert.equal(actionableNewegg.length,42); cases++;
-assert.equal(actionableNewegg.filter(offer=>actionById.get(offer.destinationId)?.destinationUrl!==ordinaryById.get(offer.destinationId)?.destinationUrl).length,42); cases++;
-assert.equal(actionableNewegg.filter(offer=>actionById.get(offer.destinationId)?.destinationUrl===ordinaryById.get(offer.destinationId)?.destinationUrl).length,0); cases++;
+assert.equal(actionableNewegg.length,43); cases++;
+assert.equal(actionableNewegg.filter(offer=>actionById.get(offer.destinationId)?.destinationUrl!==ordinaryById.get(offer.destinationId)?.destinationUrl).length,34); cases++;
+assert.equal(actionableNewegg.filter(offer=>actionById.get(offer.destinationId)?.destinationUrl===ordinaryById.get(offer.destinationId)?.destinationUrl).length,9); cases++;
 assert.equal(rows.filter(row=>row.rakutenRouting?.affiliateUrl && !ordinary.some(item=>item.atlasProductId===row.atlasProductId&&item.retailerId==="RETAILER-0004")).length,1); cases++;
-assert.equal(actions.filter(item=>item.retailerId==="RETAILER-0004"&&item.destinationUrl!==ordinaryById.get(item.destinationId).destinationUrl).length,44); cases++;
+assert.equal(actions.filter(item=>item.retailerId==="RETAILER-0004"&&item.destinationUrl!==ordinaryById.get(item.destinationId).destinationUrl).length,35); cases++;
 
 const asOf="2026-10-01T06:10:00.000Z", ordinaryCurrent=createPublicCurrentRetailProjection({products,retailers,destinations:ordinary,currentSnapshot:eligible,asOf}), affiliateCurrent=createPublicCurrentRetailProjection({products,retailers,destinations:actions,currentSnapshot:eligible,asOf});
 const omitUrl=value=>JSON.parse(JSON.stringify(value),(key,item)=>key==="destinationUrl"?undefined:item);
@@ -60,6 +60,6 @@ const catalog=createRamCatalogProjection(products), history={getAll:async()=>[]}
 assert.deepEqual(await createRamTerminalPublicIntelligence({catalog,currentRetail:affiliateCurrent,historicalRepository:history,asOf}),await createRamTerminalPublicIntelligence({catalog,currentRetail:ordinaryCurrent,historicalRepository:history,asOf})); cases++;
 assert.deepEqual(await readFile(statePath),stateBytesBefore); cases++;
 assert.equal(createHash("sha256").update(await readFile(workbookPath)).digest("hex"),workbookBefore); cases++;
-assert.equal(workbookBefore,"4101ebad513ea488f665f196077b1c75bf4f0b08d92e06a243fe7e333d533419"); cases++;
+assert.equal(workbookBefore,"5df3503810b423297cfa61ceb740f8927f05327c0952ba078f989f52dbf1aa67"); cases++;
 
 console.log(`Newegg affiliate public-action precedence tests passed: ${cases} cases.`);

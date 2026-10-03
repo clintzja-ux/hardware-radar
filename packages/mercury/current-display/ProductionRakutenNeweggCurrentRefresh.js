@@ -4,7 +4,7 @@ import { projectRakutenCatalogState } from "./RakutenCatalogStateProjection.js";
 
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const same = (left, right) => JSON.stringify(left) === JSON.stringify(right);
-const key = value => `${value.atlasProductId}|${value.retailerId}`;
+const key = (value, schemaVersion) => schemaVersion === "1.1" ? value.offerIdentity : `${value.atlasProductId}|${value.retailerId}`;
 
 export class ProductionRakutenNeweggCurrentRefreshService {
     constructor({ productRepository, retailerRepository, destinationSourceLoader, destinationSourcePath, snapshotRepository, rightsRegistry } = {}) {
@@ -19,9 +19,9 @@ export class ProductionRakutenNeweggCurrentRefreshService {
         const [products, retailers, priorState] = await Promise.all([this.productRepository.getAll(), this.retailerRepository.getAll(), this.snapshotRepository.getState()]);
         const destinationSource = await this.destinationSourceLoader({ sourcePath: this.destinationSourcePath, products, retailers });
         const destinations = destinationSource.effective.filter(value => value.retailerId === "RETAILER-0004" && value.status === "ACTIVE");
-        const catalogState = projectRakutenCatalogState({ files: catalogFiles });
+        const catalogState = projectRakutenCatalogState({ files: catalogFiles, requireLineage: true });
         const productById = new Map(products.map(value => [value.identity?.atlasProductId, value]));
-        const rowAssessments = catalogState.entries.map(({ sourceEntryKey, record }) => {
+        const rowAssessments = catalogState.currentCandidates.map(({ sourceEntryKey, record }) => {
             const binding = assessRakutenNeweggDestination(record, destinations);
             const product = binding.destination ? productById.get(binding.destination.atlasProductId) : null;
             let classification = "ROUTINE_CANDIDATE";
@@ -40,8 +40,8 @@ export class ProductionRakutenNeweggCurrentRefreshService {
         const adapter = createRakutenNeweggProductFeedAdapter({ catalogFiles, destinations: candidateDestinations, feedTimestamp });
         const portfolio = createCurrentRetailRefreshPortfolio({ products, retailers, destinations: candidateDestinations, adapters: [adapter], asOf: evaluatedAt });
         const refresh = await new CurrentRetailRefreshOrchestrator({ adapters: [adapter] }).run({ portfolio, priorSnapshot: priorState.current });
-        const priorByKey = new Map((priorState.current?.offers ?? []).map(value => [key(value), value]));
-        const nextByKey = new Map(refresh.snapshot.offers.map(value => [key(value), value]));
+        const priorByKey = new Map((priorState.current?.offers ?? []).map(value => [key(value, priorState.current?.schemaVersion), value]));
+        const nextByKey = new Map(refresh.snapshot.offers.map(value => [key(value, refresh.snapshot.schemaVersion), value]));
         const routineUpdates = [...nextByKey].filter(([entryKey, value]) => value.itemPriceEligible === true && !same(priorByKey.get(entryKey), value)).length;
         const unchanged = [...nextByKey].filter(([entryKey, value]) => same(priorByKey.get(entryKey), value)).length;
         const materialChange = !same(priorState.current?.offers ?? [], refresh.snapshot.offers);
@@ -49,7 +49,7 @@ export class ProductionRakutenNeweggCurrentRefreshService {
         if (!dryRun && materialChange) persistence = await this.snapshotRepository.replaceIfCurrent(refresh.snapshot, { expectedCurrentSnapshotId: priorState.current?.snapshotId ?? null, expectedCurrentFingerprint: priorState.current?.materialFingerprint ?? null });
         const count = status => refresh.outcomes.filter(value => value.status === status).length;
         const summary = {
-            sourceRowsConsidered: catalogState.sourceEntryCount,
+            sourceRowsConsidered: catalogState.currentCandidates.length,
             candidateProducts: new Set(rowAssessments.filter(value => value.atlasProductId).map(value => value.atlasProductId)).size,
             routineCurrentUpdates: routineUpdates,
             unchangedNoOp: unchanged,
@@ -63,6 +63,6 @@ export class ProductionRakutenNeweggCurrentRefreshService {
             failedSafe: refresh.counts.failed
         };
         const exceptions = [...rowAssessments.filter(value => value.classification !== "ROUTINE_CANDIDATE"), ...refresh.outcomes.filter(value => !["REFRESHED", "CONDITION_UNKNOWN"].includes(value.status)).map(value => ({ atlasProductId: value.atlasProductId, destinationId: value.destinationId, classification: value.status, reason: value.status }))];
-        return freeze({ schemaVersion: "1.0", operation: "RAKUTEN_NEWEGG_CURRENT_REFRESH", mode: dryRun ? "DRY_RUN" : "EXECUTE", catalogBindingDigest: catalogState.bindingDigest, portfolioId: portfolio.portfolioId, refreshRunId: refresh.runId, summary, exceptions, snapshot: refresh.snapshot, persistence, historicalObservationsCreated: 0, publicationCandidatesCreated: 0, publicationAuthorizationsCreated: 0, artifactsCreated: 0, providerCalls: 0, paidTasks: 0, actualSpendUsd: 0 });
+        return freeze({ schemaVersion: "1.0", operation: "RAKUTEN_NEWEGG_CURRENT_REFRESH", mode: dryRun ? "DRY_RUN" : "EXECUTE", catalogBindingDigest: catalogState.bindingDigest, portfolioId: portfolio.portfolioId, refreshRunId: refresh.runId, summary, rowAssessments, outcomes: refresh.outcomes, exceptions, snapshot: refresh.snapshot, persistence, historicalObservationsCreated: 0, publicationCandidatesCreated: 0, publicationAuthorizationsCreated: 0, artifactsCreated: 0, providerCalls: 0, paidTasks: 0, actualSpendUsd: 0 });
     }
 }
