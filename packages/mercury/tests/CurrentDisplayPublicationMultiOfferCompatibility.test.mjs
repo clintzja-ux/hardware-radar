@@ -4,7 +4,9 @@ import { deriveCurrentDisplayPublicationEligibleSnapshot, deriveLegacySingleOffe
 import { defaultSourceRightsRegistry } from "../rights/SourceRightsRegistry.js";
 
 const state = JSON.parse(await readFile(".forge-review/retail-display/current-display-snapshots.json", "utf8"));
-const publishedProjection = JSON.parse(await readFile("public/data/ram-current-retail.json", "utf8"));
+const releaseManifest = JSON.parse(await readFile("config/publication-release.json", "utf8"));
+const releaseBundle = JSON.parse(await readFile(`config/${releaseManifest.artifact.relativePath}`, "utf8"));
+const publishedProjection = JSON.parse(releaseBundle.fileTexts.current);
 const before = JSON.stringify(state);
 const current = { ...state.current, offers: state.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) };
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: current, rightsRegistry: defaultSourceRightsRegistry });
@@ -38,8 +40,13 @@ const continuity=deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligib
 assert.equal(continuity.offers.length,1);
 assert.equal(continuity.offers[0].offerIdentity,gskill[1].offerIdentity);
 
+const postBuildProjection={products:publishedProjection.products.filter(product=>product.atlasProductId!==gskill[0].atlasProductId)};
+assert.throws(()=>deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:{offers:gskill},publishedProjection:postBuildProjection}),/CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED/);
+const ambiguousProjection={products:[{offers:gskill.map(offer=>({atlasProductId:offer.atlasProductId,retailerId:offer.retailerId,destinationId:offer.destinationId,itemPriceUsd:offer.priceUsd,observedAt:offer.observedAt}))}]};
+assert.throws(()=>deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:{offers:gskill},publishedProjection:ambiguousProjection}),/CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED/);
+
 assert.throws(() => deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...current, offers: [gskill[0], gskill[0]] }, rightsRegistry: defaultSourceRightsRegistry }), /CURRENT_DISPLAY_OFFER_DUPLICATE/);
 assert.throws(() => deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...current, schemaVersion: "1.0", offers: gskill }, rightsRegistry: defaultSourceRightsRegistry }), /CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED/);
 assert.throws(() => deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: { ...eligible, offers: gskill }, predecessorSnapshot: { offers: [] } }), /CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED/);
 assert.equal(JSON.stringify(state), before);
-console.log("Current-display schema-1.1 publication compatibility tests passed: 23 assertions.");
+console.log("Current-display schema-1.1 publication compatibility tests passed: 25 assertions.");
