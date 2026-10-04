@@ -32,6 +32,7 @@
     "test:mercury": "node packages/mercury/tests/run-all-tests.mjs",
     "test:newegg-routine": "node packages/mercury/tests/NeweggRoutineMarketObservation.test.mjs",
     "test:newegg-routine-operations": "node packages/mercury/tests/NeweggRoutineSchedulingAndForge.test.mjs",
+    "test:newegg-routine-command": "node packages/mercury/tests/NeweggRoutineProductionCommand.test.mjs",
     "mercury:newegg-routine:history": "node scripts/newegg-routine-history.mjs",
     "test:beacon": "node packages/beacon/tests/run-all-tests.mjs",
     "test:gateway": "node packages/gateway/tests/run-all-tests.mjs",

@@ -3,5 +3,7 @@ export {createCertifiedMercuryCohortOperationsProjection} from "./CertifiedMercu
 export {CertifiedMercuryOperationsExporter,writeCertifiedMercuryOperationsArtifact} from "./CertifiedMercuryOperationsExporter.js";
 export {ProductionForgeCohortOperationsProvider} from "./ProductionForgeCohortOperationsProvider.js";
 export {ProductionForgeNeweggRoutineProvider} from "./ProductionForgeNeweggRoutineProvider.js";
+export * from "./NeweggRoutineProductionCommand.js";
+export * from "./PrivateForgeOperationsTransport.js";
 export * from "./NeweggRoutineMarketObservation.js";
 export * from "./NeweggRoutineSchedulingAndRetention.js";

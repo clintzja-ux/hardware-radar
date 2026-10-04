@@ -249,6 +249,7 @@ const testModules = [
     ,"./CertifiedMercuryCohortOperationsProjection.test.mjs"
     ,"./CertifiedMercuryOperationsPanel.test.mjs"
     ,"./NeweggRoutineSchedulingAndForge.test.mjs"
+    ,"./NeweggRoutineProductionCommand.test.mjs"
     ,"./CertifiedMercuryCohortOperationsPanel.test.mjs"
     ,"./ProductionForgeCohortOperationsProvider.test.mjs"
     ,"./ForgeCohortOperationsEndToEnd.test.mjs"
