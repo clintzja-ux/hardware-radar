@@ -22,7 +22,7 @@ export const AUTOMATED_CURRENT_LANE_CERTIFICATIONS = Object.freeze({
   DATAFORSEO_AMAZON_SELLERS: Object.freeze({ state: "BLOCKED", currentFactCapable: false, blockers: ["CANONICAL_RETAILER_IDENTITY_NOT_BOUND", "AVAILABILITY_NOT_RETAINED"] }),
   DATAFORSEO_AMAZON_PRODUCTS_PLUS_SELLERS: Object.freeze({ state: "BLOCKED", currentFactCapable: false, blockers: ["CANONICAL_RETAILER_IDENTITY_NOT_BOUND", "AVAILABILITY_NOT_RETAINED"] }),
   DATAFORSEO_GOOGLE_SHOPPING: Object.freeze({ state: "SCOPED_ROUTINE_READY", currentFactCapable: true, retailerIds: ["RETAILER-0002", "RETAILER-0003"], blockers: [] }),
-  RAKUTEN_NEWEGG: Object.freeze({ state: "ROUTINE_READY", currentFactCapable: true, retailerIds: ["RETAILER-0004"], historicalRetentionAllowed: false, blockers: [] })
+  RAKUTEN_NEWEGG: Object.freeze({ state: "ROUTINE_READY", currentFactCapable: true, retailerIds: ["RETAILER-0004"], historicalRetentionAllowed: true, blockers: [] })
 });
 
 export function getAutomatedCurrentLaneCertification(lane) {

@@ -12,7 +12,7 @@ Exact canonical destination/listing matches enter the shared Current adapter and
 
 Main-feed membership does not prove seller. Seller remains `UNKNOWN` unless separately established. Contextual `NEW` uses `RAKUTEN-NEWEGG-CONTEXTUAL-RETAIL-CONDITION-P1-1.0`; credible contrary evidence wins. Canonical RetailerDestination remains action authority, including existing governed affiliate precedence. Rakuten URLs do not replace it.
 
-Rakuten remains History-ineligible. FULL and DELTA create zero Mercury History or chronology records. The immutable plan binds the source Current snapshot/fingerprint, FULL digest/HDR, catalog state/digest, exact qualification results, and proposed schema-1.1 diff. Its preparation has `authority=NONE`, `currentMutationAuthorized=false`, and no network, provider, publication, release, or deployment authority.
+This completed Current-only operation created zero Mercury History or chronology records. Its then-current History-ineligible rights assumption is superseded for future qualified observations from the narrow Newegg Product Catalog source by `IC-NEWEGG-PRODUCT-CATALOG-HISTORY-AND-ANALYTICS-RIGHTS-P1`. The immutable plan remains Current-only and gains no retrospective History authority.
 
 Initial operating target: retrieve a new FULL approximately every 24 hours under the existing 36-hour Current TTL, leaving about 12 hours of operational recovery margin. DELTA is optional between FULL cycles. Scheduling is not implemented by this increment.
 

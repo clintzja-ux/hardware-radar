@@ -37,7 +37,7 @@ Source shipping, including `0.00`, is preserved only as `sourceEvidence.sourceSh
 
 ## Rights and downstream behavior
 
-`IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001` supersedes the original fixture-only rights posture. The canonical runtime profile now permits approved feed import, ephemeral/current-state retention, public current-price display, and cross-retailer item-price comparison while historical retention remains false. A valid price with available stock and exact destination remains item-price ineligible because condition is null; rights are no longer that fixture's blocker.
+`IC-RAKUTEN-NEWEGG-CURRENT-COMMERCE-RIGHTS-001` superseded the original fixture-only rights posture. `IC-NEWEGG-PRODUCT-CATALOG-HISTORY-AND-ANALYTICS-RIGHTS-P1` now also permits normalized historical retention and analytics for this narrow Newegg Product Catalog source, subject to normal Mercury qualification. A valid price with available stock and exact destination remains independently governed by condition and offer qualification; rights permission creates no automatic History admission.
 
 The adapter preserves the header-supported feed timestamp as `observedAt`; import runtime never retimestamps it. Existing `PublicCurrentRetailProjection` retains sole ownership of the 36-hour public freshness rule and winner calculation.
 

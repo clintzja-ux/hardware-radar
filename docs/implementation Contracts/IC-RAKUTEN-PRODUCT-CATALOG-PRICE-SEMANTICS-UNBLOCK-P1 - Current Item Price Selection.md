@@ -36,7 +36,7 @@ Condition, seller, shipping, availability, destination, currency, rights, freshn
 
 The adapter declares this bounded weak-item-price capability to the existing source-neutral `CurrentRetailRefresh`; no Rakuten-specific eligibility owner exists. Seller, shipping, taxes, and fees remain unknown, so delivered-cost and final-checkout claims remain unavailable. Explicit documented `in-stock` maps to `AVAILABLE`; explicit documented `out-of-stock` maps to `OUT_OF_STOCK`, remains unavailable for purchase, and is not degraded to unknown. Unrecognized availability remains `UNKNOWN` and fails closed.
 
-Canonical Rakuten historical retention and analytics rights remain blocked. The alignment creates no history, publication, artifact, release, deployment, provider task, or production refresh authority.
+At this checkpoint historical retention and analytics rights were blocked. That rights conclusion is superseded for the narrow Newegg Product Catalog source by `IC-NEWEGG-PRODUCT-CATALOG-HISTORY-AND-ANALYTICS-RIGHTS-P1`. This price-semantics alignment itself still creates no History, publication, artifact, release, deployment, provider task, or production refresh authority.
 
 ## Production current-refresh composition
 
