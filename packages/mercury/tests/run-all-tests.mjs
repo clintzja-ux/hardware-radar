@@ -206,6 +206,7 @@ const testModules = [
     "./BoundedRepeatObservationRecovery.test.mjs",
     "./ImmutableProviderResultReprocessing.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
+    "./RetainedCommerceHistoryPreparation.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",
     "./HistoricalRefreshAccumulation.test.mjs",

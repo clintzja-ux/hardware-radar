@@ -108,6 +108,11 @@ function normalizedPrice(record, evaluatedAt) {
     return { status: "PRICE_NOT_EXPOSED", itemPriceUsd: null, ...evidence };
 }
 
+export function assessRakutenNeweggPrice(record,{evaluatedAt}={}){
+    if(!record||record.recordType!=="PRODUCT"||!Number.isFinite(Date.parse(evaluatedAt)))throw new TypeError("RAKUTEN_NEWEGG_PRICE_INPUT_INVALID");
+    return freeze(normalizedPrice(record,evaluatedAt));
+}
+
 export function assessRakutenNeweggCondition(record, { feedProfile = "MAIN" } = {}) {
     if (!record || record.recordType !== "PRODUCT" || !RAKUTEN_NEWEGG_PROFILES.includes(feedProfile)) throw new TypeError("RAKUTEN_NEWEGG_CONDITION_INPUT_INVALID");
     const title = record.productName ?? "";
