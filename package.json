@@ -30,6 +30,8 @@
     "test:extension-validator": "node packages/sentinel/tests/ExtensionValidator.test.mjs",
     "test:atlas": "node packages/atlas/tests/run-all-tests.mjs",
     "test:mercury": "node packages/mercury/tests/run-all-tests.mjs",
+    "test:newegg-routine": "node packages/mercury/tests/NeweggRoutineMarketObservation.test.mjs",
+    "mercury:newegg-routine:history": "node scripts/newegg-routine-history.mjs",
     "test:beacon": "node packages/beacon/tests/run-all-tests.mjs",
     "test:gateway": "node packages/gateway/tests/run-all-tests.mjs",
     "test:layout": "node scripts/repository-layout.test.mjs",

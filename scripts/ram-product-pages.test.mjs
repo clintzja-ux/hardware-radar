@@ -11,9 +11,12 @@ const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
 const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
-const releaseManifest = JSON.parse(await read("config/publication-release.json"));
+const releaseManifestPath = process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST
+  ? path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST)
+  : path.join(root, "config/publication-release.json");
+const releaseManifest = JSON.parse(await readFile(releaseManifestPath, "utf8"));
 const releaseArtifact = JSON.parse(
-  await read(path.join("config", releaseManifest.artifact.relativePath)),
+  await readFile(path.resolve(path.dirname(releaseManifestPath), releaseManifest.artifact.relativePath), "utf8"),
 );
 const destinations = JSON.parse(releaseArtifact.fileTexts.destinations);
 const chronology = JSON.parse(releaseArtifact.fileTexts.chronology);
