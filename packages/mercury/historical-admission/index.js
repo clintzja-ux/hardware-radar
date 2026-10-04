@@ -1,5 +1,6 @@
 export * from "./HistoricalObservation.js";
 export * from "./RetainedCommerceHistoryPreparation.js";
+export * from "./RetainedCommerceHistoryExecutionService.js";
 export * from "./HistoricalObservationAdmissionService.js";
 export * from "./HistoricalAdmissionAuthorization.js";
 export * from "./FileHistoricalAdmissionAuthorizationRepository.js";

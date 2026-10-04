@@ -23,9 +23,9 @@ const currentRetail = createPublicCurrentRetailProjection({ products, retailers,
 const projection = await createRamTerminalPublicIntelligence({ catalog, currentRetail, historicalRepository: history, asOf, currentSnapshotId: currentState.current.snapshotId });
 assert.equal(validateRamTerminalPublicIntelligence(projection).valid, true);
 assert.deepEqual(Object.fromEntries(Object.entries(projection.lenses).map(([key, lens]) => [key, lens.coverage.productsTracked])), { ALL_RAM: 103, DDR5: 74, DDR4: 10, LAPTOP_SODIMM: 19 });
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 410);
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 213);
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.productsWithComparableHistory, 49);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 736);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 539);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.productsWithComparableHistory, 92);
 assert.equal(projection.lenses.ALL_RAM.coverage.productsCurrentlyPriced, 59);
 assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.every(row => row.formFactor === "SO_DIMM"), true);
 assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.some(row => row.memoryType === "DDR4"), true);

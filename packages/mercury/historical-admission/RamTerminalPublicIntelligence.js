@@ -10,7 +10,7 @@ const round = value => Math.round(value * 100) / 100;
 const lensIncludes = (product, lens) => lens === "ALL_RAM" || (lens === "LAPTOP_SODIMM" ? product.formFactor === "SO_DIMM" : product.memoryType === lens && product.formFactor === "DIMM");
 const median = values => { const ordered = [...values].sort((a, b) => a - b), middle = Math.floor(ordered.length / 2); return ordered.length % 2 ? ordered[middle] : round((ordered[middle - 1] + ordered[middle]) / 2); };
 const isoSpanDays = (first, last) => first && last ? round((Date.parse(last) - Date.parse(first)) / 86400000) : null;
-const publicHistorySource = source => typeof source === "string" && (source.startsWith("DATAFORSEO_") || source.endsWith("_MANUAL_PUBLISHER_OBSERVATION"));
+const publicHistorySource = record => typeof record?.provenance?.source === "string" && (record.provenance.source.startsWith("DATAFORSEO_") || record.provenance.source.endsWith("_MANUAL_PUBLISHER_OBSERVATION") || record.provenance.acquisition?.type === "RETAINED_COMMERCE_FEED");
 
 function currentValue(currentProduct) {
     const offers = (currentProduct?.offers ?? []).filter(offer => offer.comparisonEligible === true && offer.currency === "USD" && Number.isFinite(offer.itemPriceUsd)).sort((a, b) => a.itemPriceUsd - b.itemPriceUsd || a.retailerId.localeCompare(b.retailerId));
@@ -65,7 +65,7 @@ function lensProjection(lens, products) {
 export async function createRamTerminalPublicIntelligence({ catalog, currentRetail, historicalRepository, asOf, currentSnapshotId = null } = {}) {
     if (!catalog?.products || !currentRetail?.products || !historicalRepository?.getAll || !Number.isFinite(Date.parse(asOf))) throw new TypeError("RAM_TERMINAL_INPUT_INVALID");
     const raw = await historicalRepository.getAll();
-    const eligible = raw.filter(record => publicHistorySource(record?.provenance?.source));
+    const eligible = raw.filter(publicHistorySource);
     const repository = { getAll: async () => eligible };
     const service = new HistoricalObservationIntelligence({ repository });
     const currentByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));

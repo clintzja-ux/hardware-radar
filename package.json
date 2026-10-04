@@ -119,6 +119,8 @@
     "mercury:portfolio:prepare": "node scripts/mercury-acquisition-portfolio-prepare.mjs",
     "mercury:history-bootstrap:prepare": "node scripts/mercury-history-bootstrap-prepare.mjs",
     "mercury:history:retained-commerce:prepare": "node scripts/mercury-retained-commerce-history-prepare.mjs",
+    "mercury:history:retained-commerce:execute": "node scripts/mercury-retained-commerce-history-execute.mjs",
+    "mercury:history:retained-commerce:audit": "node scripts/mercury-retained-commerce-history-audit.mjs",
     "mercury:history:bootstrap:init": "node scripts/mercury-history-bootstrap-init.mjs",
     "mercury:history:bootstrap:inspect": "node scripts/mercury-history-bootstrap-inspect.mjs",
     "mercury:history:bootstrap:authorize-next": "node scripts/mercury-history-bootstrap-authorize-next.mjs",

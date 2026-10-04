@@ -4,7 +4,7 @@ export const PUBLIC_CHRONOLOGICAL_PRICE_SERIES_SCHEMA_VERSION = "1.0";
 export const PUBLIC_CHRONOLOGICAL_PRICE_SERIES_METHODOLOGY_VERSION = "MERCURY-PUBLIC-CHRONOLOGICAL-PRICE-SERIES-P1-1.0";
 
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
-const publicHistorySource = source => typeof source === "string" && (source.startsWith("DATAFORSEO_") || source.endsWith("_MANUAL_PUBLISHER_OBSERVATION"));
+const publicHistorySource = record => typeof record?.provenance?.source === "string" && (record.provenance.source.startsWith("DATAFORSEO_") || record.provenance.source.endsWith("_MANUAL_PUBLISHER_OBSERVATION") || record.provenance.acquisition?.type === "RETAINED_COMMERCE_FEED");
 const standalone = record => record.schemaVersion === "1.0" || (record.comparability?.classification === "STANDALONE_COMPARABLE" && record.comparability?.standaloneEligible === true);
 const publicEquivalentKey = value => JSON.stringify([value.retailerId, value.retailerName, value.itemPriceUsd, value.currency]);
 
@@ -32,7 +32,7 @@ export async function createPublicChronologicalPriceSeries({ catalog, retailers,
         seen.add(record.observationId);
         const product = products.get(record.atlasProductId.toLowerCase());
         if (!product) { suppressedProductIds.add(record.atlasProductId); continue; }
-        if (!standalone(record) || record.market.currency !== "USD" || !publicHistorySource(record.provenance.source)) { excludedObservationCount += 1; continue; }
+        if (!standalone(record) || record.market.currency !== "USD" || !publicHistorySource(record)) { excludedObservationCount += 1; continue; }
         const retailer = record.retailerId === null ? null : retailerById.get(record.retailerId);
         if (record.retailerId !== null && !retailer) { suppressedProductIds.add(product.atlasProductId); continue; }
         const row = {
