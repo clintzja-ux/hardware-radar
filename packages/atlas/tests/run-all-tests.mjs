@@ -23,6 +23,7 @@ const testModules = [
     ,"./AtlasActivation002PreExpansionReview.test.mjs"
     ,"./AtlasRamCoverageExpansionBatchAAdmission.test.mjs"
     ,"./AtlasRamCoverageExpansionBatchBAdmission.test.mjs"
+    ,"./AtlasRamCoverageExpansionBatchBLifecycleReview.test.mjs"
     ,"./AtlasRamCoverageExpansionBatchALifecycleReview.test.mjs"
 ];
 

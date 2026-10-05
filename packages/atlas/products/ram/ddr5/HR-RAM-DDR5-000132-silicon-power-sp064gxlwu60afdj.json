@@ -3,11 +3,11 @@
     "atlasProductId": "ram_silicon_power_sp064gxlwu60afdj",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 1,
+    "recordRevision": 2,
     "createdAt": "2026-10-04T00:00:00Z",
-    "updatedAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-04T00:00:00.000Z",
     "createdBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
-    "updatedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "updatedBy": "human:Clinton_Ramsook",
     "brand": "Silicon Power",
     "manufacturer": "Silicon Power Computer & Communications Inc.",
     "productFamily": "XPOWER Pulse",
@@ -17,12 +17,14 @@
     "slug": "silicon-power-sp064gxlwu60afdj"
   },
   "governance": {
-    "publicationStatus": "PENDING",
-    "lifecycleStatus": "DRAFT",
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
     "manufacturerStatus": "CURRENT",
     "engineeringValidationStatus": "PASS",
-    "humanReviewRequired": true,
-    "changeReason": "Batch B canonical admission; lifecycle activation remains separately governed."
+    "humanReviewRequired": false,
+    "reviewedBy": "human:Clinton_Ramsook",
+    "reviewedAt": "2026-10-04T00:00:00.000Z",
+    "changeReason": "ATLAS_RAM_COVERAGE_EXPANSION_BATCH_B_LIFECYCLE_REVIEW_AND_ACTIVATION_P1 operator-approved lifecycle review; no acquisition, market, destination, publication, or release authority implied."
   },
   "provenance": {
     "fieldSources": {

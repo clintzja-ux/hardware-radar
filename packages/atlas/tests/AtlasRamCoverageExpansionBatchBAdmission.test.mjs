@@ -20,9 +20,10 @@ assert.equal(admitted.filter(product => product.extension.data.classification.fo
 for (const product of admitted) {
   const { capacity } = product.extension.data;
   assert.equal(capacity.capacityGb, capacity.moduleCount * capacity.capacityPerModuleGb);
-  assert.equal(product.governance.lifecycleStatus, "DRAFT");
-  assert.equal(product.governance.publicationStatus, "PENDING");
-  assert.equal(product.governance.humanReviewRequired, true);
+  assert.equal(product.governance.lifecycleStatus, "ACTIVE");
+  assert.equal(product.governance.publicationStatus, "READY");
+  assert.equal(product.governance.humanReviewRequired, false);
+  assert.equal(product.governance.reviewedBy, "human:Clinton_Ramsook");
   for (const references of Object.values(product.provenance.fieldSources)) {
     assert.ok(references.every(reference => reference.verificationStatus === "VERIFIED"));
     assert.ok(references.every(reference => reference.sourceType.startsWith("MANUFACTURER_")));
@@ -31,4 +32,4 @@ for (const product of admitted) {
 }
 
 assert.equal(validateRepository(products).valid, true);
-console.log("ATLAS RAM coverage expansion Batch B admission tests passed (9 DRAFT/PENDING records).");
+console.log("ATLAS RAM coverage expansion Batch B admission tests passed (9 ACTIVE/READY records).");
