@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { createHistoricalObservation, createHistoricalObservationId, createRamTerminalPublicIntelligence, FileHistoricalObservationRepository, validateRamTerminalPublicIntelligence } from "../index.js";
 
 const catalog = JSON.parse(await readFile("public/data/ram-catalog.json", "utf8"));
@@ -17,16 +17,28 @@ const source = await loadRetailerDestinationSource({ sourcePath: "packages/mercu
 const destinations = createPublicRetailerDestinationProjection({ source, retailers });
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) }, rightsRegistry: defaultSourceRightsRegistry });
 const publishedProjection = (await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" })).projection;
-const publicationSnapshot = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: currentState.previous, publishedProjection });
-const asOf = "2026-10-04T03:20:00.000Z";
+const continuityTransitions = [];
+for (const file of await readdir(".forge-review/mercury/rakuten-full-current-refresh")) {
+    if (!file.startsWith("mer_rakutenfullprep_") || !file.endsWith(".json")) continue;
+    const preparation = JSON.parse(await readFile(`.forge-review/mercury/rakuten-full-current-refresh/${file}`, "utf8"));
+    for (const member of preparation.members ?? []) if (member?.priorOffer && member?.offer) continuityTransitions.push({ priorOffer: member.priorOffer, offer: member.offer });
+}
+const publicationSnapshot = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: currentState.previous, publishedProjection, continuityTransitions });
+const asOf = "2026-10-05T01:30:00.000Z";
 const currentRetail = createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf });
 const projection = await createRamTerminalPublicIntelligence({ catalog, currentRetail, historicalRepository: history, asOf, currentSnapshotId: currentState.current.snapshotId });
 assert.equal(validateRamTerminalPublicIntelligence(projection).valid, true);
-assert.deepEqual(Object.fromEntries(Object.entries(projection.lenses).map(([key, lens]) => [key, lens.coverage.productsTracked])), { ALL_RAM: 103, DDR5: 74, DDR4: 10, LAPTOP_SODIMM: 19 });
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 892);
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 695);
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.productsWithComparableHistory, 93);
-assert.equal(projection.lenses.ALL_RAM.coverage.productsCurrentlyPriced, 56);
+const trackedByLens = {
+    ALL_RAM: catalog.products.length,
+    DDR5: catalog.products.filter(product => product.memoryType === "DDR5" && product.formFactor === "DIMM").length,
+    DDR4: catalog.products.filter(product => product.memoryType === "DDR4" && product.formFactor === "DIMM").length,
+    LAPTOP_SODIMM: catalog.products.filter(product => product.formFactor === "SO_DIMM").length
+};
+assert.deepEqual(Object.fromEntries(Object.entries(projection.lenses).map(([key, lens]) => [key, lens.coverage.productsTracked])), trackedByLens);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 1074);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 877);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.productsWithComparableHistory, 118);
+assert.equal(projection.lenses.ALL_RAM.coverage.productsCurrentlyPriced, 82);
 assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.every(row => row.formFactor === "SO_DIMM"), true);
 assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.some(row => row.memoryType === "DDR4"), true);
 assert.doesNotMatch(JSON.stringify(projection), /destinationUrl|sourceUrl|rawPayload|providerTask|evidenceId|affiliate/i);

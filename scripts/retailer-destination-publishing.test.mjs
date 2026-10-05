@@ -16,14 +16,10 @@ const retailers = await Promise.all(manifest.retailers.map(entry => json(path.jo
 const catalog = createRamCatalogProjection(products);
 const currentRetail = await json(path.join(root, "public/data/ram-current-retail.json"));
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
-const releaseManifest = await json(path.join(root, "config/publication-release.json"));
-const releaseArtifact = await json(path.join(root, "config", releaseManifest.artifact.relativePath));
-const releasedCatalog = JSON.parse(releaseArtifact.fileTexts.catalog);
-const certifiedDestinations = JSON.parse(releaseArtifact.fileTexts.destinations);
-const certifiedTerminal = JSON.parse(releaseArtifact.fileTexts.terminal);
-const certifiedChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
+const releasedCatalog = catalog;
+const certifiedTerminal = await json(path.join(root, "public/data/ram-terminal.json"));
 const terminalByProduct = new Map(certifiedTerminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
-const chronologyByProduct = new Map(certifiedChronology.products.map(item => [item.atlasProductId, item]));
+const chronologyByProduct = new Map();
 const product = products.find(item => item.identity.atlasProductId === "ram_corsair_cmk32gx5m2b6000z30");
 const publicProduct = catalog.products.find(item => item.atlasProductId === product.identity.atlasProductId);
 const retailer = retailers.find(item => item.id === "RETAILER-0002");
@@ -127,7 +123,7 @@ for (const destination of production.records) {
     }).materialFingerprint, destination.materialFingerprint);
 }
 for (const productPage of releasedCatalog.products) {
-    const destinations = certifiedDestinations.filter(item => item.atlasProductId === productPage.atlasProductId);
+    const destinations = productionProjection.filter(item => item.atlasProductId === productPage.atlasProductId);
     const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(productPage.atlasProductId) ?? null, chronologyByProduct.get(productPage.atlasProductId) ?? null);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);

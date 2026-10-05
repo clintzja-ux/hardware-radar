@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_pny_md16gk2d4360018lp",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 2,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-05T00:04:19.402Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+    "updatedBy": "human:Clinton_Ramsook",
+    "brand": "PNY",
+    "manufacturer": "PNY Technologies, Inc.",
+    "productFamily": "Performance",
+    "series": null,
+    "modelName": "Performance MD16GK2D4360018LP",
+    "manufacturerPartNumber": "MD16GK2D4360018LP",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "PNY Performance DDR4 16GB (2×8GB) 3600 MT/s",
+    "slug": "pny-md16gk2d4360018lp"
+  },
+  "governance": {
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": false,
+    "reviewedBy": "human:Clinton_Ramsook",
+    "reviewedAt": "2026-10-05T00:04:19.402Z",
+    "changeReason": "ATLAS_RAM_COVERAGE_EXPANSION_BATCH_A_LIFECYCLE_REVIEW_AND_ACTIVATION_P1 operator-approved lifecycle review; no acquisition, market, destination, publication, or release authority implied.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD16GK2D4360018LP-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.pny.com/file%20library/company/support/product%20brochures/memory/linecard-dram-memory.pdf",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD16GK2D4360018LP-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.pny.com/file%20library/company/support/product%20brochures/memory/linecard-dram-memory.pdf",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD16GK2D4360018LP-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.pny.com/file%20library/company/support/product%20brochures/memory/linecard-dram-memory.pdf",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD16GK2D4360018LP-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.pny.com/file%20library/company/support/product%20brochures/memory/linecard-dram-memory.pdf",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD16GK2D4360018LP-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.pny.com/file%20library/company/support/product%20brochures/memory/linecard-dram-memory.pdf",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD16GK2D4360018LP-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.pny.com/file%20library/company/support/product%20brochures/memory/linecard-dram-memory.pdf",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true,
+        "gamingPositioning": true,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 8,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3600,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3600",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 28.8
+      },
+      "electrical": {
+        "ratedVoltage": null,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_xpg_ax5u6000c3016g_dclabk",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 2,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-05T00:04:19.402Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+    "updatedBy": "human:Clinton_Ramsook",
+    "brand": "XPG",
+    "manufacturer": "ADATA Technology Co., Ltd.",
+    "productFamily": "XPG LANCER",
+    "series": null,
+    "modelName": "XPG LANCER AX5U6000C3016G-DCLABK",
+    "manufacturerPartNumber": "AX5U6000C3016G-DCLABK",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "XPG XPG LANCER DDR5 32GB (2×16GB) 6000 MT/s",
+    "slug": "xpg-ax5u6000c3016g-dclabk"
+  },
+  "governance": {
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": false,
+    "reviewedBy": "human:Clinton_Ramsook",
+    "reviewedAt": "2026-10-05T00:04:19.402Z",
+    "changeReason": "ATLAS_RAM_COVERAGE_EXPANSION_BATCH_A_LIFECYCLE_REVIEW_AND_ACTIVATION_P1 operator-approved lifecycle review; no acquisition, market, destination, publication, or release authority implied.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-XPG-AX5U6000C3016G_DCLABK-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.adata.com/storage/downloadfile/datasheet_xpg_lancer_ddr5_memory_v4.pdf",
+          "publisher": "XPG",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-XPG-AX5U6000C3016G_DCLABK-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.adata.com/storage/downloadfile/datasheet_xpg_lancer_ddr5_memory_v4.pdf",
+          "publisher": "XPG",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-XPG-AX5U6000C3016G_DCLABK-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.adata.com/storage/downloadfile/datasheet_xpg_lancer_ddr5_memory_v4.pdf",
+          "publisher": "XPG",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-XPG-AX5U6000C3016G_DCLABK-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.adata.com/storage/downloadfile/datasheet_xpg_lancer_ddr5_memory_v4.pdf",
+          "publisher": "XPG",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-XPG-AX5U6000C3016G_DCLABK-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.adata.com/storage/downloadfile/datasheet_xpg_lancer_ddr5_memory_v4.pdf",
+          "publisher": "XPG",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-XPG-AX5U6000C3016G_DCLABK-ARCBA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.adata.com/storage/downloadfile/datasheet_xpg_lancer_ddr5_memory_v4.pdf",
+          "publisher": "XPG",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true,
+        "gamingPositioning": true,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 6000,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR5-6000",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 48
+      },
+      "electrical": {
+        "ratedVoltage": null,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}
