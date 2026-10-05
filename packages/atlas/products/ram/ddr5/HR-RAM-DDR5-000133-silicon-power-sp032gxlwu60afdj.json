@@ -1,0 +1,82 @@
+{
+  "identity": {
+    "atlasProductId": "ram_silicon_power_sp032gxlwu60afdj",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "updatedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "brand": "Silicon Power",
+    "manufacturer": "Silicon Power Computer & Communications Inc.",
+    "productFamily": "XPOWER Pulse",
+    "modelName": "XPOWER Pulse SP032GXLWU60AFDJ",
+    "manufacturerPartNumber": "SP032GXLWU60AFDJ",
+    "displayName": "Silicon Power XPOWER Pulse DDR5 32GB (2×16GB) 6000 MT/s",
+    "slug": "silicon-power-sp032gxlwu60afdj"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "changeReason": "Batch B canonical admission; lifecycle activation remains separately governed."
+  },
+  "provenance": {
+    "fieldSources": {
+      "canonicalSpecifications": [
+        {
+          "sourceId": "SRC-MFG-SP-SP032GXLWU60AFDJ-ARCB",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/product-detail/XPOWER_Pulse_DDR5_Gaming_UDIMM/",
+          "publisher": "Silicon Power",
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+          "verificationStatus": "VERIFIED"
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16
+      },
+      "performance": {
+        "dataRateMtps": 6000,
+        "speedLabel": "DDR5-6000",
+        "xmpSupport": "SUPPORTED",
+        "expoSupport": "SUPPORTED"
+      },
+      "electrical": {
+        "ratedVoltage": 1.35
+      },
+      "physical": {
+        "heatSpreader": true,
+        "rgbLighting": false
+      },
+      "compatibility": {}
+    }
+  }
+}

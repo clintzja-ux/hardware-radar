@@ -643,11 +643,56 @@
       "atlasProductId": "ram_transcend_jm3200hlb_16gk",
       "productType": "ram",
       "path": "products/ram/ddr4/HR-RAM-DDR4-000128-transcend-jm3200hlb-16gk.json"
+    },
+    {
+      "atlasProductId": "ram_patriot_psd48g320081s",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000129-patriot-psd48g320081s.json"
+    },
+    {
+      "atlasProductId": "ram_patriot_pve2464g320c8k",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000130-patriot-pve2464g320c8k.json"
+    },
+    {
+      "atlasProductId": "ram_patriot_pve2464g360c0k",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000131-patriot-pve2464g360c0k.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp064gxlwu60afdj",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000132-silicon-power-sp064gxlwu60afdj.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp032gxlwu60afdj",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000133-silicon-power-sp032gxlwu60afdj.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp008gblfu240x02",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000134-silicon-power-sp008gblfu240x02.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp016gblfu240x02",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000135-silicon-power-sp016gblfu240x02.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp016gxlzu320bda",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000136-silicon-power-sp016gxlzu320bda.json"
+    },
+    {
+      "atlasProductId": "ram_xpg_ax4u36008g18i_dtbkd35g",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000137-xpg-ax4u36008g18i-dtbkd35g.json"
     }
   ],
   "counts": {
-    "products": 128,
-    "brands": 11,
+    "products": 137,
+    "brands": 12,
     "categories": 1,
     "retailers": 4
   },
@@ -683,6 +728,10 @@
     {
       "brandId": "BRAND-PNY",
       "path": "brands/pny.json"
+    },
+    {
+      "brandId": "BRAND-SILICON-POWER",
+      "path": "brands/silicon-power.json"
     },
     {
       "brandId": "BRAND-TEAMGROUP",

@@ -66,6 +66,7 @@ assert.deepEqual([...registeredBrandIds], [
     "BRAND-LEXAR",
     "BRAND-PATRIOT",
     "BRAND-PNY",
+    "BRAND-SILICON-POWER",
     "BRAND-TEAMGROUP",
     "BRAND-TRANSCEND",
     "BRAND-XPG"

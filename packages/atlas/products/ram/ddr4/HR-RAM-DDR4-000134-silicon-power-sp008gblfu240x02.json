@@ -1,0 +1,82 @@
+{
+  "identity": {
+    "atlasProductId": "ram_silicon_power_sp008gblfu240x02",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "updatedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "brand": "Silicon Power",
+    "manufacturer": "Silicon Power Computer & Communications Inc.",
+    "productFamily": "DDR4 UDIMM",
+    "modelName": "DDR4 UDIMM SP008GBLFU240X02",
+    "manufacturerPartNumber": "SP008GBLFU240X02",
+    "displayName": "Silicon Power DDR4 8GB (1×8GB) 2400 MT/s",
+    "slug": "silicon-power-sp008gblfu240x02"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "changeReason": "Batch B canonical admission; lifecycle activation remains separately governed."
+  },
+  "provenance": {
+    "fieldSources": {
+      "canonicalSpecifications": [
+        {
+          "sourceId": "SRC-MFG-SP-SP008GBLFU240X02-ARCB",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/product-detail/DDR4_UDIMM/",
+          "publisher": "Silicon Power",
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+          "verificationStatus": "VERIFIED"
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": false
+      },
+      "capacity": {
+        "capacityGb": 8,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 8
+      },
+      "performance": {
+        "dataRateMtps": 2400,
+        "speedLabel": "DDR4-2400",
+        "xmpSupport": "NONE",
+        "expoSupport": "NONE"
+      },
+      "electrical": {
+        "ratedVoltage": 1.2
+      },
+      "physical": {
+        "heatSpreader": false,
+        "rgbLighting": false
+      },
+      "compatibility": {}
+    }
+  }
+}

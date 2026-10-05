@@ -1,0 +1,15 @@
+{
+  "brandId": "BRAND-SILICON-POWER",
+  "schemaVersion": "1.0.0",
+  "slug": "silicon-power",
+  "displayName": "Silicon Power",
+  "legalName": "Silicon Power Computer & Communications Inc.",
+  "country": "Taiwan",
+  "website": "https://www.silicon-power.com/",
+  "manufacturerType": "HARDWARE_MANUFACTURER",
+  "status": "ACTIVE",
+  "aliases": [],
+  "supportedCategories": ["CAT-RAM"],
+  "provenance": {"sourceUrl":"https://www.silicon-power.com/","retrievedAt":"2026-10-04T00:00:00Z","verifiedBy":"system:atlas-ram-coverage-expansion-batch-b-p1","verificationStatus":"VERIFIED"},
+  "metadata": {"createdAt":"2026-10-04T00:00:00Z","updatedAt":"2026-10-04T00:00:00Z"}
+}

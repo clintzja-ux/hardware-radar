@@ -1,0 +1,82 @@
+{
+  "identity": {
+    "atlasProductId": "ram_silicon_power_sp016gxlzu320bda",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "updatedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "brand": "Silicon Power",
+    "manufacturer": "Silicon Power Computer & Communications Inc.",
+    "productFamily": "XPOWER Turbine",
+    "modelName": "XPOWER Turbine SP016GXLZU320BDA",
+    "manufacturerPartNumber": "SP016GXLZU320BDA",
+    "displayName": "Silicon Power XPOWER Turbine DDR4 16GB (2×8GB) 3200 MT/s",
+    "slug": "silicon-power-sp016gxlzu320bda"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "changeReason": "Batch B canonical admission; lifecycle activation remains separately governed."
+  },
+  "provenance": {
+    "fieldSources": {
+      "canonicalSpecifications": [
+        {
+          "sourceId": "SRC-MFG-SP-SP016GXLZU320BDA-ARCB",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/product-detail/XPOWER_Turbine_DDR4_Gaming_UDIMM/",
+          "publisher": "Silicon Power",
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+          "verificationStatus": "VERIFIED"
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 8
+      },
+      "performance": {
+        "dataRateMtps": 3200,
+        "speedLabel": "DDR4-3200",
+        "xmpSupport": "SUPPORTED",
+        "expoSupport": "NONE"
+      },
+      "electrical": {
+        "ratedVoltage": 1.35
+      },
+      "physical": {
+        "heatSpreader": true,
+        "rgbLighting": false
+      },
+      "compatibility": {}
+    }
+  }
+}

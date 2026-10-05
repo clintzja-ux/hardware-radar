@@ -23,13 +23,13 @@ const expectedBrandDigests = {
     "teamgroup.json": "7047e189e26b3bdc5e1784eea168f94a45be0a7dc5a98acda2a082a41042e992"
 };
 
-assert.equal(manifest.counts.brands, 11);
+assert.equal(manifest.counts.brands, 12);
 assert.ok(manifest.counts.products >= 22, "The D-002B product batch must remain present after later governed admissions.");
-assert.equal(brands.length, 11);
+assert.equal(brands.length, 12);
 assert.equal(validateBrandRepository(brands).valid, true);
-assert.equal(new Set(brands.map(({ brandId }) => brandId)).size, 11);
-assert.equal(new Set(brands.map(({ displayName }) => displayName.toLowerCase())).size, 11);
-assert.equal(new Set(brands.map(({ legalName }) => legalName.toLowerCase())).size, 11);
+assert.equal(new Set(brands.map(({ brandId }) => brandId)).size, 12);
+assert.equal(new Set(brands.map(({ displayName }) => displayName.toLowerCase())).size, 12);
+assert.equal(new Set(brands.map(({ legalName }) => legalName.toLowerCase())).size, 12);
 assert.equal((await repository.getById("BRAND-GSKILL")).displayName, "G.SKILL");
 assert.equal((await repository.getByDisplayName("G.SKILL")).brandId, "BRAND-GSKILL");
 assert.equal(

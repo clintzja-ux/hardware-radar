@@ -1,0 +1,82 @@
+{
+  "identity": {
+    "atlasProductId": "ram_xpg_ax4u36008g18i_dtbkd35g",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "updatedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "brand": "XPG",
+    "manufacturer": "ADATA Technology Co., Ltd.",
+    "productFamily": "SPECTRIX D35G",
+    "modelName": "SPECTRIX D35G AX4U36008G18I-DTBKD35G",
+    "manufacturerPartNumber": "AX4U36008G18I-DTBKD35G",
+    "displayName": "XPG SPECTRIX D35G DDR4 16GB (2×8GB) 3600 MT/s",
+    "slug": "xpg-ax4u36008g18i-dtbkd35g"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "changeReason": "Batch B canonical admission; lifecycle activation remains separately governed."
+  },
+  "provenance": {
+    "fieldSources": {
+      "canonicalSpecifications": [
+        {
+          "sourceId": "SRC-MFG-XPG-AX4U36008G18I_DTBKD35G-ARCB",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://webapi3.adata.com/storage/downloadfile/datasheet_xpg_spectrix_d35g_ddr4_rgb_memory_20260402.pdf",
+          "publisher": "XPG",
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+          "verificationStatus": "VERIFIED"
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 8
+      },
+      "performance": {
+        "dataRateMtps": 3600,
+        "speedLabel": "DDR4-3600",
+        "xmpSupport": "SUPPORTED",
+        "expoSupport": "NONE"
+      },
+      "electrical": {
+        "ratedVoltage": 1.35
+      },
+      "physical": {
+        "heatSpreader": true,
+        "rgbLighting": true
+      },
+      "compatibility": {}
+    }
+  }
+}
