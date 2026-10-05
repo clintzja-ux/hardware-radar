@@ -31,6 +31,14 @@ export function selectAmazonHistoricalAcceptanceProduct({ atlasProducts, destina
   const selected = eligible[0]; return freeze({ atlasProduct: structuredClone(selected.product), productFacts: selected.facts, productIdentityDigest: digest(selected.facts), destinationId: selected.destination.destinationId, corroboratingDestinationAsins: selected.corroboratingDestinationAsins, selectionRule: "ACTIVE_READY_WITH_AMAZON_DESTINATION_NO_DATAFORSEO_AMAZON_HISTORY_THEN_IDENTITY_COMPLETENESS_DESC_ATLAS_PRODUCT_ID_ASC", eligibleCount: eligible.length });
 }
 
+export function selectAmazonIdentityDiscoveryProduct({ atlasProduct, destinations = [] } = {}) {
+  const facts = atlasProduct && productFacts(atlasProduct);
+  if (!Array.isArray(destinations) || atlasProduct?.governance?.lifecycleStatus !== "ACTIVE" || atlasProduct?.governance?.publicationStatus !== "READY" || typeof facts?.manufacturerPartNumber !== "string" || !facts.manufacturerPartNumber.trim()) throw new Error("AMAZON_IDENTITY_DISCOVERY_PRODUCT_NOT_AVAILABLE");
+  const superseded = new Set(destinations.map(row => row?.supersedesDestinationId).filter(Boolean));
+  const rows = destinations.filter(row => row?.atlasProductId === facts.atlasProductId && row?.status === "ACTIVE" && !superseded.has(row.destinationId) && row.retailerId === "RETAILER-0001" && row.marketplace === "amazon.com" && asin(row.retailerListingId)).sort((a, b) => a.destinationId.localeCompare(b.destinationId));
+  return freeze({ atlasProduct: structuredClone(atlasProduct), productFacts: facts, productIdentityDigest: digest(facts), destinationId: rows[0]?.destinationId ?? null, corroboratingDestinationAsins: [...new Set(rows.map(row => asin(row.retailerListingId)))].sort(), selectionRule: "ACTIVE_READY_CANONICAL_ATLAS_EXACT_MPN_IDENTITY_DISCOVERY_OPTIONAL_DESTINATION_CORROBORATION", eligibleCount: 1 });
+}
+
 export function prepareAmazonHistoricalAcceptance({ asOf, selection, rightsProfile, currentUtcDaySpendUsd, utcDaySpendCeilingUsd = DATAFORSEO_DEFAULT_UTC_DAY_SPEND_CEILING_USD } = {}) {
   if (typeof asOf !== "string" || !Number.isFinite(Date.parse(asOf)) || !selection?.productFacts?.atlasProductId || rightsProfile?.sourceId !== "DATAFORSEO_AMAZON" || !Number.isFinite(currentUtcDaySpendUsd) || currentUtcDaySpendUsd < 0) throw new TypeError("AMAZON_ACCEPTANCE_PREPARE_INPUT_INVALID");
   const rightsAllowed = rightsProfile.acquisition?.api === "ALLOWED" && rightsProfile.retention?.historical === "ALLOWED" && rightsProfile.retention?.durableAuditMetadata === "ALLOWED" && rightsProfile.derivation?.historicalAnalytics === "ALLOWED";
