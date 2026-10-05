@@ -6380,6 +6380,35 @@
         "createdAt": "2026-10-04T18:00:00.000Z",
         "createdBy": "operator:Clinton_Ramsook",
         "materialFingerprint": "a9ed043fdc6757d4ac2039cc6faab26c30161e46b144dde82891425afa76c6c7"
+      },
+      {
+        "schemaVersion": "1.0",
+        "destinationId": "mer_dest_2619f970b3d41e69c36c32ef",
+        "atlasProductId": "ram_timetec_76tt48nus1r16_8g",
+        "retailerId": "RETAILER-0004",
+        "marketplace": "newegg.com",
+        "destinationType": "PRODUCT_PAGE",
+        "destinationUrl": "https://newegg.com/p/0RM-006H-000J2",
+        "retailerListingId": "9SIA56XKWT0719",
+        "binding": {
+          "manufacturerPartNumber": "76TT48NUS1R16-8G",
+          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+          "scope": "EXACT_STANDALONE_PRODUCT",
+          "evidenceReferences": [
+            "artifact:ATLAS_RAM_MANUFACTURER_FIRST_COHORT_NEWEGG_IDENTITY_DISCOVERY_P1:retained-newegg:445837281414852897497009:9SIA56XKWT0719"
+          ]
+        },
+        "provenance": {
+          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+        },
+        "reviewedBy": "operator:Clinton_Ramsook",
+        "reviewedAt": "2026-10-05T00:00:00.000Z",
+        "status": "ACTIVE",
+        "supersedesDestinationId": null,
+        "retirementReason": null,
+        "createdAt": "2026-10-05T00:00:00.000Z",
+        "createdBy": "operator:Clinton_Ramsook",
+        "materialFingerprint": "ca6d19b71a45ab8434471e5c9a1e9fbdc605940d0e8252613516c6038893403c"
       }
   ]
 }
