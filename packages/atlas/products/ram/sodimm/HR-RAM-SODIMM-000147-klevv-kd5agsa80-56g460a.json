@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_klevv_kd5agsa80_56g460a",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-10-05T00:00:00.000Z",
+    "updatedAt": "2026-10-05T00:00:00.000Z",
+    "createdBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+    "updatedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+    "brand": "KLEVV",
+    "manufacturer": "Essencore Limited",
+    "productFamily": "DDR5 SODIMM",
+    "series": null,
+    "modelName": "DDR5 SODIMM KD5AGSA80-56G460A",
+    "manufacturerPartNumber": "KD5AGSA80-56G460A",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "KLEVV DDR5 SODIMM 16GB (1×16GB) 5600 MT/s",
+    "slug": "klevv-kd5agsa80-56g460a"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_RAM_MANUFACTURER_FIRST_COHORT_ADMISSION_REVIEW_P1 manufacturer-evidence admission; retailer identity and all downstream authority remain separate.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGSA80_56G460A-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.klevv.com/ktw/products_details/memory/D5_SODIMM.php",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGSA80_56G460A-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.klevv.com/ktw/products_details/memory/D5_SODIMM.php",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGSA80_56G460A-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.klevv.com/ktw/products_details/memory/D5_SODIMM.php",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGSA80_56G460A-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.klevv.com/ktw/products_details/memory/D5_SODIMM.php",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGSA80_56G460A-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.klevv.com/ktw/products_details/memory/D5_SODIMM.php",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGSA80_56G460A-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.klevv.com/ktw/products_details/memory/D5_SODIMM.php",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-05T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": false,
+        "gamingPositioning": false,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 5600,
+        "baseJedecDataRateMtps": 5600,
+        "speedLabel": "DDR5-5600",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 44.8
+      },
+      "electrical": {
+        "ratedVoltage": 1.1,
+        "baseVoltage": 1.1,
+        "pmicLocation": "ON_MODULE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

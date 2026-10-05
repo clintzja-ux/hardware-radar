@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_silicon_power_sp064gblvu560f22",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-10-05T00:00:00.000Z",
+    "updatedAt": "2026-10-05T00:00:00.000Z",
+    "createdBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+    "updatedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+    "brand": "Silicon Power",
+    "manufacturer": "Silicon Power Computer & Communications Inc.",
+    "productFamily": "DDR5 UDIMM",
+    "series": null,
+    "modelName": "DDR5 UDIMM SP064GBLVU560F22",
+    "manufacturerPartNumber": "SP064GBLVU560F22",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Silicon Power DDR5 UDIMM 64GB (2×32GB) 5600 MT/s",
+    "slug": "silicon-power-sp064gblvu560f22"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_RAM_MANUFACTURER_FIRST_COHORT_ADMISSION_REVIEW_P1 manufacturer-evidence admission; retailer identity and all downstream authority remain separate.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-SILICON-POWER-SP064GBLVU560F22-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/de/product-detail/DDR5_UDIMM/",
+          "publisher": "Silicon Power",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-SILICON-POWER-SP064GBLVU560F22-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/de/product-detail/DDR5_UDIMM/",
+          "publisher": "Silicon Power",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-SILICON-POWER-SP064GBLVU560F22-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/de/product-detail/DDR5_UDIMM/",
+          "publisher": "Silicon Power",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-SILICON-POWER-SP064GBLVU560F22-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/de/product-detail/DDR5_UDIMM/",
+          "publisher": "Silicon Power",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-SILICON-POWER-SP064GBLVU560F22-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/de/product-detail/DDR5_UDIMM/",
+          "publisher": "Silicon Power",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-SILICON-POWER-SP064GBLVU560F22-AMFCA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.silicon-power.com/de/product-detail/DDR5_UDIMM/",
+          "publisher": "Silicon Power",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-05T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true,
+        "gamingPositioning": false,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 64,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 32,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 5600,
+        "baseJedecDataRateMtps": 5600,
+        "speedLabel": "DDR5-5600",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 44.8
+      },
+      "electrical": {
+        "ratedVoltage": 1.1,
+        "baseVoltage": 1.1,
+        "pmicLocation": "ON_MODULE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

@@ -688,11 +688,116 @@
       "atlasProductId": "ram_xpg_ax4u36008g18i_dtbkd35g",
       "productType": "ram",
       "path": "products/ram/ddr4/HR-RAM-DDR4-000137-xpg-ax4u36008g18i-dtbkd35g.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp096gbsvu560p22",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000138-silicon-power-sp096gbsvu560p22.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp048gbsvu560p02",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000139-silicon-power-sp048gbsvu560p02.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp064gbsvu560f22",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000140-silicon-power-sp064gbsvu560f22.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp096gblvu560p22",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000141-silicon-power-sp096gblvu560p22.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp048gblvu560p02",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000142-silicon-power-sp048gblvu560p02.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp064gblvu560f22",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000143-silicon-power-sp064gblvu560f22.json"
+    },
+    {
+      "atlasProductId": "ram_timetec_76tt48nus1r16_8g",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000144-timetec-76tt48nus1r16-8g.json"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5agsa80_48g400a",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000145-klevv-kd5agsa80-48g400a.json"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5agsa80_48g400d",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000146-klevv-kd5agsa80-48g400d.json"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5agsa80_56g460a",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000147-klevv-kd5agsa80-56g460a.json"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5kgsd80_56g460a",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000148-klevv-kd5kgsd80-56g460a.json"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5bgsa80_56g460a",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000149-klevv-kd5bgsa80-56g460a.json"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5agsa80_56g460d",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000150-klevv-kd5agsa80-56g460d.json"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5kgsd80_56g460d",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000151-klevv-kd5kgsd80-56g460d.json"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5bgsa80_56g460d",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000152-klevv-kd5bgsa80-56g460d.json"
+    },
+    {
+      "atlasProductId": "ram_lexar_ld5ds016g_b4800gsst",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000153-lexar-ld5ds016g-b4800gsst.json"
+    },
+    {
+      "atlasProductId": "ram_lexar_ld5ds032g_b4800gsst",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000154-lexar-ld5ds032g-b4800gsst.json"
+    },
+    {
+      "atlasProductId": "ram_lexar_ld5s08g56c46st_bgs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000155-lexar-ld5s08g56c46st-bgs.json"
+    },
+    {
+      "atlasProductId": "ram_lexar_ld5s16g56c46st_bgs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000156-lexar-ld5s16g56c46st-bgs.json"
+    },
+    {
+      "atlasProductId": "ram_lexar_ld5s32g56c46st_bgs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000157-lexar-ld5s32g56c46st-bgs.json"
+    },
+    {
+      "atlasProductId": "ram_lexar_ld5s16g56c46st_bgd",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000158-lexar-ld5s16g56c46st-bgd.json"
     }
   ],
   "counts": {
-    "products": 137,
-    "brands": 12,
+    "products": 158,
+    "brands": 13,
     "categories": 1,
     "retailers": 4
   },
@@ -740,6 +845,10 @@
     {
       "brandId": "BRAND-TRANSCEND",
       "path": "brands/transcend.json"
+    },
+    {
+      "brandId": "BRAND-TIMETEC",
+      "path": "brands/timetec.json"
     },
     {
       "brandId": "BRAND-XPG",
