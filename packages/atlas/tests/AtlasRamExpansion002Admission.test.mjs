@@ -16,22 +16,22 @@ const holdMpns = [
     "CMH32GX5M2N6000Z30"
 ];
 
-assert.equal(manifest.counts.products, 103);
-assert.equal(products.length, 103);
+assert.equal(manifest.counts.products, 128);
+assert.equal(products.length, 128);
 assert.equal(admitted.length, 77);
 assert.equal(new Set(admitted.map((product) => product.identity.atlasProductId)).size, 77);
 assert.equal(new Set(admitted.map((product) => `${product.identity.brand}:${product.identity.manufacturerPartNumber.toUpperCase()}`)).size, 77);
 assert.deepEqual(
     Object.fromEntries([...new Set(products.map((product) => product.identity.brand))].sort().map((brand) => [brand, products.filter((product) => product.identity.brand === brand).length])),
-    { Corsair: 19, Crucial: 20, "G.SKILL": 25, Kingston: 23, TeamGroup: 16 }
+    { Corsair: 19, Crucial: 20, "G.SKILL": 25, KLEVV: 4, Kingston: 23, Lexar: 4, PNY: 4, Patriot: 7, TeamGroup: 16, Transcend: 3, XPG: 3 }
 );
 assert.deepEqual(
     Object.fromEntries(["DDR4", "DDR5"].map((generation) => [generation, products.filter((product) => product.extension.data.classification.memoryType === generation).length])),
-    { DDR4: 15, DDR5: 88 }
+    { DDR4: 32, DDR5: 96 }
 );
 assert.deepEqual(
     Object.fromEntries(["DIMM", "SO_DIMM"].map((formFactor) => [formFactor, products.filter((product) => product.extension.data.classification.formFactor === formFactor).length])),
-    { DIMM: 84, SO_DIMM: 19 }
+    { DIMM: 96, SO_DIMM: 32 }
 );
 
 for (const product of admitted) {
@@ -52,7 +52,7 @@ for (const product of admitted) {
 const canonicalMpns = new Set(products.map((product) => product.identity.manufacturerPartNumber.toUpperCase()));
 for (const mpn of holdMpns) assert.equal(canonicalMpns.has(mpn), false, `${mpn} must remain outside Atlas.`);
 assert.equal(validateRepository(products).valid, true);
-assert.equal((await readdir(fileURLToPath(new URL("../products/ram/", import.meta.url)), { recursive: true })).filter((path) => path.endsWith(".json")).length, 103);
+assert.equal((await readdir(fileURLToPath(new URL("../products/ram/", import.meta.url)), { recursive: true })).filter((path) => path.endsWith(".json")).length, 128);
 
 const forbiddenKeys = new Set(["retailerId", "retailer", "price", "availability", "shipping", "affiliateUrl", "destinationUrl"]);
 function assertNoMarketData(value, path = "$") {

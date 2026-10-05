@@ -21,6 +21,7 @@ const testModules = [
     "./AtlasRamExpansion002Admission.test.mjs",
     "./AtlasActivation001BatchReview.test.mjs"
     ,"./AtlasActivation002PreExpansionReview.test.mjs"
+    ,"./AtlasRamCoverageExpansionBatchAAdmission.test.mjs"
 ];
 
 console.log("Running Atlas test suite...\n");

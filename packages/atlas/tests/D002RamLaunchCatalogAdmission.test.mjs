@@ -62,7 +62,13 @@ assert.deepEqual([...registeredBrandIds], [
     "BRAND-CRUCIAL",
     "BRAND-GSKILL",
     "BRAND-KINGSTON",
-    "BRAND-TEAMGROUP"
+    "BRAND-KLEVV",
+    "BRAND-LEXAR",
+    "BRAND-PATRIOT",
+    "BRAND-PNY",
+    "BRAND-TEAMGROUP",
+    "BRAND-TRANSCEND",
+    "BRAND-XPG"
 ]);
 assert.deepEqual(
     [...requiredBrands].filter((brand) => !registeredBrandIds.has(`BRAND-${brand.replaceAll(/[^A-Za-z0-9]+/g, "").toUpperCase()}`)),

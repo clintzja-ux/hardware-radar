@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_pny_md32gk2d4320016xrgb",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-04T00:00:00Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+    "updatedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+    "brand": "PNY",
+    "manufacturer": "PNY Technologies, Inc.",
+    "productFamily": "Performance",
+    "series": null,
+    "modelName": "Performance MD32GK2D4320016XRGB",
+    "manufacturerPartNumber": "MD32GK2D4320016XRGB",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "PNY Performance DDR4 32GB (2×16GB) 3200 MT/s",
+    "slug": "pny-md32gk2d4320016xrgb"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_RAM_COVERAGE_EXPANSION_BATCH_A_EVIDENCE_COMPLETION_P1 first-party-verified Atlas admission; activation, market observation, destination, publication, and release authority remain separate.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D4320016XRGB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/en-eu/XLR8-Gaming-EPIC-X-RGB-Desktop-Memory",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D4320016XRGB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/en-eu/XLR8-Gaming-EPIC-X-RGB-Desktop-Memory",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D4320016XRGB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/en-eu/XLR8-Gaming-EPIC-X-RGB-Desktop-Memory",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D4320016XRGB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/en-eu/XLR8-Gaming-EPIC-X-RGB-Desktop-Memory",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D4320016XRGB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/en-eu/XLR8-Gaming-EPIC-X-RGB-Desktop-Memory",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D4320016XRGB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/en-eu/XLR8-Gaming-EPIC-X-RGB-Desktop-Memory",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true,
+        "gamingPositioning": true,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3200,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3200",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 25.6
+      },
+      "electrical": {
+        "ratedVoltage": null,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": true,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}
