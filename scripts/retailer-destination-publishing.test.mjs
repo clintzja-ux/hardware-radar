@@ -16,7 +16,7 @@ const retailers = await Promise.all(manifest.retailers.map(entry => json(path.jo
 const catalog = createRamCatalogProjection(products);
 const currentRetail = await json(path.join(root, "public/data/ram-current-retail.json"));
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
-const releasedCatalog = catalog;
+const releasedCatalog = await json(path.join(root, "public/data/ram-catalog.json"));
 const certifiedTerminal = await json(path.join(root, "public/data/ram-terminal.json"));
 const terminalByProduct = new Map(certifiedTerminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
 const chronologyByProduct = new Map();
@@ -86,13 +86,13 @@ const expectedProduction = new Map([
     ["ram_corsair_cmh32gx5m2f6000z36", { mpn: "CMH32GX5M2F6000Z36", listing: "B0FV3M2PGJ", id: "mer_dest_4232b39beaf37f8da51556d9", url: "https://amazon.com/CORSAIR-Vengeance-2x16GB-6000MHz-Desktop/dp/B0FV3M2PGJ", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }],
     ["ram_g_skill_f5_6000j3636f32gx2_rs5k", { mpn: "F5-6000J3636F32GX2-RS5K", listing: "B0C6HWKGWV", id: "mer_dest_5206bc4c58f5cdf145699f85", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0C6HWKGWV", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }]
 ]);
-assert.equal(production.recordCount, 211);
-assert.equal(production.effective.length, 210);
-assert.equal(productionProjection.length, 210);
-assert.equal(new Set(production.records.map(item => item.destinationId)).size, 211);
-assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 211);
+assert.equal(production.recordCount, 220);
+assert.equal(production.effective.length, 219);
+assert.equal(productionProjection.length, 219);
+assert.equal(new Set(production.records.map(item => item.destinationId)).size, 220);
+assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 220);
 assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 91);
-assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 120);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 129);
 assert.equal(production.records.some(item => item.destinationUrl.includes("/p/pl?")), false);
 for (const destination of production.records) {
     const expected = expectedProduction.get(destination.atlasProductId);
