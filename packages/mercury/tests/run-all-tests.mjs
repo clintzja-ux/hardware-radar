@@ -259,6 +259,7 @@ const testModules = [
     ,"./RamComparisonSnapshotProjection.test.mjs"
     ,"./CuratedRamOfferGovernance.test.mjs"
     ,"./RetailerDestination.test.mjs"
+    ,"./AtlasBatchNeweggDestinationBinding.test.mjs"
     ,"./AcquisitionPortfolioOrchestration.test.mjs"
     ,"./ProductionAcquisitionPortfolioComposition.test.mjs"
     ,"./AcquisitionCheckpointExecutionComposition.test.mjs"

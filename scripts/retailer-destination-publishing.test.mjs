@@ -18,6 +18,7 @@ const currentRetail = await json(path.join(root, "public/data/ram-current-retail
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const releaseManifest = await json(path.join(root, "config/publication-release.json"));
 const releaseArtifact = await json(path.join(root, "config", releaseManifest.artifact.relativePath));
+const releasedCatalog = JSON.parse(releaseArtifact.fileTexts.catalog);
 const certifiedDestinations = JSON.parse(releaseArtifact.fileTexts.destinations);
 const certifiedTerminal = JSON.parse(releaseArtifact.fileTexts.terminal);
 const certifiedChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
@@ -89,13 +90,13 @@ const expectedProduction = new Map([
     ["ram_corsair_cmh32gx5m2f6000z36", { mpn: "CMH32GX5M2F6000Z36", listing: "B0FV3M2PGJ", id: "mer_dest_4232b39beaf37f8da51556d9", url: "https://amazon.com/CORSAIR-Vengeance-2x16GB-6000MHz-Desktop/dp/B0FV3M2PGJ", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }],
     ["ram_g_skill_f5_6000j3636f32gx2_rs5k", { mpn: "F5-6000J3636F32GX2-RS5K", listing: "B0C6HWKGWV", id: "mer_dest_5206bc4c58f5cdf145699f85", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0C6HWKGWV", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }]
 ]);
-assert.equal(production.recordCount, 186);
-assert.equal(production.effective.length, 185);
-assert.equal(productionProjection.length, 185);
-assert.equal(new Set(production.records.map(item => item.destinationId)).size, 186);
-assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 186);
+assert.equal(production.recordCount, 211);
+assert.equal(production.effective.length, 210);
+assert.equal(productionProjection.length, 210);
+assert.equal(new Set(production.records.map(item => item.destinationId)).size, 211);
+assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 211);
 assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 91);
-assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 95);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 120);
 assert.equal(production.records.some(item => item.destinationUrl.includes("/p/pl?")), false);
 for (const destination of production.records) {
     const expected = expectedProduction.get(destination.atlasProductId);
@@ -125,7 +126,7 @@ for (const destination of production.records) {
         createdAt: destination.createdAt, createdBy: destination.createdBy
     }).materialFingerprint, destination.materialFingerprint);
 }
-for (const productPage of catalog.products) {
+for (const productPage of releasedCatalog.products) {
     const destinations = certifiedDestinations.filter(item => item.atlasProductId === productPage.atlasProductId);
     const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(productPage.atlasProductId) ?? null, chronologyByProduct.get(productPage.atlasProductId) ?? null);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");

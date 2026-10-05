@@ -5394,6 +5394,731 @@
       "createdAt": "2026-09-08T15:15:55.452Z",
       "createdBy": "human:Clinton_Ramsook",
       "materialFingerprint": "5b35d0fa929b52057baee580038c993c48766b5113e1b9707c01724dcb5aa8b4"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_8fa3427b71a9dcc3973199e6",
+      "atlasProductId": "ram_patriot_psd432g26662s",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-signature-line-32gb-ddr4-2666-cas-latency-cl19-laptop-memory/p/N82E16820225218",
+      "retailerListingId": "9SIA4P0M079672",
+      "binding": {
+        "manufacturerPartNumber": "PSD432G26662S",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458313206871711087981358:9SIA4P0M079672"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "afe2455d1d06e42b4a0d725a6b01de2edb49a93c4cacd298bfdcb9362da676fd"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a48c18748c20fee2468ac96e",
+      "atlasProductId": "ram_patriot_psd432g32002s",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-signature-line-32gb-ddr4-3200-cas-latency-cl22-laptop-memory/p/N82E16820225219",
+      "retailerListingId": "9SIA4P0KN02839",
+      "binding": {
+        "manufacturerPartNumber": "PSD432G32002S",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458318085594868741341115:9SIA4P0KN02839"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "3978ccda8af4adaa22b3f488c011f59ac7bfa26e605b7222f8f35609d58614dc"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_277136ae959435b6e0efa110",
+      "atlasProductId": "ram_patriot_psd416g24002s",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-signature-line-16gb-ddr4-2400-cas-latency-cl17/p/0RN-002U-000U5",
+      "retailerListingId": "9SIA4P0M3M0461",
+      "binding": {
+        "manufacturerPartNumber": "PSD416G24002S",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:44583431581915158786500:9SIA4P0M3M0461"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "d237d5df47e6ad28c8f905a252e4b1cd118b75ac10d435b9e8298808476dafa7"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_376c8cfa190b303747aeaac9",
+      "atlasProductId": "ram_patriot_psd416g26662s",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-signature-line-16gb-ddr4-2666-cas-latency-cl19-laptop-memory/p/N82E16820225151",
+      "retailerListingId": "9SIA4P0KFF1124",
+      "binding": {
+        "manufacturerPartNumber": "PSD416G26662S",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458317364617598018707829:9SIA4P0KFF1124"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "20c08f9e1cbc398f8d4fb3e92ca4d292fe92e5188fca116e276bf4a54437269a"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a21213383c0378050773e378",
+      "atlasProductId": "ram_patriot_psd416g320081s",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-signature-line-16gb-ddr4-3200-cas-latency-cl22-laptop-memory/p/N82E16820225217",
+      "retailerListingId": "9SIA4P0JSV7137",
+      "binding": {
+        "manufacturerPartNumber": "PSD416G320081S",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:44583528296613226933689:9SIA4P0JSV7137"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "2940d39565f49a176fb8b3da67f08635242263be894a8d78c9e8529b1d04d874"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_907bce33c6213f781c369356",
+      "atlasProductId": "ram_patriot_psd48g240081s",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-signature-line-8gb-ddr4-2400-cas-latency-cl17-laptop-memory/p/N82E16820225145",
+      "retailerListingId": "9SIA4P0KWC6196",
+      "binding": {
+        "manufacturerPartNumber": "PSD48G240081S",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445833748275735904862939:9SIA4P0KWC6196"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "17da3f0b2d256865bcff4aae00f0f0774d0029e65b569835faaf58fb011c3597"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_8fd72860ac113d9adadb087d",
+      "atlasProductId": "ram_patriot_psd48g266681s",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-signature-line-8gb-ddr4-2666-cas-latency-cl19-laptop-memory/p/N82E16820225157",
+      "retailerListingId": "9SIA4P0KV83283",
+      "binding": {
+        "manufacturerPartNumber": "PSD48G266681S",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445833532032174549759440:9SIA4P0KV83283"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "70eac25fed348a201cf861b571e312fdca90358ea94142d6fe5393e5eb1055f0"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_53368f6a390a2b92d9617326",
+      "atlasProductId": "ram_xpg_ax5u6000c3016g_dclabk",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/xpg-lancer-32gb-ddr5-6000-cas-latency-cl30-desktop-memory-black/p/N82E16820246064",
+      "retailerListingId": "N82E16820246064",
+      "binding": {
+        "manufacturerPartNumber": "AX5U6000C3016G-DCLABK",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458316125439481686082517:N82E16820246064"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "cb2910e91c2a455994812aadb3a6ad193b0b38285bb93cbe61e4665d645f7409"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_10afbd26191ed6b456bc5b2d",
+      "atlasProductId": "ram_xpg_ax5u6400c3232g_dclarbk",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/xpg-lancer-64gb-ddr5-6400-cas-latency-cl32-desktop-memory-black/p/N82E16820246086",
+      "retailerListingId": "9SIC7PVM6D3861",
+      "binding": {
+        "manufacturerPartNumber": "AX5U6400C3232G-DCLARBK",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445839231673337737438260:9SIC7PVM6D3861"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "7da1f5a7bd44caa5c3a64c85d6f78108290c0e4f01511f35ddc63c8a99cb73ca"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_9c5a9f42dbbf457d12b35030",
+      "atlasProductId": "ram_xpg_ax5u6400c3216g_dclabk",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/xpg-lancer-32gb-ddr5-6400-cas-latency-cl32-desktop-memory-black/p/N82E16820246063",
+      "retailerListingId": "9SIC3DRKN34298",
+      "binding": {
+        "manufacturerPartNumber": "AX5U6400C3216G-DCLABK",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458311129970048404248457:9SIC3DRKN34298"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "10d7ba1e3ac5a1743e91559fe1fc18e2c6cfa1a76e3de2c0a288909c810e6e72"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_d2e091665882494dd32ef56e",
+      "atlasProductId": "ram_pny_mn64gk2d43200_tb",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/pny-technologies-inc-64gb-2-x-32gb-ddr4-3200-pc4-25600-cas-latency-cl22-memory-notebook-memory-/p/N82E16820177180",
+      "retailerListingId": "9SIAMBVKRD8405",
+      "binding": {
+        "manufacturerPartNumber": "MN64GK2D43200-TB",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445831596621278670316955:9SIAMBVKRD8405"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "f15207707168dfae4718a52d69067d94c5913868b5e8364074d88581280b32a5"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_93bdafac4ed8e9bda1e8ca9d",
+      "atlasProductId": "ram_pny_md32gk2d4320016xrgb",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/pny-technologies-inc-xlr8-gaming-epic-x-rgb-32gb-ddr4-3200-cas-latency-cl16-memory-black/p/0RN-002V-003C7",
+      "retailerListingId": "9SIA2W0KP23499",
+      "binding": {
+        "manufacturerPartNumber": "MD32GK2D4320016XRGB",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:44583593589933145784774:9SIA2W0KP23499"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "29fbe5b79f39b90120b45be63f9453ab7c0db2fca2e6165f251b562c84db0cd7"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_abede363ed4c951ccbc70a52",
+      "atlasProductId": "ram_pny_md32gk2d5560046_tb",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/pny-technologies-inc-performance-32gb-2-x-16gb-ddr5-5600-pc5-44800-cas-latency-cl46-desktop-memory/p/N82E16820177196",
+      "retailerListingId": "N82E16820177196",
+      "binding": {
+        "manufacturerPartNumber": "MD32GK2D5560046-TB",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445837148994905428231536:N82E16820177196"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "3b749ec888f5e341279b520712f162aec6bb1bb9ebba45feb3e57a77fc586684"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_e67ad046d65a2b79d2f8bead",
+      "atlasProductId": "ram_pny_md16gk2d4360018lp",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/pny-technologies-inc-xlr8-16gb-ddr4-3600-cas-latency-cl18-low-profile-desktop-memory-black/p/N82E16820177126",
+      "retailerListingId": "N82E16820177126",
+      "binding": {
+        "manufacturerPartNumber": "MD16GK2D4360018LP",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458310245657978284031360:N82E16820177126"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "4195f24964ac59892d2a9557cb9a2f02f32f7e57187ac17b57d4e6b7145dfe35"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_2447d76068beb26158487fa9",
+      "atlasProductId": "ram_klevv_kd5bgua80_60a300h",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/klevv-64gb-2-x-32gb-ddr5-6000-pc5-48000-cas-latency-cl30-desktop-memory-black/p/N82E16820101097",
+      "retailerListingId": "N82E16820101097",
+      "binding": {
+        "manufacturerPartNumber": "KD5BGUA80-60A300H",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458311920517791772609539:N82E16820101097"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "bdf0f707fe4dab89709e1f8b95bc47a23fca665959bbf234a50fb36fc879cdf7"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_81b03b2c0c8f083c4d591172",
+      "atlasProductId": "ram_klevv_kd5agu880_60a300l",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/klevv-32gb-2-x-16gb-ddr5-6000-pc5-48000-cas-latency-cl30-desktop-memory-black/p/N82E16820101113",
+      "retailerListingId": "N82E16820101113",
+      "binding": {
+        "manufacturerPartNumber": "KD5AGU880-60A300L",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458317408436650570421276:N82E16820101113"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "234dc5fcdd366bfba2e5e74eafc0b54b1ed77b05197a22406ea0ee1014bc6227"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_f456e9b7dfee3215c157bddb",
+      "atlasProductId": "ram_klevv_kd5agua80_64b300h",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/klevv-32gb-2-x-16gb-ddr5-6400-pc5-51200-cas-latency-cl30-desktop-memory-gray/p/N82E16820101114",
+      "retailerListingId": "N82E16820101114",
+      "binding": {
+        "manufacturerPartNumber": "KD5AGUA80-64B300H",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458314838667577488356635:N82E16820101114"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "cf315ecf9771d2a06f8c6b2be5dc4e682638153046bed1beec5a131323d28dea"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_6ddff13c45677ace94be88f3",
+      "atlasProductId": "ram_klevv_kd58gu880_60a300f",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/klevv-16gb-2-x-8gb-ddr5-6000-pc5-48000-cas-latency-cl30-desktop-memory-white/p/N82E16820101094",
+      "retailerListingId": "N82E16820101094",
+      "binding": {
+        "manufacturerPartNumber": "KD58GU880-60A300F",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458316340279010752951095:N82E16820101094"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "ccf4b7ac2f051f738f1f62b67d367e34e8a266c766ff00c680b7c4a49d1919b2"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_cddfa41b9ec13706300dd3fb",
+      "atlasProductId": "ram_lexar_ld4s32g32c22st_hgn",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/lexar-bulk-pack-tray-32gb-ddr4-3200-pc4-25600-cas-latency-cl22-memory-notebook-memory-/p/N82E16820191968",
+      "retailerListingId": "9SIA8H5M6G1127",
+      "binding": {
+        "manufacturerPartNumber": "LD4S32G32C22ST-HGN",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445837318702380758513048:9SIA8H5M6G1127"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "fe582334049b18bb37708b605cfdc3db66996d2a8ecaefd62474f3066ccfe69c"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_21956c340fb22dde24d74f95",
+      "atlasProductId": "ram_lexar_ld4as008g_b3200gsst",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/0ZK-023H-00035",
+      "retailerListingId": "9SIAGBAKX62535",
+      "binding": {
+        "manufacturerPartNumber": "LD4AS008G-B3200GSST",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458311665756744875130964:9SIAGBAKX62535"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "da43215eae5c2440ce63de20d961c490144612384f7eedcdb63567d222ec4e22"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_02e494c6ca51f706190af6ec",
+      "atlasProductId": "ram_lexar_ld4s16g32c22st_hgn",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/lexar-bulk-pack-tray-16gb-ddr4-3200-pc4-25600-cas-latency-cl22-memory-notebook-memory-/p/N82E16820191967",
+      "retailerListingId": "9SIA0ZXKWY2180",
+      "binding": {
+        "manufacturerPartNumber": "LD4S16G32C22ST-HGN",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458310522952393797969496:9SIA0ZXKWY2180"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "b35819cfabb6beb59615b3b077aa15bb0919f88402790dceb093668ab530197e"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_b89d326109642aee3ab92334",
+      "atlasProductId": "ram_lexar_ld4as032g_b3200gsst",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/0RN-004W-00058",
+      "retailerListingId": "9SIAGBAKT13759",
+      "binding": {
+        "manufacturerPartNumber": "LD4AS032G-B3200GSST",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445832126899701125586264:9SIAGBAKT13759"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "709d0bc53a10d69839ad7304680f34dda44b1f55f772654dbba3668d48dc311a"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_427b6b29b8c3c830a9cfd609",
+      "atlasProductId": "ram_transcend_jm2666hse_16g",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/0RM-0020-001B1",
+      "retailerListingId": "9SIAD6HKGF9718",
+      "binding": {
+        "manufacturerPartNumber": "JM2666HSE-16G",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:4458313713929080439886512:9SIAD6HKGF9718"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "d36324533ae82f9dbf79a9b3223e579cb601df2136070c70293dc614e6847fec"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_515e25e675fba3f0837a55eb",
+      "atlasProductId": "ram_transcend_jm3200hsg_8g",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/transcend-8gb/p/0RM-0020-001B2",
+      "retailerListingId": "9SIA1K6GPN7001",
+      "binding": {
+        "manufacturerPartNumber": "JM3200HSG-8G",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445839208777084339629079:9SIA1K6GPN7001"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "d2ddba7bebe2603a7747322aa193f7d6b747d3cdd96c4d45ea9263647b5707d6"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a8ad84da261954a6d0e3e8e1",
+      "atlasProductId": "ram_transcend_jm3200hlb_16gk",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/0RN-000D-004W5",
+      "retailerListingId": "9SIA1K6K7J7714",
+      "binding": {
+        "manufacturerPartNumber": "JM3200HLB-16GK",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batcha_admission_20261004_p1:retained-newegg:445839000350182905793269:9SIA1K6K7J7714"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:18:02.123Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:18:02.123Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "7903143853255cc8f126df2c4872d5b83111fbe07e09a182e57f6afc3072c7a6"
     }
   ]
 }

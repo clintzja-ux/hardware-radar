@@ -11,7 +11,7 @@ let cases = 0;
 const asOf = "2026-09-03T12:00:00.000Z";
 const manifest = JSON.parse(await readFile(new URL("../../atlas/atlas-manifest.json", import.meta.url), "utf8"));
 const atlasProducts = await Promise.all(manifest.products.map(async entry => JSON.parse(await readFile(new URL(`../../atlas/${entry.path}`, import.meta.url), "utf8"))));
-for (const product of atlasProducts.filter(item => item.identity.createdBy === "system:atlas-ram-expansion-002" || ATLAS_PRE_EXPANSION_PRODUCT_IDS.includes(item.identity.atlasProductId))) { product.governance.lifecycleStatus = "DRAFT"; product.governance.publicationStatus = "PENDING"; }
+for (const product of atlasProducts.filter(item => item.identity.createdBy === "system:atlas-ram-expansion-002" || item.identity.createdBy === "system:atlas-ram-coverage-expansion-batch-a-p1" || ATLAS_PRE_EXPANSION_PRODUCT_IDS.includes(item.identity.atlasProductId))) { product.governance.lifecycleStatus = "DRAFT"; product.governance.publicationStatus = "PENDING"; }
 const atlas = { products: { getAll: async () => structuredClone(atlasProducts) } };
 const reusable = new Map([
   ["ram_corsair_cmk32gx5m2b6000z30", { status: "REUSABLE", productId: null, dataDocId: "3844868436216882408", gid: null, bindingDigest: "a".repeat(64) }],
@@ -24,9 +24,9 @@ const again = await service.prepare({ asOf });
 
 assert.deepEqual(portfolio, again); cases++;
 assert(Object.isFrozen(portfolio) && Object.isFrozen(portfolio.eligibleProducts)); cases++;
-assert.equal(portfolio.counts.canonicalProducts, 103); cases++;
+assert.equal(portfolio.counts.canonicalProducts, 128); cases++;
 assert.equal(portfolio.counts.eligible, 11); cases++;
-assert.equal(portfolio.counts.excluded, 92); cases++;
+assert.equal(portfolio.counts.excluded, 117); cases++;
 assert.equal(portfolio.eligibleProducts.filter(item => item.providerIdentityState === "REUSABLE").length, 2); cases++;
 assert.equal(portfolio.eligibleProducts.filter(item => item.initialState === PORTFOLIO_PRODUCT_STATES.READY_FOR_PRODUCTS).length, 9); cases++;
 assert.deepEqual(portfolio.taskEnvelope, { products: 9, productInfo: 9, sellers: 11, maximumProgramTaskCount: 29 }); cases++;
