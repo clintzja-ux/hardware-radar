@@ -19,10 +19,10 @@ assert.equal(cohort.filter(product => product.extension.data.classification.form
 for (const product of cohort) {
   const { capacity } = product.extension.data;
   assert.equal(capacity.capacityGb, capacity.moduleCount * capacity.capacityPerModuleGb);
-  assert.equal(product.governance.lifecycleStatus, "DRAFT");
-  assert.equal(product.governance.publicationStatus, "PENDING");
-  assert.equal(product.governance.humanReviewRequired, true);
-  assert.equal(product.governance.reviewedBy, null);
+  assert.equal(product.governance.lifecycleStatus, "ACTIVE");
+  assert.equal(product.governance.publicationStatus, "READY");
+  assert.equal(product.governance.humanReviewRequired, false);
+  assert.equal(product.governance.reviewedBy, "human:Clinton_Ramsook");
   for (const references of Object.values(product.provenance.fieldSources)) {
     assert.ok(references.every(reference => reference.verificationStatus === "VERIFIED"));
     assert.ok(references.every(reference => reference.sourceType.startsWith("MANUFACTURER_")));
@@ -31,4 +31,4 @@ for (const product of cohort) {
 }
 
 assert.equal(validateRepository(products).valid, true);
-console.log("Atlas RAM manufacturer-first cohort admission tests passed (21 DRAFT/PENDING records).");
+console.log("Atlas RAM manufacturer-first cohort admission tests passed (21 ACTIVE/READY records).");

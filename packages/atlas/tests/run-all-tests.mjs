@@ -26,6 +26,7 @@ const testModules = [
     ,"./AtlasRamCoverageExpansionBatchBLifecycleReview.test.mjs"
     ,"./AtlasRamCoverageExpansionBatchALifecycleReview.test.mjs"
     ,"./AtlasRamManufacturerFirstCohortAdmission.test.mjs"
+    ,"./AtlasRamManufacturerFirstCohortLifecycleReview.test.mjs"
 ];
 
 console.log("Running Atlas test suite...\n");
