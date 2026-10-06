@@ -1,5 +1,9 @@
 # Mercury Scale-Ramp Handoff
 
+## Existing-task supervision scheduling
+
+The existing-task supervision owner now has a fixture-certified generic scheduled invocation boundary and read-only Forge health projection. It discovers due work from canonical durable state rather than configured cohort identities; persisted eligibility and leases remain authoritative. The Windows task is prepared but not installed, and activation grants no paid acquisition authority.
+
 ## Formal 100-product stage completion
 
 The formal zero-provider whole-stage assessment records `100_PRODUCT_STAGE_COMPLETE`. The canonical cohort remains 100 unique, validation-clean `ACTIVE + READY` Atlas RAM products with digest `470dfadbdb8670de3566826d33eb74cb9d97a1ca6e14bf8b3fac71101ecaaf21`. Products identity discovery and the larger longitudinal experiment supplied bounded real-production evidence across the intended RAM/source classes; the post-recovery gate proves 204 retained evidence records, 188 historical observations, three unchanged canonical observations, exact immutable lineage, zero duplicate history, and no downstream-authority leakage. All stage-relevant P0s and before-completion P1s are closed.

@@ -255,6 +255,7 @@ const testModules = [
     ,"./CertifiedMercuryCohortOperationsPanel.test.mjs"
     ,"./ProductionForgeCohortOperationsProvider.test.mjs"
     ,"./ForgeCohortOperationsEndToEnd.test.mjs"
+    ,"./ExistingTaskSupervisionScheduler.test.mjs"
     ,"./CertifiedMercuryOperationsExporter.test.mjs"
     ,"./CertifiedMercuryOperationsExporterCli.test.mjs"
     ,"./PublicationOperatorGovernance.test.mjs"

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0",
+  "policyVersion": "MERCURY-EXISTING-TASK-SUPERVISION-SCHEDULER-1.0",
+  "taskName": "HardwareRadar-Mercury-ExistingTaskSupervision",
+  "schedulerCadenceMinutes": 15,
+  "maximumChecksPerInvocation": 50,
+  "automaticPaidRetries": 0,
+  "maximumSpendUsd": 0,
+  "overlapPolicy": "SQLITE_TASK_LEASE_PLUS_WINDOWS_IGNORE_NEW"
+}
