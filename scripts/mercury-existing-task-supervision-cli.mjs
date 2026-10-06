@@ -13,7 +13,6 @@ export function parseExistingTaskSupervisionArgs(values=[]){
  if(!Number.isInteger(maximum)||maximum<1||maximum>EXISTING_TASK_SUPERVISION_MAX_CHECKS_LIMIT)throw Object.assign(new Error("EXISTING_TASK_SUPERVISION_MAX_CHECKS_INVALID"),{exitCode:2});
  return freeze({runId,maxChecks:maximum});
 }
-
 const summarizeRun=run=>({state:run.state,total:run.members.length,completed:run.members.filter(value=>value.state==="COMPLETED").length,pending:run.members.filter(value=>value.state==="WAITING_FOR_PROVIDER").length,exceptions:run.members.filter(value=>value.state==="EXCEPTION").length});
 
 export async function runExistingTaskSupervisionCommand({values=process.argv.slice(2),runtimeFactory=createProductionProductsIdentityDiscoveryService,write=console.log}={}){
@@ -24,4 +23,3 @@ export async function runExistingTaskSupervisionCommand({values=process.argv.sli
  }catch(error){if(Number.isInteger(error?.exitCode))throw error;if(/RUN_NOT_FOUND|RUN_REQUIRED|LINEAGE_INVALID/.test(String(error?.message)))error.exitCode=3;else error.exitCode=4;throw error;
  }finally{runtime?.repositories?.boundedRepository?.close?.();}
 }
-
