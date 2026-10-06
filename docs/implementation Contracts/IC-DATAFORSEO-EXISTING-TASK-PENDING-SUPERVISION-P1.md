@@ -41,3 +41,18 @@ Legacy tasks use `providerCreatedAt = null`, `historicalAttemptsKnown = false`, 
 One invocation atomically leases at most its bounded requested number of due records, checks exact existing IDs, persists outcomes, and exits. Not-due, review, terminal, and completed records are not claimed. Restart reconstructs attempt history; overlapping invocations cannot claim the same live lease.
 
 Forge exposes tracked, pending, due, review, terminal, attempt, last-check, next-check, and latest-status data through the existing read-only certified projection. No scheduler is activated by this contract.
+
+## Production process command
+
+`npm run mercury:existing-task-supervision -- --run-id=<canonical-run-id> --max-checks=<1..200>` is the sole production process surface for one bounded supervision invocation. The package script uses `node --use-system-ca --env-file=.env` and instantiates `createProductionProductsIdentityDiscoveryService`; it neither accepts provider task IDs nor reproduces due-task selection in the CLI.
+
+The command emits deterministic sanitized JSON containing the run, requested bound, due/check/skip counts, reconciliation, durable per-task supervision fields, and explicit zero-paid accounting. It never prints credentials or raw provider payloads.
+
+Exit codes are:
+
+- `0`: the bounded invocation completed, including ordinary pending or surfaced review outcomes;
+- `2`: invalid arguments or configuration;
+- `3`: canonical run missing or invalid;
+- `4`: systemic process/supervision failure.
+
+`--max-checks` is mandatory, positive, integral, and capped at 200. The existing supervision owner remains solely responsible for canonical membership, due-time enforcement, completed/review/terminal skipping, leases, retrieval, normalization, and persistence. Scheduling remains inactive.

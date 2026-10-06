@@ -214,6 +214,8 @@ Checkpoint the exact two-authorization state. Then stop for separate explicit hu
 
 Existing paid asynchronous tasks are supervised through the durable source-neutral bounded-task supervision owner. Paid creation and existing-task retrieval are separate: expired paid authority does not erase purchased evidence, and supervision cannot create replacements or spend. DataForSEO `40601/40602` are retryable pending; other statuses preserve narrower certified classifications. The 15-minute cadence and six-hour long-pending review threshold are Hardware Radar policy, not provider completion facts. Review preserves the task ID and future eligibility and never declares terminality by age. Forge exposes this state read-only; no scheduler is active.
 
+The production process boundary is `npm run mercury:existing-task-supervision -- --run-id=<canonical-run-id> --max-checks=<1..200>`. It uses the existing system-CA/private-`.env` convention, accepts no provider task IDs, creates no paid work, and emits sanitized JSON. Exit codes are 0 bounded completion, 2 invalid input/configuration, 3 invalid canonical run, and 4 systemic failure. It is scheduler-safe in principle, but scheduling remains a separate unauthorized increment.
+
 1. Read `docs/handoff/CURRENT-STATE.md`.
 2. Read this handoff.
 3. Read `docs/operations/MERCURY-SCALE-RAMP.md`.
