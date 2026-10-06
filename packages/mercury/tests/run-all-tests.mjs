@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 
 process.env.HARDWARE_RADAR_TEST_MODE = "1";
 const testModules = [
+    "./ExistingProviderTaskSupervision.test.mjs",
     "./ProductsIdentityDiscoveryReadinessOwner.test.mjs",
     "./NeutralGoogleProductsFinalization.test.mjs",
     "./SchemaContract.test.mjs",

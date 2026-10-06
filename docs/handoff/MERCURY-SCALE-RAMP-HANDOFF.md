@@ -212,6 +212,8 @@ Checkpoint the exact two-authorization state. Then stop for separate explicit hu
 
 ## NEW CHAT BOOTSTRAP
 
+Existing paid asynchronous tasks are supervised through the durable source-neutral bounded-task supervision owner. Paid creation and existing-task retrieval are separate: expired paid authority does not erase purchased evidence, and supervision cannot create replacements or spend. DataForSEO `40601/40602` are retryable pending; other statuses preserve narrower certified classifications. The 15-minute cadence and six-hour long-pending review threshold are Hardware Radar policy, not provider completion facts. Review preserves the task ID and future eligibility and never declares terminality by age. Forge exposes this state read-only; no scheduler is active.
+
 1. Read `docs/handoff/CURRENT-STATE.md`.
 2. Read this handoff.
 3. Read `docs/operations/MERCURY-SCALE-RAMP.md`.

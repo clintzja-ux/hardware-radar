@@ -10,10 +10,11 @@ function googleProductIdentity({ productId, dataDocId, gid }={}) {
   if (Object.keys(identity).length === 0) throw new TypeError("One of productId, dataDocId, or gid is required.");
   return identity;
 }
-function firstTask(response) {
-  if (response?.status_code !== 20000 || !Array.isArray(response.tasks) || !response.tasks[0]) throw new Error(`DATAFORSEO_API_ERROR:${response?.status_code ?? "UNKNOWN"}`);
+function providerError(prefix,code,message,task=null){const error=new Error(`${prefix}:${code??"UNKNOWN"}`);error.providerStatusCode=Number.isInteger(code)?code:null;error.providerStatusMessage=typeof message==="string"?message:null;error.providerTask=task;return error;}
+function firstTask(response,{retrieval=false}={}) {
+  if (response?.status_code !== 20000 || !Array.isArray(response.tasks) || !response.tasks[0]) throw providerError("DATAFORSEO_API_ERROR",response?.status_code,response?.status_message);
   const task = response.tasks[0];
-  if (task.status_code >= 40000) throw new Error(`DATAFORSEO_TASK_ERROR:${task.status_code}`);
+  if (task.status_code >= 40000&&!(retrieval&&[40102,40106].includes(task.status_code))) throw providerError("DATAFORSEO_TASK_ERROR",task.status_code,task.status_message,task);
   return task;
 }
 
@@ -31,7 +32,7 @@ export class DataForSeoMerchantApiClient {
   }
   async getProductsResult(taskId) {
     required(taskId,"taskId");
-    return firstTask(await this.transport({ method:"GET", url:`${this.baseUrl}/v3/merchant/google/products/task_get/advanced/${encodeURIComponent(taskId)}`, headers:this.headers() }));
+    return firstTask(await this.transport({ method:"GET", url:`${this.baseUrl}/v3/merchant/google/products/task_get/advanced/${encodeURIComponent(taskId)}`, headers:this.headers() }),{retrieval:true});
   }
   async postSellersTask({ productId, dataDocId, gid, locationName=DATAFORSEO_DEFAULT_LOCATION, languageName=DATAFORSEO_DEFAULT_LANGUAGE, tag, priority=DATAFORSEO_NORMAL_PRIORITY }={}) {
     if (priority !== 1) throw new Error("DATAFORSEO_HIGH_PRIORITY_BLOCKED");
@@ -47,10 +48,10 @@ export class DataForSeoMerchantApiClient {
   }
   async getProductInfoResult(taskId) {
     required(taskId,"taskId");
-    return firstTask(await this.transport({ method:"GET", url:`${this.baseUrl}/v3/merchant/google/product_info/task_get/advanced/${encodeURIComponent(taskId)}`, headers:this.headers() }));
+    return firstTask(await this.transport({ method:"GET", url:`${this.baseUrl}/v3/merchant/google/product_info/task_get/advanced/${encodeURIComponent(taskId)}`, headers:this.headers() }),{retrieval:true});
   }
   async getSellersResult(taskId) {
     required(taskId,"taskId");
-    return firstTask(await this.transport({ method:"GET", url:`${this.baseUrl}/v3/merchant/google/sellers/task_get/advanced/${encodeURIComponent(taskId)}`, headers:this.headers() }));
+    return firstTask(await this.transport({ method:"GET", url:`${this.baseUrl}/v3/merchant/google/sellers/task_get/advanced/${encodeURIComponent(taskId)}`, headers:this.headers() }),{retrieval:true});
   }
 }

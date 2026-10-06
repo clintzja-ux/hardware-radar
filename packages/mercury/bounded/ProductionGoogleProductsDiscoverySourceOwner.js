@@ -7,6 +7,7 @@ import { createNeutralParentAuthorityInput } from "./NeutralParentAuthority.js";
 import { createHistoricalBootstrapProviderResult } from "../portfolio/FileHistoricalBootstrapProviderResultRepository.js";
 import { createProductsIdentityProgressionOwner } from "../portfolio/ProductionHistoricalBootstrapLocalOwners.js";
 import { NeutralGoogleProductsFinalizationService } from "./NeutralGoogleProductsFinalization.js";
+import { classifyDataForSeoTaskStatus } from "../acquisition/dataforseo/DataForSeoProviderTaskStatus.js";
 
 const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
 const digest=value=>crypto.createHash("sha256").update(stable(value)).digest("hex");
@@ -57,8 +58,8 @@ export function createProductionGoogleProductsDiscoverySourceOwner({
     resolveTask,
     async retrieve({member,providerTaskId}={}){
       const prior=await resultRepository.findByTask(providerTaskId);if(prior)return freeze({status:"AVAILABLE",canonicalResult:prior});
-      let outcome;try{outcome=await retrievalOwner.retrieve({providerTaskId});}catch(error){if(/^DATAFORSEO_TASK_ERROR:40/.test(String(error?.message)))return freeze({status:"PENDING"});throw error;}
-      if(outcome?.status==="PROVIDER_FAILED")return freeze({status:"FAILED"});if(!Array.isArray(outcome?.result)||outcome.result.length===0)return freeze({status:"PENDING"});
+      let outcome;try{outcome=await retrievalOwner.retrieve({providerTaskId});}catch(error){if(Number.isInteger(error?.providerStatusCode)){const status=classifyDataForSeoTaskStatus({statusCode:error.providerStatusCode,statusMessage:error.providerStatusMessage,result:error.providerTask?.result});return freeze({status:status.classification==="RETRYABLE_PENDING"?"PENDING":"REVIEW_REQUIRED",...status});}throw error;}
+      if(outcome?.status==="PROVIDER_FAILED")return freeze({status:"FAILED"});const status=classifyDataForSeoTaskStatus({statusCode:outcome?.status_code??20000,statusMessage:outcome?.status_message??null,result:outcome?.result});if(status.classification==="RETRYABLE_PENDING")return freeze({status:"PENDING",...status});if(!["RESULT_AVAILABLE","COMPLETED_NO_RESULTS"].includes(status.classification))return freeze({status:"REVIEW_REQUIRED",...status});
       const task=(await taskLedger.getAll()).find(row=>row.taskId===providerTaskId),record=createHistoricalBootstrapProviderResult({operation:"PRODUCTS",sourceId:"DATAFORSEO_GOOGLE_SHOPPING",providerTaskId,paidActionIntentId:task?.paidActionIntentId??member.authorizationId,acquisitionReferenceId:member.domainMemberId,atlasProductId:member.atlasProductId,sourceRightsProfileDigest:member.rightsDigest,operationResult:outcome,retrievedAt:now()});
       return freeze({status:"AVAILABLE",canonicalResult:await resultRepository.record(record)});
     },

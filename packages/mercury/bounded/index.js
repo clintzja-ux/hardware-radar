@@ -9,3 +9,4 @@ export * from "./ProductsIdentityDiscoveryReadinessOwner.js";
 export * from "./ProductionProductsIdentityDiscovery.js";
 export * from "./ProductionGoogleProductsDiscoverySourceOwner.js";
 export * from "./NeutralGoogleProductsFinalization.js";
+export * from "./ExistingProviderTaskSupervision.js";
