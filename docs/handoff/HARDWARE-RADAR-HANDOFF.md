@@ -2,6 +2,8 @@
 
 This is the stable orientation layer for new Hardware Radar engineering sessions. It points to authoritative repository artifacts; it does not replace source, tests, policies, ADRs, implementation contracts, runbooks, or Git state. Read [CURRENT-STATE.md](./CURRENT-STATE.md) for the living operational snapshot and [HANDOFF-PROTOCOL.md](./HANDOFF-PROTOCOL.md) before completing a meaningful increment.
 
+Operator procedures live in [HARDWARE-RADAR-OPERATOR-RUNBOOK.md](../operations/HARDWARE-RADAR-OPERATOR-RUNBOOK.md). The canonical machine inventory of operator commands is [`operator-command-registry.json`](../../config/operations/operator-command-registry.json). Future sessions must use those sources rather than reconstructing operations from chat history.
+
 ## Project identity and mission
 
 Hardware Radar is a Mirabelle Labs hardware decision-support product. Its current public scope is a static, RAM-focused experience for finding and understanding verified DDR4, DDR5, and laptop-memory options. Its mission is to help people make better hardware purchasing decisions and buy with confidence. The long-term direction is a traceable hardware-intelligence platform spanning broader component knowledge, market intelligence, validation, recommendations, and buying assistance.

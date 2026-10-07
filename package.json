@@ -40,6 +40,7 @@
     "test:beacon": "node packages/beacon/tests/run-all-tests.mjs",
     "test:gateway": "node packages/gateway/tests/run-all-tests.mjs",
     "test:layout": "node scripts/repository-layout.test.mjs",
+    "test:operator-command-registry": "node scripts/operator-command-registry.test.mjs",
     "test:release-governance": "node scripts/release-governance.test.mjs",
     "certify:mercury:cleanup": "node scripts/mercury-certification-cleanup.mjs",
     "review:export": "node scripts/export-observation-review.mjs",
