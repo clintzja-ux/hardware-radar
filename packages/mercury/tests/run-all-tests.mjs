@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 
 process.env.HARDWARE_RADAR_TEST_MODE = "1";
 const testModules = [
+    "./ProductionForgeAmazonDestinationReviewProvider.test.mjs",
     "./ExistingProviderTaskSupervision.test.mjs",
     "./ExistingProviderTaskSupervisionCli.test.mjs",
     "./ProductsIdentityDiscoveryReadinessOwner.test.mjs",

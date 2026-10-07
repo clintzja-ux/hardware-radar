@@ -4,6 +4,7 @@ export {CertifiedMercuryOperationsExporter,writeCertifiedMercuryOperationsArtifa
 export {ProductionForgeCohortOperationsProvider} from "./ProductionForgeCohortOperationsProvider.js";
 export {ProductionForgeNeweggRoutineProvider} from "./ProductionForgeNeweggRoutineProvider.js";
 export {ProductionForgeExistingTaskSupervisionProvider} from "./ProductionForgeExistingTaskSupervisionProvider.js";
+export {ProductionForgeAmazonDestinationReviewProvider} from "./ProductionForgeAmazonDestinationReviewProvider.js";
 export * from "./NeweggRoutineProductionCommand.js";
 export * from "./PrivateForgeOperationsTransport.js";
 export * from "./NeweggRoutineMarketObservation.js";
