@@ -9,6 +9,10 @@ import {
 export const AMAZON_DESTINATION_PROGRESSION_POLICY_VERSION = "MERCURY-AMAZON-DESTINATION-PROGRESSION-1.0";
 export const AMAZON_RETAILER_ID = "RETAILER-0001";
 export const AMAZON_MARKETPLACE = "amazon.com";
+export const AMAZON_DESTINATION_REVIEW_CONFIRMATION = "RECORD-AMAZON-DESTINATION-REVIEW";
+export const AMAZON_DESTINATION_PERSIST_CONFIRMATION = "PERSIST-APPROVED-AMAZON-DESTINATION";
+export const AMAZON_DESTINATION_APPROVAL_ATTESTATION = "I-ATTEST-EXACT-AMAZON-PRODUCT-PAGE-REVIEW";
+export const AMAZON_DESTINATION_REJECTION_REASONS = Object.freeze(["WRONG_PRODUCT", "VARIANT_CONFLICT", "NON_ACTIONABLE_PAGE", "REDIRECT_OR_TRACKING_CONCERN", "PAGE_UNAVAILABLE", "OTHER_REVIEW_REQUIRED"]);
 
 const stable = value => Array.isArray(value) ? `[${value.map(stable).join(",")}]` : value && typeof value === "object" ? `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}` : JSON.stringify(value);
 const digest = value => crypto.createHash("sha256").update(stable(value)).digest("hex");
@@ -58,10 +62,12 @@ export class AmazonDestinationProgressionService {
     return freeze({ schemaVersion: "1.0", preparationType: "AMAZON_DESTINATION_OPERATOR_REVIEW", preparationId, ...binding, bindingDigest, qualification: equivalent ? "ALREADY_BOUND" : collision.productDestinationId ? "COLLISION_BLOCKED" : "ACTIONABILITY_REVIEW_REQUIRED", reviewRequired: !equivalent, requiredReviewMethod: RETAILER_DESTINATION_BINDING_METHOD, networkOperation: "NONE", canonicalDestinationCreated: false, sellerInferred: false, affiliateRequired: false, currentAuthority: false, historicalAuthority: false, publicationAuthority: false, actualSpendUsd: 0 });
   }
 
-  createReview({ preparation, decision, reviewedBy, reviewedAt, approvedPublicPageUrl = null } = {}) {
+  createReview({ preparation, decision, reviewedBy, reviewedAt, approvalAttestation = null, rejectionReason = null, approvedPublicPageUrl = null } = {}) {
     if (!preparation?.bindingDigest || !["APPROVE", "REJECT"].includes(decision) || !reviewedBy || !validTime(reviewedAt)) throw new TypeError("AMAZON_DESTINATION_REVIEW_INVALID");
+    if (decision === "APPROVE" && approvalAttestation !== AMAZON_DESTINATION_APPROVAL_ATTESTATION) throw new Error("AMAZON_DESTINATION_APPROVAL_ATTESTATION_REQUIRED");
+    if (decision === "REJECT" && !AMAZON_DESTINATION_REJECTION_REASONS.includes(rejectionReason)) throw new Error("AMAZON_DESTINATION_REJECTION_REASON_INVALID");
     if (decision === "APPROVE" && approvedPublicPageUrl !== preparation.candidateUrl) throw new Error("AMAZON_DESTINATION_REVIEW_URL_MISMATCH");
-    const material = { preparationId: preparation.preparationId, preparationBindingDigest: preparation.bindingDigest, decision, reviewedBy, reviewedAt, approvedPublicPageUrl: decision === "APPROVE" ? approvedPublicPageUrl : null, reviewMethod: RETAILER_DESTINATION_BINDING_METHOD };
+    const material = { preparationId: preparation.preparationId, preparationBindingDigest: preparation.bindingDigest, atlasProductId: preparation.atlasProductId, asin: preparation.asin, candidateUrl: preparation.candidateUrl, decision, reviewedBy, reviewedAt, reviewMethod: RETAILER_DESTINATION_BINDING_METHOD, approvalAttestation: decision === "APPROVE" ? approvalAttestation : null, rejectionReason: decision === "REJECT" ? rejectionReason : null, approvedPublicPageUrl: decision === "APPROVE" ? approvedPublicPageUrl : null };
     const reviewDigest = digest(material);
     return freeze({ schemaVersion: "1.0", policyVersion: AMAZON_DESTINATION_PROGRESSION_POLICY_VERSION, reviewId: `mer_amzdestreview_${reviewDigest.slice(0, 24)}`, ...material, reviewDigest, persistenceAuthorized: decision === "APPROVE", networkOperation: "NONE", marketAuthority: false, publicationAuthority: false });
   }
