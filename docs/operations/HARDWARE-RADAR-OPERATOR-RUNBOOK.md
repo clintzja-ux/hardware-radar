@@ -55,6 +55,8 @@ Install/enable/disable/remove mutate Windows scheduler state. Status is read-onl
 
 Forge → **Amazon destination review** lists current preparations and safe inspection links. Review one exact product at a time.
 
+Each review card presents the expected governed ASIN and candidate URL beside current canonical Atlas product specifications. The checklist is local browser state only: completing it does not approve, reject, persist, or create evidence. `REVIEW CHECKLIST COMPLETE` means only that the operator may copy the existing governed review command. Stale or blocked preparations cannot prepare approval handoff. Rejection remains available without completing the approval checklist, using the controlled reasons below. Forge never executes the copied command.
+
 Approval:
 
 ```powershell
