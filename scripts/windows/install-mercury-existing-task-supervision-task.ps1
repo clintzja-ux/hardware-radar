@@ -7,7 +7,7 @@ $trigger = New-ScheduledTaskTrigger -Once -At ((Get-Date).AddMinutes(5)) -Repeti
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 10)
 $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
 Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Description "Hardware Radar bounded existing-provider-task supervision. Retrieval only; no paid task authority." -Force | Out-Null
-$statePath=Join-Path $RepositoryRoot ".forge-review\mercury\existing-task-supervision\scheduler-activation.json";New-Item -ItemType Directory -Force -Path (Split-Path $statePath)|Out-Null;[pscustomobject]@{schemaVersion="1.0";taskName=$TaskName;installed=$true;enabled=$true;recordedAt=(Get-Date).ToUniversalTime().ToString("o")}|ConvertTo-Json|Set-Content -Path $statePath -Encoding utf8
+$statePath=Join-Path $RepositoryRoot ".forge-review\mercury\existing-task-supervision\scheduler-activation.json";New-Item -ItemType Directory -Force -Path (Split-Path $statePath)|Out-Null;$state=[pscustomobject]@{schemaVersion="1.0";taskName=$TaskName;installed=$true;enabled=$true;recordedAt=(Get-Date).ToUniversalTime().ToString("o")}|ConvertTo-Json;[IO.File]::WriteAllText($statePath,$state,(New-Object Text.UTF8Encoding($false)))
 Write-Host "Installed scheduled task: $TaskName"
 Write-Host "Cadence: every 15 minutes; overlap policy: IgnoreNew"
 Write-Host "Paid task creation: UNREACHABLE"

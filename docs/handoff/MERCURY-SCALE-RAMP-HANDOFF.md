@@ -2,7 +2,7 @@
 
 ## Existing-task supervision scheduling
 
-The existing-task supervision owner now has a fixture-certified generic scheduled invocation boundary and read-only Forge health projection. It discovers due work from canonical durable state rather than configured cohort identities; persisted eligibility and leases remain authoritative. The Windows task is prepared but not installed, and activation grants no paid acquisition authority.
+The existing-task supervision owner now has a fixture-certified generic scheduled invocation boundary and read-only Forge health projection. It discovers due work from canonical durable state rather than configured cohort identities; persisted eligibility and leases remain authoritative. The Windows task `HardwareRadar-Mercury-ExistingTaskSupervision` is installed and enabled at a 15-minute cadence. Its first invocation was `IDLE_NO_DUE_WORK`, with zero checks, provider calls, tasks, replacements, and spend. Activation grants no paid acquisition authority.
 
 ## Formal 100-product stage completion
 

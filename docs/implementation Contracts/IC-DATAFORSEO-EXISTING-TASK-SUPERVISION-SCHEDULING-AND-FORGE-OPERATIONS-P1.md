@@ -1,6 +1,6 @@
 # IC-DATAFORSEO-EXISTING-TASK-SUPERVISION-SCHEDULING-AND-FORGE-OPERATIONS-P1
 
-Status: fixture-certified; Windows activation deliberately not performed.
+Status: fixture-certified and Windows-activated on 2026-10-07. First health result: `IDLE_NO_DUE_WORK`, zero checks and `$0.000` spend.
 
 The generic scheduler discovers due supervision records from canonical bounded SQLite state. It accepts no configured run, product, task, source, or operation identity, honors durable `nextEligibleCheckAt`, and invokes the certified existing-task supervision owner under a global maximum of 50 checks. SQLite task leases and Windows `IgnoreNew` prevent overlap.
 
