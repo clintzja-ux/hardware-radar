@@ -6120,295 +6120,326 @@
       "createdBy": "operator:Clinton_Ramsook",
       "materialFingerprint": "7903143853255cc8f126df2c4872d5b83111fbe07e09a182e57f6afc3072c7a6"
     },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_c9fb4abf0eacfd5d1e3c31d1",
-        "atlasProductId": "ram_patriot_psd48g320081s",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/patriot-memory-signature-line-8gb-ddr4-3200-cas-latency-cl22-laptop-memory/p/N82E16820225215",
-        "retailerListingId": "9SIA4P0KWC6204",
-        "binding": {
-          "manufacturerPartNumber": "PSD48G320081S",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458314220077445715332663:9SIA4P0KWC6204"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "81dca5a656386c934397e0dbff30d48acfe7a508a71b13b10730112841cd23bd"
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_c9fb4abf0eacfd5d1e3c31d1",
+      "atlasProductId": "ram_patriot_psd48g320081s",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-signature-line-8gb-ddr4-3200-cas-latency-cl22-laptop-memory/p/N82E16820225215",
+      "retailerListingId": "9SIA4P0KWC6204",
+      "binding": {
+        "manufacturerPartNumber": "PSD48G320081S",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458314220077445715332663:9SIA4P0KWC6204"
+        ]
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_1ce6f96ce49b420707e0212f",
-        "atlasProductId": "ram_patriot_pve2464g320c8k",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/patriot-memory-viper-elite-ii-64gb-ddr4-3200-cas-latency-cl18-desktop-memory-red-black/p/N82E16820225285",
-        "retailerListingId": "N82E16820225285",
-        "binding": {
-          "manufacturerPartNumber": "PVE2464G320C8K",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:445831619355019694074181:N82E16820225285"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "8b0e6f25ff812dd4f35ea88c4bdd406a999ae44f12c643d575726512b74d005f"
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_942fb402c64db35a9d12cb49",
-        "atlasProductId": "ram_patriot_pve2464g360c0k",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/patriot-memory-viper-elite-ii-64gb-ddr4-3600-cas-latency-cl20-desktop-memory-red-black/p/N82E16820225286",
-        "retailerListingId": "N82E16820225286",
-        "binding": {
-          "manufacturerPartNumber": "PVE2464G360C0K",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:445835896162054053271153:N82E16820225286"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "ea83d6c019ff932a2a974b46a130c84675fdbf7ff14d4de602c58a1e426c569b"
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "81dca5a656386c934397e0dbff30d48acfe7a508a71b13b10730112841cd23bd"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_1ce6f96ce49b420707e0212f",
+      "atlasProductId": "ram_patriot_pve2464g320c8k",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-viper-elite-ii-64gb-ddr4-3200-cas-latency-cl18-desktop-memory-red-black/p/N82E16820225285",
+      "retailerListingId": "N82E16820225285",
+      "binding": {
+        "manufacturerPartNumber": "PVE2464G320C8K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:445831619355019694074181:N82E16820225285"
+        ]
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_ff77e5211e7cc3abaa3c4d52",
-        "atlasProductId": "ram_silicon_power_sp064gxlwu60afdj",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/silicon-power-64gb-ddr5-6000-cas-latency-cl30-memory-black/p/N82E16820301529",
-        "retailerListingId": "9SIBDGPKEV5386",
-        "binding": {
-          "manufacturerPartNumber": "SP064GXLWU60AFDJ",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458316583056717566173032:9SIBDGPKEV5386"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "c439bc6fdbfe12f235b7e49274cca310bb9980c1e4324292f7923622328b974f"
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_94e5597e4eb013a5e9e466b5",
-        "atlasProductId": "ram_silicon_power_sp032gxlwu60afdj",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/silicon-power-32gb-ddr5-6000-cas-latency-cl30-memory-black/p/N82E16820301530",
-        "retailerListingId": "9SIBDGPKF00164",
-        "binding": {
-          "manufacturerPartNumber": "SP032GXLWU60AFDJ",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:445835438322731956688192:9SIBDGPKF00164"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "ccb1993fd524cfcfd9427bfa9d934724dc234bfa1a45aab6ca3b4cea843199b1"
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "8b0e6f25ff812dd4f35ea88c4bdd406a999ae44f12c643d575726512b74d005f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_942fb402c64db35a9d12cb49",
+      "atlasProductId": "ram_patriot_pve2464g360c0k",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/patriot-memory-viper-elite-ii-64gb-ddr4-3600-cas-latency-cl20-desktop-memory-red-black/p/N82E16820225286",
+      "retailerListingId": "N82E16820225286",
+      "binding": {
+        "manufacturerPartNumber": "PVE2464G360C0K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:445835896162054053271153:N82E16820225286"
+        ]
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_44527ebc93a5844de467e680",
-        "atlasProductId": "ram_silicon_power_sp008gblfu240x02",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/p/0RN-002K-000F0",
-        "retailerListingId": "9SIA1K6FZM4727",
-        "binding": {
-          "manufacturerPartNumber": "SP008GBLFU240X02",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458317171330363742493640:9SIA1K6FZM4727"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "d6c01e0ae4710d4ee7b0dbe6b249bc4e2c4cb12e92f7ecfdc4df49c49a51f11d"
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_64257e8f3514c739bf494be5",
-        "atlasProductId": "ram_silicon_power_sp016gblfu240x02",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/p/0RN-002K-000J4",
-        "retailerListingId": "9SIA1K6KBS8351",
-        "binding": {
-          "manufacturerPartNumber": "SP016GBLFU240X02",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458314971578824679384461:9SIA1K6KBS8351"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "047dac689a24db348cfba597925e9734dce18f1ea80743beb124a3900ba67cb3"
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "ea83d6c019ff932a2a974b46a130c84675fdbf7ff14d4de602c58a1e426c569b"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_ff77e5211e7cc3abaa3c4d52",
+      "atlasProductId": "ram_silicon_power_sp064gxlwu60afdj",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/silicon-power-64gb-ddr5-6000-cas-latency-cl30-memory-black/p/N82E16820301529",
+      "retailerListingId": "9SIBDGPKEV5386",
+      "binding": {
+        "manufacturerPartNumber": "SP064GXLWU60AFDJ",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458316583056717566173032:9SIBDGPKEV5386"
+        ]
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_ba660a6589e0a230d2a95e6b",
-        "atlasProductId": "ram_silicon_power_sp016gxlzu320bda",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/silicon-power-xpower-turbine-16gb-ddr4-3200-cas-latency-cl16-desktop-memory-blue/p/N82E16820301432",
-        "retailerListingId": "9SIBDGPKBF0359",
-        "binding": {
-          "manufacturerPartNumber": "SP016GXLZU320BDA",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458315589591816592691159:9SIBDGPKBF0359"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "415dc3405b0c04c0b13d712ddaf359df12d47fa8f1aab7f0e0e7dbb2aa4d820a"
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_ea4c4d1a064122f24c6e0f89",
-        "atlasProductId": "ram_xpg_ax4u36008g18i_dtbkd35g",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/xpg-spectra-d35-16gb-ddr4-3600-cas-latency-cl18-memory-black/p/N82E16820246070",
-        "retailerListingId": "9SIA1K6KKY1639",
-        "binding": {
-          "manufacturerPartNumber": "AX4U36008G18I-DTBKD35G",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458314357123014747263396:9SIA1K6KKY1639"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-04T18:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-04T18:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "a9ed043fdc6757d4ac2039cc6faab26c30161e46b144dde82891425afa76c6c7"
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "c439bc6fdbfe12f235b7e49274cca310bb9980c1e4324292f7923622328b974f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_94e5597e4eb013a5e9e466b5",
+      "atlasProductId": "ram_silicon_power_sp032gxlwu60afdj",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/silicon-power-32gb-ddr5-6000-cas-latency-cl30-memory-black/p/N82E16820301530",
+      "retailerListingId": "9SIBDGPKF00164",
+      "binding": {
+        "manufacturerPartNumber": "SP032GXLWU60AFDJ",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:445835438322731956688192:9SIBDGPKF00164"
+        ]
       },
-      {
-        "schemaVersion": "1.0",
-        "destinationId": "mer_dest_2619f970b3d41e69c36c32ef",
-        "atlasProductId": "ram_timetec_76tt48nus1r16_8g",
-        "retailerId": "RETAILER-0004",
-        "marketplace": "newegg.com",
-        "destinationType": "PRODUCT_PAGE",
-        "destinationUrl": "https://newegg.com/p/0RM-006H-000J2",
-        "retailerListingId": "9SIA56XKWT0719",
-        "binding": {
-          "manufacturerPartNumber": "76TT48NUS1R16-8G",
-          "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
-          "scope": "EXACT_STANDALONE_PRODUCT",
-          "evidenceReferences": [
-            "artifact:ATLAS_RAM_MANUFACTURER_FIRST_COHORT_NEWEGG_IDENTITY_DISCOVERY_P1:retained-newegg:445837281414852897497009:9SIA56XKWT0719"
-          ]
-        },
-        "provenance": {
-          "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
-        },
-        "reviewedBy": "operator:Clinton_Ramsook",
-        "reviewedAt": "2026-10-05T00:00:00.000Z",
-        "status": "ACTIVE",
-        "supersedesDestinationId": null,
-        "retirementReason": null,
-        "createdAt": "2026-10-05T00:00:00.000Z",
-        "createdBy": "operator:Clinton_Ramsook",
-        "materialFingerprint": "ca6d19b71a45ab8434471e5c9a1e9fbdc605940d0e8252613516c6038893403c"
-      }
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "ccb1993fd524cfcfd9427bfa9d934724dc234bfa1a45aab6ca3b4cea843199b1"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_44527ebc93a5844de467e680",
+      "atlasProductId": "ram_silicon_power_sp008gblfu240x02",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/0RN-002K-000F0",
+      "retailerListingId": "9SIA1K6FZM4727",
+      "binding": {
+        "manufacturerPartNumber": "SP008GBLFU240X02",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458317171330363742493640:9SIA1K6FZM4727"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "d6c01e0ae4710d4ee7b0dbe6b249bc4e2c4cb12e92f7ecfdc4df49c49a51f11d"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_64257e8f3514c739bf494be5",
+      "atlasProductId": "ram_silicon_power_sp016gblfu240x02",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/0RN-002K-000J4",
+      "retailerListingId": "9SIA1K6KBS8351",
+      "binding": {
+        "manufacturerPartNumber": "SP016GBLFU240X02",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458314971578824679384461:9SIA1K6KBS8351"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "047dac689a24db348cfba597925e9734dce18f1ea80743beb124a3900ba67cb3"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_ba660a6589e0a230d2a95e6b",
+      "atlasProductId": "ram_silicon_power_sp016gxlzu320bda",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/silicon-power-xpower-turbine-16gb-ddr4-3200-cas-latency-cl16-desktop-memory-blue/p/N82E16820301432",
+      "retailerListingId": "9SIBDGPKBF0359",
+      "binding": {
+        "manufacturerPartNumber": "SP016GXLZU320BDA",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458315589591816592691159:9SIBDGPKBF0359"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "415dc3405b0c04c0b13d712ddaf359df12d47fa8f1aab7f0e0e7dbb2aa4d820a"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_ea4c4d1a064122f24c6e0f89",
+      "atlasProductId": "ram_xpg_ax4u36008g18i_dtbkd35g",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/xpg-spectra-d35-16gb-ddr4-3600-cas-latency-cl18-memory-black/p/N82E16820246070",
+      "retailerListingId": "9SIA1K6KKY1639",
+      "binding": {
+        "manufacturerPartNumber": "AX4U36008G18I-DTBKD35G",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:atlas_ramcoverage_batchb_admission_20261004_p1:retained-newegg:4458314357123014747263396:9SIA1K6KKY1639"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-04T18:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-04T18:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "a9ed043fdc6757d4ac2039cc6faab26c30161e46b144dde82891425afa76c6c7"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_2619f970b3d41e69c36c32ef",
+      "atlasProductId": "ram_timetec_76tt48nus1r16_8g",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/0RM-006H-000J2",
+      "retailerListingId": "9SIA56XKWT0719",
+      "binding": {
+        "manufacturerPartNumber": "76TT48NUS1R16-8G",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "artifact:ATLAS_RAM_MANUFACTURER_FIRST_COHORT_NEWEGG_IDENTITY_DISCOVERY_P1:retained-newegg:445837281414852897497009:9SIA56XKWT0719"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_CURATED_RETAIL_REVIEW"
+      },
+      "reviewedBy": "operator:Clinton_Ramsook",
+      "reviewedAt": "2026-10-05T00:00:00.000Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-05T00:00:00.000Z",
+      "createdBy": "operator:Clinton_Ramsook",
+      "materialFingerprint": "ca6d19b71a45ab8434471e5c9a1e9fbdc605940d0e8252613516c6038893403c"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_c04e3504d1e3b3a65c7885ec",
+      "atlasProductId": "ram_klevv_kd5agsa80_56g460a",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/dp/B0BSN98RQQ",
+      "retailerListingId": "B0BSN98RQQ",
+      "binding": {
+        "manufacturerPartNumber": "KD5AGSA80-56G460A",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "assessment:mer_amzasin_2e50ba9c964d4d7fe5a5600f",
+          "provider-result:mer_providerresult_74727d1f15177648b888abc1",
+          "operator-review:mer_amzdestreview_56df0c9c90e6df31c8a197db"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "Clinton",
+      "reviewedAt": "2026-10-08T00:30:09.215Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-08T00:30:09.215Z",
+      "createdBy": "Clinton",
+      "materialFingerprint": "7f2e107428ab969c620ab48cb2e2e65139ca084a66179ad96d24cf0323d7e55f"
+    }
   ]
 }

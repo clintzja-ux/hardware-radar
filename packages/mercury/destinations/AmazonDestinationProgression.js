@@ -6,7 +6,8 @@ import {
   createRetailerDestination
 } from "./RetailerDestination.js";
 
-export const AMAZON_DESTINATION_PROGRESSION_POLICY_VERSION = "MERCURY-AMAZON-DESTINATION-PROGRESSION-1.0";
+export const AMAZON_DESTINATION_LEGACY_PROGRESSION_POLICY_VERSION = "MERCURY-AMAZON-DESTINATION-PROGRESSION-1.0";
+export const AMAZON_DESTINATION_PROGRESSION_POLICY_VERSION = "MERCURY-AMAZON-DESTINATION-PROGRESSION-1.1";
 export const AMAZON_RETAILER_ID = "RETAILER-0001";
 export const AMAZON_MARKETPLACE = "amazon.com";
 export const AMAZON_DESTINATION_REVIEW_CONFIRMATION = "RECORD-AMAZON-DESTINATION-REVIEW";
@@ -24,8 +25,11 @@ export function canonicalAmazonProductUrl(asin) {
   return `https://amazon.com/dp/${asin}`;
 }
 
-function destinationSnapshot(destinations) {
-  return digest([...destinations].map(value => ({ destinationId: value.destinationId, materialFingerprint: value.materialFingerprint, status: value.status })).sort((a, b) => a.destinationId.localeCompare(b.destinationId)));
+function relevantDestinationState(destinations, { atlasProductId, asin, candidateUrl }) {
+  return [...destinations]
+    .filter(value => value.atlasProductId === atlasProductId || (value.retailerId === AMAZON_RETAILER_ID && (value.retailerListingId === asin || value.destinationUrl === candidateUrl)))
+    .map(value => ({ destinationId: value.destinationId, atlasProductId: value.atlasProductId, retailerId: value.retailerId, marketplace: value.marketplace, retailerListingId: value.retailerListingId, destinationUrl: value.destinationUrl, materialFingerprint: value.materialFingerprint, status: value.status, supersedesDestinationId: value.supersedesDestinationId ?? null }))
+    .sort((a, b) => a.destinationId.localeCompare(b.destinationId));
 }
 
 function collisions(destinations, { atlasProductId, asin, candidateUrl }) {
@@ -57,9 +61,36 @@ export class AmazonDestinationProgressionService {
     const candidateUrl = canonicalAmazonProductUrl(identity.governedAsin), collision = collisions(destinations, { atlasProductId, asin: identity.governedAsin, candidateUrl });
     if (collision.crossProductDestinationId) throw new Error("AMAZON_DESTINATION_CROSS_PRODUCT_COLLISION");
     const equivalent = collision.productDestinationId && (collision.listingDestinationId === collision.productDestinationId || collision.urlDestinationId === collision.productDestinationId);
-    const binding = { policyVersion: AMAZON_DESTINATION_PROGRESSION_POLICY_VERSION, atlasProductId, manufacturerPartNumber: product.identity.manufacturerPartNumber, assessmentId, identityState: identity.state, asin: identity.governedAsin, outcomeId: identity.outcomeId, canonicalResultId: result.canonicalResultId, resultDigest: result.resultDigest, providerTaskId: result.providerTaskId, sourceRightsProfileDigest: result.sourceRightsProfileDigest, retailerId: AMAZON_RETAILER_ID, marketplace: AMAZON_MARKETPLACE, candidateUrl, destinationStateDigest: destinationSnapshot(destinations), collision };
+    const relevantState = relevantDestinationState(destinations, { atlasProductId, asin: identity.governedAsin, candidateUrl });
+    const binding = { policyVersion: AMAZON_DESTINATION_PROGRESSION_POLICY_VERSION, atlasProductId, manufacturerPartNumber: product.identity.manufacturerPartNumber, atlasLifecycleStatus: product.governance.lifecycleStatus, atlasPublicationStatus: product.governance.publicationStatus, assessmentId, identityState: identity.state, asin: identity.governedAsin, outcomeId: identity.outcomeId, canonicalResultId: result.canonicalResultId, resultDigest: result.resultDigest, providerTaskId: result.providerTaskId, sourceRightsProfileDigest: result.sourceRightsProfileDigest, retailerId: AMAZON_RETAILER_ID, marketplace: AMAZON_MARKETPLACE, candidateUrl, destinationBindingScope: "CANDIDATE_RELEVANT", destinationStateDigest: digest(relevantState), collision };
     const bindingDigest = digest(binding), preparationId = `mer_amzdestprep_${bindingDigest.slice(0, 24)}`;
     return freeze({ schemaVersion: "1.0", preparationType: "AMAZON_DESTINATION_OPERATOR_REVIEW", preparationId, ...binding, bindingDigest, qualification: equivalent ? "ALREADY_BOUND" : collision.productDestinationId ? "COLLISION_BLOCKED" : "ACTIONABILITY_REVIEW_REQUIRED", reviewRequired: !equivalent, requiredReviewMethod: RETAILER_DESTINATION_BINDING_METHOD, networkOperation: "NONE", canonicalDestinationCreated: false, sellerInferred: false, affiliateRequired: false, currentAuthority: false, historicalAuthority: false, publicationAuthority: false, actualSpendUsd: 0 });
+  }
+
+  async revalidatePreparation(preparation) {
+    if (!preparation || preparation.schemaVersion !== "1.0" || preparation.preparationType !== "AMAZON_DESTINATION_OPERATOR_REVIEW" || !preparation.preparationId || !preparation.bindingDigest) throw new Error("AMAZON_DESTINATION_PREPARATION_INVALID");
+    const legacy = preparation.policyVersion === AMAZON_DESTINATION_LEGACY_PROGRESSION_POLICY_VERSION;
+    const currentPolicy = preparation.policyVersion === AMAZON_DESTINATION_PROGRESSION_POLICY_VERSION;
+    if (!legacy && !currentPolicy) throw new Error("AMAZON_DESTINATION_PREPARATION_POLICY_UNSUPPORTED");
+    const common = { policyVersion: preparation.policyVersion, atlasProductId: preparation.atlasProductId, manufacturerPartNumber: preparation.manufacturerPartNumber };
+    const binding = legacy
+      ? { ...common, assessmentId: preparation.assessmentId, identityState: preparation.identityState, asin: preparation.asin, outcomeId: preparation.outcomeId, canonicalResultId: preparation.canonicalResultId, resultDigest: preparation.resultDigest, providerTaskId: preparation.providerTaskId, sourceRightsProfileDigest: preparation.sourceRightsProfileDigest, retailerId: preparation.retailerId, marketplace: preparation.marketplace, candidateUrl: preparation.candidateUrl, destinationStateDigest: preparation.destinationStateDigest, collision: preparation.collision }
+      : { ...common, atlasLifecycleStatus: preparation.atlasLifecycleStatus, atlasPublicationStatus: preparation.atlasPublicationStatus, assessmentId: preparation.assessmentId, identityState: preparation.identityState, asin: preparation.asin, outcomeId: preparation.outcomeId, canonicalResultId: preparation.canonicalResultId, resultDigest: preparation.resultDigest, providerTaskId: preparation.providerTaskId, sourceRightsProfileDigest: preparation.sourceRightsProfileDigest, retailerId: preparation.retailerId, marketplace: preparation.marketplace, candidateUrl: preparation.candidateUrl, destinationBindingScope: preparation.destinationBindingScope, destinationStateDigest: preparation.destinationStateDigest, collision: preparation.collision };
+    const expectedDigest = digest(binding);
+    if (expectedDigest !== preparation.bindingDigest || preparation.preparationId !== `mer_amzdestprep_${expectedDigest.slice(0, 24)}` || preparation.qualification !== "ACTIONABILITY_REVIEW_REQUIRED" || preparation.reviewRequired !== true || preparation.requiredReviewMethod !== RETAILER_DESTINATION_BINDING_METHOD) throw new Error("AMAZON_DESTINATION_PREPARATION_BINDING_INVALID");
+    const current = await this.prepare({ atlasProductId: preparation.atlasProductId, assessmentId: preparation.assessmentId });
+    const fields = ["atlasProductId", "manufacturerPartNumber", "assessmentId", "identityState", "asin", "outcomeId", "canonicalResultId", "resultDigest", "providerTaskId", "sourceRightsProfileDigest", "retailerId", "marketplace", "candidateUrl"];
+    const unchanged = fields.every(field => preparation[field] === current[field]);
+    const nowBound = unchanged && current.qualification === "ALREADY_BOUND" && current.collision.productDestinationId && current.collision.productDestinationId === current.collision.listingDestinationId && current.collision.productDestinationId === current.collision.urlDestinationId;
+    if (currentPolicy) {
+      if (nowBound) return freeze({ status: "ALREADY_BOUND", preparation, current });
+      if (current.bindingDigest !== preparation.bindingDigest) throw new Error("AMAZON_DESTINATION_PREPARATION_STALE");
+      return freeze({ status: "CURRENT", preparation, current });
+    }
+    if (nowBound) return freeze({ status: "ALREADY_BOUND", preparation, current });
+    const noPriorRelevantState = Object.values(preparation.collision ?? {}).every(value => value === null) && current.destinationStateDigest === digest([]) && Object.values(current.collision ?? {}).every(value => value === null);
+    if (!unchanged || !noPriorRelevantState || current.qualification !== "ACTIONABILITY_REVIEW_REQUIRED") throw new Error("AMAZON_DESTINATION_PREPARATION_STALE");
+    return freeze({ status: "LEGACY_COMPATIBLE", preparation, current });
   }
 
   createReview({ preparation, decision, reviewedBy, reviewedAt, approvalAttestation = null, rejectionReason = null, approvedPublicPageUrl = null } = {}) {
@@ -74,9 +105,8 @@ export class AmazonDestinationProgressionService {
 
   async execute({ preparation, review } = {}) {
     if (review?.decision !== "APPROVE" || review.preparationId !== preparation?.preparationId || review.preparationBindingDigest !== preparation?.bindingDigest || review.approvedPublicPageUrl !== preparation.candidateUrl) throw new Error("AMAZON_DESTINATION_REVIEW_NOT_APPROVED");
-    const current = await this.prepare({ atlasProductId: preparation.atlasProductId, assessmentId: preparation.assessmentId });
+    const { current } = await this.revalidatePreparation(preparation);
     if (current.qualification === "ALREADY_BOUND") return freeze({ status: "ALREADY_BOUND", destinationId: current.collision.productDestinationId });
-    if (current.bindingDigest !== preparation.bindingDigest) throw new Error("AMAZON_DESTINATION_PREPARATION_STALE");
     if (current.qualification !== "ACTIONABILITY_REVIEW_REQUIRED") throw new Error("AMAZON_DESTINATION_NOT_PERSISTABLE");
     const destination = createRetailerDestination({ atlasProductId: preparation.atlasProductId, retailerId: AMAZON_RETAILER_ID, marketplace: AMAZON_MARKETPLACE, destinationType: RETAILER_DESTINATION_TYPE, destinationUrl: preparation.candidateUrl, retailerListingId: preparation.asin, binding: { manufacturerPartNumber: preparation.manufacturerPartNumber, method: RETAILER_DESTINATION_BINDING_METHOD, scope: "EXACT_STANDALONE_PRODUCT", evidenceReferences: [`assessment:${preparation.assessmentId}`, `provider-result:${preparation.canonicalResultId}`, `operator-review:${review.reviewId}`] }, provenance: { sourceType: RETAILER_DESTINATION_SOURCE_TYPE }, reviewedBy: review.reviewedBy, reviewedAt: review.reviewedAt, status: "ACTIVE", supersedesDestinationId: null, retirementReason: null, createdAt: review.reviewedAt, createdBy: review.reviewedBy });
     const retained = await this.destinations.retain(destination);
