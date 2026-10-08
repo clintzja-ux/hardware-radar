@@ -2,6 +2,9 @@ export {createCertifiedMercuryOperationsProjection} from "./CertifiedMercuryOper
 export {createCertifiedMercuryCohortOperationsProjection} from "./CertifiedMercuryCohortOperationsProjection.js";
 export {CertifiedMercuryOperationsExporter,writeCertifiedMercuryOperationsArtifact} from "./CertifiedMercuryOperationsExporter.js";
 export {ProductionForgeCohortOperationsProvider} from "./ProductionForgeCohortOperationsProvider.js";
+export {createForgeProductManagerProjection} from "./ForgeProductManagerProjection.js";
+export {GovernedRetailerLinkVerificationService,FORGE_LINK_VERIFICATION_STATUSES} from "./GovernedRetailerLinkVerificationService.js";
+export {ForgeProductMutationBoundary} from "./ForgeProductMutationBoundary.js";
 export {ProductionForgeNeweggRoutineProvider} from "./ProductionForgeNeweggRoutineProvider.js";
 export {ProductionForgeExistingTaskSupervisionProvider} from "./ProductionForgeExistingTaskSupervisionProvider.js";
 export {ProductionForgeAmazonDestinationReviewProvider} from "./ProductionForgeAmazonDestinationReviewProvider.js";

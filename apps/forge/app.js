@@ -4,6 +4,10 @@ import { copyToClipboard } from "./utils/clipboard.js";
 import { ObservationReviewPanel } from "./components/ObservationReviewPanel.js";
 import { AcquisitionOperationsPanel } from "./components/AcquisitionOperationsPanel.js";
 import { CertifiedMercuryOperationsPanel } from "./components/CertifiedMercuryOperationsPanel.js";
+import { ProductManagerPanel } from "./components/ProductManagerPanel.js";
+
+const productManagerRoot = document.getElementById("productManagerPanel");
+if (productManagerRoot) new ProductManagerPanel(productManagerRoot);
 
 const forge = new ForgeGenerator();
 const reviewPanelRoot = document.getElementById("observationReviewPanel");

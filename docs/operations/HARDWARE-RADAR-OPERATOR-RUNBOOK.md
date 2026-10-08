@@ -22,6 +22,19 @@ Identity discovery is not price acquisition. Destination review is not Current o
 
 ## System health and Forge
 
+### Product Manager
+
+Generate the canonical read-only Product Manager projection from the repository root:
+
+```powershell
+$asOf = (Get-Date).ToUniversalTime().ToString("o")
+npm run forge:product-manager:export -- --as-of=$asOf
+```
+
+Open Forge and select `.forge-review/forge/product-manager.json` in **Product Manager projection**. The Product Manager searches all current Atlas products by brand, MPN, name, or canonical ID and filters by DDR generation, form factor, capacity, lifecycle, and retailer coverage. Product details show complete canonical specifications, Amazon/Newegg destinations and prior versions, operator-supplied Newegg affiliate status and public-action precedence, Current/History availability, and recorded link-health status.
+
+This projection is read-only and performs no network operation. Buttons for product, lifecycle, destination, affiliate, and **Check Link** changes remain disabled until an authenticated trusted operator runtime is deployed. Never use browser JavaScript to write repository JSON, SQLite, `.env`, workbook, or canonical evidence. Ordinary production writes must invoke the existing Atlas or Mercury canonical owner through an authenticated, auditable server-side boundary.
+
 Use Forge as the normal read-only operational surface. Refresh its canonical projection with:
 
 ```powershell

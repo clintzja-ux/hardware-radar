@@ -52,6 +52,40 @@
             </div>
         </header>
 
+        <section class="product-manager" id="productManagerPanel" aria-labelledby="productManagerTitle">
+            <div class="pane-heading">
+                <div>
+                    <p class="pane-kicker">OPERATIONS</p>
+                    <h2 id="productManagerTitle">Product Manager</h2>
+                </div>
+                <p>Find products, inspect canonical specifications, retailer destinations, affiliate routing, Current/History coverage, and link-health evidence.</p>
+            </div>
+            <div class="product-manager-load">
+                <label class="review-file-field">
+                    <span>Product Manager projection</span>
+                    <input id="productManagerFile" type="file" accept="application/json,.json">
+                </label>
+                <span id="productManagerBadge" class="status-badge pending">NOT LOADED</span>
+                <p id="productManagerSummary">Generate the read-only projection, then select <code>.forge-review/forge/product-manager.json</code>.</p>
+            </div>
+            <div class="product-manager-filters" aria-label="Product filters">
+                <label><span>Search</span><input id="productManagerSearch" type="search" placeholder="Brand, MPN, product name, or canonical ID"></label>
+                <label><span>DDR</span><select id="productManagerMemory"><option value="">All</option><option>DDR5</option><option>DDR4</option></select></label>
+                <label><span>Form factor</span><select id="productManagerFormFactor"><option value="">All</option><option value="DIMM">DIMM</option><option value="SO_DIMM">SO-DIMM</option></select></label>
+                <label><span>Capacity</span><select id="productManagerCapacity"><option value="">All</option></select></label>
+                <label><span>Lifecycle</span><select id="productManagerLifecycle"><option value="">All</option><option>ACTIVE</option><option>VERIFIED</option><option>DRAFT</option><option>ARCHIVED</option></select></label>
+                <label><span>Retailer coverage</span><select id="productManagerRetailer"><option value="">All</option><option value="RETAILER-0001">Amazon</option><option value="RETAILER-0004">Newegg</option><option value="MISSING">Missing URLs</option></select></label>
+            </div>
+            <div class="product-manager-workspace">
+                <div id="productManagerResults" class="product-manager-results" aria-live="polite"></div>
+                <article id="productManagerDetails" class="product-manager-details">
+                    <h3>Select a product</h3>
+                    <p>Canonical details and governed link evidence will appear here.</p>
+                </article>
+            </div>
+            <p class="product-manager-security"><strong>Writes are disabled.</strong> Create, edit, lifecycle, destination, affiliate, and live Check Link actions require the authenticated trusted operator runtime. This static browser never writes repository files.</p>
+        </section>
+
         <form id="forgeForm">
             <div class="forge-workspace">
                 <section

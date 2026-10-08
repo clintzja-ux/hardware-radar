@@ -319,6 +319,7 @@ const testModules = [
     ,"./CurrentRefreshPlan.test.mjs"
     ,"./AutomatedCurrentLaneCertification.test.mjs"
     ,"./CurrentRefreshStaticRecomposition.test.mjs"
+    ,"./ForgeProductManager.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

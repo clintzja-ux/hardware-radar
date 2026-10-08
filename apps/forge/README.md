@@ -13,3 +13,5 @@ Forge v0.2 retains a **legacy Mercury preview** for the existing authoring workf
 Canonical Mercury ingestion remains owned by the certified Mercury adapter → validation → observation pipeline. FM007 adds a separate certified, read-only operations panel that consumes a Mercury-owned operations projection. It renders existing identity, promotion, history/cadence, review, and publication semantics without making policy or writing state. The legacy authoring preview remains visibly isolated and noncanonical.
 
 FM008 materializes the local projection at `.forge-review/forge/certified-mercury-operations.json`. Select that file in the certified panel; it is not automatically published or loaded as public price data.
+
+`npm run forge:product-manager:export -- --as-of=<ISO_TIME>` materializes `.forge-review/forge/product-manager.json`. Select it in the Product Manager panel for canonical read-only Atlas, destination, affiliate, Current/History, and link-health inspection. Static Forge cannot execute privileged changes or network checks; those controls remain disabled until a trusted authenticated operator runtime is connected.
