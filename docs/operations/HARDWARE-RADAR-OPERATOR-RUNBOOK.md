@@ -138,6 +138,8 @@ npm run rakuten:sftp:download:authoritative
 
 This uses the private `.env`, pinned host identity, cross-process lease, one session, and sequential downloads. It is free provider acquisition but network-bearing. Do not use TOFU, log credentials, treat a lone DELTA as authoritative, or retry an uncertain transfer blindly. Acquisition does not itself grant Current, History, or publication authority. Forge → **Newegg routine operations** shows the latest governed run.
 
+Every Rakuten file transfer has a 45-minute absolute ceiling and an independent 60-second no-byte-progress stall timeout. The transport remains limited to one session, one sequential download at a time, and zero automatic retries. A terminal success receipt must show remote EOF, local-write completion, structural validation, deterministic connection cleanup, and lease release. On `SFTP_DOWNLOAD_TIMEOUT`, stop and inspect the retained terminal evidence; do not restart blindly or treat a partial file as authoritative.
+
 ## History and read-only inspection
 
 ```powershell
