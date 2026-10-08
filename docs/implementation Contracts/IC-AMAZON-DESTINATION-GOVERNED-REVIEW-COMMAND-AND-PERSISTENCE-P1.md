@@ -8,6 +8,14 @@ Complete the operator seam between the read-only Forge Amazon destination queue 
 
 No new review-policy owner exists. The file-backed review repository is append-only persistence for decisions created by the existing progression owner.
 
+## Production canonical-source adapter
+
+Production review revalidation and approved persistence use `ProductionFlatRetailerDestinationRepository` over the existing canonical `production-destinations.json` source. The adapter implements the repository contract required by `AmazonDestinationProgressionService` without changing the canonical flat schema `{ "schemaVersion": "1.0", "records": [] }`, creating a second destination source, or moving ownership out of Mercury. Reads reuse `loadRetailerDestinationSource()` so existing schema validation, Atlas/retailer binding, audit-history supersession, collision detection, and effective-record semantics remain authoritative.
+
+Governed retention is serialized by the repository-native single-writer lock and an in-process queue. It rereads and revalidates canonical state while holding the lock, binds the expected content digest, writes a same-directory exclusive temporary file, rechecks the canonical digest immediately before replacement, and atomically replaces the source. Temporary files are removed after success or failure. Busy writers and non-cooperating concurrent mutation fail closed; no blind read-modify-write is permitted. Existing audit records retain their order and a new record is appended deterministically. Exact replay resolves `ALREADY_BOUND` through progression without appending another audit record.
+
+The prior production failure was a composition defect: the runtime bound `FileRetailerDestinationRepository`, whose private indexed mutable-state contract requires `version`, object-indexed `records`, `byKey`, `byProduct`, and `byRetailer`, directly to the valid flat canonical production source. The corrected production factory binds both review revalidation and approved persistence to the compatible adapter. Operator commands, arguments, confirmation tokens, and authority separation are unchanged.
+
 ## Commands
 
 Record approval:
