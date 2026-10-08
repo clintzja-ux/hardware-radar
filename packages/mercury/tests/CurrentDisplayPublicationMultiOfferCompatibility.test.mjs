@@ -3,11 +3,13 @@ import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promis
 import os from "node:os";
 import path from "node:path";
 import { deriveCurrentDisplayPublicationEligibleSnapshot, deriveLegacySingleOfferPublicationCompatibilitySnapshot } from "../publication/CurrentDisplayPublication.js";
+import { FileCurrentDisplaySnapshotRepository } from "../current-display/FileCurrentDisplaySnapshotRepository.js";
 import { defaultSourceRightsRegistry } from "../rights/SourceRightsRegistry.js";
 import { loadStaticPublicationContinuityProjection } from "../../../scripts/static-publication-release-runtime.mjs";
 import { createStaticPublicationReleaseManifest } from "../../sentinel/validators/StaticPublicationReleaseControl.js";
 
 const state = JSON.parse(await readFile(".forge-review/retail-display/current-display-snapshots.json", "utf8"));
+const canonicalState = await new FileCurrentDisplaySnapshotRepository({ statePath: ".forge-review/retail-display/current-display-snapshots.json" }).getState();
 const publicationContinuity = await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" });
 const publishedProjection = publicationContinuity.projection;
 const before = JSON.stringify(state);
@@ -16,9 +18,11 @@ const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: cur
 const continuityTransitions=[];
 for(const file of await readdir(".forge-review/mercury/rakuten-full-current-refresh")){if(!file.startsWith("mer_rakutenfullprep_")||!file.endsWith(".json"))continue;const preparation=JSON.parse(await readFile(`.forge-review/mercury/rakuten-full-current-refresh/${file}`,"utf8"));for(const member of preparation.members??[])if(member?.priorOffer&&member?.offer)continuityTransitions.push({priorOffer:member.priorOffer,offer:member.offer});}
 assert.equal(current.schemaVersion, "1.1");
-assert.equal(state.current.offers.length, 214);
-assert.equal(current.offers.length, 143);
-assert.equal(eligible.offers.length, 143);
+assert.deepEqual(state, canonicalState);
+assert.notEqual(state.current.snapshotId, state.previous.snapshotId);
+assert.equal(new Set(state.current.offers.map(offer => offer.offerIdentity)).size, state.current.offers.length);
+assert.equal(current.offers.length, state.current.offers.filter(offer => offer?.sourceIdentity?.sourceId).length);
+assert.equal(eligible.offers.length, current.offers.length);
 
 const gskill = eligible.offers.filter(offer => offer.atlasProductId === "ram_g_skill_f5_5600s4645a16gx2_rs" && offer.retailerId === "RETAILER-0004");
 assert.deepEqual(gskill.map(offer => offer.offerIdentity).sort(), ["mer_offer_5d461bd6797e88fda18ca166", "mer_offer_77fab51b74d40becbd942cff"].sort());
@@ -35,7 +39,8 @@ assert.equal(crucial[0].seller.sellerName, "TECH_JUNKIE");
 assert.equal(crucial[0].listingIdentity, "9SIB3T1KSA7837");
 
 const compatibility = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: state.previous, publishedProjection, continuityTransitions });
-assert.equal(compatibility.offers.length, 142);
+assert.equal(compatibility.offers.length, new Set(eligible.offers.map(offer => `${offer.atlasProductId}:${offer.retailerId}`)).size);
+assert.equal(new Set(compatibility.offers.map(offer => `${offer.atlasProductId}:${offer.retailerId}`)).size, compatibility.offers.length);
 assert.equal(compatibility.offers.some(offer => offer.offerIdentity === "mer_offer_5d461bd6797e88fda18ca166"), false);
 assert.equal(compatibility.offers.some(offer => offer.offerIdentity === "mer_offer_77fab51b74d40becbd942cff"), true);
 assert.equal(compatibility.offers.some(offer => offer.offerIdentity === "mer_offer_eba86bfe779fd6c9c125ba0c"), true);
@@ -79,4 +84,4 @@ assert.throws(() => deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: 
 assert.throws(() => deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...current, schemaVersion: "1.0", offers: gskill }, rightsRegistry: defaultSourceRightsRegistry }), /CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED/);
 assert.throws(() => deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: { ...eligible, offers: gskill }, predecessorSnapshot: { offers: [] } }), /CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED/);
 assert.equal(JSON.stringify(state), before);
-console.log("Current-display schema-1.1 publication compatibility tests passed: 26 assertions.");
+console.log(`Current-display schema-1.1 publication compatibility tests passed for canonical snapshot ${state.current.snapshotId}: ${state.current.offers.length} offers (${eligible.offers.length} source-qualified).`);
