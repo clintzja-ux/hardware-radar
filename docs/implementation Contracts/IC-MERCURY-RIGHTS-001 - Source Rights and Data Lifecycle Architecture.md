@@ -50,6 +50,14 @@ MVP-002 Increment 4 adds the code boundary but no production rights profile. A c
 - condition inference, delivered-cost claims with unknown costs, recommendation, and redistribution API: BLOCKED
 - current-display execution grants no historical admission, publication, Cheapest, Pick, release, or deployment authority
 
+### RAKUTEN_NEWEGG_PRODUCT_CATALOG
+- approved Newegg US Product Catalog import, local Current processing/cache, current observation, public display, and truthful same-product comparison: ALLOWED
+- normalized historical observation retention, historical lows/trends, derived analytics, and ranking/recommendation use: ALLOWED through their independent qualification and policy boundaries
+- previously collected History/analytics retention after Product Catalog approval or the advertiser relationship ends: ALLOWED
+- future acquisition after authorization ends, raw-feed redistribution/API, unrelated Rakuten advertiser inheritance, and offer-condition inference: NOT AUTHORIZED/BLOCKED or independently unresolved
+- the 36-hour Current TTL remains Hardware Radar freshness policy; it does not limit admitted normalized History
+- rights permission grants no automatic History admission, ranking, recommendation, publication, or release authority
+
 ### BEST_BUY_PRODUCTS_API
 Provisional profile pending Best Buy's written response:
 - API acquisition: ALLOWED as the approved technical mechanism

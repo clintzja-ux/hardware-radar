@@ -15,7 +15,7 @@ export class ProductionRakutenNeweggCurrentRefreshService {
     async run({ catalogFiles, feedTimestamp, evaluatedAt, dryRun = true } = {}) {
         if (!Array.isArray(catalogFiles) || !catalogFiles.length || !Number.isFinite(Date.parse(feedTimestamp)) || !Number.isFinite(Date.parse(evaluatedAt)) || typeof dryRun !== "boolean") throw new TypeError("RAKUTEN_CURRENT_REFRESH_INPUT_INVALID");
         const rights = this.rightsRegistry.require("RAKUTEN_NEWEGG_PRODUCT_CATALOG");
-        if (rights.acquisition?.import !== "ALLOWED" || rights.processing?.ephemeral !== "ALLOWED" || rights.retention?.current !== "ALLOWED" || rights.retention?.historical === "ALLOWED" || rights.live?.currentObservation !== "ALLOWED" || rights.live?.publicDisplay !== "ALLOWED" || rights.live?.comparison !== "ALLOWED") throw new Error("RAKUTEN_CURRENT_REFRESH_RIGHTS_BLOCKED");
+        if (rights.acquisition?.import !== "ALLOWED" || rights.processing?.ephemeral !== "ALLOWED" || rights.retention?.current !== "ALLOWED" || rights.live?.currentObservation !== "ALLOWED" || rights.live?.publicDisplay !== "ALLOWED" || rights.live?.comparison !== "ALLOWED") throw new Error("RAKUTEN_CURRENT_REFRESH_RIGHTS_BLOCKED");
         const [products, retailers, priorState] = await Promise.all([this.productRepository.getAll(), this.retailerRepository.getAll(), this.snapshotRepository.getState()]);
         const destinationSource = await this.destinationSourceLoader({ sourcePath: this.destinationSourcePath, products, retailers });
         const destinations = destinationSource.effective.filter(value => value.retailerId === "RETAILER-0004" && value.status === "ACTIVE");

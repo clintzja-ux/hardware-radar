@@ -29,7 +29,7 @@ function lanesFor({ atlasProductId, retailer, inventoryItem, destinationReady, r
   ];
   return [
     { lane: "MANUAL_NEWEGG", state: stateForManual(inventoryItem), maximumTasks: 0, maximumSpendUsd: 0 },
-    { lane: "RAKUTEN_NEWEGG", state: rakutenReadiness?.classification === "DETERMINISTIC_SINGLE_BINDING" ? destinationReady ? "ROUTINE_READY" : "READY_WITH_REVIEW" : rakutenReadiness?.classification === "MULTI_SKU_REVIEW_REQUIRED" ? "READY_WITH_REVIEW" : "BLOCKED", maximumTasks: 0, maximumSpendUsd: 0, historicalRetentionAllowed: false, readiness: rakutenReadiness ?? { classification: "NO_BINDING" }, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.RAKUTEN_NEWEGG }
+    { lane: "RAKUTEN_NEWEGG", state: rakutenReadiness?.classification === "DETERMINISTIC_SINGLE_BINDING" ? destinationReady ? "ROUTINE_READY" : "READY_WITH_REVIEW" : rakutenReadiness?.classification === "MULTI_SKU_REVIEW_REQUIRED" ? "READY_WITH_REVIEW" : "BLOCKED", maximumTasks: 0, maximumSpendUsd: 0, historicalRetentionAllowed: true, readiness: rakutenReadiness ?? { classification: "NO_BINDING" }, certification: AUTOMATED_CURRENT_LANE_CERTIFICATIONS.RAKUTEN_NEWEGG }
   ];
 }
 

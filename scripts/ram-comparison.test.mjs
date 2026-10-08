@@ -10,6 +10,7 @@ const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
 const catalog = createRamCatalogProjection(products);
+const publicCatalog = JSON.parse(await read("public/data/ram-catalog.json"));
 const [left, right] = catalog.products;
 
 assert.equal(RAM_COMPARISON_AUTHORITY, "DETERMINISTIC_FACTUAL_SPECIFICATION_COMPARISON");
@@ -80,7 +81,7 @@ const sitemap = await read("public/sitemap.xml");
 assert.equal((sitemap.match(/<loc>https:\/\/cheapestram\.com\/ram\/compare\/<\/loc>/g) ?? []).length, 1);
 assert.equal((sitemap.match(/<loc>https:\/\/cheapestram\.com\/ram\/compare\/\?products=/g) ?? []).length, 0);
 const detailRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]).filter((route) => !["/ram/compare/", "/ram/terminal/"].includes(route));
-assert.equal(detailRoutes.length, 103);
+assert.equal(detailRoutes.length, publicCatalog.productCount);
 
 const styles = await read("public/css/styles.css");
 assert.match(styles, /\.ram-comparison-table-wrap\{[^}]*overflow-x:auto/);

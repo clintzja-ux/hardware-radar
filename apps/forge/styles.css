@@ -964,6 +964,66 @@ input[readonly] {
     overflow-wrap: anywhere;
 }
 
+.amazon-destination-review-card {
+    display: grid;
+    gap: 14px;
+}
+
+.amazon-review-status,
+.amazon-review-checklist-status {
+    width: fit-content;
+    margin: 0;
+    padding: 5px 9px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+}
+
+.amazon-review-section {
+    display: grid;
+    gap: 7px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface-muted);
+}
+
+.amazon-review-section h5 {
+    margin: 0 0 4px;
+    font-size: .84rem;
+    letter-spacing: .06em;
+}
+
+.amazon-review-section a {
+    width: fit-content;
+    margin-top: 5px;
+    font-weight: 800;
+}
+
+.amazon-review-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+}
+
+.amazon-review-check input {
+    margin-top: 4px;
+}
+
+.amazon-review-section button,
+.amazon-review-section input,
+.amazon-review-section select {
+    max-width: 100%;
+}
+
+.review-stale .amazon-review-status,
+.review-blocked .amazon-review-status,
+.review-rejected .amazon-review-status {
+    color: var(--danger, #9f2f2f);
+}
+
 .review-workflow-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

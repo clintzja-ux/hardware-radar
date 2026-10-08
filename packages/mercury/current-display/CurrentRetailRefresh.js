@@ -25,7 +25,7 @@ function validateRegistration(registration) {
     if (typeof registration.supports !== "function" || typeof registration.refresh !== "function") throw new TypeError("CURRENT_RETAIL_SOURCE_ADAPTER_INVALID");
     if (registration.weakItemPriceAllowed !== undefined && typeof registration.weakItemPriceAllowed !== "boolean") throw new TypeError("CURRENT_RETAIL_SOURCE_ADAPTER_INVALID");
     const rights = registration.rights;
-    if (!rights || rights.acquisitionAllowed !== true || rights.ephemeralRetentionAllowed !== true || typeof rights.publicDisplayAllowed !== "boolean" || typeof rights.comparisonAllowed !== "boolean" || rights.historicalRetentionAllowed !== false) throw new TypeError("CURRENT_RETAIL_SOURCE_RIGHTS_INVALID");
+    if (!rights || rights.acquisitionAllowed !== true || rights.ephemeralRetentionAllowed !== true || typeof rights.publicDisplayAllowed !== "boolean" || typeof rights.comparisonAllowed !== "boolean" || typeof rights.historicalRetentionAllowed !== "boolean") throw new TypeError("CURRENT_RETAIL_SOURCE_RIGHTS_INVALID");
 }
 
 export function createCurrentRetailRefreshPortfolio({ products, destinations, retailers = [], adapters, asOf } = {}) {
@@ -69,7 +69,7 @@ function normalizedObservation(result, item, adapter, operationId) {
         matchStatus: "CANONICAL_DESTINATION_REFRESH", sourceRow: operationId,
         observedAt: result.observedAt, sellerType: result.sellerType ?? null, sellerName: result.sellerName ?? null,
         listingIdentity: result.listingIdentity ?? null, sourceLocalSellerId: result.sourceLocalSellerId ?? null, sellerProfileUrl: result.sellerProfileUrl ?? null,
-        sourceIdentity: { adapterId: adapter.adapterId, sourceId: result.sourceId, rightsProfileId: adapter.rights.profileId, historicalRetentionAllowed: false },
+        sourceIdentity: { adapterId: adapter.adapterId, sourceId: result.sourceId, rightsProfileId: adapter.rights.profileId, historicalRetentionAllowed: adapter.rights.historicalRetentionAllowed },
         sourceEvidence: result.sourceEvidence ? structuredClone(result.sourceEvidence) : null,
         ...eligibility
     };

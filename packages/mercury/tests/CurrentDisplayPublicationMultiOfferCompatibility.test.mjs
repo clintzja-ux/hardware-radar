@@ -1,29 +1,35 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { deriveCurrentDisplayPublicationEligibleSnapshot, deriveLegacySingleOfferPublicationCompatibilitySnapshot } from "../publication/CurrentDisplayPublication.js";
+import { FileCurrentDisplaySnapshotRepository } from "../current-display/FileCurrentDisplaySnapshotRepository.js";
 import { defaultSourceRightsRegistry } from "../rights/SourceRightsRegistry.js";
 import { loadStaticPublicationContinuityProjection } from "../../../scripts/static-publication-release-runtime.mjs";
 import { createStaticPublicationReleaseManifest } from "../../sentinel/validators/StaticPublicationReleaseControl.js";
 
 const state = JSON.parse(await readFile(".forge-review/retail-display/current-display-snapshots.json", "utf8"));
+const canonicalState = await new FileCurrentDisplaySnapshotRepository({ statePath: ".forge-review/retail-display/current-display-snapshots.json" }).getState();
 const publicationContinuity = await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" });
 const publishedProjection = publicationContinuity.projection;
 const before = JSON.stringify(state);
 const current = { ...state.current, offers: state.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) };
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: current, rightsRegistry: defaultSourceRightsRegistry });
+const continuityTransitions=[];
+for(const file of await readdir(".forge-review/mercury/rakuten-full-current-refresh")){if(!file.startsWith("mer_rakutenfullprep_")||!file.endsWith(".json"))continue;const preparation=JSON.parse(await readFile(`.forge-review/mercury/rakuten-full-current-refresh/${file}`,"utf8"));for(const member of preparation.members??[])if(member?.priorOffer&&member?.offer)continuityTransitions.push({priorOffer:member.priorOffer,offer:member.offer});}
 assert.equal(current.schemaVersion, "1.1");
-assert.equal(state.current.offers.length, 189);
-assert.equal(current.offers.length, 117);
-assert.equal(eligible.offers.length, 117);
+assert.deepEqual(state, canonicalState);
+assert.notEqual(state.current.snapshotId, state.previous.snapshotId);
+assert.equal(new Set(state.current.offers.map(offer => offer.offerIdentity)).size, state.current.offers.length);
+assert.equal(current.offers.length, state.current.offers.filter(offer => offer?.sourceIdentity?.sourceId).length);
+assert.equal(eligible.offers.length, current.offers.length);
 
 const gskill = eligible.offers.filter(offer => offer.atlasProductId === "ram_g_skill_f5_5600s4645a16gx2_rs" && offer.retailerId === "RETAILER-0004");
-assert.deepEqual(gskill.map(offer => offer.offerIdentity).sort(), ["mer_offer_5d461bd6797e88fda18ca166", "mer_offer_e7e945f7f97c4741a63ee2db"].sort());
+assert.deepEqual(gskill.map(offer => offer.offerIdentity).sort(), ["mer_offer_5d461bd6797e88fda18ca166", "mer_offer_77fab51b74d40becbd942cff"].sort());
 assert.equal(new Set(gskill.map(offer => offer.destinationId)).size, 1);
 assert.equal(gskill.find(offer => offer.offerIdentity === "mer_offer_5d461bd6797e88fda18ca166").seller.identityState, "UNKNOWN");
 assert.equal(gskill.find(offer => offer.offerIdentity === "mer_offer_5d461bd6797e88fda18ca166").listingIdentity, "9SIA1K6KCT0998");
-assert.equal(new Set(gskill.map(offer => offer.sourceIdentity.sourceId)).size, 2);
+assert.equal(new Set(gskill.map(offer => offer.sourceIdentity.sourceId)).size, 1);
 
 const crucial = eligible.offers.filter(offer => offer.atlasProductId === "ram_crucial_ct2k32g4sfd832a" && offer.offerIdentity === "mer_offer_eba86bfe779fd6c9c125ba0c");
 assert.equal(crucial.length, 1);
@@ -32,16 +38,22 @@ assert.equal(crucial[0].priceUsd, 439.12);
 assert.equal(crucial[0].seller.sellerName, "TECH_JUNKIE");
 assert.equal(crucial[0].listingIdentity, "9SIB3T1KSA7837");
 
-const compatibility = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: state.previous, publishedProjection });
-assert.equal(compatibility.offers.length, 116);
-assert.equal(compatibility.offers.some(offer => offer.offerIdentity === "mer_offer_e7e945f7f97c4741a63ee2db"), true);
+const compatibility = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: state.previous, publishedProjection, continuityTransitions });
+assert.equal(compatibility.offers.length, new Set(eligible.offers.map(offer => `${offer.atlasProductId}:${offer.retailerId}`)).size);
+assert.equal(new Set(compatibility.offers.map(offer => `${offer.atlasProductId}:${offer.retailerId}`)).size, compatibility.offers.length);
 assert.equal(compatibility.offers.some(offer => offer.offerIdentity === "mer_offer_5d461bd6797e88fda18ca166"), false);
+assert.equal(compatibility.offers.some(offer => offer.offerIdentity === "mer_offer_77fab51b74d40becbd942cff"), true);
 assert.equal(compatibility.offers.some(offer => offer.offerIdentity === "mer_offer_eba86bfe779fd6c9c125ba0c"), true);
 
 const continuityProjection={products:[{offers:[{atlasProductId:gskill[1].atlasProductId,retailerId:gskill[1].retailerId,destinationId:gskill[1].destinationId,itemPriceUsd:gskill[1].priceUsd,observedAt:gskill[1].observedAt}]}]};
 const continuity=deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:{offers:gskill},publishedProjection:continuityProjection});
 assert.equal(continuity.offers.length,1);
 assert.equal(continuity.offers[0].offerIdentity,gskill[1].offerIdentity);
+
+const predecessorOffer={atlasProductId:gskill[1].atlasProductId,retailerId:gskill[1].retailerId,destinationId:gskill[1].destinationId,priceUsd:586.98,observedAt:"2026-09-30T21:15:00-05:00",offerIdentity:"mer_offer_legacy_fixture"};
+const transitionedProjection={products:[{offers:[{atlasProductId:predecessorOffer.atlasProductId,retailerId:predecessorOffer.retailerId,destinationId:predecessorOffer.destinationId,itemPriceUsd:predecessorOffer.priceUsd,observedAt:predecessorOffer.observedAt}]}]};
+const transitioned=deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:{offers:gskill},publishedProjection:transitionedProjection,continuityTransitions:[{priorOffer:predecessorOffer,offer:gskill[1]}]});
+assert.equal(transitioned.offers[0].offerIdentity,gskill[1].offerIdentity);
 
 const postBuildProjection={products:publishedProjection.products.filter(product=>product.atlasProductId!==gskill[0].atlasProductId)};
 assert.throws(()=>deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:{offers:gskill},publishedProjection:postBuildProjection}),/CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED/);
@@ -54,7 +66,7 @@ try{
   const activeRelease=publicationContinuity.release;
   const activeArtifactText=await readFile(`config/${activeRelease.artifact.relativePath}`,"utf8");
   const activeManifest=createStaticPublicationReleaseManifest({releaseState:"ON",targetEnvironment:activeRelease.targetEnvironment,targetSurface:activeRelease.targetSurface,reason:"canonical predecessor fixture",reviewedBy:"fixture",createdAt:activeRelease.certification.certifiedAt,artifactRelativePath:activeRelease.artifact.relativePath,artifactText:activeArtifactText,authorityReference:activeRelease.certification.authorityReference});
-  const candidateRoot=".forge-review/publication/ram-intelligence/mer_ramreleasecand_aa1c2eebf59372c9e68608c9";
+  const candidateRoot=process.env.HARDWARE_RADAR_REPLACEMENT_CANDIDATE_ROOT??".forge-review/publication/ram-intelligence/mer_ramreleasecand_aa1c2eebf59372c9e68608c9";
   const candidateManifest=JSON.parse(await readFile(`${candidateRoot}/manifest.json`,"utf8"));
   const candidateCertification=JSON.parse(await readFile(`${candidateRoot}/certification.json`,"utf8"));
   const fileTexts=Object.fromEntries(await Promise.all(Object.entries(candidateManifest.files).map(async([name,binding])=>[name,await readFile(`${candidateRoot}/${binding.file}`,"utf8")])));
@@ -64,12 +76,12 @@ try{
   await writeFile(path.join(lineageRoot,replacement.artifact.relativePath),candidateBundleText);
   await writeFile(path.join(lineageRoot,"release.json"),`${JSON.stringify(replacement)}\n`);
   const afterReplacement=(await loadStaticPublicationContinuityProjection({manifestPath:path.join(lineageRoot,"release.json")})).projection;
-  const realContinuity=deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:state.previous,publishedProjection:afterReplacement});
-  assert.equal(realContinuity.offers[0].offerIdentity,"mer_offer_e7e945f7f97c4741a63ee2db");
+  const realContinuity=deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:state.previous,publishedProjection:afterReplacement,continuityTransitions});
+  assert.equal(realContinuity.offers[0].offerIdentity,"mer_offer_77fab51b74d40becbd942cff");
 }finally{await rm(lineageRoot,{recursive:true,force:true});}
 
 assert.throws(() => deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...current, offers: [gskill[0], gskill[0]] }, rightsRegistry: defaultSourceRightsRegistry }), /CURRENT_DISPLAY_OFFER_DUPLICATE/);
 assert.throws(() => deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...current, schemaVersion: "1.0", offers: gskill }, rightsRegistry: defaultSourceRightsRegistry }), /CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED/);
 assert.throws(() => deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: { ...eligible, offers: gskill }, predecessorSnapshot: { offers: [] } }), /CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED/);
 assert.equal(JSON.stringify(state), before);
-console.log("Current-display schema-1.1 publication compatibility tests passed: 26 assertions.");
+console.log(`Current-display schema-1.1 publication compatibility tests passed for canonical snapshot ${state.current.snapshotId}: ${state.current.offers.length} offers (${eligible.offers.length} source-qualified).`);

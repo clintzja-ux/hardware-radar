@@ -132,6 +132,47 @@ const profiles = Object.freeze({
     acquisition: { api: RIGHTS_STATES.BLOCKED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.ALLOWED },
     processing: { ephemeral: RIGHTS_STATES.ALLOWED },
     live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
+    retention: { storageClass: "CURRENT_WITH_DURABLE_HISTORICAL_FACTS", contentTtlMs: 36 * HOUR, current: RIGHTS_STATES.ALLOWED, historical: RIGHTS_STATES.ALLOWED, durableAuditMetadata: RIGHTS_STATES.ALLOWED, previouslyCollectedAfterRelationshipEnds: RIGHTS_STATES.ALLOWED },
+    derivation: { analytics: RIGHTS_STATES.ALLOWED, offerCondition: RIGHTS_STATES.CLARIFICATION_REQUIRED, historicalAnalytics: RIGHTS_STATES.ALLOWED, recommendation: RIGHTS_STATES.ALLOWED },
+    distribution: { api: RIGHTS_STATES.BLOCKED },
+    presentation: { attribution: RIGHTS_STATES.CONDITIONAL },
+    provenance: {
+      program: "RAKUTEN_ADVERTISING_NEWEGG_PRODUCT_CATALOG",
+      relationshipEvidence: "OPERATOR_SUPPLIED_NEWEGG_SUPPORT_PRODUCT_CATALOG_RIGHTS_CLARIFICATION_2026_10_03",
+      references: [
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/4412243602189-Product-Catalog-Overview",
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/7145964532877-Data-Feeds",
+        "https://pubhelp.rakutenadvertising.com/hc/en-us/articles/4412243880333-Download-Product-Catalog-Data-Feed-Files"
+      ],
+      retailerId: "RETAILER-0004",
+      advertiser: "NEWEGG",
+      market: "US",
+      feedFamily: "PRODUCT_CATALOG",
+      scope: "APPROVED_NEWEGG_US_PRODUCT_CATALOG_CURRENT_HISTORY_AND_ANALYTICS",
+      evidenceType: "OPERATOR_SUPPLIED_PROVIDER_SUPPORT_CLARIFICATION",
+      evidenceSummary: [
+        "CURRENT_PRODUCT_AND_PRICE_DISPLAY_ALLOWED",
+        "TRUTHFUL_SAME_PRODUCT_CROSS_RETAILER_CURRENT_PRICE_COMPARISON_ALLOWED",
+        "RANKING_AND_RECOMMENDATION_USE_ALLOWED",
+        "LOCAL_CURRENT_DATA_PROCESSING_AND_CACHE_ALLOWED_WITH_TIMESTAMP_RECOMMENDED",
+        "SUCCESSIVE_PRICE_OBSERVATION_HISTORY_LOW_AND_TREND_RETENTION_ALLOWED",
+        "AGGREGATED_AND_DERIVED_ANALYTICS_RETENTION_AND_PUBLIC_DISPLAY_ALLOWED",
+        "PREVIOUSLY_COLLECTED_HISTORY_AND_DERIVED_ANALYTICS_RETENTION_AFTER_RELATIONSHIP_END_ALLOWED"
+      ],
+      rawPayloadPolicy: "EXISTING_BOUNDED_PROVIDER_POLICY_UNCHANGED",
+      futureAcquisitionAfterRelationshipEnds: "NOT_AUTHORIZED",
+      unsupported: ["RAW_FEED_REDISTRIBUTION_API", "OFFER_CONDITION_INFERENCE", "UNRELATED_RAKUTEN_ADVERTISERS", "FUTURE_ACQUISITION_AFTER_RELATIONSHIP_END"]
+    },
+    status: "NEWEGG_SUPPORT_HISTORY_ANALYTICS_RIGHTS_CERTIFIED_2026_10"
+  })
+});
+
+const historicalProfiles = Object.freeze([
+  Object.freeze({
+    sourceId: "RAKUTEN_NEWEGG_PRODUCT_CATALOG", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
+    acquisition: { api: RIGHTS_STATES.BLOCKED, manual: RIGHTS_STATES.BLOCKED, import: RIGHTS_STATES.ALLOWED },
+    processing: { ephemeral: RIGHTS_STATES.ALLOWED },
+    live: { currentObservation: RIGHTS_STATES.ALLOWED, publicDisplay: RIGHTS_STATES.ALLOWED, comparison: RIGHTS_STATES.ALLOWED },
     retention: { storageClass: "EPHEMERAL_CURRENT", contentTtlMs: 36 * HOUR, current: RIGHTS_STATES.ALLOWED, historical: RIGHTS_STATES.BLOCKED, durableAuditMetadata: RIGHTS_STATES.CONDITIONAL },
     derivation: { analytics: RIGHTS_STATES.BLOCKED, offerCondition: RIGHTS_STATES.CLARIFICATION_REQUIRED, historicalAnalytics: RIGHTS_STATES.BLOCKED, recommendation: RIGHTS_STATES.BLOCKED },
     distribution: { api: RIGHTS_STATES.BLOCKED },
@@ -148,10 +189,7 @@ const profiles = Object.freeze({
       unsupported: ["HISTORICAL_RETENTION", "DERIVED_ANALYTICS", "RECOMMENDATION", "REDISTRIBUTION_API", "OFFER_CONDITION_INFERENCE"]
     },
     status: "APPROVED_CURRENT_COMMERCE_2026_09"
-  })
-});
-
-const historicalProfiles = Object.freeze([
+  }),
   Object.freeze({
     sourceId: "NEWEGG_MANUAL_PUBLISHER_OBSERVATION", schemaVersion: SOURCE_RIGHTS_SCHEMA_VERSION,
     acquisition: { api: RIGHTS_STATES.BLOCKED, manual: RIGHTS_STATES.ALLOWED, import: RIGHTS_STATES.BLOCKED },

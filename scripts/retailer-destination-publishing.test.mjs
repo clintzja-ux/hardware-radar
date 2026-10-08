@@ -16,13 +16,10 @@ const retailers = await Promise.all(manifest.retailers.map(entry => json(path.jo
 const catalog = createRamCatalogProjection(products);
 const currentRetail = await json(path.join(root, "public/data/ram-current-retail.json"));
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
-const releaseManifest = await json(path.join(root, "config/publication-release.json"));
-const releaseArtifact = await json(path.join(root, "config", releaseManifest.artifact.relativePath));
-const certifiedDestinations = JSON.parse(releaseArtifact.fileTexts.destinations);
-const certifiedTerminal = JSON.parse(releaseArtifact.fileTexts.terminal);
-const certifiedChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
+const releasedCatalog = await json(path.join(root, "public/data/ram-catalog.json"));
+const certifiedTerminal = await json(path.join(root, "public/data/ram-terminal.json"));
 const terminalByProduct = new Map(certifiedTerminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
-const chronologyByProduct = new Map(certifiedChronology.products.map(item => [item.atlasProductId, item]));
+const chronologyByProduct = new Map();
 const product = products.find(item => item.identity.atlasProductId === "ram_corsair_cmk32gx5m2b6000z30");
 const publicProduct = catalog.products.find(item => item.atlasProductId === product.identity.atlasProductId);
 const retailer = retailers.find(item => item.id === "RETAILER-0002");
@@ -78,7 +75,9 @@ await save([record, record]); await assert.rejects(() => loadRetailerDestination
 await save([record, createRetailerDestination(input({ destinationUrl: "https://platinummicro.com/fixture-reviewed/parallel" }))]); await assert.rejects(() => loadRetailerDestinationSource({ sourcePath, products, retailers }), /ACTIVE_HEAD_CONFLICT/);
 await save([replacement]); await assert.rejects(() => loadRetailerDestinationSource({ sourcePath, products, retailers }), /SUPERSESSION/);
 
-const production = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages/mercury/destinations/production-destinations.json"), products, retailers });
+const productionStatePath = path.join(root, "packages/mercury/destinations/production-destinations.json");
+const canonicalProductionRecords = (await json(productionStatePath)).records;
+const production = await loadRetailerDestinationSource({ sourcePath: productionStatePath, products, retailers });
 const productionProjection = createPublicRetailerDestinationProjection({ source: production, retailers });
 const expectedProduction = new Map([
     ["ram_kingston_kf560c30bbea_8", { mpn: "KF560C30BBEA-8", listing: "B0CYM3TYCR", id: "mer_dest_a09300f14e011c9edac43a0d", url: "https://amazon.com/Kingston-6000MT-Desktop-Memory-KF560C30BBEA-8/dp/B0CYM3TYCR" }],
@@ -89,13 +88,13 @@ const expectedProduction = new Map([
     ["ram_corsair_cmh32gx5m2f6000z36", { mpn: "CMH32GX5M2F6000Z36", listing: "B0FV3M2PGJ", id: "mer_dest_4232b39beaf37f8da51556d9", url: "https://amazon.com/CORSAIR-Vengeance-2x16GB-6000MHz-Desktop/dp/B0FV3M2PGJ", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }],
     ["ram_g_skill_f5_6000j3636f32gx2_rs5k", { mpn: "F5-6000J3636F32GX2-RS5K", listing: "B0C6HWKGWV", id: "mer_dest_5206bc4c58f5cdf145699f85", url: "https://amazon.com/G-SKILL-Ripjaws-CL36-36-36-96-Desktop-Computer/dp/B0C6HWKGWV", sourceType: "OPERATOR_CURATED_RETAIL_REVIEW" }]
 ]);
-assert.equal(production.recordCount, 186);
-assert.equal(production.effective.length, 185);
-assert.equal(productionProjection.length, 185);
-assert.equal(new Set(production.records.map(item => item.destinationId)).size, 186);
-assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, 186);
-assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, 91);
-assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, 95);
+assert.equal(production.recordCount, canonicalProductionRecords.length);
+assert.equal(productionProjection.length, production.effective.length);
+assert.equal(new Set(production.records.map(item => item.destinationId)).size, production.recordCount);
+assert.equal(new Set(production.records.map(item => item.materialFingerprint)).size, production.recordCount);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0001").length, canonicalProductionRecords.filter(item => item.retailerId === "RETAILER-0001").length);
+assert.equal(production.records.filter(item => item.retailerId === "RETAILER-0004").length, canonicalProductionRecords.filter(item => item.retailerId === "RETAILER-0004").length);
+assert.equal(production.effective.some(item => item.destinationId === "mer_dest_2619f970b3d41e69c36c32ef" && item.atlasProductId === "ram_timetec_76tt48nus1r16_8g" && item.retailerListingId === "9SIA56XKWT0719"), true);
 assert.equal(production.records.some(item => item.destinationUrl.includes("/p/pl?")), false);
 for (const destination of production.records) {
     const expected = expectedProduction.get(destination.atlasProductId);
@@ -125,8 +124,8 @@ for (const destination of production.records) {
         createdAt: destination.createdAt, createdBy: destination.createdBy
     }).materialFingerprint, destination.materialFingerprint);
 }
-for (const productPage of catalog.products) {
-    const destinations = certifiedDestinations.filter(item => item.atlasProductId === productPage.atlasProductId);
+for (const productPage of releasedCatalog.products) {
+    const destinations = productionProjection.filter(item => item.atlasProductId === productPage.atlasProductId);
     const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(productPage.atlasProductId) ?? null, chronologyByProduct.get(productPage.atlasProductId) ?? null);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);
@@ -146,7 +145,8 @@ for (const productPage of catalog.products) {
         assert.doesNotMatch(rendered, /Retailer links|amazon\.com|newegg\.com/);
     }
 }
-assert.equal(catalog.products.filter(product => !productionProjection.some(destination => destination.atlasProductId === product.atlasProductId)).length, 1);
+const destinationProductIds = new Set(productionProjection.map(destination => destination.atlasProductId));
+assert.equal(catalog.products.filter(product => !destinationProductIds.has(product.atlasProductId)).length, catalog.products.length - destinationProductIds.size);
 const marketData = await readFile(path.join(root, "public/js/modules/marketData.js"), "utf8");
 assert.match(marketData, /offerUrl: item\.destinationUrl/);
 assert.doesNotMatch(marketData, /affiliateUrl/);

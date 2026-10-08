@@ -5,9 +5,10 @@ import { formatHistorySpan, formatMarketDate, formatMovement, formatProductName,
 
 const read = path => readFile(path, "utf8");
 const artifact = JSON.parse(await read("public/data/ram-terminal.json"));
+const catalog = JSON.parse(await read("public/data/ram-catalog.json"));
 const [html, script, styles, sitemap, footer] = await Promise.all([read("public/ram/terminal/index.html"), read("public/js/modules/ramTerminal.js"), read("public/css/styles.css"), read("public/sitemap.xml"), read("public/js/modules/renderFooter.js")]);
 assert.equal(validateRamTerminalPublicIntelligence(artifact).valid, true);
-assert.equal(artifact.lenses.ALL_RAM.coverage.productsTracked, 103);
+assert.equal(artifact.lenses.ALL_RAM.coverage.productsTracked, catalog.productCount);
 assert.equal((html.match(/<h1>/g) ?? []).length, 1);
 assert.match(html, /<h1>RAM Market Terminal<\/h1>/);
 assert.match(html, /role="tablist"/);

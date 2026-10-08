@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_lexar_ld5s16g56c46st_bgs",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 2,
+    "createdAt": "2026-10-05T00:00:00.000Z",
+    "updatedAt": "2026-10-05T00:00:00.000Z",
+    "createdBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+    "updatedBy": "human:Clinton_Ramsook",
+    "brand": "Lexar",
+    "manufacturer": "Lexar Co., Ltd.",
+    "productFamily": "DDR5 Standard SODIMM",
+    "series": null,
+    "modelName": "DDR5 Standard SODIMM LD5S16G56C46ST-BGS",
+    "manufacturerPartNumber": "LD5S16G56C46ST-BGS",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Lexar DDR5 Standard SODIMM 16GB (1×16GB) 5600 MT/s",
+    "slug": "lexar-ld5s16g56c46st-bgs"
+  },
+  "governance": {
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": false,
+    "reviewedBy": "human:Clinton_Ramsook",
+    "reviewedAt": "2026-10-05T00:00:00.000Z",
+    "changeReason": "ATLAS_RAM_MANUFACTURER_FIRST_COHORT_LIFECYCLE_REVIEW_AND_ACTIVATION_P1 operator-approved lifecycle review; no retailer, market, destination, publication, or release authority implied.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-LEXAR-LD5S16G56C46ST_BGS-AMFCA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://resources.lexar.com/download/1561/data-sheet/14776/lexar-ddr5-standard-so-dimm-memory-datasheet-48005600.pdf",
+          "publisher": "Lexar",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-LEXAR-LD5S16G56C46ST_BGS-AMFCA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://resources.lexar.com/download/1561/data-sheet/14776/lexar-ddr5-standard-so-dimm-memory-datasheet-48005600.pdf",
+          "publisher": "Lexar",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-LEXAR-LD5S16G56C46ST_BGS-AMFCA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://resources.lexar.com/download/1561/data-sheet/14776/lexar-ddr5-standard-so-dimm-memory-datasheet-48005600.pdf",
+          "publisher": "Lexar",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-LEXAR-LD5S16G56C46ST_BGS-AMFCA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://resources.lexar.com/download/1561/data-sheet/14776/lexar-ddr5-standard-so-dimm-memory-datasheet-48005600.pdf",
+          "publisher": "Lexar",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-LEXAR-LD5S16G56C46ST_BGS-AMFCA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://resources.lexar.com/download/1561/data-sheet/14776/lexar-ddr5-standard-so-dimm-memory-datasheet-48005600.pdf",
+          "publisher": "Lexar",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-LEXAR-LD5S16G56C46ST_BGS-AMFCA",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://resources.lexar.com/download/1561/data-sheet/14776/lexar-ddr5-standard-so-dimm-memory-datasheet-48005600.pdf",
+          "publisher": "Lexar",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-05T00:00:00.000Z",
+          "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and canonical RAM specification verified from first-party material; retailer identity is separate and is not product-truth authority."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-05T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": false,
+        "gamingPositioning": false,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 5600,
+        "baseJedecDataRateMtps": 5600,
+        "speedLabel": "DDR5-5600",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 44.8
+      },
+      "electrical": {
+        "ratedVoltage": 1.1,
+        "baseVoltage": 1.1,
+        "pmicLocation": "ON_MODULE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

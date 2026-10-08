@@ -5,6 +5,9 @@ import path from "node:path";
 import { validateRakutenProductCatalogGzip } from "./RakutenProductCatalogParser.js";
 import { redactRakutenSftpError } from "./RakutenSftpConfig.js";
 import { createRakutenSftpConnectionAccounting } from "./RakutenSftpConnectionAccounting.js";
+import { RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS } from "./NativeSftpSession.js";
+
+export { RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS };
 
 export const RAKUTEN_SFTP_MAX_CONNECTIONS = 5;
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
@@ -17,7 +20,6 @@ const sha256File=async filePath=>{const hash=crypto.createHash("sha256");for awa
 const validateStagedFile=async(filePath,feedProfile,feedFamilyKey)=>validateRakutenProductCatalogGzip(createReadStream(filePath),{feedProfile,feedFamilyKey,collectRecords:false,diagnosticInputFactory:()=>createReadStream(filePath)});
 
 export const RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS=60000;
-export const RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS=1800000;
 export const RAKUTEN_SFTP_LIST_TIMEOUT_MS=30000;
 
 export async function inspectRakutenStalePartials(stagingRoot,{asOf=new Date().toISOString()}={}){

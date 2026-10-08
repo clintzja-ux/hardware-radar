@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_pny_md32gk2d5560046_tb",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 2,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-05T00:04:19.402Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+    "updatedBy": "human:Clinton_Ramsook",
+    "brand": "PNY",
+    "manufacturer": "PNY Technologies, Inc.",
+    "productFamily": "Performance",
+    "series": null,
+    "modelName": "Performance MD32GK2D5560046-TB",
+    "manufacturerPartNumber": "MD32GK2D5560046-TB",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "PNY Performance DDR5 32GB (2×16GB) 5600 MT/s",
+    "slug": "pny-md32gk2d5560046-tb"
+  },
+  "governance": {
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": false,
+    "reviewedBy": "human:Clinton_Ramsook",
+    "reviewedAt": "2026-10-05T00:04:19.402Z",
+    "changeReason": "ATLAS_RAM_COVERAGE_EXPANSION_BATCH_A_LIFECYCLE_REVIEW_AND_ACTIVATION_P1 operator-approved lifecycle review; no acquisition, market, destination, publication, or release authority implied.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D5560046_TB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/performance-5600-mhz-desktop-memory?SKU=MD32GK2D5560046-TB",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D5560046_TB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/performance-5600-mhz-desktop-memory?SKU=MD32GK2D5560046-TB",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D5560046_TB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/performance-5600-mhz-desktop-memory?SKU=MD32GK2D5560046-TB",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D5560046_TB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/performance-5600-mhz-desktop-memory?SKU=MD32GK2D5560046-TB",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D5560046_TB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/performance-5600-mhz-desktop-memory?SKU=MD32GK2D5560046-TB",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-PNY-MD32GK2D5560046_TB-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.pny.com/performance-5600-mhz-desktop-memory?SKU=MD32GK2D5560046-TB",
+          "publisher": "PNY",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": true,
+        "gamingPositioning": true,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 5600,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR5-5600",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 44.8
+      },
+      "electrical": {
+        "ratedVoltage": null,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

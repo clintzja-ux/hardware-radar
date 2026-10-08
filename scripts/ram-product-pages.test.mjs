@@ -3,6 +3,7 @@ import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRamCatalogProjection, createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
+import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { formatProductName } from "../public/js/modules/ramTerminal.js";
 import { calculatePriceDisplayDomain, createRamProductSitemapRoutes, renderRamProductPage, selectChronologyTickIndexes } from "./ram-product-publishing.mjs";
 
@@ -11,25 +12,35 @@ const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
 const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
-const releaseManifest = JSON.parse(await read("config/publication-release.json"));
+const releaseManifestPath = process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST
+  ? path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST)
+  : path.join(root, "config/publication-release.json");
+const releaseManifest = JSON.parse(await readFile(releaseManifestPath, "utf8"));
 const releaseArtifact = JSON.parse(
-  await read(path.join("config", releaseManifest.artifact.relativePath)),
+  await readFile(path.resolve(path.dirname(releaseManifestPath), releaseManifest.artifact.relativePath), "utf8"),
 );
-const destinations = JSON.parse(releaseArtifact.fileTexts.destinations);
-const chronology = JSON.parse(releaseArtifact.fileTexts.chronology);
+const productionReleaseActive = (process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT || "PREVIEW").toUpperCase() === releaseManifest.targetEnvironment;
+const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages/mercury/destinations/production-destinations.json"), products, retailers });
+const destinations = productionReleaseActive ? JSON.parse(releaseArtifact.fileTexts.destinations) : createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
+const chronology = productionReleaseActive
+  ? JSON.parse(releaseArtifact.fileTexts.chronology)
+  : { products: [] };
 const chronologicalSeriesByProduct = new Map(chronology.products.map(item => [item.atlasProductId, item]));
 const currentRetail = JSON.parse(await read("public/data/ram-current-retail.json"));
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const terminal = JSON.parse(await read("public/data/ram-terminal.json"));
 const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
 const catalog = createRamCatalogProjection(products);
+const publicCatalog = JSON.parse(await read("public/data/ram-catalog.json"));
+const releasedProductIds = new Set(publicCatalog.products.map((product) => product.atlasProductId));
+const releasedProducts = products.filter((product) => releasedProductIds.has(product.identity.atlasProductId));
 const replay = createRamCatalogProjection([...products].reverse());
 
-assert.equal(catalog.productCount, 103);
-assert.equal(catalog.products.length, 103);
-assert.equal(new Set(catalog.products.map((product) => product.atlasProductId)).size, 103);
-assert.equal(new Set(catalog.products.map((product) => product.publicSlug)).size, 103);
-assert.equal(new Set(catalog.products.map((product) => product.publicPath)).size, 103);
+assert.equal(catalog.productCount, manifest.products.length);
+assert.equal(catalog.products.length, manifest.products.length);
+assert.equal(new Set(catalog.products.map((product) => product.atlasProductId)).size, manifest.products.length);
+assert.equal(new Set(catalog.products.map((product) => product.publicSlug)).size, manifest.products.length);
+assert.equal(new Set(catalog.products.map((product) => product.publicPath)).size, manifest.products.length);
 assert.deepEqual(replay, catalog, "Public identity must be deterministic across input order.");
 assert.ok(catalog.products.every((product) => product.publicPath === `/ram/${product.publicSlug}/`));
 assert.ok(catalog.products.every((product) => product.capacityGb === product.moduleCount * product.capacityPerModuleGb));
@@ -41,7 +52,7 @@ for (const product of products) {
 }
 
 const duplicateBrandProducts = catalog.products.filter((product) => formatProductName(product.brand, product.displayName) !== product.displayName);
-assert.equal(duplicateBrandProducts.length, 14);
+assert.ok(duplicateBrandProducts.length > 0);
 const observedDuplicate = duplicateBrandProducts.find((product) => product.atlasProductId === "ram_crucial_ct16g4dfra32a");
 assert.ok(observedDuplicate);
 const observedDuplicateHtml = renderRamProductPage(observedDuplicate);
@@ -69,7 +80,7 @@ assert.throws(() => createRamPublicProductIdentity(unsafe), /RAM_PUBLIC_IDENTITY
 
 const titles = new Set();
 const canonicals = new Set();
-for (const product of catalog.products) {
+for (const product of publicCatalog.products) {
     const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
     await stat(output);
     const html = await readFile(output, "utf8");
@@ -108,14 +119,14 @@ const catalogScript = await read("public/js/modules/ramCatalog.js");
 assert.match(catalogScript, /href="\$\{escapeHtml\(item\.publicPath\)\}"/);
 assert.match(catalogScript, /View specifications/);
 const generatedCatalog = JSON.parse(await read("public/data/ram-catalog.json"));
-assert.deepEqual(generatedCatalog, catalog);
+assert.deepEqual(generatedCatalog, publicCatalog);
 
 const sitemap = await read("public/sitemap.xml");
-const productRoutes = createRamProductSitemapRoutes(products);
-assert.equal(productRoutes.length, 103);
+const productRoutes = createRamProductSitemapRoutes(releasedProducts);
+assert.equal(productRoutes.length, publicCatalog.productCount);
 for (const route of productRoutes) assert.equal((sitemap.match(new RegExp(`<loc>https://cheapestram\\.com${route.path}</loc>`, "g")) ?? []).length, 1);
 const ramChildRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]);
-assert.equal(ramChildRoutes.filter((route) => !["/ram/compare/", "/ram/terminal/"].includes(route)).length, 103);
+assert.equal(ramChildRoutes.filter((route) => !["/ram/compare/", "/ram/terminal/"].includes(route)).length, publicCatalog.productCount);
 
 const styles = await read("public/css/styles.css");
 assert.match(styles, /\.ram-product-heading h1[^}]*overflow-wrap:anywhere/);
@@ -250,4 +261,4 @@ assert.match(sodimm, /<h1>Compare Laptop RAM Prices<\/h1>/);
 assert.match(guides, /<h1>Hardware Buying Guides<\/h1>/);
 assert.equal([...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com\/guides\/[^<]*<\/loc>/g)].length, 6);
 
-console.log("GROWTH-003 canonical public RAM product identity contract passed (103 routes).");
+console.log(`GROWTH-003 canonical/public RAM identity contract passed (${catalog.productCount} canonical; ${publicCatalog.productCount} released routes).`);

@@ -1,0 +1,23 @@
+{
+  "brandId": "BRAND-TIMETEC",
+  "schemaVersion": "1.0.0",
+  "slug": "timetec",
+  "displayName": "Timetec",
+  "legalName": "Timetec International Inc.",
+  "country": "United States",
+  "website": "https://timetecinc.com/",
+  "manufacturerType": "HARDWARE_MANUFACTURER",
+  "status": "ACTIVE",
+  "aliases": [],
+  "supportedCategories": ["CAT-RAM"],
+  "provenance": {
+    "sourceUrl": "https://timetecinc.com/",
+    "retrievedAt": "2026-10-05T00:00:00.000Z",
+    "verifiedBy": "system:atlas-ram-manufacturer-first-cohort-admission-p1",
+    "verificationStatus": "VERIFIED"
+  },
+  "metadata": {
+    "createdAt": "2026-10-05T00:00:00.000Z",
+    "updatedAt": "2026-10-05T00:00:00.000Z"
+  }
+}

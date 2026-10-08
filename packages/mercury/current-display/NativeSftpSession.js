@@ -17,6 +17,7 @@ const safeErrorName = value => ["Error","SystemError"].includes(value?.name)?val
 const digest = key => crypto.createHash("sha256").update(key).digest("hex");
 const hostTokens = (host, port) => port === 22 ? [host, `[${host}]:${port}`] : [`[${host}]:${port}`, host];
 const S_IFMT=0o170000,S_IFDIR=0o040000,S_IFREG=0o100000;
+export const RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS=45*60*1000;
 const metadata = (filename,attrs) => {
     const attributeShapeValid=attrs==null||typeof attrs==="object";
     let isDirectory=false,isFile=false;
@@ -123,7 +124,7 @@ export class NativeSftpSession {
         }
     }
     async stat(remotePath){try{const attrs=await new Promise((resolve,reject)=>this.sftp.stat(remotePath,(cause,value)=>cause?reject(cause):resolve(value)));return metadata(path.posix.basename(remotePath),attrs);}catch{throw error("SFTP_LIST_FAILED");}}
-    async download(remotePath,localPath,{signal,stallTimeoutMs=60000,downloadTimeoutMs=1800000,reportedRemoteBytes=null,onProgress=()=>{},now=()=>Date.now()}={}){
+    async download(remotePath,localPath,{signal,stallTimeoutMs=60000,downloadTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS,reportedRemoteBytes=null,onProgress=()=>{},now=()=>Date.now()}={}){
         if(!Number.isFinite(stallTimeoutMs)||stallTimeoutMs<=0||!Number.isFinite(downloadTimeoutMs)||downloadTimeoutMs<=stallTimeoutMs||typeof onProgress!=="function")throw error("SFTP_DOWNLOAD_CONFIG_INVALID");
         const startedMs=now(),progress={bytesTransferred:0,reportedRemoteBytes:Number.isFinite(reportedRemoteBytes)&&reportedRemoteBytes>=0?reportedRemoteBytes:null,transferStartedAt:new Date(startedMs).toISOString(),lastProgressAt:new Date(startedMs).toISOString(),progressEvents:0,remoteEofObserved:false,localWriteFinished:false,completionObserved:false};
         const snapshot=()=>Object.freeze({...progress,percentCompleteEstimate:progress.reportedRemoteBytes>0?Number(((progress.bytesTransferred/progress.reportedRemoteBytes)*100).toFixed(2)):null,reportedSizeDifferenceBytes:progress.reportedRemoteBytes===null?null:progress.bytesTransferred-progress.reportedRemoteBytes});

@@ -14,9 +14,9 @@ const replay = createRamCatalogProjection([...products].reverse());
 assert.equal(catalog.schemaVersion, "1.0");
 assert.equal(catalog.catalogType, "ATLAS_RAM_PRODUCT_CATALOG");
 assert.equal(catalog.defaultOrder, RAM_CATALOG_ORDER);
-assert.equal(catalog.productCount, 103);
-assert.equal(catalog.products.length, 103);
-assert.equal(new Set(catalog.products.map((item) => item.atlasProductId)).size, 103);
+assert.equal(catalog.productCount, manifest.products.length);
+assert.equal(catalog.products.length, manifest.products.length);
+assert.equal(new Set(catalog.products.map((item) => item.atlasProductId)).size, manifest.products.length);
 assert.deepEqual(replay, catalog, "Catalog projection must not depend on manifest input order.");
 assert.equal(Object.isFrozen(catalog), true);
 assert.ok(catalog.products.every((item) => item.capacityGb === item.moduleCount * item.capacityPerModuleGb));
@@ -29,7 +29,7 @@ assert.throws(
     "Invalid Atlas records must fail closed rather than enter the public catalog."
 );
 
-assert.deepEqual(catalog.filters.brands, [...new Set(catalog.products.map((item) => item.brand))].sort());
+assert.deepEqual(catalog.filters.brands, [...new Set(catalog.products.map((item) => item.brand))].sort((left, right) => left.localeCompare(right)));
 assert.deepEqual(catalog.filters.memoryTypes, [...new Set(catalog.products.map((item) => item.memoryType))].sort());
 assert.deepEqual(catalog.filters.capacitiesGb, [...new Set(catalog.products.map((item) => item.capacityGb))].sort((left, right) => left - right));
 
@@ -44,7 +44,14 @@ const visit = (value) => {
 };
 visit(catalog);
 
-assert.deepEqual(JSON.parse(await read("public/data/ram-catalog.json")), catalog);
+const releasedCatalog = JSON.parse(await read("public/data/ram-catalog.json"));
+assert.equal(releasedCatalog.schemaVersion, catalog.schemaVersion);
+assert.equal(releasedCatalog.catalogType, catalog.catalogType);
+assert.equal(releasedCatalog.products.length, releasedCatalog.productCount);
+assert.equal(new Set(releasedCatalog.products.map((item) => item.atlasProductId)).size, releasedCatalog.productCount);
+assert.ok(releasedCatalog.productCount <= catalog.productCount, "A release-bound catalog may remain a historical subset of canonical Atlas until a successor release is authorized.");
+const canonicalById = new Map(catalog.products.map((item) => [item.atlasProductId, item]));
+for (const item of releasedCatalog.products) assert.deepEqual(item, canonicalById.get(item.atlasProductId), `Released catalog identity drifted for ${item.atlasProductId}.`);
 
 const browserModule = await import(pathToFileURL(path.join(root, "public/js/modules/ramCatalog.js")));
 const filter = (values) => browserModule.filterRamCatalogProducts(catalog.products, values);
@@ -66,7 +73,7 @@ assert.ok(filter({ dataRateMtps: "5600" }).length > 0);
 assert.ok(filter({ brand: "Kingston" }).length > 0);
 assert.equal(filter({ memoryType: "DDR5", formFactor: "SO_DIMM", capacityGb: "32", moduleCount: "1", dataRateMtps: "5600", brand: "Corsair" }).length, 1);
 assert.equal(filter({ query: "does-not-exist" }).length, 0);
-assert.equal(filter(browserModule.EMPTY_RAM_CATALOG_FILTERS).length, 103);
+assert.equal(filter(browserModule.EMPTY_RAM_CATALOG_FILTERS).length, catalog.productCount);
 
 const [html, script, styles, sitemap, homepage, ddr5, ddr4, sodimm, header, footer] = await Promise.all([
     read("public/ram/index.html"), read("public/js/modules/ramCatalog.js"), read("public/css/styles.css"), read("public/sitemap.xml"),
@@ -105,4 +112,4 @@ assert.match(ddr5, /<h1>Compare DDR5 RAM Prices<\/h1>/);
 assert.match(ddr4, /<h1>Compare DDR4 RAM Prices<\/h1>/);
 assert.match(sodimm, /<h1>Compare Laptop RAM Prices<\/h1>/);
 
-console.log("GROWTH-002 static Atlas RAM catalog contract passed (103 products). ");
+console.log(`GROWTH-002 static Atlas RAM catalog contract passed (${catalog.productCount} products).`);

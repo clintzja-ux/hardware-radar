@@ -12,7 +12,7 @@ let cases=0;
 const secret="fixture-password-never-log", username="fixture-user";
 const config=loadRakutenSftpConfig({RAKUTEN_SFTP_USERNAME:username,RAKUTEN_SFTP_PASSWORD:secret});
 assert.deepEqual({protocol:config.protocol,host:config.host,port:config.port,connections:config.concurrency},{protocol:"SFTP",host:"aftp.linksynergy.com",port:22,connections:1});
-assert.equal(RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS,30*60*1000);cases++;
+assert.equal(RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS,45*60*1000);cases++;
 assert.doesNotMatch(JSON.stringify(config),new RegExp(`${secret}|${username}`)); cases++;
 assert.throws(()=>loadRakutenSftpConfig({}),/SFTP_CONFIG_MISSING/); assert.throws(()=>loadRakutenSftpConfig({RAKUTEN_SFTP_USERNAME:"u",RAKUTEN_SFTP_PASSWORD:"p",RAKUTEN_SFTP_CONNECTIONS:"6"}),/CONNECTION_LIMIT/); assert.throws(()=>loadRakutenSftpConfig({RAKUTEN_SFTP_USERNAME:"u",RAKUTEN_SFTP_PASSWORD:"p",RAKUTEN_SFTP_HOST:"wrong.example"}),/CONFIG_INVALID/); cases++;
 const redacted=redactRakutenSftpError(new Error(`auth ${username} password=${secret}`),[username,secret]); assert.doesNotMatch(redacted.message,new RegExp(`${secret}|${username}`)); cases++;

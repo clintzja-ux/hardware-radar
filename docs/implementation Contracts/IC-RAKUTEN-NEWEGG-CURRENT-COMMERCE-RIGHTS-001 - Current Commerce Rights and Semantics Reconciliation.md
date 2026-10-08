@@ -4,6 +4,8 @@
 **Owner:** Mercury source-rights and current-display boundaries
 **Date:** 2026-09-18
 
+> **Superseded rights boundary (2026-10-03):** This contract remains the historical record of the evidence available in September. `IC-NEWEGG-PRODUCT-CATALOG-HISTORY-AND-ANALYTICS-RIGHTS-P1` now governs the same narrow Newegg Product Catalog source and permits normalized historical retention, historical analytics, derived analytics, and ranking/recommendation use subject to their independent qualification and policy boundaries. Raw-feed redistribution and future acquisition after relationship termination remain unauthorized.
+
 ## Purpose and evidence
 
 This increment reconciles the approved Hardware Radar Newegg Product Catalog relationship with current official Rakuten publisher documentation. The operator-confirmed relationship evidence is recorded only as the non-secret reference `OPERATOR_CONFIRMED_APPROVED_NEWEGG_ADVERTISER_AND_PRODUCT_CATALOG_ACCESS_2026_09_18`. No account, credential, site, or private program identifier is retained.
@@ -30,10 +32,10 @@ Canonical references are:
 | current/ephemeral retention | `ALLOWED` | Current plus immediately previous replaceable display state under the existing 36-hour Hardware Radar public-current safety policy |
 | public current-price display | `ALLOWED` | Only after identity, offer, destination, freshness, and current-market qualification |
 | cross-retailer item-price comparison | `ALLOWED` | Only among otherwise comparable qualified offers |
-| historical retention | `BLOCKED` | No feed-derived longitudinal price history |
-| derived analytics | `BLOCKED` | Not independently established |
+| historical retention | `BLOCKED` at this checkpoint; superseded 2026-10-03 | See the later narrow Newegg Product Catalog rights certification |
+| derived analytics | `BLOCKED` at this checkpoint; superseded 2026-10-03 | See the later narrow Newegg Product Catalog rights certification |
 | offer-condition derivation | `CLARIFICATION_REQUIRED` | Product Catalog access does not itself prove `NEW` |
-| recommendation | `BLOCKED` | No Compass/Pick authority |
+| recommendation | `BLOCKED` at this checkpoint; rights superseded 2026-10-03 | Permission still does not create Compass/Pick authority or change recommendation policy |
 | redistribution/API | `BLOCKED` | No external feed-data API or bulk redistribution |
 | attribution | `CONDITIONAL` | Existing affiliate/program presentation requirements remain independently applicable |
 

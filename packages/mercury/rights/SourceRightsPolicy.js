@@ -18,6 +18,7 @@ export const SOURCE_RIGHTS_CAPABILITIES = Object.freeze({
   EPHEMERAL_PROCESSING: "processing.ephemeral",
   CURRENT_RETENTION: "retention.current",
   HISTORICAL_RETENTION: "retention.historical",
+  PREVIOUSLY_COLLECTED_POST_RELATIONSHIP_RETENTION: "retention.previouslyCollectedAfterRelationshipEnds",
   DERIVED_ANALYTICS: "derivation.analytics",
   OFFER_CONDITION: "derivation.offerCondition",
   HISTORICAL_ANALYTICS: "derivation.historicalAnalytics",

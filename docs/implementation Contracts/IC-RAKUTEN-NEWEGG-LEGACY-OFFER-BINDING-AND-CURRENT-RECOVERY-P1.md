@@ -15,7 +15,7 @@ The binding enriches the legacy manual Crucial offer with Newegg Item `9SIB3T1KS
 - Crucial `ram_crucial_ct16g56c46s5`: Items `9SIC6E1M4N1100` and `9SIC89BM7N3054` remain `IDENTITY_REVIEW_REQUIRED` and are excluded.
 - Crucial `ram_crucial_ct32g56c46u5`: Item `9SIA12KK066781` remains an exact Rakuten-source withdrawal; no canonical offer is removed because no current canonical Rakuten-owned offer has that identity.
 
-Both proposed members pass the common identity, USD price, condition, availability, freshness, rights, and destination/actionability boundaries at the explicit preparation time. Both expire at `2026-10-03T22:51:03Z` under the existing 36-hour rule. Rakuten remains History-ineligible.
+Both proposed members pass the common identity, USD price, condition, availability, freshness, rights, and destination/actionability boundaries at the explicit preparation time. Both expire at `2026-10-03T22:51:03Z` under the existing 36-hour rule. This recovery remained Current-only; later Newegg Product Catalog History rights do not retroactively turn its preparations into History authority.
 
 ## Authority and stale-state protection
 

@@ -3,6 +3,12 @@ import { fileURLToPath } from "node:url";
 
 process.env.HARDWARE_RADAR_TEST_MODE = "1";
 const testModules = [
+    "./AmazonDestinationReviewWorkflow.test.mjs",
+    "./AmazonDestinationRelevantStateBinding.test.mjs",
+    "./ProductionFlatRetailerDestinationRepository.test.mjs",
+    "./ProductionForgeAmazonDestinationReviewProvider.test.mjs",
+    "./ExistingProviderTaskSupervision.test.mjs",
+    "./ExistingProviderTaskSupervisionCli.test.mjs",
     "./ProductsIdentityDiscoveryReadinessOwner.test.mjs",
     "./NeutralGoogleProductsFinalization.test.mjs",
     "./SchemaContract.test.mjs",
@@ -206,6 +212,7 @@ const testModules = [
     "./BoundedRepeatObservationRecovery.test.mjs",
     "./ImmutableProviderResultReprocessing.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
+    "./RetainedCommerceHistoryPreparation.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",
     "./HistoricalRefreshAccumulation.test.mjs",
@@ -247,15 +254,19 @@ const testModules = [
     ,"./CertifiedMercuryOperationsProjection.test.mjs"
     ,"./CertifiedMercuryCohortOperationsProjection.test.mjs"
     ,"./CertifiedMercuryOperationsPanel.test.mjs"
+    ,"./NeweggRoutineSchedulingAndForge.test.mjs"
+    ,"./NeweggRoutineProductionCommand.test.mjs"
     ,"./CertifiedMercuryCohortOperationsPanel.test.mjs"
     ,"./ProductionForgeCohortOperationsProvider.test.mjs"
     ,"./ForgeCohortOperationsEndToEnd.test.mjs"
+    ,"./ExistingTaskSupervisionScheduler.test.mjs"
     ,"./CertifiedMercuryOperationsExporter.test.mjs"
     ,"./CertifiedMercuryOperationsExporterCli.test.mjs"
     ,"./PublicationOperatorGovernance.test.mjs"
     ,"./RamComparisonSnapshotProjection.test.mjs"
     ,"./CuratedRamOfferGovernance.test.mjs"
     ,"./RetailerDestination.test.mjs"
+    ,"./AtlasBatchNeweggDestinationBinding.test.mjs"
     ,"./AcquisitionPortfolioOrchestration.test.mjs"
     ,"./ProductionAcquisitionPortfolioComposition.test.mjs"
     ,"./AcquisitionCheckpointExecutionComposition.test.mjs"

@@ -38,7 +38,7 @@ export function prepareRakutenLegacyOfferRecovery({sourceSnapshot,binding,incomi
   const priorGSkill=findOne(sourceSnapshot.offers,value=>value.atlasProductId===gskill.atlasProductId&&value.retailerId==="RETAILER-0004","CURRENT_RECOVERY_GSKILL_PRIOR_INVALID");
   if(gskill.offerIdentity===priorGSkill.offerIdentity)throw new Error("CURRENT_RECOVERY_GSKILL_IDENTITY_NOT_DISTINCT");
   const expiry=new Date(Date.parse(crucial.observedAt)+36*60*60*1000).toISOString();
-  const qualifying=offer=>offer.condition==="NEW"&&offer.availability==="AVAILABLE"&&offer.currency==="USD"&&offer.priceUsd>0&&offer.itemPriceEligible===true&&offer.comparisonEligible===true&&Date.parse(preparedAt)<=Date.parse(expiry)&&offer.sourceIdentity?.historicalRetentionAllowed===false&&offer.destinationId;
+  const qualifying=offer=>offer.condition==="NEW"&&offer.availability==="AVAILABLE"&&offer.currency==="USD"&&offer.priceUsd>0&&offer.itemPriceEligible===true&&offer.comparisonEligible===true&&Date.parse(preparedAt)<=Date.parse(expiry)&&typeof offer.sourceIdentity?.historicalRetentionAllowed==="boolean"&&offer.destinationId;
   if(!qualifying(crucial)||!qualifying(gskill))throw new Error("CURRENT_RECOVERY_QUALIFICATION_BLOCKED");
   const offers=sourceSnapshot.offers.filter(value=>value.offerIdentity!==legacy.offerIdentity);
   offers.push(crucial,gskill);

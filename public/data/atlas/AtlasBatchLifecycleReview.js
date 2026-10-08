@@ -21,10 +21,10 @@ const freeze = value => {
 const nonBlank = value => typeof value === "string" && value.trim() !== "";
 const iso = value => nonBlank(value) && Number.isFinite(Date.parse(value));
 
-function reviewBlockers(product, registeredBrands) {
+function reviewBlockers(product, registeredBrands, sourceSet) {
     const blockers = [];
     if (!product?.identity?.atlasProductId) blockers.push("ATLAS_PRODUCT_ID_MISSING");
-    if (product?.identity?.createdBy !== ATLAS_EXPANSION_REVIEW_SOURCE) blockers.push("PRODUCT_NOT_IN_AUTHORIZED_EXPANSION_SET");
+    if (product?.identity?.createdBy !== sourceSet) blockers.push("PRODUCT_NOT_IN_AUTHORIZED_EXPANSION_SET");
     if (!registeredBrands.has(product?.identity?.brand)) blockers.push("MANUFACTURER_NOT_REGISTERED");
     if (!nonBlank(product?.identity?.manufacturerPartNumber)) blockers.push("MANUFACTURER_PART_NUMBER_MISSING");
     if (product?.governance?.engineeringValidationStatus !== "PASS") blockers.push("ENGINEERING_VALIDATION_NOT_PASS");
@@ -35,14 +35,18 @@ function reviewBlockers(product, registeredBrands) {
     return [...new Set(blockers)];
 }
 
-export function reviewAtlasExpansionBatch({ products, brands, reviewedBy, reviewedAt, reason } = {}) {
+export function reviewAtlasExpansionBatch({ products, brands, reviewedBy, reviewedAt, reason, authorizedProductIds = null, sourceSet = ATLAS_EXPANSION_REVIEW_SOURCE, expectedCount = 77, policyVersion = ATLAS_BATCH_REVIEW_POLICY_VERSION } = {}) {
     if (!Array.isArray(products) || !Array.isArray(brands) || !nonBlank(reviewedBy) || !iso(reviewedAt) || !nonBlank(reason)) throw new TypeError("ATLAS_BATCH_REVIEW_INPUT_INVALID");
+    if (!nonBlank(sourceSet) || !Number.isInteger(expectedCount) || expectedCount < 1 || (authorizedProductIds !== null && (!Array.isArray(authorizedProductIds) || authorizedProductIds.some(id => !nonBlank(id))))) throw new TypeError("ATLAS_BATCH_REVIEW_AUTHORITY_INVALID");
     const registeredBrands = new Set(brands.map(brand => brand?.displayName).filter(nonBlank));
-    const reviewSet = products.filter(product => product?.identity?.createdBy === ATLAS_EXPANSION_REVIEW_SOURCE).sort((a, b) => a.identity.atlasProductId.localeCompare(b.identity.atlasProductId));
-    if (reviewSet.length !== 77 || new Set(reviewSet.map(product => product.identity.atlasProductId)).size !== 77) throw new Error("ATLAS_EXPANSION_REVIEW_SET_INVALID");
+    const byId = new Map(products.map(product => [product?.identity?.atlasProductId, product]));
+    const reviewSet = authorizedProductIds === null
+        ? products.filter(product => product?.identity?.createdBy === sourceSet).sort((a, b) => a.identity.atlasProductId.localeCompare(b.identity.atlasProductId))
+        : authorizedProductIds.map(id => byId.get(id));
+    if (reviewSet.some(product => !product) || reviewSet.length !== expectedCount || new Set(reviewSet.map(product => product.identity.atlasProductId)).size !== expectedCount) throw new Error("ATLAS_EXPANSION_REVIEW_SET_INVALID");
 
     const outcomes = reviewSet.map(product => {
-        const blockers = reviewBlockers(product, registeredBrands);
+        const blockers = reviewBlockers(product, registeredBrands, sourceSet);
         if (blockers.length) return { atlasProductId: product.identity.atlasProductId, status: "BLOCKED", blockers, product: clone(product) };
         return {
             atlasProductId: product.identity.atlasProductId,
@@ -64,9 +68,10 @@ export function reviewAtlasExpansionBatch({ products, brands, reviewedBy, review
         };
     });
     const auditMaterial = {
-        policyVersion: ATLAS_BATCH_REVIEW_POLICY_VERSION,
+        policyVersion,
         subjectType: "ATLAS_PRODUCT_LIFECYCLE_BATCH",
-        sourceSet: ATLAS_EXPANSION_REVIEW_SOURCE,
+        sourceSet,
+        ...(authorizedProductIds === null ? {} : { authorizedProductIds: [...authorizedProductIds] }),
         reviewedBy,
         reviewedAt,
         reason,

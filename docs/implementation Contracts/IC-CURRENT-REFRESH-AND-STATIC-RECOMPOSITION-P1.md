@@ -32,7 +32,7 @@ Priority is fixed at:
 3. stale/uncovered coverage;
 4. routine refresh.
 
-Supported projections are `MANUAL_AMAZON`, `MANUAL_NEWEGG`, `DATAFORSEO_AMAZON_SELLERS`, `DATAFORSEO_AMAZON_PRODUCTS_PLUS_SELLERS`, `DATAFORSEO_GOOGLE_SHOPPING`, and `RAKUTEN_NEWEGG`. Lane states are `ROUTINE_READY`, `READY_WITH_REVIEW`, `RESEARCH_ONLY`, `BLOCKED`, or `NOT_APPLICABLE`. Amazon Products alone is not a Current offer. Rakuten is Current-capable but History-prohibited. Manual remains first-class.
+Supported projections are `MANUAL_AMAZON`, `MANUAL_NEWEGG`, `DATAFORSEO_AMAZON_SELLERS`, `DATAFORSEO_AMAZON_PRODUCTS_PLUS_SELLERS`, `DATAFORSEO_GOOGLE_SHOPPING`, and `RAKUTEN_NEWEGG`. Lane states are `ROUTINE_READY`, `READY_WITH_REVIEW`, `RESEARCH_ONLY`, `BLOCKED`, or `NOT_APPLICABLE`. Amazon Products alone is not a Current offer. The narrow governed Newegg Product Catalog lane is Current-capable and History-rights-permitted, but this refresh composition remains Current-only and creates no automatic History admission. Manual remains first-class.
 
 Amazon tasks are bounded at `$0.0015`; Google tasks at `$0.0010`; UTC-day spend at `$0.0750`; automatic paid retries are zero. PREPARE/INSPECT create no provider call, task, spend, authorization, release or deployment authority.
 

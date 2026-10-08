@@ -58,7 +58,7 @@ export function validateRamPublicIntelligencePortfolio({ manifest, fileTexts, ev
   if ((!legacy && !splitAuthority) || manifest?.artifactType !== "RAM_PUBLIC_INTELLIGENCE_RELEASE_PORTFOLIO") errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_HEADER_INVALID");
   if (!/^mer_ramreleasecand_[a-f0-9]{24}$/.test(manifest?.candidateId ?? "") || !/^mer_ramreleaseart_[a-f0-9]{24}$/.test(manifest?.artifactId ?? "") || !/^[a-f0-9]{64}$/.test(manifest?.bindingDigest ?? "")) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_IDENTITY_INVALID");
   if (!validTime(manifest?.preparedAt) || !validTime(evaluatedAt) || manifest?.releaseAuthority !== false || manifest?.deploymentAuthority !== false || manifest?.snapshotIncluded !== false) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_AUTHORITY_INVALID");
-  if (manifest?.counts?.products !== 103 || manifest?.routes?.productRoutes !== 103 || manifest?.routes?.snapshotRoutes !== 0) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_MEMBERSHIP_INVALID");
+  if (!Number.isInteger(manifest?.counts?.products) || manifest.counts.products < 1 || manifest?.routes?.productRoutes !== manifest.counts.products || manifest?.routes?.snapshotRoutes !== 0) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_MEMBERSHIP_INVALID");
   if (!fileTexts || typeof fileTexts !== "object") errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_FILES_REQUIRED");
   for (const [name, binding] of Object.entries(manifest?.files ?? {})) {
     const text = fileTexts?.[name];
@@ -69,13 +69,13 @@ export function validateRamPublicIntelligencePortfolio({ manifest, fileTexts, ev
     catalog = JSON.parse(fileTexts?.catalog ?? "null"); current = JSON.parse(fileTexts?.current ?? "null"); terminal = JSON.parse(fileTexts?.terminal ?? "null");
     staleCurrent = JSON.parse(fileTexts?.staleCurrent ?? "null"); staleTerminal = JSON.parse(fileTexts?.staleTerminal ?? "null"); chronology = JSON.parse(fileTexts?.chronology ?? "null"); destinations = JSON.parse(fileTexts?.destinations ?? "null");
   } catch { errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_JSON_INVALID"); }
-  if (catalog?.productCount !== 103 || catalog?.products?.length !== 103) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_CATALOG_INVALID");
+  if (catalog?.productCount !== manifest?.counts?.products || catalog?.products?.length !== manifest?.counts?.products) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_CATALOG_INVALID");
   if (!validatePublicCurrentRetailProjection(current).valid || !validatePublicCurrentRetailProjection(staleCurrent).valid || staleCurrent?.products?.length !== 0) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_CURRENT_INVALID");
   if (!validateRamTerminalPublicIntelligence(terminal).valid || !validateRamTerminalPublicIntelligence(staleTerminal).valid) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_TERMINAL_INVALID");
   if (!validatePublicChronologicalPriceSeries(chronology)) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_CHRONOLOGY_INVALID");
   if (!Array.isArray(destinations)) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_DESTINATIONS_INVALID");
   if (terminal?.lenses?.ALL_RAM?.historyCoverage?.comparableObservationCount !== chronology?.eligibleObservationCount || staleTerminal?.lenses?.ALL_RAM?.historyCoverage?.comparableObservationCount !== chronology?.eligibleObservationCount) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_HISTORY_INDEPENDENCE_INVALID");
-  if (staleTerminal?.lenses?.ALL_RAM?.coverage?.productsCurrentlyPriced !== 0 || terminal?.lenses?.ALL_RAM?.coverage?.productsTracked !== 103) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_STALE_CURRENT_INVALID");
+  if (staleTerminal?.lenses?.ALL_RAM?.coverage?.productsCurrentlyPriced !== 0 || terminal?.lenses?.ALL_RAM?.coverage?.productsTracked !== manifest?.counts?.products || staleTerminal?.lenses?.ALL_RAM?.coverage?.productsTracked !== manifest?.counts?.products) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_STALE_CURRENT_INVALID");
   if (splitAuthority && (manifest?.authorityDomains?.durablePortfolio?.state !== "CERTIFIABLE" || manifest?.authorityDomains?.durablePortfolio?.expiresAt !== null || manifest?.authorityDomains?.ephemeralCurrent?.expiresAt !== (manifest.currentValidUntil ?? null) || !["FRESH_UNTIL", "EMPTY"].includes(manifest?.authorityDomains?.ephemeralCurrent?.state))) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_AUTHORITY_DOMAINS_INVALID");
   if (privatePattern.test(Object.values(fileTexts ?? {}).join("\n"))) errors.push("RAM_PUBLIC_INTELLIGENCE_PORTFOLIO_PRIVATE_DATA_INVALID");
   const rebuilt = { schemaVersion: manifest?.schemaVersion, policyVersion: manifest?.policyVersion, preparedAt: manifest?.preparedAt, inputs: manifest?.inputs, routes: manifest?.routes, files: manifest?.files, counts: manifest?.counts, currentValidUntil: manifest?.currentValidUntil, ...(splitAuthority ? { authorityDomains: manifest?.authorityDomains } : {}) };

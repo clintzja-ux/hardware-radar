@@ -45,7 +45,12 @@ assert.equal(alternatePortfolio.items[0].sourceMode, "AUTOMATED_ALTERNATE"); cas
 const invalidDestinationPortfolio = createCurrentRetailRefreshPortfolio({ products, destinations: [{ ...destinations[0], destinationUrl: "http://newegg.com/not-secure" }], retailers, adapters: [primarySeed], asOf });
 assert.equal(invalidDestinationPortfolio.items.length, 0); assert.equal(invalidDestinationPortfolio.excluded[0].reason, "DESTINATION_INVALID"); cases += 1;
 
-assert.throws(() => createCurrentRetailRefreshPortfolio({ products, destinations, adapters: [{ ...primarySeed, rights: { ...rights, historicalRetentionAllowed: true } }], asOf }), /CURRENT_RETAIL_SOURCE_RIGHTS_INVALID/); cases += 1;
+const historyPermittedAdapter={...primarySeed,rights:{...rights,historicalRetentionAllowed:true}};
+const historyPermittedPortfolio=createCurrentRetailRefreshPortfolio({products,destinations,adapters:[historyPermittedAdapter],asOf});
+assert.equal(historyPermittedPortfolio.items.length,2);
+const historyPermittedRun=await new CurrentRetailRefreshOrchestrator({adapters:[historyPermittedAdapter]}).run({portfolio:historyPermittedPortfolio});
+assert.equal(historyPermittedRun.historicalObservationsCreated,0);
+assert.throws(() => createCurrentRetailRefreshPortfolio({ products, destinations, adapters: [{ ...primarySeed, rights: { ...rights, historicalRetentionAllowed: "ALLOWED" } }], asOf }), /CURRENT_RETAIL_SOURCE_RIGHTS_INVALID/); cases += 3;
 
 const preparedResults = Object.fromEntries(portfolio.items.map((item, index) => [item.destinationId, observation(item, { itemPriceUsd: [80, 70, 60][index] })]));
 const adapters = [fixtureAdapter({ results: preparedResults }), fixtureAdapter({ adapterId: alternate.adapterId, mode: alternate.mode, retailerIds: ["RETAILER-0001", "RETAILER-0004"], results: preparedResults })];

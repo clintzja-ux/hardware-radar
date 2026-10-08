@@ -1,0 +1,84 @@
+{
+  "identity": {
+    "atlasProductId": "ram_patriot_pve2464g360c0k",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 2,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-04T00:00:00.000Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+    "updatedBy": "human:Clinton_Ramsook",
+    "brand": "Patriot",
+    "manufacturer": "Patriot Memory",
+    "productFamily": "Viper Elite II",
+    "modelName": "Viper Elite II PVE2464G360C0K",
+    "manufacturerPartNumber": "PVE2464G360C0K",
+    "displayName": "Patriot Viper Elite II DDR4 64GB (2×32GB) 3600 MT/s",
+    "slug": "patriot-pve2464g360c0k"
+  },
+  "governance": {
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": false,
+    "reviewedBy": "human:Clinton_Ramsook",
+    "reviewedAt": "2026-10-04T00:00:00.000Z",
+    "changeReason": "ATLAS_RAM_COVERAGE_EXPANSION_BATCH_B_LIFECYCLE_REVIEW_AND_ACTIVATION_P1 operator-approved lifecycle review; no acquisition, market, destination, publication, or release authority implied."
+  },
+  "provenance": {
+    "fieldSources": {
+      "canonicalSpecifications": [
+        {
+          "sourceId": "SRC-MFG-PATRIOT-PVE2464G360C0K-ARCB",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://viper.patriotmemory.com/products/viper-elite-ii-ddr4-memory-viper-gaming-by-patriot-memory-gamercertified",
+          "publisher": "Patriot",
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-b-p1",
+          "verificationStatus": "VERIFIED"
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true
+      },
+      "capacity": {
+        "capacityGb": 64,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 32
+      },
+      "performance": {
+        "dataRateMtps": 3600,
+        "speedLabel": "DDR4-3600",
+        "xmpSupport": "SUPPORTED",
+        "expoSupport": "NONE"
+      },
+      "electrical": {
+        "ratedVoltage": 1.35
+      },
+      "physical": {
+        "heatSpreader": true,
+        "rgbLighting": false
+      },
+      "compatibility": {}
+    }
+  }
+}

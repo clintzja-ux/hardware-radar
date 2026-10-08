@@ -1,0 +1,3 @@
+import {runExistingTaskSupervisionCommand,EXISTING_TASK_SUPERVISION_EXIT_CODES} from "./mercury-existing-task-supervision-cli.mjs";
+
+try{await runExistingTaskSupervisionCommand();process.exitCode=EXISTING_TASK_SUPERVISION_EXIT_CODES.SUCCESS;}catch(error){console.error(JSON.stringify({schemaVersion:"1.0",command:"MERCURY_EXISTING_TASK_SUPERVISION",status:"FAILED",classification:error?.exitCode===2?"INVALID_INPUT_OR_CONFIGURATION":error?.exitCode===3?"CANONICAL_RUN_INVALID":"SYSTEMIC_SUPERVISION_FAILURE",reason:String(error?.message??error),newPaidTasks:0,replacementTasks:0,additionalSpendUsd:0},null,2));process.exitCode=error?.exitCode??EXISTING_TASK_SUPERVISION_EXIT_CODES.SYSTEMIC_FAILURE;}

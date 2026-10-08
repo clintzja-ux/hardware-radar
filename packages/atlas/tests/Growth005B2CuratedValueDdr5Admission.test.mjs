@@ -19,7 +19,7 @@ const admitted = [
 ];
 
 assert.ok(manifest.counts.products >= 26);
-assert.equal(manifest.counts.brands, 5, "Existing registered brands are reused; empty candidate brands are not created.");
+assert.equal(manifest.counts.brands, 13, "Only governed canonical brands are registered; the later Timetec admission uses the ordinary brand owner.");
 assert.equal(validateRepository(products).valid, true);
 assert.equal(new Set(products.map(({ identity }) => identity.atlasProductId)).size, products.length);
 assert.equal(new Set(products.map(({ identity }) => identity.manufacturerPartNumber.toLowerCase())).size, products.length);
@@ -77,7 +77,7 @@ const visit = (value, path = "$") => {
 admitted.forEach(([mpn]) => visit(products.find(({ identity }) => identity.manufacturerPartNumber === mpn)));
 
 const destinations = JSON.parse(await readFile(fileURLToPath(new URL("../../mercury/destinations/production-destinations.json", import.meta.url)), "utf8"));
-assert.equal(destinations.records.length, 186);
+assert.equal(new Set(destinations.records.map(destination => destination.destinationId)).size, destinations.records.length);
 for (const atlasProductId of ["ram_kingston_kf560c30bbea_8", "ram_corsair_cmk16gx5m2b5200z40", "ram_g_skill_f5_6000j3636f16gx1_rs5k"]) {
     assert.equal(destinations.records.some(destination => destination.atlasProductId === atlasProductId && destination.retailerId === "RETAILER-0001"), true);
 }

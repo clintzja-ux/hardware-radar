@@ -1,0 +1,200 @@
+{
+  "identity": {
+    "atlasProductId": "ram_transcend_jm2666hse_16g",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 2,
+    "createdAt": "2026-10-04T00:00:00Z",
+    "updatedAt": "2026-10-05T00:04:19.402Z",
+    "createdBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+    "updatedBy": "human:Clinton_Ramsook",
+    "brand": "Transcend",
+    "manufacturer": "Transcend Information, Inc.",
+    "productFamily": "JetRam",
+    "series": null,
+    "modelName": "JetRam JM2666HSE-16G",
+    "manufacturerPartNumber": "JM2666HSE-16G",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Transcend JetRam DDR4 16GB (1×16GB) 2666 MT/s",
+    "slug": "transcend-jm2666hse-16g"
+  },
+  "governance": {
+    "publicationStatus": "READY",
+    "lifecycleStatus": "ACTIVE",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": false,
+    "reviewedBy": "human:Clinton_Ramsook",
+    "reviewedAt": "2026-10-05T00:04:19.402Z",
+    "changeReason": "ATLAS_RAM_COVERAGE_EXPANSION_BATCH_A_LIFECYCLE_REVIEW_AND_ACTIVATION_P1 operator-approved lifecycle review; no acquisition, market, destination, publication, or release authority implied.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-TRANSCEND-JM2666HSE_16G-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://sg.transcend-info.com/product/module/ddr4",
+          "publisher": "Transcend",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-TRANSCEND-JM2666HSE_16G-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://sg.transcend-info.com/product/module/ddr4",
+          "publisher": "Transcend",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-TRANSCEND-JM2666HSE_16G-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://sg.transcend-info.com/product/module/ddr4",
+          "publisher": "Transcend",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-TRANSCEND-JM2666HSE_16G-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://sg.transcend-info.com/product/module/ddr4",
+          "publisher": "Transcend",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-TRANSCEND-JM2666HSE_16G-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://sg.transcend-info.com/product/module/ddr4",
+          "publisher": "Transcend",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-TRANSCEND-JM2666HSE_16G-ARCBA",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://sg.transcend-info.com/product/module/ddr4",
+          "publisher": "Transcend",
+          "publishedDate": null,
+          "retrievedAt": "2026-10-04T00:00:00Z",
+          "verifiedBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer MPN and core RAM specification verified from first-party material; retailer evidence was not used as specification authority."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": false,
+        "gamingPositioning": false,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 2666,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-2666",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": null,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 21.3
+      },
+      "electrical": {
+        "ratedVoltage": null,
+        "baseVoltage": null,
+        "pmicLocation": "UNKNOWN",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

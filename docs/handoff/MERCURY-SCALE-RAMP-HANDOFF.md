@@ -1,5 +1,9 @@
 # Mercury Scale-Ramp Handoff
 
+## Existing-task supervision scheduling
+
+The existing-task supervision owner now has a fixture-certified generic scheduled invocation boundary and read-only Forge health projection. It discovers due work from canonical durable state rather than configured cohort identities; persisted eligibility and leases remain authoritative. The Windows task `HardwareRadar-Mercury-ExistingTaskSupervision` is installed and enabled at a 15-minute cadence. Its first invocation was `IDLE_NO_DUE_WORK`, with zero checks, provider calls, tasks, replacements, and spend. Activation grants no paid acquisition authority.
+
 ## Formal 100-product stage completion
 
 The formal zero-provider whole-stage assessment records `100_PRODUCT_STAGE_COMPLETE`. The canonical cohort remains 100 unique, validation-clean `ACTIVE + READY` Atlas RAM products with digest `470dfadbdb8670de3566826d33eb74cb9d97a1ca6e14bf8b3fac71101ecaaf21`. Products identity discovery and the larger longitudinal experiment supplied bounded real-production evidence across the intended RAM/source classes; the post-recovery gate proves 204 retained evidence records, 188 historical observations, three unchanged canonical observations, exact immutable lineage, zero duplicate history, and no downstream-authority leakage. All stage-relevant P0s and before-completion P1s are closed.
@@ -117,7 +121,7 @@ The state sequence is `FULL(N) → DELTA(N+1) → … → FULL(M) → DELTA(M+1)
 
 The parser preserves distinct ordered records and the adapter does not URL-deduplicate. The source-local `RakutenCatalogStateProjection` now fixture-certifies R1, folds repeated same-key delta rows in physical order for R2, and replaces complete derived source membership from each later full for R3. It is a deterministic in-memory projection inside the existing adapter boundary, not a new identity or persistence owner. Production current-data retention and downstream Rakuten activation remain fail closed under the unchanged rights profile.
 
-Rakuten's root main FULL and `_delta` filenames are mutable. SFTP mtime is transport metadata, never feed chronology or Current evidence time. The transport surfaces the structurally matching root DELTA regardless of mtime inversion; application then binds exact MID/SID/main family, validated artifact digests, validated HDR times, and deterministic parent/child catalog-state IDs. Same-name/same-digest replay is no-op; changed content is a new candidate; ambiguous HDR order fails closed. Only explicit DELTA `I`/`U` records receive DELTA-HDR Current evidence, absent baseline entries do not refresh, and `D` remains source withdrawal. Rakuten remains History-ineligible. The next network boundary, if separately authorized, is one DELTA-only retrieval with one session and zero retries; fetch another FULL only when chain validation requires it.
+Rakuten's root main FULL and `_delta` filenames are mutable. SFTP mtime is transport metadata, never feed chronology or Current evidence time. The transport surfaces the structurally matching root DELTA regardless of mtime inversion; application then binds exact MID/SID/main family, validated artifact digests, validated HDR times, and deterministic parent/child catalog-state IDs. Same-name/same-digest replay is no-op; changed content is a new candidate; ambiguous HDR order fails closed. Only explicit DELTA `I`/`U` records receive DELTA-HDR evidence, absent baseline entries do not refresh, and `D` remains source withdrawal. The narrow Newegg Product Catalog source is now History-rights-permitted subject to ordinary Mercury qualification; no existing record was admitted by the rights change. Unrelated Rakuten sources remain independently governed.
 
 Distinct source SKUs do not automatically establish standalone comparability. Bundles do not compete with standalone Cheapest or establish standalone product history. `UNKNOWN_COMPARABILITY` remains isolated. Unknown shipping, tax, and mandatory fees are not zero.
 
@@ -211,6 +215,10 @@ The durable run remains terminal `COMPLETED_WITH_EXCEPTIONS`: three completed me
 Checkpoint the exact two-authorization state. Then stop for separate explicit human START decisions. If either authorization expires before review, do not START or revive it; perform a fresh zero-provider reassessment and use the governed successor lifecycle.
 
 ## NEW CHAT BOOTSTRAP
+
+Existing paid asynchronous tasks are supervised through the durable source-neutral bounded-task supervision owner. Paid creation and existing-task retrieval are separate: expired paid authority does not erase purchased evidence, and supervision cannot create replacements or spend. DataForSEO `40601/40602` are retryable pending; other statuses preserve narrower certified classifications. The 15-minute cadence and six-hour long-pending review threshold are Hardware Radar policy, not provider completion facts. Review preserves the task ID and future eligibility and never declares terminality by age. Forge exposes this state read-only; no scheduler is active.
+
+The production process boundary is `npm run mercury:existing-task-supervision -- --run-id=<canonical-run-id> --max-checks=<1..200>`. It uses the existing system-CA/private-`.env` convention, accepts no provider task IDs, creates no paid work, and emits sanitized JSON. Exit codes are 0 bounded completion, 2 invalid input/configuration, 3 invalid canonical run, and 4 systemic failure. It is scheduler-safe in principle, but scheduling remains a separate unauthorized increment.
 
 1. Read `docs/handoff/CURRENT-STATE.md`.
 2. Read this handoff.

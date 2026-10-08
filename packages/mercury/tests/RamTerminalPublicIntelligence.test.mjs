@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import { createHistoricalObservation, createHistoricalObservationId, createRamTerminalPublicIntelligence, FileHistoricalObservationRepository, validateRamTerminalPublicIntelligence } from "../index.js";
+import { readFile, readdir } from "node:fs/promises";
+import { createHistoricalObservation, createHistoricalObservationId, createPublicChronologicalPriceSeries, createRamTerminalPublicIntelligence, EffectiveHistoricalObservationRepository, FileHistoricalComparabilityReassessmentRepository, FileHistoricalObservationRepository, validateRamTerminalPublicIntelligence } from "../index.js";
 
 const catalog = JSON.parse(await readFile("public/data/ram-catalog.json", "utf8"));
-const history = new FileHistoricalObservationRepository({ statePath: ".forge-review/mercury/historical-observations.json" });
+const rawHistory = new FileHistoricalObservationRepository({ statePath: ".forge-review/mercury/historical-observations.json" });
+const history = new EffectiveHistoricalObservationRepository({ historicalRepository: rawHistory, reassessmentRepository: new FileHistoricalComparabilityReassessmentRepository({ statePath: ".forge-review/mercury/historical-comparability-reassessments.json" }) });
 const currentState = JSON.parse(await readFile(".forge-review/retail-display/current-display-snapshots.json", "utf8"));
 const { ProductRepository, RetailerRepository } = await import("../../atlas/index.js");
 const { loadRetailerDestinationSource, createPublicRetailerDestinationProjection } = await import("../destinations/RetailerDestinationSource.js");
@@ -17,16 +18,34 @@ const source = await loadRetailerDestinationSource({ sourcePath: "packages/mercu
 const destinations = createPublicRetailerDestinationProjection({ source, retailers });
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) }, rightsRegistry: defaultSourceRightsRegistry });
 const publishedProjection = (await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" })).projection;
-const publicationSnapshot = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: currentState.previous, publishedProjection });
-const asOf = "2026-10-02T22:22:28.595Z";
+const continuityTransitions = [];
+for (const file of await readdir(".forge-review/mercury/rakuten-full-current-refresh")) {
+    if (!file.startsWith("mer_rakutenfullprep_") || !file.endsWith(".json")) continue;
+    const preparation = JSON.parse(await readFile(`.forge-review/mercury/rakuten-full-current-refresh/${file}`, "utf8"));
+    for (const member of preparation.members ?? []) if (member?.priorOffer && member?.offer) continuityTransitions.push({ priorOffer: member.priorOffer, offer: member.offer });
+}
+const publicationSnapshot = deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot: eligible, predecessorSnapshot: currentState.previous, publishedProjection, continuityTransitions });
+const asOf = "2026-10-05T01:30:00.000Z";
 const currentRetail = createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf });
 const projection = await createRamTerminalPublicIntelligence({ catalog, currentRetail, historicalRepository: history, asOf, currentSnapshotId: currentState.current.snapshotId });
+const chronology = await createPublicChronologicalPriceSeries({ catalog, retailers, historicalRepository: history });
+const canonicalHistory = await history.getAll();
+const catalogProductIds = new Set(catalog.products.map(product => product.atlasProductId));
+const terminalSourceEligible = record => typeof record?.provenance?.source === "string" && (record.provenance.source.startsWith("DATAFORSEO_") || record.provenance.source.endsWith("_MANUAL_PUBLISHER_OBSERVATION") || record.provenance.acquisition?.type === "RETAINED_COMMERCE_FEED");
+const terminalAdmitted = canonicalHistory.filter(record => catalogProductIds.has(record.atlasProductId) && terminalSourceEligible(record));
+const currentlyPricedProducts = currentRetail.products.filter(product => (product.offers ?? []).some(offer => offer.comparisonEligible === true && offer.currency === "USD" && Number.isFinite(offer.itemPriceUsd))).length;
 assert.equal(validateRamTerminalPublicIntelligence(projection).valid, true);
-assert.deepEqual(Object.fromEntries(Object.entries(projection.lenses).map(([key, lens]) => [key, lens.coverage.productsTracked])), { ALL_RAM: 103, DDR5: 74, DDR4: 10, LAPTOP_SODIMM: 19 });
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, 410);
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.comparableObservationCount, 213);
-assert.equal(projection.lenses.ALL_RAM.historyCoverage.productsWithComparableHistory, 49);
-assert.equal(projection.lenses.ALL_RAM.coverage.productsCurrentlyPriced, 59);
+const trackedByLens = {
+    ALL_RAM: catalog.products.length,
+    DDR5: catalog.products.filter(product => product.memoryType === "DDR5" && product.formFactor === "DIMM").length,
+    DDR4: catalog.products.filter(product => product.memoryType === "DDR4" && product.formFactor === "DIMM").length,
+    LAPTOP_SODIMM: catalog.products.filter(product => product.formFactor === "SO_DIMM").length
+};
+assert.deepEqual(Object.fromEntries(Object.entries(projection.lenses).map(([key, lens]) => [key, lens.coverage.productsTracked])), trackedByLens);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.totalAdmittedObservationCount, terminalAdmitted.length);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.comparableObservationCount, chronology.eligibleObservationCount);
+assert.equal(projection.lenses.ALL_RAM.historyCoverage.productsWithComparableHistory, chronology.productSeriesCount);
+assert.equal(projection.lenses.ALL_RAM.coverage.productsCurrentlyPriced, currentlyPricedProducts);
 assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.every(row => row.formFactor === "SO_DIMM"), true);
 assert.equal(projection.lenses.LAPTOP_SODIMM.productRows.some(row => row.memoryType === "DDR4"), true);
 assert.doesNotMatch(JSON.stringify(projection), /destinationUrl|sourceUrl|rawPayload|providerTask|evidenceId|affiliate/i);
@@ -81,4 +100,4 @@ assert.equal(independentRow.history.previousComparableObservation.itemPriceUsd, 
 assert.equal(independentRow.history.changeFromPreviousAmount, -10);
 assert.equal(independentRow.history.movement, "DOWN");
 assert.equal(independentRow.current.itemPriceUsd < independentRow.history.observedMinimumItemPrice, true);
-console.log("Mercury RAM Terminal public intelligence contract passed.");
+console.log(`Mercury RAM Terminal public intelligence contract passed: ${terminalAdmitted.length} admitted, ${chronology.eligibleObservationCount} comparable, ${currentlyPricedProducts} currently priced.`);
