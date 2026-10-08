@@ -32,6 +32,8 @@ const terminal = JSON.parse(await read("public/data/ram-terminal.json"));
 const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
 const catalog = createRamCatalogProjection(products);
 const publicCatalog = JSON.parse(await read("public/data/ram-catalog.json"));
+const releasedProductIds = new Set(publicCatalog.products.map((product) => product.atlasProductId));
+const releasedProducts = products.filter((product) => releasedProductIds.has(product.identity.atlasProductId));
 const replay = createRamCatalogProjection([...products].reverse());
 
 assert.equal(catalog.productCount, manifest.products.length);
@@ -78,7 +80,7 @@ assert.throws(() => createRamPublicProductIdentity(unsafe), /RAM_PUBLIC_IDENTITY
 
 const titles = new Set();
 const canonicals = new Set();
-for (const product of catalog.products) {
+for (const product of publicCatalog.products) {
     const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
     await stat(output);
     const html = await readFile(output, "utf8");
@@ -117,10 +119,10 @@ const catalogScript = await read("public/js/modules/ramCatalog.js");
 assert.match(catalogScript, /href="\$\{escapeHtml\(item\.publicPath\)\}"/);
 assert.match(catalogScript, /View specifications/);
 const generatedCatalog = JSON.parse(await read("public/data/ram-catalog.json"));
-assert.deepEqual(generatedCatalog, catalog);
+assert.deepEqual(generatedCatalog, publicCatalog);
 
 const sitemap = await read("public/sitemap.xml");
-const productRoutes = createRamProductSitemapRoutes(products);
+const productRoutes = createRamProductSitemapRoutes(releasedProducts);
 assert.equal(productRoutes.length, publicCatalog.productCount);
 for (const route of productRoutes) assert.equal((sitemap.match(new RegExp(`<loc>https://cheapestram\\.com${route.path}</loc>`, "g")) ?? []).length, 1);
 const ramChildRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]);

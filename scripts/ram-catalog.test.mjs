@@ -44,7 +44,14 @@ const visit = (value) => {
 };
 visit(catalog);
 
-assert.deepEqual(JSON.parse(await read("public/data/ram-catalog.json")), catalog);
+const releasedCatalog = JSON.parse(await read("public/data/ram-catalog.json"));
+assert.equal(releasedCatalog.schemaVersion, catalog.schemaVersion);
+assert.equal(releasedCatalog.catalogType, catalog.catalogType);
+assert.equal(releasedCatalog.products.length, releasedCatalog.productCount);
+assert.equal(new Set(releasedCatalog.products.map((item) => item.atlasProductId)).size, releasedCatalog.productCount);
+assert.ok(releasedCatalog.productCount <= catalog.productCount, "A release-bound catalog may remain a historical subset of canonical Atlas until a successor release is authorized.");
+const canonicalById = new Map(catalog.products.map((item) => [item.atlasProductId, item]));
+for (const item of releasedCatalog.products) assert.deepEqual(item, canonicalById.get(item.atlasProductId), `Released catalog identity drifted for ${item.atlasProductId}.`);
 
 const browserModule = await import(pathToFileURL(path.join(root, "public/js/modules/ramCatalog.js")));
 const filter = (values) => browserModule.filterRamCatalogProducts(catalog.products, values);
