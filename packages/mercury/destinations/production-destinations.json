@@ -6440,6 +6440,130 @@
       "createdAt": "2026-10-08T00:30:09.215Z",
       "createdBy": "Clinton",
       "materialFingerprint": "7f2e107428ab969c620ab48cb2e2e65139ca084a66179ad96d24cf0323d7e55f"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_7977f87eb61a6d3d947a685f",
+      "atlasProductId": "ram_silicon_power_sp064gbsvu560f22",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/dp/B0G4QDFSWS",
+      "retailerListingId": "B0G4QDFSWS",
+      "binding": {
+        "manufacturerPartNumber": "SP064GBSVU560F22",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "assessment:mer_amzasin_60bbd6f136d97d719bb16ffc",
+          "provider-result:mer_providerresult_3b694c1622a5013ee685b98a",
+          "operator-review:mer_amzdestreview_4a078e505ecc93463ea0d166"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "Clinton",
+      "reviewedAt": "2026-10-08T01:02:25.868Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-08T01:02:25.868Z",
+      "createdBy": "Clinton",
+      "materialFingerprint": "901e4a35af2389da97371af61a3a1649e297dd06ad5ab48876aff027fb75651b"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_5a612a74f6b0735cdb3038c7",
+      "atlasProductId": "ram_klevv_kd5agsa80_56g460d",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/dp/B0BSN9SBFY",
+      "retailerListingId": "B0BSN9SBFY",
+      "binding": {
+        "manufacturerPartNumber": "KD5AGSA80-56G460D",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "assessment:mer_amzasin_13a382bd69e04d65367f5d46",
+          "provider-result:mer_providerresult_0076f7cd59dc4518d30571a6",
+          "operator-review:mer_amzdestreview_676c6ecc598f6a1fbd597fbc"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "Clinton",
+      "reviewedAt": "2026-10-08T01:16:51.339Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-08T01:16:51.339Z",
+      "createdBy": "Clinton",
+      "materialFingerprint": "189f5e3f8d25c54c28c74bba67d15718a31c42836468350d115a26ef1d9f0af5"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_971e510204c49a150d22fc6a",
+      "atlasProductId": "ram_silicon_power_sp064gblvu560f22",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/dp/B0CWD825S9",
+      "retailerListingId": "B0CWD825S9",
+      "binding": {
+        "manufacturerPartNumber": "SP064GBLVU560F22",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "assessment:mer_amzasin_85e5c3d0379d9e294213d687",
+          "provider-result:mer_providerresult_349af85960052324816bc6cb",
+          "operator-review:mer_amzdestreview_7034e08121acf250fae9d65d"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "Clinton",
+      "reviewedAt": "2026-10-08T01:22:22.961Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-08T01:22:22.961Z",
+      "createdBy": "Clinton",
+      "materialFingerprint": "1ce3b43ce15c2aaffbf91f8e99320e762b31d8ac2b81ae600e8f8247a7c92f75"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_7522dcef9b0070bf3634dc4f",
+      "atlasProductId": "ram_lexar_ld5s32g56c46st_bgs",
+      "retailerId": "RETAILER-0001",
+      "marketplace": "amazon.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://amazon.com/dp/B0DSHWRMPY",
+      "retailerListingId": "B0DSHWRMPY",
+      "binding": {
+        "manufacturerPartNumber": "LD5S32G56C46ST-BGS",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "assessment:mer_amzasin_827ed9ccda64ac9683c09e85",
+          "provider-result:mer_providerresult_2b06de3016a5c156ce8a19d1",
+          "operator-review:mer_amzdestreview_4981fc286f7363e4f604962c"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "Clinton",
+      "reviewedAt": "2026-10-08T01:26:44.362Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-08T01:26:44.362Z",
+      "createdBy": "Clinton",
+      "materialFingerprint": "19641d06ae3ff8198f1070d00d43d3d73a317b1e5afaebbc7f8cc1b2502cf6e3"
     }
   ]
 }
