@@ -5,6 +5,9 @@ export {ProductionForgeCohortOperationsProvider} from "./ProductionForgeCohortOp
 export {createForgeProductManagerProjection} from "./ForgeProductManagerProjection.js";
 export {GovernedRetailerLinkVerificationService,FORGE_LINK_VERIFICATION_STATUSES} from "./GovernedRetailerLinkVerificationService.js";
 export {ForgeProductMutationBoundary} from "./ForgeProductMutationBoundary.js";
+export {ForgeTrustedOperatorService} from "./ForgeTrustedOperatorService.js";
+export {FileForgeOperatorAuditRepository} from "./FileForgeOperatorAuditRepository.js";
+export {ForgeTrustedOperatorHttpRuntime} from "./ForgeTrustedOperatorHttpRuntime.js";
 export {ProductionForgeNeweggRoutineProvider} from "./ProductionForgeNeweggRoutineProvider.js";
 export {ProductionForgeExistingTaskSupervisionProvider} from "./ProductionForgeExistingTaskSupervisionProvider.js";
 export {ProductionForgeAmazonDestinationReviewProvider} from "./ProductionForgeAmazonDestinationReviewProvider.js";

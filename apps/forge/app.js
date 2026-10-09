@@ -5,6 +5,10 @@ import { ObservationReviewPanel } from "./components/ObservationReviewPanel.js";
 import { AcquisitionOperationsPanel } from "./components/AcquisitionOperationsPanel.js";
 import { CertifiedMercuryOperationsPanel } from "./components/CertifiedMercuryOperationsPanel.js";
 import { ProductManagerPanel } from "./components/ProductManagerPanel.js";
+import { ForgeShell } from "./components/ForgeShell.js";
+
+const shellRoot = document.getElementById("forgeApp");
+if (shellRoot) new ForgeShell(shellRoot);
 
 const productManagerRoot = document.getElementById("productManagerPanel");
 if (productManagerRoot) new ProductManagerPanel(productManagerRoot);
@@ -15,7 +19,10 @@ if (reviewPanelRoot) new ObservationReviewPanel(reviewPanelRoot, { copyToClipboa
 const acquisitionPanelRoot = document.getElementById("acquisitionOperationsPanel");
 if (acquisitionPanelRoot) new AcquisitionOperationsPanel(acquisitionPanelRoot);
 const certifiedMercuryRoot = document.getElementById("certifiedMercuryOperationsPanel");
-if (certifiedMercuryRoot) new CertifiedMercuryOperationsPanel(certifiedMercuryRoot);
+if (certifiedMercuryRoot) {
+    const certifiedOperations = new CertifiedMercuryOperationsPanel(certifiedMercuryRoot);
+    void certifiedOperations.loadUrl("/operator-data/certified-mercury-operations.json");
+}
 
 const form = document.getElementById("forgeForm");
 const productForm = new ProductForm(form);

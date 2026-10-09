@@ -98,6 +98,8 @@
     "history:comparability:execute": "node scripts/mercury-historical-comparability-recovery.mjs --action=execute",
     "forge:mercury:operations:export": "node scripts/forge-mercury-operations-export.mjs",
     "forge:product-manager:export": "node scripts/forge-product-manager-export.mjs",
+    "forge:operator:preview": "node scripts/serve-forge-operator-preview.mjs",
+    "forge:operator": "node scripts/serve-forge-operator-preview.mjs",
     "product:interest": "node scripts/beacon-product-interest.mjs",
     "product:interest:collection:status": "node scripts/beacon-interest-collection-status.mjs",
     "product:interest:retention": "node scripts/beacon-interest-retention-status.mjs",

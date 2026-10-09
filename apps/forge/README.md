@@ -14,4 +14,6 @@ Canonical Mercury ingestion remains owned by the certified Mercury adapter → v
 
 FM008 materializes the local projection at `.forge-review/forge/certified-mercury-operations.json`. Select that file in the certified panel; it is not automatically published or loaded as public price data.
 
-`npm run forge:product-manager:export -- --as-of=<ISO_TIME>` materializes `.forge-review/forge/product-manager.json`. Select it in the Product Manager panel for canonical read-only Atlas, destination, affiliate, Current/History, and link-health inspection. Static Forge cannot execute privileged changes or network checks; those controls remain disabled until a trusted authenticated operator runtime is connected.
+`npm run forge:product-manager:export -- --as-of=<ISO_TIME>` materializes `.forge-review/forge/product-manager.json`. `npm run forge:operator:preview` then opens the loopback-only read-only workspace at `http://127.0.0.1:4174/`; the Product Manager and certified Mercury projections load automatically. Manual JSON selection remains under **Settings / Diagnostics** as a fallback. Static Forge cannot execute privileged changes or network checks; those controls remain disabled with an explanation until a trusted authenticated operator runtime is connected.
+
+The current goal-oriented navigation is **Overview**, **Products**, **Retailer & Affiliate Links**, **Market Operations**, **Reviews & Exceptions**, and **Settings / Diagnostics**. Existing legacy authoring and raw JSON inspection remain available under Diagnostics rather than occupying the routine workflow.

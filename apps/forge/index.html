@@ -8,7 +8,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Hardware Radar Forge v0.2</title>
+    <title>Hardware Radar Forge</title>
 
     <link rel="stylesheet" href="styles.css">
 
@@ -25,7 +25,7 @@
 </head>
 
 <body>
-    <main class="forge-shell">
+    <main class="forge-shell" id="forgeApp">
         <header class="forge-header">
             <div class="forge-brand">
                 <p class="eyebrow">
@@ -61,29 +61,40 @@
                 <p>Find products, inspect canonical specifications, retailer destinations, affiliate routing, Current/History coverage, and link-health evidence.</p>
             </div>
             <div class="product-manager-load">
-                <label class="review-file-field">
+                <button id="productManagerAdd" class="primary-button" type="button" disabled>Add Product</button>
+                <label class="review-file-field" id="productManagerFileFallback">
                     <span>Product Manager projection</span>
                     <input id="productManagerFile" type="file" accept="application/json,.json">
                 </label>
                 <span id="productManagerBadge" class="status-badge pending">NOT LOADED</span>
-                <p id="productManagerSummary">Generate the read-only projection, then select <code>.forge-review/forge/product-manager.json</code>.</p>
+                <p id="productManagerSummary">Loading the certified local product catalog…</p>
             </div>
             <div class="product-manager-filters" aria-label="Product filters">
                 <label><span>Search</span><input id="productManagerSearch" type="search" placeholder="Brand, MPN, product name, or canonical ID"></label>
-                <label><span>DDR</span><select id="productManagerMemory"><option value="">All</option><option>DDR5</option><option>DDR4</option></select></label>
-                <label><span>Form factor</span><select id="productManagerFormFactor"><option value="">All</option><option value="DIMM">DIMM</option><option value="SO_DIMM">SO-DIMM</option></select></label>
-                <label><span>Capacity</span><select id="productManagerCapacity"><option value="">All</option></select></label>
-                <label><span>Lifecycle</span><select id="productManagerLifecycle"><option value="">All</option><option>ACTIVE</option><option>VERIFIED</option><option>DRAFT</option><option>ARCHIVED</option></select></label>
-                <label><span>Retailer coverage</span><select id="productManagerRetailer"><option value="">All</option><option value="RETAILER-0001">Amazon</option><option value="RETAILER-0004">Newegg</option><option value="MISSING">Missing URLs</option></select></label>
+                <label><span>Generation</span><select id="productManagerMemory"><option value="">All generations</option><option>DDR5</option><option>DDR4</option></select></label>
+                <label><span>Form factor</span><select id="productManagerFormFactor"><option value="">All form factors</option><option value="DIMM">DIMM</option><option value="SO_DIMM">SO-DIMM</option></select></label>
+                <label><span>Capacity</span><select id="productManagerCapacity"><option value="">All capacities</option></select></label>
+                <label><span>Lifecycle</span><select id="productManagerLifecycle"><option value="">All lifecycle states</option><option>ACTIVE</option><option>VERIFIED</option><option>DRAFT</option><option>ARCHIVED</option></select></label>
+                <label><span>Retailer coverage</span><select id="productManagerRetailer"><option value="">All retailer coverage</option><option value="RETAILER-0001">Amazon</option><option value="RETAILER-0004">Newegg</option><option value="MISSING">Missing destinations</option></select></label>
+                <label><span>Sort</span><select id="productManagerSort"><option value="brand">Brand</option><option value="name">Product name</option><option value="capacity">Capacity</option><option value="current">Current coverage</option><option value="history">History depth</option></select></label>
+                <button id="productManagerReset" class="secondary-button" type="button">Reset filters</button>
             </div>
             <div class="product-manager-workspace">
-                <div id="productManagerResults" class="product-manager-results" aria-live="polite"></div>
+                <div class="product-list-pane">
+                    <div id="productManagerResults" class="product-manager-results" aria-live="polite"></div>
+                    <nav class="product-pagination" aria-label="Product result pages">
+                        <button id="productManagerPrevious" class="secondary-button" type="button">Previous</button>
+                        <span id="productManagerPageStatus">0 products</span>
+                        <button id="productManagerNext" class="secondary-button" type="button">Next</button>
+                    </nav>
+                </div>
                 <article id="productManagerDetails" class="product-manager-details">
                     <h3>Select a product</h3>
-                    <p>Canonical details and governed link evidence will appear here.</p>
+                    <p>Choose a product to see canonical specifications, retailer links, Current coverage, and History availability.</p>
                 </article>
             </div>
-            <p class="product-manager-security"><strong>Writes are disabled.</strong> Create, edit, lifecycle, destination, affiliate, and live Check Link actions require the authenticated trusted operator runtime. This static browser never writes repository files.</p>
+            <p class="product-manager-security"><strong>Read-only by design.</strong> Changes and live checks require the authenticated trusted operator runtime. This local browser cannot write repository files.</p>
+            <dialog id="forgeProductDialog" class="operator-dialog"><form id="forgeProductDialogForm" method="dialog"><header><div><p class="pane-kicker">ATLAS CATALOG</p><h2>Add RAM product</h2></div><button value="cancel" class="secondary-button">Close</button></header><p>Products are saved as DRAFT after Atlas validation. Activation remains separate.</p><div class="operator-form-grid"><label><span>Manufacturer</span><input name="manufacturer" required></label><label><span>Product name</span><input name="productName" required></label><label><span>Canonical MPN</span><input name="mpn" required></label><label><span>Manufacturer evidence URL</span><input name="evidenceUrl" type="url" required></label><label><span>Generation</span><select name="memoryType"><option>DDR5</option><option>DDR4</option><option>DDR3</option></select></label><label><span>Form factor</span><select name="formFactor"><option value="DIMM">DIMM</option><option value="SO_DIMM">SO-DIMM</option></select></label><label><span>Total capacity (GB)</span><input name="capacityGb" type="number" min="1" required></label><label><span>Module count</span><input name="moduleCount" type="number" min="1" required></label><label><span>Capacity per module (GB)</span><input name="capacityPerModuleGb" type="number" min="1" required></label><label><span>Speed (MT/s)</span><input name="dataRateMtps" type="number" min="1" required></label><label><span>Primary timings</span><input name="primaryTimings" placeholder="30-36-36-76"></label><label><span>Voltage</span><input name="ratedVoltage" type="number" min="0" step="0.01"></label></div><p id="forgeProductDialogStatus" class="review-workflow-note"></p><footer><button id="forgeProductSave" class="primary-button" value="default">Validate and save draft</button></footer></form></dialog>
         </section>
 
         <form id="forgeForm">
@@ -859,7 +870,7 @@
                             <span id="certifiedMercuryProjectionStatus" class="status-badge pending">NO PROJECTION</span>
                         </div>
                         <p id="certifiedMercuryProjectionSummary" class="review-workflow-summary">Load a local certified Mercury operations projection. No repository or provider operation is performed.</p>
-                        <label class="review-file-field"><span>Certified projection</span><input id="certifiedMercuryProjectionFile" type="file" accept="application/json,.json"></label>
+                        <label class="review-file-field" id="certifiedMercuryFileFallback"><span>Certified projection</span><input id="certifiedMercuryProjectionFile" type="file" accept="application/json,.json"></label>
                         <section class="review-workflow-section">
                             <h4>Newegg routine operations</h4>
                             <p id="certifiedMercuryProjectionNeweggRoutineStatus" class="review-workflow-note">No certified Newegg routine projection loaded.</p>

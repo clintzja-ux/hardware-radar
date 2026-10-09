@@ -31,7 +31,14 @@ $asOf = (Get-Date).ToUniversalTime().ToString("o")
 npm run forge:product-manager:export -- --as-of=$asOf
 ```
 
-Open Forge and select `.forge-review/forge/product-manager.json` in **Product Manager projection**. The Product Manager searches all current Atlas products by brand, MPN, name, or canonical ID and filters by DDR generation, form factor, capacity, lifecycle, and retailer coverage. Product details show complete canonical specifications, Amazon/Newegg destinations and prior versions, operator-supplied Newegg affiliate status and public-action precedence, Current/History availability, and recorded link-health status.
+Refresh the certified Mercury projection, then start the read-only local Forge workspace:
+
+```powershell
+npm run forge:mercury:operations:export -- --as-of=$asOf
+npm run forge:operator:preview
+```
+
+Open `http://127.0.0.1:4174/`. Forge loads both ignored certified projections automatically. The Product Manager searches all current Atlas products by brand, MPN, name, or canonical ID and filters by DDR generation, form factor, capacity, lifecycle, and retailer coverage. Product details show complete canonical specifications, Amazon/Newegg destinations and prior versions, operator-supplied Newegg affiliate status and public-action precedence, Current/History availability, and recorded link-health status. Manual JSON import is a fallback under **Settings / Diagnostics**, not the normal workflow.
 
 This projection is read-only and performs no network operation. Buttons for product, lifecycle, destination, affiliate, and **Check Link** changes remain disabled until an authenticated trusted operator runtime is deployed. Never use browser JavaScript to write repository JSON, SQLite, `.env`, workbook, or canonical evidence. Ordinary production writes must invoke the existing Atlas or Mercury canonical owner through an authenticated, auditable server-side boundary.
 
@@ -206,3 +213,8 @@ Low-level `scripts/*.mjs`, fixture utilities, direct importers, recovery helpers
 - `config/operations/operator-command-registry.json`: machine-readable canonical command inventory.
 
 Any increment adding, changing, deprecating, superseding, or removing an operator-facing command must update both this runbook and the registry.
+# Trusted local Forge catalog administration
+
+Set `FORGE_OPERATOR_ID` to the named operator and run `npm run forge:operator`. Open the one-time loopback URL printed by the command. The URL signs the browser into a local-only session and is invalid after first use. Forge then enables product draft creation, permitted product edits, destination creation, and bounded Check Link operations. Every write is validated, confirmed, replay-protected, and audited. Stop the process to end the runtime session.
+
+This runtime grants no provider, Current, History, publication, release, or deployment authority. Affiliate mutation remains unavailable until the canonical workbook writer is certified; do not create a sidecar affiliate file.

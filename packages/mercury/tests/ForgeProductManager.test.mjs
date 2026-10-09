@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createForgeProductManagerProjection, ForgeProductMutationBoundary, GovernedRetailerLinkVerificationService } from "../index.js";
-import { filterForgeProducts } from "../../../apps/forge/components/ProductManagerPanel.js";
+import { ProductRepository } from "../../atlas/ProductRepository.js";
+import { filterForgeProducts, sortForgeProducts } from "../../../apps/forge/components/ProductManagerPanel.js";
 
 const products = Array.from({ length: 200 }, (_, index) => ({
     identity: { atlasProductId: `ram_fixture_${String(index + 1).padStart(3, "0")}`, brand: index % 2 ? "Fixture B" : "Fixture A", manufacturer: "Fixture", manufacturerPartNumber: `MPN-${index + 1}`, displayName: `Fixture RAM ${index + 1}`, slug: `fixture-ram-${index + 1}`, recordRevision: 1 },
@@ -27,6 +28,8 @@ assert.equal(filterForgeProducts(projection.products, { capacity: 32 }).length, 
 assert.equal(filterForgeProducts(projection.products, { lifecycle: "ACTIVE" }).length, 200);
 assert.equal(filterForgeProducts(projection.products, { retailer: "RETAILER-0001" }).length, 1);
 assert.equal(filterForgeProducts(projection.products, { retailer: "MISSING" }).length, 199);
+assert.equal(sortForgeProducts(projection.products, "capacity").length, 200);
+assert.equal(sortForgeProducts(projection.products, "name")[0].displayName, "Fixture RAM 1");
 
 const boundary = new ForgeProductMutationBoundary();
 assert.equal((await boundary.assess({ action: "CREATE_PRODUCT", operator: null, authenticated: false })).status, "UNAUTHORIZED");
@@ -47,9 +50,18 @@ assert.equal((await service({ status: 403, url: "https://www.amazon.com/dp/B0000
 assert.equal((await service({ status: 404, url: "https://www.amazon.com/dp/B000000001" }).verify({ url: "https://www.amazon.com/dp/B000000001" })).status, "BROKEN");
 await assert.rejects(() => service({ status: 200, url: "https://localhost/item" }).verify({ url: "https://localhost/item" }), /PROHIBITED/);
 
-const [html, app, component] = await Promise.all([readFile(new URL("../../../apps/forge/index.html", import.meta.url), "utf8"), readFile(new URL("../../../apps/forge/app.js", import.meta.url), "utf8"), readFile(new URL("../../../apps/forge/components/ProductManagerPanel.js", import.meta.url), "utf8")]);
-for (const token of ["Product Manager", "productManagerSearch", "productManagerRetailer", "Writes are disabled", "Check Link"]) assert.match(html, new RegExp(token));
+const [html, app, component, shell, server, canonicalProducts] = await Promise.all([readFile(new URL("../../../apps/forge/index.html", import.meta.url), "utf8"), readFile(new URL("../../../apps/forge/app.js", import.meta.url), "utf8"), readFile(new URL("../../../apps/forge/components/ProductManagerPanel.js", import.meta.url), "utf8"), readFile(new URL("../../../apps/forge/components/ForgeShell.js", import.meta.url), "utf8"), readFile(new URL("../../../scripts/serve-forge-operator-preview.mjs", import.meta.url), "utf8"), new ProductRepository({ readJson: async resource => JSON.parse(await readFile(resource, "utf8")) }).getAll()]);
+for (const token of ["Product Manager", "productManagerSearch", "productManagerRetailer", "Read-only by design", "productManagerSort", "productManagerPrevious"]) assert.match(html, new RegExp(token));
 assert.match(app, /ProductManagerPanel/);
-assert.match(component, /authenticated operator runtime|Authenticated trusted operator runtime/);
-assert.doesNotMatch(component, /fetch\s*\(/);
-console.log("Forge Product Manager projection and safety tests passed (34 cases).");
+assert.match(app, /ForgeShell/);
+assert.match(component, /trusted authenticated|authenticated trusted operator runtime/i);
+assert.match(component, /Check Link/);
+assert.match(component, /operator-data\/product-manager\.json/);
+for (const goal of ["Overview", "Products", "Retailer & Affiliate Links", "Market Operations", "Reviews & Exceptions", "Settings / Diagnostics"]) assert.match(shell, new RegExp(goal.replace("&", "&(?:amp;)?")));
+assert.match(server, /127\.0\.0\.1/);
+assert.match(server, /\["GET", "HEAD"\]/);
+assert.doesNotMatch(server, /listen\([^,]+,\s*["']0\.0\.0\.0/);
+const realCatalogProjection = createForgeProductManagerProjection({ asOf: "2026-10-08T00:00:00Z", products: canonicalProducts, destinationSource: { schemaVersion: "1.0", records: [], effective: [] }, currentSnapshot: { offers: [] }, historicalObservations: [] });
+assert.equal(realCatalogProjection.products.length, 158);
+assert.equal(filterForgeProducts(realCatalogProjection.products, { query: "CORSAIR" }).length, 19);
+console.log("Forge Product Manager and modern operator UX tests passed (46 cases).");

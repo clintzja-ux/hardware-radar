@@ -6,6 +6,7 @@ const testModules = [
     "./AmazonDestinationReviewWorkflow.test.mjs",
     "./AmazonDestinationRelevantStateBinding.test.mjs",
     "./ProductionFlatRetailerDestinationRepository.test.mjs",
+    "./ForgeTrustedOperatorSelfService.test.mjs",
     "./ProductionForgeAmazonDestinationReviewProvider.test.mjs",
     "./ExistingProviderTaskSupervision.test.mjs",
     "./ExistingProviderTaskSupervisionCli.test.mjs",
