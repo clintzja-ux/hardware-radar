@@ -1,5 +1,9 @@
 # Hardware Radar canonical handoff
 
+## Trusted local Forge operation (`FORGE-OPS-001`)
+
+The normal bounded catalog and retailer-link operator mode is the repository-root **`Launch Hardware Radar Forge.cmd`** launcher. It opens an authenticated loopback-only Forge session without requiring the operator to use PowerShell, Git, environment variables, tokens, or copied localhost URLs. Authentication uses an HttpOnly SameSite session established only by the one-use direct local-launch navigation, followed by same-origin and CSRF enforcement. Domain validation, audit, locking/serialization, stale-state rejection, collision checks, backup, and atomic persistence remain authoritative. A clean synchronized Git branch is not a routine-operation prerequisite; Forge has no commit, push, merge, publication, release, deployment, or provider authority. Command-line operation remains an engineering/recovery fallback.
+
 This is the stable orientation layer for new Hardware Radar engineering sessions. It points to authoritative repository artifacts; it does not replace source, tests, policies, ADRs, implementation contracts, runbooks, or Git state. Read [CURRENT-STATE.md](./CURRENT-STATE.md) for the living operational snapshot and [HANDOFF-PROTOCOL.md](./HANDOFF-PROTOCOL.md) before completing a meaningful increment.
 
 Operator procedures live in [HARDWARE-RADAR-OPERATOR-RUNBOOK.md](../operations/HARDWARE-RADAR-OPERATOR-RUNBOOK.md). The canonical machine inventory of operator commands is [`operator-command-registry.json`](../../config/operations/operator-command-registry.json). Future sessions must use those sources rather than reconstructing operations from chat history.

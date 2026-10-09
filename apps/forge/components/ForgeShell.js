@@ -20,6 +20,7 @@ export class ForgeShell {
         window.addEventListener("forge:product-manager-loaded", event => this.renderProductProjection(event.detail));
         window.addEventListener("forge:product-selected", event => this.renderSelection(event.detail));
         window.addEventListener("forge:operations-loaded", event => this.renderOperations(event.detail));
+        window.addEventListener("forge:trusted-session", event => this.renderTrustedSession(event.detail));
     }
 
     build() {
@@ -81,6 +82,12 @@ export class ForgeShell {
         app.append(sidebar, workspace); this.root.replaceChildren(app);
         const overlay = node("button", "sidebar-overlay", "Close navigation"); overlay.type = "button"; overlay.addEventListener("click", () => this.toggleMenu(false)); document.body.append(overlay);
         this.sidebar = sidebar; this.overlay = overlay;
+        this.safety = safety; this.topStatus = status;
+    }
+
+    renderTrustedSession({ operatorId }) {
+        this.safety.innerHTML = `<span class="status-dot"></span><div><strong>Trusted operator</strong><small>${operatorId} · governed changes enabled</small></div>`;
+        this.topStatus.innerHTML = `<span class="status-dot"></span><span>Authenticated local session</span>`;
     }
 
     createOverview() {

@@ -2,13 +2,10 @@ import crypto from "node:crypto";
 const json=(response,status,value)=>{response.writeHead(status,{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Content-Type-Options":"nosniff"});response.end(JSON.stringify(value));};
 const cookies=request=>Object.fromEntries(String(request.headers.cookie??"").split(";").map(x=>x.trim().split("=")).filter(x=>x.length===2));
 export class ForgeTrustedOperatorHttpRuntime{
- constructor({service,operatorId,bootstrapToken=crypto.randomBytes(32).toString("base64url"),allowedOrigin}={}){if(!service||!operatorId||!allowedOrigin)throw new TypeError("FORGE_HTTP_RUNTIME_CONFIGURATION_REQUIRED");Object.assign(this,{service,operatorId,bootstrapToken,allowedOrigin});this.sessions=new Map();}
+ constructor({service,operatorId,allowedOrigin,trustedLaunch=false,now=()=>Date.now()}={}){if(!service||!operatorId||!allowedOrigin)throw new TypeError("FORGE_HTTP_RUNTIME_CONFIGURATION_REQUIRED");Object.assign(this,{service,operatorId,allowedOrigin,trustedLaunch,now});this.sessions=new Map();this.launchExpiresAt=now()+120000;this.launchClaimed=false;}
+ establishTrustedLaunch(request,response){if(!this.trustedLaunch||this.launchClaimed||this.now()>this.launchExpiresAt||request.method!=="GET"||request.url!=="/"||request.headers["sec-fetch-site"]!=="none"||request.headers["sec-fetch-mode"]!=="navigate"||request.headers["sec-fetch-dest"]!=="document")return false;const id=crypto.randomBytes(32).toString("base64url"),csrf=crypto.randomBytes(24).toString("base64url");this.sessions.set(id,{csrf,createdAt:this.now()});this.launchClaimed=true;response.setHeader("Set-Cookie",`forge_session=${id}; HttpOnly; SameSite=Strict; Path=/`);return true;}
  async handle(request,response){
   const url=new URL(request.url,this.allowedOrigin);
-  if(url.pathname==="/operator-api/bootstrap"&&request.method==="POST"){
-   if(request.headers.origin!==this.allowedOrigin||request.headers["x-forge-bootstrap"]!==this.bootstrapToken)return json(response,401,{error:"UNAUTHORIZED"});
-   const id=crypto.randomBytes(32).toString("base64url"),csrf=crypto.randomBytes(24).toString("base64url");this.sessions.set(id,{csrf,createdAt:Date.now()});response.setHeader("Set-Cookie",`forge_session=${id}; HttpOnly; SameSite=Strict; Path=/`);this.bootstrapToken=null;return json(response,200,{operatorId:this.operatorId,csrf});
-  }
   if(!url.pathname.startsWith("/operator-api/"))return false;
   const session=this.sessions.get(cookies(request).forge_session),sameOrigin=request.headers.origin===this.allowedOrigin||(request.method==="GET"&&String(request.headers.referer??"").startsWith(`${this.allowedOrigin}/`));
   if(!session||!sameOrigin)return json(response,401,{error:"FORGE_OPERATOR_UNAUTHORIZED"});

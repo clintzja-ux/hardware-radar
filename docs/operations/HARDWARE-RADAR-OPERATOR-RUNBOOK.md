@@ -40,14 +40,13 @@ npm run forge:operator:preview
 
 Open `http://127.0.0.1:4174/`. Forge loads both ignored certified projections automatically. The Product Manager searches all current Atlas products by brand, MPN, name, or canonical ID and filters by DDR generation, form factor, capacity, lifecycle, and retailer coverage. Product details show complete canonical specifications, Amazon/Newegg destinations and prior versions, operator-supplied Newegg affiliate status and public-action precedence, Current/History availability, and recorded link-health status. Manual JSON import is a fallback under **Settings / Diagnostics**, not the normal workflow.
 
-For authorized local self-service, start the loopback-only trusted runtime from a clean synchronized `hardware-radar-growth-1` checkout:
+For authorized local self-service, double-click **`Launch Hardware Radar Forge.cmd`** in the repository folder. The launcher starts the loopback-only trusted runtime when needed and opens `http://127.0.0.1:4174/` in the default browser. No PowerShell, Git command, environment variable, token, or localhost URL needs to be copied. Forge shows **Signed in as operator:<Windows user>** when the authenticated session is ready. If startup or sign-in fails, Forge reports a specific recovery message rather than silently falling back to read-only behavior.
 
-```powershell
-$env:FORGE_OPERATOR_ID = "operator:<name>"
-npm run forge:operator
-```
+Product Manager reloads canonical Atlas, destination, Current/History, and affiliate-workbook state automatically after successful audited changes. It supports evidence-backed manufacturer registration, DRAFT product creation, permitted edits, destinations, bounded **Check Link**, and Newegg affiliate add/replace/disable/history. Product activation remains unavailable because no generic canonical activation owner is established. Manual projection import remains a diagnostics fallback. Browser JavaScript never writes canonical files directly; the trusted server invokes existing Atlas and Mercury owners.
 
-Open the one-use localhost URL printed by the command. Product Manager then reloads canonical Atlas, destination, Current/History, and affiliate-workbook state automatically after successful audited changes. It supports evidence-backed manufacturer registration, DRAFT product creation, permitted edits, destinations, bounded **Check Link**, and Newegg affiliate add/replace/disable/history. Product activation remains unavailable because no generic canonical activation owner is established. Manual projection import remains a diagnostics fallback. Browser JavaScript never writes canonical files directly; the trusted server invokes existing Atlas and Mercury owners.
+Routine Forge operation does not require a clean synchronized Git branch. Canonical owners still enforce validation, immutable audit, stale-state checks, collision checks, serialization/locking, backups, and atomic writes. Forge never commits, pushes, merges, releases, or deploys. Git and command-line procedures remain engineering/recovery tools, not routine operator prerequisites.
+
+**FORGE-OPS-001 — Trusted local operator mode.** A trusted authenticated Forge session launched through the Hardware Radar local launcher is the normal operator mode for bounded catalog and retailer-link administration. Routine operators use Forge controls; terminal and Git workflows are reserved for engineering and recovery. Browser sessions remain loopback-only, same-origin, HttpOnly-cookie authenticated, CSRF protected, operator identified, and auditable. Governance is enforced at the domain and persistence boundaries rather than by requiring a pristine Git checkout.
 
 Use Forge as the normal read-only operational surface. Refresh its canonical projection with:
 
