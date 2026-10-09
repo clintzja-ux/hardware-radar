@@ -6,7 +6,8 @@ import { fileURLToPath } from "node:url";
 import { readFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { ProductRepository, RetailerRepository, FileAtlasCatalogAdministrationRepository } from "../packages/atlas/index.js";
-import { ProductionFlatRetailerDestinationRepository, ForgeTrustedOperatorService, ForgeTrustedOperatorHttpRuntime, FileForgeOperatorAuditRepository, GovernedRetailerLinkVerificationService, ManualCurrentPriceAffiliateWorkbookRepository, FileCurrentDisplaySnapshotRepository, readManualCurrentPriceWorkbookRows, FileHistoricalObservationRepository, createForgeProductManagerProjection } from "../packages/mercury/index.js";
+import { ProductionFlatRetailerDestinationRepository, ForgeTrustedOperatorService, ForgeTrustedOperatorHttpRuntime, FileForgeOperatorAuditRepository, GovernedRetailerLinkVerificationService, FileHistoricalObservationRepository, createForgeProductManagerProjection } from "../packages/mercury/index.js";
+import { FileCurrentDisplaySnapshotRepository, ManualCurrentPriceAffiliateWorkbookRepository, readManualCurrentPriceWorkbookRows } from "../packages/mercury/current-display/index.js";
 import { loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -54,6 +55,8 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, "127.0.0.1", () => {
-    console.log(trustedRuntime?`Forge trusted operator: http://127.0.0.1:${port}/#forge-bootstrap=${encodeURIComponent(trustedRuntime.bootstrapToken)}`:`Forge operator preview: http://127.0.0.1:${port}/`);
+    const actualPort=server.address().port;
+    console.log(trustedRuntime?`Forge trusted operator: http://127.0.0.1:${actualPort}/#forge-bootstrap=${encodeURIComponent(trustedRuntime.bootstrapToken)}`:`Forge operator preview: http://127.0.0.1:${actualPort}/`);
     console.log(trustedRuntime?`Authenticated operator: ${operatorId}. Loopback only. Press Ctrl+C to stop.`:"Read-only loopback server. Press Ctrl+C to stop.");
 });
+for(const signal of ["SIGINT","SIGTERM"])process.once(signal,()=>server.close(()=>process.exit(0)));

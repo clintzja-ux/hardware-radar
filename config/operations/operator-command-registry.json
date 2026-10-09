@@ -5,7 +5,7 @@
   "documentation": "docs/operations/HARDWARE-RADAR-OPERATOR-RUNBOOK.md",
   "inventory": {
     "packageScriptDeclarations": 219,
-    "topLevelMjsFiles": 210,
+    "topLevelMjsFiles": 211,
     "windowsPowerShellFiles": 10,
     "operatorEligibleEntries": 23,
     "nonOperatorDeclarations": 414,
