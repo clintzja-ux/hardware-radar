@@ -40,7 +40,14 @@ npm run forge:operator:preview
 
 Open `http://127.0.0.1:4174/`. Forge loads both ignored certified projections automatically. The Product Manager searches all current Atlas products by brand, MPN, name, or canonical ID and filters by DDR generation, form factor, capacity, lifecycle, and retailer coverage. Product details show complete canonical specifications, Amazon/Newegg destinations and prior versions, operator-supplied Newegg affiliate status and public-action precedence, Current/History availability, and recorded link-health status. Manual JSON import is a fallback under **Settings / Diagnostics**, not the normal workflow.
 
-This projection is read-only and performs no network operation. Buttons for product, lifecycle, destination, affiliate, and **Check Link** changes remain disabled until an authenticated trusted operator runtime is deployed. Never use browser JavaScript to write repository JSON, SQLite, `.env`, workbook, or canonical evidence. Ordinary production writes must invoke the existing Atlas or Mercury canonical owner through an authenticated, auditable server-side boundary.
+For authorized local self-service, start the loopback-only trusted runtime from a clean synchronized `hardware-radar-growth-1` checkout:
+
+```powershell
+$env:FORGE_OPERATOR_ID = "operator:<name>"
+npm run forge:operator
+```
+
+Open the one-use localhost URL printed by the command. Product Manager then reloads canonical Atlas, destination, Current/History, and affiliate-workbook state automatically after successful audited changes. It supports evidence-backed manufacturer registration, DRAFT product creation, permitted edits, destinations, bounded **Check Link**, and Newegg affiliate add/replace/disable/history. Product activation remains unavailable because no generic canonical activation owner is established. Manual projection import remains a diagnostics fallback. Browser JavaScript never writes canonical files directly; the trusted server invokes existing Atlas and Mercury owners.
 
 Use Forge as the normal read-only operational surface. Refresh its canonical projection with:
 

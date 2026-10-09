@@ -60,7 +60,7 @@ function destinationProjection({ productId, records, effective, affiliateRow }) 
     });
 }
 
-export function createForgeProductManagerProjection({ asOf, products, destinationSource, currentSnapshot = null, historicalObservations = [], affiliateRows = [] } = {}) {
+export function createForgeProductManagerProjection({ asOf, products, brands = [], destinationSource, currentSnapshot = null, historicalObservations = [], affiliateRows = [] } = {}) {
     if (!Number.isFinite(Date.parse(asOf)) || !Array.isArray(products) || destinationSource?.schemaVersion !== "1.0" || !Array.isArray(destinationSource.records) || !Array.isArray(destinationSource.effective) || !Array.isArray(historicalObservations) || !Array.isArray(affiliateRows)) {
         throw new TypeError("FORGE_PRODUCT_MANAGER_SOURCE_INVALID");
     }
@@ -109,6 +109,7 @@ export function createForgeProductManagerProjection({ asOf, products, destinatio
             productsWithHistory: items.filter(value => value.history.available).length,
             productsMissingDestinations: items.filter(value => !value.destinations.length).length
         },
+        manufacturers: brands.map(brand=>({brandId:brand.brandId,displayName:brand.displayName,aliases:clone(brand.aliases??[])})).sort((a,b)=>a.displayName.localeCompare(b.displayName)),
         products: items,
         capabilities: {
             catalogInspection: true,
