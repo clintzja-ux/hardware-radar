@@ -16,7 +16,7 @@ export async function loadRetailerDestinationSource({ sourcePath, products, reta
         if (!report.valid) fail(report.errors.join(","));
         if (byId.has(record.destinationId)) fail("DUPLICATE_ID");
         const binding = assessRetailerDestinationBinding({ destination: record, product: productById.get(record.atlasProductId), retailer: retailerById.get(record.retailerId) });
-        if (binding.reasons.some(reason => reason !== "RETAILER_DESTINATION_RETIRED")) fail(binding.reasons.join(","));
+        if (binding.reasons.some(reason => !["RETAILER_DESTINATION_RETIRED","RETAILER_DESTINATION_ATLAS_PRODUCT_DRAFT_NOT_PUBLIC"].includes(reason))) fail(binding.reasons.join(","));
         byId.set(record.destinationId, structuredClone(record));
     }
     const byKey = new Map();

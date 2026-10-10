@@ -1,0 +1,79 @@
+{
+  "identity": {
+    "atlasProductId": "ram_timetec_76tt26nus2r8_16g",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 3,
+    "createdAt": "2026-10-10T02:00:11.014Z",
+    "updatedAt": "2026-10-10T02:18:57.009Z",
+    "createdBy": "forge:trusted-operator",
+    "updatedBy": "forge:trusted-operator",
+    "brand": "Timetec",
+    "manufacturer": "Timetec",
+    "modelName": "Timetec 32GB KIT (2x16GB) DDR4 2666MHz (PC4-2666V) PC4-21300 UDIMM Desktop RAM 288-Pin",
+    "manufacturerPartNumber": "76TT26NUS2R8-16G",
+    "displayName": "Timetec 32GB KIT (2x16GB) DDR4 2666MHz (PC4-2666V) PC4-21300 UDIMM Desktop RAM 288-Pin",
+    "slug": "timetec-timetec-32gb-kit-2x16gb-ddr4-2666mhz-pc4-2666v-pc4-21300-udimm-desktop-ram-288-pin-76tt26nus2r8-16g"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-76TT26NUS2R8-16G",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://timetecinc.com/products/timetec-premium-ddr4-sodimm-laptop-memory?variant=44776567144614",
+          "retrievedAt": "2026-10-10T02:00:11.014Z",
+          "verifiedBy": "forge:trusted-operator",
+          "verificationStatus": "VERIFIED"
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-10-10T02:00:11.014Z",
+    "validatorVersion": "atlas-product-validator/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16
+      },
+      "performance": {
+        "dataRateMtps": 2666,
+        "speedLabel": "DDR4-2666",
+        "primaryTimings": "19-19-19-43",
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN"
+      },
+      "electrical": {
+        "ratedVoltage": 1.2
+      },
+      "physical": {
+        "heatSpreader": false,
+        "rgbLighting": false
+      },
+      "compatibility": {}
+    }
+  }
+}

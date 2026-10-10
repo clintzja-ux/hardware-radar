@@ -60,8 +60,8 @@ function destinationProjection({ productId, records, effective, affiliateRow }) 
     });
 }
 
-export function createForgeProductManagerProjection({ asOf, products, brands = [], destinationSource, currentSnapshot = null, historicalObservations = [], affiliateRows = [] } = {}) {
-    if (!Number.isFinite(Date.parse(asOf)) || !Array.isArray(products) || destinationSource?.schemaVersion !== "1.0" || !Array.isArray(destinationSource.records) || !Array.isArray(destinationSource.effective) || !Array.isArray(historicalObservations) || !Array.isArray(affiliateRows)) {
+export function createForgeProductManagerProjection({ asOf, products, brands = [], retailers = [], destinationSource, currentSnapshot = null, historicalObservations = [], affiliateRows = [] } = {}) {
+    if (!Number.isFinite(Date.parse(asOf)) || !Array.isArray(products) || !Array.isArray(retailers) || destinationSource?.schemaVersion !== "1.0" || !Array.isArray(destinationSource.records) || !Array.isArray(destinationSource.effective) || !Array.isArray(historicalObservations) || !Array.isArray(affiliateRows)) {
         throw new TypeError("FORGE_PRODUCT_MANAGER_SOURCE_INVALID");
     }
     const currentIds = currentProductIds(currentSnapshot), history = historyCounts(historicalObservations), affiliates = new Map(affiliateRows.map(row => [row.atlasProductId, row]));
@@ -110,6 +110,7 @@ export function createForgeProductManagerProjection({ asOf, products, brands = [
             productsMissingDestinations: items.filter(value => !value.destinations.length).length
         },
         manufacturers: brands.map(brand=>({brandId:brand.brandId,displayName:brand.displayName,aliases:clone(brand.aliases??[])})).sort((a,b)=>a.displayName.localeCompare(b.displayName)),
+        retailers: retailers.filter(retailer=>retailer.status==="active").map(retailer=>({retailerId:retailer.id,name:retailer.name,marketplace:new URL(retailer.websiteUrl).hostname.replace(/^www\./,"").toLowerCase()})).sort((a,b)=>a.name.localeCompare(b.name)),
         products: items,
         capabilities: {
             catalogInspection: true,

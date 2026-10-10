@@ -10,7 +10,7 @@ export const RETAILER_DESTINATION_STATUSES = Object.freeze(["ACTIVE", "RETIRED"]
 export const RETAILER_DESTINATION_NAVIGATION_AUTHORITY = "DESTINATION_NAVIGATION_ELIGIBLE";
 
 const SHORTENER_HOSTS = new Set(["bit.ly", "buff.ly", "cutt.ly", "goo.gl", "ow.ly", "t.co", "tinyurl.com"]);
-const TRACKING_PARAMETERS = new Set(["fbclid", "gclid", "msclkid", "srsltid"]);
+const TRACKING_PARAMETERS = new Set(["fbclid", "gclid", "msclkid", "srsltid", "cm_sp", "cm_mmc", "nm_mc", "quicklink"]);
 const PROHIBITED_KEYS = new Set(["price", "currency", "availability", "condition", "shipping", "tax", "discount", "promotion", "cheapest", "currentprice", "recommendation", "pick", "rank", "score", "affiliate", "affiliateenabled", "affiliateurl", "isaffiliatelink"]);
 const TOP_LEVEL_KEYS = new Set(["schemaVersion", "destinationId", "atlasProductId", "retailerId", "marketplace", "destinationType", "destinationUrl", "retailerListingId", "binding", "provenance", "reviewedBy", "reviewedAt", "status", "supersedesDestinationId", "retirementReason", "createdAt", "createdBy", "materialFingerprint"]);
 const BINDING_KEYS = new Set(["manufacturerPartNumber", "method", "scope", "evidenceReferences"]);
@@ -47,6 +47,7 @@ export function canonicalizeRetailerDestinationUrl(value) {
         const lower = key.toLowerCase();
         if (lower.startsWith("utm_") || TRACKING_PARAMETERS.has(lower)) url.searchParams.delete(key);
     }
+    if(host==="newegg.com")for(const key of [...url.searchParams.keys()])if(key.toLowerCase()==="item"){const listing=url.searchParams.get(key)?.trim().toUpperCase(),pathListing=/\/p\/([^/]+)/i.exec(url.pathname)?.[1]?.toUpperCase();if(listing&&pathListing===listing)url.searchParams.delete(key);}
     if ([...url.searchParams.keys()].length) throw new TypeError("RETAILER_DESTINATION_QUERY_UNSUPPORTED");
     const path = url.pathname.replace(/\/{2,}/g, "/").replace(/\/$/, "") || "/";
     if (path === "/") throw new TypeError("RETAILER_DESTINATION_PRODUCT_PATH_REQUIRED");
@@ -142,7 +143,9 @@ export function assessRetailerDestinationBinding({ destination, product, retaile
     if (!structural.valid) reasons.push(...structural.errors);
     if (!product || product.identity?.atlasProductId !== destination?.atlasProductId) reasons.push("RETAILER_DESTINATION_ATLAS_PRODUCT_UNKNOWN");
     else {
-        if (product.governance?.lifecycleStatus !== "ACTIVE" || product.governance?.publicationStatus !== "READY") reasons.push("RETAILER_DESTINATION_ATLAS_PRODUCT_NOT_ACTIVE_READY");
+        const activeReady=product.governance?.lifecycleStatus === "ACTIVE" && product.governance?.publicationStatus === "READY",draftPending=product.governance?.lifecycleStatus === "DRAFT" && product.governance?.publicationStatus === "PENDING";
+        if (!activeReady&&!draftPending) reasons.push("RETAILER_DESTINATION_ATLAS_PRODUCT_NOT_ACTIVE_READY");
+        else if(draftPending) reasons.push("RETAILER_DESTINATION_ATLAS_PRODUCT_DRAFT_NOT_PUBLIC");
         if (product.identity?.manufacturerPartNumber !== destination.binding?.manufacturerPartNumber) reasons.push("RETAILER_DESTINATION_MPN_MISMATCH");
     }
     if (!retailer || retailer.id !== destination?.retailerId) reasons.push("RETAILER_DESTINATION_ATLAS_RETAILER_UNKNOWN");

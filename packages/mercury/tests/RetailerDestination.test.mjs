@@ -75,6 +75,11 @@ throws(() => createRetailerDestination(makeInput({ destinationUrl: "https://bit.
 throws(() => createRetailerDestination(makeInput({ destinationUrl: "https://platinummicro.com/fixture/product?variant=1" })), /QUERY_UNSUPPORTED/);
 throws(() => createRetailerDestination(makeInput({ destinationUrl: "https://platinummicro.com/" })), /PRODUCT_PATH_REQUIRED/);
 equal(canonicalizeRetailerDestinationUrl("https://platinummicro.com/fixture/product?utm_campaign=x#fragment"), "https://platinummicro.com/fixture/product");
+equal(canonicalizeRetailerDestinationUrl("https://www.newegg.com/p/N82E16800000001?Item=N82E16800000001&cm_sp=fixture"), "https://newegg.com/p/N82E16800000001");
+throws(() => canonicalizeRetailerDestinationUrl("https://www.newegg.com/p/N82E16800000001?Item=N82E16899999999"), /QUERY_UNSUPPORTED/);
+const draftAssessment = assessRetailerDestinationBinding({ destination, product: { ...product, governance: { lifecycleStatus: "DRAFT", publicationStatus: "PENDING" } }, retailer });
+equal(draftAssessment.eligible, false);
+check(draftAssessment.reasons.includes("RETAILER_DESTINATION_ATLAS_PRODUCT_DRAFT_NOT_PUBLIC"));
 throws(() => createRetailerDestination(makeInput({ binding: { ...makeInput().binding, evidenceReferences: [] } })), /BINDING_INVALID/);
 throws(() => createRetailerDestination(makeInput({ binding: { ...makeInput().binding, scope: "BUNDLE" } })), /BINDING_INVALID/);
 throws(() => createRetailerDestination({ ...makeInput(), price: 99 }), /PROHIBITED_FIELD/);
