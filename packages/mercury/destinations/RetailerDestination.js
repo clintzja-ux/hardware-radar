@@ -47,11 +47,20 @@ export function canonicalizeRetailerDestinationUrl(value) {
         const lower = key.toLowerCase();
         if (lower.startsWith("utm_") || TRACKING_PARAMETERS.has(lower)) url.searchParams.delete(key);
     }
-    if(host==="newegg.com")for(const key of [...url.searchParams.keys()])if(key.toLowerCase()==="item"){const listing=url.searchParams.get(key)?.trim().toUpperCase(),pathListing=/\/p\/([^/]+)/i.exec(url.pathname)?.[1]?.toUpperCase();if(listing&&pathListing===listing)url.searchParams.delete(key);}
-    if ([...url.searchParams.keys()].length) throw new TypeError("RETAILER_DESTINATION_QUERY_UNSUPPORTED");
+    if(host==="newegg.com"){
+        const itemEntries=[...url.searchParams.entries()].filter(([key])=>key.toLowerCase()==="item");
+        if(itemEntries.length>1)throw new TypeError("RETAILER_DESTINATION_QUERY_UNSUPPORTED");
+        if(itemEntries.length===1){
+            const [key,raw]=itemEntries[0],listing=raw.trim().toUpperCase();
+            if(!/^[A-Z0-9-]{5,32}$/.test(listing))throw new TypeError("RETAILER_DESTINATION_NEWEGG_ITEM_INVALID");
+            url.searchParams.delete(key);
+            url.searchParams.set("Item",listing);
+        }
+    }
+    if ([...url.searchParams.keys()].some(key=>!(host==="newegg.com"&&key==="Item"))) throw new TypeError("RETAILER_DESTINATION_QUERY_UNSUPPORTED");
     const path = url.pathname.replace(/\/{2,}/g, "/").replace(/\/$/, "") || "/";
     if (path === "/") throw new TypeError("RETAILER_DESTINATION_PRODUCT_PATH_REQUIRED");
-    return `https://${host}${path}`;
+    return `https://${host}${path}${url.search}`;
 }
 
 function identityMaterial(record) {

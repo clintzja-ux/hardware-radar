@@ -1,6 +1,7 @@
 const STATUSES = Object.freeze(["WORKING", "REDIRECTED", "BROKEN", "BLOCKED_FROM_VERIFICATION", "IDENTITY_REVIEW_REQUIRED", "NOT_CHECKED"]);
 const PRIVATE_HOST = /^(localhost|127\.|0\.0\.0\.0$|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|\[?::1\]?$)/i;
 const freeze = value => Object.freeze(value);
+const host=value=>String(value??"").toLowerCase().replace(/^www\./,"");
 
 export class GovernedRetailerLinkVerificationService {
     constructor({ request, allowedHosts = ["amazon.com", "www.amazon.com", "newegg.com", "www.newegg.com", "click.linksynergy.com"], timeoutMs = 10_000, now = () => new Date().toISOString() } = {}) {
@@ -20,7 +21,7 @@ export class GovernedRetailerLinkVerificationService {
             const final = this._url(response.url || requested.href), status = Number(response.status);
             if ([401, 403, 429].includes(status)) return freeze({ status: "BLOCKED_FROM_VERIFICATION", checkedAt: this.now(), finalUrl: final.href, httpStatus: status, reasons: ["RETAILER_BLOCKED_AUTOMATED_VERIFICATION"] });
             if (status < 200 || status >= 400) return freeze({ status: "BROKEN", checkedAt: this.now(), finalUrl: final.href, httpStatus: status, reasons: ["HTTP_FAILURE"] });
-            if (expectedRetailerHost && final.hostname.toLowerCase() !== expectedRetailerHost.toLowerCase()) return freeze({ status: "IDENTITY_REVIEW_REQUIRED", checkedAt: this.now(), finalUrl: final.href, httpStatus: status, reasons: ["RETAILER_DOMAIN_MISMATCH"] });
+            if (expectedRetailerHost && host(final.hostname) !== host(expectedRetailerHost)) return freeze({ status: "IDENTITY_REVIEW_REQUIRED", checkedAt: this.now(), finalUrl: final.href, httpStatus: status, reasons: ["RETAILER_DOMAIN_MISMATCH"] });
             if (expectedListingId && !decodeURIComponent(final.href).toUpperCase().includes(String(expectedListingId).toUpperCase())) return freeze({ status: "IDENTITY_REVIEW_REQUIRED", checkedAt: this.now(), finalUrl: final.href, httpStatus: status, reasons: ["PRODUCT_IDENTIFIER_NOT_CONFIRMED"] });
             return freeze({ status: final.href === requested.href ? "WORKING" : "REDIRECTED", checkedAt: this.now(), finalUrl: final.href, httpStatus: status, reasons: [] });
         } catch (error) {

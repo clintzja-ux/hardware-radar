@@ -6564,6 +6564,35 @@
       "createdAt": "2026-10-08T01:26:44.362Z",
       "createdBy": "Clinton",
       "materialFingerprint": "19641d06ae3ff8198f1070d00d43d3d73a317b1e5afaebbc7f8cc1b2502cf6e3"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_426c295ef1d131ba8f2d25b6",
+      "atlasProductId": "ram_timetec_76tt26nus2r8_16g",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/timetec-32gb-ddr4-2666-cas-latency-cl19-memory/p/0RM-006H-000A7",
+      "retailerListingId": "0RM-006H-000A7",
+      "binding": {
+        "manufacturerPartNumber": "76TT26NUS2R8-16G",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/timetec-32gb-ddr4-2666-cas-latency-cl19-memory/p/0RM-006H-000A7"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-10-10T12:39:52.518Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-10-10T12:39:52.518Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "5903d7a6ca423aa9cc33e9c7501074a5e6f7f2bb273d935159011803afc5bf29"
     }
   ]
 }

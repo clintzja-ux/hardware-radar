@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createForgeProductManagerProjection, ForgeProductMutationBoundary, GovernedRetailerLinkVerificationService } from "../index.js";
 import { ProductRepository } from "../../atlas/ProductRepository.js";
-import { extractForgeRetailerListing, filterForgeProducts, forgeAffiliateSupport, formatForgeOperatorError, normalizeForgeRetailers, sortForgeProducts } from "../../../apps/forge/components/ProductManagerPanel.js";
+import { extractForgeRetailerListing, parseForgeRetailerUrl, filterForgeProducts, forgeAffiliateSupport, formatForgeOperatorError, normalizeForgeRetailers, sortForgeProducts } from "../../../apps/forge/components/ProductManagerPanel.js";
 
 const products = Array.from({ length: 200 }, (_, index) => ({
     identity: { atlasProductId: `ram_fixture_${String(index + 1).padStart(3, "0")}`, brand: index % 2 ? "Fixture B" : "Fixture A", manufacturer: "Fixture", manufacturerPartNumber: `MPN-${index + 1}`, displayName: `Fixture RAM ${index + 1}`, slug: `fixture-ram-${index + 1}`, recordRevision: 1 },
@@ -27,6 +27,9 @@ assert.deepEqual(normalizeForgeRetailers([null, projection.retailers[0]]), [proj
 assert.equal(forgeAffiliateSupport(projection.retailers[1]).supported, true);
 assert.equal(forgeAffiliateSupport(projection.retailers[0]).supported, false);
 assert.equal(extractForgeRetailerListing("https://www.newegg.com/p/N82E16800000001?Item=N82E16800000001", projection.retailers[1]), "N82E16800000001");
+assert.deepEqual(parseForgeRetailerUrl("https://www.newegg.com/timetec/p/0RM-006H-000A7?Item=9SIA56XA8D1141",projection.retailers[1]),{retailerListingId:"9SIA56XA8D1141",retailerProductId:"0RM-006H-000A7"});
+assert.deepEqual(parseForgeRetailerUrl("https://www.newegg.com/timetec/p/0RM-006H-000A7?item=9sia56xa8d1141&utm_source=fixture",projection.retailers[1]),{retailerListingId:"9SIA56XA8D1141",retailerProductId:"0RM-006H-000A7"});
+assert.throws(()=>parseForgeRetailerUrl("https://www.newegg.com/timetec/p/0RM-006H-000A7?Item=9SIA56XA8D1141&option=unsafe",projection.retailers[1]),/unsupported option/);
 assert.equal(extractForgeRetailerListing("https://www.amazon.com/example/dp/B000000001", projection.retailers[0]), "B000000001");
 assert.throws(() => extractForgeRetailerListing("https://example.com/p/N82E16800000001", projection.retailers[1]), /exact Newegg HTTPS/);
 assert.match(formatForgeOperatorError("RETAILER_DESTINATION_QUERY_UNSUPPORTED"), /unsupported option/);
@@ -54,6 +57,7 @@ assert.equal((await connected.assess({ action: "CREATE_PRODUCT", operator: "fixt
 const at = "2026-10-08T00:01:00Z";
 const service = response => new GovernedRetailerLinkVerificationService({ request: async () => response, now: () => at, timeoutMs: 100 });
 assert.equal((await service({ status: 200, url: "https://www.amazon.com/dp/B000000001" }).verify({ url: "https://www.amazon.com/dp/B000000001", expectedRetailerHost: "www.amazon.com", expectedListingId: "B000000001" })).status, "WORKING");
+assert.equal((await service({ status: 200, url: "https://www.newegg.com/p/N82E16800000001" }).verify({ url: "https://newegg.com/p/N82E16800000001", expectedRetailerHost: "newegg.com", expectedListingId: "N82E16800000001" })).status, "REDIRECTED");
 assert.equal((await service({ status: 200, url: "https://www.newegg.com/p/N82E16800000001" }).verify({ url: "https://www.amazon.com/dp/B000000001", expectedRetailerHost: "www.amazon.com", expectedListingId: "B000000001" })).status, "IDENTITY_REVIEW_REQUIRED");
 assert.equal((await service({ status: 403, url: "https://www.amazon.com/dp/B000000001" }).verify({ url: "https://www.amazon.com/dp/B000000001" })).status, "BLOCKED_FROM_VERIFICATION");
 assert.equal((await service({ status: 404, url: "https://www.amazon.com/dp/B000000001" }).verify({ url: "https://www.amazon.com/dp/B000000001" })).status, "BROKEN");

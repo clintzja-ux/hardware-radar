@@ -75,8 +75,12 @@ throws(() => createRetailerDestination(makeInput({ destinationUrl: "https://bit.
 throws(() => createRetailerDestination(makeInput({ destinationUrl: "https://platinummicro.com/fixture/product?variant=1" })), /QUERY_UNSUPPORTED/);
 throws(() => createRetailerDestination(makeInput({ destinationUrl: "https://platinummicro.com/" })), /PRODUCT_PATH_REQUIRED/);
 equal(canonicalizeRetailerDestinationUrl("https://platinummicro.com/fixture/product?utm_campaign=x#fragment"), "https://platinummicro.com/fixture/product");
-equal(canonicalizeRetailerDestinationUrl("https://www.newegg.com/p/N82E16800000001?Item=N82E16800000001&cm_sp=fixture"), "https://newegg.com/p/N82E16800000001");
-throws(() => canonicalizeRetailerDestinationUrl("https://www.newegg.com/p/N82E16800000001?Item=N82E16899999999"), /QUERY_UNSUPPORTED/);
+equal(canonicalizeRetailerDestinationUrl("https://www.newegg.com/p/N82E16800000001?Item=N82E16800000001&cm_sp=fixture"), "https://newegg.com/p/N82E16800000001?Item=N82E16800000001");
+equal(canonicalizeRetailerDestinationUrl("https://www.newegg.com/product/p/0RM-006H-000A7?item=9sia56xa8d1141&utm_source=fixture"), "https://newegg.com/product/p/0RM-006H-000A7?Item=9SIA56XA8D1141");
+const dualNewegg=createRetailerDestination({...makeInput(),retailerId:"RETAILER-0004",marketplace:"newegg.com",destinationUrl:"https://www.newegg.com/product/p/0RM-006H-000A7?item=9sia56xa8d1141&utm_source=fixture",retailerListingId:"9SIA56XA8D1141"});
+equal(dualNewegg.destinationUrl,"https://newegg.com/product/p/0RM-006H-000A7?Item=9SIA56XA8D1141");equal(dualNewegg.retailerListingId,"9SIA56XA8D1141");
+throws(() => canonicalizeRetailerDestinationUrl("https://www.newegg.com/p/N82E16800000001?Item=bad%20item"), /ITEM_INVALID/);
+throws(() => canonicalizeRetailerDestinationUrl("https://www.newegg.com/p/N82E16800000001?Item=N82E16800000001&item=N82E16899999999"), /QUERY_UNSUPPORTED/);
 const draftAssessment = assessRetailerDestinationBinding({ destination, product: { ...product, governance: { lifecycleStatus: "DRAFT", publicationStatus: "PENDING" } }, retailer });
 equal(draftAssessment.eligible, false);
 check(draftAssessment.reasons.includes("RETAILER_DESTINATION_ATLAS_PRODUCT_DRAFT_NOT_PUBLIC"));
