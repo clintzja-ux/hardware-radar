@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createForgeProductManagerProjection, ForgeProductMutationBoundary, GovernedRetailerLinkVerificationService } from "../index.js";
 import { ProductRepository } from "../../atlas/ProductRepository.js";
-import { extractForgeRetailerListing, filterForgeProducts, formatForgeOperatorError, sortForgeProducts } from "../../../apps/forge/components/ProductManagerPanel.js";
+import { extractForgeRetailerListing, filterForgeProducts, forgeAffiliateSupport, formatForgeOperatorError, normalizeForgeRetailers, sortForgeProducts } from "../../../apps/forge/components/ProductManagerPanel.js";
 
 const products = Array.from({ length: 200 }, (_, index) => ({
     identity: { atlasProductId: `ram_fixture_${String(index + 1).padStart(3, "0")}`, brand: index % 2 ? "Fixture B" : "Fixture A", manufacturer: "Fixture", manufacturerPartNumber: `MPN-${index + 1}`, displayName: `Fixture RAM ${index + 1}`, slug: `fixture-ram-${index + 1}`, recordRevision: 1 },
@@ -23,6 +23,9 @@ assert.equal(projection.readOnly, true);
 assert.equal(projection.mutationAuthorized, false);
 assert.equal(projection.capabilities.blockedBy, "AUTHENTICATED_TRUSTED_OPERATOR_RUNTIME_NOT_CONNECTED");
 assert.deepEqual(projection.retailers.map(value => value.name), ["Amazon", "Newegg"]);
+assert.deepEqual(normalizeForgeRetailers([null, projection.retailers[0]]), [projection.retailers[0]]);
+assert.equal(forgeAffiliateSupport(projection.retailers[1]).supported, true);
+assert.equal(forgeAffiliateSupport(projection.retailers[0]).supported, false);
 assert.equal(extractForgeRetailerListing("https://www.newegg.com/p/N82E16800000001?Item=N82E16800000001", projection.retailers[1]), "N82E16800000001");
 assert.equal(extractForgeRetailerListing("https://www.amazon.com/example/dp/B000000001", projection.retailers[0]), "B000000001");
 assert.throws(() => extractForgeRetailerListing("https://example.com/p/N82E16800000001", projection.retailers[1]), /exact Newegg HTTPS/);
@@ -65,7 +68,10 @@ assert.match(component, /Check Link/);
 assert.match(component, /Correct draft product/);
 assert.match(component, /Validate and save correction/);
 assert.match(component, /Select a registered retailer/);
-assert.match(component, /Validate and save link/);
+assert.match(component, /Validate and save retailer URL/);
+assert.match(component, /Add affiliate URL/);
+assert.match(component, /Disable affiliate URL/);
+assert.match(component, /Registered retailer data is unavailable/);
 assert.match(component, /operator-data\/product-manager\.json/);
 for (const goal of ["Overview", "Products", "Retailer & Affiliate Links", "Market Operations", "Reviews & Exceptions", "Settings / Diagnostics"]) assert.match(shell, new RegExp(goal.replace("&", "&(?:amp;)?")));
 assert.match(server, /127\.0\.0\.1/);

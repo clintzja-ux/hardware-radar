@@ -4,12 +4,14 @@ import { createServer } from "node:http";
 import { extname, join, normalize, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { readFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import { RetailerRepository, FileAtlasCatalogAdministrationRepository } from "../packages/atlas/index.js";
 import { ProductionFlatRetailerDestinationRepository, ForgeTrustedOperatorService, ForgeTrustedOperatorHttpRuntime, FileForgeOperatorAuditRepository, GovernedRetailerLinkVerificationService, FileHistoricalObservationRepository, createForgeProductManagerProjection } from "../packages/mercury/index.js";
 import { FileCurrentDisplaySnapshotRepository, ManualCurrentPriceAffiliateWorkbookRepository, readManualCurrentPriceWorkbookRows } from "../packages/mercury/current-display/index.js";
 import { loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const runtimeRevision = (() => { try { return execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8", windowsHide: true }).trim(); } catch { return "UNKNOWN"; } })();
 const forgeRoot = join(repositoryRoot, "apps", "forge");
 const publicImages = join(repositoryRoot, "public", "images");
 const operatorData = new Map([
@@ -59,7 +61,7 @@ const server = createServer(async (request, response) => {
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("X-Frame-Options", "DENY");
     if(trustedRuntime&&request.url==="/"&&request.method==="GET")trustedRuntime.establishTrustedLaunch(fixtureMode?{method:request.method,url:request.url,headers:{...request.headers,"sec-fetch-site":"none","sec-fetch-mode":"navigate","sec-fetch-dest":"document"}}:request,response);
-    if(request.url==="/operator-api/health"&&request.method==="GET"){response.writeHead(200,{"Content-Type":"application/json; charset=utf-8"});return response.end(JSON.stringify({status:"READY",mode:trustedRuntime?"TRUSTED":"READ_ONLY",loopback:true}));}
+    if(request.url==="/operator-api/health"&&request.method==="GET"){response.writeHead(200,{"Content-Type":"application/json; charset=utf-8"});return response.end(JSON.stringify({status:"READY",mode:trustedRuntime?"TRUSTED":"READ_ONLY",loopback:true,runtimeRevision,processId:process.pid}));}
     if(trustedRuntime&&request.url.startsWith("/operator-api/")){await trustedRuntime.handle(request,response);return;}
     if(liveProductProjection&&new URL(request.url,"http://127.0.0.1").pathname==="/operator-data/product-manager.json"){if(!["GET","HEAD"].includes(request.method)){response.writeHead(405);return response.end();}const body=JSON.stringify(await liveProductProjection());response.writeHead(200,{"Content-Type":"application/json; charset=utf-8"});return response.end(request.method==="HEAD"?undefined:body);}
     if (!["GET", "HEAD"].includes(request.method)) { response.writeHead(405, { Allow: "GET, HEAD" }); return response.end("Operator API unavailable"); }

@@ -15,3 +15,9 @@ Retailer choice is projected from Atlas's active registered-retailer owner. Forg
 Product creation remains DRAFT. No generic canonical Atlas readiness/activation owner exists for this runtime, so Forge exposes no activation control. Link reachability never establishes exact-product identity and never retires a destination automatically.
 
 All certification writes use disposable fixture copies. Production Atlas, destinations, workbook, Current, History, publication, release, and deployment remain outside fixture certification.
+
+## Runtime retailer and affiliate management correction
+
+The trusted launcher identifies the Git revision loaded by the active loopback runtime and replaces a stale local process before opening Forge. The Product Manager projection must contain valid canonical retailer records; missing or malformed retailer data blocks link controls with an explicit recovery message instead of rendering an empty selector. Human-readable retailer names are displayed while canonical retailer IDs remain the control values.
+
+Manage Links separates the governed retailer destination from affiliate routing. Retailer URLs continue through Mercury destination validation and exact listing identity. The existing manual-current-price workbook owner alone supports Newegg affiliate add, replace, disable, stale-digest protection, single-writer locking, atomic replacement, recoverable prior copies, and trusted audit history. Unsupported retailers expose no affiliate Save action. The bounded verifier may check saved retailer URLs; it does not claim affiliate-network health verification. Successful changes reload canonical projection state immediately. Affiliate routing remains independent from identity, Current, History, Cheapest, Picks, recommendations, and retailer eligibility.

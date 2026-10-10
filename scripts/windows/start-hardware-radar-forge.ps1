@@ -2,16 +2,29 @@ $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $url = "http://127.0.0.1:4174/"
 $health = "$url`operator-api/health"
+$expectedRevision = (& git -C $repositoryRoot rev-parse HEAD).Trim()
 
-try {
-    $status = Invoke-RestMethod -Uri $health -TimeoutSec 1
+$status = $null
+try { $status = Invoke-RestMethod -Uri $health -TimeoutSec 1 } catch {}
+if ($null -ne $status) {
     if ($status.mode -ne "TRUSTED") {
         throw "Forge is already running in read-only mode. Close that Forge window and try again."
     }
-    Start-Process $url
-    exit 0
-} catch {
-    if ($_.Exception.Message -like "Forge is already running*") { throw }
+    if ($status.runtimeRevision -eq $expectedRevision) {
+        Start-Process $url
+        exit 0
+    }
+    $runtimeProcessId = $status.processId
+    if (-not $runtimeProcessId) {
+        $listener = Get-NetTCPConnection -LocalAddress 127.0.0.1 -LocalPort 4174 -State Listen -ErrorAction Stop
+        $runtimeProcessId = $listener.OwningProcess
+    }
+    if (-not $runtimeProcessId) { throw "Forge is running an outdated runtime that could not be identified. Close Forge and try again." }
+    Stop-Process -Id $runtimeProcessId -ErrorAction Stop
+    for ($attempt = 0; $attempt -lt 20; $attempt++) {
+        Start-Sleep -Milliseconds 100
+        if (-not (Get-NetTCPConnection -LocalAddress 127.0.0.1 -LocalPort 4174 -State Listen -ErrorAction SilentlyContinue)) { break }
+    }
 }
 
 $node = (Get-Command node -ErrorAction Stop).Source
