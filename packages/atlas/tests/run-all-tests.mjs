@@ -20,6 +20,7 @@ const testModules = [
     "./Growth005B2CuratedValueDdr5Admission.test.mjs",
     "./AtlasRamExpansion002Admission.test.mjs",
     "./AtlasActivation001BatchReview.test.mjs"
+    ,"./AtlasDraftActivation.test.mjs"
     ,"./AtlasActivation002PreExpansionReview.test.mjs"
     ,"./AtlasRamCoverageExpansionBatchAAdmission.test.mjs"
     ,"./AtlasRamCoverageExpansionBatchBAdmission.test.mjs"

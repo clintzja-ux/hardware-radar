@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { gzipSync } from "node:zlib";
 import { readFile } from "node:fs/promises";
+import { ProductRepository, RetailerRepository } from "../../atlas/index.js";
 import { assessRakutenNeweggCondition, collectRakutenProductCatalogFixture, createCurrentDisplaySnapshot, createCurrentRetailRefreshPortfolio, createPublicCurrentRetailProjection, createRakutenNeweggProductFeedAdapter, CurrentRetailRefreshOrchestrator, extractRakutenMerchantUrl, RAKUTEN_NEWEGG_CONDITION_POLICY_VERSION, RAKUTEN_PRODUCT_CATALOG_BASE_FIELDS } from "../current-display/index.js";
+import { loadRetailerDestinationSource } from "../destinations/index.js";
 import { fixtureFeedText, fixtureRow, sanitizedCases } from "./fixtures/rakuten-newegg/sanitized-feed-fixtures.js";
 
 let cases=0; const gz=text=>gzipSync(Buffer.from(text));
@@ -102,11 +104,19 @@ const sourceLoss=await new CurrentRetailRefreshOrchestrator({adapters:[unavailab
 assert.equal(sourceLoss.snapshot.offers[0].observedAt,"2026-09-08T11:00:00.000Z"); assert.equal(sourceLoss.outcomes[0].status,"SOURCE_UNAVAILABLE");
 assert.equal(createPublicCurrentRetailProjection({products:[product],retailers,destinations:[destination],currentSnapshot:sourceLoss.snapshot,asOf:"2026-09-10T12:00:00.000Z"}).winners.overall,null); assert.equal(unavailablePortfolio.affiliateStateUsed,false); cases++;
 
-const state=JSON.parse(await readFile(new URL("../destinations/production-destinations.json",import.meta.url),"utf8"));
-const effective=[...new Map(state.records.filter(x=>x.status==="ACTIVE").map(x=>[`${x.atlasProductId}|${x.retailerId}|${x.marketplace}`,x])).values()].filter(x=>x.retailerId==="RETAILER-0004"); assert.ok(effective.length>0);
+const readJson=async resource=>JSON.parse(await readFile(resource,"utf8"));
+const canonicalProducts=await new ProductRepository({readJson}).getAll(),canonicalRetailers=await new RetailerRepository({readJson}).getAll();
+const destinationSource=await loadRetailerDestinationSource({sourcePath:new URL("../destinations/production-destinations.json",import.meta.url),products:canonicalProducts,retailers:canonicalRetailers});
+const effective=destinationSource.effective.filter(x=>x.retailerId==="RETAILER-0004"); assert.ok(effective.length>0);
 const rows=effective.map((x,i)=>({recordType:"PRODUCT",sku:x.retailerListingId,productUrl:`https://click.example.invalid/track?murl=${encodeURIComponent(x.destinationUrl)}`,productId:`fixture-${i}`,manufacturerPartNumber:x.binding.manufacturerPartNumber,upc:null,modification:"U",retailPrice:"100",salePrice:"100",shipping:"0.00",availability:"in-stock",currency:"USD"}));
 const coverage=createRakutenNeweggProductFeedAdapter({records:rows,destinations:effective,feedTimestamp:parsed[0].feedTimestamp});
-for(const x of effective)assert.equal((await coverage.refresh({atlasProductId:x.atlasProductId,retailerId:x.retailerId,retailer:"NEWEGG",destinationId:x.destinationId,destinationUrl:x.destinationUrl,retailerListingId:x.retailerListingId,marketplace:x.marketplace,asOf})).type,"OBSERVATION"); cases++;
+const productionPortfolio=createCurrentRetailRefreshPortfolio({products:canonicalProducts,destinations:effective,retailers:canonicalRetailers,adapters:[coverage],asOf});
+for(const x of productionPortfolio.items)assert.equal((await coverage.refresh(x)).type,"OBSERVATION"); cases++;
+const timetecId="ram_timetec_76tt26nus2r8_16gk2",timetecDestination=effective.find(x=>x.atlasProductId===timetecId);assert.ok(timetecDestination);
+assert.equal(productionPortfolio.items.some(x=>x.atlasProductId===timetecId),false);assert.deepEqual(productionPortfolio.excluded.find(x=>x.destinationId===timetecDestination.destinationId),{destinationId:timetecDestination.destinationId,reason:"ATLAS_OR_DESTINATION_NOT_ACTIVE_READY"});cases++;
+const activatedProducts=structuredClone(canonicalProducts),activatedTimetec=activatedProducts.find(x=>x.identity.atlasProductId===timetecId);activatedTimetec.governance.lifecycleStatus="ACTIVE";activatedTimetec.governance.publicationStatus="READY";activatedTimetec.governance.humanReviewRequired=false;
+const activatedPortfolio=createCurrentRetailRefreshPortfolio({products:activatedProducts,destinations:effective,retailers:canonicalRetailers,adapters:[coverage],asOf:"2026-09-08T13:01:00.000Z"});
+assert.equal(productionPortfolio.items.some(x=>x.atlasProductId===timetecId),false);assert.equal(activatedPortfolio.items.some(x=>x.atlasProductId===timetecId),true);assert.equal(activatedPortfolio.externalOperations,0);assert.equal(activatedPortfolio.providerTasks,0);assert.equal(activatedPortfolio.actualSpendUsd,0);cases++;
 assert.equal(adapter.rights.profileId,"RAKUTEN_NEWEGG_PRODUCT_CATALOG"); assert.equal(adapter.rights.publicDisplayAllowed,true); assert.equal(adapter.rights.comparisonAllowed,true); assert.equal(adapter.rights.historicalRetentionAllowed,true); assert.equal(run.externalOperations,0); assert.equal(run.actualSpendUsd,0); cases++;
 assert.equal(adapter.weakItemPriceAllowed,true); assert.equal(run.historicalObservationsCreated,0); assert.equal(run.publicationDecisionsCreated,0); cases+=2;
 assert.equal(JSON.stringify({parsed,result}).match(/password|username|host.?key/i),null); cases++;

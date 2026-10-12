@@ -10,6 +10,7 @@ const testModules = [
     "./ForgeDraftIdentityCorrection.test.mjs",
     "./ForgeDraftIdentityDestinationCoordination.test.mjs",
     "./ForgeDraftIdentityDestinationProductionShape.test.mjs",
+    "./ForgeDraftActivation.test.mjs",
     "./ManualCurrentPriceAffiliateWorkbookRepository.test.mjs",
     "./ProductionForgeAmazonDestinationReviewProvider.test.mjs",
     "./ExistingProviderTaskSupervision.test.mjs",

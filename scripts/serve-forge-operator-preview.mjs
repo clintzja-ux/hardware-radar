@@ -37,7 +37,7 @@ if(operatorId){
     const readJson=async resource=>JSON.parse(await readFile(resource instanceof URL?fileURLToPath(resource):resource,"utf8"));
     const retailerReader=new RetailerRepository({readJson});
     const catalogWriter=new FileAtlasCatalogAdministrationRepository({atlasRoot});
-    const catalogRepository={getAll:()=>catalogWriter.getAll(),getBrands:()=>catalogWriter.getBrands(),getById:id=>catalogWriter.getById(id),registerBrand:value=>catalogWriter.registerBrand(value),createProduct:value=>catalogWriter.createProduct(value),updateProduct:(value,options)=>catalogWriter.updateProduct(value,options),correctDraftIdentity:value=>catalogWriter.correctDraftIdentity(value)};
+    const catalogRepository={getAll:()=>catalogWriter.getAll(),getBrands:()=>catalogWriter.getBrands(),getById:id=>catalogWriter.getById(id),registerBrand:value=>catalogWriter.registerBrand(value),createProduct:value=>catalogWriter.createProduct(value),updateProduct:(value,options)=>catalogWriter.updateProduct(value,options),correctDraftIdentity:value=>catalogWriter.correctDraftIdentity(value),assessDraftActivation:id=>catalogWriter.assessDraftActivation(id),activateDraft:value=>catalogWriter.activateDraft(value)};
     const destinationRepository=new ProductionFlatRetailerDestinationRepository({statePath:destinationPath,productRepository:catalogRepository,retailerRepository:retailerReader});
     const auditRepository=new FileForgeOperatorAuditRepository({statePath:auditPath});
     const identityCorrectionRepository=new FileForgeDraftIdentityCorrectionRepository({statePath:fixtureRoot?join(fixtureRoot,"draft-identity-corrections.json"):join(repositoryRoot,".forge-review","forge","draft-identity-corrections.json")});

@@ -30,7 +30,8 @@ const destination = createRetailerDestination({
     createdAt: "2026-10-09T03:00:00.000Z",
     createdBy: "operator:fixture"
 });
-assert.equal(destination.destinationUrl, "https://newegg.com/p/N82E16800000001");
+assert.equal(destination.destinationUrl, "https://newegg.com/p/N82E16800000001?Item=N82E16800000001");
+assert.equal(destination.retailerListingId, "N82E16800000001");
 assert.equal((await repository.retain(destination)).status, "RETAINED");
 assert.equal((await repository.retain(destination)).status, "DUPLICATE");
 assert.equal((await repository.getAll()).length, 1);
