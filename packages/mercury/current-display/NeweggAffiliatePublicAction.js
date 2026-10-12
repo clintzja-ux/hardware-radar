@@ -11,7 +11,11 @@ const listingFromNeweggUrl = value => {
     const url = new URL(value);
     if (url.protocol !== "https:" || !["newegg.com", "www.newegg.com"].includes(url.hostname.toLowerCase())) return null;
     const match = /\/p\/([^/?#]+)/i.exec(url.pathname);
-    return match?.[1]?.toUpperCase() ?? null;
+    const items = [...url.searchParams.entries()].filter(([key]) => key.toLowerCase() === "item");
+    if (!match || items.length > 1) return null;
+    const item = items[0]?.[1]?.trim().toUpperCase() ?? null;
+    if (item && !/^[A-Z0-9-]{5,32}$/.test(item)) return null;
+    return item || match[1].toUpperCase();
   } catch { return null; }
 };
 

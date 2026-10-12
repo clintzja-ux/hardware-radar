@@ -18,6 +18,10 @@ const affiliateUrl = `https://click.linksynergy.com/deeplink?id=operator-preserv
 const row = { atlasProductId:destination.atlasProductId, recordReviewedBy:"operator", neweggReference:{destinationId:destination.destinationId,listingId:destination.retailerListingId}, rakutenRouting:{affiliateUrl,status:"READY",checkedAt:"2026-09-30T21:00:00-05:00",reviewedBy:"operator"} };
 const selected = createPublicRetailerActionProjection({ destinations:[destination], manualWorkbookRows:[row] });
 assert.equal(selected[0].destinationUrl, affiliateUrl); cases++;
+const dualDestination={...destination,destinationUrl:"https://www.newegg.com/timetec/p/0RM-006H-000A7?Item=9SIA56XA8D1141",retailerListingId:"9SIA56XA8D1141"},dualUrl=`https://click.linksynergy.com/deeplink?id=operator-preserved&mid=44583&murl=${encodeURIComponent(dualDestination.destinationUrl)}`,dualRow={...row,neweggReference:{destinationId:dualDestination.destinationId,listingId:dualDestination.retailerListingId},rakutenRouting:{...row.rakutenRouting,affiliateUrl:dualUrl}};
+assert.equal(assessNeweggAffiliatePublicAction({row:dualRow,destination:dualDestination}).eligible,true); cases++;
+const pathOnlyUrl=`https://click.linksynergy.com/deeplink?id=operator-preserved&mid=44583&murl=${encodeURIComponent("https://www.newegg.com/timetec/p/0RM-006H-000A7")}`;
+assert.deepEqual(assessNeweggAffiliatePublicAction({row:{...dualRow,rakutenRouting:{...dualRow.rakutenRouting,affiliateUrl:pathOnlyUrl}},destination:dualDestination}).reasons,["AFFILIATE_RETAILER_LISTING_INVALID"]); cases++;
 assert.equal(assessNeweggAffiliatePublicAction({row,destination}).eligible, true); cases++;
 assert.equal(createPublicRetailerActionProjection({destinations:[destination],manualWorkbookRows:[{...row,rakutenRouting:{...row.rakutenRouting,affiliateUrl:null,status:"MISSING"}}]})[0].destinationUrl,destination.destinationUrl); cases++;
 for (const invalidRow of [
