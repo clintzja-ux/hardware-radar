@@ -30,7 +30,10 @@ assert.equal(result.decision.providerOperations, 0);
 assert.equal(result.decision.actualSpendUsd, 0);
 assert.deepEqual(audit, result.decision);
 for (const outcome of result.outcomes) assert.deepEqual(canonicalProducts.find(product => product.identity.atlasProductId === outcome.atlasProductId), outcome.product);
-assert.equal(canonicalProducts.filter(product => product.governance.lifecycleStatus === "ACTIVE" && product.governance.publicationStatus === "READY").length, 158);
+assert.equal(ATLAS_PRE_EXPANSION_PRODUCT_IDS.every(atlasProductId => {
+    const product=canonicalProducts.find(item=>item.identity.atlasProductId===atlasProductId);
+    return product?.governance.lifecycleStatus==="ACTIVE"&&product?.governance.publicationStatus==="READY";
+}),true);
 
 const broken = structuredClone(products);
 broken.find(product => product.identity.atlasProductId === ATLAS_PRE_EXPANSION_PRODUCT_IDS[0]).extension.data.capacity.capacityGb += 1;

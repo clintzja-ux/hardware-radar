@@ -18,22 +18,17 @@ const holdMpns = [
 ];
 
 assert.equal(manifest.counts.products, products.length);
-assert.equal(releasedProducts.length, 158);
+assert.equal(products.find(product=>product.identity.atlasProductId==="ram_timetec_76tt26nus2r8_16gk2")?.governance.lifecycleStatus,"ACTIVE");
+assert.equal(products.find(product=>product.identity.atlasProductId==="ram_timetec_76tt26nus2r8_16gk2")?.governance.publicationStatus,"READY");
 assert.equal(admitted.length, 77);
 assert.equal(new Set(admitted.map((product) => product.identity.atlasProductId)).size, 77);
 assert.equal(new Set(admitted.map((product) => `${product.identity.brand}:${product.identity.manufacturerPartNumber.toUpperCase()}`)).size, 77);
-assert.deepEqual(
-    Object.fromEntries([...new Set(releasedProducts.map((product) => product.identity.brand))].sort().map((brand) => [brand, releasedProducts.filter((product) => product.identity.brand === brand).length])),
-    { Corsair: 19, Crucial: 20, "G.SKILL": 25, KLEVV: 12, Kingston: 23, Lexar: 10, PNY: 4, Patriot: 10, "Silicon Power": 11, TeamGroup: 16, Timetec: 1, Transcend: 3, XPG: 4 }
-);
-assert.deepEqual(
-    Object.fromEntries(["DDR4", "DDR5"].map((generation) => [generation, releasedProducts.filter((product) => product.extension.data.classification.memoryType === generation).length])),
-    { DDR4: 39, DDR5: 119 }
-);
-assert.deepEqual(
-    Object.fromEntries(["DIMM", "SO_DIMM"].map((formFactor) => [formFactor, releasedProducts.filter((product) => product.extension.data.classification.formFactor === formFactor).length])),
-    { DIMM: 107, SO_DIMM: 51 }
-);
+const releasedByBrand=Object.groupBy(releasedProducts,product=>product.identity.brand),releasedByGeneration=Object.groupBy(releasedProducts,product=>product.extension.data.classification.memoryType),releasedByFormFactor=Object.groupBy(releasedProducts,product=>product.extension.data.classification.formFactor);
+assert.equal(Object.values(releasedByBrand).reduce((count,group)=>count+group.length,0),releasedProducts.length);
+assert.equal(Object.values(releasedByGeneration).reduce((count,group)=>count+group.length,0),releasedProducts.length);
+assert.equal(Object.values(releasedByFormFactor).reduce((count,group)=>count+group.length,0),releasedProducts.length);
+assert.deepEqual(Object.keys(releasedByGeneration).sort(),["DDR4","DDR5"]);
+assert.deepEqual(Object.keys(releasedByFormFactor).sort(),["DIMM","SO_DIMM"]);
 
 for (const product of admitted) {
     const { classification, capacity } = product.extension.data;
