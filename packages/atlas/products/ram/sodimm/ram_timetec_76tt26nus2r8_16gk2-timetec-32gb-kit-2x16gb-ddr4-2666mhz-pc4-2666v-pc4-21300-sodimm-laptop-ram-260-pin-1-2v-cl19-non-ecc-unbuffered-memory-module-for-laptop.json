@@ -1,17 +1,17 @@
 {
   "identity": {
-    "atlasProductId": "ram_timetec_76tt26nus2r8_16g",
+    "atlasProductId": "ram_timetec_76tt26nus2r8_16gk2",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 4,
+    "recordRevision": 5,
     "createdAt": "2026-10-10T02:00:11.014Z",
-    "updatedAt": "2026-10-10T05:16:02.332Z",
+    "updatedAt": "2026-10-12T15:06:03.349Z",
     "createdBy": "forge:trusted-operator",
-    "updatedBy": "forge:trusted-operator",
+    "updatedBy": "operator:JRVR",
     "brand": "Timetec",
     "manufacturer": "Timetec",
     "modelName": "Timetec 32GB KIT (2x16GB) DDR4 2666MHz (PC4-2666V) PC4-21300 SODIMM Laptop RAM 260-Pin 1.2V CL19 Non-ECC Unbuffered Memory Module for Laptop",
-    "manufacturerPartNumber": "76TT26NUS2R8-16G",
+    "manufacturerPartNumber": "76TT26NUS2R8-16GK2",
     "displayName": "Timetec 32GB KIT (2x16GB) DDR4 2666MHz (PC4-2666V) PC4-21300 SODIMM Laptop RAM 260-Pin 1.2V CL19 Non-ECC Unbuffered Memory Module for Laptop",
     "slug": "timetec-32gb-kit-2x16gb-ddr4-2666mhz-pc4-2666v-pc4-21300-sodimm-laptop-ram-260-pin-1-2v-cl19-non-ecc-unbuffered-memory-module-for-laptop"
   },
@@ -31,6 +31,14 @@
           "retrievedAt": "2026-10-10T02:00:11.014Z",
           "verifiedBy": "forge:trusted-operator",
           "verificationStatus": "VERIFIED"
+        },
+        {
+          "sourceId": "SRC-MFG-76TT26NUS2R8-16GK2-R5",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://timetecinc.com/products/timetec-premium-ddr4-sodimm-laptop-memory?variant=44776567144614",
+          "retrievedAt": "2026-10-12T15:06:03.349Z",
+          "verifiedBy": "operator:JRVR",
+          "verificationStatus": "VERIFIED"
         }
       ]
     }
@@ -38,7 +46,7 @@
   "validation": {
     "errors": [],
     "warnings": [],
-    "validatedAt": "2026-10-10T05:16:02.332Z",
+    "validatedAt": "2026-10-12T15:06:03.349Z",
     "validatorVersion": "atlas-product-validator/1.0.0"
   },
   "extension": {

@@ -2,7 +2,7 @@
   "atlasVersion": "1.0.0",
   "coreSchemaVersion": "1.0",
   "repositoryStatus": "stable",
-  "generatedAt": "2026-10-10T02:00:11.014Z",
+  "generatedAt": "2026-10-12T15:06:03.349Z",
   "products": [
     {
       "atlasProductId": "ram_corsair_cmh16gx5m2b5200z40",
@@ -755,9 +755,9 @@
       "path": "products/ram/ddr4/HR-RAM-DDR4-000100-teamgroup-t-force-vulcan-z-tlzgd432g3200hc16fdc01.json"
     },
     {
-      "atlasProductId": "ram_timetec_76tt26nus2r8_16g",
+      "atlasProductId": "ram_timetec_76tt26nus2r8_16gk2",
       "productType": "ram",
-      "path": "products/ram/sodimm/ram_timetec_76tt26nus2r8_16g-timetec-32gb-kit-2x16gb-ddr4-2666mhz-pc4-2666v-pc4-21300-udimm-desktop-ram-288-pin.json"
+      "path": "products/ram/sodimm/ram_timetec_76tt26nus2r8_16gk2-timetec-32gb-kit-2x16gb-ddr4-2666mhz-pc4-2666v-pc4-21300-sodimm-laptop-ram-260-pin-1-2v-cl19-non-ecc-unbuffered-memory-module-for-laptop.json"
     },
     {
       "atlasProductId": "ram_timetec_76tt48nus1r16_8g",
