@@ -36,7 +36,7 @@ const input = {
 
 const result = reviewAtlasExpansionBatch(input);
 assert.deepEqual(result, reviewAtlasExpansionBatch(input));
-assert.equal(result.decision.decisionId, "atlas_batchreview_8d2b4de16ae6f93f088f495c");
+assert.equal(result.decision.decisionId, "atlas_batchreview_6df602abe132697ebb207132");
 assert.deepEqual(result.decision.counts, { requested: 21, activated: 21, blocked: 0 });
 assert.equal(result.outcomes.every(outcome => outcome.product.governance.lifecycleStatus === "ACTIVE" && outcome.product.governance.publicationStatus === "READY"), true);
 assert.equal(result.outcomes.every(outcome => outcome.product.governance.humanReviewRequired === false), true);

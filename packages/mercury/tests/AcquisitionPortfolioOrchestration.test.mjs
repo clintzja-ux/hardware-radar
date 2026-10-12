@@ -78,7 +78,7 @@ assert(projectAcquisitionPortfolio({ portfolio, currentUtcDaySpendUsd: .075 }).b
 assert.throws(() => projectAcquisitionPortfolio({ portfolio, events: [event("excluded", portfolio.excludedProducts[0].atlasProductId, PORTFOLIO_EVENT_TYPES.PRODUCTS_POSTED, { operation: "PRODUCTS" })] }), /EXCLUDED_OR_UNKNOWN/); cases++;
 
 assert.equal(await assertAcquisitionPortfolioBindingCurrent({ portfolio, atlas, rightsRegistry: defaultSourceRightsRegistry }), true); cases++;
-const originalProducts = await atlas.products.getAll(), drifted = structuredClone(originalProducts); drifted[0].governance.lifecycleStatus = "DRAFT";
+const originalProducts = await atlas.products.getAll(), drifted = structuredClone(originalProducts), driftTarget = drifted.find(product=>portfolio.eligibleProducts.some(selected=>selected.atlasProductId===product.identity.atlasProductId)); assert.ok(driftTarget); driftTarget.governance.lifecycleStatus = "DRAFT";
 await assert.rejects(() => assertAcquisitionPortfolioBindingCurrent({ portfolio, atlas: { products: { getAll: async () => drifted } }, rightsRegistry: defaultSourceRightsRegistry }), /ATLAS_DRIFT/); cases++;
 const changedRights = structuredClone(defaultSourceRightsRegistry.get("DATAFORSEO_GOOGLE_SHOPPING")); changedRights.status = "CHANGED";
 await assert.rejects(() => assertAcquisitionPortfolioBindingCurrent({ portfolio, atlas, rightsRegistry: { get: () => changedRights } }), /RIGHTS_DRIFT/); cases++;

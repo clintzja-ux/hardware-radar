@@ -1,0 +1,14 @@
+import crypto from "node:crypto";
+import {mkdir,readFile,rename,rm,writeFile} from "node:fs/promises";
+import {dirname,resolve} from "node:path";
+import {FileSingleWriterRunLock,SINGLE_WRITER_LOCK_STATUSES} from "../runtime/FileSingleWriterRunLock.js";
+
+const clone=structuredClone;
+export class FileForgeDraftIdentityCorrectionRepository{
+ constructor({statePath,runLock}={}){if(!statePath)throw new TypeError("FORGE_IDENTITY_CORRECTION_PATH_REQUIRED");this.path=resolve(statePath);this.lock=runLock??new FileSingleWriterRunLock({lockPath:`${this.path}.lock`});}
+ async get(correctionId){return(await this._read()).intents.find(value=>value.correctionId===correctionId)??null;}
+ async prepare(intent){return this._write(current=>{const existing=current.intents.find(value=>value.correctionId===intent.correctionId);if(existing){if(JSON.stringify(existing.material)!==JSON.stringify(intent.material))throw new Error("FORGE_IDENTITY_CORRECTION_REPLAY_CONFLICT");return{document:current,value:existing,status:"ALREADY_PREPARED"};}const value={schemaVersion:"1.0",...clone(intent),state:"PREPARED",receipts:{}};return{document:{schemaVersion:"1.0",intents:[...current.intents,value]},value,status:"PREPARED"};});}
+ async advance(correctionId,expectedState,state,receipt){return this._write(current=>{const index=current.intents.findIndex(value=>value.correctionId===correctionId);if(index<0)throw new Error("FORGE_IDENTITY_CORRECTION_NOT_FOUND");const prior=current.intents[index];if(prior.state===state||prior.state==="COMPLETED")return{document:current,value:prior,status:"ALREADY_ADVANCED"};if(prior.state!==expectedState)throw new Error("FORGE_IDENTITY_CORRECTION_STATE_CONFLICT");const value={...prior,state,receipts:{...prior.receipts,[state]:clone(receipt)}};const intents=[...current.intents];intents[index]=value;return{document:{schemaVersion:"1.0",intents},value,status:"ADVANCED"};});}
+ async _read(){try{const value=JSON.parse(await readFile(this.path,"utf8"));if(value?.schemaVersion!=="1.0"||!Array.isArray(value.intents))throw new Error();return value;}catch(error){if(error?.code==="ENOENT")return{schemaVersion:"1.0",intents:[]};throw new Error("FORGE_IDENTITY_CORRECTION_STATE_INVALID");}}
+ async _write(operation){const outcome=await this.lock.runExclusive(async()=>{const result=operation(await this._read());if(result.document){await mkdir(dirname(this.path),{recursive:true});const temporary=`${this.path}.tmp-${process.pid}-${crypto.randomUUID()}`;try{await writeFile(temporary,`${JSON.stringify(result.document,null,2)}\n`,{flag:"wx"});await rename(temporary,this.path);}finally{await rm(temporary,{force:true}).catch(()=>{});}}return{status:result.status,value:clone(result.value)};});if(outcome.status!==SINGLE_WRITER_LOCK_STATUSES.COMPLETED)throw new Error("FORGE_IDENTITY_CORRECTION_BUSY");return outcome.result;}
+}

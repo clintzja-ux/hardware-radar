@@ -8,6 +8,7 @@ const manifest = JSON.parse(await readFile(fileURLToPath(new URL("../atlas-manif
 const products = await Promise.all(manifest.products.map(async ({ path }) =>
     JSON.parse(await readFile(fileURLToPath(new URL(`../${path}`, import.meta.url)), "utf8"))
 ));
+const releasedProducts=products.filter(product=>product.governance.lifecycleStatus==="ACTIVE"&&product.governance.publicationStatus==="READY");
 const admitted = products.filter((product) => product.identity.createdBy === "system:atlas-ram-expansion-002");
 const holdMpns = [
     "CMH32GX5M2N6400C36",
@@ -16,21 +17,21 @@ const holdMpns = [
     "CMH32GX5M2N6000Z30"
 ];
 
-assert.equal(manifest.counts.products, 158);
-assert.equal(products.length, 158);
+assert.equal(manifest.counts.products, products.length);
+assert.equal(releasedProducts.length, 158);
 assert.equal(admitted.length, 77);
 assert.equal(new Set(admitted.map((product) => product.identity.atlasProductId)).size, 77);
 assert.equal(new Set(admitted.map((product) => `${product.identity.brand}:${product.identity.manufacturerPartNumber.toUpperCase()}`)).size, 77);
 assert.deepEqual(
-    Object.fromEntries([...new Set(products.map((product) => product.identity.brand))].sort().map((brand) => [brand, products.filter((product) => product.identity.brand === brand).length])),
+    Object.fromEntries([...new Set(releasedProducts.map((product) => product.identity.brand))].sort().map((brand) => [brand, releasedProducts.filter((product) => product.identity.brand === brand).length])),
     { Corsair: 19, Crucial: 20, "G.SKILL": 25, KLEVV: 12, Kingston: 23, Lexar: 10, PNY: 4, Patriot: 10, "Silicon Power": 11, TeamGroup: 16, Timetec: 1, Transcend: 3, XPG: 4 }
 );
 assert.deepEqual(
-    Object.fromEntries(["DDR4", "DDR5"].map((generation) => [generation, products.filter((product) => product.extension.data.classification.memoryType === generation).length])),
+    Object.fromEntries(["DDR4", "DDR5"].map((generation) => [generation, releasedProducts.filter((product) => product.extension.data.classification.memoryType === generation).length])),
     { DDR4: 39, DDR5: 119 }
 );
 assert.deepEqual(
-    Object.fromEntries(["DIMM", "SO_DIMM"].map((formFactor) => [formFactor, products.filter((product) => product.extension.data.classification.formFactor === formFactor).length])),
+    Object.fromEntries(["DIMM", "SO_DIMM"].map((formFactor) => [formFactor, releasedProducts.filter((product) => product.extension.data.classification.formFactor === formFactor).length])),
     { DIMM: 107, SO_DIMM: 51 }
 );
 
@@ -52,7 +53,7 @@ for (const product of admitted) {
 const canonicalMpns = new Set(products.map((product) => product.identity.manufacturerPartNumber.toUpperCase()));
 for (const mpn of holdMpns) assert.equal(canonicalMpns.has(mpn), false, `${mpn} must remain outside Atlas.`);
 assert.equal(validateRepository(products).valid, true);
-assert.equal((await readdir(fileURLToPath(new URL("../products/ram/", import.meta.url)), { recursive: true })).filter((path) => path.endsWith(".json")).length, 158);
+assert.equal((await readdir(fileURLToPath(new URL("../products/ram/", import.meta.url)), { recursive: true })).filter((path) => path.endsWith(".json")).length, products.length);
 
 const forbiddenKeys = new Set(["retailerId", "retailer", "price", "availability", "shipping", "affiliateUrl", "destinationUrl"]);
 function assertNoMarketData(value, path = "$") {

@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { readFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { RetailerRepository, FileAtlasCatalogAdministrationRepository } from "../packages/atlas/index.js";
-import { ProductionFlatRetailerDestinationRepository, ForgeTrustedOperatorService, ForgeTrustedOperatorHttpRuntime, FileForgeOperatorAuditRepository, GovernedRetailerLinkVerificationService, FileHistoricalObservationRepository, createForgeProductManagerProjection } from "../packages/mercury/index.js";
+import { ProductionFlatRetailerDestinationRepository, ForgeTrustedOperatorService, ForgeTrustedOperatorHttpRuntime, FileForgeOperatorAuditRepository, FileForgeDraftIdentityCorrectionRepository, GovernedRetailerLinkVerificationService, FileHistoricalObservationRepository, createForgeProductManagerProjection } from "../packages/mercury/index.js";
 import { FileCurrentDisplaySnapshotRepository, ManualCurrentPriceAffiliateWorkbookRepository, readManualCurrentPriceWorkbookRows } from "../packages/mercury/current-display/index.js";
 import { loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 
@@ -37,12 +37,14 @@ if(operatorId){
     const readJson=async resource=>JSON.parse(await readFile(resource instanceof URL?fileURLToPath(resource):resource,"utf8"));
     const retailerReader=new RetailerRepository({readJson});
     const catalogWriter=new FileAtlasCatalogAdministrationRepository({atlasRoot});
-    const catalogRepository={getAll:()=>catalogWriter.getAll(),getBrands:()=>catalogWriter.getBrands(),getById:id=>catalogWriter.getById(id),registerBrand:value=>catalogWriter.registerBrand(value),createProduct:value=>catalogWriter.createProduct(value),updateProduct:(value,options)=>catalogWriter.updateProduct(value,options)};
+    const catalogRepository={getAll:()=>catalogWriter.getAll(),getBrands:()=>catalogWriter.getBrands(),getById:id=>catalogWriter.getById(id),registerBrand:value=>catalogWriter.registerBrand(value),createProduct:value=>catalogWriter.createProduct(value),updateProduct:(value,options)=>catalogWriter.updateProduct(value,options),correctDraftIdentity:value=>catalogWriter.correctDraftIdentity(value)};
     const destinationRepository=new ProductionFlatRetailerDestinationRepository({statePath:destinationPath,productRepository:catalogRepository,retailerRepository:retailerReader});
     const auditRepository=new FileForgeOperatorAuditRepository({statePath:auditPath});
+    const identityCorrectionRepository=new FileForgeDraftIdentityCorrectionRepository({statePath:fixtureRoot?join(fixtureRoot,"draft-identity-corrections.json"):join(repositoryRoot,".forge-review","forge","draft-identity-corrections.json")});
     const linkVerifier=new GovernedRetailerLinkVerificationService({request:fetch});
     const affiliateOwner=new ManualCurrentPriceAffiliateWorkbookRepository({workbookPath,productRepository:catalogRepository,destinationRepository});
-    const service=new ForgeTrustedOperatorService({catalogRepository,destinationRepository,affiliateOwner,linkVerifier,auditRepository});
+    const identityDependencyInspector=async atlasProductId=>{const current=(await new FileCurrentDisplaySnapshotRepository({statePath:currentPath}).getState()).current,history=await new FileHistoricalObservationRepository({statePath:historyPath}).getAll();return[...((current?.offers??[]).some(value=>value.atlasProductId===atlasProductId)?[{type:"CURRENT_OBSERVATION",id:atlasProductId}]:[]),...(history.some(value=>value.atlasProductId===atlasProductId)?[{type:"HISTORY_OBSERVATION",id:atlasProductId}]:[])];};
+    const service=new ForgeTrustedOperatorService({catalogRepository,destinationRepository,affiliateOwner,linkVerifier,auditRepository,identityCorrectionRepository,identityDependencyInspector});
     trustedRuntime=new ForgeTrustedOperatorHttpRuntime({service,operatorId,allowedOrigin:`http://127.0.0.1:${port}`,trustedLaunch:process.env.FORGE_OPERATOR_TRUSTED_LAUNCH==="1"});
     liveProductProjection=async()=>{const products=await catalogRepository.getAll(),brands=await catalogRepository.getBrands(),retailers=await retailerReader.getAll(),destinationSource=await loadRetailerDestinationSource({sourcePath:destinationPath,products,retailers}),current=(await new FileCurrentDisplaySnapshotRepository({statePath:currentPath}).getState()).current,history=await new FileHistoricalObservationRepository({statePath:historyPath}).getAll();let affiliateRows=[];try{affiliateRows=await readManualCurrentPriceWorkbookRows({workbookPath});}catch(error){if(error.code!=="ENOENT")throw error;}return createForgeProductManagerProjection({asOf:new Date().toISOString(),products,brands,retailers,destinationSource,currentSnapshot:current,historicalObservations:history,affiliateRows});};
 }

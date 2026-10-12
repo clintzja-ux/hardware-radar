@@ -7,6 +7,7 @@ export {GovernedRetailerLinkVerificationService,FORGE_LINK_VERIFICATION_STATUSES
 export {ForgeProductMutationBoundary} from "./ForgeProductMutationBoundary.js";
 export {ForgeTrustedOperatorService} from "./ForgeTrustedOperatorService.js";
 export {FileForgeOperatorAuditRepository} from "./FileForgeOperatorAuditRepository.js";
+export {FileForgeDraftIdentityCorrectionRepository} from "./FileForgeDraftIdentityCorrectionRepository.js";
 export {ForgeTrustedOperatorHttpRuntime} from "./ForgeTrustedOperatorHttpRuntime.js";
 export {ProductionForgeNeweggRoutineProvider} from "./ProductionForgeNeweggRoutineProvider.js";
 export {ProductionForgeExistingTaskSupervisionProvider} from "./ProductionForgeExistingTaskSupervisionProvider.js";

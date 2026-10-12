@@ -16,7 +16,7 @@ export {
     loadProduct,
     listProductEntries
 } from "./ProductRepository.js";
-export { FileAtlasCatalogAdministrationRepository } from "./FileAtlasCatalogAdministrationRepository.js";
+export { FileAtlasCatalogAdministrationRepository, deriveAtlasRamProductId } from "./FileAtlasCatalogAdministrationRepository.js";
 export {
     PRODUCT_VALIDATOR_VERSION,
     validateProduct,

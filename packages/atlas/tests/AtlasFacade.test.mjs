@@ -33,7 +33,7 @@ assert.equal((await atlas.getRetailer("retailer-0004")).name, "Newegg");
 const repositories = await atlas.loadRepositories();
 assert.equal(repositories.brands.length, 13);
 assert.equal(repositories.categories.length, 1);
-assert.equal(repositories.products.length, 158);
+assert.equal(repositories.products.length, (await atlas.getManifest()).counts.products);
 assert.equal(repositories.retailers.length, 4);
 assert.equal(Object.isFrozen(repositories), true);
 
