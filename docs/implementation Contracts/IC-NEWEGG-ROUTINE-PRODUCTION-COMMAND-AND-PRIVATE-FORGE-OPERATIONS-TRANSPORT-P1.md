@@ -2,6 +2,26 @@
 
 Status: retained-FULL end-to-end certified and exposed through one registered mode-explicit operator command; live acquisition and scheduler activation remain fail-closed/OFF pending a durable acquisition-authority owner.
 
+## Bounded recurring-authority extension — implemented, inactive
+
+The operator approved this policy extension for implementation and disposable certification only. No production mandate is active.
+
+The present Current and retained-commerce History contracts require exact plan/preparation-scoped confirmations. The routine contract also forbids inventing a routine-wide confirmation. A standing mandate that can cause future exact plans to execute therefore changes durable authority policy and requires explicit operator approval before implementation.
+
+The narrow proposed extension has three independent scopes under one operator-attributed mandate:
+
+1. **Acquisition scope.** Authorize only the exact Rakuten Newegg main FULL source family, during an explicit start/expiry interval and Jamaica-local operating window, for at most one new acquisition per Jamaica-local calendar day, with zero automatic retries, pinned-host and source-rights revalidation, pause/revocation state, single-writer consumption, and durable recovery receipts. Canonical recovery of an already-started acquisition reuses its receipt and consumes no second daily slot.
+2. **Current scope.** When independently enabled, allow the mandate owner to create a single-use child authorization only after the existing Current owner has produced and revalidated one exact plan and preparation against the mandate's acquired FULL lineage, current predecessor, rights, and eligibility. The child authorization carries the exact plan/preparation scope expected by the existing executor; the standing mandate itself is not passed as the executor confirmation.
+3. **History scope.** When independently enabled, perform the equivalent operation through a distinct single-use child authorization after the existing retained-commerce History owner revalidates its exact plan, preparation, candidates, source lineage, History predecessor, and rights. Current enablement or consumption never implies History enablement or consumption.
+
+The proposed child-authority owner would be the only component permitted to issue execution evidence from a recurring mandate. It must persist the mandate revision, scope, exact source digest/HDR, exact plan and preparation IDs/digests, predecessor binding, issuance/consumption state, operator attribution, and recovery link. It must reject expiry, not-yet-valid time, pause, revocation, wrong source/day/window, tampering, stale predecessor, concurrent consumption, unauthorized renewal, and any unrelated plan. Publication, release, deployment, affiliate, identity, and scheduler authority remain false.
+
+Forge may project only sanitized state: enabled/paused/revoked, approved source, expiry, last authorized run, remaining daily allowance, next eligible window, and separate Current/History scope status. No control is eligible until backend creation, pause, resume, revoke, and inspection actions are separately certified.
+
+`NeweggRoutineRecurringAuthorityService` implements these rules over an atomic file repository protected by the repository-native cross-process single-writer lock. Mandate and child records carry deterministic integrity digests. Acquisition and market completion receipts support exact recovery without additional consumption. The registered command accepts `--mandate-id` for mandate-specific inspection and live validation; no default mandate exists.
+
+No authenticated production mandate creation/pause/revoke/renewal control has been activated, and no production mandate was created during certification. `RUN_LIVE` therefore remains unavailable before network access until that separate control and activation boundary is approved. This implementation does not authorize scheduling, provider retries, publication, release, deployment, paid work, or automatic source deletion.
+
 ## Production command service
 
 `NeweggRoutineProductionCommand` is the single orchestration owner for the certified Newegg routine. It accepts injected existing stage owners and executes: preflight, acquisition, validation, disk-backed catalog state, binding, qualification, preparation, Current, History, QA, recomposition, Sentinel certification, production-shaped release certification, retention assessment, Forge projection, and Forge transport. It contains no source parsing, qualification, Current, History, QA, release, or retention policy.

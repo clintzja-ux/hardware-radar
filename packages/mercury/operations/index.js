@@ -26,3 +26,4 @@ export * from "./NeweggRoutinePreflightBindingQualificationOwners.js";
 export * from "./ProductionNeweggRoutinePublicationServices.js";
 export * from "./DisposableNeweggRoutineRoot.js";
 export * from "./ProductionNeweggRoutineOperatorCommand.js";
+export * from "./NeweggRoutineRecurringAuthority.js";

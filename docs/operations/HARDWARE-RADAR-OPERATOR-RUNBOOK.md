@@ -154,11 +154,16 @@ The complete certified routine has one registered command:
 
 ```powershell
 npm run mercury:newegg-routine -- --mode=INSPECT
+npm run mercury:newegg-routine -- --mode=INSPECT --mandate-id=<MANDATE_ID>
 npm run mercury:newegg-routine -- --mode=CERTIFY_RETAINED
-npm run mercury:newegg-routine -- --mode=RUN_LIVE
+npm run mercury:newegg-routine -- --mode=RUN_LIVE --mandate-id=<MANDATE_ID>
 ```
 
-`INSPECT` is strictly read-only and performs no provider call, recovery write, or authority consumption. `CERTIFY_RETAINED` executes the immutable retained FULL only inside disposable canonical state. `RUN_LIVE` has no default and currently fails closed with `NEWEGG_ROUTINE_LIVE_ACQUISITION_AUTHORITY_OWNER_MISSING`: Current and History already retain independent plan-specific authority, but live acquisition does not yet have a durable reusable authority owner. Do not substitute an environment variable, generic confirmation token, or scheduler trigger for that missing authority. Windows scheduling remains disabled.
+`INSPECT` is strictly read-only and performs no provider call, recovery write, or authority consumption. With a mandate ID it also returns the sanitized recurring-authority projection: enabled/paused/revoked, approved source, expiry, last authorized acquisition, remaining Jamaica-local daily allowance, next window, and independent Current/History scope status. `CERTIFY_RETAINED` executes the immutable retained FULL only inside disposable canonical state.
+
+`RUN_LIVE` has no default and requires an exact durable mandate ID. The bounded authority owner limits mandates to 30 days, the exact Rakuten Newegg main FULL source, one new acquisition per Jamaica-local day inside the approved window, zero retries, pinned host and rights validation, and independently enabled Current and History child scopes. Each market child is single-use/exact-replay-safe and binds one exact canonical plan, preparation, source lineage, predecessor, and applicable rights/eligibility result. Recovery uses canonical receipts without consuming another daily or child authorization. The mandate grants no publication, release, deployment, paid-provider, automatic-deletion, or scheduler authority.
+
+This implementation does not create a production mandate. Until a separately certified authenticated creation/pause/revoke/renewal procedure creates one and live activation is explicitly approved, `RUN_LIVE` remains fail closed before network access. Never hand-edit the authority file or substitute an environment variable, generic confirmation token, or scheduler trigger. Windows scheduling remains disabled.
 
 Inspect readiness only when needed:
 
