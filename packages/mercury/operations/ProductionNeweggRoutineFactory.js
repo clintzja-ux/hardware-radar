@@ -4,6 +4,10 @@ import {dirname,resolve} from "node:path";
 import {FileSingleWriterRunLock,SINGLE_WRITER_LOCK_STATUSES} from "../runtime/FileSingleWriterRunLock.js";
 import {NeweggRoutineProductionCommand,NEWEGG_ROUTINE_COMMAND_STAGES} from "./NeweggRoutineProductionCommand.js";
 import {createRakutenFullCurrentRoutineOwner,createRetainedCommerceHistoryRoutineOwner} from "./NeweggRoutineAuthorityAdapters.js";
+import {bindProductionNeweggRoutineSourceOwners} from "./NeweggRoutineSourceStageOwners.js";
+import {bindProductionNeweggRoutineP1BOwners} from "./NeweggRoutineP1BStageOwners.js";
+import {bindProductionNeweggRoutineDownstreamOwners} from "./NeweggRoutineDownstreamStageOwners.js";
+import {bindProductionNeweggRoutinePreflightBindingQualificationOwners} from "./NeweggRoutinePreflightBindingQualificationOwners.js";
 
 const terminal=new Set(["SUCCESS_RELEASE_READY","SUCCESS_NO_CHANGE"]);
 const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
@@ -62,4 +66,15 @@ export function bindProductionNeweggRoutineMarketAuthorities({owners,currentSnap
 export function createNeweggRoutineBinding(input={}){
  const lineage=input.lineage;if(!/^[a-f0-9]{64}$/i.test(lineage?.artifactDigest??"")||!Number.isFinite(Date.parse(lineage?.sourceObservedAt))||!lineage?.catalogStateId||!lineage?.currentPredecessor||!lineage?.historyPredecessor||!lineage?.rightsDigest)throw new TypeError("NEWEGG_ROUTINE_BINDING_INPUT_INVALID");
  return digest({lineage,mode:input.mode??"PRODUCTION"});
+}
+
+export function composeProductionNeweggRoutineOwners(input={}){
+ let owners=input.owners??{};
+ owners=bindProductionNeweggRoutineSourceOwners({owners,transport:input.transport,projection:input.catalogProjection,receiptRoot:input.sourceReceiptRoot,acquisitionAuthorityOwner:input.acquisitionAuthorityOwner});
+ owners=bindProductionNeweggRoutinePreflightBindingQualificationOwners({owners,receiptRoot:input.assessmentReceiptRoot,rightsOwner:input.rightsOwner,capacityOwner:input.capacityOwner,retentionOwner:input.retentionSafetyOwner,configurationOwner:input.configurationOwner,currentPreparationService:input.currentPreparationService,historyPreparationService:input.historyPreparationService});
+ owners=bindProductionNeweggRoutineP1BOwners({owners,currentPreparationService:input.currentPreparationService,historyPreparationService:input.historyPreparationService,qaService:input.qaService});
+ owners=bindProductionNeweggRoutineMarketAuthorities({owners,currentSnapshotRepository:input.currentSnapshotRepository,historicalRepository:input.historicalRepository,historyStateReader:input.historyStateReader,historyExecutionService:input.historyExecutionService});
+ owners=bindProductionNeweggRoutineDownstreamOwners({owners,receiptRoot:input.downstreamReceiptRoot,recompositionService:input.recompositionService,certificationService:input.certificationService,releaseReadinessService:input.releaseReadinessService,inventoryOwner:input.inventoryOwner,capacityOwner:input.capacityOwner,healthRepository:input.healthRepository,forgeTransport:input.forgeTransport,now:input.now});
+ createProductionNeweggRoutineStageOwners({owners});
+ return Object.freeze(owners);
 }
