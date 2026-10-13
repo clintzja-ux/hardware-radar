@@ -24,3 +24,4 @@ export * from "./NeweggRoutineP1BStageOwners.js";
 export * from "./NeweggRoutineDownstreamStageOwners.js";
 export * from "./NeweggRoutinePreflightBindingQualificationOwners.js";
 export * from "./ProductionNeweggRoutinePublicationServices.js";
+export * from "./DisposableNeweggRoutineRoot.js";

@@ -22,7 +22,7 @@ export class RakutenFullCurrentRoutineAuthorityAdapter{
   const completed=current?.snapshotId===plan.proposedCurrent.snapshotId&&current?.materialFingerprint===plan.proposedCurrent.materialFingerprint&&current?.offers?.length===plan.proposedCurrent.offerCount;
   const predecessor=current?.snapshotId===plan.sourceCurrent.snapshotId&&current?.materialFingerprint===plan.sourceCurrent.materialFingerprint&&current?.offers?.length===plan.sourceCurrent.offerCount;
   if(!completed&&!predecessor)throw new Error("RAKUTEN_FULL_CURRENT_REFRESH_SOURCE_CHANGED");
-  return freeze({state:completed?"COMPLETED":"AUTHORIZED",planId:plan.planId,preparationId:preparation.preparationId,artifactDigest:lineage.artifactDigest,sourceObservedAt:lineage.sourceObservedAt,currentSnapshotId:current?.snapshotId??null});
+  return freeze({state:completed?"COMPLETED":"AUTHORIZED",planId:plan.planId,preparationId:preparation.preparationId,artifactDigest:lineage.artifactDigest,sourceObservedAt:lineage.sourceObservedAt,currentSnapshotId:current?.snapshotId??null,snapshotId:current?.snapshotId??null,materialFingerprint:current?.materialFingerprint??null,offerCount:current?.offers?.length??null});
  }
  async validate({authority,context}={}){await this.inspect({plan:context?.input?.current?.plan,preparation:context?.input?.current?.preparation,authority,lineage:context?.input?.lineage});return true;}
 }

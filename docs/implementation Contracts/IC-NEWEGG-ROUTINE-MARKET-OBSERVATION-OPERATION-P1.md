@@ -10,6 +10,12 @@ One governed Newegg routine observation acquires one authoritative Rakuten main 
 
 Current and History retain independent qualification. A source record may qualify for both, either, or neither. FULL absence never creates false freshness or an invented out-of-stock observation. Seller identity is not manufactured. The approximately 24-hour target cadence and 36-hour Current TTL remain unchanged. Weekly affiliate maintenance remains separate.
 
+## Product-local exception isolation
+
+An exact MPN contradiction against one uniquely matched governed destination is retained as `IDENTITY_REVIEW_REQUIRED` with immutable FULL lineage and is excluded from Current, History, and publication. It does not prevent unrelated independently qualified offers from continuing. The routine neither infers manufacturer equivalence nor creates a second review system. H052 is Amazon-ASIN-specific and does not apply; the existing generic retained-evidence product review contract also does not accept this Rakuten catalog contradiction, so any later resolution requires its own separately governed policy decision.
+
+Isolation is permitted only when the preparation records a unique affected Atlas product and destination and proves explicit Current/History exclusion. Any unclassified identity block remains a routine stop. FULL integrity, source rights, canonical repository corruption, ambiguous or cross-product collision, predecessor drift, storage/locking failure, and incomplete or conflicting receipts remain systemic fail-closed conditions.
+
 ## Deterministic recovery
 
 Routine identity binds the source family, immutable FULL digest and HDR, source Current and History state, rights profile, and routine version. Ordered stage receipts permit restart at the first incomplete stage. Each canonical execution remains independently idempotent, so a completed Current or History stage is replay-safe if the other stage fails. Immutable provider input and the canonical Current/History repositories remain the authorities; the routine is orchestration only.

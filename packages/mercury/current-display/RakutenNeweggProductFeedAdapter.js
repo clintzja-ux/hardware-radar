@@ -61,7 +61,7 @@ function exactDestination(record, destinations) {
     if (candidates.size !== 1) return { status: "DESTINATION_MATCH_CONFLICT", destination: null, merchantUrl };
     const destination = [...candidates.values()][0];
     if (skuMatches.length && urlMatches.length && !urlMatches.some(item => item.destinationId === destination.destinationId)) return { status: "DESTINATION_MATCH_CONFLICT", destination: null, merchantUrl };
-    if (destination.binding?.manufacturerPartNumber && record.manufacturerPartNumber && destination.binding.manufacturerPartNumber.toUpperCase() !== record.manufacturerPartNumber.toUpperCase()) return { status: "MPN_CONTRADICTION", destination: null, merchantUrl };
+    if (destination.binding?.manufacturerPartNumber && record.manufacturerPartNumber && destination.binding.manufacturerPartNumber.toUpperCase() !== record.manufacturerPartNumber.toUpperCase()) return { status: "MPN_CONTRADICTION", destination: null, conflictingDestination: destination, merchantUrl };
     return { status: "MATCHED", destination, merchantUrl };
 }
 
