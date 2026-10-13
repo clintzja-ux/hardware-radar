@@ -1,6 +1,6 @@
 # IC-NEWEGG-ROUTINE-PRODUCTION-COMMAND-AND-PRIVATE-FORGE-OPERATIONS-TRANSPORT-P1
 
-Status: retained-FULL end-to-end certified through canonical Current/History authority, QA, recomposition, Sentinel, retention, and private Forge transport; scheduler activation remains OFF.
+Status: retained-FULL end-to-end certified and exposed through one registered mode-explicit operator command; live acquisition and scheduler activation remain fail-closed/OFF pending a durable acquisition-authority owner.
 
 ## Production command service
 

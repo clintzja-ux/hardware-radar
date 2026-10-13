@@ -1,0 +1,14 @@
+import assert from "node:assert/strict";
+import {mkdtemp,mkdir,rm,writeFile} from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import {createProductionNeweggRoutineLiveRoot,ProductionNeweggRoutineOperatorCommand} from "../operations/index.js";
+
+const root=await mkdtemp(path.join(os.tmpdir(),"newegg-operator-command-"));
+try{
+ await mkdir(path.join(root,".forge-review/retail-display"),{recursive:true});await mkdir(path.join(root,".forge-review/mercury"),{recursive:true});await mkdir(path.join(root,".forge-review/rakuten-sftp/catalog-state"),{recursive:true});
+ await writeFile(path.join(root,".forge-review/retail-display/current-display-snapshots.json"),JSON.stringify({current:{snapshotId:"snapshot-fixture"}}));await writeFile(path.join(root,".forge-review/mercury/historical-observations.json"),JSON.stringify({sequence:0,records:{}}));await writeFile(path.join(root,".forge-review/rakuten-sftp/catalog-state/current.json"),JSON.stringify({stateId:"catalog-fixture"}));
+ const command=new ProductionNeweggRoutineOperatorCommand({root,retainedRunner:async()=>({status:"SUCCESS",output:"certified"}),now:()=>"2026-10-13T12:00:00.000Z"}),inspection=await command.execute({mode:"INSPECT"});assert.equal(inspection.status,"READY");assert.equal(inspection.providerCalls,0);assert.equal(inspection.canonicalMutation,false);assert.equal(inspection.current.snapshotId,"snapshot-fixture");assert.equal((await command.execute({mode:"CERTIFY_RETAINED"})).status,"SUCCESS_WITH_PRODUCT_EXCEPTIONS");await assert.rejects(()=>command.execute({mode:"RUN_LIVE"}),error=>error.code==="NEWEGG_ROUTINE_LIVE_ACQUISITION_AUTHORITY_OWNER_MISSING");
+ const productionRoot=await createProductionNeweggRoutineLiveRoot({root});assert.equal(productionRoot.blocker,"NEWEGG_ROUTINE_LIVE_ACQUISITION_AUTHORITY_OWNER_MISSING");assert.equal(productionRoot.currentSnapshotRepository.statePath,path.resolve(root,".forge-review/retail-display/current-display-snapshots.json"));assert.equal(productionRoot.liveExecutionAuthorized,false);const invalid=new ProductionNeweggRoutineOperatorCommand({root,liveRootFactory:async()=>({command:{},liveExecutionAuthorized:false})});await assert.rejects(()=>invalid.execute({mode:"RUN_LIVE"}),error=>error.code==="NEWEGG_ROUTINE_LIVE_AUTHORITY_INVALID");const authorized=new ProductionNeweggRoutineOperatorCommand({root,liveRootFactory:async()=>({command:{execute:()=>{}},liveExecutionAuthorized:true})}),live=await authorized.execute({mode:"RUN_LIVE"});assert.equal(typeof live.execute,"function");await assert.rejects(()=>command.execute({mode:"PRODUCTION"}),/MODE_REQUIRED/);
+ console.log("Production Newegg routine operator command tests passed: 14 cases.");
+}finally{await rm(root,{recursive:true,force:true});}

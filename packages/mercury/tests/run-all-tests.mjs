@@ -270,6 +270,7 @@ const testModules = [
     ,"./NeweggRoutinePreflightBindingQualificationOwners.test.mjs"
     ,"./ProductionNeweggRoutinePublicationServices.test.mjs"
     ,"./DisposableNeweggRoutineRoot.test.mjs"
+    ,"./ProductionNeweggRoutineOperatorCommand.test.mjs"
     ,"./ProductionRakutenFullCurrentPreparationService.test.mjs"
     ,"./ProductionRakutenCurrentQaService.test.mjs"
     ,"./NeweggRoutineSourceStageOwners.test.mjs"

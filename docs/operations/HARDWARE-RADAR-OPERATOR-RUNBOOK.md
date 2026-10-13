@@ -150,6 +150,16 @@ RESUME must create zero new paid tasks. Stop if exact provider-task lineage cann
 
 ## Newegg / Rakuten routine input
 
+The complete certified routine has one registered command:
+
+```powershell
+npm run mercury:newegg-routine -- --mode=INSPECT
+npm run mercury:newegg-routine -- --mode=CERTIFY_RETAINED
+npm run mercury:newegg-routine -- --mode=RUN_LIVE
+```
+
+`INSPECT` is strictly read-only and performs no provider call, recovery write, or authority consumption. `CERTIFY_RETAINED` executes the immutable retained FULL only inside disposable canonical state. `RUN_LIVE` has no default and currently fails closed with `NEWEGG_ROUTINE_LIVE_ACQUISITION_AUTHORITY_OWNER_MISSING`: Current and History already retain independent plan-specific authority, but live acquisition does not yet have a durable reusable authority owner. Do not substitute an environment variable, generic confirmation token, or scheduler trigger for that missing authority. Windows scheduling remains disabled.
+
 Inspect readiness only when needed:
 
 ```powershell
