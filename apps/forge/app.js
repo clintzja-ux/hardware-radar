@@ -6,9 +6,11 @@ import { AcquisitionOperationsPanel } from "./components/AcquisitionOperationsPa
 import { CertifiedMercuryOperationsPanel } from "./components/CertifiedMercuryOperationsPanel.js";
 import { ProductManagerPanel } from "./components/ProductManagerPanel.js";
 import { ForgeShell } from "./components/ForgeShell.js";
+import { NeweggMandatePanel } from "./components/NeweggMandatePanel.js";
 
 const shellRoot = document.getElementById("forgeApp");
 if (shellRoot) new ForgeShell(shellRoot);
+const mandateRoot=document.getElementById("neweggMandatePanel");if(mandateRoot)new NeweggMandatePanel(mandateRoot);
 
 const productManagerRoot = document.getElementById("productManagerPanel");
 if (productManagerRoot) new ProductManagerPanel(productManagerRoot);
