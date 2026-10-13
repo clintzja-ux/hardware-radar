@@ -4,7 +4,7 @@
   "workingDirectory": "C:\\Projects\\hardware-radar\\hardware-radar",
   "documentation": "docs/operations/HARDWARE-RADAR-OPERATOR-RUNBOOK.md",
   "inventory": {
-    "packageScriptDeclarations": 219,
+    "packageScriptDeclarations": 225,
     "topLevelMjsFiles": 211,
     "windowsPowerShellFiles": 11,
     "operatorEligibleEntries": 23,

@@ -219,6 +219,7 @@ const testModules = [
     "./ImmutableProviderResultReprocessing.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
     "./RetainedCommerceHistoryPreparation.test.mjs",
+    "./ProductionRetainedCommerceHistoryPreparationService.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",
     "./HistoricalRefreshAccumulation.test.mjs",
@@ -262,6 +263,12 @@ const testModules = [
     ,"./CertifiedMercuryOperationsPanel.test.mjs"
     ,"./NeweggRoutineSchedulingAndForge.test.mjs"
     ,"./NeweggRoutineProductionCommand.test.mjs"
+    ,"./ProductionNeweggRoutineFactory.test.mjs"
+    ,"./NeweggRoutineAuthorityAdapters.test.mjs"
+    ,"./NeweggRoutineSourceStageOwners.test.mjs"
+    ,"./ProductionRakutenFullCurrentPreparationService.test.mjs"
+    ,"./ProductionRakutenCurrentQaService.test.mjs"
+    ,"./NeweggRoutineSourceStageOwners.test.mjs"
     ,"./CertifiedMercuryCohortOperationsPanel.test.mjs"
     ,"./ProductionForgeCohortOperationsProvider.test.mjs"
     ,"./ForgeCohortOperationsEndToEnd.test.mjs"
