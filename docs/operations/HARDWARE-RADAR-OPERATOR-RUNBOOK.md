@@ -155,11 +155,14 @@ The complete certified routine has one registered command:
 ```powershell
 npm run mercury:newegg-routine -- --mode=INSPECT
 npm run mercury:newegg-routine -- --mode=INSPECT --mandate-id=<MANDATE_ID>
+npm run mercury:newegg-routine -- --mode=READINESS --mandate-id=<MANDATE_ID>
 npm run mercury:newegg-routine -- --mode=CERTIFY_RETAINED
 npm run mercury:newegg-routine -- --mode=RUN_LIVE --mandate-id=<MANDATE_ID>
 ```
 
-`INSPECT` is strictly read-only and performs no provider call, recovery write, or authority consumption. With a mandate ID it also returns the sanitized recurring-authority projection: enabled/paused/revoked, approved source, expiry, last authorized acquisition, remaining Jamaica-local daily allowance, next window, and independent Current/History scope status. `CERTIFY_RETAINED` executes the immutable retained FULL only inside disposable canonical state.
+`INSPECT` and `READINESS` are strictly read-only and perform no provider call, recovery write, or authority consumption. `READINESS` additionally checks the mandate period/window/daily allowance, independent Current/History scopes, Rakuten credential presence, the dedicated server-side `FORGE_PRIVATE_OPERATIONS_BEARER`, pinned-host state, source rights, measured disk capacity, protected artifact inventory, and the complete production-owner set. The private bearer must contain at least 32 cryptographically random bytes in the existing Git-ignored `.env`; never place it in a command argument, URL, browser state, log, audit record, or checked-in file. Trusted Forge cookie/CSRF authentication remains authoritative for browser access.
+
+The live-lineage adapter durably authorizes an operation before provider access, recovers only an exact atomic transport completion receipt, promotes the validated FULL, and creates independent Current/History children. A finalized artifact without that receipt fails closed and is never automatically reacquired. Storage calculation uses measured retained FULL, catalog, QA, and recomposition evidence plus the approved safety reserve; unknown measurements produce `STORAGE_HOLD`. Current and explicitly linked predecessor catalogs remain protected, legacy unverifiable lineage remains held for review, and no automatic pruning is authorized. `CERTIFY_RETAINED` executes the immutable retained FULL only inside disposable canonical state. A successful `READINESS` result establishes technical readiness only; it does not authorize `RUN_LIVE`.
 
 ### Administer bounded Newegg authority in trusted Forge
 

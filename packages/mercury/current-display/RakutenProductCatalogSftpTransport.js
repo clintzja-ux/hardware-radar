@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { createReadStream } from "node:fs";
-import { mkdir, readdir, rename, rm, stat } from "node:fs/promises";
+import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { validateRakutenProductCatalogGzip } from "./RakutenProductCatalogParser.js";
 import { redactRakutenSftpError } from "./RakutenSftpConfig.js";
@@ -171,13 +171,15 @@ export class RakutenProductCatalogSftpTransport {
             } catch(error){await rm(temporaryPath,{force:true});if(String(error?.message??"").startsWith("SFTP_"))throw error;if(["EACCES","ENOSPC","EROFS","EMFILE","ENFILE","ENOENT"].includes(error?.code))throw new Error("SFTP_LOCAL_WRITE_FAILED");throw new Error("SFTP_INTEGRITY_FAILED");}
         });
     }
-    async downloadFullAndValidate({ advertiserMid="44583", publisherSid="4746097", signal, listTimeoutMs=RAKUTEN_SFTP_LIST_TIMEOUT_MS, stallTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS, downloadTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS, onProgress=()=>{} }={}) {
+    async downloadFullAndValidate({ advertiserMid="44583", publisherSid="4746097", acquisitionId=null, signal, listTimeoutMs=RAKUTEN_SFTP_LIST_TIMEOUT_MS, stallTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_STALL_TIMEOUT_MS, downloadTimeoutMs=RAKUTEN_SFTP_DOWNLOAD_TIMEOUT_MS, onProgress=()=>{} }={}) {
+        if(acquisitionId!==null&&!/^mer_newegglive_[a-f0-9]{24}$/.test(acquisitionId))throw error("SFTP_ACQUISITION_ID_INVALID");
+        if(acquisitionId){const acquisitionRoot=path.join(this.stagingRoot,"acquisitions",acquisitionId),receiptPath=path.join(acquisitionRoot,"acquisition-receipt.json");try{const receipt=JSON.parse(await readFile(receiptPath,"utf8")),filePath=path.join(acquisitionRoot,receipt.filename),actual=await sha256File(filePath),validation=await validateStagedFile(filePath,"MAIN_FULL",`RAKUTEN_MAIN:${advertiserMid}:${publisherSid}`);if(receipt.schemaVersion!=="1.0"||receipt.acquisitionId!==acquisitionId||receipt.sha256!==actual||receipt.headerTimestamp!==validation.summary.header.feedTimestamp||receipt.productRows!==validation.summary.products||receipt.trailerRows!==validation.summary.trailer.productCount)throw error("SFTP_ACQUISITION_RECEIPT_CONFLICT");return freeze({...receipt,status:"FULL_RECOVERED_AND_VALIDATED",selected:{filename:receipt.filename,advertiserMid,publisherSid,feedFamily:"FULL"},localPath:filePath,connectionsUsed:0,externalOperations:0,recovered:true,connectionAccounting:{connectionsOpened:0,connectionsReady:0,activeConnectionsAtStart:0,activeConnectionsAtEnd:0,peakLocalConcurrentConnections:0},lease:{leaseAcquired:false,leaseReleased:false}});}catch(cause){if(cause?.code!=="ENOENT")throw cause;try{if((await readdir(acquisitionRoot)).length)throw error("SFTP_ACQUISITION_COMPLETION_UNESTABLISHED");}catch(inner){if(inner?.code!=="ENOENT")throw inner;}}}
         return this.withSession(async (session,{releaseLease}) => {
             const discovery=await this.discoverAvailable(session,{advertiserMid,signal,listTimeoutMs});
             let selected;
             try { selected=selectRakutenNeweggMainFull(discovery.listings,{advertiserMid,publisherSid}); }
             catch(cause) { cause.discovery=discovery.discovery; cause.directoryListings=discovery.directoryListings; throw cause; }
-            const acquisitionRoot=path.join(this.stagingRoot,"acquisitions",crypto.randomUUID());
+            const acquisitionRoot=path.join(this.stagingRoot,"acquisitions",acquisitionId??crypto.randomUUID());
             await mkdir(acquisitionRoot,{recursive:true});
             const finalPath=path.join(acquisitionRoot,selected.filename),temporaryPath=`${finalPath}.partial`;
             try {
@@ -186,8 +188,7 @@ export class RakutenProductCatalogSftpTransport {
                 const local=await stat(temporaryPath); if (local.size<=0) throw error("SFTP_DOWNLOAD_FAILED");
                 const validation=await validateStagedFile(temporaryPath,"MAIN_FULL",`RAKUTEN_MAIN:${advertiserMid}:${publisherSid}`),{header,trailer,products,modifications,fieldCounts}=validation.summary;
                 if (!header || !trailer || trailer.actualProductCount!==products) throw error("SFTP_INTEGRITY_FAILED");
-                await rename(temporaryPath,finalPath);
-                return freeze({status:"FULL_DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,transfer,integrity:validation.integrity,localPath:finalPath,localBytes:local.size,sha256:await sha256File(finalPath),headerTimestamp:header.feedTimestamp,productRows:products,trailerRows:trailer.productCount,modifications,fieldCounts,filesDownloaded:1,downloadsSequential:true,localProcessingStartedAfterNetworkClose:true,externalOperations:1,actualSpendUsd:0});
+                await rename(temporaryPath,finalPath);const sha256=await sha256File(finalPath),result={status:"FULL_DOWNLOADED_AND_VALIDATED",selected,directoryListings:discovery.directoryListings,discovery:discovery.discovery,transfer,integrity:validation.integrity,localPath:finalPath,localBytes:local.size,sha256,headerTimestamp:header.feedTimestamp,productRows:products,trailerRows:trailer.productCount,modifications,fieldCounts,filesDownloaded:1,downloadsSequential:true,localProcessingStartedAfterNetworkClose:true,externalOperations:1,actualSpendUsd:0};if(acquisitionId){const receipt={schemaVersion:"1.0",acquisitionId,filename:selected.filename,localBytes:local.size,sha256,headerTimestamp:header.feedTimestamp,productRows:products,trailerRows:trailer.productCount,filesDownloaded:1,downloadsSequential:true,connectionClosedBeforeValidation:true,automaticRetries:0},temporaryReceipt=`${path.join(acquisitionRoot,"acquisition-receipt.json")}.tmp-${process.pid}-${crypto.randomUUID()}`;try{await writeFile(temporaryReceipt,`${JSON.stringify(receipt,null,2)}\n`,{flag:"wx"});await rename(temporaryReceipt,path.join(acquisitionRoot,"acquisition-receipt.json"));}finally{await rm(temporaryReceipt,{force:true}).catch(()=>{});}}return freeze(result);
             } catch(cause) { await rm(temporaryPath,{force:true}); throw cause; }
         });
     }

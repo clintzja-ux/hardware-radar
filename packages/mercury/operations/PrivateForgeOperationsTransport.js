@@ -23,6 +23,8 @@ export function createPrivateForgeOperationsHttpHandler({transport}={}){
  if(!transport?.readLatest)throw new TypeError("PRIVATE_FORGE_HTTP_TRANSPORT_REQUIRED");
  return async function handle(request,response){
   response.setHeader("Cache-Control","private, no-store");response.setHeader("X-Robots-Tag","noindex, nofollow");response.setHeader("Content-Type","application/json; charset=utf-8");
+  const remoteAddress=request.socket?.remoteAddress??request.connection?.remoteAddress??null;
+  if(!["127.0.0.1","::1","::ffff:127.0.0.1"].includes(remoteAddress)){response.statusCode=403;response.end(JSON.stringify({error:"PRIVATE_FORGE_LOOPBACK_REQUIRED"}));return;}
   if(request.method!=="GET"||request.url!=="/internal/forge/newegg-routine"){response.statusCode=404;response.end(JSON.stringify({error:"NOT_FOUND"}));return;}
   const header=String(request.headers?.authorization??""),token=header.startsWith("Bearer ")?header.slice(7):"";
   try{const envelope=await transport.readLatest({accessToken:token});response.statusCode=200;response.end(JSON.stringify(envelope));}catch(error){response.statusCode=error?.code==="PRIVATE_FORGE_ACCESS_DENIED"?401:503;response.end(JSON.stringify({error:error?.code??error?.message??"PRIVATE_FORGE_TRANSPORT_FAILURE"}));}

@@ -11,7 +11,7 @@ const copy=value=>structuredClone(value);
 const failOutcome={ACQUISITION:"PROVIDER_FAILURE",VALIDATION:"INTEGRITY_FAILURE",CATALOG:"INTEGRITY_FAILURE",BINDING:"INTEGRITY_FAILURE",QUALIFICATION:"QUALIFICATION_REVIEW_REQUIRED",PREPARE:"QUALIFICATION_REVIEW_REQUIRED",CURRENT:"CURRENT_FAILURE",HISTORY:"HISTORY_FAILURE",QA:"QA_FAILURE",RECOMPOSITION:"RECOMPOSITION_FAILURE",CERTIFICATION:"CERTIFICATION_FAILURE",RELEASE_CERTIFICATION:"CERTIFICATION_FAILURE",RETENTION_ASSESSMENT:"STORAGE_HOLD",FORGE_PROJECTION:"CERTIFICATION_FAILURE",FORGE_TRANSPORT:"FORGE_TRANSPORT_FAILURE"};
 
 export class NeweggRoutineProductionCommand{
- constructor({runRepository,overlapOwner,stageOwners,now=()=>new Date().toISOString()}={}){if(!runRepository?.loadActive||!runRepository?.save||!overlapOwner?.assess)throw new TypeError("NEWEGG_ROUTINE_COMMAND_OWNER_REQUIRED");this.runRepository=runRepository;this.overlapOwner=overlapOwner;this.stageOwners=stageOwners??{};this.now=now;}
+ constructor({runRepository,overlapOwner,stageOwners,afterStage=async()=>{},now=()=>new Date().toISOString()}={}){if(!runRepository?.loadActive||!runRepository?.save||!overlapOwner?.assess||typeof afterStage!=="function")throw new TypeError("NEWEGG_ROUTINE_COMMAND_OWNER_REQUIRED");this.runRepository=runRepository;this.overlapOwner=overlapOwner;this.stageOwners=stageOwners??{};this.afterStage=afterStage;this.now=now;}
  async execute({mode="PRODUCTION",input={}}={}){
   if(!NEWEGG_ROUTINE_COMMAND_MODES.includes(mode))throw new TypeError("NEWEGG_ROUTINE_COMMAND_MODE_INVALID");
   const active=await this.runRepository.loadActive();
@@ -25,7 +25,7 @@ export class NeweggRoutineProductionCommand{
    try{
     const stageResult=await owner.execute({mode,input:copy(input),run:copy(run),priorResults:copy(run.stageResults)});
     if(stageResult?.status==="REVIEW_REQUIRED")return await this.stop(run,stage,"QUALIFICATION_REVIEW_REQUIRED",stageResult);
-    run={...run,completedStages:[...run.completedStages,stage],stageResults:{...run.stageResults,[stage]:copy(stageResult??{})},updatedAt:this.now()};await this.runRepository.save(run);
+    run={...run,completedStages:[...run.completedStages,stage],stageResults:{...run.stageResults,[stage]:copy(stageResult??{})},updatedAt:this.now()};await this.runRepository.save(run);await this.afterStage(stage,copy(run));
    }catch(error){return await this.stop(run,stage,failOutcome[stage]??"INTEGRITY_FAILURE",{code:error?.code??error?.message??"UNKNOWN_ERROR"});}
   }
   const unchanged=Object.values(run.stageResults).some(value=>value?.status==="NO_CHANGE"||value?.status==="REPLAY");const outcome=unchanged?"SUCCESS_NO_CHANGE":"SUCCESS_RELEASE_READY";

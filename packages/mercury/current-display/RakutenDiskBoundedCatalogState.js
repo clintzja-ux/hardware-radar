@@ -63,6 +63,9 @@ export class RakutenDiskBoundedCatalogStateProjection {
     const absolute=path.resolve(artifactPath??"");if(path.basename(absolute)!==expected.filename||absolute.includes(".partial-"))fail("RAKUTEN_FULL_BASELINE_ARTIFACT_INELIGIBLE");
     const info=await stat(absolute);if(!info.isFile()||info.size!==expected.fileSize)fail("RAKUTEN_FULL_BASELINE_SIZE_MISMATCH");
     const artifactDigest=await hashFile(absolute);if(artifactDigest!==expected.artifactDigest.toLowerCase())fail("RAKUTEN_FULL_BASELINE_DIGEST_MISMATCH");
+    const predecessor=await this.getCurrent();
+    if(predecessor?.artifact?.digest===artifactDigest&&predecessor?.artifact?.headerTimestamp===new Date(expected.headerTimestamp).toISOString())return freeze({status:"REPLAY_NO_CHANGE",manifest:predecessor,statePath:statePath(this.stateRoot,predecessor.stateId),durationMs:0});
+    const parentStateId=predecessor?.stateId??null;
     await mkdir(this.stateRoot,{recursive:true});const temporary=tempPath(this.stateRoot);let db;
     const started=performance.now();let header=null,trailer=null,products=0;
     try{
@@ -73,8 +76,8 @@ export class RakutenDiskBoundedCatalogStateProjection {
         const [productId,sku]=key(record);try{insert.run(productId,sku,JSON.stringify(compactRecord(record)));}catch(error){if(String(error?.message).includes("UNIQUE"))fail("RAKUTEN_FULL_SOURCE_ENTRY_DUPLICATE");throw error;}products+=1;
       }db.exec("COMMIT");}catch(error){try{db.exec("ROLLBACK");}catch{}throw error;}
       if(header?.advertiserMid!=="44583"||header.feedTimestamp!==expected.headerTimestamp||products!==expected.productRows||trailer?.actualProductCount!==expected.trailerCount)fail("RAKUTEN_FULL_BASELINE_VALIDATION_MISMATCH");
-      const catalogDigest=stateDigest(db),material=stateMaterial({feedFamilyKey:expected.feedFamilyKey,artifactDigest,headerTimestamp:header.feedTimestamp,count:products,catalogDigest}),identity=identify(material);
-      const manifest={schemaVersion:RAKUTEN_DISK_CATALOG_FORMAT_VERSION,stateId:identity.stateId,stateDigest:identity.stateDigest,stateType:"FULL_BASELINE",parentStateId:null,feedFamilyKey:expected.feedFamilyKey,artifact:{filename:expected.filename,digest:artifactDigest,headerTimestamp:header.feedTimestamp,remoteModifiedAt:expected.remoteModifiedAt?new Date(expected.remoteModifiedAt).toISOString():null,productRows:products,trailerCount:trailer.actualProductCount},projectionVersion:RAKUTEN_DISK_CATALOG_PROJECTION_VERSION,catalogDigest,recordCount:products,historyEligibility:false,currentEvidenceAt:header.feedTimestamp};
+      const catalogDigest=stateDigest(db),material=stateMaterial({feedFamilyKey:expected.feedFamilyKey,artifactDigest,headerTimestamp:header.feedTimestamp,count:products,catalogDigest,parentStateId}),identity=identify(material);
+      const manifest={schemaVersion:RAKUTEN_DISK_CATALOG_FORMAT_VERSION,stateId:identity.stateId,stateDigest:identity.stateDigest,stateType:"FULL_BASELINE",parentStateId,feedFamilyKey:expected.feedFamilyKey,artifact:{filename:expected.filename,digest:artifactDigest,headerTimestamp:header.feedTimestamp,remoteModifiedAt:expected.remoteModifiedAt?new Date(expected.remoteModifiedAt).toISOString():null,productRows:products,trailerCount:trailer.actualProductCount},projectionVersion:RAKUTEN_DISK_CATALOG_PROJECTION_VERSION,catalogDigest,recordCount:products,historyEligibility:false,currentEvidenceAt:header.feedTimestamp};
       putMetadata(db,"manifest",manifest);db.exec("PRAGMA optimize");db.close();db=null;
       const final=statePath(this.stateRoot,identity.stateId);try{const prior=JSON.parse(await readFile(final+".manifest.json","utf8"));if(prior.stateDigest!==identity.stateDigest)fail("RAKUTEN_CATALOG_STATE_CONFLICT");await rm(temporary,{force:true});return freeze({status:"REPLAY_NO_CHANGE",manifest:prior,statePath:final,durationMs:Math.round(performance.now()-started)});}catch(error){if(error?.code!=="ENOENT")throw error;}
       await promoteState({root:this.stateRoot,temporary,final,manifest});
