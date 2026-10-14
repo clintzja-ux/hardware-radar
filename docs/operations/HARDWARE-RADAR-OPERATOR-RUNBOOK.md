@@ -167,7 +167,33 @@ Launch trusted Forge with **Launch Hardware Radar Forge.cmd**, then open **Marke
 
 The production defaults are source `RAKUTEN_MAIN:44583:4746097`, a maximum 30-day term, Jamaica-local operating window `4:00 PM–11:45 PM`, preferred future scheduler start `4:30 PM`, one new FULL acquisition per local day, zero automatic retries, and independently enabled Current and History scopes. Forge shows expiry, remaining daily allowance, next eligible window, last authorized acquisition, scope state, pause/revocation state, and operator audit history. Renewal atomically retires the prior mandate; Forge will not create a second active mandate.
 
-Mandate administration does **not** start the Newegg routine or scheduler and grants no publication, release, deployment, paid-provider, or automatic-deletion authority. The first real mandate requires a separate explicit production authorization after the implementation checkpoint. Windows scheduling remains a later, separately certified boundary.
+Mandate administration does **not** start the Newegg routine or scheduler and grants no publication, release, deployment, paid-provider, or automatic-deletion authority. Windows scheduling is certified but remains uninstalled and inactive until separately authorized.
+
+### Install the Newegg schedule disabled
+
+The Windows task is always installed disabled. Installation performs no provider call and does not run the routine:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/install-newegg-routine-task.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/get-newegg-routine-task.ps1
+```
+
+The installer requires the Windows local timezone to be fixed UTC-05:00 with no daylight-saving transitions. The policy owner remains `America/Jamaica`; the local trigger is daily at 4:30 PM, inside the mandate's 4:00–11:45 PM Jamaica window. The task uses `IgnoreNew`, does not start when a trigger was missed, accumulates no backlog, and has no automatic restart or retry. Shutdown during a run is recovered only through canonical acquisition and stage receipts on a later separately permitted invocation.
+
+Enable only after a separate scheduler-activation authorization:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/enable-newegg-routine-task.ps1
+```
+
+Emergency stop and explicit removal are separate controls:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/disable-newegg-routine-task.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/remove-newegg-routine-task.ps1
+```
+
+The scheduled wrapper resolves the single enabled production mandate internally; no mandate ID or credential appears in the task definition. Missing, multiple, expired, paused, revoked, out-of-window, daily-consumed, overlapping, unsafe-source, pinned-host, rights, or storage states fail closed. Forge **Market Operations** combines live Windows task inspection with governed scheduler-attempt and routine receipts. `Not installed`, `Disabled`, and `Enabled` are actual task states; a missing attempt receipt is not presented as a successful run.
 
 `RUN_LIVE` has no default and requires an exact durable mandate ID. The bounded authority owner limits mandates to 30 days, the exact Rakuten Newegg main FULL source, one new acquisition per Jamaica-local day inside the approved window, zero retries, pinned host and rights validation, and independently enabled Current and History child scopes. Each market child is single-use/exact-replay-safe and binds one exact canonical plan, preparation, source lineage, predecessor, and applicable rights/eligibility result. Recovery uses canonical receipts without consuming another daily or child authorization. The mandate grants no publication, release, deployment, paid-provider, automatic-deletion, or scheduler authority.
 

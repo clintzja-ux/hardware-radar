@@ -44,6 +44,7 @@
     "test:rakuten-current-qa-service": "node packages/mercury/tests/ProductionRakutenCurrentQaService.test.mjs",
     "mercury:newegg-routine:history": "node scripts/newegg-routine-history.mjs",
     "mercury:newegg-routine": "node --env-file=.env scripts/newegg-routine.mjs",
+    "mercury:newegg-routine:scheduled": "node --env-file=.env scripts/newegg-routine-scheduled.mjs",
     "test:beacon": "node packages/beacon/tests/run-all-tests.mjs",
     "test:gateway": "node packages/gateway/tests/run-all-tests.mjs",
     "test:layout": "node scripts/repository-layout.test.mjs",

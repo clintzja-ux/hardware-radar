@@ -271,6 +271,7 @@ const testModules = [
     ,"./ProductionNeweggRoutinePublicationServices.test.mjs"
     ,"./DisposableNeweggRoutineRoot.test.mjs"
     ,"./ProductionNeweggRoutineOperatorCommand.test.mjs"
+    ,"./NeweggRoutineWindowsScheduler.test.mjs"
     ,"./NeweggRoutineRecurringAuthority.test.mjs"
     ,"./ForgeNeweggRecurringAuthority.test.mjs"
     ,"./ProductionRakutenFullCurrentPreparationService.test.mjs"

@@ -1,0 +1,5 @@
+import path from "node:path";
+import {executeScheduledNeweggRoutine,FileNeweggRoutineSchedulerHealthRepository,FileNeweggRoutineRecurringAuthorityRepository,NeweggRoutineRecurringAuthorityService,ProductionNeweggRoutineOperatorCommand} from "../packages/mercury/operations/index.js";
+
+const root=process.cwd(),stateRoot=path.join(root,".forge-review/mercury/newegg-routine"),authorityService=new NeweggRoutineRecurringAuthorityService({repository:new FileNeweggRoutineRecurringAuthorityRepository({statePath:path.join(stateRoot,"recurring-authority.json")})}),command=new ProductionNeweggRoutineOperatorCommand({root}),healthRepository=new FileNeweggRoutineSchedulerHealthRepository({statePath:path.join(stateRoot,"scheduler-health.json")});
+try{const result=await executeScheduledNeweggRoutine({authorityService,command,healthRepository});console.log(JSON.stringify(result,null,2));}catch(error){console.error(JSON.stringify({status:error.schedulerStatus??"FAILED_REVIEW_REQUIRED",failure:error.code??error.message,automaticRetries:0,nextAction:"STOP_AND_REVIEW"},null,2));process.exitCode=2;}
