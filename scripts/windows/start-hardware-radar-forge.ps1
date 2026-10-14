@@ -34,7 +34,7 @@ New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
 $env:FORGE_OPERATOR_ID = $operator
 $env:FORGE_OPERATOR_TRUSTED_LAUNCH = "1"
 $env:FORGE_OPERATOR_PREVIEW_PORT = "4174"
-Start-Process -FilePath $node -ArgumentList "scripts/serve-forge-operator-preview.mjs" -WorkingDirectory $repositoryRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $logRoot "operator-runtime.log") -RedirectStandardError (Join-Path $logRoot "operator-runtime-error.log")
+Start-Process -FilePath $node -ArgumentList "--env-file=.env", "scripts/serve-forge-operator-preview.mjs" -WorkingDirectory $repositoryRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $logRoot "operator-runtime.log") -RedirectStandardError (Join-Path $logRoot "operator-runtime-error.log")
 
 $ready = $false
 for ($attempt = 0; $attempt -lt 40; $attempt++) {

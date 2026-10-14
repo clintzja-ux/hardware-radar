@@ -163,7 +163,7 @@ npm run mercury:newegg-routine -- --mode=RUN_LIVE --mandate-id=<MANDATE_ID>
 
 ### Administer bounded Newegg authority in trusted Forge
 
-Launch trusted Forge with **Launch Hardware Radar Forge.cmd**, then open **Market Operations → Newegg operating mandate**. The authenticated operator can create, inspect, pause, resume, revoke, or renew the bounded mandate without entering internal IDs, digests, confirmation tokens, or JSON. Creation and renewal always show a separate confirmation dialog before durable authority changes.
+Launch trusted Forge with **Launch Hardware Radar Forge.cmd**, then open **Market Operations → Newegg operating mandate**. The launcher uses the same private repository `.env` mechanism as the registered Newegg routine; Forge reports Rakuten credential presence only and never exposes their values. The authenticated operator can create, inspect, pause, resume, revoke, or renew the bounded mandate without entering internal IDs, digests, confirmation tokens, or JSON. Creation and renewal always show a separate confirmation dialog before durable authority changes.
 
 The production defaults are source `RAKUTEN_MAIN:44583:4746097`, a maximum 30-day term, Jamaica-local operating window `4:00 PM–11:45 PM`, preferred future scheduler start `4:30 PM`, one new FULL acquisition per local day, zero automatic retries, and independently enabled Current and History scopes. Forge shows expiry, remaining daily allowance, next eligible window, last authorized acquisition, scope state, pause/revocation state, and operator audit history. Renewal atomically retires the prior mandate; Forge will not create a second active mandate.
 
