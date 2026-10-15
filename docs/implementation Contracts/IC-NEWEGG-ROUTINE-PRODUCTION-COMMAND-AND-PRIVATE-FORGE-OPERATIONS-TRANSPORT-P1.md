@@ -62,7 +62,7 @@ The service persists after every successful stage. Resume starts at the first in
 
 `bindProductionNeweggRoutineMarketAuthorities` installs these two canonical owners into the existing production factory without changing any other stage owner or policy.
 
-Machine outcomes are `SUCCESS_RELEASE_READY`, `SUCCESS_NO_CHANGE`, `BLOCKED_ACTIVE_RUN`, `PROVIDER_FAILURE`, `INTEGRITY_FAILURE`, `QUALIFICATION_REVIEW_REQUIRED`, `CURRENT_FAILURE`, `HISTORY_FAILURE`, `QA_FAILURE`, `RECOMPOSITION_FAILURE`, `CERTIFICATION_FAILURE`, and `FORGE_TRANSPORT_FAILURE`. Success uses exit code 0; blocks and failures use a nonzero exit code.
+Machine outcomes are `SUCCESS_RELEASE_READY`, `SUCCESS_NO_CHANGE`, `BLOCKED_ACTIVE_RUN`, `PROVIDER_FAILURE`, `INTEGRITY_FAILURE`, `QUALIFICATION_REVIEW_REQUIRED`, `CURRENT_FAILURE`, `HISTORY_FAILURE`, `QA_FAILURE`, `RECOMPOSITION_FAILURE`, `CERTIFICATION_FAILURE`, `FORGE_HEALTH_FAILURE`, and `FORGE_TRANSPORT_FAILURE`. A Forge projection/persistence failure is distinct from Sentinel certification, and a private-transport failure remains distinct from both. Success uses exit code 0; blocks and failures use a nonzero exit code.
 
 ## Private Forge transport
 
@@ -71,6 +71,8 @@ Machine outcomes are `SUCCESS_RELEASE_READY`, `SUCCESS_NO_CHANGE`, `BLOCKED_ACTI
 The envelope binds transport version, audience, creation/expiry, projection digest, and envelope digest. Corrupt or stale envelopes fail closed. A transport failure after Current or History persistence becomes `FORGE_TRANSPORT_FAILURE`; completed market stages remain durable. A retry resumes only `FORGE_TRANSPORT`, is projection-specific and idempotent, and cannot reacquire provider data or mutate Mercury.
 
 The existing explicit local projection file remains a diagnostic fallback. It is not the production transport.
+
+The production health repository recognizes exactly two state shapes: the current schema-1.0 digest envelope and the established schema-1.0 raw `NEWEGG_ROUTINE_OPERATIONS` projection. Legacy acceptance requires the complete known field set, a valid routine run identity, immutable FULL digest/HDR and catalog identity, recognized success status, schedule shape, zero-authority safety flags, and valid numeric accounting. Unknown, malformed, ambiguous, or tampered legacy evidence fails closed. During the first newer projection write, the repository preserves the validated raw projection in a digest-bound same-directory backup, atomically replaces the active file with the canonical envelope under its single-writer lock, and re-reads the committed envelope before reporting success. It does not reinterpret the legacy run as a new completion.
 
 ## Deployment and activation boundary
 
