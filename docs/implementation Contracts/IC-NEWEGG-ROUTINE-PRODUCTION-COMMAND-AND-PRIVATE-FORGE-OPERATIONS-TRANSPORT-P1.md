@@ -8,6 +8,8 @@ The operator approved this policy extension for implementation and disposable ce
 
 The present Current and retained-commerce History contracts require exact plan/preparation-scoped confirmations. The routine contract also forbids inventing a routine-wide confirmation. A standing mandate that can cause future exact plans to execute therefore changes durable authority policy and requires explicit operator approval before implementation.
 
+The mandate operating window governs authorization of a new acquisition. It is not a completion deadline. Once a new FULL acquisition is authorized in-window, later Current and History children may be issued after the window end or parent expiry only for that exact completed acquisition, matching mandate, source, artifact digest, plan, preparation, predecessor, rights, and eligibility evidence. Pause, revocation, tampering, source mismatch, rights failure, or conflicting lineage still fails closed. This continuation creates no new acquisition allowance, retry, catch-up, renewal, publication, or deployment authority.
+
 The narrow proposed extension has three independent scopes under one operator-attributed mandate:
 
 1. **Acquisition scope.** Authorize only the exact Rakuten Newegg main FULL source family, during an explicit start/expiry interval and Jamaica-local operating window, for at most one new acquisition per Jamaica-local calendar day, with zero automatic retries, pinned-host and source-rights revalidation, pause/revocation state, single-writer consumption, and durable recovery receipts. Canonical recovery of an already-started acquisition reuses its receipt and consumes no second daily slot.
