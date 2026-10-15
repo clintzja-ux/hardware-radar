@@ -170,7 +170,7 @@ Launch trusted Forge with **Launch Hardware Radar Forge.cmd**, then open **Marke
 
 The production defaults are source `RAKUTEN_MAIN:44583:4746097`, a maximum 30-day term, Jamaica-local operating window `4:00 PM–11:45 PM`, preferred future scheduler start `4:30 PM`, one new FULL acquisition per local day, zero automatic retries, and independently enabled Current and History scopes. Forge shows expiry, remaining daily allowance, next eligible window, last authorized acquisition, scope state, pause/revocation state, and operator audit history. Renewal atomically retires the prior mandate; Forge will not create a second active mandate.
 
-Mandate administration does **not** start the Newegg routine or scheduler and grants no publication, release, deployment, paid-provider, or automatic-deletion authority. Windows scheduling is certified but remains uninstalled and inactive until separately authorized.
+Mandate administration does **not** start the Newegg routine or scheduler and grants no publication, release, deployment, paid-provider, or automatic-deletion authority. `HardwareRadar-Newegg-Routine` was installed on October 15, 2026 through the repository-native installer and remains **Disabled** and never-run. Installation is not activation; enabling it still requires separate explicit authorization.
 
 ### Install the Newegg schedule disabled
 
@@ -180,6 +180,8 @@ The Windows task is always installed disabled. Installation performs no provider
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/install-newegg-routine-task.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/windows/get-newegg-routine-task.ps1
 ```
+
+The inspector treats Windows Task Scheduler's `0x41303` / pre-2000 never-run sentinel as no prior attempt, so a newly installed disabled task reports `lastScheduledAttempt: null` and `lastTaskResult: null` rather than fabricated history.
 
 The installer requires the Windows local timezone to be fixed UTC-05:00 with no daylight-saving transitions. The policy owner remains `America/Jamaica`; the local trigger is daily at 4:30 PM, inside the mandate's 4:00–11:45 PM Jamaica window. The task uses `IgnoreNew`, does not start when a trigger was missed, accumulates no backlog, and has no automatic restart or retry. Shutdown during a run is recovered only through canonical acquisition and stage receipts on a later separately permitted invocation.
 
