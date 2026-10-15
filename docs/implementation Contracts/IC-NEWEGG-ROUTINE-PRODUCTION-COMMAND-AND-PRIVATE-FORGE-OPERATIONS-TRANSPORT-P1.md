@@ -64,6 +64,8 @@ The service persists after every successful stage. Resume starts at the first in
 
 Machine outcomes are `SUCCESS_RELEASE_READY`, `SUCCESS_NO_CHANGE`, `BLOCKED_ACTIVE_RUN`, `PROVIDER_FAILURE`, `INTEGRITY_FAILURE`, `QUALIFICATION_REVIEW_REQUIRED`, `CURRENT_FAILURE`, `HISTORY_FAILURE`, `QA_FAILURE`, `RECOMPOSITION_FAILURE`, `CERTIFICATION_FAILURE`, `FORGE_HEALTH_FAILURE`, and `FORGE_TRANSPORT_FAILURE`. A Forge projection/persistence failure is distinct from Sentinel certification, and a private-transport failure remains distinct from both. Success uses exit code 0; blocks and failures use a nonzero exit code.
 
+Terminal presentation is derived from canonical completion rather than residual attempt fields. `SUCCESS_RELEASE_READY` and `SUCCESS_NO_CHANGE` expose `failedStage: null` and `failure: null`, including exact completed-operation replay. Failed and incomplete outcomes expose their actual active failed stage and failure detail. This projection rule never erases or rewrites prior failed-attempt evidence in the durable run journal or bootstrap operation.
+
 ## Private Forge transport
 
 `PrivateForgeOperationsTransport` transports only the certified `NEWEGG_ROUTINE_OPERATIONS` projection in a digest-bound, expiring envelope. Access requires a runtime bearer credential of at least 24 characters. The credential is never included in the envelope, source, logs, public artifacts, or Forge projection. The HTTP adapter serves only `/internal/forge/newegg-routine`, returns `Cache-Control: private, no-store` and `X-Robots-Tag: noindex, nofollow`, and returns 404 for public routes. It is read-only and has no provider, Mercury, publication, release, or deployment authority.

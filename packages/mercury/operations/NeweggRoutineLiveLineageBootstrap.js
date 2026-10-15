@@ -3,6 +3,7 @@ import {mkdir,readFile,rename,rm,writeFile} from "node:fs/promises";
 import path from "node:path";
 import {FileSingleWriterRunLock,SINGLE_WRITER_LOCK_STATUSES} from "../runtime/FileSingleWriterRunLock.js";
 import {createNeweggRoutineBinding} from "./ProductionNeweggRoutineFactory.js";
+import {normalizeNeweggRoutineTerminalResult} from "./NeweggRoutineProductionCommand.js";
 
 const freeze=value=>Object.freeze(structuredClone(value));
 const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
@@ -26,7 +27,7 @@ export class NeweggRoutineLiveLineageBootstrapAdapter{
  constructor({repository,authorityService,acquisitionService,catalogProjection,currentPreparationService,historyPreparationService,routineCommand,rightsOwner,readinessOwner,checkpoint=async()=>{},now=()=>new Date().toISOString()}={}){if(!repository?.transact||!authorityService?.inspectOperation||!authorityService?.authorizeAcquisition||!authorityService?.completeAcquisition||!authorityService?.authorizeChild||!authorityService?.completeChild||!acquisitionService?.acquire||!catalogProjection?.materializeFull||!currentPreparationService?.prepare||!currentPreparationService?.resolve||!historyPreparationService?.prepare||!historyPreparationService?.resolve||!routineCommand?.execute||!rightsOwner?.assess||!readinessOwner?.assess||typeof checkpoint!=="function")throw new TypeError("NEWEGG_LIVE_BOOTSTRAP_OWNER_REQUIRED");Object.assign(this,{repository,authorityService,acquisitionService,catalogProjection,currentPreparationService,historyPreparationService,routineCommand,rightsOwner,readinessOwner,checkpoint,now});}
  operationId({mandateId,localDay}){return `mer_newegglive_${digest({mandateId,localDay,source:"RAKUTEN_MAIN:44583:4746097"}).slice(0,24)}`;}
  async execute({mandateId,localDay}={}){
-  const operationId=this.operationId({mandateId,localDay}),existing=await this.repository.get(operationId);if(existing?.status==="ROUTINE_COMPLETED")return freeze({status:"REPLAY",operation:existing,result:existing.routineResult});
+  const operationId=this.operationId({mandateId,localDay}),existing=await this.repository.get(operationId);if(existing?.status==="ROUTINE_COMPLETED")return freeze({status:"REPLAY",operation:existing,result:normalizeNeweggRoutineTerminalResult(existing.routineResult)});
   const recovery=Boolean(existing),authorityState=recovery?await this.authorityService.inspectOperation({mandateId,operationId}):null;if(recovery&&(existing.mandateId!==mandateId||existing.localDay!==localDay||existing.source!=="RAKUTEN_MAIN:44583:4746097"))throw new Error("NEWEGG_LIVE_BOOTSTRAP_RECOVERY_CONFLICT");
   await this.checkpoint(recovery?"RECOVERY_CLASSIFIED":"BEFORE_ACQUISITION",{operationId,mandateId,localDay,recovery:recovery?"CANONICAL_OPERATION_RECOVERY":"NEW_ACQUISITION"});
   if(!recovery){const readiness=await this.readinessOwner.assess({mandateId,localDay,networkOperation:"NONE"});if(readiness?.ready!==true)throw Object.assign(new Error(readiness?.reason??"NEWEGG_LIVE_BOOTSTRAP_NOT_READY"),{code:readiness?.reason??"NEWEGG_LIVE_BOOTSTRAP_NOT_READY"});}
