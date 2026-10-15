@@ -187,6 +187,10 @@ The installer requires the Windows local timezone to be fixed UTC-05:00 with no 
 
 The interactive user must be signed in for the task to run. A locked but signed-in session is eligible for the daily trigger while the PC is awake. The `AtLogOn` trigger covers an authenticated sign-in after cold startup; merely unlocking or resuming a sleeping, already-signed-in session is not guaranteed to fire it. The task does not wake the PC, and a sleeping or signed-out PC must not be treated as having completed an evaluation.
 
+An authenticated operator may also use Forge → **Market Operations** → **Run Today's Routine** during the approved acquisition-start window. Forge revalidates the one enabled mandate, daily allowance, source rights, credentials, pinned host, storage, active-run state, and canonical recovery before accepting the request. If an exact incomplete operation exists, Forge disables the fresh action and offers **Resume Existing Routine** instead. The confirmation explicitly states that the action may connect to Rakuten and update independently governed Current and History. Closing or refreshing the browser does not cancel an accepted server-side operation; return to Market Operations and use **Refresh progress** to read canonical stage and terminal state. Never repeat-click after provider failure or uncertain completion—inspect the durable review result and recovery state.
+
+Forge and Windows scheduling share the same command, recurring-authority repository, daily allowance, locks, and receipts. Neither entry point can authorize publication, release, deployment, provider retry, or automatic FULL deletion. A Forge process interruption is recovered from canonical receipts on a later explicitly confirmed **Resume Existing Routine** action; it is never treated as browser success.
+
 Enable only after a separate scheduler-activation authorization:
 
 ```powershell

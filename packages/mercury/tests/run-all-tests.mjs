@@ -277,6 +277,7 @@ const testModules = [
     ,"./ProductionNeweggRoutineOperationalOwners.test.mjs"
     ,"./NeweggRoutineCrashRecoveryMatrix.test.mjs"
     ,"./ForgeNeweggRecurringAuthority.test.mjs"
+    ,"./ForgeNeweggRoutineExecution.test.mjs"
     ,"./ProductionRakutenFullCurrentPreparationService.test.mjs"
     ,"./ProductionRakutenCurrentQaService.test.mjs"
     ,"./NeweggRoutineSourceStageOwners.test.mjs"
