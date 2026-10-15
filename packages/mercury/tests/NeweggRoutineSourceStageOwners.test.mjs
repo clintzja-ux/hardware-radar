@@ -17,6 +17,10 @@ try{
  const catalog=await owners.CATALOG.executionOwner.execute({input,priorResults:withValidation});assert.equal(catalog.receipt.outputArtifact.recordCount,1);assert.equal((await owners.CATALOG.receiptOwner.resolve({input})).state,"COMPLETED");
  const replay=await owners.CATALOG.executionOwner.execute({input,priorResults:withValidation});assert.equal(replay.status,"REPLAY");assert.equal(providerCalls,0);
  const receipts=new FileNeweggSourceStageReceiptRepository({root:receiptRoot});assert.equal((await receipts.read("ACQUISITION",digest)).artifactDigest,digest);
+ const operationId="mer_newegglive_fixture",bootstrapAuthority={status:"COMPLETED",acquisitionId:operationId,artifactDigest:digest,sourceObservedAt:observedAt},bootstrapArtifact={...input.retainedArtifact,operationId},productionInput={...input,operationId,bootstrapAcquisition:bootstrapArtifact,bootstrapAcquisitionAuthority:bootstrapAuthority};
+ assert.equal(await owners.ACQUISITION.authorityOwner.validate({context:{mode:"PRODUCTION",input:productionInput}}),true);
+ assert.equal(await owners.ACQUISITION.authorityOwner.validate({context:{mode:"PRODUCTION",input:{...productionInput,bootstrapAcquisitionAuthority:{...bootstrapAuthority,artifactDigest:"f".repeat(64)}}}}),false);
+ assert.equal(await owners.ACQUISITION.authorityOwner.validate({context:{mode:"PRODUCTION",input:{...productionInput,operationId:"different-operation"}}}),false);
  await assert.rejects(owners.VALIDATION.executionOwner.execute({input:{...input,retainedArtifact:{...input.retainedArtifact,digest:"0".repeat(64)}},priorResults}),/INTEGRITY_FAILED/);
- console.log("Newegg routine acquisition/validation/catalog owners passed: 11 cases.");
+ console.log("Newegg routine acquisition/validation/catalog owners passed: 14 cases.");
 }finally{await rm(root,{recursive:true,force:true});}

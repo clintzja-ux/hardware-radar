@@ -51,10 +51,10 @@ export function createProductionNeweggRoutineStageOwners({owners}={}){
  }));
 }
 
-export function createProductionNeweggRoutineCommand({statePath,owners,afterStage,now}={}){
+export function createProductionNeweggRoutineCommand({statePath,owners,afterStage,progress,now}={}){
  const runRepository=new FileNeweggRoutineRunRepository({statePath}),stageOwners=createProductionNeweggRoutineStageOwners({owners});
  const overlapOwner={assess:async({activeRun})=>activeRun&&!terminal.has(activeRun.status)?{state:"BLOCKED_ACTIVE_RUN"}:{state:"DUE"}};
- const command=new NeweggRoutineProductionCommand({runRepository,overlapOwner,stageOwners,afterStage,now}),executionLock=new FileSingleWriterRunLock({lockPath:`${resolve(statePath)}.execution.lock`});
+ const command=new NeweggRoutineProductionCommand({runRepository,overlapOwner,stageOwners,afterStage,progress,now}),executionLock=new FileSingleWriterRunLock({lockPath:`${resolve(statePath)}.execution.lock`});
  return Object.freeze({runRepository,stageOwners,async execute(input){const outcome=await executionLock.runExclusive(()=>command.execute(input));if(outcome.status!==SINGLE_WRITER_LOCK_STATUSES.COMPLETED)return Object.freeze({schemaVersion:"1.0",command:"mercury:newegg:routine",outcome:"BLOCKED_ACTIVE_RUN",success:false,exitCode:2,providerCalls:0,paidTasks:0,actualSpendUsd:0,releaseAuthority:false,deploymentAuthority:false});return outcome.result;}});
 }
 

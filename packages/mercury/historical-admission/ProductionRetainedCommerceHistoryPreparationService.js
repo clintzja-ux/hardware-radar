@@ -35,6 +35,7 @@ export class ProductionRetainedCommerceHistoryPreparationService{
     try{await writeFile(preparationFile,preparationText,{flag:"wx"});}catch(error){throw Object.assign(new Error("RETAINED_COMMERCE_HISTORY_PREPARATION_PARTIAL_CONFLICT"),{cause:error});}
     return{status:"PREPARED",planPath:path.relative(this.root,planFile),preparationPath:path.relative(this.root,preparationFile)};
   }
+  async resolve({planId,preparationId}={}){const [planText,preparationText]=await Promise.all([readExisting(path.join(this.outputRoot,`${planId}.json`)),readExisting(path.join(this.outputRoot,`${preparationId}.json`))]);if(!planText||!preparationText)throw new Error("RETAINED_COMMERCE_HISTORY_PREPARATION_NOT_FOUND");const plan=JSON.parse(planText),preparation=JSON.parse(preparationText),expected=prepareRetainedCommerceHistory({plan});if(plan.planId!==planId||preparation.preparationId!==preparationId||JSON.stringify(expected)!==JSON.stringify(preparation))throw new Error("RETAINED_COMMERCE_HISTORY_PREPARATION_REPLAY_CONFLICT");return freeze({planValue:plan,preparationValue:preparation,sourceRights:{profileDigest:plan.rightsProfileDigest},candidates:plan.candidates??[]});}
   async prepare({artifactPath,expectedDigest,expectedObservedAt,catalogStateId=null}={}){
     const artifact=path.resolve(String(artifactPath??"")),digest=String(expectedDigest??"").toLowerCase(),observedAt=new Date(String(expectedObservedAt??"")).toISOString();
     if(!/^[a-f0-9]{64}$/.test(digest)||await hashFile(artifact)!==digest)throw new Error("NEWEGG_ROUTINE_ARTIFACT_DIGEST_MISMATCH");
