@@ -173,3 +173,6 @@ Follow the [Codex operating protocol](../developer-daily-routine.md): navigate p
 6. Respect every approval and PREPARE/EXECUTE gate. Never silently deploy, connect, acquire, publish, send, commit, or push.
 7. Report mutations, network/provider operations, paid tasks, actual spend, tests, protected-state impact, and Git status precisely.
 8. Do not weaken privacy, provenance, immutability, replay, or fail-closed behavior to make an increment easier.
+# Bounded Newegg acquisition attempts
+
+Hardware Radar treats a daily Rakuten FULL objective and its provider attempts separately. One Jamaica-local day may contain at most three uniquely identified attempts but at most one successful FULL. Only the first attempt belongs to normal recurring/scheduler authority. Every later attempt requires a new authenticated operator approval bound to the latest conclusively failed attempt; uncertainty, activity, or an existing successful FULL blocks reattempt. Failed attempts remain consumed, automatic retries remain zero, and Current/History authority begins only from a successfully validated FULL. This extends the existing recurring-authority owner rather than creating another provider or scheduling subsystem.

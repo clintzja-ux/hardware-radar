@@ -273,6 +273,8 @@ const testModules = [
     ,"./ProductionNeweggRoutineOperatorCommand.test.mjs"
     ,"./NeweggRoutineWindowsScheduler.test.mjs"
     ,"./NeweggRoutineRecurringAuthority.test.mjs"
+    ,"./NeweggFailedAcquisitionDisposition.test.mjs"
+    ,"./NeweggBoundedDailyAcquisitionReattempt.test.mjs"
     ,"./NeweggRoutineLiveLineageBootstrap.test.mjs"
     ,"./ProductionNeweggRoutineOperationalOwners.test.mjs"
     ,"./NeweggRoutineCrashRecoveryMatrix.test.mjs"

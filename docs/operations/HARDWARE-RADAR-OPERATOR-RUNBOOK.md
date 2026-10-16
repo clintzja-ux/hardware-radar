@@ -281,6 +281,10 @@ Low-level `scripts/*.mjs`, fixture utilities, direct importers, recovery helpers
 4. Use Forge to distinguish member-local review from systemic failure.
 5. Escalate engineering only for a new capability or genuine reusable/systemic defect.
 
+For a provider-attempted Newegg acquisition with no finalized FULL, do not delete evidence, retry, or start a replacement acquisition. Inspect the preserved operation in trusted Forge. A separately authorized disposition must use Forge's authenticated `DISPOSE_NEWEGG_ACQUISITION` action, the displayed exact evidence digest, and the explicit confirmation `CONFIRM DISPOSE_NEWEGG_ACQUISITION`. Choose only the evidence-derived classification: `ACQUISITION_FAILED` requires a durable terminal SFTP/cleanup receipt; otherwise use `ACQUISITION_REVIEW_REQUIRED`. The action preserves the original daily allowance consumption and does not itself authorize another attempt. Engineering/API invocation is not a substitute for the trusted Forge confirmation flow.
+
+After a conclusively failed Newegg acquisition, trusted Forge may show **Authorize Another Acquisition Attempt**. Review today's attempts, successful FULL count, predecessor classification, remaining allowance, rights, pinned-host, storage, Current scope, and History scope. Each click requires a new modern confirmation and creates one audited single-use approval; it does not start provider work itself. Attempt two or three must then be started through Forge's ordinary governed Run action and receives a new operation identity. A successful FULL, active attempt, uncertain/review-required predecessor, missing approval, or fourth attempt blocks the action. The Windows scheduler never performs this approval and never retries automatically.
+
 ## Documentation roles
 
 - `docs/handoff/CURRENT-STATE.md`: reconciled living system state now.
