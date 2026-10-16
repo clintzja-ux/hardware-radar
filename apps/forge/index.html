@@ -866,10 +866,11 @@
 
                     <section class="inspection-card observation-review-card" id="certifiedMercuryOperationsPanel">
                         <div class="inspection-heading">
-                            <div><p class="pane-kicker">CERTIFIED MERCURY OPERATIONS</p><h2>Canonical Read-Only View</h2></div>
+                            <div><p class="pane-kicker">CERTIFIED MERCURY OPERATIONS</p><h2>Point-in-Time Certified Snapshot</h2></div>
                             <span id="certifiedMercuryProjectionStatus" class="status-badge pending">NO PROJECTION</span>
                         </div>
-                        <p id="certifiedMercuryProjectionSummary" class="review-workflow-summary">Load a local certified Mercury operations projection. No repository or provider operation is performed.</p>
+                        <p id="certifiedMercuryProjectionSummary" class="review-workflow-summary">Load a local certified Mercury operations projection. Its displayed as-of time is the snapshot boundary; live routine completion does not update it automatically.</p>
+                        <p class="review-workflow-note"><strong>Separate owner:</strong> use Refresh progress above for live routine health. Generate a new certified snapshot through the registered read-only exporter when a newer point-in-time projection is required.</p>
                         <label class="review-file-field" id="certifiedMercuryFileFallback"><span>Certified projection</span><input id="certifiedMercuryProjectionFile" type="file" accept="application/json,.json"></label>
                         <section class="review-workflow-section">
                             <h4>Newegg routine operations</h4>

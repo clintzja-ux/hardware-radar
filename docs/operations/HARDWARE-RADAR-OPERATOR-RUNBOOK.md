@@ -55,6 +55,8 @@ $asOf = (Get-Date).ToUniversalTime().ToString("o")
 npm run forge:mercury:operations:export -- --as-of=$asOf
 ```
 
+Forge intentionally shows two different operational views. **Refresh progress** reads live Newegg routine health from durable routine receipts; it is read-only and remains usable when no routine is active. **Market Health** and **Certified Mercury Operations** are point-in-time certified snapshots. Their displayed as-of, Current-expiry, and History counts do not advance merely because a later routine succeeds. After governed state changes, an operator may run the registered exporter above to materialize a newer ignored snapshot; this does not publish, release, deploy, call a provider, or mutate Current/History.
+
 - **When to use:** before operator review and after governed state changes.
 - **Do not use when:** canonical repositories are invalid; fix the owner rather than editing exported JSON.
 - **May change:** ignored Forge projection only.
