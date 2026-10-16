@@ -30,6 +30,7 @@ export class ForgeShell {
         const form = document.getElementById("forgeForm");
         const operations = document.getElementById("certifiedMercuryOperationsPanel");
         const reviews = document.getElementById("observationReviewPanel");
+        const acquisitionReviews = document.getElementById("neweggAcquisitionDispositionReviewPanel");
         const acquisition = document.getElementById("acquisitionOperationsPanel");
         const productFallback = productManager?.querySelector("#productManagerFileFallback");
         const certifiedFallback = operations?.querySelector("#certifiedMercuryFileFallback");
@@ -72,6 +73,7 @@ export class ForgeShell {
         if (operations) this.pages.get("operations").append(operations);
         if (acquisition) this.pages.get("operations").append(acquisition);
         this.pages.get("reviews").append(this.createReviewsSummary());
+        if (acquisitionReviews) this.pages.get("reviews").append(acquisitionReviews);
         if (reviews) this.pages.get("reviews").append(reviews);
         if (legacyHeader) legacyHeader.classList.add("diagnostic-legacy-header");
         if (form) this.pages.get("diagnostics").append(this.createDiagnosticsIntro(), legacyHeader, form);

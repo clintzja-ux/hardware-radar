@@ -7,6 +7,7 @@ import { CertifiedMercuryOperationsPanel } from "./components/CertifiedMercuryOp
 import { ProductManagerPanel } from "./components/ProductManagerPanel.js";
 import { ForgeShell } from "./components/ForgeShell.js";
 import { NeweggMandatePanel } from "./components/NeweggMandatePanel.js";
+import { NeweggAcquisitionDispositionReviewPanel } from "./components/NeweggAcquisitionDispositionReviewPanel.js";
 
 const shellRoot = document.getElementById("forgeApp");
 if (shellRoot) new ForgeShell(shellRoot);
@@ -18,6 +19,8 @@ if (productManagerRoot) new ProductManagerPanel(productManagerRoot);
 const forge = new ForgeGenerator();
 const reviewPanelRoot = document.getElementById("observationReviewPanel");
 if (reviewPanelRoot) new ObservationReviewPanel(reviewPanelRoot, { copyToClipboard });
+const dispositionReviewRoot=document.getElementById("neweggAcquisitionDispositionReviewPanel");
+if(dispositionReviewRoot)new NeweggAcquisitionDispositionReviewPanel(dispositionReviewRoot);
 const acquisitionPanelRoot = document.getElementById("acquisitionOperationsPanel");
 if (acquisitionPanelRoot) new AcquisitionOperationsPanel(acquisitionPanelRoot);
 const certifiedMercuryRoot = document.getElementById("certifiedMercuryOperationsPanel");

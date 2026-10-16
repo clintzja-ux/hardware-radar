@@ -13,6 +13,17 @@ export class ProductionNeweggFailedAcquisitionEvidenceOwner{
   const operation=await this.bootstrapRepository.get(operationId),authority=(await this.authorityService.inspectOperation({mandateId,operationId})).acquisition,audit=(await this.auditRepository.getAll()).find(value=>value.requestId===forgeRequestId),directory=path.join(this.root,".forge-review","rakuten-sftp","staging","acquisitions",operationId),entries=await readdir(directory,{withFileTypes:true}).catch(error=>error?.code==="ENOENT"?[]:Promise.reject(error)),names=entries.filter(value=>value.isFile()).map(value=>value.name),partialPresent=names.some(value=>value.includes(".partial")),finalizedFullPresent=names.some(value=>value.endsWith(".txt.gz")),completionReceiptPresent=names.includes("acquisition-receipt.json"),leaseHeld=await exists(path.join(this.root,".forge-review","rakuten-sftp","acquisition.lock"));
   return{operation,authority,forgeAudit:audit,leaseHeld,partialPresent,finalizedFullPresent,completionReceiptPresent,terminalTransportEvidence:operation?.terminalTransportEvidence??operation?.failureReceipt??null};
  }
+ async listReviewable(){
+  const [state,audits]=await Promise.all([this.bootstrapRepository.read(),this.auditRepository.getAll()]),runs=audits.filter(value=>value.action==="RUN_NEWEGG_ROUTINE"&&value.requestId&&value.operatorId);
+  const values=[];
+  for(const operation of Object.values(state.operations??{})){
+   if(operation.dispositionEvidenceDigest||!["INTENT_AUTHORIZED","ACQUISITION_FAILED","ACQUISITION_REVIEW_REQUIRED"].includes(operation.status))continue;
+   const created=Date.parse(operation.createdAt),matches=runs.filter(value=>{const occurred=Date.parse(value.occurredAt);return Number.isFinite(created)&&Number.isFinite(occurred)&&occurred<=created&&created-occurred<=300000;}).sort((a,b)=>Date.parse(b.occurredAt)-Date.parse(a.occurredAt));
+   if(matches.length!==1)continue;
+   values.push({operationId:operation.operationId,mandateId:operation.mandateId,forgeRequestId:matches[0].requestId});
+  }
+  return freeze(values);
+ }
 }
 
 export function assessFailedNeweggAcquisitionEvidence({operation,authority,forgeAudit,leaseHeld=false,partialPresent=false,finalizedFullPresent=false,completionReceiptPresent=false,terminalTransportEvidence=null}={}){
@@ -27,6 +38,12 @@ export function assessFailedNeweggAcquisitionEvidence({operation,authority,forge
 export class NeweggFailedAcquisitionDispositionService{
  constructor({bootstrapRepository,authorityService,evidenceOwner,now=()=>new Date().toISOString()}={}){if(!bootstrapRepository?.get||!bootstrapRepository?.transact||!authorityService?.inspectOperation||!authorityService?.reviewAcquisition||!evidenceOwner?.inspect)throw new TypeError("NEWEGG_ACQUISITION_DISPOSITION_OWNER_REQUIRED");Object.assign(this,{bootstrapRepository,authorityService,evidenceOwner,now});}
  async assess({operationId,mandateId,forgeRequestId}={}){return assessFailedNeweggAcquisitionEvidence(await this.evidenceOwner.inspect({operationId,mandateId,forgeRequestId}));}
+ async listReviews(){
+  if(!this.evidenceOwner.listReviewable)return freeze([]);
+  const reviews=[];for(const binding of await this.evidenceOwner.listReviewable()){try{const assessment=await this.assess(binding);reviews.push({...binding,classification:assessment.classification,providerWorkAttempted:assessment.providerWorkAttempted,dailyAllowanceConsumed:assessment.dailyAllowanceConsumed,automaticRetryPermitted:false,replacementAcquisitionPermitted:false,nextAction:assessment.nextAction,evidence:{localDay:assessment.evidence.localDay,source:assessment.evidence.source,leaseHeld:assessment.evidence.leaseHeld,partialPresent:assessment.evidence.partialPresent,finalizedFullPresent:assessment.evidence.finalizedFullPresent,completionReceiptPresent:assessment.evidence.completionReceiptPresent,authorityStatus:assessment.evidence.authorityStatus,bootstrapStatus:assessment.evidence.bootstrapStatus}});}catch(error){reviews.push({...binding,status:"CONFLICT",error:error.message});}}
+  return freeze(reviews);
+ }
+ async disposeAssessed(input={}){const stored=await this.bootstrapRepository.get(input.operationId),assessment=stored?.dispositionEvidenceDigest?{evidenceDigest:stored.dispositionEvidenceDigest,classification:stored.dispositionClassification}:await this.assess(input);return this.dispose({...input,expectedEvidenceDigest:assessment.evidenceDigest,classification:assessment.classification});}
  async dispose({operationId,mandateId,forgeRequestId,operatorId,expectedEvidenceDigest,classification,confirmation}={}){
   if(!operatorId||confirmation!=="CONFIRM DISPOSE_NEWEGG_ACQUISITION"||!expectedEvidenceDigest||!classification)throw new Error("NEWEGG_ACQUISITION_DISPOSITION_AUTHORITY_INVALID");
   const stored=await this.bootstrapRepository.get(operationId);
