@@ -55,7 +55,7 @@ $asOf = (Get-Date).ToUniversalTime().ToString("o")
 npm run forge:mercury:operations:export -- --as-of=$asOf
 ```
 
-Forge intentionally shows two different operational views. **Refresh progress** reads live Newegg routine health from durable routine receipts; it is read-only and remains usable when no routine is active. **Market Health** and **Certified Mercury Operations** are point-in-time certified snapshots. Their displayed as-of, Current-expiry, and History counts do not advance merely because a later routine succeeds. After governed state changes, an operator may run the registered exporter above to materialize a newer ignored snapshot; this does not publish, release, deploy, call a provider, or mutate Current/History.
+Forge intentionally shows two different operational views. **Refresh progress** reads live Newegg routine health from durable bootstrap, transport-disposition, and routine receipts; it is read-only and remains usable when no routine is active. Before the sixteen-stage routine starts, it reports the acquisition phase, durable bytes, last byte progress, lease/cleanup state, finalized-FULL status, and any terminal sanitized failure. **Market Health** and **Certified Mercury Operations** are point-in-time certified snapshots. Their displayed as-of, Current-expiry, and History counts do not advance merely because a later routine succeeds. After governed state changes, an operator may run the registered exporter above to materialize a newer ignored snapshot; this does not publish, release, deploy, call a provider, or mutate Current/History.
 
 - **When to use:** before operator review and after governed state changes.
 - **Do not use when:** canonical repositories are invalid; fix the owner rather than editing exported JSON.
@@ -172,7 +172,9 @@ Launch trusted Forge with **Launch Hardware Radar Forge.cmd**, then open **Marke
 
 The production defaults are source `RAKUTEN_MAIN:44583:4746097`, a maximum 30-day term, Jamaica-local operating window `4:00 PM–11:45 PM`, preferred future scheduler start `4:30 PM`, one new FULL acquisition per local day, zero automatic retries, and independently enabled Current and History scopes. Forge shows expiry, remaining daily allowance, next eligible window, last authorized acquisition, scope state, pause/revocation state, and operator audit history. Renewal atomically retires the prior mandate; Forge will not create a second active mandate.
 
-Mandate administration does **not** start the Newegg routine or scheduler and grants no publication, release, deployment, paid-provider, or automatic-deletion authority. `HardwareRadar-Newegg-Routine` was installed on October 15, 2026 through the repository-native installer and remains **Disabled** and never-run. Installation is not activation; enabling it still requires separate explicit authorization.
+Mandate administration does **not** start the Newegg routine or scheduler and grants no publication, release, deployment, paid-provider, or automatic-deletion authority. At the latest certified inspection, `HardwareRadar-Newegg-Routine` is **not installed** and is not enabled. Installation and activation remain separate explicit operator-authorized actions.
+
+A confirmed SFTP transfer failure consumes the original daily acquisition authority, records a durable terminal failure, and requires `STOP_AND_REVIEW`; it does not permit an automatic replacement acquisition. If bootstrap state remains only `INTENT_AUTHORIZED` after process interruption, treat it as an uncertain acquisition rather than assuming failure from missing TCP state. Do not rerun `RUN_LIVE`, release locks, or edit authority JSON. Preserve the operation and obtain separate authorization for canonical failure disposition.
 
 ### Install the Newegg schedule disabled
 

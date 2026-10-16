@@ -28,6 +28,10 @@ No authenticated production mandate creation/pause/revoke/renewal control has be
 
 `NeweggRoutineProductionCommand` is the single orchestration owner for the certified Newegg routine. It accepts injected existing stage owners and executes: preflight, acquisition, validation, disk-backed catalog state, binding, qualification, preparation, Current, History, QA, recomposition, Sentinel certification, production-shaped release certification, retention assessment, Forge projection, and Forge transport. It contains no source parsing, qualification, Current, History, QA, release, or retention policy.
 
+### SFTP terminal failure disposition
+
+The existing native SFTP session owns transfer cancellation and connection cleanup. Stall and absolute timers actively destroy the remote and local streams, invoke the same bounded session cleanup, and bound transfer-promise settlement when an implementation-specific stream does not honor ordinary abort signaling. Buffered bytes observed after cancellation never establish FULL completion. A confirmed sanitized SFTP failure is atomically represented as terminal `ACQUISITION_FAILED` in both bootstrap and recurring acquisition authority state; the daily authorization remains consumed, completion cannot overwrite failure, and exact restart does not reacquire. A process interruption leaving only durable intent is explicitly uncertain and requires operator review. Forge projects this pre-routine evidence without becoming another execution or monitoring owner.
+
 ## Current preparation service extraction (P1B1)
 
 `ProductionRakutenFullCurrentPreparationService` owns the production composition for the Current PREPARE stage. It composes existing owners rather than reproducing their policy: Atlas repositories, effective destination resolution, disk-backed Rakuten catalog evidence, source-neutral Current qualification, source-rights validation, predecessor resolution, and canonical plan/preparation creation.

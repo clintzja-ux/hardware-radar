@@ -21,6 +21,7 @@ export class FileNeweggRoutineLiveBootstrapRepository{
 export class RecoverableRakutenFullAcquisitionService{
  constructor({transport}={}){if(!transport?.downloadFullAndValidate)throw new TypeError("NEWEGG_LIVE_ACQUISITION_TRANSPORT_REQUIRED");this.transport=transport;}
  async acquire({operationId}={}){const value=await this.transport.downloadFullAndValidate({acquisitionId:operationId});return freeze({path:value.localPath,digest:value.sha256,observedAt:value.headerTimestamp,bytes:value.localBytes,productRows:value.productRows,trailerCount:value.trailerRows,filename:value.selected.filename,remoteModifiedAt:value.selected.remoteTimestampUtc??null,recovered:value.recovered===true,providerCalls:value.externalOperations>0?1:0,connectionAccounting:value.connectionAccounting??null});}
+ async inspect({operationId}={}){const value=await this.transport.inspectCompletedFullAcquisition?.({acquisitionId:operationId});return value?freeze({path:value.localPath,digest:value.sha256,observedAt:value.headerTimestamp,bytes:value.localBytes,productRows:value.productRows,trailerCount:value.trailerRows,filename:value.selected.filename,remoteModifiedAt:value.selected.remoteTimestampUtc??null,recovered:true,providerCalls:0,connectionAccounting:value.connectionAccounting??null}):null;}
 }
 
 export class NeweggRoutineLiveLineageBootstrapAdapter{
@@ -28,6 +29,8 @@ export class NeweggRoutineLiveLineageBootstrapAdapter{
  operationId({mandateId,localDay}){return `mer_newegglive_${digest({mandateId,localDay,source:"RAKUTEN_MAIN:44583:4746097"}).slice(0,24)}`;}
  async execute({mandateId,localDay}={}){
   const operationId=this.operationId({mandateId,localDay}),existing=await this.repository.get(operationId);if(existing?.status==="ROUTINE_COMPLETED")return freeze({status:"REPLAY",operation:existing,result:normalizeNeweggRoutineTerminalResult(existing.routineResult)});
+  if(existing?.status==="ACQUISITION_FAILED")throw Object.assign(new Error(existing.failure?.classification??"NEWEGG_LIVE_ACQUISITION_FAILED"),{code:existing.failure?.classification??"NEWEGG_LIVE_ACQUISITION_FAILED",operationId,disposition:"CONFIRMED_TERMINAL_FAILURE",automaticRetryPermitted:false});
+  let inspectedAcquisition=null;if(existing?.status==="INTENT_AUTHORIZED"){inspectedAcquisition=await this.acquisitionService.inspect?.({operationId})??null;if(!inspectedAcquisition)throw Object.assign(new Error("NEWEGG_LIVE_ACQUISITION_REVIEW_REQUIRED"),{code:"NEWEGG_LIVE_ACQUISITION_REVIEW_REQUIRED",operationId,disposition:"UNCERTAIN_INTERRUPTED_ACQUISITION",automaticRetryPermitted:false});}
   const recovery=Boolean(existing),authorityState=recovery?await this.authorityService.inspectOperation({mandateId,operationId}):null;if(recovery&&(existing.mandateId!==mandateId||existing.localDay!==localDay||existing.source!=="RAKUTEN_MAIN:44583:4746097"))throw new Error("NEWEGG_LIVE_BOOTSTRAP_RECOVERY_CONFLICT");
   await this.checkpoint(recovery?"RECOVERY_CLASSIFIED":"BEFORE_ACQUISITION",{operationId,mandateId,localDay,recovery:recovery?"CANONICAL_OPERATION_RECOVERY":"NEW_ACQUISITION"});
   if(!recovery){const readiness=await this.readinessOwner.assess({mandateId,localDay,networkOperation:"NONE"});if(readiness?.ready!==true)throw Object.assign(new Error(readiness?.reason??"NEWEGG_LIVE_BOOTSTRAP_NOT_READY"),{code:readiness?.reason??"NEWEGG_LIVE_BOOTSTRAP_NOT_READY"});}
@@ -36,7 +39,17 @@ export class NeweggRoutineLiveLineageBootstrapAdapter{
   const acquisitionAuthorization=await this.authorityService.authorizeAcquisition({mandateId,operationId,at:this.now()});
   await this.repository.transact(operationId,prior=>prior??{schemaVersion:"1.0",operationId,mandateId,localDay,status:"INTENT_AUTHORIZED",source:"RAKUTEN_MAIN:44583:4746097",rightsDigest:rights.profileDigest,createdAt:this.now()});
   await this.checkpoint("AFTER_DURABLE_INTENT",{operationId});
-  const acquisitionValue=await this.acquisitionService.acquire({operationId}),acquisition={...acquisitionValue,operationId};if(!validDigest(acquisition?.digest)||!Number.isFinite(Date.parse(acquisition?.observedAt))||!acquisition?.path)throw new Error("NEWEGG_LIVE_BOOTSTRAP_ACQUISITION_INVALID");if(existing?.artifactDigest&&(existing.artifactDigest!==acquisition.digest||existing.sourceObservedAt!==new Date(acquisition.observedAt).toISOString()))throw new Error("NEWEGG_LIVE_BOOTSTRAP_LINEAGE_CONFLICT");
+  let acquisitionValue;
+  try{acquisitionValue=inspectedAcquisition??await this.acquisitionService.acquire({operationId});}
+  catch(cause){
+   const classification=/^SFTP_[A-Z0-9_]+$/.test(cause?.code??"")?cause.code:null;
+   if(!classification)throw cause;
+   const accounting=cause.connectionAccounting??null,cleanup={leaseReleased:cause.lease?.leaseReleased===true,activeConnectionsAtEnd:accounting?.activeConnectionsAtEnd??null,cleanupErrors:accounting?.cleanupErrors??accounting?.connectionsCleanupFailed??null};
+   const disposition=await this.authorityService.failAcquisition({mandateId,operationId,failureClassification:classification,providerCalls:accounting?.connectionsOpened>0?1:0,connectionAccounting:accounting,cleanup,failedAt:this.now()});
+   await this.repository.transact(operationId,prior=>({...prior,status:"ACQUISITION_FAILED",failure:{classification,failedAt:disposition.receipt.failedAt,providerCalls:disposition.receipt.providerCalls,connectionAccounting:accounting,cleanup},updatedAt:this.now(),nextAction:"STOP_AND_REVIEW",automaticRetryPermitted:false}));
+   throw Object.assign(new Error(classification),{code:classification,operationId,disposition:"CONFIRMED_TERMINAL_FAILURE"});
+  }
+  const acquisition={...acquisitionValue,operationId};if(!validDigest(acquisition?.digest)||!Number.isFinite(Date.parse(acquisition?.observedAt))||!acquisition?.path)throw new Error("NEWEGG_LIVE_BOOTSTRAP_ACQUISITION_INVALID");if(existing?.artifactDigest&&(existing.artifactDigest!==acquisition.digest||existing.sourceObservedAt!==new Date(acquisition.observedAt).toISOString()))throw new Error("NEWEGG_LIVE_BOOTSTRAP_LINEAGE_CONFLICT");
   await this.checkpoint("AFTER_FULL_COMPLETION",{operationId,artifactDigest:acquisition.digest});await this.checkpoint("AFTER_CONNECTION_CLOSURE",{operationId,artifactDigest:acquisition.digest});await this.checkpoint("AFTER_FULL_VALIDATION",{operationId,artifactDigest:acquisition.digest});
   const acquisitionCompletion=await this.authorityService.completeAcquisition({mandateId,operationId,artifactDigest:acquisition.digest,sourceObservedAt:acquisition.observedAt,completedAt:this.now()}),acquisitionReceipt=acquisitionCompletion.receipt??acquisitionAuthorization.authorization??authorityState?.acquisition;if(acquisitionReceipt?.status!=="COMPLETED")throw new Error("NEWEGG_LIVE_BOOTSTRAP_ACQUISITION_RECEIPT_INVALID");
   await this.repository.transact(operationId,prior=>{if(prior?.artifactDigest&&prior.artifactDigest!==acquisition.digest)throw new Error("NEWEGG_LIVE_BOOTSTRAP_LINEAGE_CONFLICT");return{...prior,status:"ACQUISITION_COMPLETED",artifactDigest:acquisition.digest,sourceObservedAt:new Date(acquisition.observedAt).toISOString(),artifact:structuredClone(acquisition),updatedAt:this.now()};});
