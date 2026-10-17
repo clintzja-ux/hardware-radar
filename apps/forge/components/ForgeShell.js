@@ -163,13 +163,13 @@ export class ForgeShell {
     }
 
     renderOperations(model) {
-        const routine = model.neweggRoutineOperations, supervision = model.existingTaskSupervisionOperations, reviews = model.amazonDestinationReviewOperations;
+        const routine = model.neweggRoutineOperations, supervision = model.existingTaskSupervisionOperations, reviews = model.amazonDestinationReviewOperations, publication = model.unattendedPublicationOperations;
         const metricValues = [routine?.full?.observedAt ?? routine?.asOf ?? "See details", routine?.status ?? "Not available", routine?.current?.expiresAt ?? "See details", (supervision?.due ?? 0) + (supervision?.reviewRequired ?? 0) + (supervision?.providerTerminalFailures ?? 0)];
         document.querySelectorAll("#operationsMetrics .metric-card strong").forEach((item, index) => { item.textContent = String(metricValues[index]); item.classList.toggle("state-attention", index === 3 && Number(metricValues[index]) > 0); });
         const reviewValues = [reviews?.counts?.AWAITING_OPERATOR_REVIEW ?? 0, (reviews?.counts?.STALE ?? 0) + (reviews?.counts?.BLOCKED ?? 0), (supervision?.reviewRequired ?? 0) + (supervision?.providerTerminalFailures ?? 0)];
         document.querySelectorAll("#reviewSummaryGrid strong").forEach((item, index) => { item.textContent = String(reviewValues[index]); });
         const total = reviewValues.reduce((sum, current) => sum + Number(current), 0), message = document.getElementById("reviewSummaryMessage");
-        if (message) message.textContent = total === 0 ? "No governed reviews or task exceptions currently require operator action." : `${total} governed item${total === 1 ? "" : "s"} require operator attention. Inspect the certified detail below before acting.`;
+        if (message) message.textContent = (total === 0 ? "No governed reviews or task exceptions currently require operator action." : `${total} governed item${total === 1 ? "" : "s"} require operator attention. Inspect the certified detail below before acting.`) + (publication ? ` Unattended publication: ${publication.status}; deployment ${publication.deploymentStatus ?? "not started"}; next ${publication.nextAction}.` : "");
     }
 
     renderLinks() {

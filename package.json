@@ -61,6 +61,7 @@
     "publication:release:inspect": "node scripts/static-publication-release-inspect.mjs",
     "publication:release:prepare": "node scripts/static-publication-release-prepare.mjs",
     "publication:live-price": "node scripts/governed-live-price-publication.mjs",
+    "publication:unattended": "node scripts/unattended-live-price-publication.mjs",
     "publication:ram-intelligence:prepare": "node scripts/ram-public-intelligence-release.mjs --action=prepare",
     "publication:ram-intelligence:inspect": "node scripts/ram-public-intelligence-release.mjs --action=inspect",
     "publication:ram-intelligence:certify": "node scripts/ram-public-intelligence-release.mjs --action=certify",
