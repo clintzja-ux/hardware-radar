@@ -25,12 +25,12 @@ try {
   });
   const repository = new FileLivePricePublicationAuthorizationRepository({ statePath: path.join(fixtureRoot, ".state", "publication.json") });
   await repository.record(authorization);
-  let builds = 0, verifications = 0, inspections = 0, changedPaths = ["public/ram/index.html"];
+  let builds = 0, verifications = 0, inspections = 0, changedPaths = ["public/ram/index.html"], buildEnvironment, verificationEnvironment;
   const service = new GovernedLivePricePublicationCoordinator({ authorizationRepository: repository,
-    buildRunner: { run: async () => { builds += 1; } }, verificationRunner: { run: async () => { verifications += 1; } },
+    buildRunner: { run: async ({ environment }) => { builds += 1; buildEnvironment = environment; } }, verificationRunner: { run: async ({ authorization: verifiedAuthorization }) => { verifications += 1; verificationEnvironment = verifiedAuthorization.targetEnvironment; } },
     gitInspector: { inspect: async () => (++inspections % 2) ? { clean: true, changedPaths: [] } : { clean: false, changedPaths } }, now: () => "2026-10-17T00:30:00.000Z" });
   const result = await service.prepare({ authorizationId: authorization.authorizationId, checkoutRoot: fixtureRoot });
-  assert.equal(result.status, "READY_FOR_RELEASE_ONLY_CHECKPOINT"); assert.equal(result.mergeAuthorized, false); assert.equal(result.deploymentAuthorized, false); assert.equal(builds, 1); assert.equal(verifications, 1);
+  assert.equal(result.status, "READY_FOR_RELEASE_ONLY_CHECKPOINT"); assert.equal(result.mergeAuthorized, false); assert.equal(result.deploymentAuthorized, false); assert.equal(builds, 1); assert.equal(verifications, 1); assert.equal(buildEnvironment, "PRODUCTION"); assert.equal(verificationEnvironment, buildEnvironment);
   const replay = await service.prepare({ authorizationId: authorization.authorizationId, checkoutRoot: fixtureRoot }); assert.equal(replay.replay, true); assert.equal(replay.recovery, true);
   changedPaths = ["scripts/unrelated.mjs"]; await assert.rejects(() => service.prepare({ authorizationId: authorization.authorizationId, checkoutRoot: fixtureRoot }), /UNAUTHORIZED_PATHS/);
   const expired = new GovernedLivePricePublicationCoordinator({ authorizationRepository: repository, buildRunner: { run: async () => {} }, verificationRunner: { run: async () => {} }, gitInspector: { inspect: async () => ({ clean: true, changedPaths: [] }) }, now: () => bundle.manifest.currentValidUntil });
@@ -45,5 +45,5 @@ try {
   await runner("verify:public",{env:fixtureEnv}); assert.deepEqual(calls[0],{command:"C:\\node\\node.exe",args:["C:\\node\\npm-cli.js","run","verify:public"],options:{cwd:fixtureRoot,windowsHide:true,env:fixtureEnv}});
   const failure=new Error("fixture nonzero");failure.code=7;const failing=createPortableNpmRunner({execFile:async()=>{throw failure;},cwd:fixtureRoot,platform:"win32",nodeExecutable:"C:\\node\\node.exe",npmEntryPoint:"C:\\node\\npm-cli.js"}); await assert.rejects(()=>failing("build:public"),error=>error===failure);
   assert.throws(()=>resolveNpmRunInvocation({script:"build:public",platform:"win32",nodeExecutable:"C:\\node\\node.exe",npmEntryPoint:null}),/NPM_ENTRY_POINT_UNAVAILABLE/);
-  console.log("Governed live-price publication coordinator tests passed: 22 cases.");
+  console.log("Governed live-price publication coordinator tests passed: 24 cases.");
 } finally { await rm(fixtureRoot, { recursive: true, force: true }); }

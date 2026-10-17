@@ -36,7 +36,7 @@ const runNpm = createPortableNpmRunner({ execFile: exec, cwd: root, baseOptions:
 const coordinator = new GovernedLivePricePublicationCoordinator({ authorizationRepository: repository,
   gitInspector: { inspect: async () => { const { stdout } = await run("git", ["status", "--porcelain=v1", "--untracked-files=all"]); const changedPaths = stdout.split(/\r?\n/).filter(Boolean).map(line => line.slice(3).replace(/^"|"$/g, "")); return { clean: changedPaths.length === 0, changedPaths }; } },
   buildRunner: { run: async ({ generatedAt, environment }) => runNpm("build:public", { env: { ...process.env, HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT: environment, HARDWARE_RADAR_GENERATED_AT: generatedAt } }) },
-  verificationRunner: { run: async () => { for (const script of ["verify:public","test:ram-products","test:ram-catalog","test:ram-terminal","test:retailer-destinations","test:release-governance","test:layout"]) await runNpm(script); } }
+  verificationRunner: { run: async ({ authorization }) => { const env = { ...process.env, HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT: authorization.targetEnvironment }; for (const script of ["verify:public","test:ram-products","test:ram-catalog","test:ram-terminal","test:retailer-destinations","test:release-governance","test:layout"]) await runNpm(script, { env }); } }
 });
 const result = await coordinator.prepare({ authorizationId: args["authorization-id"], checkoutRoot: root, releaseManifestPath: path.relative(root, manifestPath) });
 console.log(JSON.stringify({ ...result, checkpointCreated: false, nextAction: "OPERATOR_REVIEW_THEN_SEPARATELY_AUTHORIZE_RELEASE_ONLY_GIT_CHECKPOINT", providerCalls: 0, canonicalMarketMutation: false }, null, 2));
