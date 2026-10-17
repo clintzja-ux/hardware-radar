@@ -51,7 +51,12 @@ assert.equal(releasedCatalog.products.length, releasedCatalog.productCount);
 assert.equal(new Set(releasedCatalog.products.map((item) => item.atlasProductId)).size, releasedCatalog.productCount);
 assert.ok(releasedCatalog.productCount <= catalog.productCount, "A release-bound catalog may remain a historical subset of canonical Atlas until a successor release is authorized.");
 const canonicalById = new Map(catalog.products.map((item) => [item.atlasProductId, item]));
-for (const item of releasedCatalog.products) assert.deepEqual(item, canonicalById.get(item.atlasProductId), `Released catalog identity drifted for ${item.atlasProductId}.`);
+for (const item of releasedCatalog.products) {
+    const serializedCanonical = JSON.parse(JSON.stringify(canonicalById.get(item.atlasProductId)));
+    assert.deepEqual(item, serializedCanonical, `Released catalog identity drifted for ${item.atlasProductId}.`);
+}
+const releasedTimetec = releasedCatalog.products.find((item) => item.atlasProductId === "ram_timetec_76tt26nus2r8_16gk2");
+assert.equal(Object.hasOwn(releasedTimetec, "productFamily"), false, "Undefined optional productFamily values must remain omitted from public JSON.");
 
 const browserModule = await import(pathToFileURL(path.join(root, "public/js/modules/ramCatalog.js")));
 const filter = (values) => browserModule.filterRamCatalogProducts(catalog.products, values);
