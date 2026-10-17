@@ -303,6 +303,12 @@ After a conclusively failed Newegg acquisition, trusted Forge may show **Authori
 - `config/operations/operator-command-registry.json`: machine-readable canonical command inventory.
 
 Any increment adding, changing, deprecating, superseding, or removing an operator-facing command must update both this runbook and the registry.
+
+## Unattended live-price publication (production inactive)
+
+The unattended publication coordinator is certified as a production-inactive boundary over the existing Sentinel-certified candidate, governed PREPARE/build/verification owner, release-only allowlist, fast-forward-only Git integration, Cloudflare Pages observation, and live acceptance verifier. Its recurring mandate permits at most one successfully accepted Production release per Jamaica-local day, issues one exact child authority per immutable candidate, and supports pause and revocation. It never grants acquisition, market mutation, source-code deployment, automatic retry, automatic rollback, or provider authority.
+
+There is currently no production mandate, scheduler binding, or approved unattended Git credential. Do not create JSON authority records or invoke internal service methods manually. Activation requires separate operator approval of the named production mandate and a narrowly scoped Git credential/identity capable only of the reviewed release-only fast-forward workflow. Cloudflare continues to deploy from `main`; a failed deployment or live mismatch stops for operator review and must not trigger another push or rollback.
 # Trusted local Forge catalog administration
 
 Set `FORGE_OPERATOR_ID` to the named operator and run `npm run forge:operator`, or use the normal Windows launcher described above. Forge then enables product draft creation, permitted product edits, destination creation, bounded Check Link operations, and governed Newegg affiliate add/replace/disable/history. Every write is validated, confirmed, replay-protected, and audited. The Windows launcher restarts a trusted runtime whose loaded Git revision differs from the current checkout, preventing obsolete in-memory projections from being silently reused. Stop the process to end the runtime session.
