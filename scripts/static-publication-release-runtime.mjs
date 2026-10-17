@@ -11,9 +11,10 @@ async function readBoundArtifact(manifestPath, binding) {
   return readFile(artifactPath, "utf8");
 }
 
-export async function loadStaticPublicationContinuityProjection({ manifestPath } = {}) {
+export async function loadStaticPublicationContinuityProjection({ manifestPath, useRollbackPredecessor = false } = {}) {
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
-  const release = manifest.rollback?.previousRelease ?? manifest;
+  const release = useRollbackPredecessor ? manifest.rollback?.previousRelease : manifest;
+  if (!release) throw new Error("STATIC_RELEASE_PREDECESSOR_MISSING");
   const artifactText = await readBoundArtifact(manifestPath, release.artifact);
   if (artifactText === null) throw new Error("STATIC_RELEASE_PREDECESSOR_ARTIFACT_MISSING");
   if (staticPublicationArtifactDigest(artifactText) !== release.artifact.digestSha256) throw new Error("STATIC_RELEASE_PREDECESSOR_ARTIFACT_DIGEST_MISMATCH");

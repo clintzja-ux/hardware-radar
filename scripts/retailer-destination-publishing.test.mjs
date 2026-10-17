@@ -19,7 +19,11 @@ const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.
 const releasedCatalog = await json(path.join(root, "public/data/ram-catalog.json"));
 const certifiedTerminal = await json(path.join(root, "public/data/ram-terminal.json"));
 const terminalByProduct = new Map(certifiedTerminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
-const chronologyByProduct = new Map();
+const releaseManifest = await json(path.join(root, "config/publication-release.json"));
+const releaseArtifact = await json(path.join(root, "config", releaseManifest.artifact.relativePath));
+const certifiedChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
+const certifiedDestinations = JSON.parse(releaseArtifact.fileTexts.destinations);
+const chronologyByProduct = new Map(certifiedChronology.products.map(item => [item.atlasProductId, item]));
 const product = products.find(item => item.identity.atlasProductId === "ram_corsair_cmk32gx5m2b6000z30");
 const publicProduct = catalog.products.find(item => item.atlasProductId === product.identity.atlasProductId);
 const retailer = retailers.find(item => item.id === "RETAILER-0002");
@@ -125,7 +129,7 @@ for (const destination of production.records) {
     }).materialFingerprint, destination.materialFingerprint);
 }
 for (const productPage of releasedCatalog.products) {
-    const destinations = productionProjection.filter(item => item.atlasProductId === productPage.atlasProductId);
+    const destinations = certifiedDestinations.filter(item => item.atlasProductId === productPage.atlasProductId);
     const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(productPage.atlasProductId) ?? null, chronologyByProduct.get(productPage.atlasProductId) ?? null);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);
