@@ -3,7 +3,7 @@ import { mkdtemp, rm, writeFile, mkdir } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { FileRecurringPublicationAuthorityRepository } from "../publication/UnattendedLivePricePublication.js";
-import { CloudflarePagesDeploymentObserver, ProductionForgeUnattendedPublicationProvider, RecurringPublicationMandateOperatorService } from "../publication/ProductionUnattendedPublicationBindings.js";
+import { CloudflarePagesDeploymentObserver, ProductionForgeUnattendedPublicationProvider, ProductionUnattendedPublicationCommand, RecurringPublicationMandateOperatorService } from "../publication/ProductionUnattendedPublicationBindings.js";
 
 const root = await mkdtemp(path.join(os.tmpdir(), "hr-publication-bindings-"));
 try {
@@ -23,5 +23,7 @@ try {
   assert.equal((await observer.observe({ commit: "abc" })).status, "SUCCESS");
   await assert.rejects(() => new CloudflarePagesDeploymentObserver({ accountId: "account", projectName: "project", tokenProvider: async () => null }).observe({ commit: "abc" }), /CREDENTIAL_REQUIRED/);
   await mkdir(path.join(root, "empty")); await writeFile(path.join(root, "empty", "marker"), "fixture");
+  let factoryCalls=0;const deployedCandidate={candidateId:"candidate",artifactId:"artifact",certificationId:"certification",releaseId:"release",alreadyDeployed:true},command=new ProductionUnattendedPublicationCommand({repository,mandateService:service,candidateOwner:{discover:async()=>deployedCandidate},coordinatorFactory:async()=>{factoryCalls++;return{run:async()=>({})};}}),deployed=await command.run({mandateId:"unused-but-required"});
+  assert.equal(deployed.status,"ALREADY_DEPLOYED_CANDIDATE");assert.equal(deployed.authorityCreated,false);assert.equal(deployed.gitOperation,false);assert.equal(factoryCalls,0);assert.equal((await command.run({mandateId:"unused-but-required"})).status,"ALREADY_DEPLOYED_CANDIDATE");
   console.log("Production unattended publication binding tests passed.");
 } finally { await rm(root, { recursive: true, force: true }); }

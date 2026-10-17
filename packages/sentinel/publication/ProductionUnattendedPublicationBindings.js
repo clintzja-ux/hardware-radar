@@ -36,20 +36,22 @@ export class CertifiedRoutinePublicationCandidateOwner {
       this.readJson(path.join(directory, "manifest.json")), this.readJson(path.join(directory, "certification.json")), this.readJson(this.releaseManifestPath),
     ]);
     if (manifest.candidateId !== readiness.candidateId || manifest.artifactId !== readiness.artifactId || certification.certificationId !== readiness.certificationId) throw new Error("PUBLICATION_TRIGGER_BINDING_CONFLICT");
+    const alreadyDeployed = release.releaseState === "ON" && release.targetEnvironment === "PRODUCTION" && release.artifact?.candidateId === manifest.candidateId && release.artifact?.artifactId === manifest.artifactId && release.artifact?.certificationId === certification.certificationId && release.artifact?.bindingDigest === manifest.bindingDigest;
     return freeze({
       candidateId: manifest.candidateId, artifactId: manifest.artifactId, certificationId: certification.certificationId,
       bindingDigest: manifest.bindingDigest, artifactDigest: sha256(JSON.stringify(manifest)), certificationDigest: sha256(JSON.stringify(certification)),
       predecessorReleaseId: release.releaseId, freshUntil: manifest.currentValidUntil, sentinelStatus: "CERTIFIED",
-      sourceRightsEligible: certification.status === "CERTIFIED", releaseId: null,
+      sourceRightsEligible: certification.status === "CERTIFIED", releaseId: alreadyDeployed ? release.releaseId : null, alreadyDeployed,
       trigger: { runId: health.lastSuccessfulRun.runId, certificationStageCompleted: true, releaseReadinessStageCompleted: true },
     });
   }
 }
 
 export class GitHubAppReleaseGitOwner {
-  constructor({ runner, checkoutRoot, credentialReady = () => process.env.HARDWARE_RADAR_PUBLICATION_GITHUB_APP_READY === "true" } = {}) {
-    if (!runner || !checkoutRoot) throw new Error("PUBLICATION_GIT_COMPOSITION_INCOMPLETE"); Object.assign(this, { runner, checkoutRoot, credentialReady });
+  constructor({ runner, checkoutRoot, tokenProvider, askPassPath } = {}) {
+    if (!runner || !checkoutRoot || !tokenProvider?.getToken || !askPassPath) throw new Error("PUBLICATION_GIT_COMPOSITION_INCOMPLETE"); Object.assign(this, { runner, checkoutRoot, tokenProvider, askPassPath });
   }
+  async _remote(args){const credential=await this.tokenProvider.getToken(),env={...process.env,GIT_ASKPASS:this.askPassPath,GIT_TERMINAL_PROMPT:"0",GCM_INTERACTIVE:"Never",GIT_CONFIG_COUNT:"1",GIT_CONFIG_KEY_0:"credential.helper",GIT_CONFIG_VALUE_0:"",HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL:credential.token};try{return await this.runner("git",args,this.checkoutRoot,{env});}finally{env.HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL="";}}
   async inspectBase() {
     const [status, local, remote] = await Promise.all([
       this.runner("git", ["status", "--porcelain=v1", "--untracked-files=all"], this.checkoutRoot),
@@ -58,7 +60,6 @@ export class GitHubAppReleaseGitOwner {
     return freeze({ clean: !status.stdout.trim(), localCommit: local.stdout.trim(), remoteCommit: remote.stdout.trim() });
   }
   async checkpoint({ prepared, expectedParent }) {
-    if (!this.credentialReady()) throw new Error("PUBLICATION_GITHUB_APP_CREDENTIAL_REQUIRED");
     if (prepared.allowlistValid !== true || !Array.isArray(prepared.changedPaths)) throw new Error("PUBLICATION_PREPARATION_INVALID");
     await this.runner("git", ["add", "--", ...prepared.changedPaths], this.checkoutRoot);
     await this.runner("git", ["commit", "-m", `feat(publication): deliver ${prepared.candidateId}`], this.checkoutRoot);
@@ -66,10 +67,9 @@ export class GitHubAppReleaseGitOwner {
     return freeze({ commit: commit.stdout.trim(), parentCommit: parent.stdout.trim(), unrelatedPaths: parent.stdout.trim() === expectedParent ? [] : ["GIT_PARENT_CONFLICT"] });
   }
   async fastForwardMain({ commit, expectedRemote }) {
-    if (!this.credentialReady()) throw new Error("PUBLICATION_GITHUB_APP_CREDENTIAL_REQUIRED");
-    const remote = (await this.runner("git", ["ls-remote", "origin", "refs/heads/main"], this.checkoutRoot)).stdout.split(/\s+/)[0];
+    const remote = (await this._remote(["ls-remote", "origin", "refs/heads/main"])).stdout.split(/\s+/)[0];
     if (remote !== expectedRemote) throw new Error("PUBLICATION_GIT_PREDECESSOR_CONFLICT");
-    await this.runner("git", ["push", "origin", `${commit}:refs/heads/main`], this.checkoutRoot);
+    await this._remote(["push", "origin", `${commit}:refs/heads/main`]);
     return freeze({ commit });
   }
 }
@@ -102,7 +102,7 @@ export class PublicArtifactIntegrityVerifier {
 export class ProductionUnattendedPublicationCommand {
   constructor({ repository, mandateService, candidateOwner, coordinatorFactory, now = () => new Date().toISOString() } = {}) { Object.assign(this, { repository, mandateService, candidateOwner, coordinatorFactory, now }); }
   async inspect() { const state = await this.mandateService.inspect(), candidate = await this.candidateOwner.discover(); const operation = candidate ? await this.repository.getOperation(candidate.candidateId) : null, mandate = state.mandates.find(item => item.status === "ENABLED") ?? null; return freeze({ status: "INSPECTED", candidate, health: projectUnattendedPublicationHealth({ mandate, operation, asOf: this.now() }), networkOperation: "NONE", actionExecuted: false }); }
-  async run({ mandateId }) { if (!mandateId) throw new Error("PUBLICATION_MANDATE_ID_REQUIRED"); const coordinator = await this.coordinatorFactory(); return coordinator.run({ mandateId }); }
+  async run({ mandateId }) { if (!mandateId) throw new Error("PUBLICATION_MANDATE_ID_REQUIRED"); const candidate=await this.candidateOwner.discover();if(candidate?.alreadyDeployed)return freeze({status:"ALREADY_DEPLOYED_CANDIDATE",candidateId:candidate.candidateId,artifactId:candidate.artifactId,certificationId:candidate.certificationId,releaseId:candidate.releaseId,replay:true,authorityCreated:false,gitOperation:false,deploymentOperation:false,providerCalls:0,canonicalMarketMutation:false}); const coordinator = await this.coordinatorFactory(); return coordinator.run({ mandateId }); }
 }
 
 export class ProductionForgeUnattendedPublicationProvider {

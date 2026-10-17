@@ -3,6 +3,7 @@ const testModules = [
   "./GovernedLivePricePublication.test.mjs",
   "./UnattendedLivePricePublication.test.mjs",
   "./ProductionUnattendedPublicationBindings.test.mjs",
+  "./GitHubAppInstallationAuthentication.test.mjs",
   "./CertifiedCandidateReleasePromotion.test.mjs",
     "./DecisionAggregator.test.mjs",
     "./RuleRegistry.test.mjs",
