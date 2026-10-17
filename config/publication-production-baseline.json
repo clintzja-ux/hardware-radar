@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "policyVersion": "PUBLICATION-PRODUCTION-BASELINE-001-1.0",
+  "purpose": "Minimum production code and canonical classification state required to reproduce an immutable certified RAM portfolio.",
+  "requiredContracts": [
+    "packages/atlas/atlas-manifest.json",
+    "packages/atlas/products/ram/",
+    "packages/atlas/retailers/",
+    "packages/mercury/destinations/production-destinations.json",
+    "packages/mercury/destinations/RetailerDestination.js",
+    "packages/mercury/destinations/RetailerDestinationSource.js",
+    "scripts/build-public.mjs",
+    "scripts/static-publication-release-runtime.mjs",
+    "scripts/editorial-publishing.mjs",
+    "scripts/ram-product-publishing.mjs",
+    "scripts/ram-terminal-publishing.mjs",
+    "content/site-routes.json"
+  ],
+  "generatedPathAllowlist": [
+    "config/publication-release.json",
+    "config/artifacts/",
+    "public/data/market-snapshot.json",
+    "public/data/ram-catalog.json",
+    "public/data/ram-current-retail.json",
+    "public/data/ram-terminal.json",
+    "public/data/atlas/",
+    "public/ram/",
+    "public/sitemap.xml"
+  ],
+  "excludedSubsystems": [
+    "Mercury acquisition",
+    "Forge operator controls",
+    "Windows scheduling",
+    "provider credentials",
+    "operational receipts"
+  ],
+  "deployment": {
+    "provider": "CLOUDFLARE_PAGES_GIT_INTEGRATION",
+    "productionBranch": "main",
+    "directDeploymentPermitted": false
+  }
+}

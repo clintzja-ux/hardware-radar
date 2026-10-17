@@ -257,6 +257,16 @@ Prepare release authority only from a certified artifact and the exact arguments
 
 ```powershell
 npm run publication:release:prepare -- <GOVERNED_ARGUMENTS>
+
+Governed live-price publication is a separate coordination boundary over the existing certified portfolio, static release, public builder, and verifier:
+
+```powershell
+npm run publication:live-price -- --mode=INSPECT
+npm run publication:live-price -- --mode=AUTHORIZE --authorized-by=<NAMED_OPERATOR> --confirmation=CONFIRM-GOVERNED-LIVE-PRICE-PUBLICATION
+npm run publication:live-price -- --mode=PREPARE --authorization-id=<SINGLE_USE_AUTHORIZATION_ID> --checkout-root=<CLEAN_COMPATIBLE_CHECKOUT>
+```
+
+`PREPARE` requires a separately recorded, single-use authorization bound to the exact candidate, artifact, Sentinel certification, production environment, predecessor release, freshness deadline, named operator, and generated-path allowlist. It builds only in the supplied clean compatible checkout, runs the registered public verification chain, rejects every changed path outside the authorization, and returns `READY_FOR_RELEASE_ONLY_CHECKPOINT`. It does not commit, push, merge, deploy, acquire market data, or authorize rollback. Cloudflare Pages continues to deploy only through the established `main` branch Git integration after separate operator approval.
 ```
 
 Build a governed local RAM preview:
