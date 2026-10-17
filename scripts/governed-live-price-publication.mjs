@@ -4,6 +4,7 @@ import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { createLivePricePublicationAuthorization, FileLivePricePublicationAuthorizationRepository, GovernedLivePricePublicationCoordinator } from "../packages/sentinel/publication/GovernedLivePricePublication.js";
+import { createPortableNpmRunner } from "./lib/portable-npm-runner.mjs";
 
 const exec = promisify(execFile);
 const args = Object.fromEntries(process.argv.slice(2).filter(value => value.startsWith("--") && value.includes("=")).map(value => value.slice(2).split(/=(.*)/s).slice(0, 2)));
@@ -31,10 +32,11 @@ if (mode !== "PREPARE") throw new Error("LIVE_PRICE_PUBLICATION_MODE_INVALID");
 if (!args["authorization-id"]) throw new Error("LIVE_PRICE_PUBLICATION_AUTHORIZATION_ID_REQUIRED");
 
 const run = async (command, commandArgs, options = {}) => exec(command, commandArgs, { cwd: root, windowsHide: true, maxBuffer: 32 * 1024 * 1024, ...options });
+const runNpm = createPortableNpmRunner({ execFile: exec, cwd: root, baseOptions: { windowsHide: true, maxBuffer: 32 * 1024 * 1024 } });
 const coordinator = new GovernedLivePricePublicationCoordinator({ authorizationRepository: repository,
   gitInspector: { inspect: async () => { const { stdout } = await run("git", ["status", "--porcelain=v1", "--untracked-files=all"]); const changedPaths = stdout.split(/\r?\n/).filter(Boolean).map(line => line.slice(3).replace(/^"|"$/g, "")); return { clean: changedPaths.length === 0, changedPaths }; } },
-  buildRunner: { run: async ({ generatedAt, environment }) => run("npm.cmd", ["run", "build:public"], { env: { ...process.env, HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT: environment, HARDWARE_RADAR_GENERATED_AT: generatedAt } }) },
-  verificationRunner: { run: async () => { for (const script of ["verify:public","test:ram-products","test:ram-catalog","test:ram-terminal","test:retailer-destinations","test:release-governance","test:layout"]) await run("npm.cmd", ["run", script]); } }
+  buildRunner: { run: async ({ generatedAt, environment }) => runNpm("build:public", { env: { ...process.env, HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT: environment, HARDWARE_RADAR_GENERATED_AT: generatedAt } }) },
+  verificationRunner: { run: async () => { for (const script of ["verify:public","test:ram-products","test:ram-catalog","test:ram-terminal","test:retailer-destinations","test:release-governance","test:layout"]) await runNpm(script); } }
 });
 const result = await coordinator.prepare({ authorizationId: args["authorization-id"], checkoutRoot: root, releaseManifestPath: path.relative(root, manifestPath) });
 console.log(JSON.stringify({ ...result, checkpointCreated: false, nextAction: "OPERATOR_REVIEW_THEN_SEPARATELY_AUTHORIZE_RELEASE_ONLY_GIT_CHECKPOINT", providerCalls: 0, canonicalMarketMutation: false }, null, 2));

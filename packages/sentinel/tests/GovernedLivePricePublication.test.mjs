@@ -4,6 +4,7 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { classifyCloudflareDeploymentObservation, createLivePricePublicationAuthorization, FileLivePricePublicationAuthorizationRepository, GovernedLivePricePublicationCoordinator } from "../publication/GovernedLivePricePublication.js";
+import { createPortableNpmRunner, resolveNpmRunInvocation } from "../../../scripts/lib/portable-npm-runner.mjs";
 
 const sha = value => createHash("sha256").update(value).digest("hex");
 const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), "hr-live-publication-"));
@@ -37,5 +38,12 @@ try {
   assert.equal(classifyCloudflareDeploymentObservation({ expectedCommit:"abc",expectedReleaseId:sourceManifest.releaseId,observation:{status:"FAILED",reason:"BUILD_FAILED"} }).status,"DEPLOYMENT_FAILED");
   assert.equal(classifyCloudflareDeploymentObservation({ expectedCommit:"abc",expectedReleaseId:sourceManifest.releaseId,observation:{status:"SUCCESS",commit:"def",releaseId:sourceManifest.releaseId} }).status,"DEPLOYMENT_BINDING_MISMATCH");
   assert.equal(classifyCloudflareDeploymentObservation({ expectedCommit:"abc",expectedReleaseId:sourceManifest.releaseId,observation:{status:"SUCCESS",commit:"abc",releaseId:sourceManifest.releaseId} }).status,"DEPLOYMENT_VERIFIED");
-  console.log("Governed live-price publication coordinator tests passed: 14 cases.");
+  const windowsInvocation=resolveNpmRunInvocation({script:"build:public",platform:"win32",nodeExecutable:"C:\\Program Files\\nodejs\\node.exe",npmEntryPoint:"C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js"});
+  assert.equal(windowsInvocation.command,"C:\\Program Files\\nodejs\\node.exe"); assert.deepEqual(windowsInvocation.args,["C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js","run","build:public"]);
+  assert.deepEqual(resolveNpmRunInvocation({script:"build:public",platform:"linux"}),{command:"npm",args:["run","build:public"]});
+  const calls=[],fixtureEnv={FIXTURE:"preserved"},runner=createPortableNpmRunner({execFile:async(command,args,options)=>{calls.push({command,args,options});return {stdout:"ok"};},cwd:fixtureRoot,baseOptions:{windowsHide:true},platform:"win32",nodeExecutable:"C:\\node\\node.exe",npmEntryPoint:"C:\\node\\npm-cli.js"});
+  await runner("verify:public",{env:fixtureEnv}); assert.deepEqual(calls[0],{command:"C:\\node\\node.exe",args:["C:\\node\\npm-cli.js","run","verify:public"],options:{cwd:fixtureRoot,windowsHide:true,env:fixtureEnv}});
+  const failure=new Error("fixture nonzero");failure.code=7;const failing=createPortableNpmRunner({execFile:async()=>{throw failure;},cwd:fixtureRoot,platform:"win32",nodeExecutable:"C:\\node\\node.exe",npmEntryPoint:"C:\\node\\npm-cli.js"}); await assert.rejects(()=>failing("build:public"),error=>error===failure);
+  assert.throws(()=>resolveNpmRunInvocation({script:"build:public",platform:"win32",nodeExecutable:"C:\\node\\node.exe",npmEntryPoint:null}),/NPM_ENTRY_POINT_UNAVAILABLE/);
+  console.log("Governed live-price publication coordinator tests passed: 22 cases.");
 } finally { await rm(fixtureRoot, { recursive: true, force: true }); }
