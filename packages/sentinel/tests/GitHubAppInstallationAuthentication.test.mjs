@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { generateKeyPairSync } from "node:crypto";
+import { readFile } from "node:fs/promises";
 import { GitHubAppInstallationTokenProvider } from "../publication/GitHubAppInstallationAuthentication.js";
 import { GitHubAppReleaseGitOwner } from "../publication/ProductionUnattendedPublicationBindings.js";
 
@@ -10,4 +12,8 @@ let calls=[];const runner=async(command,args,cwd,options={})=>{calls.push({comma
 await owner.fastForwardMain({commit:"def",expectedRemote:"abc"});assert.equal(calls.length,2);for(const call of calls){assert.ok(!call.args.join(" ").includes("installation-secret"));assert.equal(call.options.env.GIT_TERMINAL_PROMPT,"0");assert.equal(call.options.env.GIT_CONFIG_KEY_0,"credential.helper");assert.equal(call.options.env.GIT_CONFIG_VALUE_0,"");assert.equal(call.options.env.HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL,"installation-secret");}
 await assert.rejects(()=>new GitHubAppInstallationTokenProvider({}).getToken(),/APP_ID_REQUIRED/);
 await assert.rejects(()=>new GitHubAppInstallationTokenProvider({appId:"1",installationId:"2",privateKeyPath:"x",repositoryOwner:"owner",repositoryName:"repo",readPrivateKey:async()=>privateKey,now:()=>now,fetchImpl:async()=>({ok:true,json:async()=>({token:"wrong",expires_at:"2026-10-17T13:00:00Z",permissions:{contents:"read"},repositories:[]})})}).getToken(),/TOKEN_SCOPE_INVALID/);
+const pkg=JSON.parse(await readFile(new URL("../../../package.json",import.meta.url),"utf8")),publicationCommand=pkg.scripts["publication:unattended"];
+assert.equal(publicationCommand,"node --use-system-ca --env-file=.env scripts/unattended-live-price-publication.mjs");
+assert.match(publicationCommand,/^node --use-system-ca --env-file=\.env scripts\/unattended-live-price-publication\.mjs$/);
+const supported=spawnSync(process.execPath,["--use-system-ca","--version"],{encoding:"utf8"});assert.equal(supported.status,0,supported.stderr);
 console.log("GitHub App installation authentication tests passed: scoped token, secret-free arguments, no credential-helper fallback, and fail-closed credentials.");
