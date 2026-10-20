@@ -350,6 +350,7 @@ const testModules = [
     ,"./ForgeProductManager.test.mjs"
     ,"./ForgeDraftCorrection.test.mjs"
     ,"./ForgeDraftDestination.test.mjs"
+    ,"./NeweggRoutinePostSuccessPublication.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

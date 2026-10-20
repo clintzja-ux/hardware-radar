@@ -43,6 +43,7 @@ try {
   assert.deepEqual(resolveNpmRunInvocation({script:"build:public",platform:"linux"}),{command:"npm",args:["run","build:public"]});
   const calls=[],fixtureEnv={FIXTURE:"preserved"},runner=createPortableNpmRunner({execFile:async(command,args,options)=>{calls.push({command,args,options});return {stdout:"ok"};},cwd:fixtureRoot,baseOptions:{windowsHide:true},platform:"win32",nodeExecutable:"C:\\node\\node.exe",npmEntryPoint:"C:\\node\\npm-cli.js"});
   await runner("verify:public",{env:fixtureEnv}); assert.deepEqual(calls[0],{command:"C:\\node\\node.exe",args:["C:\\node\\npm-cli.js","run","verify:public"],options:{cwd:fixtureRoot,windowsHide:true,env:fixtureEnv}});
+  await runner("publication:unattended",{args:["--mode=RUN","--mandate-id=fixture"]}); assert.deepEqual(calls[1].args,["C:\\node\\npm-cli.js","run","publication:unattended","--","--mode=RUN","--mandate-id=fixture"]);
   const failure=new Error("fixture nonzero");failure.code=7;const failing=createPortableNpmRunner({execFile:async()=>{throw failure;},cwd:fixtureRoot,platform:"win32",nodeExecutable:"C:\\node\\node.exe",npmEntryPoint:"C:\\node\\npm-cli.js"}); await assert.rejects(()=>failing("build:public"),error=>error===failure);
   assert.throws(()=>resolveNpmRunInvocation({script:"build:public",platform:"win32",nodeExecutable:"C:\\node\\node.exe",npmEntryPoint:null}),/NPM_ENTRY_POINT_UNAVAILABLE/);
   console.log("Governed live-price publication coordinator tests passed: 24 cases.");

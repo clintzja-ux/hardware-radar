@@ -12,6 +12,8 @@ export function createPortableNpmRunner({ execFile, cwd, baseOptions = {}, platf
   if (typeof execFile !== "function") throw new Error("EXEC_FILE_REQUIRED");
   return async function runNpmScript(script, options = {}) {
     const invocation = resolveNpmRunInvocation({ script, platform, nodeExecutable, npmEntryPoint });
-    return execFile(invocation.command, [...invocation.args], { cwd, ...baseOptions, ...options });
+    const { args: scriptArgs = [], ...execOptions } = options;
+    if (!Array.isArray(scriptArgs) || scriptArgs.some(value => typeof value !== "string")) throw new Error("NPM_SCRIPT_ARGUMENTS_INVALID");
+    return execFile(invocation.command, [...invocation.args, ...(scriptArgs.length ? ["--", ...scriptArgs] : [])], { cwd, ...baseOptions, ...execOptions });
   };
 }

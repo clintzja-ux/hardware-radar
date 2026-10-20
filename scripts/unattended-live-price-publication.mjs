@@ -5,7 +5,7 @@ import { CertifiedRoutinePublicationCandidateOwner, ProductionUnattendedPublicat
 import { createProductionUnattendedPublicationCoordinator } from "../packages/sentinel/publication/ProductionUnattendedPublicationFactory.js";
 
 const args = Object.fromEntries(process.argv.slice(2).filter(value => value.startsWith("--") && value.includes("=")).map(value => value.slice(2).split(/=(.*)/s).slice(0, 2)));
-const mode = String(args.mode ?? "INSPECT").toUpperCase(), root = path.resolve(args.root ?? ".");
+const mode = String(args.mode ?? "INSPECT").toUpperCase(), root = path.resolve(args.root ?? "."), checkoutRoot = path.resolve(args["checkout-root"] ?? root);
 const registryConfirmationDescriptor = "<STATUS>-UNATTENDED-PUBLICATION-MANDATE";
 void registryConfirmationDescriptor;
 const repository = new FileRecurringPublicationAuthorityRepository({ statePath: path.resolve(args["mandate-state"] ?? ".forge-review/publication/unattended-live-price.json") });
@@ -21,10 +21,10 @@ if (mode === "CREATE") {
 } else {
   const coordinatorFactory = async () => {
     const modulePath = process.env.HARDWARE_RADAR_PUBLICATION_PRODUCTION_FACTORY;
-    if (!modulePath) return createProductionUnattendedPublicationCoordinator({ root, repository, candidateOwner });
+    if (!modulePath) return createProductionUnattendedPublicationCoordinator({ root:checkoutRoot, repository, candidateOwner });
     const factory = await import(pathToFileURL(path.resolve(modulePath)).href);
     if (typeof factory.createProductionUnattendedPublicationCoordinator !== "function") throw new Error("PUBLICATION_PRODUCTION_FACTORY_INVALID");
-    return factory.createProductionUnattendedPublicationCoordinator({ root, repository, candidateOwner });
+    return factory.createProductionUnattendedPublicationCoordinator({ root:checkoutRoot, repository, candidateOwner });
   };
   const command = new ProductionUnattendedPublicationCommand({ repository, mandateService, candidateOwner, coordinatorFactory });
   console.log(JSON.stringify(mode === "RUN" ? await command.run({ mandateId: args["mandate-id"] }) : await command.inspect(), null, 2));
