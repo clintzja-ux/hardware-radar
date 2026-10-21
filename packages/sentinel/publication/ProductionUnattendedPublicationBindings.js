@@ -57,7 +57,8 @@ export class GitHubAppReleaseGitOwner {
       this.runner("git", ["status", "--porcelain=v1", "--untracked-files=all"], this.checkoutRoot),
       this.runner("git", ["rev-parse", "HEAD"], this.checkoutRoot), this.runner("git", ["rev-parse", "origin/main"], this.checkoutRoot),
     ]);
-    return freeze({ clean: !status.stdout.trim(), localCommit: local.stdout.trim(), remoteCommit: remote.stdout.trim() });
+    const changedPaths=status.stdout.split(/\r?\n/).filter(Boolean).map(line=>line.slice(3).replace(/^"|"$/g,""));
+    return freeze({ clean: changedPaths.length===0, changedPaths, localCommit: local.stdout.trim(), remoteCommit: remote.stdout.trim() });
   }
   async checkpoint({ prepared, expectedParent }) {
     if (prepared.allowlistValid !== true || !Array.isArray(prepared.changedPaths)) throw new Error("PUBLICATION_PREPARATION_INVALID");

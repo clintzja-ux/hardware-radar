@@ -58,7 +58,7 @@ export class FileLivePricePublicationAuthorizationRepository {
 
 export class GovernedLivePricePublicationCoordinator {
   constructor({ authorizationRepository, buildRunner, verificationRunner, gitInspector, now = () => new Date().toISOString() } = {}) { if (!authorizationRepository || !buildRunner || !verificationRunner || !gitInspector) throw new Error("LIVE_PRICE_PUBLICATION_COMPOSITION_INCOMPLETE"); Object.assign(this, { authorizationRepository, buildRunner, verificationRunner, gitInspector, now }); }
-  async prepare({ authorizationId, checkoutRoot, releaseManifestPath = "config/publication-release.json" } = {}) {
+  async prepare({ authorizationId, checkoutRoot, releaseManifestPath = "config/publication-release.json", promotionEvidence = null } = {}) {
     const authorization = await this.authorizationRepository.get(authorizationId); if (!authorization) throw new Error("LIVE_PRICE_PUBLICATION_AUTHORIZATION_NOT_FOUND");
     const evaluatedAt = this.now(); if (Date.parse(evaluatedAt) >= Date.parse(authorization.freshUntil)) throw new Error("LIVE_PRICE_PUBLICATION_FRESHNESS_EXPIRED");
     const root = path.resolve(checkoutRoot), manifestPath = path.resolve(root, releaseManifestPath), manifest = JSON.parse(await readFile(manifestPath, "utf8"));
@@ -68,7 +68,12 @@ export class GovernedLivePricePublicationCoordinator {
     const bindings = [[manifest.artifact.candidateId,authorization.candidateId],[manifest.artifact.artifactId,authorization.artifactId],[staticPublicationArtifactDigest(artifactText),authorization.artifactDigest],[manifest.artifact.bindingDigest,authorization.bindingDigest],[manifest.artifact.certificationId,authorization.certificationId],[digest(JSON.stringify(release.portfolio.certification)),authorization.certificationDigest],[manifest.rollback.previousReleaseId,authorization.predecessorReleaseId],[manifest.targetEnvironment,authorization.targetEnvironment]];
     if (bindings.some(([actual,expected]) => actual !== expected)) throw new Error("LIVE_PRICE_PUBLICATION_BINDING_MISMATCH");
     const before = await this.gitInspector.inspect({ root }), priorOperation = await this.authorizationRepository.getOperation(authorizationId);
-    if (!before.clean && (!priorOperation || before.changedPaths.some(file => !pathAllowed(file, authorization.authorizedPaths)))) throw new Error("LIVE_PRICE_PUBLICATION_CHECKOUT_NOT_CLEAN");
+    if (!before.clean) {
+      const changedPaths=[...(before.changedPaths??[])].sort(), expectedPromotionPaths=[path.relative(root,manifestPath).replaceAll("\\","/"),path.relative(root,path.resolve(path.dirname(manifestPath),manifest.artifact.relativePath)).replaceAll("\\","/")].sort(), cleanEvidence=promotionEvidence?.originalCleanCheckout;
+      const exactPromotion=promotionEvidence?.schemaVersion==="1.0"&&promotionEvidence.candidateId===authorization.candidateId&&promotionEvidence.artifactId===authorization.artifactId&&promotionEvidence.certificationId===authorization.certificationId&&promotionEvidence.predecessorReleaseId===authorization.predecessorReleaseId&&cleanEvidence?.clean===true&&cleanEvidence.localCommit===promotionEvidence.predecessorCommit&&cleanEvidence.remoteCommit===promotionEvidence.predecessorCommit&&Number.isFinite(Date.parse(cleanEvidence.verifiedAt??""))&&manifest.artifact.relativePath===`artifacts/${authorization.candidateId}.json`&&JSON.stringify([...(promotionEvidence.promotionPaths??[])].sort())===JSON.stringify(expectedPromotionPaths)&&JSON.stringify(changedPaths)===JSON.stringify(expectedPromotionPaths);
+      const recoverableBuild=priorOperation&&changedPaths.every(file=>pathAllowed(file,authorization.authorizedPaths));
+      if(!exactPromotion&&!recoverableBuild)throw new Error("LIVE_PRICE_PUBLICATION_CHECKOUT_NOT_CLEAN");
+    }
     const operation = await this.authorizationRepository.begin({ authorizationId, checkoutRoot: root, startedAt: priorOperation?.startedAt ?? evaluatedAt });
     await this.buildRunner.run({ root, generatedAt: manifest.createdAt, environment: "PRODUCTION" }); await this.verificationRunner.run({ root, authorization, release });
     if (Date.parse(this.now()) >= Date.parse(authorization.freshUntil)) throw new Error("LIVE_PRICE_PUBLICATION_FRESHNESS_EXPIRED");

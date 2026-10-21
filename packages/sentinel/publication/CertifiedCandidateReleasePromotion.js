@@ -13,10 +13,11 @@ export class CertifiedCandidateReleasePromotionOwner {
     if (!recurringAuthorityRepository?.getChild || !recurringAuthorityRepository?.getMandate || !publicationAuthorizationRepository?.record || !preparationOwner?.prepare) throw new Error("PUBLICATION_PROMOTION_COMPOSITION_INCOMPLETE");
     Object.assign(this,{recurringAuthorityRepository,publicationAuthorizationRepository,preparationOwner,now,checkpoint});
   }
-  async prepare({ candidate, child, checkoutRoot, candidateDirectory, releaseManifestPath="config/publication-release.json" }={}) {
+  async prepare({ candidate, child, checkoutRoot, candidateDirectory, releaseManifestPath="config/publication-release.json", originalCleanCheckout }={}) {
     const root=path.resolve(checkoutRoot), directory=path.resolve(candidateDirectory), manifestPath=path.resolve(root,releaseManifestPath);
     const durableChild=await this.recurringAuthorityRepository.getChild(child?.childAuthorizationId), mandate=await this.recurringAuthorityRepository.getMandate(child?.mandateId);
     if (!durableChild || JSON.stringify(durableChild)!==JSON.stringify(child) || !mandate || mandate.status!=="ENABLED") throw new Error("PUBLICATION_PROMOTION_AUTHORITY_INVALID");
+    if (originalCleanCheckout?.clean!==true || originalCleanCheckout.localCommit!==child.predecessorCommit || originalCleanCheckout.remoteCommit!==child.predecessorCommit || !Number.isFinite(Date.parse(originalCleanCheckout.verifiedAt??""))) throw new Error("PUBLICATION_PROMOTION_CLEAN_CHECKOUT_EVIDENCE_INVALID");
     if (Date.parse(this.now())>=Date.parse(child.freshUntil)) throw new Error("PUBLICATION_CANDIDATE_EXPIRED");
     const [manifest,certification,currentRelease]=await Promise.all([readFile(path.join(directory,"manifest.json"),"utf8").then(JSON.parse),readFile(path.join(directory,"certification.json"),"utf8").then(JSON.parse),readFile(manifestPath,"utf8").then(JSON.parse)]);
     const fileTexts={}; for (const [name,binding] of Object.entries(manifest.files??{})) fileTexts[name]=await readFile(path.join(directory,binding.file),"utf8");
@@ -32,7 +33,7 @@ export class CertifiedCandidateReleasePromotionOwner {
     await this.checkpoint({stage:"PROMOTION_COMPLETED",childAuthorizationId:child.childAuthorizationId,releaseId:release.releaseId,artifactDigest});
     const authorization=createLivePricePublicationAuthorization({candidateId:manifest.candidateId,artifactId:manifest.artifactId,artifactDigest,bindingDigest:manifest.bindingDigest,certificationId:certification.certificationId,certificationDigest,targetEnvironment:"PRODUCTION",predecessorReleaseId:child.predecessorReleaseId,freshUntil:manifest.currentValidUntil,authorizedBy:mandate.operatorId,authorizedAt:child.authorizedAt});
     await this.publicationAuthorizationRepository.record(authorization);
-    const prepared=await this.preparationOwner.prepare({authorizationId:authorization.authorizationId,checkoutRoot:root,releaseManifestPath});
+    const prepared=await this.preparationOwner.prepare({authorizationId:authorization.authorizationId,checkoutRoot:root,releaseManifestPath,promotionEvidence:{schemaVersion:"1.0",candidateId:child.candidateId,artifactId:child.artifactId,certificationId:child.certificationId,predecessorReleaseId:child.predecessorReleaseId,predecessorCommit:child.predecessorCommit,originalCleanCheckout,promotionPaths:[path.relative(root,manifestPath).replaceAll("\\","/"),path.relative(root,artifactPath).replaceAll("\\","/")].sort()}});
     return freeze({...prepared,authorizationId:child.childAuthorizationId,releaseId:release.releaseId,canonicalPreparationAuthorizationId:authorization.authorizationId,candidateId:manifest.candidateId,allowlistValid:true});
   }
 }

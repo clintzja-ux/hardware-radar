@@ -93,6 +93,11 @@ try {
   const staleBase = await createRepository("stale-base");
   await assert.rejects(() => createCoordinator({ repository: staleBase.repository, overrides: { gitOwner: { inspectBase: async () => ({ clean: true, localCommit: "old", remoteCommit: "new" }) } } }).coordinator.run({ mandateId: staleBase.mandate.mandateId }), /PREDECESSOR_CONFLICT/);
 
+  const interrupted = await createRepository("interrupted"), interruptedCandidate={...candidate,candidateId:"interrupted"}, interruptedPaths=[`config/artifacts/${"interrupted"}.json`,"config/publication-release.json"].sort(), interruptedChild=await interrupted.repository.authorizeChild({mandateId:interrupted.mandate.mandateId,candidate:interruptedCandidate,predecessorCommit:"base",at});
+  await interrupted.repository.recordEvent({candidateId:interruptedCandidate.candidateId,type:"PREPARE_STARTED",status:"PREPARING",evidence:{originalCleanCheckout:{clean:true,localCommit:"base",remoteCommit:"base",verifiedAt:at},promotionPaths:interruptedPaths},at});
+  const interruptedRun=createCoordinator({repository:interrupted.repository,candidateValue:interruptedCandidate,overrides:{gitOwner:{inspectBase:async()=>({clean:false,changedPaths:[interruptedPaths[0]],localCommit:"base",remoteCommit:"base"}),checkpoint:async()=>({commit:"release",parentCommit:"base",unrelatedPaths:[]}),fastForwardMain:async()=>({commit:"release"})}}});
+  const recovered=await interruptedRun.coordinator.run({mandateId:interrupted.mandate.mandateId});assert.equal(recovered.status,"LIVE_ACCEPTED");assert.equal(interruptedRun.counts().preparations,1);assert.equal((await interrupted.repository.getOperation(interruptedCandidate.candidateId)).attempts,1);assert.equal(interruptedChild.childAuthorizationId,(await interrupted.repository.getOperation(interruptedCandidate.candidateId)).childAuthorizationId);
+
   const unrelated = await createRepository("unrelated");
   const unrelatedRun = createCoordinator({ repository: unrelated.repository, overrides: { gitOwner: {
     inspectBase: async () => ({ clean: true, localCommit: "base", remoteCommit: "base" }),
