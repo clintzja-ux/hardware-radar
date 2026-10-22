@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import process from "node:process";
 import { createRecurringPublicationMandate, projectUnattendedPublicationHealth } from "./UnattendedLivePricePublication.js";
 
 const freeze = value => Object.freeze(structuredClone(value));
@@ -51,7 +52,7 @@ export class GitHubAppReleaseGitOwner {
   constructor({ runner, checkoutRoot, tokenProvider, askPassPath } = {}) {
     if (!runner || !checkoutRoot || !tokenProvider?.getToken || !askPassPath) throw new Error("PUBLICATION_GIT_COMPOSITION_INCOMPLETE"); Object.assign(this, { runner, checkoutRoot, tokenProvider, askPassPath });
   }
-  async _remote(args){const credential=await this.tokenProvider.getToken(),env={...process.env,GIT_ASKPASS:this.askPassPath,GIT_TERMINAL_PROMPT:"0",GCM_INTERACTIVE:"Never",GIT_CONFIG_COUNT:"1",GIT_CONFIG_KEY_0:"credential.helper",GIT_CONFIG_VALUE_0:"",HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL:credential.token};try{return await this.runner("git",args,this.checkoutRoot,{env});}finally{env.HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL="";}}
+  async _remote(args){const credential=await this.tokenProvider.getToken(),env={...process.env,GIT_ASKPASS:this.askPassPath,GIT_TERMINAL_PROMPT:"0",GCM_INTERACTIVE:"Never",GIT_CONFIG_COUNT:"1",GIT_CONFIG_KEY_0:"credential.helper",GIT_CONFIG_VALUE_0:"",HARDWARE_RADAR_GITHUB_ASKPASS_NODE:process.execPath,HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL:credential.token};try{return await this.runner("git",args,this.checkoutRoot,{env});}finally{env.HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL="";}}
   async inspectBase() {
     const [status, local, remote] = await Promise.all([
       this.runner("git", ["status", "--porcelain=v1", "--untracked-files=all"], this.checkoutRoot),
