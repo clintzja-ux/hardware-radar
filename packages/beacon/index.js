@@ -8,6 +8,7 @@ export * from "./FirstPartyProductInterestCollectionService.js";
 export * from "./FirstPartyProductInterestCollectionStatus.js";
 export * from "./FileFirstPartyProductInterestCollectionRepository.js";
 export * from "./GovernedProductInterestHttpHandler.js";
+export * from "./PublicProductInterestDestinationRepository.js";
 export * from "./retention/BeaconEvidenceRetentionPolicy.js";
 export * from "./retention/BeaconEvidenceRetentionPolicyRepository.js";
 export * from "./retention/BeaconInterestRetentionAssessment.js";

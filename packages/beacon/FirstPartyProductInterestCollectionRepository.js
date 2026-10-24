@@ -1,6 +1,6 @@
 import {createHash} from "node:crypto";
 const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
-const fingerprint=event=>createHash("sha256").update(JSON.stringify({schemaVersion:event.schemaVersion,eventId:event.eventId,atlasProductId:event.atlasProductId,signalType:event.signalType,sourceSurface:event.sourceSurface,occurredAt:event.occurredAt,retailerId:event.retailerId})).digest("hex");
+const fingerprint=event=>createHash("sha256").update(JSON.stringify(event.schemaVersion==="1.0"?{schemaVersion:event.schemaVersion,eventId:event.eventId,atlasProductId:event.atlasProductId,signalType:event.signalType,sourceSurface:event.sourceSurface,occurredAt:event.occurredAt,retailerId:event.retailerId}:{schemaVersion:event.schemaVersion,eventId:event.eventId,atlasProductId:event.atlasProductId,destinationId:event.destinationId,retailerId:event.retailerId,catalogCategory:event.catalogCategory,placement:event.placement,signalType:event.signalType,occurredAt:event.occurredAt})).digest("hex");
 export const firstPartyInterestEventFingerprint=fingerprint;
 export const createFirstPartyInterestSignalId=eventId=>`beacon_interest_${createHash("sha256").update(eventId).digest("hex").slice(0,24)}`;
 export class FirstPartyProductInterestCollectionRepository{
