@@ -27,5 +27,7 @@ if (mode === "CREATE") {
     return factory.createProductionUnattendedPublicationCoordinator({ root:checkoutRoot, repository, candidateOwner });
   };
   const command = new ProductionUnattendedPublicationCommand({ repository, mandateService, candidateOwner, coordinatorFactory });
-  console.log(JSON.stringify(mode === "RUN" ? await command.run({ mandateId: args["mandate-id"] }) : await command.inspect(), null, 2));
+  if(mode==="OBSERVE"&&args.confirmation!=="OBSERVE-UNATTENDED-PUBLICATION-DEPLOYMENT")throw new Error("PUBLICATION_OBSERVATION_CONFIRMATION_REQUIRED");
+  const result=mode==="RUN"?await command.run({mandateId:args["mandate-id"]}):mode==="OBSERVE"?await command.observe({mandateId:args["mandate-id"],candidateId:args["candidate-id"]}):await command.inspect();
+  console.log(JSON.stringify(result, null, 2));
 }

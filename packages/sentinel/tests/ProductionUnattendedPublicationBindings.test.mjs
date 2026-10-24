@@ -19,8 +19,8 @@ try {
   assert.equal((await service.inspect()).audit.length, 3);
   const health = await new ProductionForgeUnattendedPublicationProvider({ repository }).load({ asOf: "2026-10-17T01:00:00Z" });
   assert.equal(health.status, "REVOKED"); assert.equal(health.readOnly, true); assert.equal(health.mutationAuthorized, false);
-  const observer = new CloudflarePagesDeploymentObserver({ accountId: "account", projectName: "project", tokenProvider: async () => "secret", fetchImpl: async () => ({ ok: true, json: async () => ({ result: [{ deployment_trigger: { metadata: { commit_hash: "abc" } }, latest_stage: { status: "success" } }] }) }) });
-  assert.equal((await observer.observe({ commit: "abc" })).status, "SUCCESS");
+  const observer = new CloudflarePagesDeploymentObserver({ accountId: "account", projectName: "project", tokenProvider: async () => "secret", fetchImpl: async () => ({ ok: true, json: async () => ({ result: [{ id:"deployment",environment:"production",deployment_trigger: { metadata: { commit_hash: "abc" } }, latest_stage: { status: "success",ended_on:"2026-10-23T22:08:42Z" } }] }) }) });
+  const observed=await observer.observe({ commit: "abc" });assert.equal(observed.status, "SUCCESS");assert.equal(observed.deploymentId,"deployment");assert.equal(observed.environment,"production");assert.equal(observed.completedAt,"2026-10-23T22:08:42Z");
   await assert.rejects(() => new CloudflarePagesDeploymentObserver({ accountId: "account", projectName: "project", tokenProvider: async () => null }).observe({ commit: "abc" }), /CREDENTIAL_REQUIRED/);
   await mkdir(path.join(root, "empty")); await writeFile(path.join(root, "empty", "marker"), "fixture");
   let factoryCalls=0;const deployedCandidate={candidateId:"candidate",artifactId:"artifact",certificationId:"certification",releaseId:"release",alreadyDeployed:true},command=new ProductionUnattendedPublicationCommand({repository,mandateService:service,candidateOwner:{discover:async()=>deployedCandidate},coordinatorFactory:async()=>{factoryCalls++;return{run:async()=>({})};}}),deployed=await command.run({mandateId:"unused-but-required"});

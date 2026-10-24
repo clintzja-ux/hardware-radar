@@ -8,12 +8,13 @@ import {
   projectUnattendedPublicationHealth,
   UnattendedLivePricePublicationCoordinator,
 } from "../publication/UnattendedLivePricePublication.js";
+import { createLivePricePublicationAuthorization, FileLivePricePublicationAuthorizationRepository } from "../publication/GovernedLivePricePublication.js";
 
 const root = await mkdtemp(path.join(os.tmpdir(), "hr-unattended-publication-"));
 const at = "2026-10-17T16:30:00.000Z";
 const candidate = {
   candidateId: "candidate-1", artifactId: "artifact-1", certificationId: "cert-1",
-  bindingDigest: "a".repeat(64), releaseId: "release-1",
+  bindingDigest: "a".repeat(64), artifactDigest:"b".repeat(64), certificationDigest:"c".repeat(64), releaseId: "release-1",
   freshUntil: "2026-10-18T03:15:08.000Z", sentinelStatus: "CERTIFIED", sourceRightsEligible: true,
 };
 
@@ -113,10 +114,25 @@ try {
   const liveMismatch = await createRepository("live-mismatch");
   await assert.rejects(() => createCoordinator({ repository: liveMismatch.repository, overrides: { liveVerifier: { verify: async () => ({ status: "MISMATCH" }) } } }).coordinator.run({ mandateId: liveMismatch.mandate.mandateId }), /LIVE_ACCEPTANCE_INVALID/);
 
+  const observation=await createRepository("observation"),observedCandidate={...candidate,candidateId:"mer_ramreleasecand_1234567890abcdef12345678",artifactId:"mer_ramreleaseart_1234567890abcdef12345678",certificationId:"sent_ramreleasecert_1234567890abcdef12345678",releaseId:"pubrel_1234567890abcdef12345678",predecessorReleaseId:"pubrel_abcdefabcdefabcdefabcdef"},child=await observation.repository.authorizeChild({mandateId:observation.mandate.mandateId,candidate:observedCandidate,predecessorCommit:"base",at});
+  await observation.repository.recordEvent({candidateId:observedCandidate.candidateId,type:"PREPARE_STARTED",status:"PREPARING",evidence:{},at});
+  await observation.repository.recordEvent({candidateId:observedCandidate.candidateId,type:"CHECKPOINT_CREATED",status:"CHECKPOINTED",evidence:{commit:"release"},at});
+  await observation.repository.recordEvent({candidateId:observedCandidate.candidateId,type:"MAIN_UPDATED",status:"DEPLOYMENT_PENDING",evidence:{commit:"release"},at});
+  const innerRepository=new FileLivePricePublicationAuthorizationRepository({statePath:path.join(root,"observation-inner.json")}),inner=createLivePricePublicationAuthorization({candidateId:observedCandidate.candidateId,artifactId:observedCandidate.artifactId,artifactDigest:observedCandidate.artifactDigest,bindingDigest:observedCandidate.bindingDigest,certificationId:observedCandidate.certificationId,certificationDigest:observedCandidate.certificationDigest,targetEnvironment:"PRODUCTION",predecessorReleaseId:observedCandidate.predecessorReleaseId??"pubrel_abcdefabcdefabcdefabcdef",freshUntil:observedCandidate.freshUntil,authorizedPaths:["public/"],authorizedBy:"operator:observation",authorizedAt:at});
+  await innerRepository.record(inner);await innerRepository.consume({authorizationId:inner.authorizationId,checkpointDigest:"d".repeat(64),consumedAt:at});
+  let observations=0;const observationRun=createCoordinator({repository:observation.repository,candidateValue:observedCandidate,overrides:{authorizationRepository:innerRepository,gitOwner:{inspectPublishedCheckpoint:async()=>({localCommit:"release",remoteCommit:"release",parentCommit:"base",candidateId:observedCandidate.candidateId,releaseId:observedCandidate.releaseId,publicArtifacts:[{url:"https://example.test/",sha256:"e".repeat(64)}]})},deploymentOwner:{observe:async()=>({status:"SUCCESS",commit:"release",environment:"production",deploymentId:"deployment",completedAt:"2026-10-18T03:00:00Z"})},liveVerifier:{verify:async()=>{observations++;return{status:"MATCH"};}},now:()=>"2026-10-23T00:00:00Z"}});
+  const observed=await observationRun.coordinator.observe({candidateId:observedCandidate.candidateId,mandateId:observation.mandate.mandateId});assert.equal(observed.status,"LIVE_ACCEPTED");assert.equal(observed.events.at(-1).evidence.observationOnly,true);assert.equal(observationRun.counts().preparations,0);assert.equal(observationRun.counts().pushes,0);assert.equal(observations,1);
+  assert.equal((await observationRun.coordinator.observe({candidateId:observedCandidate.candidateId,mandateId:observation.mandate.mandateId})).replay,true);assert.equal(observations,1);
+
+  const late=await createRepository("late-observation"),lateCandidate={...observedCandidate,candidateId:"mer_ramreleasecand_abcdefabcdefabcdefabcdef"},lateChild=await late.repository.authorizeChild({mandateId:late.mandate.mandateId,candidate:lateCandidate,predecessorCommit:"base",at});void lateChild;
+  await late.repository.recordEvent({candidateId:lateCandidate.candidateId,type:"PREPARE_STARTED",status:"PREPARING",evidence:{},at});await late.repository.recordEvent({candidateId:lateCandidate.candidateId,type:"CHECKPOINT_CREATED",status:"CHECKPOINTED",evidence:{commit:"release"},at});await late.repository.recordEvent({candidateId:lateCandidate.candidateId,type:"MAIN_UPDATED",status:"DEPLOYMENT_PENDING",evidence:{commit:"release"},at});
+  const lateInnerRepository=new FileLivePricePublicationAuthorizationRepository({statePath:path.join(root,"late-inner.json")}),lateInner=createLivePricePublicationAuthorization({candidateId:lateCandidate.candidateId,artifactId:lateCandidate.artifactId,artifactDigest:lateCandidate.artifactDigest,bindingDigest:lateCandidate.bindingDigest,certificationId:lateCandidate.certificationId,certificationDigest:lateCandidate.certificationDigest,targetEnvironment:"PRODUCTION",predecessorReleaseId:lateCandidate.predecessorReleaseId,freshUntil:lateCandidate.freshUntil,authorizedPaths:["public/"],authorizedBy:"operator:late",authorizedAt:at});await lateInnerRepository.record(lateInner);await lateInnerRepository.consume({authorizationId:lateInner.authorizationId,checkpointDigest:"f".repeat(64),consumedAt:at});
+  const lateRun=createCoordinator({repository:late.repository,candidateValue:lateCandidate,overrides:{authorizationRepository:lateInnerRepository,gitOwner:{inspectPublishedCheckpoint:async()=>({localCommit:"release",remoteCommit:"release",parentCommit:"base",candidateId:lateCandidate.candidateId,releaseId:lateCandidate.releaseId,publicArtifacts:[{}]})},deploymentOwner:{observe:async()=>({status:"SUCCESS",commit:"release",environment:"production",completedAt:lateCandidate.freshUntil})},liveVerifier:{verify:async()=>({status:"MATCH"})},now:()=>"2026-10-23T00:00:00Z"}});await assert.rejects(()=>lateRun.coordinator.observe({candidateId:lateCandidate.candidateId,mandateId:late.mandate.mandateId}),/AFTER_FRESHNESS/);
+
   assert.equal(primary.mandate.automaticRetries, 0);
   assert.equal(primary.mandate.automaticRollback, false);
   assert.equal(primary.mandate.sourceCodeChanges, false);
-  console.log("Unattended live-price publication tests passed: success, replay, authority, Git, deployment, and live-acceptance controls.");
+  console.log("Unattended live-price publication tests passed: success, replay, authority, Git, deployment, observation-only reconciliation, and live-acceptance controls.");
 } finally {
   await rm(root, { recursive: true, force: true });
 }
