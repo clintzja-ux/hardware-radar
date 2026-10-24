@@ -8,6 +8,11 @@ import { staticPublicationArtifactDigest } from "../validators/StaticPublication
 const freeze = value => Object.freeze(structuredClone(value));
 const sha256 = value => createHash("sha256").update(value).digest("hex");
 
+export function validatePublishedReleaseBinding({manifest,artifactText,expected}={}) {
+  const comparisons={releaseId:manifest?.releaseId===expected?.releaseId,candidateId:manifest?.artifact?.candidateId===expected?.candidateId,artifactId:manifest?.artifact?.artifactId===expected?.artifactId,certificationId:manifest?.artifact?.certificationId===expected?.certificationId,bindingDigest:manifest?.artifact?.bindingDigest===expected?.bindingDigest,predecessorReleaseId:manifest?.rollback?.previousReleaseId===expected?.predecessorReleaseId,releaseArtifactDigest:staticPublicationArtifactDigest(artifactText??"")===expected?.releaseArtifactDigest};
+  return freeze({valid:Object.values(comparisons).every(Boolean),comparisons});
+}
+
 export class RecurringPublicationMandateOperatorService {
   constructor({ repository, now = () => new Date().toISOString() } = {}) {
     if (!repository) throw new Error("PUBLICATION_MANDATE_REPOSITORY_REQUIRED");
@@ -75,7 +80,7 @@ export class GitHubAppReleaseGitOwner {
     await this._remote(["push", "origin", `${commit}:refs/heads/main`]);
     return freeze({ commit });
   }
-  async inspectPublishedCheckpoint({commit,expectedParent,candidateId,artifactId,artifactDigest,certificationId,bindingDigest,predecessorReleaseId,releaseId}) {
+  async inspectPublishedCheckpoint({commit,expectedParent,candidateId,artifactId,releaseArtifactDigest,certificationId,bindingDigest,predecessorReleaseId,releaseId}) {
     const [status,local,parent,remote,files]=await Promise.all([
       this.runner("git",["status","--porcelain=v1","--untracked-files=all"],this.checkoutRoot),this.runner("git",["rev-parse","HEAD"],this.checkoutRoot),this.runner("git",["rev-parse",`${commit}^`],this.checkoutRoot),this._remote(["ls-remote","origin","refs/heads/main"]),this.runner("git",["diff-tree","--no-commit-id","--name-only","--diff-filter=ACMRT","-r",commit,"--","public"],this.checkoutRoot),
     ]);
@@ -84,7 +89,7 @@ export class GitHubAppReleaseGitOwner {
     const publicPaths=files.stdout.split(/\r?\n/).map(value=>value.trim()).filter(Boolean).sort();
     const publicArtifacts=[];for(const relativePath of publicPaths){const bytes=await readFile(path.join(this.checkoutRoot,relativePath));const urlPath=relativePath.slice("public/".length).replace(/index\.html$/,""),url=`https://cheapestram.com/${urlPath}`;publicArtifacts.push({relativePath,url,sha256:sha256(bytes)});}
     const manifest=JSON.parse(await readFile(path.join(this.checkoutRoot,"config/publication-release.json"),"utf8")),artifactText=await readFile(path.join(this.checkoutRoot,"config",manifest.artifact?.relativePath??""),"utf8");
-    if(manifest.releaseId!==releaseId||manifest.artifact?.candidateId!==candidateId||manifest.artifact?.artifactId!==artifactId||manifest.artifact?.certificationId!==certificationId||manifest.artifact?.bindingDigest!==bindingDigest||manifest.rollback?.previousReleaseId!==predecessorReleaseId||staticPublicationArtifactDigest(artifactText)!==artifactDigest)throw new Error("PUBLICATION_OBSERVATION_RELEASE_BINDING_INVALID");
+    if(!validatePublishedReleaseBinding({manifest,artifactText,expected:{releaseId,candidateId,artifactId,certificationId,bindingDigest,predecessorReleaseId,releaseArtifactDigest}}).valid)throw new Error("PUBLICATION_OBSERVATION_RELEASE_BINDING_INVALID");
     return freeze({localCommit,remoteCommit,parentCommit,releaseId:manifest.releaseId,candidateId:manifest.artifact.candidateId,publicArtifacts});
   }
 }

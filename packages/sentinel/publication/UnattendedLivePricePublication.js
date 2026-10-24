@@ -6,6 +6,18 @@ import { FileSingleWriterRunLock, SINGLE_WRITER_LOCK_STATUSES } from "../../merc
 const POLICY = "UNATTENDED-LIVE-PRICE-PUBLICATION-P1-1.0", clone = value => structuredClone(value), freeze = value => Object.freeze(clone(value)), sha = value => createHash("sha256").update(typeof value === "string" ? value : JSON.stringify(value)).digest("hex");
 const jamaicaDay = value => new Intl.DateTimeFormat("en-CA", { timeZone:"America/Jamaica", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date(value));
 
+export function selectObservationInnerAuthorization({authorizations=[],child,mandate}={}) {
+ const matches=authorizations.filter(value=>value?.status==="AUTHORIZED"&&value.candidateId===child?.candidateId&&value.artifactId===child?.artifactId&&value.certificationId===child?.certificationId&&value.certificationDigest===child?.certificationDigest&&value.bindingDigest===child?.bindingDigest&&value.predecessorReleaseId===child?.predecessorReleaseId&&value.freshUntil===child?.freshUntil&&value.authorizedAt===child?.authorizedAt&&value.authorizedBy===mandate?.operatorId&&value.targetEnvironment==="PRODUCTION");
+ if(matches.length!==1)throw new Error("PUBLICATION_OBSERVATION_INNER_AUTHORITY_INVALID");
+ return freeze(matches[0]);
+}
+
+export function validateObservationDeployment({deployment,commit,freshUntil}={}) {
+ if(deployment?.status!=="SUCCESS"||deployment.commit!==commit||deployment.environment!=="production"||!Number.isFinite(Date.parse(deployment.completedAt??"")))throw new Error("PUBLICATION_DEPLOYMENT_OBSERVATION_INVALID");
+ if(Date.parse(deployment.completedAt)>=Date.parse(freshUntil))throw new Error("PUBLICATION_DEPLOYMENT_AFTER_FRESHNESS_DEADLINE");
+ return freeze(deployment);
+}
+
 export function createRecurringPublicationMandate(input={}) { const identity={operatorId:input.operatorId,validFrom:input.validFrom,expiresAt:input.expiresAt,maximumAcceptedReleasesPerLocalDay:1,environment:"PRODUCTION"},mandate={schemaVersion:"1.0",policyVersion:POLICY,mandateId:`pubmandate_${sha(identity).slice(0,24)}`,revision:1,status:"ENABLED",...identity,automaticRetries:0,automaticRollback:false,sourceCodeChanges:false,createdAt:input.createdAt};if(!/^operator:.+/.test(mandate.operatorId??""))throw new Error("PUBLICATION_MANDATE_OPERATOR_INVALID");if(![mandate.validFrom,mandate.expiresAt,mandate.createdAt].every(value=>Number.isFinite(Date.parse(value??"")))||Date.parse(mandate.expiresAt)<=Date.parse(mandate.validFrom)||Date.parse(mandate.expiresAt)-Date.parse(mandate.validFrom)>30*24*60*60*1000)throw new Error("PUBLICATION_MANDATE_WINDOW_INVALID");return freeze({...mandate,mandateDigest:sha(mandate)}); }
 
 export class FileRecurringPublicationAuthorityRepository {
@@ -33,23 +45,22 @@ export class UnattendedLivePricePublicationCoordinator {
   if(operation.status==="LIVE_ACCEPTED")return freeze({...operation,replay:true,observationOnly:true});
   if(operation.status==="FAILED")throw new Error("PUBLICATION_AUTOMATIC_RETRY_PROHIBITED");
   if(operation.status!=="DEPLOYMENT_PENDING"||operation.attempts!==1)throw new Error("PUBLICATION_OBSERVATION_STATE_INVALID");
-  const child=await this.repository.getChild(operation.childAuthorizationId);if(!child||child.status!=="AUTHORIZED"||child.mandateId!==mandateId||child.candidateId!==candidateId)throw new Error("PUBLICATION_OBSERVATION_CHILD_AUTHORITY_INVALID");
+  const child=await this.repository.getChild(operation.childAuthorizationId),mandate=await this.repository.getMandate(mandateId);if(!child||child.status!=="AUTHORIZED"||child.mandateId!==mandateId||child.candidateId!==candidateId||!mandate||mandate.status!=="ENABLED"||Date.parse(child.authorizedAt)<Date.parse(mandate.validFrom)||Date.parse(child.authorizedAt)>=Date.parse(mandate.expiresAt))throw new Error("PUBLICATION_OBSERVATION_CHILD_AUTHORITY_INVALID");
   const checkpointEvents=operation.events.filter(event=>event.type==="CHECKPOINT_CREATED"),mainEvents=operation.events.filter(event=>event.type==="MAIN_UPDATED");
   if(checkpointEvents.length!==1||mainEvents.length!==1||!checkpointEvents[0].evidence?.commit||checkpointEvents[0].evidence.commit!==mainEvents[0].evidence?.commit)throw new Error("PUBLICATION_OBSERVATION_CHECKPOINT_INVALID");
   const commit=mainEvents[0].evidence.commit,candidate=await this.candidateOwner.discover();
   if(!candidate||candidate.candidateId!==child.candidateId||candidate.artifactId!==child.artifactId||candidate.certificationId!==child.certificationId||candidate.bindingDigest!==child.bindingDigest||candidate.artifactDigest!==child.artifactDigest||candidate.certificationDigest!==child.certificationDigest||candidate.sentinelStatus!=="CERTIFIED"||candidate.sourceRightsEligible!==true)throw new Error("PUBLICATION_OBSERVATION_CANDIDATE_BINDING_INVALID");
   if(!this.authorizationRepository)throw new Error("PUBLICATION_OBSERVATION_INNER_AUTHORITY_OWNER_REQUIRED");
-  const authorizations=await this.authorizationRepository.findByCandidate(candidateId),inner=authorizations.filter(value=>value.artifactId===child.artifactId&&value.certificationId===child.certificationId&&value.bindingDigest===child.bindingDigest&&value.predecessorReleaseId===child.predecessorReleaseId&&value.freshUntil===child.freshUntil);
-  if(inner.length!==1||inner[0].status!=="AUTHORIZED"||Date.parse(inner[0].authorizedAt)>=Date.parse(child.freshUntil))throw new Error("PUBLICATION_OBSERVATION_INNER_AUTHORITY_INVALID");
-  const consumption=await this.authorizationRepository.getConsumption(inner[0].authorizationId);if(!consumption)throw new Error("PUBLICATION_OBSERVATION_PREPARATION_EVIDENCE_MISSING");
-  const checkpoint=await this.gitOwner.inspectPublishedCheckpoint({commit,expectedParent:child.predecessorCommit,candidateId,artifactId:child.artifactId,artifactDigest:child.artifactDigest,certificationId:child.certificationId,bindingDigest:child.bindingDigest,predecessorReleaseId:child.predecessorReleaseId,releaseId:candidate.releaseId});
+  const authorizations=await this.authorizationRepository.findByCandidate(candidateId),inner=selectObservationInnerAuthorization({authorizations,child,mandate});
+  if(Date.parse(inner.authorizedAt)>=Date.parse(child.freshUntil))throw new Error("PUBLICATION_OBSERVATION_INNER_AUTHORITY_INVALID");
+  const [innerOperation,consumption]=await Promise.all([this.authorizationRepository.getOperation(inner.authorizationId),this.authorizationRepository.getConsumption(inner.authorizationId)]);if(innerOperation?.status!=="BUILD_INTENT_RECORDED"||!consumption)throw new Error("PUBLICATION_OBSERVATION_PREPARATION_EVIDENCE_MISSING");
+  const checkpoint=await this.gitOwner.inspectPublishedCheckpoint({commit,expectedParent:child.predecessorCommit,candidateId,artifactId:child.artifactId,releaseArtifactDigest:inner.artifactDigest,certificationId:child.certificationId,bindingDigest:child.bindingDigest,predecessorReleaseId:child.predecessorReleaseId,releaseId:candidate.releaseId});
   if(checkpoint.remoteCommit!==commit||checkpoint.localCommit!==commit||checkpoint.parentCommit!==child.predecessorCommit||checkpoint.releaseId!==candidate.releaseId||checkpoint.candidateId!==candidateId||!checkpoint.publicArtifacts?.length)throw new Error("PUBLICATION_OBSERVATION_CHECKPOINT_INVALID");
   const deployment=await this.deploymentOwner.observe({commit,candidate});
   if(deployment.status==="PENDING")throw Object.assign(new Error("PUBLICATION_DEPLOYMENT_PENDING"),{recoverable:true});
-  if(deployment.status!=="SUCCESS"||deployment.commit!==commit||deployment.environment!=="production"||!Number.isFinite(Date.parse(deployment.completedAt??"")))throw new Error("PUBLICATION_DEPLOYMENT_OBSERVATION_INVALID");
-  if(Date.parse(deployment.completedAt)>=Date.parse(child.freshUntil))throw new Error("PUBLICATION_DEPLOYMENT_AFTER_FRESHNESS_DEADLINE");
+  validateObservationDeployment({deployment,commit,freshUntil:child.freshUntil});
   const live=await this.liveVerifier.verify({commit,candidate,publicArtifacts:checkpoint.publicArtifacts});if(live.status!=="MATCH")throw new Error("PUBLICATION_LIVE_ACCEPTANCE_INVALID");
-  return this.repository.recordEvent({candidateId,type:"LIVE_ACCEPTED",status:"LIVE_ACCEPTED",evidence:{commit,releaseId:candidate.releaseId,deploymentId:deployment.deploymentId,deploymentCompletedAt:deployment.completedAt,observedAt:this.now(),observationOnly:true,innerAuthorizationId:inner[0].authorizationId,checkpointDigest:consumption.checkpointDigest},at:this.now()});
+  return this.repository.recordEvent({candidateId,type:"LIVE_ACCEPTED",status:"LIVE_ACCEPTED",evidence:{commit,releaseId:candidate.releaseId,deploymentId:deployment.deploymentId,deploymentCompletedAt:deployment.completedAt,observedAt:this.now(),observationOnly:true,innerAuthorizationId:inner.authorizationId,checkpointDigest:consumption.checkpointDigest},at:this.now()});
  }
 }
 
