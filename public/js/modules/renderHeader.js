@@ -1,4 +1,6 @@
- export function renderHeader(containerId, { basePath = "" } = {}) {
+import {initializeBeaconOutboundClickCollection} from "./beaconOutboundClick.js";
+export function renderHeader(containerId, { basePath = "" } = {}) {
+    initializeBeaconOutboundClickCollection();
     const container = document.getElementById(containerId);
 
     if (!container) return;

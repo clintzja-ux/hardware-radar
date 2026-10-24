@@ -1,4 +1,5 @@
- export function renderRecommendation(product, containerId) {
+import {beaconOutboundClickAttributes} from "./beaconOutboundClick.js";
+export function renderRecommendation(product, containerId) {
 
     const container = document.getElementById(containerId);
 
@@ -35,7 +36,7 @@
                 class="price-button"
                 href="${product.offerUrl}"
                 target="_blank"
-                rel="noopener noreferrer">
+                rel="noopener noreferrer"${beaconOutboundClickAttributes({atlasProductId:product.id,destinationId:product.destinationId,retailerId:product.retailerId,catalogCategory:product.catalogCategory,placement:"HERO"})}>
 
                 View retailer listing →
 

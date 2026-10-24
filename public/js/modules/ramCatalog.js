@@ -1,3 +1,5 @@
+import {beaconOutboundClickAttributes} from "./beaconOutboundClick.js";
+
 export const EMPTY_RAM_CATALOG_FILTERS = Object.freeze({
     query: "", brand: "", memoryType: "", capacityGb: "", formFactor: "", moduleCount: "", dataRateMtps: ""
 });
@@ -82,7 +84,7 @@ export function renderRamCatalogCard(item, currentRetailByProduct = new Map()) {
         <p class="ram-catalog-card__mpn"><span>MPN</span> <code>${escapeHtml(item.manufacturerPartNumber)}</code></p>
         ${current ? `<p class="ram-catalog-card__price"><span>Current tracked price</span><strong>$${Number(current.itemPriceUsd).toFixed(2)} USD</strong><small>${escapeHtml(current.retailerName)}</small></p>` : ""}
         <dl>${details.map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>
-        <div class="ram-catalog-card__actions">${retailerAction ? `<a class="button ram-catalog-card__retailer" href="${escapeHtml(retailerAction.destinationUrl)}" target="_blank" rel="noopener noreferrer" aria-label="View ${escapeHtml(item.displayName)} at ${escapeHtml(retailerAction.retailerName)}">View at ${escapeHtml(retailerAction.retailerName)}</a>` : ""}<div class="ram-catalog-card__secondary-actions"><a class="ram-catalog-card__link" href="${escapeHtml(item.publicPath)}">View specifications<span class="sr-only"> for ${escapeHtml(item.displayName)}</span></a><a class="ram-catalog-card__compare" href="/ram/compare/?products=${escapeHtml(item.publicSlug)}">Compare<span class="sr-only"> ${escapeHtml(item.displayName)} with another RAM product</span></a></div></div>
+        <div class="ram-catalog-card__actions">${retailerAction ? `<a class="button ram-catalog-card__retailer" href="${escapeHtml(retailerAction.destinationUrl)}" target="_blank" rel="noopener noreferrer" aria-label="View ${escapeHtml(item.displayName)} at ${escapeHtml(retailerAction.retailerName)}"${beaconOutboundClickAttributes({atlasProductId:item.atlasProductId,destinationId:retailerAction.destinationId,retailerId:retailerAction.retailerId,catalogCategory:item.formFactor==="SO_DIMM"?"SO_DIMM":item.memoryType,placement:"CATALOG_CARD"})}>View at ${escapeHtml(retailerAction.retailerName)}</a>` : ""}<div class="ram-catalog-card__secondary-actions"><a class="ram-catalog-card__link" href="${escapeHtml(item.publicPath)}">View specifications<span class="sr-only"> for ${escapeHtml(item.displayName)}</span></a><a class="ram-catalog-card__compare" href="/ram/compare/?products=${escapeHtml(item.publicSlug)}">Compare<span class="sr-only"> ${escapeHtml(item.displayName)} with another RAM product</span></a></div></div>
     </li>`;
 }
 

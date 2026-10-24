@@ -4,8 +4,10 @@ import { renderCategory, renderCategoryUnavailable } from "./modules/renderCateg
 import { renderTrust } from "./modules/renderTrust.js";
 import { renderFooter } from "./modules/renderFooter.js";
 import { renderHeader } from "./modules/renderHeader.js";
+import { initializeBeaconOutboundClickCollection } from "./modules/beaconOutboundClick.js";
 
 async function init() {
+    initializeBeaconOutboundClickCollection();
     try {
         const [snapshot, catalog] = await Promise.all([loadCurrentRetailSnapshot(), loadRamCatalog()]);
         const overall = winnerToDisplayProduct(snapshot, "overall", "overall", "Cheapest RAM Today");

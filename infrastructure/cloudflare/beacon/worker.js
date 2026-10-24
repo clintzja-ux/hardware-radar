@@ -1,0 +1,3 @@
+import {createCloudflareBeaconWorker,createTransientBeaconRateLimiter} from "../../../packages/gateway/index.js";
+const rateLimiter=createTransientBeaconRateLimiter(),metrics=Object.freeze({async increment(){},async observeLatency(){}}),worker=createCloudflareBeaconWorker({loadDestinationProjection:async({env})=>{if(!env?.BEACON_PUBLIC_DESTINATION_PROJECTION?.get)throw new Error("BEACON_PUBLIC_DESTINATION_PROJECTION_REQUIRED");const projection=await env.BEACON_PUBLIC_DESTINATION_PROJECTION.get("current",{type:"json"});if(!projection)throw new Error("BEACON_PUBLIC_DESTINATION_PROJECTION_MISSING");return projection;},rateLimiter,metrics});
+export default worker;

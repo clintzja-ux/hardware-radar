@@ -1,4 +1,5 @@
- export function renderOverall(items) {
+import {beaconOutboundClickAttributes} from "./beaconOutboundClick.js";
+export function renderOverall(items) {
     const product = items.find(item => item.section === "overall");
     const container = document.getElementById("overallSection");
 
@@ -24,7 +25,7 @@
                 <span class="retailer">${product.retailer}</span>
             </div>
 
-            <a class="price-button" href="${product.offerUrl}" target="_blank" rel="noopener noreferrer">
+            <a class="price-button" href="${product.offerUrl}" target="_blank" rel="noopener noreferrer"${beaconOutboundClickAttributes({atlasProductId:product.id,destinationId:product.destinationId,retailerId:product.retailerId,catalogCategory:"OVERALL",placement:"HERO"})}>
                 View retailer listing →
             </a>
 

@@ -7,8 +7,10 @@
  import { renderFooter } from "../renderFooter.js";
  import { renderHeader } from "../renderHeader.js";
  import { initializeRamCatalog } from "../ramCatalog.js";
+import { initializeBeaconOutboundClickCollection } from "../beaconOutboundClick.js";
  
  async function init() {
+     initializeBeaconOutboundClickCollection();
  
      const buyingAdvice = {
          title: "Should you buy the cheapest qualifying Laptop RAM?",
