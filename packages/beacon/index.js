@@ -13,3 +13,4 @@ export * from "./retention/BeaconEvidenceRetentionPolicy.js";
 export * from "./retention/BeaconEvidenceRetentionPolicyRepository.js";
 export * from "./retention/BeaconInterestRetentionAssessment.js";
 export * from "./retention/BeaconInterestRetentionPlan.js";
+export * from "./retention/BeaconInterestRetentionExecutionService.js";
