@@ -54,6 +54,11 @@ export class CertifiedRoutinePublicationCandidateOwner {
   }
 }
 
+export function createSplitRootProductionPublicationCandidateOwner({evidenceRoot,checkoutRoot,readJson}={}) {
+  if(!evidenceRoot||!checkoutRoot)throw new Error("PUBLICATION_CANDIDATE_ROOTS_REQUIRED");
+  return new CertifiedRoutinePublicationCandidateOwner({routineHealthPath:path.join(evidenceRoot,".forge-review/mercury/newegg-routine/routine-health.json"),artifactRoot:path.join(evidenceRoot,".forge-review/publication/ram-intelligence"),releaseManifestPath:path.join(checkoutRoot,"config/publication-release.json"),readJson});
+}
+
 export class GitHubAppReleaseGitOwner {
   constructor({ runner, checkoutRoot, tokenProvider, askPassPath } = {}) {
     if (!runner || !checkoutRoot || !tokenProvider?.getToken || !askPassPath) throw new Error("PUBLICATION_GIT_COMPOSITION_INCOMPLETE"); Object.assign(this, { runner, checkoutRoot, tokenProvider, askPassPath });

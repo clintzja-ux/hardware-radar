@@ -1,7 +1,7 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { FileRecurringPublicationAuthorityRepository } from "../packages/sentinel/publication/UnattendedLivePricePublication.js";
-import { CertifiedRoutinePublicationCandidateOwner, ProductionUnattendedPublicationCommand, RecurringPublicationMandateOperatorService } from "../packages/sentinel/publication/ProductionUnattendedPublicationBindings.js";
+import { createSplitRootProductionPublicationCandidateOwner, ProductionUnattendedPublicationCommand, RecurringPublicationMandateOperatorService } from "../packages/sentinel/publication/ProductionUnattendedPublicationBindings.js";
 import { createProductionUnattendedPublicationCoordinator } from "../packages/sentinel/publication/ProductionUnattendedPublicationFactory.js";
 
 const args = Object.fromEntries(process.argv.slice(2).filter(value => value.startsWith("--") && value.includes("=")).map(value => value.slice(2).split(/=(.*)/s).slice(0, 2)));
@@ -10,7 +10,7 @@ const registryConfirmationDescriptor = "<STATUS>-UNATTENDED-PUBLICATION-MANDATE"
 void registryConfirmationDescriptor;
 const repository = new FileRecurringPublicationAuthorityRepository({ statePath: path.resolve(args["mandate-state"] ?? ".forge-review/publication/unattended-live-price.json") });
 const mandateService = new RecurringPublicationMandateOperatorService({ repository });
-const candidateOwner = new CertifiedRoutinePublicationCandidateOwner({ routineHealthPath: path.join(root, ".forge-review/mercury/newegg-routine/routine-health.json"), artifactRoot: path.join(root, ".forge-review/publication/ram-intelligence"), releaseManifestPath: path.join(root, "config/publication-release.json") });
+const candidateOwner = createSplitRootProductionPublicationCandidateOwner({ evidenceRoot:root, checkoutRoot });
 
 if (mode === "CREATE") {
   const result = await mandateService.create({ operatorId: args["operator-id"], validFrom: args["valid-from"], expiresAt: args["expires-at"], confirmation: args.confirmation });
