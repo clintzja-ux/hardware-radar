@@ -1,5 +1,11 @@
 # Hardware Radar current state
 
+## Bounded unattended deployment observation continuation (uncommitted, 2026-10-23)
+
+The existing unattended publication coordinator now continues through its certified Cloudflare observation-only owner after `MAIN_UPDATED`. It polls the exact pushed commit every 15 seconds for at most 10 minutes, verifies the approved public-artifact SHA-256 inventory and the original deployment freshness deadline, and appends `LIVE_ACCEPTED` exactly once. A terminal deployment or binding failure becomes operator-review-required; an exhausted window records `OBSERVATION_TIMED_OUT` without changing the canonical `DEPLOYMENT_PENDING` status or granting retry authority.
+
+Restart recovery resolves the exact pending operation before the already-deployed-candidate no-op, reuses its original recurring child, consumed inner authorization, Git checkpoint, and artifact inventory, and performs observation only. It does not prepare, build, stage, commit, push, redeploy, reacquire, or mutate Current/History. The existing Newegg task remains the sole scheduler and the post-success production trigger remains disabled pending checkpoint and separate activation approval. The accepted October 23 production operation is not modified by this implementation or its disposable tests.
+
 ## Unattended publication promotion/PREPARE contract correction (uncommitted, 2026-10-21)
 
 The first unattended publication attempt for `mer_ramreleasecand_78a354c2c32c7cdf27877472` proved a sequencing defect rather than operator checkout contamination. The outer publication owner verified a clean production checkout at predecessor `2d3946c83da7a9e2547376c5d7ea6ea5a461230f`, then the certified-candidate promotion owner atomically wrote the authorized release manifest and candidate-specific artifact. The inner governed PREPARE owner rejected those two expected paths before recording build intent, so no build, verification, checkpoint, Git push, or Cloudflare deployment occurred. The production operation remains terminally `FAILED`; its child and inner authorization remain historical evidence and are not retried or replaced by this correction.

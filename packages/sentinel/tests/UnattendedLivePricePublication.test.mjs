@@ -18,6 +18,7 @@ const candidate = {
   candidateId: "candidate-1", artifactId: "artifact-1", certificationId: "cert-1",
   bindingDigest: "a".repeat(64), artifactDigest:"b".repeat(64), certificationDigest:"c".repeat(64), releaseId: "release-1",
   freshUntil: "2026-10-18T03:15:08.000Z", sentinelStatus: "CERTIFIED", sourceRightsEligible: true,
+  predecessorReleaseId: "release-0",
 };
 
 const createRepository = async name => {
@@ -32,6 +33,22 @@ const createRepository = async name => {
 
 const createCoordinator = ({ repository, candidateValue = candidate, overrides = {} }) => {
   let pushes = 0, preparations = 0;
+  const releaseArtifactDigest = "9".repeat(64);
+  const authorizationRepository = {
+    findByCandidate: async () => {
+      const mandate = (await repository.inspect()).mandates[0];
+      return [{
+        authorizationId: "pubauto_fixture", status: "AUTHORIZED",
+        candidateId: candidateValue.candidateId, artifactId: candidateValue.artifactId,
+        artifactDigest: releaseArtifactDigest, certificationId: candidateValue.certificationId,
+        certificationDigest: candidateValue.certificationDigest, bindingDigest: candidateValue.bindingDigest,
+        predecessorReleaseId: candidateValue.predecessorReleaseId, freshUntil: candidateValue.freshUntil,
+        authorizedAt: at, authorizedBy: mandate.operatorId, targetEnvironment: "PRODUCTION",
+      }];
+    },
+    getConsumption: async () => ({ authorizationId: "pubauto_fixture", checkpointDigest: "d".repeat(64) }),
+    getOperation: async () => ({ authorizationId: "pubauto_fixture", status: "BUILD_INTENT_RECORDED" }),
+  };
   const coordinator = new UnattendedLivePricePublicationCoordinator({
     repository,
     candidateOwner: { discover: async () => candidateValue },
@@ -40,9 +57,11 @@ const createCoordinator = ({ repository, candidateValue = candidate, overrides =
       inspectBase: async () => ({ clean: true, localCommit: "base", remoteCommit: "base" }),
       checkpoint: async () => ({ commit: "release", parentCommit: "base", unrelatedPaths: [] }),
       fastForwardMain: async () => { pushes += 1; return { commit: "release" }; },
+      inspectPublishedCheckpoint: async () => ({ localCommit: "release", remoteCommit: "release", parentCommit: "base", candidateId: candidateValue.candidateId, releaseId: candidateValue.releaseId, publicArtifacts: [{ url: "https://example.test/", sha256: "e".repeat(64) }] }),
     },
-    deploymentOwner: { observe: async () => ({ status: "SUCCESS" }) },
+    deploymentOwner: { observe: async () => ({ status: "SUCCESS", commit: "release", environment: "production", completedAt: "2026-10-18T03:00:00Z" }) },
     liveVerifier: { verify: async () => ({ status: "MATCH" }) },
+    authorizationRepository,
     now: () => at,
     ...overrides,
   });
@@ -82,12 +101,21 @@ try {
   await assert.rejects(() => transitions.repository.authorizeChild({ mandateId: transitions.mandate.mandateId, candidate, predecessorCommit: "base", at }), /REVOKED/);
 
   const pending = await createRepository("pending");
-  let deploymentStatus = "PENDING";
-  const pendingRun = createCoordinator({ repository: pending.repository, candidateValue: { ...candidate, candidateId: "pending" }, overrides: { deploymentOwner: { observe: async () => ({ status: deploymentStatus }) } } });
-  await assert.rejects(() => pendingRun.coordinator.run({ mandateId: pending.mandate.mandateId }), /PENDING/);
-  deploymentStatus = "SUCCESS";
+  let deploymentObservations = 0, clock = Date.parse(at);
+  const pendingRun = createCoordinator({ repository: pending.repository, candidateValue: { ...candidate, candidateId: "pending" }, overrides: {
+    deploymentOwner: { observe: async () => (++deploymentObservations < 3 ? { status: "PENDING" } : { status: "SUCCESS", commit: "release", environment: "production", completedAt: "2026-10-18T03:00:00Z" }) },
+    now: () => new Date(clock).toISOString(), wait: async milliseconds => { clock += milliseconds; }, observationIntervalMs: 15_000, observationMaxElapsedMs: 60_000,
+  } });
   assert.equal((await pendingRun.coordinator.run({ mandateId: pending.mandate.mandateId })).status, "LIVE_ACCEPTED");
+  assert.equal(deploymentObservations, 3);
   assert.equal(pendingRun.counts().preparations, 1);
+  assert.equal(pendingRun.counts().pushes, 1);
+  const pendingState=await pending.repository.getOperation("pending");assert.equal(pendingState.events.filter(event=>event.type==="DEPLOYMENT_OBSERVATION_PENDING").length,2);assert.equal(pendingState.events.filter(event=>event.type==="LIVE_ACCEPTED").length,1);
+
+  const timedOut = await createRepository("timed-out"), timedCandidate={...candidate,candidateId:"timed-out"};let timeoutClock=Date.parse(at),timeoutObservations=0;
+  const timeoutRun=createCoordinator({repository:timedOut.repository,candidateValue:timedCandidate,overrides:{deploymentOwner:{observe:async()=>{timeoutObservations++;return{status:"PENDING"};}},now:()=>new Date(timeoutClock).toISOString(),wait:async milliseconds=>{timeoutClock+=milliseconds;},observationIntervalMs:15_000,observationMaxElapsedMs:30_000}});
+  const timeoutResult=await timeoutRun.coordinator.run({mandateId:timedOut.mandate.mandateId});assert.equal(timeoutResult.status,"DEPLOYMENT_PENDING");assert.equal(timeoutResult.observationStatus,"OBSERVATION_TIMED_OUT");assert.equal(timeoutObservations,3);assert.equal(timeoutRun.counts().preparations,1);assert.equal(timeoutRun.counts().pushes,1);
+  const timeoutHealth=projectUnattendedPublicationHealth({mandate:timedOut.mandate,operation:timeoutResult,asOf:new Date(timeoutClock).toISOString()});assert.equal(timeoutHealth.observationStatus,"OBSERVATION_TIMED_OUT");assert.equal(timeoutHealth.observationAttemptCount,3);assert.equal(timeoutHealth.nextAction,"OBSERVE_DEPLOYMENT");
 
   const daily = await createRepository("daily");
   await createCoordinator({ repository: daily.repository }).coordinator.run({ mandateId: daily.mandate.mandateId });
@@ -98,7 +126,7 @@ try {
 
   const interrupted = await createRepository("interrupted"), interruptedCandidate={...candidate,candidateId:"interrupted"}, interruptedPaths=[`config/artifacts/${"interrupted"}.json`,"config/publication-release.json"].sort(), interruptedChild=await interrupted.repository.authorizeChild({mandateId:interrupted.mandate.mandateId,candidate:interruptedCandidate,predecessorCommit:"base",at});
   await interrupted.repository.recordEvent({candidateId:interruptedCandidate.candidateId,type:"PREPARE_STARTED",status:"PREPARING",evidence:{originalCleanCheckout:{clean:true,localCommit:"base",remoteCommit:"base",verifiedAt:at},promotionPaths:interruptedPaths},at});
-  const interruptedRun=createCoordinator({repository:interrupted.repository,candidateValue:interruptedCandidate,overrides:{gitOwner:{inspectBase:async()=>({clean:false,changedPaths:[interruptedPaths[0]],localCommit:"base",remoteCommit:"base"}),checkpoint:async()=>({commit:"release",parentCommit:"base",unrelatedPaths:[]}),fastForwardMain:async()=>({commit:"release"})}}});
+  const interruptedRun=createCoordinator({repository:interrupted.repository,candidateValue:interruptedCandidate,overrides:{gitOwner:{inspectBase:async()=>({clean:false,changedPaths:[interruptedPaths[0]],localCommit:"base",remoteCommit:"base"}),checkpoint:async()=>({commit:"release",parentCommit:"base",unrelatedPaths:[]}),fastForwardMain:async()=>({commit:"release"}),inspectPublishedCheckpoint:async()=>({localCommit:"release",remoteCommit:"release",parentCommit:"base",candidateId:interruptedCandidate.candidateId,releaseId:interruptedCandidate.releaseId,publicArtifacts:[{url:"https://example.test/",sha256:"e".repeat(64)}]})}}});
   const recovered=await interruptedRun.coordinator.run({mandateId:interrupted.mandate.mandateId});assert.equal(recovered.status,"LIVE_ACCEPTED");assert.equal(interruptedRun.counts().preparations,1);assert.equal((await interrupted.repository.getOperation(interruptedCandidate.candidateId)).attempts,1);assert.equal(interruptedChild.childAuthorizationId,(await interrupted.repository.getOperation(interruptedCandidate.candidateId)).childAuthorizationId);
 
   const unrelated = await createRepository("unrelated");
@@ -110,7 +138,7 @@ try {
 
   const deploymentFailure = await createRepository("deployment-failure");
   const failedRun = createCoordinator({ repository: deploymentFailure.repository, overrides: { deploymentOwner: { observe: async () => ({ status: "FAILED" }) } } });
-  await assert.rejects(() => failedRun.coordinator.run({ mandateId: deploymentFailure.mandate.mandateId }), /DEPLOYMENT_FAILED/);
+  await assert.rejects(() => failedRun.coordinator.run({ mandateId: deploymentFailure.mandate.mandateId }), /DEPLOYMENT_OBSERVATION_INVALID/);
   await assert.rejects(() => failedRun.coordinator.run({ mandateId: deploymentFailure.mandate.mandateId }), /AUTOMATIC_RETRY_PROHIBITED/);
 
   const liveMismatch = await createRepository("live-mismatch");
