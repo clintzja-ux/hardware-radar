@@ -53,8 +53,18 @@ export function sortRamCatalogProductsByCurrentPrice(products, currentRetailByPr
     });
 }
 
-function card(item, currentRetailByProduct = new Map()) {
+export function qualifyingCatalogRetailerAction(offer) {
+    if (!offer || offer.freshness !== "PUBLIC_CURRENT" || offer.comparisonEligible !== true || !Number.isFinite(offer.itemPriceUsd) || typeof offer.retailerName !== "string" || !offer.retailerName.trim() || typeof offer.destinationUrl !== "string") return null;
+    try {
+        const destination = new URL(offer.destinationUrl);
+        if (destination.protocol !== "https:" || destination.username || destination.password) return null;
+    } catch { return null; }
+    return offer;
+}
+
+export function renderRamCatalogCard(item, currentRetailByProduct = new Map()) {
     const current = representativeCatalogPrice(currentRetailByProduct.get(item.atlasProductId));
+    const retailerAction = qualifyingCatalogRetailerAction(current);
     const details = [
         ["Memory", `${item.memoryType} · ${displayFormFactor(item.formFactor)}`],
         ["Capacity", `${item.capacityGb}GB (${item.moduleCount} × ${item.capacityPerModuleGb}GB)`],
@@ -72,7 +82,7 @@ function card(item, currentRetailByProduct = new Map()) {
         <p class="ram-catalog-card__mpn"><span>MPN</span> <code>${escapeHtml(item.manufacturerPartNumber)}</code></p>
         ${current ? `<p class="ram-catalog-card__price"><span>Current tracked price</span><strong>$${Number(current.itemPriceUsd).toFixed(2)} USD</strong><small>${escapeHtml(current.retailerName)}</small></p>` : ""}
         <dl>${details.map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl>
-        <div class="ram-catalog-card__actions"><a class="ram-catalog-card__link" href="${escapeHtml(item.publicPath)}">View specifications<span class="sr-only"> for ${escapeHtml(item.displayName)}</span></a><a class="ram-catalog-card__compare" href="/ram/compare/?products=${escapeHtml(item.publicSlug)}">Compare<span class="sr-only"> ${escapeHtml(item.displayName)} with another RAM product</span></a></div>
+        <div class="ram-catalog-card__actions">${retailerAction ? `<a class="button ram-catalog-card__retailer" href="${escapeHtml(retailerAction.destinationUrl)}" target="_blank" rel="noopener noreferrer" aria-label="View ${escapeHtml(item.displayName)} at ${escapeHtml(retailerAction.retailerName)}">View at ${escapeHtml(retailerAction.retailerName)}</a>` : ""}<div class="ram-catalog-card__secondary-actions"><a class="ram-catalog-card__link" href="${escapeHtml(item.publicPath)}">View specifications<span class="sr-only"> for ${escapeHtml(item.displayName)}</span></a><a class="ram-catalog-card__compare" href="/ram/compare/?products=${escapeHtml(item.publicSlug)}">Compare<span class="sr-only"> ${escapeHtml(item.displayName)} with another RAM product</span></a></div></div>
     </li>`;
 }
 
@@ -101,7 +111,7 @@ export async function initializeRamCatalog({ fetchCatalog = () => fetch("/data/r
             const matches = filterRamCatalogProducts(catalog.products, values(form, fixedFilters));
             const ordered = priceFirst ? sortRamCatalogProductsByCurrentPrice(matches, currentRetailByProduct) : matches;
             status.textContent = `${matches.length} RAM product${matches.length === 1 ? "" : "s"} shown.`;
-            results.innerHTML = ordered.length ? ordered.map(item => card(item, currentRetailByProduct)).join("") : `<li class="ram-catalog-empty"><h2>No RAM products match these filters.</h2><p>Clear the search and filters to browse the complete catalog.</p></li>`;
+            results.innerHTML = ordered.length ? ordered.map(item => renderRamCatalogCard(item, currentRetailByProduct)).join("") : `<li class="ram-catalog-empty"><h2>No RAM products match these filters.</h2><p>Clear the search and filters to browse the complete catalog.</p></li>`;
         };
         form.addEventListener("input", render);
         form.addEventListener("change", render);
