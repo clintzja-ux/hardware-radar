@@ -60,6 +60,39 @@ assert.equal(Object.hasOwn(releasedTimetec, "productFamily"), false, "Undefined 
 
 const browserModule = await import(pathToFileURL(path.join(root, "public/js/modules/ramCatalog.js")));
 const filter = (values) => browserModule.filterRamCatalogProducts(catalog.products, values);
+const cardProduct = catalog.products[0];
+const governedOffer = { itemPriceUsd: 129.99, retailerName: "Newegg", retailerId: "RETAILER-0004", destinationId: "mer_dest_fixture", destinationUrl: "https://click.linksynergy.com/deeplink?id=fixture&mid=44583&murl=https%3A%2F%2Fwww.newegg.com%2Fp%2FN82E16800000000", freshness: "PUBLIC_CURRENT", comparisonEligible: true };
+const renderCard = current => browserModule.renderRamCatalogCard(cardProduct, new Map([[cardProduct.atlasProductId, current]]));
+const affiliateCard = renderCard({ lowerCurrentItemPrice: governedOffer, eligibleOfferCount: 2, offers: [governedOffer, { ...governedOffer, retailerName: "Amazon", destinationUrl: "https://www.amazon.com/dp/B000000000", itemPriceUsd: 139.99 }] });
+assert.match(affiliateCard, /\$129\.99 USD[\s\S]*?<small>Newegg<\/small>/, "The action must use the exact offer whose price is displayed.");
+assert.match(affiliateCard, /View at Newegg/);
+assert.match(affiliateCard, /href="https:\/\/click\.linksynergy\.com\/deeplink\?id=fixture&amp;mid=44583&amp;murl=/, "The effective governed affiliate destination must be preserved exactly, not reconstructed.");
+assert.match(affiliateCard, /target="_blank" rel="noopener noreferrer"/);
+assert.match(affiliateCard, /aria-label="View [^"]+ at Newegg"/);
+const ordinaryCard = renderCard({ lowerCurrentItemPrice: null, eligibleOfferCount: 1, offers: [{ ...governedOffer, retailerName: "Amazon", destinationUrl: "https://www.amazon.com/dp/B000000000" }] });
+assert.match(ordinaryCard, /View at Amazon/);
+assert.match(ordinaryCard, /href="https:\/\/www\.amazon\.com\/dp\/B000000000"/);
+for (const [label, product] of [
+    ["DDR4", catalog.products.find(item => item.memoryType === "DDR4" && item.formFactor === "DIMM")],
+    ["DDR5", catalog.products.find(item => item.memoryType === "DDR5" && item.formFactor === "DIMM")],
+    ["SO-DIMM", catalog.products.find(item => item.formFactor === "SO_DIMM")]
+]) {
+    assert.ok(product, `${label} catalog fixture is required.`);
+    const rendered = browserModule.renderRamCatalogCard(product, new Map([[product.atlasProductId, { lowerCurrentItemPrice: governedOffer, eligibleOfferCount: 1, offers: [governedOffer] }]]));
+    assert.match(rendered, /View at Newegg/, `${label} cards must use the shared retailer action.`);
+}
+for (const offer of [
+    { ...governedOffer, destinationUrl: null },
+    { ...governedOffer, destinationUrl: "http://www.newegg.com/p/N82E16800000000" },
+    { ...governedOffer, freshness: "STALE" },
+    { ...governedOffer, comparisonEligible: false }
+]) {
+    const rendered = renderCard({ lowerCurrentItemPrice: offer, eligibleOfferCount: 1, offers: [offer] });
+    assert.doesNotMatch(rendered, /ram-catalog-card__retailer/, "An ineligible or destination-less offer must not create a retailer action.");
+    assert.match(rendered, /View specifications/);
+    assert.match(rendered, />Compare</);
+}
+assert.doesNotMatch(renderCard(null), /ram-catalog-card__retailer/, "Cards without Current evidence must not expose a retailer action.");
 assert.equal(filter({ query: "CMK32GX5M2B6000Z30" }).length, 1);
 for (const mpn of ["KF560C30BBEA-8", "KF560C36BBEA-8", "CMK16GX5M2B5200Z40", "F5-6000J3636F16GX1-RS5K"]) {
     assert.equal(filter({ query: mpn }).length, 1, `${mpn} must resolve through exact-MPN catalog search.`);
@@ -105,6 +138,8 @@ assert.match(script, /Current tracked price/);
 assert.match(html, /Prices shown exclude applicable shipping, taxes, and fees\./);
 assert.match(styles, /@media\(max-width:600px\)[^}]*\.catalog-breadcrumbs/s);
 assert.match(styles, /\.ram-catalog-filter-grid,.ram-catalog-grid\{grid-template-columns:1fr\}/);
+assert.match(styles, /\.ram-catalog-card__retailer\{min-height:44px/);
+assert.match(styles, /@media\(max-width:600px\)[^\n]*\.ram-catalog-card__retailer\{width:100%\}/);
 assert.match(sitemap, /<loc>https:\/\/cheapestram\.com\/ram\/<\/loc>[\s\S]*?<lastmod>2026-09-02<\/lastmod>/);
 assert.equal((header.match(/<a href=/g) ?? []).length, 5, "Primary navigation must remain five items.");
 assert.match(header, /ram\/">RAM Catalog/);
