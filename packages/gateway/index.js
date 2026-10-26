@@ -6,6 +6,7 @@ export * from "./TransactionalFirstPartyProductInterestCollectionRepository.js";
 export * from "./CloudflareD1FirstPartyProductInterestStore.js";
 export * from "./CloudflareBeaconWorker.js";
 export * from "./ReleaseBoundDestinationProjectionDelivery.js";
+export * from "./DurableReleaseBoundProjectionPointerCoordinator.js";
 export * from "./CloudflareBeaconDeploymentPlan.js";
 export * from "./BeaconGatewayAbuseControlPolicy.js";
 export * from "./BeaconGatewayAbuseControlPolicyRepository.js";
