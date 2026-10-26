@@ -1,13 +1,33 @@
 import { createCurrentOfferProjection } from "./CurrentOfferModel.js";
 
-export const DATAFORSEO_AMAZON_SELLERS_CURRENT_OFFER_ADAPTER_VERSION = "DATAFORSEO-AMAZON-SELLERS-MULTI-SELLER-ADAPTER-P1-1.0";
+export const DATAFORSEO_AMAZON_SELLERS_CURRENT_OFFER_ADAPTER_VERSION = "DATAFORSEO-AMAZON-SELLERS-MULTI-SELLER-ADAPTER-P1-1.1";
 export const DATAFORSEO_AMAZON_SELLERS_OFFER_PRESENCE_POLICY_VERSION = "DATAFORSEO-AMAZON-SELLERS-OFFER-PRESENCE-P1-1.0";
+export const DATAFORSEO_AMAZON_SELLERS_FRESHNESS_POLICY = Object.freeze({ policyVersion: "DATAFORSEO-AMAZON-SELLERS-CURRENT-FRESHNESS-P1-1.0", maximumAgeHours: 24 });
+export const DATAFORSEO_AMAZON_SELLERS_OFFER_ACTION_POLICY_VERSION = "DATAFORSEO-AMAZON-SELLERS-OFFER-ACTION-P1-1.0";
 export const AMAZON_COMMERCE_CHANNEL = Object.freeze({ retailer: "AMAZON", retailerId: "RETAILER-0001", marketplace: "amazon.com" });
 
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const text = value => typeof value === "string" && value.trim() ? value.trim() : null;
 const validTime = value => text(value) !== null && Number.isFinite(Date.parse(value));
 const exactAsin = value => typeof value === "string" && /^[A-Z0-9]{10}$/.test(value) ? value : null;
+
+export function assessDataForSeoAmazonSellersFreshness({ observedAt, evaluatedAt, maximumAgeHours = DATAFORSEO_AMAZON_SELLERS_FRESHNESS_POLICY.maximumAgeHours } = {}) {
+  if (!validTime(observedAt) || !validTime(evaluatedAt) || !Number.isFinite(maximumAgeHours) || maximumAgeHours <= 0) throw new TypeError("AMAZON_SELLERS_FRESHNESS_INPUT_INVALID");
+  const ageMilliseconds = Date.parse(evaluatedAt) - Date.parse(observedAt);
+  const maximumAgeMilliseconds = maximumAgeHours * 60 * 60 * 1000;
+  const state = ageMilliseconds < 0 ? "INVALID_FUTURE_OBSERVATION" : ageMilliseconds <= maximumAgeMilliseconds ? "FRESH" : "STALE";
+  return freeze({
+    policyVersion: DATAFORSEO_AMAZON_SELLERS_FRESHNESS_POLICY.policyVersion,
+    observedAt,
+    evaluatedAt,
+    maximumAgeHours,
+    ageHours: Number((ageMilliseconds / 3_600_000).toFixed(6)),
+    expiresAt: new Date(Date.parse(observedAt) + maximumAgeMilliseconds).toISOString(),
+    state,
+    historicalRetentionIndependent: true,
+    automaticExtension: false
+  });
+}
 
 function normalizeCondition(value) {
   const condition = text(value)?.toUpperCase() ?? null;
@@ -36,6 +56,42 @@ function sellerProfile(value) {
 function classifySeller(name) {
   if (!name) return "UNKNOWN";
   return name === "Amazon.com" ? "KNOWN_FIRST_PARTY_AMAZON" : "KNOWN_THIRD_PARTY";
+}
+
+function exactSellerOfferUrl(value, asin, sellerId) {
+  if (!text(value) || !asin || !sellerId) return false;
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase().replace(/^www\./, "");
+    if (url.protocol !== "https:" || host !== "amazon.com") return false;
+    const escapedAsin = asin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const pathBound = new RegExp(`^/(?:gp/product|gp/offer-listing)/${escapedAsin}(?:/|$)`, "i").test(url.pathname);
+    return pathBound && (url.searchParams.get("smid") === sellerId || url.searchParams.get("seller") === sellerId);
+  } catch { return false; }
+}
+
+export function assessDataForSeoAmazonSellerOfferAction({ evidence, destination, offerActionEvidence = null } = {}) {
+  const asin = exactAsin(evidence?.providerIdentity?.asin);
+  const sellerName = text(evidence?.seller?.name);
+  const seller = sellerProfile(evidence?.seller?.url);
+  const productDestinationReady = Boolean(asin && destination?.status === "ACTIVE" && destination?.retailerId === AMAZON_COMMERCE_CHANNEL.retailerId && destination?.marketplace === AMAZON_COMMERCE_CHANNEL.marketplace && destination?.retailerListingId === asin && text(destination?.destinationUrl));
+  const action = offerActionEvidence;
+  const exact = Boolean(
+    productDestinationReady &&
+    action?.actionType === "EXACT_SELLER_OFFER" &&
+    action?.destinationId === destination.destinationId &&
+    action?.atlasProductId === evidence?.atlasProductId &&
+    action?.retailerId === AMAZON_COMMERCE_CHANNEL.retailerId &&
+    action?.marketplace === AMAZON_COMMERCE_CHANNEL.marketplace &&
+    action?.asin === asin &&
+    text(action?.sellerName) === sellerName &&
+    text(action?.sourceLocalSellerId) === seller.sourceLocalSellerId &&
+    text(action?.destinationUrl) === destination.destinationUrl &&
+    exactSellerOfferUrl(action?.destinationUrl, asin, seller.sourceLocalSellerId) &&
+    text(action?.evidenceReference)
+  );
+  const semantics = exact ? "EXACT_SELLER_OFFER_DESTINATION" : seller.classification === "SELLER_PROFILE_ONLY" ? "SELLER_PROFILE_PLUS_CHANNEL_PRODUCT_DESTINATION" : productDestinationReady ? "CHANNEL_PRODUCT_DESTINATION" : "NO_ACTIONABLE_DESTINATION";
+  return freeze({ policyVersion: DATAFORSEO_AMAZON_SELLERS_OFFER_ACTION_POLICY_VERSION, semantics, priceCorrespondingAction: exact, destinationId: destination?.destinationId ?? null, asin, sellerIdentity: seller.sourceLocalSellerId ?? sellerName, evidenceReference: exact ? action.evidenceReference.trim() : null, reasons: exact ? [] : ["EXACT_SELLER_OFFER_ACTION_NOT_ESTABLISHED"] });
 }
 
 const NEGATIVE_DELIVERY_SIGNAL = /(?:currently\s+unavailable|cannot\s+(?:ship|deliver)|can['’]?t\s+(?:ship|deliver)|delivery\s+unavailable|out[\s-]*of[\s-]*stock|temporarily\s+unavailable|back[\s-]*order|pre[\s-]*order|does\s+not\s+(?:ship|deliver)|won['’]?t\s+(?:ship|deliver))/i;
@@ -84,7 +140,7 @@ function validateLineage({ record, canonicalResult, destination }) {
   return { evidence, asin };
 }
 
-export function composeDataForSeoAmazonSellerOffer({ record, canonicalResult, destination, freshness = "UNASSESSED", rightsAllowed = true } = {}) {
+export function composeDataForSeoAmazonSellerOffer({ record, canonicalResult, destination, offerActionEvidence = null, evaluatedAt = null, freshness = null, rightsAllowed = true } = {}) {
   const { evidence, asin } = validateLineage({ record, canonicalResult, destination });
   const sellerName = text(evidence.seller?.name);
   const profile = sellerProfile(evidence.seller?.url);
@@ -93,6 +149,19 @@ export function composeDataForSeoAmazonSellerOffer({ record, canonicalResult, de
   const currency = text(evidence.pricing?.currency);
   const offerPresence = assessDataForSeoAmazonSellerOfferPresence({ delivery: evidence.offer?.delivery, price, currency, observedAt: evidence.provenance.observedAt });
   const availabilityState = offerPresence.state === "EVIDENCED" ? "CONTRACTUALLY_DERIVABLE" : offerPresence.state === "NEGATIVELY_EVIDENCED" ? "NEGATIVE" : offerPresence.state === "AMBIGUOUS" ? "AMBIGUOUS" : "ABSENT";
+  const freshnessAssessment = evaluatedAt === null ? freeze({ policyVersion: DATAFORSEO_AMAZON_SELLERS_FRESHNESS_POLICY.policyVersion, state: freshness ?? "UNASSESSED", maximumAgeHours: DATAFORSEO_AMAZON_SELLERS_FRESHNESS_POLICY.maximumAgeHours, observedAt: evidence.provenance.observedAt, evaluatedAt: null, expiresAt: null, ageHours: null, historicalRetentionIndependent: true, automaticExtension: false }) : assessDataForSeoAmazonSellersFreshness({ observedAt: evidence.provenance.observedAt, evaluatedAt });
+  const actionAssessment = assessDataForSeoAmazonSellerOfferAction({ evidence, destination, offerActionEvidence });
+  const blockers = [];
+  if (!sellerName) blockers.push("SELLER_IDENTITY_UNRESOLVED");
+  if (condition === "UNKNOWN") blockers.push("CONDITION_UNRESOLVED");
+  if (condition !== "NEW") blockers.push("CONDITION_NOT_NEW");
+  if (price === null || currency === null) blockers.push("PRICE_NOT_ESTABLISHED");
+  if (currency !== "USD") blockers.push("CURRENCY_NOT_USD");
+  if (availabilityState !== "EXPLICIT" && availabilityState !== "CONTRACTUALLY_DERIVABLE") blockers.push("AVAILABILITY_NOT_ESTABLISHED");
+  if (!actionAssessment.priceCorrespondingAction) blockers.push(...actionAssessment.reasons);
+  if (freshnessAssessment.state !== "FRESH") blockers.push(freshnessAssessment.state === "STALE" ? "STALE" : freshnessAssessment.state === "INVALID_FUTURE_OBSERVATION" ? "OBSERVATION_TIME_INVALID" : "FRESHNESS_POLICY_NOT_ESTABLISHED");
+  if (!rightsAllowed) blockers.push("RIGHTS_BLOCKED");
+  const qualified = blockers.length === 0;
   const offer = createCurrentOfferProjection({
     offer: {
       atlasProductId: evidence.atlasProductId,
@@ -110,24 +179,18 @@ export function composeDataForSeoAmazonSellerOffer({ record, canonicalResult, de
       observedAt: evidence.provenance.observedAt,
       sellerName,
       sourceIdentity: { adapterId: DATAFORSEO_AMAZON_SELLERS_CURRENT_OFFER_ADAPTER_VERSION, sourceId: "DATAFORSEO_AMAZON", canonicalResultId: canonicalResult.canonicalResultId, evidenceId: record.evidenceId },
-      comparisonEligible: false,
-      comparisonReasons: ["MARKETPLACE_CURRENT_NOT_QUALIFIED"],
-      itemPriceEligible: false,
+      expiresAt: freshnessAssessment.expiresAt,
+      comparisonEligible: qualified,
+      comparisonReasons: qualified ? [] : [...new Set(blockers)],
+      itemPriceEligible: qualified,
       deliveredCostEligible: false,
-      deliveredCostReasons: ["MARKETPLACE_CURRENT_NOT_QUALIFIED"]
+      deliveredCostReasons: offerPresence.priceReady && Number.isFinite(evidence.pricing?.shippingPrice) ? ["FEES_UNKNOWN"] : ["SHIPPING_COST_UNKNOWN", "FEES_UNKNOWN"]
     },
     listingIdentity: `ASIN:${asin}`,
     sourceLocalSellerId: profile.sourceLocalSellerId,
-    sellerProfileUrl: profile.normalizedUrl
+    sellerProfileUrl: profile.normalizedUrl,
+    offerSpecificDestination: actionAssessment.priceCorrespondingAction ? destination.destinationUrl : null
   });
-  const blockers = [];
-  if (!sellerName) blockers.push("SELLER_IDENTITY_UNRESOLVED");
-  if (condition === "UNKNOWN") blockers.push("CONDITION_UNRESOLVED");
-  if (price === null || currency === null) blockers.push("PRICE_NOT_ESTABLISHED");
-  if (availabilityState !== "EXPLICIT" && availabilityState !== "CONTRACTUALLY_DERIVABLE") blockers.push("AVAILABILITY_NOT_ESTABLISHED");
-  blockers.push("OFFER_ACTION_NOT_ESTABLISHED");
-  if (freshness !== "FRESH") blockers.push(freshness === "STALE" ? "STALE" : "FRESHNESS_POLICY_NOT_ESTABLISHED");
-  if (!rightsAllowed) blockers.push("RIGHTS_BLOCKED");
   return freeze({
     schemaVersion: "1.0",
     policyVersion: DATAFORSEO_AMAZON_SELLERS_CURRENT_OFFER_ADAPTER_VERSION,
@@ -138,11 +201,13 @@ export function composeDataForSeoAmazonSellerOffer({ record, canonicalResult, de
     offerPresence,
     availabilityState,
     shippingState: offer.shippingUsd === null ? "UNKNOWN" : "EXPLICIT",
-    destinationSemantics: "CHANNEL_PRODUCT_DESTINATION",
-    priceCorrespondingAction: false,
-    freshness,
+    destinationSemantics: actionAssessment.semantics,
+    offerActionAssessment: actionAssessment,
+    priceCorrespondingAction: actionAssessment.priceCorrespondingAction,
+    freshness: freshnessAssessment.state,
+    freshnessAssessment,
     qualification: { status: blockers.length ? "BLOCKED" : "READY_FOR_CURRENT_QUALIFICATION", blockers: [...new Set(blockers)] },
-    authority: { canonicalCurrent: false, history: false, public: false, cheapest: false, picks: false, terminal: false, affiliate: false },
+    authority: { canonicalCurrent: qualified, history: false, public: qualified, cheapest: false, picks: false, terminal: false, affiliate: false },
     networkOperation: "NONE",
     paidTaskCreated: false,
     actualSpendUsd: 0

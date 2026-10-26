@@ -26,6 +26,6 @@ The evidenced rows comprise 13 Amazon.com and 186 known third-party observations
 
 ## Independent blockers and authority
 
-No DataForSEO Amazon Sellers Current freshness policy exists. Presence therefore makes no retained row fully Current-ready. Seller-specific actions remain absent; Amazon product destinations remain channel-level. This increment creates no Current or History record, public action, Cheapest/Pick/Terminal input, affiliate authority, publication, release, or deployment.
+The later `DATAFORSEO-AMAZON-SELLERS-CURRENT-FRESHNESS-P1-1.0` policy supplies a 24-hour Current window, but does not retroactively refresh retained evidence. Seller-specific actions remain absent; Amazon product destinations remain channel-level. Presence therefore still makes no retained row fully Current-ready. This increment creates no Current or History record, public action, Cheapest/Pick/Terminal input, affiliate authority, publication, release, or deployment.
 
 Amazon Products, manual observations, Rakuten, Google Shopping, and Amazon affiliate behavior are outside this policy.
