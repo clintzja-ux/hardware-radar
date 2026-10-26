@@ -31,6 +31,7 @@ const orderOffers = (left, right) => left.itemPriceUsd - right.itemPriceUsd
 
 function publicOffer({ offer, product, retailer, destination, asOf }) {
     const ageHours = (Date.parse(asOf) - Date.parse(offer.observedAt)) / HOUR_MS;
+    const freshnessMaximumAgeHours = offer?.sourceIdentity?.sourceId === "AMAZON_MANUAL_PUBLISHER_OBSERVATION" ? 24 : PUBLIC_CURRENT_RETAIL_POLICY.maxAgeHours;
     return {
         atlasProductId: product.identity.atlasProductId,
         brand: product.identity.brand,
@@ -48,11 +49,14 @@ function publicOffer({ offer, product, retailer, destination, asOf }) {
         retailerName: retailer.name,
         destinationId: destination.destinationId,
         destinationUrl: destination.destinationUrl,
+        destinationSemantics: offer.destinationSemantics ?? "CHANNEL_PRODUCT_DESTINATION",
+        priceCorrespondingAction: offer.priceCorrespondingAction === true,
         itemPriceUsd: offer.priceUsd,
         currency: "USD",
         observedAt: offer.observedAt,
         ageHours: Math.round(ageHours * 1000) / 1000,
         freshness: "PUBLIC_CURRENT",
+        freshnessMaximumAgeHours,
         comparisonSemantics: "ITEM_PRICE",
         comparisonEligible: offer.comparisonEligible === true,
         shippingUsd: null,
@@ -96,8 +100,9 @@ export function createPublicCurrentRetailProjection({ products, retailers, desti
             || destination.atlasProductId !== offer.atlasProductId || destination.retailerId !== offer.retailerId
             || !validTime(offer.observedAt) || !Number.isFinite(offer.priceUsd) || offer.priceUsd <= 0 || offer.currency !== "USD") continue;
         const ageMs = Date.parse(asOf) - Date.parse(offer.observedAt);
+        const maximumAgeHours = offer?.sourceIdentity?.sourceId === "AMAZON_MANUAL_PUBLISHER_OBSERVATION" ? 24 : PUBLIC_CURRENT_RETAIL_POLICY.maxAgeHours;
         if (ageMs < 0) continue;
-        if (ageMs > PUBLIC_CURRENT_RETAIL_POLICY.maxAgeHours * HOUR_MS) { staleOffers += 1; continue; }
+        if (ageMs > maximumAgeHours * HOUR_MS) { staleOffers += 1; continue; }
         eligible.push(publicOffer({ offer, product, retailer, destination, asOf }));
     }
     eligible.sort(orderOffers);
@@ -157,8 +162,13 @@ export function validatePublicCurrentRetailProjection(projection) {
     for (const offer of allOffers) {
         if (!/^ram_[a-z0-9_]+$/.test(offer?.atlasProductId ?? "") || !/^RETAILER-\d{4}$/.test(offer?.retailerId ?? "") || !/^mer_dest_[a-f0-9]{24}$/.test(offer?.destinationId ?? "")) errors.push("PUBLIC_CURRENT_RETAIL_IDENTITY_INVALID");
         if (!Number.isFinite(offer?.itemPriceUsd) || offer.itemPriceUsd <= 0 || offer.currency !== "USD" || offer.comparisonSemantics !== "ITEM_PRICE" || typeof offer.comparisonEligible !== "boolean") errors.push("PUBLIC_CURRENT_RETAIL_PRICE_INVALID");
-        if (!validTime(offer?.observedAt) || offer?.freshness !== "PUBLIC_CURRENT" || offer?.ageHours < 0 || offer?.ageHours > 36) errors.push("PUBLIC_CURRENT_RETAIL_FRESHNESS_INVALID");
+        const offerFreshnessMaximumAgeHours = offer?.freshnessMaximumAgeHours ?? PUBLIC_CURRENT_RETAIL_POLICY.maxAgeHours;
+        if (!validTime(offer?.observedAt) || offer?.freshness !== "PUBLIC_CURRENT" || ![24, 36].includes(offerFreshnessMaximumAgeHours) || offer?.ageHours < 0 || offer?.ageHours > offerFreshnessMaximumAgeHours) errors.push("PUBLIC_CURRENT_RETAIL_FRESHNESS_INVALID");
         if (offer?.shippingUsd !== null || offer?.feesUsd !== null || offer?.taxesIncluded !== false) errors.push("PUBLIC_CURRENT_RETAIL_UNKNOWN_COST_INVALID");
+        const destinationSemantics = offer?.destinationSemantics ?? "CHANNEL_PRODUCT_DESTINATION";
+        const priceCorrespondingAction = offer?.priceCorrespondingAction ?? false;
+        if (!["CHANNEL_PRODUCT_DESTINATION", "ALL_OFFERS_DESTINATION", "EXACT_SELLER_OFFER_DESTINATION"].includes(destinationSemantics) || typeof priceCorrespondingAction !== "boolean") errors.push("PUBLIC_CURRENT_RETAIL_ACTION_SEMANTICS_INVALID");
+        if (priceCorrespondingAction && destinationSemantics !== "EXACT_SELLER_OFFER_DESTINATION") errors.push("PUBLIC_CURRENT_RETAIL_ACTION_SEMANTICS_INVALID");
         try { if (new URL(offer.destinationUrl).protocol !== "https:") throw new Error(); } catch { errors.push("PUBLIC_CURRENT_RETAIL_DESTINATION_INVALID"); }
     }
     for (const scope of SCOPES) {

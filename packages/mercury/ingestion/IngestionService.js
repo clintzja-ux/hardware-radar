@@ -12,6 +12,7 @@ function norm(v) { return String(v).trim(); }
 function amazonBlocked(request) {
   if (request.retailerId !== "RETAILER-0001") return null;
   const method = request.sourceMethod.toUpperCase();
+  if (method === "MANUAL" && request.licenseContext === "AMAZON_MANUAL_PUBLISHER_OBSERVATION") return null;
   if (["MANUAL", "IMPORT", "AUTOMATED_CHECK", "FEED"].includes(method)) return "Amazon production ingestion requires an approved Amazon acquisition mechanism.";
   if (method === "API" && request.licenseContext !== "AMAZON_CREATORS_API") return "Amazon API ingestion requires the AMAZON_CREATORS_API license context.";
   return null;
