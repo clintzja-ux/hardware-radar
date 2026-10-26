@@ -24,6 +24,7 @@ const countKeys = Object.freeze(["sourceOffers", "publicCurrentEligibleOffers", 
 const winnerKeys = Object.freeze(["overall", "ddr5", "ddr4", "laptop"]);
 const productKeys = Object.freeze(["atlasProductId", "status", "lowerCurrentItemPrice", "eligibleOfferCount", "offers"]);
 const offerKeys = Object.freeze(["atlasProductId", "brand", "family", "series", "displayName", "ddrGeneration", "formFactor", "totalCapacityGb", "moduleCount", "capacityPerModuleGb", "speedMtps", "casLatency", "retailerId", "retailerName", "destinationId", "destinationUrl", "itemPriceUsd", "currency", "observedAt", "ageHours", "freshness", "comparisonSemantics", "comparisonEligible", "shippingUsd", "feesUsd", "taxesIncluded"]);
+const marketplaceComparableOfferKeys = Object.freeze([...offerKeys, "destinationSemantics", "priceCorrespondingAction", "sellerName", "navigationDisclosure", "deliveredCostEligible", "totalAcquisitionCostUsd"]);
 const forbidden = /providerTaskId|authorizationId|evidenceId|operatorNotes|rightsProfile|actualSpend|rawPayload|recovery|secret|credential/i;
 const validTime = value => typeof value === "string" && Number.isFinite(Date.parse(value));
 const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === keys.length && keys.every(key => Object.hasOwn(value, key));
@@ -167,15 +168,16 @@ function validateArtifactAt({ artifact, artifactText, evaluatedAt }) {
   try { projection = JSON.parse(artifactText); } catch { errors.push("STATIC_RELEASE_ARTIFACT_JSON_INVALID"); }
   if (projection) {
     const report = validatePublicCurrentRetailProjection(projection);
+    const acceptedOfferKeys = projection?.comparisonSemantics === "TOTAL_ACQUISITION_COST" ? marketplaceComparableOfferKeys : offerKeys;
     if (!report.valid) errors.push(...report.errors.map(error => `STATIC_RELEASE_${error}`));
     if (forbidden.test(JSON.stringify(projection))) errors.push("STATIC_RELEASE_PRIVATE_FIELD_INVALID");
     if (!exactKeys(projection, projectionKeys) || !exactKeys(projection.freshness, freshnessKeys) || !exactKeys(projection.counts, countKeys) || !exactKeys(projection.winners, winnerKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");
     const projectedOffers = [];
     for (const product of projection.products ?? []) {
-      if (!exactKeys(product, productKeys) || (product.lowerCurrentItemPrice !== null && !exactKeys(product.lowerCurrentItemPrice, offerKeys))) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");
-      for (const offer of product.offers ?? []) { if (!exactKeys(offer, offerKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID"); projectedOffers.push(offer); }
+      if (!exactKeys(product, productKeys) || (product.lowerCurrentItemPrice !== null && !exactKeys(product.lowerCurrentItemPrice, acceptedOfferKeys))) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");
+      for (const offer of product.offers ?? []) { if (!exactKeys(offer, acceptedOfferKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID"); projectedOffers.push(offer); }
     }
-    for (const winner of Object.values(projection.winners ?? {})) if (winner !== null && !exactKeys(winner, offerKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");
+    for (const winner of Object.values(projection.winners ?? {})) if (winner !== null && !exactKeys(winner, acceptedOfferKeys)) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_SHAPE_INVALID");
     if ((projection.state === "AVAILABLE") !== (projectedOffers.length > 0) || projection.counts?.publicCurrentEligibleOffers !== projectedOffers.length) errors.push("STATIC_RELEASE_PUBLIC_ARTIFACT_STATE_INVALID");
     if (projection.schemaVersion !== artifact.schemaVersion || projection.policyVersion !== artifact.policyVersion || projection.asOf !== artifact.evaluatedAt) errors.push("STATIC_RELEASE_ARTIFACT_BINDING_MISMATCH");
     for (const product of projection.products ?? []) for (const offer of product.offers ?? []) {

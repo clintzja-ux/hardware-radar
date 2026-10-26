@@ -3,7 +3,7 @@ import { RIGHTS_STATES } from "../rights/SourceRightsPolicy.js";
 import { assessRetailerDestinationBinding } from "../destinations/RetailerDestination.js";
 import { assessCurrentDisplayItemPriceEligibility } from "./CurrentDisplayEligibility.js";
 
-export const MANUAL_CURRENT_PRICE_POLICY_VERSION = "CURRENT-RETAIL-ITEM-PRICE-DISPLAY-QUALIFICATION-P1-1.1";
+export const MANUAL_CURRENT_PRICE_POLICY_VERSION = "CURRENT-RETAIL-MARKETPLACE-COMPARABILITY-P1-1.2";
 export const AMAZON_MANUAL_CURRENT_FRESHNESS_POLICY = Object.freeze({ maximumAgeHours: 24, automaticExtension: false });
 export const NEWEGG_MANUAL_SOURCE_ID = "NEWEGG_MANUAL_PUBLISHER_OBSERVATION";
 export const AMAZON_MANUAL_SOURCE_ID = "AMAZON_MANUAL_PUBLISHER_OBSERVATION";
@@ -31,8 +31,9 @@ function amazonDestinationSemantics(destination) {
 const normalizedFacts = input => {
   const condition=input?.condition === "UNKNOWN" || input?.condition === undefined ? null : input?.condition;
   const shippingUsd=input?.shippingUsd === "UNKNOWN" || input?.shippingUsd === undefined ? null : input?.shippingUsd;
+  const feesUsd=input?.feesUsd === "UNKNOWN" || input?.feesUsd === undefined ? null : input?.feesUsd;
   const seller=typeof input?.seller === "string" && input.seller.trim() && input.seller.trim().toUpperCase() !== "UNKNOWN" ? input.seller.trim() : null;
-  return {condition,shippingUsd,seller,researchUrl:nonBlank(input?.researchUrl)?input.researchUrl.trim():null};
+  return {condition,shippingUsd,feesUsd,seller,researchUrl:nonBlank(input?.researchUrl)?input.researchUrl.trim():null};
 };
 
 export function assessManualCurrentPriceInput({ input, product, retailer, destination, rightsProfile, preparedAt, currentSnapshot = null } = {}) {
@@ -50,6 +51,7 @@ export function assessManualCurrentPriceInput({ input, product, retailer, destin
   const facts=normalizedFacts(input);
   if (!CONDITIONS.has(facts.condition)) reasons.push("CONDITION_INVALID");
   if (facts.shippingUsd !== null && (!Number.isFinite(facts.shippingUsd) || facts.shippingUsd < 0)) reasons.push("SHIPPING_INVALID");
+  if (facts.feesUsd !== null && (!Number.isFinite(facts.feesUsd) || facts.feesUsd < 0)) reasons.push("FEES_INVALID");
   if (input?.seller != null && typeof input.seller !== "string") reasons.push("SELLER_INVALID");
   if (source?.retailer === "AMAZON") {
     const destinationAsin=exactAsin(destination?.retailerListingId), suppliedAsin=input?.governedAsin == null ? destinationAsin : exactAsin(input.governedAsin);
@@ -65,9 +67,16 @@ export function assessManualCurrentPriceInput({ input, product, retailer, destin
   const current = currentSnapshot?.offers?.find(offer => offer.atlasProductId === input?.atlasProductId && offer.retailerId === retailer?.id);
   if (current?.sourceIdentity?.sourceId && current.sourceIdentity.sourceId !== source?.sourceId) reasons.push("CURRENT_SOURCE_CONFLICT_REVIEW_REQUIRED");
   const baseEligibility = assessCurrentDisplayItemPriceEligibility({ condition: facts.condition, conditionReasons: ["CONDITION_UNKNOWN"], availability: input?.availability, destinationId: destination?.destinationId, publicDisplayAllowed: rightsProfile?.live?.publicDisplay === RIGHTS_STATES.ALLOWED, comparisonAllowed: rightsProfile?.live?.comparison === RIGHTS_STATES.ALLOWED, weakItemPriceAllowed: true });
-  const eligibility = source?.retailer === "AMAZON" && baseEligibility.itemPriceEligible
-    ? freeze({ ...baseEligibility, comparisonEligible: false, comparisonReasons: [...new Set([...baseEligibility.comparisonReasons, "EXACT_SELLER_OFFER_ACTION_NOT_ESTABLISHED"])], deliveredCostEligible: false, deliveredCostReasons: [...new Set([...baseEligibility.deliveredCostReasons, "EXACT_SELLER_OFFER_ACTION_NOT_ESTABLISHED"])] })
-    : baseEligibility;
+  const deliveredCostReasons = [...new Set([
+    ...baseEligibility.comparisonReasons,
+    ...(facts.shippingUsd === null ? ["SHIPPING_COST_UNKNOWN"] : []),
+    ...(facts.feesUsd === null ? ["MANDATORY_FEES_UNKNOWN"] : [])
+  ])];
+  const eligibility = freeze({
+    ...baseEligibility,
+    deliveredCostEligible: baseEligibility.comparisonEligible && deliveredCostReasons.length === 0,
+    deliveredCostReasons
+  });
   if (!eligibility.itemPriceEligible) reasons.push(...eligibility.comparisonReasons.filter(reason => reason !== "CONDITION_UNKNOWN" && reason !== "SOURCE_COMPARISON_NOT_ALLOWED"));
   return freeze({ eligible: [...new Set(reasons)].length === 0, reasons: [...new Set(reasons)], eligibility });
 }
@@ -98,10 +107,12 @@ export function prepareManualCurrentPriceObservation({ input, product, retailer,
     observedBy: input.observedBy.trim(),
     evidenceReference: input.evidenceReference.trim(),
     evidenceNotes: nonBlank(input.evidenceNotes) ? input.evidenceNotes.trim() : null,
-    condition: facts.condition, seller: facts.seller, shippingUsd: facts.shippingUsd, feesUsd: null, researchUrl, operatorEvidence,
+    condition: facts.condition, seller: facts.seller, shippingUsd: facts.shippingUsd, feesUsd: facts.feesUsd, researchUrl, operatorEvidence,
     destinationSemantics, priceCorrespondingAction: false,
     itemPriceEligible: assessment.eligibility.itemPriceEligible, comparisonEligible: assessment.eligibility.comparisonEligible,
-    comparisonReasons: assessment.eligibility.comparisonReasons
+    comparisonReasons: assessment.eligibility.comparisonReasons,
+    deliveredCostEligible: assessment.eligibility.deliveredCostEligible,
+    deliveredCostReasons: assessment.eligibility.deliveredCostReasons
   };
   const bindingDigest = manualCurrentPriceDigest(binding);
   return freeze({
@@ -118,5 +129,5 @@ export function projectPreparedManualCurrentOffer(preparation, { authorizationId
   const source = SOURCE_BY_RETAILER[b.retailerId];
   if (!source || source.sourceId !== b.sourceId) throw new Error("MANUAL_CURRENT_PRICE_SOURCE_BINDING_INVALID");
   const executionLineage = authorizationId === null ? null : { preparationId: preparation.preparationId, preparationDigest: preparation.bindingDigest, authorizationId, sourceRightsProfileDigest: b.sourceRightsProfileDigest, destinationBindingDigest: b.destinationBindingDigest };
-  return freeze({ atlasProductId: b.atlasProductId, retailer: source.retailer, retailerId: b.retailerId, marketplace: b.marketplace, priceUsd: b.itemPriceUsd, currency: b.currency, availability: b.availability, condition: b.condition ?? null, shippingUsd: b.shippingUsd ?? null, feesUsd: null, researchUrl: b.researchUrl ?? null, destinationId: b.destinationId, matchStatus: "OPERATOR_CONFIRMED_EXACT_PRODUCT_PAGE", sourceRow: 1, observedAt: b.observedAt, sellerType: null, sellerName: b.seller ?? null, governedAsin: b.governedAsin ?? null, destinationSemantics: b.destinationSemantics ?? "CHANNEL_PRODUCT_DESTINATION", priceCorrespondingAction: b.priceCorrespondingAction === true, actionability: b.priceCorrespondingAction === true ? "OFFER_SPECIFIC_DESTINATION" : "CHANNEL_PRODUCT_DESTINATION", operatorEvidence: b.operatorEvidence ? structuredClone(b.operatorEvidence) : null, sourceIdentity: { adapterId: source.adapterId, sourceId: b.sourceId, rightsProfileId: b.sourceId, historicalRetentionAllowed: true }, ...(executionLineage ? { manualExecutionLineage: executionLineage } : {}), itemPriceEligible: b.itemPriceEligible, comparisonEligible: b.comparisonEligible, comparisonReasons: [...b.comparisonReasons], deliveredCostEligible: false, deliveredCostReasons: b.comparisonEligible ? [b.shippingUsd == null ? "SHIPPING_COST_UNKNOWN" : "FEES_UNKNOWN", ...(b.shippingUsd == null ? ["FEES_UNKNOWN"] : [])] : [...b.comparisonReasons] });
+  return freeze({ atlasProductId: b.atlasProductId, retailer: source.retailer, retailerId: b.retailerId, marketplace: b.marketplace, priceUsd: b.itemPriceUsd, currency: b.currency, availability: b.availability, condition: b.condition ?? null, shippingUsd: b.shippingUsd ?? null, feesUsd: b.feesUsd ?? null, researchUrl: b.researchUrl ?? null, destinationId: b.destinationId, matchStatus: "OPERATOR_CONFIRMED_EXACT_PRODUCT_PAGE", sourceRow: 1, observedAt: b.observedAt, sellerType: null, sellerName: b.seller ?? null, governedAsin: b.governedAsin ?? null, destinationSemantics: b.destinationSemantics ?? "CHANNEL_PRODUCT_DESTINATION", priceCorrespondingAction: b.priceCorrespondingAction === true, actionability: b.priceCorrespondingAction === true ? "OFFER_SPECIFIC_DESTINATION" : "CHANNEL_PRODUCT_DESTINATION", operatorEvidence: b.operatorEvidence ? structuredClone(b.operatorEvidence) : null, sourceIdentity: { adapterId: source.adapterId, sourceId: b.sourceId, rightsProfileId: b.sourceId, historicalRetentionAllowed: true }, ...(executionLineage ? { manualExecutionLineage: executionLineage } : {}), itemPriceEligible: b.itemPriceEligible, comparisonEligible: b.comparisonEligible, comparisonReasons: [...b.comparisonReasons], deliveredCostEligible: b.deliveredCostEligible === true, deliveredCostReasons: [...(b.deliveredCostReasons ?? [])] });
 }

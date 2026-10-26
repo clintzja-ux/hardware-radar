@@ -30,9 +30,9 @@ const destinations = [
     destination("c", "ram_laptop_one", "RETAILER-0004"),
     destination("d", "ram_held_one", "RETAILER-0001")
 ];
-const offer = ({ productId, retailerId, destinationId, price, observedAt, itemPriceEligible = true, comparisonEligible = itemPriceEligible, availability = "AVAILABLE", condition = "NEW" }) => ({
+const offer = ({ productId, retailerId, destinationId, price, observedAt, itemPriceEligible = true, comparisonEligible = itemPriceEligible, deliveredCostEligible = comparisonEligible, shippingUsd = 0, feesUsd = 0, availability = "AVAILABLE", condition = "NEW" }) => ({
     atlasProductId: productId, retailerId, destinationId, priceUsd: price, currency: "USD", observedAt,
-    itemPriceEligible, comparisonEligible, availability, condition, shippingUsd: null, feesUsd: null
+    itemPriceEligible, comparisonEligible, deliveredCostEligible, deliveredCostReasons: deliveredCostEligible ? [] : ["MANDATORY_FEES_UNKNOWN"], availability, condition, shippingUsd, feesUsd, sellerName: retailerId === "RETAILER-0001" ? "Amazon" : "Newegg"
 });
 const asOf = "2026-09-07T12:00:00.000Z";
 const source = {
@@ -56,9 +56,9 @@ assert.deepEqual({ products, retailers, destinations, source }, before); cases +
 assert.deepEqual(createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: source, asOf }), projection); cases += 1;
 assert.equal(Object.isFrozen(projection), true); cases += 1;
 assert.equal(validatePublicCurrentRetailProjection(projection).valid, true); cases += 1;
-assert.equal(projection.disclosure, "Prices shown exclude applicable shipping, taxes, and fees."); cases += 1;
-assert.equal(projection.comparisonSemantics, "ITEM_PRICE"); cases += 1;
-assert.equal(projection.products.every(item => item.offers.every(item => item.shippingUsd === null && item.feesUsd === null && item.taxesIncluded === false)), true); cases += 1;
+assert.match(projection.disclosure, /seller and price are timestamped/i); cases += 1;
+assert.equal(projection.comparisonSemantics, "TOTAL_ACQUISITION_COST"); cases += 1;
+assert.equal(projection.products.every(item => item.offers.every(item => item.shippingUsd === 0 && item.feesUsd === 0 && item.taxesIncluded === false)), true); cases += 1;
 assert.doesNotMatch(JSON.stringify(projection), /\.forge-review|operatorNotes|workbook|affiliate/i); cases += 1;
 
 const staleSource = { offers: [offer({ productId: "ram_ddr5_one", retailerId: "RETAILER-0001", destinationId: destinations[0].destinationId, price: 200, observedAt: "2026-09-05T23:59:59.999Z" })] };
@@ -79,6 +79,16 @@ const tie = createPublicCurrentRetailProjection({ products, retailers, destinati
 assert.equal(tie.winners.overall.retailerId, "RETAILER-0001"); cases += 1;
 const reversedAffiliates = retailers.map(item => ({ ...item, affiliateProgram: { status: item.id === "RETAILER-0001" ? "approved" : "pending" } }));
 assert.equal(createPublicCurrentRetailProjection({ products, retailers: reversedAffiliates, destinations: tieDestinations, currentSnapshot: tieSource, asOf }).winners.overall.retailerId, "RETAILER-0001"); cases += 1;
+
+const totalCostSource = { offers: [
+    offer({ productId: "ram_ddr5_one", retailerId: "RETAILER-0001", destinationId: tieDestinations[0].destinationId, price: 190, shippingUsd: 20, observedAt: "2026-09-07T00:00:00.000Z" }),
+    offer({ productId: "ram_ddr5_one", retailerId: "RETAILER-0004", destinationId: tieDestinations[1].destinationId, price: 200, observedAt: "2026-09-07T00:00:00.000Z" })
+] };
+const totalCostProjection = createPublicCurrentRetailProjection({ products, retailers: reversedAffiliates, destinations: tieDestinations, currentSnapshot: totalCostSource, asOf });
+assert.equal(totalCostProjection.winners.overall.retailerId, "RETAILER-0004"); cases += 1;
+assert.equal(totalCostProjection.winners.overall.totalAcquisitionCostUsd, 200); cases += 1;
+const exactActionSource = { offers: [{ ...totalCostSource.offers[1], destinationSemantics: "EXACT_SELLER_OFFER_DESTINATION", priceCorrespondingAction: true }] };
+assert.equal(createPublicCurrentRetailProjection({ products, retailers, destinations: tieDestinations, currentSnapshot: exactActionSource, asOf }).products[0].offers[0].navigationDisclosure, "EXACT_SELLER_OFFER_ACTION"); cases += 1;
 
 for (const blocked of [
     offer({ productId: "ram_ddr5_one", retailerId: "RETAILER-0001", destinationId: destinations[0].destinationId, price: 100, observedAt: "2026-09-07T00:00:00.000Z", itemPriceEligible: false, availability: "AVAILABLE_MARKETPLACE", condition: null }),

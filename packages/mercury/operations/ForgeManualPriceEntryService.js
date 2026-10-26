@@ -29,11 +29,12 @@ export class ForgeManualPriceEntryService {
     const product = products.find(value => value.identity.atlasProductId === atlasProductId), destination = destinations.find(value => value.destinationId === destinationId), retailer = retailers.find(value => value.id === destination?.retailerId), governed = RETAILERS[destination?.retailerId];
     if (!governed) throw new Error("MANUAL_CURRENT_PRICE_RETAILER_INVALID");
     const shippingUsd = payload.shippingKnown === false ? "UNKNOWN" : Number(payload.shippingUsd);
-    const evidenceMaterial = { atlasProductId, destinationId, itemPriceUsd: Number(payload.itemPriceUsd), shippingUsd, availability: payload.availability, condition: payload.condition, seller: payload.seller, observedAt: payload.observedAt, operatorId };
+    const feesUsd = payload.feesKnown === true ? Number(payload.feesUsd) : "UNKNOWN";
+    const evidenceMaterial = { atlasProductId, destinationId, itemPriceUsd: Number(payload.itemPriceUsd), shippingUsd, feesUsd, availability: payload.availability, condition: payload.condition, seller: payload.seller, observedAt: payload.observedAt, operatorId };
     const input = {
       retailer: governed.retailer, atlasProductId, destinationId,
       ...(governed.retailer === "AMAZON" ? { governedAsin: destination.retailerListingId } : {}),
-      itemPriceUsd: Number(payload.itemPriceUsd), currency: "USD", availability: required(payload.availability, "AVAILABILITY_INVALID"), condition: required(payload.condition, "CONDITION_INVALID"), seller: required(payload.seller, "SELLER_INVALID"), shippingUsd,
+      itemPriceUsd: Number(payload.itemPriceUsd), currency: "USD", availability: required(payload.availability, "AVAILABILITY_INVALID"), condition: required(payload.condition, "CONDITION_INVALID"), seller: required(payload.seller, "SELLER_INVALID"), shippingUsd, feesUsd,
       observedAt: required(payload.observedAt, "OBSERVATION_TIME_INVALID"), observedBy: operatorId,
       evidenceReference: `forge:operator-attestation:${manualCurrentPriceDigest(evidenceMaterial)}`,
       evidenceNotes: "Operator-attested observation entered through authenticated Forge.",
