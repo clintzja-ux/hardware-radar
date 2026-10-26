@@ -309,6 +309,7 @@ const testModules = [
     ,"./RamMarketSnapshotProjection.test.mjs"
     ,"./PublicChronologicalPriceSeries.test.mjs"
     ,"./ManualCurrentPriceQualification.test.mjs"
+    ,"./ForgeManualPriceEntry.test.mjs"
     ,"./ManualCurrentPriceWorkbook.test.mjs"
     ,"./ManualCurrentPriceWorkbookComposition.test.mjs"
     ,"./ManualCurrentPriceSnapshotExecution.test.mjs"

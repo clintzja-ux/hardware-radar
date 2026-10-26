@@ -6,6 +6,7 @@ export {createForgeProductManagerProjection} from "./ForgeProductManagerProjecti
 export {GovernedRetailerLinkVerificationService,FORGE_LINK_VERIFICATION_STATUSES} from "./GovernedRetailerLinkVerificationService.js";
 export {ForgeProductMutationBoundary} from "./ForgeProductMutationBoundary.js";
 export {ForgeTrustedOperatorService} from "./ForgeTrustedOperatorService.js";
+export {ForgeManualPriceEntryService} from "./ForgeManualPriceEntryService.js";
 export {FileForgeOperatorAuditRepository} from "./FileForgeOperatorAuditRepository.js";
 export {FileForgeDraftIdentityCorrectionRepository} from "./FileForgeDraftIdentityCorrectionRepository.js";
 export {ForgeTrustedOperatorHttpRuntime} from "./ForgeTrustedOperatorHttpRuntime.js";
