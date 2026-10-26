@@ -1,0 +1,23 @@
+import {releaseBoundDestinationProjectionDigest,validateReleaseBoundDestinationProjectionEnvelope} from "../beacon/ReleaseBoundDestinationProjection.js";
+const freeze=value=>{if(value&&typeof value==="object"&&!Object.isFrozen(value)){Object.freeze(value);for(const child of Object.values(value))freeze(child);}return value;};
+const pointerFor=(envelope,digest,previous)=>freeze({schemaVersion:"1.0",pointerType:"BEACON_DESTINATION_PROJECTION_POINTER",releaseGeneration:envelope.releaseGeneration,releaseId:envelope.releaseId,envelopeDigest:digest,envelopeKey:`envelopes/${digest}`,previous:previous?{releaseGeneration:previous.releaseGeneration,releaseId:previous.releaseId,envelopeDigest:previous.envelopeDigest,envelopeKey:previous.envelopeKey}:null});
+const validPointer=value=>value?.schemaVersion==="1.0"&&value.pointerType==="BEACON_DESTINATION_PROJECTION_POINTER"&&Number.isSafeInteger(value.releaseGeneration)&&value.releaseGeneration>0&&/^pubrel_[a-f0-9]{24}$/.test(value.releaseId??"")&&/^[a-f0-9]{64}$/.test(value.envelopeDigest??"")&&value.envelopeKey===`envelopes/${value.envelopeDigest}`;
+
+export class WorkersKvDestinationProjectionRepository{
+ constructor({namespace}={}){if(!namespace?.get||!namespace?.put)throw new TypeError("BEACON_PROJECTION_KV_REQUIRED");this.namespace=namespace;}
+ getPointer(){return this.namespace.get("current",{type:"json"});}
+ getEnvelope(key){return this.namespace.get(key,{type:"json"});}
+ async putEnvelope({key,envelope}){const prior=await this.getEnvelope(key);if(prior&&releaseBoundDestinationProjectionDigest(prior)!==releaseBoundDestinationProjectionDigest(envelope))throw new Error("BEACON_PROJECTION_IMMUTABLE_CONFLICT");if(!prior)await this.namespace.put(key,JSON.stringify(envelope));return freeze({status:prior?"EXISTS":"WRITTEN",key});}
+}
+
+export class ReleaseBoundDestinationProjectionDeliveryOwner{
+ constructor({repository,pointerCoordinator,envelopeOwner,enabled=false,now=()=>new Date().toISOString()}={}){if(!repository?.getPointer||!repository?.getEnvelope||!repository?.putEnvelope||!pointerCoordinator?.compareAndSet||!envelopeOwner?.create)throw new TypeError("BEACON_PROJECTION_DELIVERY_DEPENDENCIES_REQUIRED");Object.assign(this,{repository,pointerCoordinator,envelopeOwner,enabled,now});}
+ async deliver(input={}){if(this.enabled!==true)throw new Error("BEACON_PROJECTION_DELIVERY_DISABLED");const envelope=await this.envelopeOwner.create(input),report=validateReleaseBoundDestinationProjectionEnvelope(envelope,{asOf:this.now()});if(!report.valid)throw new Error(`BEACON_PROJECTION_DELIVERY_INVALID:${report.errors.join(",")}`);const digest=releaseBoundDestinationProjectionDigest(envelope),key=`envelopes/${digest}`,observed=await this.repository.getPointer();if(observed&&!validPointer(observed))throw new Error("BEACON_PROJECTION_POINTER_INVALID");if(observed?.releaseGeneration>envelope.releaseGeneration)throw new Error("BEACON_PROJECTION_POINTER_STALE_ADVANCE");if(observed?.releaseGeneration===envelope.releaseGeneration&&observed.envelopeDigest!==digest)throw new Error("BEACON_PROJECTION_POINTER_CONFLICT");await this.repository.putEnvelope({key,envelope});const written=await this.repository.getEnvelope(key);if(!written||releaseBoundDestinationProjectionDigest(written)!==digest)throw new Error("BEACON_PROJECTION_IMMUTABLE_VERIFICATION_FAILED");const pointer=pointerFor(envelope,digest,observed);const advanced=await this.pointerCoordinator.compareAndSet({expected:observed,next:pointer});if(advanced?.status!=="ADVANCED"&&!(advanced?.status==="UNCHANGED"&&advanced.pointer?.envelopeDigest===digest))throw new Error("BEACON_PROJECTION_POINTER_ADVANCE_REJECTED");return freeze({status:advanced.status==="UNCHANGED"?"ALREADY_DELIVERED":"DELIVERED",digest,key,pointer});}
+}
+
+export async function resolveReleaseBoundDestinationProjection({repository,asOf}={}){
+ const pointer=await repository?.getPointer?.();if(!validPointer(pointer))throw new Error("BEACON_PROJECTION_POINTER_UNAVAILABLE");
+ const candidates=[{key:pointer.envelopeKey,digest:pointer.envelopeDigest,generation:pointer.releaseGeneration},pointer.previous&&{key:pointer.previous.envelopeKey,digest:pointer.previous.envelopeDigest,generation:pointer.previous.releaseGeneration}].filter(Boolean);
+ for(const candidate of candidates){try{const envelope=await repository.getEnvelope(candidate.key);if(!envelope||releaseBoundDestinationProjectionDigest(envelope)!==candidate.digest||envelope.releaseGeneration!==candidate.generation)continue;const report=validateReleaseBoundDestinationProjectionEnvelope(envelope,{asOf});if(report.valid)return freeze({envelope,fallback:candidate!==candidates[0]});}catch{}}
+ throw new Error("BEACON_PROJECTION_TRUST_UNAVAILABLE");
+}
