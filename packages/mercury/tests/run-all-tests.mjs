@@ -6,6 +6,12 @@ const testModules = [
     "./AmazonDestinationReviewWorkflow.test.mjs",
     "./AmazonDestinationRelevantStateBinding.test.mjs",
     "./ProductionFlatRetailerDestinationRepository.test.mjs",
+    "./ForgeTrustedOperatorSelfService.test.mjs",
+    "./ForgeDraftIdentityCorrection.test.mjs",
+    "./ForgeDraftIdentityDestinationCoordination.test.mjs",
+    "./ForgeDraftIdentityDestinationProductionShape.test.mjs",
+    "./ForgeDraftActivation.test.mjs",
+    "./ManualCurrentPriceAffiliateWorkbookRepository.test.mjs",
     "./ProductionForgeAmazonDestinationReviewProvider.test.mjs",
     "./ExistingProviderTaskSupervision.test.mjs",
     "./ExistingProviderTaskSupervisionCli.test.mjs",
@@ -213,6 +219,7 @@ const testModules = [
     "./ImmutableProviderResultReprocessing.test.mjs",
     "./HistoricalObservationAdmission.test.mjs",
     "./RetainedCommerceHistoryPreparation.test.mjs",
+    "./ProductionRetainedCommerceHistoryPreparationService.test.mjs",
     "./HistoricalAdmissionOperatorGovernance.test.mjs",
     "./HistoricalObservationIntelligence.test.mjs",
     "./HistoricalRefreshAccumulation.test.mjs",
@@ -256,6 +263,27 @@ const testModules = [
     ,"./CertifiedMercuryOperationsPanel.test.mjs"
     ,"./NeweggRoutineSchedulingAndForge.test.mjs"
     ,"./NeweggRoutineProductionCommand.test.mjs"
+    ,"./ProductionNeweggRoutineFactory.test.mjs"
+    ,"./NeweggRoutineAuthorityAdapters.test.mjs"
+    ,"./NeweggRoutineSourceStageOwners.test.mjs"
+    ,"./NeweggRoutineDownstreamStageOwners.test.mjs"
+    ,"./NeweggRoutinePreflightBindingQualificationOwners.test.mjs"
+    ,"./ProductionNeweggRoutinePublicationServices.test.mjs"
+    ,"./DisposableNeweggRoutineRoot.test.mjs"
+    ,"./ProductionNeweggRoutineOperatorCommand.test.mjs"
+    ,"./NeweggRoutineWindowsScheduler.test.mjs"
+    ,"./NeweggRoutineRecurringAuthority.test.mjs"
+    ,"./NeweggFailedAcquisitionDisposition.test.mjs"
+    ,"./NeweggBoundedDailyAcquisitionReattempt.test.mjs"
+    ,"./NeweggRoutineLiveLineageBootstrap.test.mjs"
+    ,"./ProductionNeweggRoutineOperationalOwners.test.mjs"
+    ,"./NeweggRoutineCrashRecoveryMatrix.test.mjs"
+    ,"./ForgeNeweggRecurringAuthority.test.mjs"
+    ,"./ForgeNeweggRoutineExecution.test.mjs"
+    ,"./ForgeNeweggProgressRefresh.test.mjs"
+    ,"./ProductionRakutenFullCurrentPreparationService.test.mjs"
+    ,"./ProductionRakutenCurrentQaService.test.mjs"
+    ,"./NeweggRoutineSourceStageOwners.test.mjs"
     ,"./CertifiedMercuryCohortOperationsPanel.test.mjs"
     ,"./ProductionForgeCohortOperationsProvider.test.mjs"
     ,"./ForgeCohortOperationsEndToEnd.test.mjs"
@@ -320,6 +348,10 @@ const testModules = [
     ,"./CurrentRefreshPlan.test.mjs"
     ,"./AutomatedCurrentLaneCertification.test.mjs"
     ,"./CurrentRefreshStaticRecomposition.test.mjs"
+    ,"./ForgeProductManager.test.mjs"
+    ,"./ForgeDraftCorrection.test.mjs"
+    ,"./ForgeDraftDestination.test.mjs"
+    ,"./NeweggRoutinePostSuccessPublication.test.mjs"
 ];
 
 console.log("Running Mercury test suite...\n");

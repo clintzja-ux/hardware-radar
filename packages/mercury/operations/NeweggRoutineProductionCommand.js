@@ -2,16 +2,22 @@ import crypto from "node:crypto";
 
 export const NEWEGG_ROUTINE_COMMAND_VERSION="NEWEGG-ROUTINE-PRODUCTION-COMMAND-P1-1.0";
 export const NEWEGG_ROUTINE_COMMAND_MODES=Object.freeze(["PRODUCTION","RETAINED_EVIDENCE","FIXTURE"]);
-export const NEWEGG_ROUTINE_COMMAND_STAGES=Object.freeze(["PREFLIGHT","ACQUISITION","VALIDATION","CATALOG","BINDING","QUALIFICATION","PREPARE","CURRENT","HISTORY","QA","RECOMPOSITION","CERTIFICATION","RELEASE_CERTIFICATION","RETENTION_ASSESSMENT","FORGE_PROJECTION","FORGE_TRANSPORT"]);
-export const NEWEGG_ROUTINE_COMMAND_OUTCOMES=Object.freeze(["SUCCESS_RELEASE_READY","SUCCESS_NO_CHANGE","BLOCKED_ACTIVE_RUN","PROVIDER_FAILURE","INTEGRITY_FAILURE","QUALIFICATION_REVIEW_REQUIRED","CURRENT_FAILURE","HISTORY_FAILURE","QA_FAILURE","RECOMPOSITION_FAILURE","CERTIFICATION_FAILURE","FORGE_TRANSPORT_FAILURE"]);
+export const NEWEGG_ROUTINE_COMMAND_STAGES=Object.freeze(["PREFLIGHT","ACQUISITION","VALIDATION","CATALOG","BINDING","QUALIFICATION","PREPARE","HISTORY","CURRENT","QA","RECOMPOSITION","CERTIFICATION","RELEASE_CERTIFICATION","RETENTION_ASSESSMENT","FORGE_PROJECTION","FORGE_TRANSPORT"]);
+export const NEWEGG_ROUTINE_COMMAND_OUTCOMES=Object.freeze(["SUCCESS_RELEASE_READY","SUCCESS_NO_CHANGE","BLOCKED_ACTIVE_RUN","PROVIDER_FAILURE","LOCAL_AUTHORITY_FAILURE","BOOTSTRAP_COMPOSITION_FAILURE","CANONICAL_RECEIPT_CONFLICT","RECOVERABLE_INTERRUPTED_OPERATION","INTEGRITY_FAILURE","QUALIFICATION_REVIEW_REQUIRED","CURRENT_FAILURE","HISTORY_FAILURE","QA_FAILURE","RECOMPOSITION_FAILURE","CERTIFICATION_FAILURE","STORAGE_HOLD","FORGE_HEALTH_FAILURE","FORGE_TRANSPORT_FAILURE"]);
 const terminal=new Set(["SUCCESS_RELEASE_READY","SUCCESS_NO_CHANGE"]);
 const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
 const digest=value=>crypto.createHash("sha256").update(stable(value)).digest("hex");
 const copy=value=>structuredClone(value);
-const failOutcome={ACQUISITION:"PROVIDER_FAILURE",VALIDATION:"INTEGRITY_FAILURE",CATALOG:"INTEGRITY_FAILURE",BINDING:"INTEGRITY_FAILURE",QUALIFICATION:"QUALIFICATION_REVIEW_REQUIRED",PREPARE:"QUALIFICATION_REVIEW_REQUIRED",CURRENT:"CURRENT_FAILURE",HISTORY:"HISTORY_FAILURE",QA:"QA_FAILURE",RECOMPOSITION:"RECOMPOSITION_FAILURE",CERTIFICATION:"CERTIFICATION_FAILURE",RELEASE_CERTIFICATION:"CERTIFICATION_FAILURE",RETENTION_ASSESSMENT:"CERTIFICATION_FAILURE",FORGE_PROJECTION:"CERTIFICATION_FAILURE",FORGE_TRANSPORT:"FORGE_TRANSPORT_FAILURE"};
+const failOutcome={ACQUISITION:"PROVIDER_FAILURE",VALIDATION:"INTEGRITY_FAILURE",CATALOG:"INTEGRITY_FAILURE",BINDING:"INTEGRITY_FAILURE",QUALIFICATION:"QUALIFICATION_REVIEW_REQUIRED",PREPARE:"QUALIFICATION_REVIEW_REQUIRED",CURRENT:"CURRENT_FAILURE",HISTORY:"HISTORY_FAILURE",QA:"QA_FAILURE",RECOMPOSITION:"RECOMPOSITION_FAILURE",CERTIFICATION:"CERTIFICATION_FAILURE",RELEASE_CERTIFICATION:"CERTIFICATION_FAILURE",RETENTION_ASSESSMENT:"STORAGE_HOLD",FORGE_PROJECTION:"FORGE_HEALTH_FAILURE",FORGE_TRANSPORT:"FORGE_TRANSPORT_FAILURE"};
+const classify=(stage,error)=>{const code=String(error?.code??error?.message??"");if(code.includes("AUTHORITY_REQUIRED")||code.includes("AUTHORITY_INVALID"))return"LOCAL_AUTHORITY_FAILURE";if(code.includes("CANONICAL_RECEIPT_CONFLICT")||code.includes("REPLAY_CONFLICT"))return"CANONICAL_RECEIPT_CONFLICT";if(code.includes("BOOTSTRAP"))return"BOOTSTRAP_COMPOSITION_FAILURE";return failOutcome[stage]??"INTEGRITY_FAILURE";};
+
+export const normalizeNeweggRoutineTerminalResult=value=>{
+ const result=copy(value??{}),success=terminal.has(result.outcome);
+ return Object.freeze({...result,success,failedStage:success?null:result.failedStage??null,failure:success?null:copy(result.failure??null)});
+};
 
 export class NeweggRoutineProductionCommand{
- constructor({runRepository,overlapOwner,stageOwners,now=()=>new Date().toISOString()}={}){if(!runRepository?.loadActive||!runRepository?.save||!overlapOwner?.assess)throw new TypeError("NEWEGG_ROUTINE_COMMAND_OWNER_REQUIRED");this.runRepository=runRepository;this.overlapOwner=overlapOwner;this.stageOwners=stageOwners??{};this.now=now;}
+ constructor({runRepository,overlapOwner,stageOwners,afterStage=async()=>{},progress=async()=>{},now=()=>new Date().toISOString()}={}){if(!runRepository?.loadActive||!runRepository?.save||!overlapOwner?.assess||typeof afterStage!=="function"||typeof progress!=="function")throw new TypeError("NEWEGG_ROUTINE_COMMAND_OWNER_REQUIRED");this.runRepository=runRepository;this.overlapOwner=overlapOwner;this.stageOwners=stageOwners??{};this.afterStage=afterStage;this.progress=progress;this.now=now;}
  async execute({mode="PRODUCTION",input={}}={}){
   if(!NEWEGG_ROUTINE_COMMAND_MODES.includes(mode))throw new TypeError("NEWEGG_ROUTINE_COMMAND_MODE_INVALID");
   const active=await this.runRepository.loadActive();
@@ -23,14 +29,15 @@ export class NeweggRoutineProductionCommand{
    if(run.completedStages.includes(stage))continue;
    const owner=this.stageOwners[stage];if(!owner?.execute)throw new TypeError(`NEWEGG_ROUTINE_STAGE_OWNER_REQUIRED:${stage}`);
    try{
+    await this.progress("ROUTINE_STAGE_STARTED",{runId:run.runId,stage});
     const stageResult=await owner.execute({mode,input:copy(input),run:copy(run),priorResults:copy(run.stageResults)});
     if(stageResult?.status==="REVIEW_REQUIRED")return await this.stop(run,stage,"QUALIFICATION_REVIEW_REQUIRED",stageResult);
-    run={...run,completedStages:[...run.completedStages,stage],stageResults:{...run.stageResults,[stage]:copy(stageResult??{})},updatedAt:this.now()};await this.runRepository.save(run);
-   }catch(error){return await this.stop(run,stage,failOutcome[stage]??"INTEGRITY_FAILURE",{code:error?.code??error?.message??"UNKNOWN_ERROR"});}
+    run={...run,completedStages:[...run.completedStages,stage],stageResults:{...run.stageResults,[stage]:copy(stageResult??{})},updatedAt:this.now()};await this.runRepository.save(run);await this.afterStage(stage,copy(run));await this.progress("ROUTINE_STAGE_COMPLETED",{runId:run.runId,stage,status:stageResult?.status??"COMPLETED"});
+   }catch(error){const outcome=classify(stage,error);await this.progress("ROUTINE_STAGE_FAILED",{runId:run.runId,stage,outcome,code:error?.code??error?.message??"UNKNOWN_ERROR"});return await this.stop(run,stage,outcome,{code:error?.code??error?.message??"UNKNOWN_ERROR"});}
   }
   const unchanged=Object.values(run.stageResults).some(value=>value?.status==="NO_CHANGE"||value?.status==="REPLAY");const outcome=unchanged?"SUCCESS_NO_CHANGE":"SUCCESS_RELEASE_READY";
   run={...run,status:outcome,completedAt:this.now(),updatedAt:this.now()};await this.runRepository.save(run);return this.result(outcome,run,0);
  }
  async stop(run,stage,outcome,detail){const stopped={...run,status:outcome,failedStage:stage,failure:copy(detail),updatedAt:this.now()};await this.runRepository.save(stopped);return this.result(outcome,stopped,1);}
- result(outcome,run,exitCode){return Object.freeze({schemaVersion:"1.0",command:"mercury:newegg:routine",outcome,success:terminal.has(outcome),exitCode,runId:run?.runId??null,completedStages:copy(run?.completedStages??[]),providerCalls:run?.stageResults?.ACQUISITION?.providerCalls??0,paidTasks:0,actualSpendUsd:0,releaseAuthority:false,deploymentAuthority:false});}
+ result(outcome,run,exitCode){const acquisition=run?.stageResults?.ACQUISITION??null,current=run?.stageResults?.CURRENT??null,history=run?.stageResults?.HISTORY??null,currentMutated=current?.currentChanged===true||current?.persistence?.status==="REPLACED",historyMutated=Number(history?.admitted??0)>0;return normalizeNeweggRoutineTerminalResult({schemaVersion:"1.0",command:"mercury:newegg:routine",outcome,success:terminal.has(outcome),exitCode,runId:run?.runId??null,completedStages:copy(run?.completedStages??[]),failedStage:run?.failedStage??null,failure:copy(run?.failure??null),recovery:Boolean(acquisition?.receipt?.replay??acquisition?.canonicalReceipt?.replay),acquisitionActivity:{status:acquisition?.status??null,providerCalls:acquisition?.providerCalls??0,replay:Boolean(acquisition?.receipt?.replay??acquisition?.canonicalReceipt?.replay)},current:{status:current?.status??"NOT_COMPLETED",canonicalCompletion:Boolean(current?.canonicalReceipt),mutation:currentMutated?"COMMITTED":current?.canonicalReceipt?"CANONICAL_REPLAY":"NONE",snapshotId:current?.snapshotId??current?.canonicalReceipt?.snapshotId??current?.canonicalReceipt?.currentSnapshotId??null},history:{status:history?.status??"NOT_COMPLETED",canonicalCompletion:Boolean(history?.canonicalReceipt),mutation:historyMutated?"COMMITTED":history?.canonicalReceipt?"CANONICAL_REPLAY":"NONE",admitted:Number(history?.admitted??0),finalSequence:history?.finalSequence??history?.canonicalReceipt?.historySequence??null},canonicalMutation:currentMutated||historyMutated,finalHealthOutcome:outcome,providerCalls:acquisition?.providerCalls??0,paidTasks:0,actualSpendUsd:0,releaseAuthority:false,deploymentAuthority:false});}
 }

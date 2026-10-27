@@ -1,0 +1,20 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { ProductRepository, BrandRepository } from "../index.js";
+import { assessAtlasDraftActivationReadiness, createActivatedAtlasProduct } from "../AtlasDraftActivation.js";
+
+const readJson=async resource=>JSON.parse(await readFile(resource instanceof URL?fileURLToPath(resource):resource,"utf8"));
+const options={manifestUrl:new URL("../atlas-manifest.json",import.meta.url),readJson};
+const products=await new ProductRepository(options).getAll(),brands=await new BrandRepository(options).getAll();
+const canonical=products.find(value=>value.identity.atlasProductId==="ram_timetec_76tt26nus2r8_16gk2");
+assert.equal(assessAtlasDraftActivationReadiness({product:canonical,products,brands}).status,"ALREADY_ACTIVE");
+const draft=structuredClone(canonical);draft.governance={...draft.governance,lifecycleStatus:"DRAFT",publicationStatus:"PENDING",humanReviewRequired:true};
+const fixtureProducts=products.map(value=>value===canonical?draft:value);
+const ready=assessAtlasDraftActivationReadiness({product:draft,products:fixtureProducts,brands});
+assert.equal(ready.status,"READY_TO_ACTIVATE");assert.equal(ready.eligible,true);assert.equal(ready.blockers.length,0);
+const activated=createActivatedAtlasProduct({product:draft,reviewedBy:"operator:fixture",reviewedAt:"2026-10-12T18:00:00.000Z"});
+assert.equal(activated.governance.lifecycleStatus,"ACTIVE");assert.equal(activated.governance.publicationStatus,"READY");assert.equal(activated.governance.humanReviewRequired,false);assert.equal(activated.identity.recordRevision,draft.identity.recordRevision+1);assert.equal(activated.identity.atlasProductId,draft.identity.atlasProductId);assert.equal(activated.identity.manufacturerPartNumber,draft.identity.manufacturerPartNumber);assert.deepEqual(activated.extension,draft.extension);
+assert.equal(assessAtlasDraftActivationReadiness({product:activated,products:fixtureProducts.map(value=>value===draft?activated:value),brands}).status,"ALREADY_ACTIVE");
+const broken=structuredClone(draft);broken.extension.data.capacity.capacityGb=31;const blocked=assessAtlasDraftActivationReadiness({product:broken,products:fixtureProducts.map(value=>value===draft?broken:value),brands});assert.equal(blocked.status,"BLOCKED");assert.ok(blocked.blockers.includes("CAPACITY_INVARIANT_VALID"));
+console.log("Atlas governed DRAFT activation readiness tests passed.");

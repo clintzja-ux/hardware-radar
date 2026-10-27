@@ -4,17 +4,32 @@ import { copyToClipboard } from "./utils/clipboard.js";
 import { ObservationReviewPanel } from "./components/ObservationReviewPanel.js";
 import { AcquisitionOperationsPanel } from "./components/AcquisitionOperationsPanel.js";
 import { CertifiedMercuryOperationsPanel } from "./components/CertifiedMercuryOperationsPanel.js";
+import { ProductManagerPanel } from "./components/ProductManagerPanel.js";
+import { ForgeShell } from "./components/ForgeShell.js";
+import { NeweggMandatePanel } from "./components/NeweggMandatePanel.js";
+import { NeweggAcquisitionDispositionReviewPanel } from "./components/NeweggAcquisitionDispositionReviewPanel.js";
 import { ManualPriceEntryPanel } from "./components/ManualPriceEntryPanel.js";
+
+const shellRoot = document.getElementById("forgeApp");
+if (shellRoot) new ForgeShell(shellRoot);
+const mandateRoot=document.getElementById("neweggMandatePanel");if(mandateRoot)new NeweggMandatePanel(mandateRoot);
+const manualPriceRoot=document.getElementById("manualPriceEntryPanel");if(manualPriceRoot)new ManualPriceEntryPanel(manualPriceRoot);
+
+const productManagerRoot = document.getElementById("productManagerPanel");
+if (productManagerRoot) new ProductManagerPanel(productManagerRoot);
 
 const forge = new ForgeGenerator();
 const reviewPanelRoot = document.getElementById("observationReviewPanel");
 if (reviewPanelRoot) new ObservationReviewPanel(reviewPanelRoot, { copyToClipboard });
+const dispositionReviewRoot=document.getElementById("neweggAcquisitionDispositionReviewPanel");
+if(dispositionReviewRoot)new NeweggAcquisitionDispositionReviewPanel(dispositionReviewRoot);
 const acquisitionPanelRoot = document.getElementById("acquisitionOperationsPanel");
 if (acquisitionPanelRoot) new AcquisitionOperationsPanel(acquisitionPanelRoot);
 const certifiedMercuryRoot = document.getElementById("certifiedMercuryOperationsPanel");
-if (certifiedMercuryRoot) new CertifiedMercuryOperationsPanel(certifiedMercuryRoot);
-const manualPriceRoot = document.getElementById("manualPriceEntryPanel");
-if (manualPriceRoot) new ManualPriceEntryPanel(manualPriceRoot);
+if (certifiedMercuryRoot) {
+    const certifiedOperations = new CertifiedMercuryOperationsPanel(certifiedMercuryRoot);
+    void certifiedOperations.loadUrl("/operator-data/certified-mercury-operations.json");
+}
 
 const form = document.getElementById("forgeForm");
 const productForm = new ProductForm(form);
