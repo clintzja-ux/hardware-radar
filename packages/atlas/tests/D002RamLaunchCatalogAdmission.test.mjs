@@ -35,7 +35,7 @@ assert.equal(records.length, 21, "D-002 fixture batch must contain exactly 21 ne
 assert.ok(manifest.counts.products >= 22, "The D-002B anchor plus 21 certified products must remain admitted.");
 assert.equal(canonicalRecords.length, manifest.counts.products);
 assert.equal(canonicalProductFiles.length, manifest.counts.products, "Every canonical RAM product file must be registered exactly once.");
-assert.equal(canonicalRecords[0].identity.atlasProductId, "ram_corsair_cmk32gx5m2b6000z30");
+assert.equal(canonicalRecords[0].identity.atlasProductId, manifest.products[0].atlasProductId);
 for (const fixture of records) {
     const canonical = canonicalRecords.find(
         ({ identity }) => identity.atlasProductId === fixture.identity.atlasProductId

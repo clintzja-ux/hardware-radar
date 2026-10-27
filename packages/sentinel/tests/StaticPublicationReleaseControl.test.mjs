@@ -94,7 +94,7 @@ try {
   await writeFile(path.join(lineageDir, "artifacts", "fixture.json"), artifactText);
   await writeFile(path.join(lineageDir, "artifacts", "b.json"), artifactBText);
   await writeFile(path.join(lineageDir, "release.json"), `${JSON.stringify(releaseB)}\n`);
-  const predecessorB = await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json") });
+  const predecessorB = await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json"), useRollbackPredecessor: true });
   eq(predecessorB.releaseId, manifest.releaseId);
   eq(predecessorB.projection.products[0].offers[0].itemPriceUsd, 100);
   const artifactC = structuredClone(artifact); artifactC.products[0].offers[0].itemPriceUsd = 102;
@@ -102,12 +102,12 @@ try {
   const releaseC = createStaticPublicationReleaseManifest({ ...base, reason: "fixture C", artifactRelativePath: "artifacts/c.json", artifactText: artifactCText, previousReleaseId: releaseB.releaseId, previousReleaseManifest: releaseB });
   await writeFile(path.join(lineageDir, "artifacts", "c.json"), artifactCText);
   await writeFile(path.join(lineageDir, "release.json"), `${JSON.stringify(releaseC)}\n`);
-  const predecessorC = await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json") });
+  const predecessorC = await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json"), useRollbackPredecessor: true });
   eq(predecessorC.releaseId, releaseB.releaseId);
   eq(predecessorC.projection.products[0].offers[0].itemPriceUsd, 101);
   const failedBDiscardedC = createStaticPublicationReleaseManifest({ ...base, reason: "fixture C after failed B", artifactRelativePath: "artifacts/c.json", artifactText: artifactCText, previousReleaseId: manifest.releaseId, previousReleaseManifest: manifest });
   await writeFile(path.join(lineageDir, "release.json"), `${JSON.stringify(failedBDiscardedC)}\n`);
-  eq((await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json") })).releaseId, manifest.releaseId);
+  eq((await loadStaticPublicationContinuityProjection({ manifestPath: path.join(lineageDir, "release.json"), useRollbackPredecessor: true })).releaseId, manifest.releaseId);
 } finally { await rm(lineageDir, { recursive: true, force: true }); }
 
 const readJson = async file => JSON.parse(await readFile(file, "utf8"));

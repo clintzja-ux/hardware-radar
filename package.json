@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "forge:operator": "node --env-file=.env scripts/serve-forge-operator-preview.mjs",
+    "forge:operator:preview": "node --env-file=.env scripts/serve-forge-operator-preview.mjs",
     "build:public": "node scripts/build-public.mjs",
     "build:public:development-preview": "node scripts/build-public-development-preview.mjs",
     "serve:public:development-preview": "node scripts/serve-public-development-preview.mjs",

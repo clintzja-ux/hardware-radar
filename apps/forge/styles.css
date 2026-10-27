@@ -1088,3 +1088,14 @@ input[readonly] {
     flex-wrap: wrap;
     justify-content: flex-end;
 }
+
+.operator-dialog { width: min(820px, calc(100vw - 32px)); max-height: 90vh; padding: 0; border: 0; border-radius: 16px; box-shadow: 0 24px 80px rgb(15 23 42 / 35%); }
+.operator-dialog::backdrop { background: rgb(15 23 42 / 55%); }
+.operator-dialog > section { padding: 24px; }
+.operator-dialog header, .operator-dialog footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.operator-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 20px 0; }
+.operator-form-grid label { display: grid; gap: 6px; color: var(--text-subtle); font-size: .74rem; font-weight: 800; }
+.operator-form-grid input, .operator-form-grid select { min-height: 42px; padding: 0 11px; border: 1px solid var(--border-strong); border-radius: 8px; }
+.operator-form-grid .field-full { grid-column: 1 / -1; }
+.product-manager-security { margin: 20px 0 0; padding: 12px; border-radius: 9px; background: #fef3c7; color: #78350f; }
+@media (max-width: 620px) { .operator-form-grid { grid-template-columns: 1fr; } .operator-form-grid .field-full { grid-column: auto; } }

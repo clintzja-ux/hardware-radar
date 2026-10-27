@@ -193,3 +193,9 @@ Low-level `scripts/*.mjs`, fixture utilities, direct importers, recovery helpers
 - `config/operations/operator-command-registry.json`: machine-readable canonical command inventory.
 
 Any increment adding, changing, deprecating, superseding, or removing an operator-facing command must update both this runbook and the registry.
+
+## Trusted Forge manual price entry
+
+Launch Forge by double-clicking `Launch Hardware Radar Forge.cmd` from the repository root, or run `npm run forge:operator`. The Windows launcher establishes the trusted JRVR operator bootstrap; running the preview server module directly does not establish an authenticated operator session.
+
+In Forge, use **Manual Price Entry** to select an existing Atlas RAM product and governed Amazon or Newegg destination, then enter item price, shipping, mandatory fees, seller, condition, availability, and observation time. One explicit confirmation invokes the existing Mercury manual Current and History processing owners. Unknown shipping or mandatory fees remain unknown and cannot qualify an offer for delivered-cost comparison. Current, History, Cheapest, Picks, affiliate, publication, and release decisions remain independently governed.

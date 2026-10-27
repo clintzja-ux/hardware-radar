@@ -11,7 +11,7 @@ let cases = 0;
 const asOf = "2026-09-03T12:00:00.000Z";
 const manifest = JSON.parse(await readFile(new URL("../../atlas/atlas-manifest.json", import.meta.url), "utf8"));
 const atlasProducts = await Promise.all(manifest.products.map(async entry => JSON.parse(await readFile(new URL(`../../atlas/${entry.path}`, import.meta.url), "utf8"))));
-for (const product of atlasProducts.filter(item => item.identity.createdBy === "system:atlas-ram-expansion-002" || item.identity.createdBy === "system:atlas-ram-coverage-expansion-batch-a-p1" || item.identity.createdBy === "system:atlas-ram-coverage-expansion-batch-b-p1" || item.identity.createdBy === "system:atlas-ram-manufacturer-first-cohort-admission-p1" || ATLAS_PRE_EXPANSION_PRODUCT_IDS.includes(item.identity.atlasProductId))) { product.governance.lifecycleStatus = "DRAFT"; product.governance.publicationStatus = "PENDING"; }
+for (const product of atlasProducts.filter(item => Date.parse(item.identity.createdAt) > Date.parse(asOf) || item.identity.createdBy === "system:atlas-ram-expansion-002" || item.identity.createdBy === "system:atlas-ram-coverage-expansion-batch-a-p1" || item.identity.createdBy === "system:atlas-ram-coverage-expansion-batch-b-p1" || item.identity.createdBy === "system:atlas-ram-manufacturer-first-cohort-admission-p1" || ATLAS_PRE_EXPANSION_PRODUCT_IDS.includes(item.identity.atlasProductId))) { product.governance.lifecycleStatus = "DRAFT"; product.governance.publicationStatus = "PENDING"; }
 const atlas = { products: { getAll: async () => structuredClone(atlasProducts) } };
 const reusable = new Map([
   ["ram_corsair_cmk32gx5m2b6000z30", { status: "REUSABLE", productId: null, dataDocId: "3844868436216882408", gid: null, bindingDigest: "a".repeat(64) }],
@@ -78,7 +78,7 @@ assert(projectAcquisitionPortfolio({ portfolio, currentUtcDaySpendUsd: .075 }).b
 assert.throws(() => projectAcquisitionPortfolio({ portfolio, events: [event("excluded", portfolio.excludedProducts[0].atlasProductId, PORTFOLIO_EVENT_TYPES.PRODUCTS_POSTED, { operation: "PRODUCTS" })] }), /EXCLUDED_OR_UNKNOWN/); cases++;
 
 assert.equal(await assertAcquisitionPortfolioBindingCurrent({ portfolio, atlas, rightsRegistry: defaultSourceRightsRegistry }), true); cases++;
-const originalProducts = await atlas.products.getAll(), drifted = structuredClone(originalProducts); drifted[0].governance.lifecycleStatus = "DRAFT";
+const originalProducts = await atlas.products.getAll(), drifted = structuredClone(originalProducts), driftTarget = drifted.find(product => portfolio.eligibleProducts.some(selected => selected.atlasProductId === product.identity.atlasProductId)); assert.ok(driftTarget); driftTarget.governance.lifecycleStatus = "DRAFT";
 await assert.rejects(() => assertAcquisitionPortfolioBindingCurrent({ portfolio, atlas: { products: { getAll: async () => drifted } }, rightsRegistry: defaultSourceRightsRegistry }), /ATLAS_DRIFT/); cases++;
 const changedRights = structuredClone(defaultSourceRightsRegistry.get("DATAFORSEO_GOOGLE_SHOPPING")); changedRights.status = "CHANGED";
 await assert.rejects(() => assertAcquisitionPortfolioBindingCurrent({ portfolio, atlas, rightsRegistry: { get: () => changedRights } }), /RIGHTS_DRIFT/); cases++;

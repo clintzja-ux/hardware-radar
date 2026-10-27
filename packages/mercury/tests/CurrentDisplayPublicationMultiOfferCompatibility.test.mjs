@@ -12,6 +12,7 @@ const state = JSON.parse(await readFile(".forge-review/retail-display/current-di
 const canonicalState = await new FileCurrentDisplaySnapshotRepository({ statePath: ".forge-review/retail-display/current-display-snapshots.json" }).getState();
 const publicationContinuity = await loadStaticPublicationContinuityProjection({ manifestPath: "config/publication-release.json" });
 const publishedProjection = publicationContinuity.projection;
+assert.equal(publicationContinuity.releaseId, JSON.parse(await readFile("config/publication-release.json", "utf8")).releaseId);
 const before = JSON.stringify(state);
 const current = { ...state.current, offers: state.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) };
 const eligible = deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot: current, rightsRegistry: defaultSourceRightsRegistry });
@@ -75,7 +76,7 @@ try{
   await writeFile(path.join(lineageRoot,activeManifest.artifact.relativePath),activeArtifactText);
   await writeFile(path.join(lineageRoot,replacement.artifact.relativePath),candidateBundleText);
   await writeFile(path.join(lineageRoot,"release.json"),`${JSON.stringify(replacement)}\n`);
-  const afterReplacement=(await loadStaticPublicationContinuityProjection({manifestPath:path.join(lineageRoot,"release.json")})).projection;
+  const afterReplacement=(await loadStaticPublicationContinuityProjection({manifestPath:path.join(lineageRoot,"release.json"),useRollbackPredecessor:true})).projection;
   const realContinuity=deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot:{...eligible,offers:gskill},predecessorSnapshot:state.previous,publishedProjection:afterReplacement,continuityTransitions});
   assert.equal(realContinuity.offers[0].offerIdentity,"mer_offer_77fab51b74d40becbd942cff");
 }finally{await rm(lineageRoot,{recursive:true,force:true});}

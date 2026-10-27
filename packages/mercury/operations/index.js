@@ -9,3 +9,7 @@ export * from "./NeweggRoutineProductionCommand.js";
 export * from "./PrivateForgeOperationsTransport.js";
 export * from "./NeweggRoutineMarketObservation.js";
 export * from "./NeweggRoutineSchedulingAndRetention.js";
+export * from "./FileForgeOperatorAuditRepository.js";
+export * from "./ForgeManualPriceEntryService.js";
+export * from "./ForgeTrustedOperatorHttpRuntime.js";
+export * from "./ForgeTrustedOperatorService.js";
