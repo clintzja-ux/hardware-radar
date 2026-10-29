@@ -26,7 +26,22 @@ Actual deterministic seller attribution is preserved. Exact `Amazon.com` is clas
 
 Offer identity uses Atlas product + Amazon channel + exact ASIN listing anchor + deterministic seller (when present) + condition. It is stable across price, observation time, acquisition mode, provider task, and evidence record changes. Different sellers or conditions remain different offers. Unknown-seller evidence remains representable through its exact ASIN anchor but carries an independent seller blocker.
 
-The canonical Amazon product destination is classified `CHANNEL_PRODUCT_DESTINATION`; it is not evidence that a retained marketplace price has a seller-offer-corresponding action. The adapter therefore always preserves `OFFER_ACTION_NOT_ESTABLISHED` for this retained population.
+The canonical Amazon product or all-offers destination is classified `CHANNEL_PRODUCT_DESTINATION`. It does not preselect the observed seller or guarantee that the observed price remains available. Under Hardware Radar's approved marketplace-navigation policy, that limitation no longer makes an otherwise trustworthy timestamped marketplace observation ineligible by itself. Public presentation must preserve the observed seller and time and disclose `PRODUCT_OR_ALL_OFFERS_NAVIGATION_SELLER_AND_PRICE_NOT_PRESELECTED`. A seller-profile URL may provide seller context, but it is not an offer action and must not replace the governed product destination.
+
+The implemented adapter predates that policy correction and still emits `OFFER_ACTION_NOT_ESTABLISHED`, `comparisonEligible: false`, and `MARKETPLACE_CURRENT_NOT_QUALIFIED` unconditionally. Those are now implementation blockers rather than evidence that an exact seller-selected URL exists or should be constructed. Removing them requires a bounded adapter/qualification correction through the existing Current owners; this documentation update does not requalify retained evidence.
+
+## Written DataForSEO clarification — 2026-10-29
+
+DataForSEO confirmed in writing that:
+
+1. No Amazon Sellers endpoint returns a stable offer-level identifier.
+2. No documented Amazon URL preselects an exact seller offer.
+3. Seller-profile and all-offers URLs are available.
+4. DataForSEO states there is no restriction on using or displaying the returned URLs.
+5. Sellers results are timestamped snapshots; Amazon prices and featured offers may change after observation.
+6. The Sellers HTML function exposes raw offers-page markup, but undocumented Amazon internal values are not stable identifiers and must not be promoted as such.
+
+Hardware Radar therefore must not synthesize an offer ID, treat an undocumented HTML value as durable identity, or claim that a destination selects the observed seller. Exact Atlas product + governed ASIN + Amazon marketplace + observed seller + condition remain the deterministic offer identity inputs. Product/all-offers navigation is acceptable only with the marketplace-navigation disclosure and all ordinary Current, rights, freshness, availability, shipping, fee, and comparability gates.
 
 ## Canonical retained-evidence certification
 
@@ -43,15 +58,28 @@ The qualification funnel is:
 | Seller-ready | 199 |
 | Condition-ready | 195 |
 | Offer-presence/availability-ready under the subsequent versioned policy | 199 |
-| Price-corresponding action-ready | 0 |
+| Seller + NEW + USD price + offer-presence ready | 165 |
+| Above rows with explicit shipping amount | 23 |
+| Exact seller-preselected action available | 0 (not required by approved marketplace-navigation policy) |
 | Fresh under an established Amazon Current policy | 0 |
 | Fully Current-qualification-ready | 0 |
 
-No DataForSEO Amazon Sellers Current freshness policy exists yet, so freshness is explicitly unassessed rather than fabricated. Semantic readiness remains separate from freshness.
+All 218 retained rows are now stale. Across the retained population, 34 rows have an explicit shipping amount and 184 have unknown shipping; within the 165 seller/new/USD/presence-ready rows, 23 have explicit shipping and 142 do not. No retained row carries a separately established mandatory-fee amount. Unknown shipping or unavoidable fees must never be treated as zero and prevent delivered-cost Cheapest/Pick comparison until established. No DataForSEO Amazon Sellers Current freshness policy exists yet, so freshness is explicitly unassessed rather than fabricated. Semantic readiness remains separate from freshness.
 
-## Remaining evidence questions
+## Qualification assessment and remaining gaps
 
-The remaining Current-semantic blocker is a responsible source-specific freshness policy. The separate actionability question remains whether the provider supplies a retained offer identifier or explicit seller-offer/add-to-cart destination that can be validated without URL synthesis. Amazon Associates compliance, Current progression, and public marketplace display remain separate increments.
+**Assessment:** future fresh Sellers observations can support product-level Amazon marketplace navigation under the approved policy; an exact seller-preselected action is neither available nor required. The current adapter cannot yet admit them because its pre-policy action blocker and comparison flags remain hard-coded.
+
+The remaining eligibility gaps are:
+
+- establish and certify a DataForSEO Amazon Sellers source-specific Current freshness policy;
+- update the existing adapter and Current qualification composition to accept governed product/all-offers navigation with the required seller/time/non-preselection disclosure;
+- reconcile the automated-lane certification with the already implemented exact ASIN destination binding and offer-presence semantics;
+- require explicit shipping and unavoidable-fee treatment for delivered-cost comparison—unknown values remain ineligible for Cheapest and retailer pricing used by Picks;
+- preserve independent source-rights, seller, `NEW` condition, USD price, availability/presence, canonical destination, and exact provider-lineage validation;
+- keep Amazon Associates eligibility independent from Current and comparison eligibility.
+
+No retained row is eligible for requalification: all are stale, and none establishes the complete delivered-cost fee treatment. New paid Sellers acquisition is not justified solely by this clarification; first certify the bounded adapter/freshness correction, then authorize only a small evidence-gathering canary if the expected shipping/fee yield can answer the remaining commercial question.
 
 ## Authority and isolation
 
