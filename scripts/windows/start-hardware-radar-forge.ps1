@@ -1,8 +1,17 @@
+param(
+    [string]$RuntimeRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path,
+    [string]$OperationalRoot = "C:\Projects\hardware-radar\hardware-radar"
+)
 $ErrorActionPreference = "Stop"
-$repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$runtimeRoot = (Resolve-Path -LiteralPath $RuntimeRoot).Path
+$operationalRoot = (Resolve-Path -LiteralPath $OperationalRoot).Path
+$operationalEnvironment = Join-Path $operationalRoot ".env"
+if (-not (Test-Path -LiteralPath $operationalEnvironment -PathType Leaf)) { throw "Forge operational environment is unavailable." }
+$entryPoint = Join-Path $runtimeRoot "scripts\serve-forge-operator-preview.mjs"
+if (-not (Test-Path -LiteralPath $entryPoint -PathType Leaf)) { throw "Forge runtime entry point is unavailable." }
 $url = "http://127.0.0.1:4174/"
 $health = "$url`operator-api/health"
-$expectedRevision = (& git -C $repositoryRoot rev-parse HEAD).Trim()
+$expectedRevision = (& git -C $runtimeRoot rev-parse HEAD).Trim()
 
 $status = $null
 try { $status = Invoke-RestMethod -Uri $health -TimeoutSec 1 } catch {}
@@ -29,12 +38,13 @@ if ($null -ne $status) {
 
 $node = (Get-Command node -ErrorAction Stop).Source
 $operator = "operator:$env:USERNAME"
-$logRoot = Join-Path $repositoryRoot ".forge-review\forge"
+$logRoot = Join-Path $operationalRoot ".forge-review\forge"
 New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
 $env:FORGE_OPERATOR_ID = $operator
 $env:FORGE_OPERATOR_TRUSTED_LAUNCH = "1"
 $env:FORGE_OPERATOR_PREVIEW_PORT = "4174"
-Start-Process -FilePath $node -ArgumentList "--env-file=.env", "scripts/serve-forge-operator-preview.mjs" -WorkingDirectory $repositoryRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $logRoot "operator-runtime.log") -RedirectStandardError (Join-Path $logRoot "operator-runtime-error.log")
+$env:FORGE_OPERATOR_OPERATIONAL_ROOT = $operationalRoot
+Start-Process -FilePath $node -ArgumentList "--env-file=$operationalEnvironment", $entryPoint -WorkingDirectory $runtimeRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $logRoot "operator-runtime.log") -RedirectStandardError (Join-Path $logRoot "operator-runtime-error.log")
 
 $ready = $false
 for ($attempt = 0; $attempt -lt 40; $attempt++) {

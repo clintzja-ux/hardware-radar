@@ -1,7 +1,7 @@
 import { createReadStream } from "node:fs";
 import { access, stat } from "node:fs/promises";
 import { createServer } from "node:http";
-import { extname, join, normalize, relative, resolve } from "node:path";
+import { extname, isAbsolute, join, normalize, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { readFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
@@ -12,12 +12,15 @@ import { defaultSourceRightsRegistry } from "../packages/mercury/rights/SourceRi
 import { loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const operationalRootValue = process.env.FORGE_OPERATOR_OPERATIONAL_ROOT?.trim();
+if (operationalRootValue && !isAbsolute(operationalRootValue)) throw new Error("FORGE_OPERATOR_OPERATIONAL_ROOT_MUST_BE_ABSOLUTE");
+const operationalRoot = operationalRootValue ? resolve(operationalRootValue) : repositoryRoot;
 const runtimeRevision = (() => { try { return execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8", windowsHide: true }).trim(); } catch { return "UNKNOWN"; } })();
 const forgeRoot = join(repositoryRoot, "apps", "forge");
 const publicImages = join(repositoryRoot, "public", "images");
 const operatorData = new Map([
-    ["/operator-data/product-manager.json", join(repositoryRoot, ".forge-review", "forge", "product-manager.json")],
-    ["/operator-data/certified-mercury-operations.json", join(repositoryRoot, ".forge-review", "forge", "certified-mercury-operations.json")]
+    ["/operator-data/product-manager.json", join(operationalRoot, ".forge-review", "forge", "product-manager.json")],
+    ["/operator-data/certified-mercury-operations.json", join(operationalRoot, ".forge-review", "forge", "certified-mercury-operations.json")]
 ]);
 const mime = new Map([[".html", "text/html; charset=utf-8"], [".js", "text/javascript; charset=utf-8"], [".css", "text/css; charset=utf-8"], [".json", "application/json; charset=utf-8"], [".svg", "image/svg+xml"], [".ico", "image/x-icon"], [".png", "image/png"]]);
 const port = Number(process.env.FORGE_OPERATOR_PREVIEW_PORT ?? 4174);
@@ -31,29 +34,29 @@ if(operatorId){
     fixtureMode=Boolean(fixtureRoot);
     const atlasRoot = fixtureRoot ? join(fixtureRoot, "atlas") : join(repositoryRoot, "packages", "atlas");
     const destinationPath = fixtureRoot ? join(fixtureRoot, "production-destinations.json") : join(repositoryRoot, "packages", "mercury", "destinations", "production-destinations.json");
-    const workbookPath = fixtureRoot ? join(fixtureRoot, "manual-price-workbook.xlsx") : join(repositoryRoot, ".forge-review", "retail-display", "hardware-radar-amazon-newegg-manual-price-research-with-rakuten.xlsx");
-    const currentPath = fixtureRoot ? join(fixtureRoot, "current-display-snapshots.json") : join(repositoryRoot, ".forge-review", "retail-display", "current-display-snapshots.json");
-    const historyPath = fixtureRoot ? join(fixtureRoot, "historical-observations.json") : join(repositoryRoot, ".forge-review", "mercury", "historical-observations.json");
-    const auditPath = fixtureRoot ? join(fixtureRoot, "operator-audit.json") : join(repositoryRoot, ".forge-review", "forge", "operator-audit.json");
+    const workbookPath = fixtureRoot ? join(fixtureRoot, "manual-price-workbook.xlsx") : join(operationalRoot, ".forge-review", "retail-display", "hardware-radar-amazon-newegg-manual-price-research-with-rakuten.xlsx");
+    const currentPath = fixtureRoot ? join(fixtureRoot, "current-display-snapshots.json") : join(operationalRoot, ".forge-review", "retail-display", "current-display-snapshots.json");
+    const historyPath = fixtureRoot ? join(fixtureRoot, "historical-observations.json") : join(operationalRoot, ".forge-review", "mercury", "historical-observations.json");
+    const auditPath = fixtureRoot ? join(fixtureRoot, "operator-audit.json") : join(operationalRoot, ".forge-review", "forge", "operator-audit.json");
     const readJson=async resource=>JSON.parse(await readFile(resource instanceof URL?fileURLToPath(resource):resource,"utf8"));
     const retailerReader=new RetailerRepository({readJson});
     const catalogWriter=new FileAtlasCatalogAdministrationRepository({atlasRoot});
     const catalogRepository={getAll:()=>catalogWriter.getAll(),getBrands:()=>catalogWriter.getBrands(),getById:id=>catalogWriter.getById(id),registerBrand:value=>catalogWriter.registerBrand(value),createProduct:value=>catalogWriter.createProduct(value),updateProduct:(value,options)=>catalogWriter.updateProduct(value,options),correctDraftIdentity:value=>catalogWriter.correctDraftIdentity(value),assessDraftActivation:id=>catalogWriter.assessDraftActivation(id),activateDraft:value=>catalogWriter.activateDraft(value)};
     const destinationRepository=new ProductionFlatRetailerDestinationRepository({statePath:destinationPath,productRepository:catalogRepository,retailerRepository:retailerReader});
     const auditRepository=new FileForgeOperatorAuditRepository({statePath:auditPath});
-    const identityCorrectionRepository=new FileForgeDraftIdentityCorrectionRepository({statePath:fixtureRoot?join(fixtureRoot,"draft-identity-corrections.json"):join(repositoryRoot,".forge-review","forge","draft-identity-corrections.json")});
+    const identityCorrectionRepository=new FileForgeDraftIdentityCorrectionRepository({statePath:fixtureRoot?join(fixtureRoot,"draft-identity-corrections.json"):join(operationalRoot,".forge-review","forge","draft-identity-corrections.json")});
     const linkVerifier=new GovernedRetailerLinkVerificationService({request:fetch});
     const affiliateOwner=new ManualCurrentPriceAffiliateWorkbookRepository({workbookPath,productRepository:catalogRepository,destinationRepository});
     const identityDependencyInspector=async atlasProductId=>{const current=(await new FileCurrentDisplaySnapshotRepository({statePath:currentPath}).getState()).current,history=await new FileHistoricalObservationRepository({statePath:historyPath}).getAll();return[...((current?.offers??[]).some(value=>value.atlasProductId===atlasProductId)?[{type:"CURRENT_OBSERVATION",id:atlasProductId}]:[]),...(history.some(value=>value.atlasProductId===atlasProductId)?[{type:"HISTORY_OBSERVATION",id:atlasProductId}]:[])];};
-    const recurringAuthorityRepository=new FileNeweggRoutineRecurringAuthorityRepository({statePath:fixtureRoot?join(fixtureRoot,"newegg-recurring-authority.json"):join(repositoryRoot,".forge-review","mercury","newegg-routine","recurring-authority.json")});
+    const recurringAuthorityRepository=new FileNeweggRoutineRecurringAuthorityRepository({statePath:fixtureRoot?join(fixtureRoot,"newegg-recurring-authority.json"):join(operationalRoot,".forge-review","mercury","newegg-routine","recurring-authority.json")});
     const recurringAuthorityService=new NeweggRoutineRecurringAuthorityService({repository:recurringAuthorityRepository});
-    const bootstrapRepository=new FileNeweggRoutineLiveBootstrapRepository({statePath:fixtureRoot?join(fixtureRoot,"newegg-live-bootstrap.json"):join(repositoryRoot,".forge-review","mercury","newegg-routine","live-bootstrap.json")});
-    const dispositionEvidenceOwner=new ProductionNeweggFailedAcquisitionEvidenceOwner({root:fixtureRoot??repositoryRoot,bootstrapRepository,authorityService:recurringAuthorityService,auditRepository});
+    const bootstrapRepository=new FileNeweggRoutineLiveBootstrapRepository({statePath:fixtureRoot?join(fixtureRoot,"newegg-live-bootstrap.json"):join(operationalRoot,".forge-review","mercury","newegg-routine","live-bootstrap.json")});
+    const dispositionEvidenceOwner=new ProductionNeweggFailedAcquisitionEvidenceOwner({root:fixtureRoot??operationalRoot,bootstrapRepository,authorityService:recurringAuthorityService,auditRepository});
     const neweggAcquisitionDispositionService=new NeweggFailedAcquisitionDispositionService({bootstrapRepository,authorityService:recurringAuthorityService,evidenceOwner:dispositionEvidenceOwner});
-    const neweggRoutineInspector=new ProductionNeweggRoutineOperatorCommand({root:fixtureRoot??repositoryRoot}),neweggRoutineExecutionSupervisor=new ForgeNeweggRoutineExecutionSupervisor({command:neweggRoutineInspector});
-    const preparationRepository=new FileManualCurrentPricePreparationRepository({filePath:fixtureRoot?join(fixtureRoot,"manual-current-price-preparations.json"):join(repositoryRoot,".forge-review","retail-display","manual-current-price-preparations.json")});
+    const neweggRoutineInspector=new ProductionNeweggRoutineOperatorCommand({root:fixtureRoot??operationalRoot}),neweggRoutineExecutionSupervisor=new ForgeNeweggRoutineExecutionSupervisor({command:neweggRoutineInspector});
+    const preparationRepository=new FileManualCurrentPricePreparationRepository({filePath:fixtureRoot?join(fixtureRoot,"manual-current-price-preparations.json"):join(operationalRoot,".forge-review","retail-display","manual-current-price-preparations.json")});
     const snapshotRepository=new FileCurrentDisplaySnapshotRepository({statePath:currentPath});
-    const executionRepository=new FileManualCurrentPriceSnapshotExecutionRepository({filePath:fixtureRoot?join(fixtureRoot,"manual-current-price-snapshot-executions.json"):join(repositoryRoot,".forge-review","retail-display","manual-current-price-snapshot-executions.json")});
+    const executionRepository=new FileManualCurrentPriceSnapshotExecutionRepository({filePath:fixtureRoot?join(fixtureRoot,"manual-current-price-snapshot-executions.json"):join(operationalRoot,".forge-review","retail-display","manual-current-price-snapshot-executions.json")});
     const productResolver=id=>catalogRepository.getById(id),retailerResolver=async id=>(await retailerReader.getAll()).find(value=>value.id===id)??null,destinationResolver=async id=>(await destinationRepository.getAll()).find(value=>value.destinationId===id)??null;
     const snapshotExecutionService=new ManualCurrentPriceSnapshotExecutionService({preparationRepository,snapshotRepository,executionRepository,productResolver,retailerResolver,destinationResolver,rightsResolver:async id=>defaultSourceRightsRegistry.require(id)});
     const historyService=new ManualCurrentPriceHistoryService({historicalRepository:new FileHistoricalObservationRepository({statePath:historyPath}),rightsRegistry:defaultSourceRightsRegistry});
