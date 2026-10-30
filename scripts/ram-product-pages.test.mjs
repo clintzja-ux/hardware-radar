@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { createRamCatalogProjection, createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { formatProductName } from "../public/js/modules/ramTerminal.js";
-import { calculatePriceDisplayDomain, createRamProductSitemapRoutes, renderRamProductPage, selectChronologyTickIndexes } from "./ram-product-publishing.mjs";
+import { calculatePriceDisplayDomain, createRamProductSitemapRoutes, renderRamProductPage, selectChronologyTickIndexes, selectRelatedRamProducts } from "./ram-product-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
@@ -56,9 +56,9 @@ assert.ok(duplicateBrandProducts.length > 0);
 const observedDuplicate = duplicateBrandProducts.find((product) => product.atlasProductId === "ram_crucial_ct16g4dfra32a");
 assert.ok(observedDuplicate);
 const observedDuplicateHtml = renderRamProductPage(observedDuplicate);
-assert.match(observedDuplicateHtml, /<h1>Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s<\/h1>/);
-assert.match(observedDuplicateHtml, /aria-current="page">Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s<\/span>/);
-assert.match(observedDuplicateHtml, /<meta name="description" content="Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s specifications:/);
+assert.match(observedDuplicateHtml, /<h1>Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s — CT16G4DFRA32A<\/h1>/);
+assert.match(observedDuplicateHtml, /aria-current="page">Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s — CT16G4DFRA32A<\/span>/);
+assert.match(observedDuplicateHtml, /<meta name="description" content="Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s — CT16G4DFRA32A specifications:/);
 assert.doesNotMatch(observedDuplicateHtml, /<h1>Crucial Crucial|aria-current="page">Crucial Crucial|content="Crucial Crucial/);
 assert.match(observedDuplicateHtml, /"@type":"Product","name":"Crucial Crucial DDR4 16GB \(1×16GB\) 3200 MT\/s"/, "Structured canonical identity must remain unchanged.");
 assert.equal(observedDuplicate.publicPath, "/ram/crucial-crucial-ct16g4dfra32a/");
@@ -66,10 +66,10 @@ assert.equal(observedDuplicate.atlasProductId, "ram_crucial_ct16g4dfra32a");
 
 const corsairFixture = { ...catalog.products.find((product) => product.brand === "Corsair"), displayName: "Corsair Corsair Vengeance DDR5" };
 const corsairFixtureHtml = renderRamProductPage(corsairFixture);
-assert.match(corsairFixtureHtml, /<h1>Corsair Vengeance DDR5<\/h1>/);
+assert.match(corsairFixtureHtml, new RegExp(`<h1>Corsair Vengeance DDR5 — ${corsairFixture.manufacturerPartNumber}<\\/h1>`));
 assert.doesNotMatch(corsairFixtureHtml, /<h1>Corsair Corsair/);
 const legitimateRepeatFixture = { ...corsairFixture, displayName: "Corsair Vengeance Vengeance DDR5" };
-assert.match(renderRamProductPage(legitimateRepeatFixture), /<h1>Corsair Vengeance Vengeance DDR5<\/h1>/);
+assert.match(renderRamProductPage(legitimateRepeatFixture), new RegExp(`<h1>Corsair Vengeance Vengeance DDR5 — ${legitimateRepeatFixture.manufacturerPartNumber}<\\/h1>`));
 
 const collision = structuredClone(products[1]);
 collision.identity.slug = products[0].identity.slug;
@@ -80,29 +80,60 @@ assert.throws(() => createRamPublicProductIdentity(unsafe), /RAM_PUBLIC_IDENTITY
 
 const titles = new Set();
 const canonicals = new Set();
+const headings = new Set();
+const descriptions = new Set();
 for (const product of publicCatalog.products) {
     const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
     await stat(output);
     const html = await readFile(output, "utf8");
-    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(product.atlasProductId), chronologicalSeriesByProduct.get(product.atlasProductId) ?? null), `${product.publicPath} must match its canonical generator.`);
+    const related = selectRelatedRamProducts(product, publicCatalog.products);
+    assert.equal(html, renderRamProductPage(product, destinations.filter(destination => destination.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(product.atlasProductId), chronologicalSeriesByProduct.get(product.atlasProductId) ?? null, related), `${product.publicPath} must match its canonical generator.`);
     assert.equal((html.match(/<h1>/g) ?? []).length, 1);
     assert.match(html, new RegExp(`data-atlas-product-id="${product.atlasProductId}"`));
     assert.ok(html.includes(product.manufacturerPartNumber));
     assert.match(html, /href="\/ram\/">Back to the RAM catalog<\/a>/);
     assert.match(html, /href="\/ram\/terminal\/">View RAM Market Terminal<\/a>/);
     assert.match(html, /<h2 id="observed-history-heading">Hardware Radar-observed price history<\/h2>/);
-    assert.doesNotMatch(html, /"@type":"(?:Offer|AggregateOffer|Review|AggregateRating)"/);
-    assert.doesNotMatch(html, /"(?:offers|price|priceCurrency|availability|seller|review|aggregateRating|merchantReturnPolicy|shippingDetails|retailer|affiliateUrl|sourceUrl)"\s*:/i);
+    assert.doesNotMatch(html, /"@type":"(?:Review|AggregateRating)"/);
+    if (currentRetailByProduct.get(product.atlasProductId)?.offers?.length) assert.match(html, /"@type":"Offer"/);
+    else assert.doesNotMatch(html, /"@type":"Offer"/);
     assert.doesNotMatch(html, />[^<]*(?:\bCheapest\b|\bPick\b|we tested|our testing|recommended|recommendation)[^<]*</i);
     const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
     const canonical = html.match(/<link rel="canonical" href="([^"]+)">/)?.[1];
+    const heading = html.match(/<h1>([^<]+)<\/h1>/)?.[1];
+    const description = html.match(/<meta name="description" content="([^"]+)">/)?.[1];
     assert.ok(title && !titles.has(title), `Unique title required for ${product.publicPath}.`);
     assert.ok(canonical && !canonicals.has(canonical), `Unique canonical required for ${product.publicPath}.`);
+    assert.ok(heading && !headings.has(heading), `Unique H1 required for ${product.publicPath}.`);
+    assert.ok(description && !descriptions.has(description), `Unique description required for ${product.publicPath}.`);
     titles.add(title);
     canonicals.add(canonical);
+    headings.add(heading);
+    descriptions.add(description);
     assert.match(html, /"@type":"Product"/);
-    assert.doesNotMatch(html, /"@type":"(?:Offer|AggregateOffer|Review|AggregateRating)"/);
+    assert.doesNotMatch(html, /"@type":"(?:Review|AggregateRating)"/);
+    assert.doesNotMatch(html, /<meta name="robots" content="[^"]*noindex/i);
+    const relatedCandidates = selectRelatedRamProducts(product, publicCatalog.products);
+    assert.ok(relatedCandidates.length > 0 && relatedCandidates.length <= 4);
+    assert.ok(relatedCandidates.every(candidate => candidate.memoryType === product.memoryType && candidate.formFactor === product.formFactor));
+    for (const candidate of relatedCandidates) assert.match(html, new RegExp(`href="${candidate.publicPath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
 }
+
+const discoveryBlock = html => html.match(/<!-- RAM_PRODUCT_DISCOVERY_START -->([\s\S]*?)<!-- RAM_PRODUCT_DISCOVERY_END -->/)?.[1] ?? "";
+const discoveryLinks = html => [...discoveryBlock(html).matchAll(/href="(\/ram\/[a-z0-9-]+\/)"/g)].map(match => match[1]);
+const discoverySurfaces = new Map([
+    ["public/index.html", publicCatalog.products],
+    ["public/ram/index.html", publicCatalog.products],
+    ["public/ddr4.html", publicCatalog.products.filter(product => product.memoryType === "DDR4" && product.formFactor === "DIMM")],
+    ["public/ddr5.html", publicCatalog.products.filter(product => product.memoryType === "DDR5" && product.formFactor === "DIMM")],
+    ["public/sodimm.html", publicCatalog.products.filter(product => product.formFactor === "SO_DIMM")]
+]);
+for (const [surface, expectedProducts] of discoverySurfaces) {
+    const links = discoveryLinks(await read(surface));
+    assert.equal(links.length, expectedProducts.length, `${surface} must expose every relevant product in server-rendered HTML.`);
+    assert.deepEqual(new Set(links), new Set(expectedProducts.map(product => product.publicPath)));
+}
+assert.match(await read("public/js/modules/ramCatalog.js"), /results\.innerHTML = ordered\.length/, "JavaScript must replace, rather than duplicate, the server-rendered catalog fallback.");
 
 const optionalMissing = catalog.products.find((product) => !product.casLatency && !product.primaryTimings && !product.ratedVoltage);
 assert.ok(optionalMissing);
@@ -122,9 +153,13 @@ const generatedCatalog = JSON.parse(await read("public/data/ram-catalog.json"));
 assert.deepEqual(generatedCatalog, publicCatalog);
 
 const sitemap = await read("public/sitemap.xml");
-const productRoutes = createRamProductSitemapRoutes(releasedProducts);
+const productRoutes = createRamProductSitemapRoutes(releasedProducts, { currentRetailByProduct, chronologicalSeriesByProduct });
+assert.deepEqual(productRoutes, createRamProductSitemapRoutes(releasedProducts, { currentRetailByProduct, chronologicalSeriesByProduct }), "Sitemap output must be deterministic for unchanged evidence.");
 assert.equal(productRoutes.length, publicCatalog.productCount);
 for (const route of productRoutes) assert.equal((sitemap.match(new RegExp(`<loc>https://cheapestram\\.com${route.path}</loc>`, "g")) ?? []).length, 1);
+assert.doesNotMatch(sitemap, /<loc>[^<]+\.html<\/loc>/, "Sitemap must contain final HTTP-200 route identities, not redirecting .html aliases.");
+const changedRoutes = createRamProductSitemapRoutes(releasedProducts, { currentRetailByProduct: new Map([[releasedProducts[0].identity.atlasProductId, { offers: [{ observedAt: "2026-11-01T12:00:00.000Z" }] }]]) });
+assert.equal(changedRoutes.find(route => route.path === `/ram/${releasedProducts[0].identity.slug}/`).lastmod, "2026-11-01", "A meaningful published-offer change must advance lastmod.");
 const ramChildRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]);
 assert.equal(ramChildRoutes.filter((route) => !["/ram/compare/", "/ram/terminal/"].includes(route)).length, publicCatalog.productCount);
 
@@ -144,14 +179,18 @@ const pricedPage = catalog.products.find(product => destinations.some(destinatio
 assert.ok(pricedPage);
 const pricedDestination = destinations.find(destination => destination.atlasProductId === pricedPage.atlasProductId);
 const fixtureRetail = {
-    offers: [{ retailerName: pricedDestination.retailerDisplayName, itemPriceUsd: 100, observedAt: "2026-09-18T11:00:00.000Z", destinationUrl: pricedDestination.destinationUrl }],
+    offers: [{ atlasProductId: pricedPage.atlasProductId, retailerName: pricedDestination.retailerDisplayName, destinationId: pricedDestination.destinationId, itemPriceUsd: 100, currency: "USD", freshness: "PUBLIC_CURRENT", observedAt: "2026-09-18T11:00:00.000Z", destinationUrl: pricedDestination.destinationUrl }],
     lowerCurrentItemPrice: { retailerName: pricedDestination.retailerDisplayName, itemPriceUsd: 100 }
 };
 const pricedHtml = renderRamProductPage(pricedPage, [pricedDestination], fixtureRetail, currentRetail.disclosure);
 assert.match(pricedHtml, /<h2 id="current-retail-heading">Current market<\/h2>/);
 assert.match(pricedHtml, /Lower current item price:/);
 assert.match(pricedHtml, /Prices shown exclude applicable shipping, taxes, and fees\./);
-assert.doesNotMatch(pricedHtml, /"@type":"Offer"/);
+assert.match(pricedHtml, /"@type":"Offer"/);
+assert.match(pricedHtml, /"price":"100\.00","priceCurrency":"USD","availability":"https:\/\/schema\.org\/InStock"/);
+assert.match(pricedHtml, new RegExp(`"url":"${pricedDestination.destinationUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`));
+const staleOfferHtml = renderRamProductPage(pricedPage, [pricedDestination], { offers: [{ ...fixtureRetail.offers[0], freshness: "STALE" }] });
+assert.doesNotMatch(staleOfferHtml, /"@type":"Offer"/, "Stale public evidence must fail closed for Product offer markup.");
 
 const baseSummary = terminalByProduct.get(pricedPage.atlasProductId);
 const summary = (history) => ({ ...baseSummary, atlasProductId: pricedPage.atlasProductId, publicPath: pricedPage.publicPath, history });

@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRetailerDestination, RETAILER_DESTINATION_BINDING_METHOD, RETAILER_DESTINATION_SOURCE_TYPE, RETAILER_DESTINATION_TYPE, validateRetailerDestination } from "../packages/mercury/destinations/RetailerDestination.js";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
-import { renderRamProductPage } from "./ram-product-publishing.mjs";
+import { renderRamProductPage, selectRelatedRamProducts } from "./ram-product-publishing.mjs";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -130,7 +130,9 @@ for (const destination of production.records) {
 }
 for (const productPage of releasedCatalog.products) {
     const destinations = certifiedDestinations.filter(item => item.atlasProductId === productPage.atlasProductId);
-    const rendered = renderRamProductPage(productPage, destinations, currentRetailByProduct.get(productPage.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(productPage.atlasProductId) ?? null, chronologyByProduct.get(productPage.atlasProductId) ?? null);
+    const currentOffer = currentRetailByProduct.get(productPage.atlasProductId) ?? null;
+    const relatedProducts = selectRelatedRamProducts(productPage, releasedCatalog.products);
+    const rendered = renderRamProductPage(productPage, destinations, currentOffer, currentRetail.disclosure, terminalByProduct.get(productPage.atlasProductId) ?? null, chronologyByProduct.get(productPage.atlasProductId) ?? null, relatedProducts);
     const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);
     assert.equal((rendered.match(/googletagmanager\.com\/gtag\/js/g) ?? []).length, 1);
@@ -144,7 +146,9 @@ for (const productPage of releasedCatalog.products) {
         assert.match(rendered, /target="_blank" rel="noopener noreferrer">Visit retailer<\/a>/);
         assert.doesNotMatch(rendered, /onclick=|sendBeacon\(|fetch\(|gtag\("event"|data-(?:analytics|event|destination)/i);
         assert.match(rendered, /do not indicate current price or availability/);
-        assert.doesNotMatch(rendered, /rel="[^"]*sponsored|affiliate|"@type":"(?:Offer|AggregateOffer)"|"price(?:Currency)?"|"availability"|"seller"/i);
+        assert.doesNotMatch(rendered, /rel="[^"]*sponsored|affiliate/i);
+        if (currentOffer) assert.match(rendered, /"@type":"Offer"/);
+        else assert.doesNotMatch(rendered, /"@type":"(?:Offer|AggregateOffer)"|"price(?:Currency)?"|"availability"|"seller"/i);
     } else {
         assert.doesNotMatch(rendered, /Retailer links|amazon\.com|newegg\.com/);
     }

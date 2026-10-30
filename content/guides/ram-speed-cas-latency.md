@@ -11,7 +11,7 @@ publisher: "Mirabelle Labs"
 publishedAt: "2026-09-02"
 updatedAt: "2026-09-02"
 relatedGuides: []
-relevantPricePages: ["/ddr5.html", "/ddr4.html"]
+relevantPricePages: ["/ddr5", "/ddr4"]
 references: [{"classification":"FACT","label":"Crucial: What are memory timings?","url":"https://www.crucial.com/support/articles-faq-memory/what-are-memory-timings"},{"classification":"FACT","label":"Kingston: CAS latency and RAM timings explained","url":"https://www.kingston.com/en/blog/gaming/cas-latency-cl-ram-timing-explained"},{"classification":"FACT","label":"Intel: Extreme Memory Profile (XMP)","url":"https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html"},{"classification":"FACT","label":"AMD: Extended Profiles for Overclocking (EXPO)","url":"https://www.amd.com/en/products/processors/technologies/expo.html"},{"classification":"EXPLANATION","label":"Hardware Radar: RAM Buying Guide","url":"https://cheapestram.com/guides/ram/"}]
 dek: "Transfer rate describes data movement; CAS latency counts delay cycles. Read them together and only after compatibility and capacity."
 tableOfContents: true
@@ -129,6 +129,6 @@ Return to the [RAM Buying Guide](/guides/ram/) for the complete purchase sequenc
 
 ## Compare RAM prices
 
-[[price-cta: Compare DDR5 prices | /ddr5.html]]
+[[price-cta: Compare DDR5 prices | /ddr5]]
 
-[[price-cta: Compare DDR4 prices | /ddr4.html]]
+[[price-cta: Compare DDR4 prices | /ddr4]]

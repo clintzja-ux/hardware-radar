@@ -11,8 +11,8 @@ publisher: "Mirabelle Labs"
 publishedAt: "2026-09-02"
 updatedAt: "2026-09-02"
 relatedGuides: []
-relevantPricePages: ["/ddr5.html", "/ddr4.html", "/sodimm.html"]
-references: [{"classification":"FACT","label":"Crucial: Is my RAM compatible with my motherboard?","url":"https://www.crucial.com/articles/about-memory/is-my-ram-compatible-with-my-motherboard"},{"classification":"FACT","label":"Crucial: DDR memory generations explained","url":"https://www.crucial.com/articles/about-memory/difference-among-ddr2-ddr3-ddr4-and-ddr5-memory"},{"classification":"FACT","label":"Crucial: What are memory timings?","url":"https://www.crucial.com/support/articles-faq-memory/what-are-memory-timings"},{"classification":"FACT","label":"Intel: Extreme Memory Profile (XMP)","url":"https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html"},{"classification":"FACT","label":"AMD: Extended Profiles for Overclocking (EXPO)","url":"https://www.amd.com/en/products/processors/technologies/expo.html"},{"classification":"FACT","label":"Kingston: Performance and gaming memory support","url":"https://www.kingston.com/en/support/technical/products/gaming-memory"},{"classification":"EXPLANATION","label":"Hardware Radar: How we compare RAM prices","url":"https://cheapestram.com/how-we-choose.html"}]
+relevantPricePages: ["/ddr5", "/ddr4", "/sodimm"]
+references: [{"classification":"FACT","label":"Crucial: Is my RAM compatible with my motherboard?","url":"https://www.crucial.com/articles/about-memory/is-my-ram-compatible-with-my-motherboard"},{"classification":"FACT","label":"Crucial: DDR memory generations explained","url":"https://www.crucial.com/articles/about-memory/difference-among-ddr2-ddr3-ddr4-and-ddr5-memory"},{"classification":"FACT","label":"Crucial: What are memory timings?","url":"https://www.crucial.com/support/articles-faq-memory/what-are-memory-timings"},{"classification":"FACT","label":"Intel: Extreme Memory Profile (XMP)","url":"https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html"},{"classification":"FACT","label":"AMD: Extended Profiles for Overclocking (EXPO)","url":"https://www.amd.com/en/products/processors/technologies/expo.html"},{"classification":"FACT","label":"Kingston: Performance and gaming memory support","url":"https://www.kingston.com/en/support/technical/products/gaming-memory"},{"classification":"EXPLANATION","label":"Hardware Radar: How we compare RAM prices","url":"https://cheapestram.com/how-we-choose"}]
 dek: "Choose compatibility first, capacity second, and performance specifications only after you know what your system can actually use."
 tableOfContents: true
 ---
@@ -200,7 +200,7 @@ Compare at least:
 
 A 2x16GB matched kit is not the same product configuration as one 32GB module. A motherboard-and-memory bundle does not establish a standalone RAM price. Used, refurbished, open-box, and new offers should not be collapsed into one condition. If shipping is unknown, the honest state is unknown—not zero.
 
-The lowest sticker price may therefore not be the lowest actionable acquisition cost. Compare the final checkout amount when possible, including shipping and mandatory fees, and confirm that the listing matches the exact product and quantity you intended to buy. Hardware Radar's [comparison methodology](/how-we-choose.html) explains why qualifying prices remain scoped to monitored products and retailers and why missing charges remain unknown.
+The lowest sticker price may therefore not be the lowest actionable acquisition cost. Compare the final checkout amount when possible, including shipping and mandatory fees, and confirm that the listing matches the exact product and quantity you intended to buy. Hardware Radar's [comparison methodology](/how-we-choose) explains why qualifying prices remain scoped to monitored products and retailers and why missing charges remain unknown.
 
 Static guide prose does not own live prices. The category pages below are the appropriate place for governed current comparisons when qualifying observations are available.
 
@@ -230,8 +230,8 @@ Static guide prose does not own live prices. The category pages below are the ap
 
 Use the Hardware Radar category that matches the generation or form factor you have already confirmed. These links do not recommend a specific product; they lead to governed price surfaces that show qualifying observations or an honest unavailable state.
 
-[[price-cta: Check current DDR5 prices | /ddr5.html]]
+[[price-cta: Check current DDR5 prices | /ddr5]]
 
-[[price-cta: Compare DDR4 prices | /ddr4.html]]
+[[price-cta: Compare DDR4 prices | /ddr4]]
 
-[[price-cta: Browse Laptop RAM prices | /sodimm.html]]
+[[price-cta: Browse Laptop RAM prices | /sodimm]]

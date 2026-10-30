@@ -12,7 +12,7 @@ const lfFixture = fixtureSource.replaceAll("\r\n", "\n");
 const crlfFixture = lfFixture.replaceAll("\n", "\r\n");
 const parsedLf = parseEditorialSource(lfFixture, "fixture-lf.md");
 const parsedCrlf = parseEditorialSource(crlfFixture, "fixture-crlf.md");
-const knownRoutes = ["/", "/ddr5.html", "/guides/", "/guides/ram/", parsed.metadata.canonicalPath];
+const knownRoutes = ["/", "/ddr5", "/guides/", "/guides/ram/", parsed.metadata.canonicalPath];
 const metadata = validateArticleMetadata(parsed.metadata, { knownRoutes });
 
 assert.deepEqual(parsedCrlf.metadata, parsedLf.metadata, "LF and CRLF front matter must be semantically identical.");
@@ -35,7 +35,7 @@ assert.throws(() => validateArticleMetadata({ ...parsed.metadata, canonicalPath:
 assert.throws(() => validateArticleMetadata({ ...parsed.metadata, category: "GPU" }, { knownRoutes }), /EDITORIAL_CATEGORY_UNSUPPORTED/);
 assert.throws(() => validateArticleMetadata({ ...parsed.metadata, articleType: "REVIEW" }, { knownRoutes }), /EDITORIAL_TYPE_UNSUPPORTED/);
 assert.throws(() => validateArticleMetadata({ ...parsed.metadata, relatedGuides: ["/guides/ram/not-published/"] }, { knownRoutes }), /EDITORIAL_INTERNAL_LINK_INVALID/);
-assert.throws(() => validateArticleMetadata(parsed.metadata, { knownRoutes: ["/", "/ddr5.html", parsed.metadata.canonicalPath] }), /EDITORIAL_BREADCRUMB_PARENT_MISSING/);
+assert.throws(() => validateArticleMetadata(parsed.metadata, { knownRoutes: ["/", "/ddr5", parsed.metadata.canonicalPath] }), /EDITORIAL_BREADCRUMB_PARENT_MISSING/);
 assert.throws(() => validateArticleMetadata({ ...parsed.metadata, title: "<script>bad" }, { knownRoutes }), /EDITORIAL_METADATA_UNSAFE/);
 assert.throws(() => renderMarkdown("<script>alert(1)</script>"), /EDITORIAL_RAW_HTML_FORBIDDEN/);
 assert.throws(() => renderMarkdown("[Bad](javascript:alert(1))"), /EDITORIAL_LINK_UNSAFE/);
@@ -51,7 +51,7 @@ assert.match(html, /"@type":"Article"/);
 assert.match(html, /"@type":"BreadcrumbList"/);
 assert.match(html, /<th scope="col">/);
 assert.match(html, /article-price-cta/);
-assert.match(html, /href="\/ddr5\.html"/);
+assert.match(html, /href="\/ddr5"/);
 assert.match(html, /article-references/);
 assert.doesNotMatch(html, /article-disclosure/);
 assert.match(html, /article-callout--terminology/);
@@ -61,14 +61,14 @@ assert.match(html, /href="#read-the-notation"/);
 
 const disclosed = renderArticle({ metadata: { ...metadata, affiliateDisclosure: "This article contains affiliate links." }, markdown: parsed.markdown });
 assert.match(disclosed, /article-disclosure/);
-assert.match(disclosed, /affiliate-disclosure\.html/);
+assert.match(disclosed, /href="\/affiliate-disclosure"/);
 
-const routes = [{ path: "/", lastmod: "2026-07-11", changefreq: "daily", priority: "1.0" }, { path: "/ddr5.html", lastmod: "2026-07-11", changefreq: "daily", priority: "0.95" }, { path: "/guides/", lastmod: "2026-09-01", changefreq: "monthly", priority: "0.70" }, { path: "/guides/ram/", lastmod: "2026-09-01", changefreq: "monthly", priority: "0.70" }];
+const routes = [{ path: "/", lastmod: "2026-07-11", changefreq: "daily", priority: "1.0" }, { path: "/ddr5", lastmod: "2026-07-11", changefreq: "daily", priority: "0.95" }, { path: "/guides/", lastmod: "2026-09-01", changefreq: "monthly", priority: "0.70" }, { path: "/guides/ram/", lastmod: "2026-09-01", changefreq: "monthly", priority: "0.70" }];
 const sitemap = generateSitemap({ staticRoutes: routes, articles: [{ metadata }] });
 assert.equal(sitemap, generateSitemap({ staticRoutes: [...routes].reverse(), articles: [{ metadata }] }));
 assert.match(sitemap, /fixture-memory-notation/);
 assert.match(sitemap, /<lastmod>2026-09-02<\/lastmod>/);
-assert.match(sitemap, /ddr5\.html/);
+assert.match(sitemap, /<loc>https:\/\/cheapestram\.com\/ddr5<\/loc>/);
 assert.throws(() => generateSitemap({ staticRoutes: [...routes, routes[0]], articles: [] }), /EDITORIAL_ROUTE_DUPLICATE/);
 
 async function generateFrom(sources) {

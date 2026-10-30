@@ -30,7 +30,7 @@ assert.match(ram, /"@type":"Article"/);
 assert.match(ram, /"@type":"BreadcrumbList"/);
 assert.match(ram, /By Hardware Radar Editorial/);
 assert.match(ram, /Published by Mirabelle Labs/);
-for (const route of ["/ddr5.html", "/ddr4.html", "/sodimm.html"]) assert.match(ram, new RegExp(`href="${route.replace(".", "\\.")}"`));
+for (const route of ["/ddr5", "/ddr4", "/sodimm"]) assert.match(ram, new RegExp(`href="${route}"`));
 assert.equal((ram.match(/article-price-cta/g) ?? []).length, 3);
 assert.doesNotMatch(ram, /\bCheapest\b|GOVERNED PICK|specific retailer/i);
 

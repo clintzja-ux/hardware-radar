@@ -16,15 +16,15 @@ const categoryModules = [
 
 const pageIdentity = new Map([
     ["index.html", ["Compare RAM Prices | Hardware Radar", "Compare RAM Prices", "https://cheapestram.com/"]],
-    ["ddr5.html", ["Compare DDR5 RAM Prices | Hardware Radar", "Compare DDR5 RAM Prices", "https://cheapestram.com/ddr5.html"]],
-    ["ddr4.html", ["Compare DDR4 RAM Prices | Hardware Radar", "Compare DDR4 RAM Prices", "https://cheapestram.com/ddr4.html"]],
-    ["sodimm.html", ["Compare Laptop RAM Prices | Hardware Radar", "Compare Laptop RAM Prices", "https://cheapestram.com/sodimm.html"]],
-    ["about.html", ["About Hardware Radar", "About Hardware Radar", "https://cheapestram.com/about.html"]],
-    ["how-we-choose.html", ["How We Compare RAM Prices | Hardware Radar", "How We Choose", "https://cheapestram.com/how-we-choose.html"]],
-    ["contact.html", ["Contact | Hardware Radar", "Contact", "https://cheapestram.com/contact.html"]],
-    ["affiliate-disclosure.html", ["Affiliate Disclosure | Hardware Radar", "Affiliate Disclosure", "https://cheapestram.com/affiliate-disclosure.html"]],
-    ["privacy-policy.html", ["Privacy Policy | Hardware Radar", "Privacy Policy", "https://cheapestram.com/privacy-policy.html"]],
-    ["terms.html", ["Terms of Use | Hardware Radar", "Terms of Use", "https://cheapestram.com/terms.html"]]
+    ["ddr5.html", ["Compare DDR5 RAM Prices | Hardware Radar", "Compare DDR5 RAM Prices", "https://cheapestram.com/ddr5"]],
+    ["ddr4.html", ["Compare DDR4 RAM Prices | Hardware Radar", "Compare DDR4 RAM Prices", "https://cheapestram.com/ddr4"]],
+    ["sodimm.html", ["Compare Laptop RAM Prices | Hardware Radar", "Compare Laptop RAM Prices", "https://cheapestram.com/sodimm"]],
+    ["about.html", ["About Hardware Radar", "About Hardware Radar", "https://cheapestram.com/about"]],
+    ["how-we-choose.html", ["How We Compare RAM Prices | Hardware Radar", "How We Choose", "https://cheapestram.com/how-we-choose"]],
+    ["contact.html", ["Contact | Hardware Radar", "Contact", "https://cheapestram.com/contact"]],
+    ["affiliate-disclosure.html", ["Affiliate Disclosure | Hardware Radar", "Affiliate Disclosure", "https://cheapestram.com/affiliate-disclosure"]],
+    ["privacy-policy.html", ["Privacy Policy | Hardware Radar", "Privacy Policy", "https://cheapestram.com/privacy-policy"]],
+    ["terms.html", ["Terms of Use | Hardware Radar", "Terms of Use", "https://cheapestram.com/terms"]]
 ]);
 
 for (const [file, [title, heading, url]] of pageIdentity) {
@@ -157,11 +157,11 @@ const { renderCategoryUnavailable } = await import(pathToFileURL(path.join(publi
 renderCategoryUnavailable("ddr5Section", "DDR5", "ddr5");
 assert.match(containers.get("ddr5Section").innerHTML, /Browse DDR5/);
 assert.match(containers.get("ddr5Section").innerHTML, /Compare products, specifications and available retailer links/);
-assert.match(containers.get("ddr5Section").innerHTML, /href="\/ddr5\.html"/);
+assert.match(containers.get("ddr5Section").innerHTML, /href="\/ddr5"/);
 renderCategoryUnavailable("ddr4Section", "DDR4", "ddr4");
-assert.match(containers.get("ddr4Section").innerHTML, /href="\/ddr4\.html"/);
+assert.match(containers.get("ddr4Section").innerHTML, /href="\/ddr4"/);
 renderCategoryUnavailable("sodimmSection", "Laptop RAM", "sodimm");
-assert.match(containers.get("sodimmSection").innerHTML, /href="\/sodimm\.html"/);
+assert.match(containers.get("sodimmSection").innerHTML, /href="\/sodimm"/);
 const { renderCategory } = await import(pathToFileURL(path.join(publicRoot, "js/modules/renderCategory.js")));
 renderCategory([{ ...projected, publicPath: publicOffer.publicPath, section: "ddr5", title: "Cheapest DDR5 Today" }], "ddr5", "ddr5Section", "Browse DDR5 RAM");
 assert.match(containers.get("ddr5Section").innerHTML, /Lowest current item price/);

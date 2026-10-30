@@ -16,7 +16,7 @@ import { ProductRepository } from "../packages/atlas/ProductRepository.js";
 import { RetailerRepository } from "../packages/atlas/RetailerRepository.js";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
 import { generateEditorialSite, generateSitemap } from "./editorial-publishing.mjs";
-import { generateRamProductPages } from "./ram-product-publishing.mjs";
+import { generateRamDiscoveryLinks, generateRamProductPages } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { FileCurrentDisplaySnapshotRepository, createEmptyPublicCurrentRetailProjection, createPublicCurrentRetailProjection } from "../packages/mercury/current-display/index.js";
 import { loadStaticPublicationRelease } from "./static-publication-release-runtime.mjs";
@@ -117,6 +117,7 @@ const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.
 const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
 const chronologicalSeriesByProduct = new Map(chronological.products.map(item => [item.atlasProductId, item]));
 const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, terminalByProduct, chronologicalSeriesByProduct, disclosure: currentRetail.disclosure, outputDir: path.join(root, "public") });
+await generateRamDiscoveryLinks({ catalog: ramCatalog, outputDir: path.join(root, "public") });
 await generateRamTerminalPage({ artifact: terminal, outputDir: path.join(root, "public") });
 const staticRoutes = await json(path.join(root, "content", "site-routes.json"));
 await writeFile(path.join(root, "public", "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));

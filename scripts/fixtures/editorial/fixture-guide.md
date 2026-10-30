@@ -11,7 +11,7 @@ publisher: "Mirabelle Labs"
 publishedAt: "2026-09-01"
 updatedAt: "2026-09-02"
 relatedGuides: []
-relevantPricePages: ["/ddr5.html"]
+relevantPricePages: ["/ddr5"]
 references: [{"classification":"FACT","label":"Fixture source","url":"https://example.com/reference"}]
 dek: "This fixture proves the reusable article contract without publishing editorial content."
 tableOfContents: true
@@ -27,4 +27,4 @@ Memory labels combine **several fields**. This fixture does not make a buying re
 | Generation | DDR5 |
 | Rate | 6000 MT/s |
 
-[[price-cta: Check current DDR5 prices | /ddr5.html]]
+[[price-cta: Check current DDR5 prices | /ddr5]]

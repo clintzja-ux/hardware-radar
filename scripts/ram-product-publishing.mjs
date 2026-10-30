@@ -1,9 +1,11 @@
-import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
 import { formatProductName } from "../public/js/modules/ramTerminal.js";
 
 const SITE_ORIGIN = "https://cheapestram.com";
+const DISCOVERY_START = "<!-- RAM_PRODUCT_DISCOVERY_START -->";
+const DISCOVERY_END = "<!-- RAM_PRODUCT_DISCOVERY_END -->";
 const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 const safeJson = (value) => JSON.stringify(value).replaceAll("<", "\\u003c").replaceAll(">", "\\u003e").replaceAll("&", "\\u0026");
 const displayFormFactor = (value) => value === "SO_DIMM" ? "SO-DIMM" : value;
@@ -20,15 +22,101 @@ function displayTitle(product) {
     return formatProductName(product.brand, `${product.brand} ${product.productFamily || product.modelName} ${product.manufacturerPartNumber} ${product.capacityGb}GB ${product.memoryType}-${product.dataRateMtps}`);
 }
 
+function differentiatedDisplayName(product) {
+    const name = formatProductName(product.brand, product.displayName);
+    return name.toLowerCase().includes(String(product.manufacturerPartNumber).toLowerCase())
+        ? name
+        : `${name} — ${product.manufacturerPartNumber}`;
+}
+
+function qualifyingStructuredOffers(currentRetail, product) {
+    if (!currentRetail?.offers?.length) return [];
+    return currentRetail.offers.filter(offer =>
+        offer?.atlasProductId === product.atlasProductId &&
+        offer?.freshness === "PUBLIC_CURRENT" &&
+        offer?.currency === "USD" &&
+        Number.isFinite(offer?.itemPriceUsd) && offer.itemPriceUsd >= 0 &&
+        typeof offer?.retailerName === "string" && offer.retailerName.trim() &&
+        typeof offer?.destinationId === "string" && offer.destinationId.trim() &&
+        /^https:\/\//.test(offer?.destinationUrl ?? "")
+    ).map(offer => ({
+        "@type": "Offer",
+        price: Number(offer.itemPriceUsd).toFixed(2),
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        url: offer.destinationUrl,
+        seller: { "@type": "Organization", name: offer.retailerName }
+    }));
+}
+
+function relatedScore(product, candidate) {
+    return Number(product.memoryType === candidate.memoryType) * 16 +
+        Number(product.formFactor === candidate.formFactor) * 16 +
+        Number(product.capacityGb === candidate.capacityGb) * 8 +
+        Number(product.moduleCount === candidate.moduleCount) * 4 +
+        Number(product.brand === candidate.brand) * 2 -
+        Math.abs(product.dataRateMtps - candidate.dataRateMtps) / 1000;
+}
+
+export function selectRelatedRamProducts(product, catalogProducts, limit = 4) {
+    if (!Number.isInteger(limit) || limit < 1 || limit > 8) throw new Error("RAM_PRODUCT_RELATED_LIMIT_INVALID");
+    return [...catalogProducts]
+        .filter(candidate => candidate.atlasProductId !== product.atlasProductId && candidate.memoryType === product.memoryType && candidate.formFactor === product.formFactor)
+        .sort((a, b) => relatedScore(product, b) - relatedScore(product, a) || a.atlasProductId.localeCompare(b.atlasProductId))
+        .slice(0, limit);
+}
+
+function productGuideLinks(product) {
+    const generation = product.memoryType === "DDR4" || product.memoryType === "DDR5"
+        ? `<a href="/guides/ram/ddr4-vs-ddr5/">DDR4 versus DDR5 guide</a>` : "";
+    return `${generation}<a href="/guides/ram/check-ram-compatibility/">RAM compatibility guide</a><a href="/guides/ram/ram-speed-cas-latency/">RAM speed and latency guide</a>`;
+}
+
+function decisionSupportSection(product) {
+    const timing = product.casLatency ? ` with CL${product.casLatency} latency` : "";
+    return `<section class="ram-product-decision-support" aria-labelledby="product-fit-heading"><p class="eyebrow">Compare the verified specifications</p><h2 id="product-fit-heading">Where this model fits</h2><p>This ${escapeHtml(product.memoryType)} ${escapeHtml(displayFormFactor(product.formFactor))} configuration provides ${product.capacityGb}GB as ${product.moduleCount} × ${product.capacityPerModuleGb}GB at ${product.dataRateMtps} MT/s${escapeHtml(timing)}. Use the exact part number ${escapeHtml(product.manufacturerPartNumber)} when checking system compatibility and retailer listings.</p><nav aria-label="RAM buying guides">${productGuideLinks(product)}</nav></section>`;
+}
+
+function relatedProductsSection(relatedProducts) {
+    if (!relatedProducts.length) return "";
+    return `<section class="ram-product-related" aria-labelledby="related-products-heading"><h2 id="related-products-heading">Related RAM to compare</h2><ul>${relatedProducts.map(product => `<li><a href="${escapeHtml(product.publicPath)}">${escapeHtml(differentiatedDisplayName(product))}</a><span>${escapeHtml(product.memoryType)} · ${product.capacityGb}GB · ${product.dataRateMtps} MT/s · ${escapeHtml(displayFormFactor(product.formFactor))}</span></li>`).join("")}</ul></section>`;
+}
+
+export function renderRamDiscoveryItems(products) {
+    return products.map(product => `<li class="ram-catalog-card ram-catalog-card--discovery"><h2><a href="${escapeHtml(product.publicPath)}">${escapeHtml(differentiatedDisplayName(product))}</a></h2><p>${escapeHtml(product.memoryType)} · ${product.capacityGb}GB · ${product.dataRateMtps} MT/s · ${escapeHtml(displayFormFactor(product.formFactor))}</p></li>`).join("");
+}
+
+function replaceDiscoveryBlock(html, contents) {
+    const start = html.indexOf(DISCOVERY_START), end = html.indexOf(DISCOVERY_END);
+    if (start < 0 || end < start) throw new Error("RAM_PRODUCT_DISCOVERY_MARKERS_MISSING");
+    return `${html.slice(0, start + DISCOVERY_START.length)}\n${contents}\n${html.slice(end)}`;
+}
+
+export async function generateRamDiscoveryLinks({ catalog, outputDir }) {
+    const surfaces = [
+        ["index.html", catalog.products],
+        ["ram/index.html", catalog.products],
+        ["ddr4.html", catalog.products.filter(product => product.memoryType === "DDR4" && product.formFactor === "DIMM")],
+        ["ddr5.html", catalog.products.filter(product => product.memoryType === "DDR5" && product.formFactor === "DIMM")],
+        ["sodimm.html", catalog.products.filter(product => product.formFactor === "SO_DIMM")]
+    ];
+    for (const [relativePath, products] of surfaces) {
+        const target = path.join(outputDir, relativePath);
+        const html = await readFile(target, "utf8");
+        await writeFile(target, replaceDiscoveryBlock(html, renderRamDiscoveryItems(products)), "utf8");
+    }
+    return Object.freeze({ surfaceCount: surfaces.length, linkedProductCount: catalog.products.length });
+}
+
 function specificationGroup(title, rows) {
     if (!rows.length) return "";
     return `<section class="ram-product-spec-group"><h2>${escapeHtml(title)}</h2><dl>${rows.map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}</dl></section>`;
 }
 
 export function categoryLinkForRamProduct(product) {
-    if (product.formFactor === "SO_DIMM") return Object.freeze({ path: "/sodimm.html", label: "Browse laptop RAM prices" });
-    if (product.memoryType === "DDR5") return Object.freeze({ path: "/ddr5.html", label: "Browse DDR5 RAM prices" });
-    if (product.memoryType === "DDR4") return Object.freeze({ path: "/ddr4.html", label: "Browse DDR4 RAM prices" });
+    if (product.formFactor === "SO_DIMM") return Object.freeze({ path: "/sodimm", label: "Browse laptop RAM prices" });
+    if (product.memoryType === "DDR5") return Object.freeze({ path: "/ddr5", label: "Browse DDR5 RAM prices" });
+    if (product.memoryType === "DDR4") return Object.freeze({ path: "/ddr4", label: "Browse DDR4 RAM prices" });
     throw new Error(`RAM_PRODUCT_CATEGORY_ROUTE_UNSUPPORTED:${product.atlasProductId}`);
 }
 
@@ -152,7 +240,7 @@ function methodologySection() {
     return `<section class="ram-product-methodology" aria-labelledby="product-methodology-heading"><p class="eyebrow">How to read this page</p><h2 id="product-methodology-heading">Methodology</h2><p>Current values are qualified item prices and exclude applicable shipping, taxes, and fees. Unknown shipping or fees are never treated as zero. Only governed standalone-comparable observations appear in observed price history; multiple retailer observations may exist at one timestamp. Points are discrete observations, and Hardware Radar does not observe prices continuously. Historical movement compares the latest and previous distinct-time comparable historical observations; it does not compare Current with previous History. Current Market remains separately qualified.</p></section>`;
 }
 
-function renderRamProductPageBase(product, destinations = [], currentRetail = null, disclosure = "", terminalSummary = null, chronologicalSeries = null) {
+function renderRamProductPageBase(product, destinations = [], currentRetail = null, disclosure = "", terminalSummary = null, chronologicalSeries = null, relatedProducts = []) {
     if (!product || typeof product !== "object" || !/^\/ram\/[a-z0-9]+(?:-[a-z0-9]+)*\/$/.test(product.publicPath ?? "")) {
         throw new Error("RAM_PRODUCT_PUBLIC_IDENTITY_INVALID");
     }
@@ -166,30 +254,36 @@ function renderRamProductPageBase(product, destinations = [], currentRetail = nu
     const performance = [["Rated speed", `${product.dataRateMtps} MT/s`], ...(product.casLatency ? [["CAS latency", `CL${product.casLatency}`]] : []), ...(product.primaryTimings ? [["Primary timings", product.primaryTimings]] : []), ...(product.ratedVoltage ? [["Rated voltage", `${product.ratedVoltage}V`]] : [])];
     const features = [["ECC", displayEnum(product.eccType)], ["Buffering", displayEnum(product.buffering)], ...(product.xmpSupport !== "UNKNOWN" ? [["Intel XMP", displayEnum(product.xmpSupport)]] : []), ...(product.expoSupport !== "UNKNOWN" ? [["AMD EXPO", displayEnum(product.expoSupport)]] : [])];
     const productLd = { "@context": "https://schema.org", "@type": "Product", name: product.displayName, brand: { "@type": "Brand", name: product.brand }, mpn: product.manufacturerPartNumber, category: "Computer memory", url: canonicalUrl };
+    const structuredOffers = qualifyingStructuredOffers(currentRetail, product);
+    if (structuredOffers.length) productLd.offers = structuredOffers.length === 1 ? structuredOffers[0] : structuredOffers;
     const breadcrumbLd = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${SITE_ORIGIN}/` }, { "@type": "ListItem", position: 2, name: "RAM catalog", item: `${SITE_ORIGIN}/ram/` }, { "@type": "ListItem", position: 3, name: product.displayName, item: canonicalUrl }] };
-    const description = `${publicDisplayName} specifications: ${product.memoryType}, ${product.capacityGb}GB, ${product.moduleCount} × ${product.capacityPerModuleGb}GB, ${product.dataRateMtps} MT/s.`;
+    const differentiatedName = differentiatedDisplayName(product);
+    const description = `${differentiatedName} specifications: ${product.memoryType}, ${product.capacityGb}GB, ${product.moduleCount} × ${product.capacityPerModuleGb}GB, ${product.dataRateMtps} MT/s, ${displayFormFactor(product.formFactor)}.`;
     if (terminalSummary && (terminalSummary.atlasProductId !== product.atlasProductId || terminalSummary.publicPath !== product.publicPath)) throw new Error("RAM_PRODUCT_TERMINAL_SUMMARY_BINDING_INVALID");
     if (chronologicalSeries && (chronologicalSeries.atlasProductId !== product.atlasProductId || chronologicalSeries.publicPath !== product.publicPath)) throw new Error("RAM_PRODUCT_CHRONOLOGICAL_SERIES_BINDING_INVALID");
     product = Object.freeze({ ...product, displayName: publicDisplayName });
-    return `<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>${escapeHtml(title)} RAM Specifications | Hardware Radar</title>\n<meta name="description" content="${escapeHtml(description)}">\n<link rel="canonical" href="${canonicalUrl}">\n<meta property="og:type" content="website">\n<meta property="og:title" content="${escapeHtml(title)} RAM Specifications">\n<meta property="og:description" content="${escapeHtml(description)}">\n<meta property="og:url" content="${canonicalUrl}">\n<meta property="og:site_name" content="Hardware Radar">\n<meta name="twitter:card" content="summary">\n<meta name="twitter:title" content="${escapeHtml(title)} RAM Specifications">\n<meta name="twitter:description" content="${escapeHtml(description)}">\n<link rel="icon" type="image/svg+xml" href="/images/branding/favicon.svg">\n<link rel="stylesheet" href="/css/styles.css">\n<script type="application/ld+json">${safeJson(productLd)}</script>\n<script type="application/ld+json">${safeJson(breadcrumbLd)}</script>\n</head>\n<body>\n<header id="headerContainer"></header>\n<nav class="catalog-breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/ram/">RAM catalog</a></li><li><span aria-current="page">${escapeHtml(product.displayName)}</span></li></ol></nav>\n<main class="ram-product-main" data-atlas-product-id="${escapeHtml(product.atlasProductId)}"><header class="ram-product-heading"><p class="eyebrow">Product intelligence</p><h1>${escapeHtml(product.displayName)}</h1><p>Reference specifications, qualified current prices, and Hardware Radar-observed history for this product.</p></header><div class="ram-product-specs">${specificationGroup("Identity", identity)}${specificationGroup("Memory", memory)}${specificationGroup("Performance specifications", performance)}${specificationGroup("Platform and features", features)}</div>${currentRetailSection(currentRetail, disclosure)}${historySection(terminalSummary)}${chronologicalSeriesSection(chronologicalSeries)}${retailerDestinations(destinations)}${methodologySection()}<aside class="ram-product-next" aria-label="Related browsing"><a href="/ram/terminal/">View RAM Market Terminal</a><a href="/ram/">Back to the RAM catalog</a><a href="/ram/compare/?products=${escapeHtml(product.publicSlug)}">Compare this RAM</a><a href="${categoryLink.path}">${categoryLink.label}</a><p>Price pages cover broader tracked categories and do not establish an offer for this exact product.</p></aside></main>\n<footer id="footerContainer"></footer>\n<script type="module">import {renderHeader} from "/js/modules/renderHeader.js";import {renderFooter} from "/js/modules/renderFooter.js";renderHeader("headerContainer",{basePath:"/"});renderFooter("footerContainer",{basePath:"/"});</script>\n</body>\n</html>\n`;
+    return `<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>${escapeHtml(title)} RAM Specifications | Hardware Radar</title>\n<meta name="description" content="${escapeHtml(description)}">\n<link rel="canonical" href="${canonicalUrl}">\n<meta property="og:type" content="website">\n<meta property="og:title" content="${escapeHtml(title)} RAM Specifications">\n<meta property="og:description" content="${escapeHtml(description)}">\n<meta property="og:url" content="${canonicalUrl}">\n<meta property="og:site_name" content="Hardware Radar">\n<meta name="twitter:card" content="summary">\n<meta name="twitter:title" content="${escapeHtml(title)} RAM Specifications">\n<meta name="twitter:description" content="${escapeHtml(description)}">\n<link rel="icon" type="image/svg+xml" href="/images/branding/favicon.svg">\n<link rel="stylesheet" href="/css/styles.css">\n<script type="application/ld+json">${safeJson(productLd)}</script>\n<script type="application/ld+json">${safeJson(breadcrumbLd)}</script>\n</head>\n<body>\n<header id="headerContainer"></header>\n<nav class="catalog-breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/ram/">RAM catalog</a></li><li><span aria-current="page">${escapeHtml(differentiatedName)}</span></li></ol></nav>\n<main class="ram-product-main" data-atlas-product-id="${escapeHtml(product.atlasProductId)}"><header class="ram-product-heading"><p class="eyebrow">Product intelligence</p><h1>${escapeHtml(differentiatedName)}</h1><p>Reference specifications, qualified current prices, and Hardware Radar-observed history for this exact model.</p></header><div class="ram-product-specs">${specificationGroup("Identity", identity)}${specificationGroup("Memory", memory)}${specificationGroup("Performance specifications", performance)}${specificationGroup("Platform and features", features)}</div>${decisionSupportSection(product)}${currentRetailSection(currentRetail, disclosure)}${historySection(terminalSummary)}${chronologicalSeriesSection(chronologicalSeries)}${retailerDestinations(destinations)}${relatedProductsSection(relatedProducts)}${methodologySection()}<aside class="ram-product-next" aria-label="Related browsing"><a href="/ram/terminal/">View RAM Market Terminal</a><a href="/ram/">Back to the RAM catalog</a><a href="/ram/compare/?products=${escapeHtml(product.publicSlug)}">Compare this RAM</a><a href="${categoryLink.path}">${categoryLink.label}</a><a href="/guides/ram/">Read RAM buying guides</a><p>Price pages cover broader tracked categories and do not establish an offer for this exact product.</p></aside></main>\n<footer id="footerContainer"></footer>\n<script type="module">import {renderHeader} from "/js/modules/renderHeader.js";import {renderFooter} from "/js/modules/renderFooter.js";renderHeader("headerContainer",{basePath:"/"});renderFooter("footerContainer",{basePath:"/"});</script>\n</body>\n</html>\n`;
 }
 
-export function renderRamProductPage(product, destinations = [], currentRetail = null, disclosure = "", terminalSummary = null, chronologicalSeries = null) {
-    const page = renderRamProductPageBase(product, destinations, currentRetail, disclosure, terminalSummary, chronologicalSeries);
+export function renderRamProductPage(product, destinations = [], currentRetail = null, disclosure = "", terminalSummary = null, chronologicalSeries = null, relatedProducts = []) {
+    const page = renderRamProductPageBase(product, destinations, currentRetail, disclosure, terminalSummary, chronologicalSeries, relatedProducts);
     const analytics = `<script async src="https://www.googletagmanager.com/gtag/js?id=G-QF6XJ8GCMY"></script>\n<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-QF6XJ8GCMY");</script>\n`;
     return page.replace('<script type="application/ld+json">', `${analytics}<script type="application/ld+json">`);
 }
 
-export function createRamProductSitemapRoutes(products) {
+export function createRamProductSitemapRoutes(products, { currentRetailByProduct = new Map(), chronologicalSeriesByProduct = new Map() } = {}) {
     return products.map((product) => {
         const identity = createRamPublicProductIdentity(product);
-        return { path: identity.publicPath, lastmod: identity.lastModified, changefreq: "monthly", priority: "0.70" };
+        const timestamps = [identity.lastModified, ...(currentRetailByProduct.get(identity.atlasProductId)?.offers ?? []).map(offer => offer.observedAt), ...(chronologicalSeriesByProduct.get(identity.atlasProductId)?.timestampGroups ?? []).map(group => group.observedAt)]
+            .filter(value => typeof value === "string" && Number.isFinite(Date.parse(value)));
+        const lastmod = new Date(Math.max(...timestamps.map(value => Date.parse(value)))).toISOString().slice(0, 10);
+        return { path: identity.publicPath, lastmod, changefreq: "weekly", priority: "0.70" };
     });
 }
 
 export async function generateRamProductPages({ catalog, products, destinations = [], currentRetailByProduct = new Map(), terminalByProduct = new Map(), chronologicalSeriesByProduct = new Map(), disclosure = "", outputDir }) {
     if (!catalog || catalog.productCount !== catalog.products?.length) throw new Error("RAM_PRODUCT_CATALOG_INVALID");
-    const routes = createRamProductSitemapRoutes(products);
+    const routes = createRamProductSitemapRoutes(products, { currentRetailByProduct, chronologicalSeriesByProduct });
     const paths = new Set(routes.map((route) => route.path));
     if (routes.length !== catalog.productCount || catalog.products.some((product) => !paths.has(product.publicPath))) throw new Error("RAM_PRODUCT_ROUTE_BINDING_INVALID");
     const ramRoot = path.join(outputDir, "ram");
@@ -198,7 +292,8 @@ export async function generateRamProductPages({ catalog, products, destinations 
     for (const product of catalog.products) {
         const destination = path.join(outputDir, product.publicPath.slice(1), "index.html");
         await mkdir(path.dirname(destination), { recursive: true });
-        await writeFile(destination, renderRamProductPage(product, destinations.filter(item => item.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, disclosure, terminalByProduct.get(product.atlasProductId) ?? null, chronologicalSeriesByProduct.get(product.atlasProductId) ?? null), "utf8");
+        const relatedProducts = selectRelatedRamProducts(product, catalog.products);
+        await writeFile(destination, renderRamProductPage(product, destinations.filter(item => item.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, disclosure, terminalByProduct.get(product.atlasProductId) ?? null, chronologicalSeriesByProduct.get(product.atlasProductId) ?? null, relatedProducts), "utf8");
     }
     return Object.freeze({ productCount: catalog.products.length, routes: Object.freeze(routes) });
 }

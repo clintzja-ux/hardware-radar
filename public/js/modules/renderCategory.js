@@ -12,9 +12,9 @@
     if (!product || !container) return;
 
     const categoryPages = {
-        ddr5: "ddr5.html",
-        ddr4: "ddr4.html",
-        sodimm: "sodimm.html"
+        ddr5: "ddr5",
+        ddr4: "ddr4",
+        sodimm: "sodimm"
     };
 
     const pageUrl = categoryPages[sectionName];
@@ -56,7 +56,7 @@
 export function renderCategoryUnavailable(containerId, title, sectionName = title.toLowerCase()) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    const categoryPages = { ddr5: "/ddr5.html", ddr4: "/ddr4.html", sodimm: "/sodimm.html" };
+    const categoryPages = { ddr5: "/ddr5", ddr4: "/ddr4", sodimm: "/sodimm" };
     const pageUrl = categoryPages[sectionName] ?? "/ram/";
     container.innerHTML = `
         <article class="card category-card market-unavailable">

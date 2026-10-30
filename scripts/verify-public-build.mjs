@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { generateSitemap, parseEditorialSource, renderArticle, renderGuidesIndex, validateArticleMetadata } from "./editorial-publishing.mjs";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
-import { createRamProductSitemapRoutes, renderRamProductPage } from "./ram-product-publishing.mjs";
+import { createRamProductSitemapRoutes, renderRamProductPage, selectRelatedRamProducts } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { validatePublicCurrentRetailProjection } from "../packages/mercury/current-display/PublicCurrentRetailProjection.js";
 import { createEmptyPublicCurrentRetailProjection } from "../packages/mercury/current-display/PublicCurrentRetailProjection.js";
@@ -46,7 +46,12 @@ try {
     const articles = rawArticles.map((article) => ({ ...article, metadata: validateArticleMetadata(article.metadata, { knownRoutes }) }));
     const atlasManifest = JSON.parse(await readFile(path.join(root, "packages", "atlas", "atlas-manifest.json"), "utf8"));
     const atlasProducts = await Promise.all(atlasManifest.products.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
-    const expectedSitemap = generateSitemap({ staticRoutes, articles, additionalRoutes: createRamProductSitemapRoutes(atlasProducts) });
+    const publicCurrent = JSON.parse(await readFile(path.join(root, "public", "data", "ram-current-retail.json"), "utf8"));
+    const releaseManifestPath = path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json"));
+    const releaseManifest = JSON.parse(await readFile(releaseManifestPath, "utf8"));
+    const releaseArtifact = JSON.parse(await readFile(path.resolve(path.dirname(releaseManifestPath), releaseManifest.artifact.relativePath), "utf8"));
+    const publicChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
+    const expectedSitemap = generateSitemap({ staticRoutes, articles, additionalRoutes: createRamProductSitemapRoutes(atlasProducts, { currentRetailByProduct: new Map(publicCurrent.products.map(item => [item.atlasProductId, item])), chronologicalSeriesByProduct: new Map(publicChronology.products.map(item => [item.atlasProductId, item])) }) });
     const actualSitemap = await readFile(path.join(root, "public", "sitemap.xml"), "utf8");
     if (expectedSitemap !== actualSitemap) errors.push("Editorial: sitemap.xml is stale or not deterministically generated.");
     if (/fixture-memory-notation|scripts\/fixtures\/editorial/.test(actualSitemap)) errors.push("Editorial: fixture content leaked into the production sitemap.");
@@ -111,7 +116,7 @@ try {
     for (const product of catalog.products) {
         const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
         const page = await readFile(output, "utf8");
-        if (page !== renderRamProductPage(product, destinations.filter(item => item.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(product.atlasProductId) ?? null, chronologyByProduct.get(product.atlasProductId) ?? null)) errors.push(`Atlas catalog: stale product page ${product.publicPath}`);
+        if (page !== renderRamProductPage(product, destinations.filter(item => item.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(product.atlasProductId) ?? null, chronologyByProduct.get(product.atlasProductId) ?? null, selectRelatedRamProducts(product, catalog.products))) errors.push(`Atlas catalog: stale product page ${product.publicPath}`);
     }
 } catch (error) { errors.push(`Atlas catalog: projection missing or invalid (${error.message}).`); }
 for (const internal of ["sentinel", "mercury"]) {
