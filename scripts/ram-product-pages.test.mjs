@@ -4,10 +4,14 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRamCatalogProjection, createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
+import { createPublicCurrentRetailProjection } from "../packages/mercury/current-display/PublicCurrentRetailProjection.js";
 import { formatProductName } from "../public/js/modules/ramTerminal.js";
 import { calculatePriceDisplayDomain, createRamProductSitemapRoutes, renderRamProductPage, selectChronologyTickIndexes } from "./ram-product-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const APPROVED_MARKETPLACE_DISCLOSURE = "Observed seller and price are timestamped. Product and all-offers links may not preselect that seller or price. Cheapest uses item price plus known shipping and mandatory fees; taxes may apply.";
+const UNSUPPORTED_ENDORSEMENT_TERMINOLOGY = />[^<]*(?:\bPick\b|we tested|our testing|recommended|recommendation)[^<]*</i;
+const assertNoUnsupportedEndorsementClaims = (html) => assert.doesNotMatch(html, UNSUPPORTED_ENDORSEMENT_TERMINOLOGY);
 const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
@@ -93,7 +97,7 @@ for (const product of publicCatalog.products) {
     assert.match(html, /<h2 id="observed-history-heading">Hardware Radar-observed price history<\/h2>/);
     assert.doesNotMatch(html, /"@type":"(?:Offer|AggregateOffer|Review|AggregateRating)"/);
     assert.doesNotMatch(html, /"(?:offers|price|priceCurrency|availability|seller|review|aggregateRating|merchantReturnPolicy|shippingDetails|retailer|affiliateUrl|sourceUrl)"\s*:/i);
-    assert.doesNotMatch(html, />[^<]*(?:\bCheapest\b|\bPick\b|we tested|our testing|recommended|recommendation)[^<]*</i);
+    assertNoUnsupportedEndorsementClaims(html);
     const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
     const canonical = html.match(/<link rel="canonical" href="([^"]+)">/)?.[1];
     assert.ok(title && !titles.has(title), `Unique title required for ${product.publicPath}.`);
@@ -152,6 +156,63 @@ assert.match(pricedHtml, /<h2 id="current-retail-heading">Current market<\/h2>/)
 assert.match(pricedHtml, /Lower current item price:/);
 assert.match(pricedHtml, /Prices shown exclude applicable shipping, taxes, and fees\./);
 assert.doesNotMatch(pricedHtml, /"@type":"Offer"/);
+
+const amazonDestination = destinations.find(destination => destination.retailerId === "RETAILER-0001");
+assert.ok(amazonDestination, "A governed Amazon destination is required for marketplace publication coverage.");
+const amazonAtlasProduct = products.find(product => product.identity.atlasProductId === amazonDestination.atlasProductId);
+const amazonPublicProduct = publicCatalog.products.find(product => product.atlasProductId === amazonDestination.atlasProductId);
+assert.ok(amazonAtlasProduct && amazonPublicProduct);
+const amazonObservedAt = "2026-10-26T16:36:00.000Z";
+const amazonAsOf = "2026-10-26T17:00:00.000Z";
+const amazonOffer = {
+    atlasProductId: amazonDestination.atlasProductId,
+    retailerId: amazonDestination.retailerId,
+    destinationId: amazonDestination.destinationId,
+    priceUsd: 213.44,
+    currency: "USD",
+    observedAt: amazonObservedAt,
+    itemPriceEligible: true,
+    comparisonEligible: true,
+    deliveredCostEligible: true,
+    deliveredCostReasons: [],
+    availability: "AVAILABLE",
+    condition: "NEW",
+    shippingUsd: 0,
+    feesUsd: 0,
+    sellerName: "Amazon"
+};
+const marketplaceProjection = createPublicCurrentRetailProjection({
+    products: [amazonAtlasProduct],
+    retailers,
+    destinations: [amazonDestination],
+    currentSnapshot: { offers: [amazonOffer] },
+    asOf: amazonAsOf
+});
+assert.equal(marketplaceProjection.counts.publicCurrentEligibleOffers, 1);
+assert.equal(marketplaceProjection.disclosure, APPROVED_MARKETPLACE_DISCLOSURE);
+const marketplaceHtml = renderRamProductPage(amazonPublicProduct, [amazonDestination], marketplaceProjection.products[0], marketplaceProjection.disclosure);
+assert.ok(marketplaceHtml.includes(`<p>${APPROVED_MARKETPLACE_DISCLOSURE}</p>`));
+assertNoUnsupportedEndorsementClaims(marketplaceHtml);
+assert.throws(() => assertNoUnsupportedEndorsementClaims("<p>Our Pick is recommended because we tested it.</p>"), assert.AssertionError);
+
+for (const ineligibleOffer of [
+    { ...amazonOffer, observedAt: "2026-10-24T00:00:00.000Z" },
+    { ...amazonOffer, availability: "OUT_OF_STOCK", itemPriceEligible: false, comparisonEligible: false, deliveredCostEligible: false, deliveredCostReasons: ["OFFER_UNAVAILABLE"] },
+    { ...amazonOffer, itemPriceEligible: false, comparisonEligible: false, deliveredCostEligible: false, deliveredCostReasons: ["MANDATORY_FEES_UNKNOWN"], feesUsd: null },
+    { ...amazonOffer, itemPriceEligible: false, comparisonEligible: false, deliveredCostEligible: false, deliveredCostReasons: ["OFFER_INELIGIBLE"] }
+]) {
+    const ineligibleProjection = createPublicCurrentRetailProjection({
+        products: [amazonAtlasProduct],
+        retailers,
+        destinations: [amazonDestination],
+        currentSnapshot: { offers: [ineligibleOffer] },
+        asOf: amazonAsOf
+    });
+    const ineligibleHtml = renderRamProductPage(amazonPublicProduct, [amazonDestination], ineligibleProjection.products[0] ?? null, ineligibleProjection.disclosure);
+    assert.equal(ineligibleProjection.counts.publicCurrentEligibleOffers, 0);
+    assert.doesNotMatch(ineligibleHtml, /<h2 id="current-retail-heading">Current market<\/h2>/);
+    assert.doesNotMatch(ineligibleHtml, /"@type":"(?:Offer|AggregateOffer)"/);
+}
 
 const baseSummary = terminalByProduct.get(pricedPage.atlasProductId);
 const summary = (history) => ({ ...baseSummary, atlasProductId: pricedPage.atlasProductId, publicPath: pricedPage.publicPath, history });
