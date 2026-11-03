@@ -12,6 +12,12 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const APPROVED_MARKETPLACE_DISCLOSURE = "Observed seller and price are timestamped. Product and all-offers links may not preselect that seller or price. Cheapest uses item price plus known shipping and mandatory fees; taxes may apply.";
 const UNSUPPORTED_ENDORSEMENT_TERMINOLOGY = />[^<]*(?:\bPick\b|we tested|our testing|recommended|recommendation)[^<]*</i;
 const assertNoUnsupportedEndorsementClaims = (html) => assert.doesNotMatch(html, UNSUPPORTED_ENDORSEMENT_TERMINOLOGY);
+const assertMarketplaceDisclosureFacts = (html) => {
+    assert.match(html, /seller[^<.]*price[^<.]*timestamp|seller[^<.]*price[^<.]*time/i);
+    assert.match(html, /product[^<.]*all-offers[^<.]*not preselect[^<.]*seller[^<.]*price/i);
+    assert.match(html, /Cheapest[^<.]*item price[^<.]*shipping[^<.]*mandatory fees/i);
+    assert.match(html, /taxes may apply/i);
+};
 const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
@@ -94,7 +100,7 @@ for (const product of publicCatalog.products) {
     assert.ok(html.includes(product.manufacturerPartNumber));
     assert.match(html, /href="\/ram\/">Back to the RAM catalog<\/a>/);
     assert.match(html, /href="\/ram\/terminal\/">View RAM Market Terminal<\/a>/);
-    assert.match(html, /<h2 id="observed-history-heading">Hardware Radar-observed price history<\/h2>/);
+    assert.match(html, /<h2 id="observed-history-heading">Prices observed by Hardware Radar<\/h2>/);
     assert.doesNotMatch(html, /"@type":"(?:Offer|AggregateOffer|Review|AggregateRating)"/);
     assert.doesNotMatch(html, /"(?:offers|price|priceCurrency|availability|seller|review|aggregateRating|merchantReturnPolicy|shippingDetails|retailer|affiliateUrl|sourceUrl)"\s*:/i);
     assertNoUnsupportedEndorsementClaims(html);
@@ -152,9 +158,15 @@ const fixtureRetail = {
     lowerCurrentItemPrice: { retailerName: pricedDestination.retailerDisplayName, itemPriceUsd: 100 }
 };
 const pricedHtml = renderRamProductPage(pricedPage, [pricedDestination], fixtureRetail, currentRetail.disclosure);
-assert.match(pricedHtml, /<h2 id="current-retail-heading">Current market<\/h2>/);
-assert.match(pricedHtml, /Lower current item price:/);
-assert.match(pricedHtml, /Prices shown exclude applicable shipping, taxes, and fees\./);
+assert.match(pricedHtml, /<h2 id="current-retail-heading">Current prices<\/h2>/);
+assert.match(pricedHtml, /Lowest current item price:/);
+assert.match(pricedHtml, /Item price: \$100\.00 USD/);
+assert.match(pricedHtml, /Price checked Sep 18, 2026/);
+assert.match(pricedHtml, new RegExp(`href="${pricedDestination.destinationUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[^>]+target="_blank"[^>]+rel="noopener noreferrer"`));
+assert.match(pricedHtml, new RegExp(`View at ${pricedDestination.retailerDisplayName}`));
+assert.match(pricedHtml, /Current prices are item prices\./);
+assert.match(pricedHtml, /shipping and mandatory fees are included in comparisons/i);
+assert.match(pricedHtml, /unknown costs are never treated as zero/i);
 assert.doesNotMatch(pricedHtml, /"@type":"Offer"/);
 
 const amazonDestination = destinations.find(destination => destination.retailerId === "RETAILER-0001");
@@ -191,7 +203,10 @@ const marketplaceProjection = createPublicCurrentRetailProjection({
 assert.equal(marketplaceProjection.counts.publicCurrentEligibleOffers, 1);
 assert.equal(marketplaceProjection.disclosure, APPROVED_MARKETPLACE_DISCLOSURE);
 const marketplaceHtml = renderRamProductPage(amazonPublicProduct, [amazonDestination], marketplaceProjection.products[0], marketplaceProjection.disclosure);
-assert.ok(marketplaceHtml.includes(`<p>${APPROVED_MARKETPLACE_DISCLOSURE}</p>`));
+assertMarketplaceDisclosureFacts(marketplaceHtml);
+assert.match(marketplaceHtml, /Item price: \$213\.44 USD/);
+assert.match(marketplaceHtml, /Price checked Oct 26, 2026/);
+assert.match(marketplaceHtml, new RegExp(`href="${amazonDestination.destinationUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[^>]+target="_blank"[^>]+rel="noopener noreferrer"`));
 assertNoUnsupportedEndorsementClaims(marketplaceHtml);
 assert.throws(() => assertNoUnsupportedEndorsementClaims("<p>Our Pick is recommended because we tested it.</p>"), assert.AssertionError);
 
@@ -210,33 +225,34 @@ for (const ineligibleOffer of [
     });
     const ineligibleHtml = renderRamProductPage(amazonPublicProduct, [amazonDestination], ineligibleProjection.products[0] ?? null, ineligibleProjection.disclosure);
     assert.equal(ineligibleProjection.counts.publicCurrentEligibleOffers, 0);
-    assert.doesNotMatch(ineligibleHtml, /<h2 id="current-retail-heading">Current market<\/h2>/);
+    assert.doesNotMatch(ineligibleHtml, /<h2 id="current-retail-heading">Current prices<\/h2>/);
     assert.doesNotMatch(ineligibleHtml, /"@type":"(?:Offer|AggregateOffer)"/);
 }
 
 const baseSummary = terminalByProduct.get(pricedPage.atlasProductId);
 const summary = (history) => ({ ...baseSummary, atlasProductId: pricedPage.atlasProductId, publicPath: pricedPage.publicPath, history });
 const noHistoryHtml = renderRamProductPage(pricedPage, [], fixtureRetail, currentRetail.disclosure, summary({ status: "NO_HISTORY", admittedObservationCount: 0, comparableObservationCount: 0, distinctComparableTimestampCount: 0, movement: "INSUFFICIENT_HISTORY" }));
-assert.match(noHistoryHtml, /Hardware Radar does not yet have comparable price history for this product\./);
-assert.match(noHistoryHtml, /<h2 id="current-retail-heading">Current market<\/h2>/, "Current must remain useful without History.");
+assert.match(noHistoryHtml, /Not enough price history yet/);
+assert.match(noHistoryHtml, /not recorded enough comparable prices/i);
+assert.match(noHistoryHtml, /<h2 id="current-retail-heading">Current prices<\/h2>/, "Current must remain useful without History.");
 assert.doesNotMatch(noHistoryHtml, /<svg|<canvas|price-history-chart/);
 
 const nonComparableHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary({ status: "NO_COMPARABLE_HISTORY", admittedObservationCount: 3, comparableObservationCount: 0, distinctComparableTimestampCount: 0, movement: "INSUFFICIENT_HISTORY" }));
-assert.match(nonComparableHtml, /none currently qualify as a public-comparable price series/);
-assert.doesNotMatch(nonComparableHtml, /<h2 id="current-retail-heading">Current market<\/h2>/);
+assert.match(nonComparableHtml, /not comparable enough to show a public history yet/i);
+assert.doesNotMatch(nonComparableHtml, /<h2 id="current-retail-heading">Current prices<\/h2>/);
 
 const oneHistory = { status: "INSUFFICIENT_HISTORY", admittedObservationCount: 2, comparableObservationCount: 2, distinctComparableTimestampCount: 1, latestComparableObservation: { observedAt: "2026-09-29T17:35:00-05:00", itemPriceUsd: 128 }, historySpanDays: 0, movement: "INSUFFICIENT_HISTORY" };
 const oneHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(oneHistory));
-assert.match(oneHtml, /Latest comparable/);
+assert.match(oneHtml, /Latest observed price/);
 assert.match(oneHtml, /Sep 29, 2026/);
 assert.match(oneHtml, /2 distinct time|1 distinct time/);
-assert.match(oneHtml, /Insufficient history for movement\./);
-assert.doesNotMatch(oneHtml, /Previous comparable|Comparable observed range|Observed history span/);
+assert.match(oneHtml, /Not enough price history to show a trend yet\./);
+assert.doesNotMatch(oneHtml, /Previous observed price|Observed price range|Observed history span/);
 
 const twoHistory = { status: "COMPARABLE_HISTORY", admittedObservationCount: 2, comparableObservationCount: 2, distinctComparableTimestampCount: 2, latestComparableObservation: { observedAt: "2026-09-29T17:35:00-05:00", itemPriceUsd: 90 }, previousComparableObservation: { observedAt: "2026-09-20T17:35:00-05:00", itemPriceUsd: 100 }, historySpanDays: 9, observedMinimumItemPrice: 90, observedMaximumItemPrice: 100, movement: "DOWN", changeFromPreviousAmount: -10, atObservedLow: true };
 const twoHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary(twoHistory));
-assert.match(twoHtml, /Previous comparable/);
-assert.match(twoHtml, /Historical movement/);
+assert.match(twoHtml, /Previous observed price/);
+assert.match(twoHtml, /Price change/);
 assert.match(twoHtml, /↓<\/span> \$10\.00/);
 assert.match(twoHtml, /\$90\.00–\$100\.00/);
 assert.match(twoHtml, /Latest at observed low/);
@@ -309,8 +325,8 @@ assert.throws(() => renderRamProductPage(pricedPage, [], null, "", baseSummary, 
 
 const flatHtml = renderRamProductPage(pricedPage, [], null, currentRetail.disclosure, summary({ ...twoHistory, movement: "FLAT", changeFromPreviousAmount: 0, latestComparableObservation: { ...twoHistory.latestComparableObservation, itemPriceUsd: 100 }, observedMinimumItemPrice: 100 }));
 assert.match(flatHtml, /—<\/span> Unchanged/);
-assert.match(flatHtml, /Current market prices and historical observations are independently qualified evidence\./);
-assert.match(flatHtml, /Unknown shipping or fees are never treated as zero\./);
+assert.match(flatHtml, /Current prices and price history are checked separately\./);
+assert.match(flatHtml, /unknown costs are never treated as zero/i);
 assert.doesNotMatch(flatHtml, /all-time low|best ever|good price|bad price|prediction|recommendation/i);
 assert.throws(() => renderRamProductPage(pricedPage, [], null, "", { ...baseSummary, atlasProductId: "wrong" }), /RAM_PRODUCT_TERMINAL_SUMMARY_BINDING_INVALID/);
 

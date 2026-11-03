@@ -47,7 +47,8 @@ assert.equal(projected.length, 1);
 assert.deepEqual(Object.keys(projected[0]), ["destinationId", "atlasProductId", "retailerId", "retailerDisplayName", "marketplace", "destinationUrl", "destinationType"]);
 const html = renderRamProductPage(publicProduct, projected);
 assert.match(html, /<h2 id="retailer-links-heading">Retailer links<\/h2>/);
-assert.match(html, />Platinummicro<\/span><a href="https:\/\/platinummicro\.com\/fixture-reviewed\/exact-product" target="_blank" rel="noopener noreferrer">Visit retailer<\/a>/);
+assert.match(html, />Platinummicro<\/span><a href="https:\/\/platinummicro\.com\/fixture-reviewed\/exact-product" target="_blank" rel="noopener noreferrer">[^<]+<\/a>/);
+assert.match(html, /View at Platinummicro/);
 assert.match(html, /do not indicate current price or availability/);
 assert.doesNotMatch(html, /rel="[^"]*sponsored|affiliate|>Buy now<|>In stock<|>Best price<|>Lowest price<|>Cheapest<|>Recommended retailer<|"@type":"Offer"/i);
 assert.doesNotMatch(renderRamProductPage({ ...publicProduct, atlasProductId: products[1].identity.atlasProductId }, projected.filter(item => item.atlasProductId === products[1].identity.atlasProductId)), /Retailer links/);
@@ -141,7 +142,7 @@ for (const productPage of releasedCatalog.products) {
             const renderedUrl = destination.destinationUrl.replaceAll("&", "&amp;");
             assert.match(rendered, new RegExp(`>${destination.retailerDisplayName}<\\/span><a href="${renderedUrl.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
         }
-        assert.match(rendered, /target="_blank" rel="noopener noreferrer">Visit retailer<\/a>/);
+        assert.match(rendered, /target="_blank" rel="noopener noreferrer">View at [^<]+<\/a>/);
         assert.doesNotMatch(rendered, /onclick=|sendBeacon\(|fetch\(|gtag\("event"|data-(?:analytics|event|destination)/i);
         assert.match(rendered, /do not indicate current price or availability/);
         assert.doesNotMatch(rendered, /rel="[^"]*sponsored|affiliate|"@type":"(?:Offer|AggregateOffer)"|"price(?:Currency)?"|"availability"|"seller"/i);

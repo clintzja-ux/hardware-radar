@@ -218,8 +218,11 @@ for (const scope of ["overall", "ddr5", "ddr4", "sodimm"]) {
     assert.deepEqual(marketSnapshot.scopes[scope].alternatives, []);
 }
 const currentRetail = JSON.parse(await readPublic("data/ram-current-retail.json"));
-assert.equal(currentRetail.comparisonSemantics, "ITEM_PRICE");
-assert.equal(currentRetail.disclosure, "Prices shown exclude applicable shipping, taxes, and fees.");
+assert.equal(currentRetail.comparisonSemantics, "TOTAL_ACQUISITION_COST");
+assert.match(currentRetail.disclosure, /seller[^.]*price[^.]*timestamp/i);
+assert.match(currentRetail.disclosure, /product[^.]*all-offers[^.]*not preselect[^.]*seller[^.]*price/i);
+assert.match(currentRetail.disclosure, /Cheapest[^.]*item price[^.]*shipping[^.]*mandatory fees/i);
+assert.match(currentRetail.disclosure, /taxes may apply/i);
 assert.doesNotMatch(JSON.stringify(currentRetail), /\.forge-review|operatorNotes|workbook/i);
 
 console.log("Public launch-shell truth and safety contract passed.");

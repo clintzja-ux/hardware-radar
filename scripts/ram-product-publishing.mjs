@@ -38,16 +38,16 @@ function retailerDestinations(destinations) {
         let url;
         try { url = new URL(destination.destinationUrl); } catch { throw new Error("RAM_PRODUCT_DESTINATION_INVALID"); }
         if (url.protocol !== "https:" || url.href !== destination.destinationUrl) throw new Error("RAM_PRODUCT_DESTINATION_INVALID");
-        return `<li><span>${escapeHtml(destination.retailerDisplayName)}</span><a href="${escapeHtml(destination.destinationUrl)}" target="_blank" rel="noopener noreferrer">Visit retailer</a></li>`;
+        return `<li><span>${escapeHtml(destination.retailerDisplayName)}</span><a href="${escapeHtml(destination.destinationUrl)}" target="_blank" rel="noopener noreferrer">View at ${escapeHtml(destination.retailerDisplayName)}</a></li>`;
     }).join("");
     return `<section class="ram-product-destinations" aria-labelledby="retailer-links-heading"><h2 id="retailer-links-heading">Retailer links</h2><p>These links are provided for navigation and do not indicate current price or availability.</p><ul>${links}</ul></section>`;
 }
 
 function currentRetailSection(currentRetail, disclosure) {
     if (!currentRetail?.offers?.length) return "";
-    const offers = currentRetail.offers.map(offer => `<li><div><strong>${escapeHtml(offer.retailerName)}</strong><span>Current tracked price: $${Number(offer.itemPriceUsd).toFixed(2)} USD</span><small>Price checked ${escapeHtml(new Date(offer.observedAt).toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }))} UTC</small></div><a href="${escapeHtml(offer.destinationUrl)}" target="_blank" rel="noopener noreferrer">View retailer listing</a></li>`).join("");
-    const lower = currentRetail.lowerCurrentItemPrice ? `<p class="ram-product-current-retail__lower">Lower current item price: <strong>${escapeHtml(currentRetail.lowerCurrentItemPrice.retailerName)} — $${Number(currentRetail.lowerCurrentItemPrice.itemPriceUsd).toFixed(2)} USD</strong></p>` : "";
-    return `<section class="ram-product-current-retail" aria-labelledby="current-retail-heading"><p class="eyebrow">Qualified retailer evidence</p><h2 id="current-retail-heading">Current market</h2>${lower}<p>${escapeHtml(disclosure)}</p><ul>${offers}</ul></section>`;
+    const offers = currentRetail.offers.map(offer => `<li><div><strong>${escapeHtml(offer.retailerName)}</strong><span>Item price: $${Number(offer.itemPriceUsd).toFixed(2)} USD</span><small>Price checked ${escapeHtml(new Date(offer.observedAt).toLocaleString("en-US", { timeZone: "UTC", dateStyle: "medium", timeStyle: "short" }))} UTC</small></div><a href="${escapeHtml(offer.destinationUrl)}" target="_blank" rel="noopener noreferrer">View at ${escapeHtml(offer.retailerName)}</a></li>`).join("");
+    const lower = currentRetail.lowerCurrentItemPrice ? `<p class="ram-product-current-retail__lower">Lowest current item price: <strong>${escapeHtml(currentRetail.lowerCurrentItemPrice.retailerName)} — $${Number(currentRetail.lowerCurrentItemPrice.itemPriceUsd).toFixed(2)} USD</strong></p>` : "";
+    return `<section class="ram-product-current-retail" aria-labelledby="current-retail-heading"><p class="eyebrow">Retailer prices</p><h2 id="current-retail-heading">Current prices</h2>${lower}<p>${escapeHtml(disclosure)}</p><ul>${offers}</ul></section>`;
 }
 
 function historyMetric(label, value, detail = "") {
@@ -65,24 +65,24 @@ function historySection(summary) {
     const history = summary?.history;
     if (!history || history.comparableObservationCount === 0) {
         const detail = history?.admittedObservationCount > 0
-            ? "Hardware Radar has admitted observations for this product, but none currently qualify as a public-comparable price series."
-            : "Hardware Radar does not yet have comparable price history for this product.";
-        return `<section class="ram-product-history" aria-labelledby="observed-history-heading"><p class="eyebrow">Independent historical evidence</p><h2 id="observed-history-heading">Hardware Radar-observed price history</h2><div class="ram-product-history__empty"><strong>Comparable history not yet available</strong><p>${escapeHtml(detail)}</p></div><p class="ram-product-history__separation">Current market prices and historical observations are independently qualified evidence.</p></section>`;
+            ? "We have recorded prices for this product, but they are not comparable enough to show a public history yet."
+            : "We have not recorded enough comparable prices for this product yet.";
+        return `<section class="ram-product-history" aria-labelledby="observed-history-heading"><p class="eyebrow">Price history</p><h2 id="observed-history-heading">Prices observed by Hardware Radar</h2><div class="ram-product-history__empty"><strong>Not enough price history yet</strong><p>${escapeHtml(detail)}</p></div><p class="ram-product-history__separation">Current prices and price history are checked separately.</p></section>`;
     }
     const latest = history.latestComparableObservation;
     const timestamps = history.distinctComparableTimestampCount;
-    let metrics = historyMetric("Latest comparable", formatMoney(latest.itemPriceUsd), formatHistoryDate(latest.observedAt));
+    let metrics = historyMetric("Latest observed price", formatMoney(latest.itemPriceUsd), formatHistoryDate(latest.observedAt));
     if (timestamps >= 2) {
         const previous = history.previousComparableObservation;
-        metrics += historyMetric("Previous comparable", formatMoney(previous.itemPriceUsd), formatHistoryDate(previous.observedAt));
-        metrics += historyMetric("Historical movement", historyMovement(history));
-        metrics += historyMetric("Comparable observed range", `${formatMoney(history.observedMinimumItemPrice)}–${formatMoney(history.observedMaximumItemPrice)}`);
+        metrics += historyMetric("Previous observed price", formatMoney(previous.itemPriceUsd), formatHistoryDate(previous.observedAt));
+        metrics += historyMetric("Price change", historyMovement(history));
+        metrics += historyMetric("Observed price range", `${formatMoney(history.observedMinimumItemPrice)}–${formatMoney(history.observedMaximumItemPrice)}`);
     }
     metrics += historyMetric("Comparable observations", String(history.comparableObservationCount), `${timestamps} distinct time${timestamps === 1 ? "" : "s"}`);
     if (timestamps >= 2) metrics += historyMetric("Observed history span", formatHistorySpan(history.historySpanDays));
     const low = timestamps >= 2 && history.atObservedLow === true ? `<p class="ram-product-history__low"><span aria-hidden="true">★</span> Latest at observed low</p>` : "";
-    const insufficient = timestamps === 1 ? `<p class="ram-product-history__insufficient">Insufficient history for movement.</p>` : "";
-    return `<section class="ram-product-history" aria-labelledby="observed-history-heading"><p class="eyebrow">Independent historical evidence</p><h2 id="observed-history-heading">Hardware Radar-observed price history</h2><p>This summary describes Hardware Radar's governed comparable observations, not complete internet-wide price history.</p><dl class="ram-product-history__metrics">${metrics}</dl>${low}${insufficient}<p class="ram-product-history__separation">Current market prices and historical observations are independently qualified evidence.</p></section>`;
+    const insufficient = timestamps === 1 ? `<p class="ram-product-history__insufficient">Not enough price history to show a trend yet.</p>` : "";
+    return `<section class="ram-product-history" aria-labelledby="observed-history-heading"><p class="eyebrow">Price history</p><h2 id="observed-history-heading">Prices observed by Hardware Radar</h2><p>This history includes comparable prices we recorded at the times shown. It is not a complete record of every price online.</p><dl class="ram-product-history__metrics">${metrics}</dl>${low}${insufficient}<p class="ram-product-history__separation">Current prices and price history are checked separately.</p></section>`;
 }
 
 function pointShape({ x, y, index, label }) {
@@ -119,7 +119,7 @@ function chronologicalSeriesSection(series) {
         const observed = index === 0 ? `<th scope="rowgroup" rowspan="${group.observations.length}">${escapeHtml(formatHistoryDate(group.observedAt))}</th>` : "";
         return `<tr>${observed}<td>${escapeHtml(formatMoney(observation.itemPriceUsd))} USD</td><td>${escapeHtml(retailer)}</td><td>${escapeHtml(count)}</td></tr>`;
     })).join("");
-    const table = `<div class="ram-price-series__table-wrap" tabindex="0"><table><caption>${groups.reduce((sum, group) => sum + group.observations.reduce((count, observation) => count + observation.observationCount, 0), 0)} comparable observations across ${groups.length} distinct time${groups.length === 1 ? "" : "s"}</caption><thead><tr><th scope="col">Observed at</th><th scope="col">Observed item price</th><th scope="col">Retailer</th><th scope="col">Observation count</th></tr></thead><tbody>${tableRows}</tbody></table></div>`;
+    const table = `<div class="ram-price-series__table-wrap" tabindex="0"><table><caption>${groups.reduce((sum, group) => sum + group.observations.reduce((count, observation) => count + observation.observationCount, 0), 0)} comparable prices across ${groups.length} price-check time${groups.length === 1 ? "" : "s"}</caption><thead><tr><th scope="col">Price checked</th><th scope="col">Item price</th><th scope="col">Retailer</th><th scope="col">Matching observations</th></tr></thead><tbody>${tableRows}</tbody></table></div>`;
     if (groups.length < 2) return `<section class="ram-price-series" aria-labelledby="price-series-heading"><p class="eyebrow">Discrete historical evidence</p><h2 id="price-series-heading">Observed price history</h2><p>Hardware Radar observed these comparable item prices at the times shown. We do not observe prices continuously.</p>${table}</section>`;
     const width = 760, height = 280, left = 68, right = 28, top = 30, bottom = 58;
     const values = groups.flatMap(group => group.observations.map(observation => observation.itemPriceUsd));
@@ -149,7 +149,7 @@ function chronologicalSeriesSection(series) {
 }
 
 function methodologySection() {
-    return `<section class="ram-product-methodology" aria-labelledby="product-methodology-heading"><p class="eyebrow">How to read this page</p><h2 id="product-methodology-heading">Methodology</h2><p>Current values are qualified item prices and exclude applicable shipping, taxes, and fees. Unknown shipping or fees are never treated as zero. Only governed standalone-comparable observations appear in observed price history; multiple retailer observations may exist at one timestamp. Points are discrete observations, and Hardware Radar does not observe prices continuously. Historical movement compares the latest and previous distinct-time comparable historical observations; it does not compare Current with previous History. Current Market remains separately qualified.</p></section>`;
+    return `<section class="ram-product-methodology" aria-labelledby="product-methodology-heading"><p class="eyebrow">How to read this page</p><h2 id="product-methodology-heading">About these prices</h2><p>Current prices are item prices. When known, shipping and mandatory fees are included in comparisons; unknown costs are never treated as zero. Price history includes only comparable standalone products. Each point is a price check, not continuous monitoring. Historical changes compare the two latest comparable price-check times and do not compare a current price with an older historical price.</p></section>`;
 }
 
 function renderRamProductPageBase(product, destinations = [], currentRetail = null, disclosure = "", terminalSummary = null, chronologicalSeries = null) {
@@ -175,7 +175,10 @@ function renderRamProductPageBase(product, destinations = [], currentRetail = nu
 }
 
 export function renderRamProductPage(product, destinations = [], currentRetail = null, disclosure = "", terminalSummary = null, chronologicalSeries = null) {
-    const page = renderRamProductPageBase(product, destinations, currentRetail, disclosure, terminalSummary, chronologicalSeries);
+    const page = renderRamProductPageBase(product, destinations, currentRetail, disclosure, terminalSummary, chronologicalSeries)
+        .replace('<p class="eyebrow">Product intelligence</p>', '<p class="eyebrow">RAM product details</p>')
+        .replace("Reference specifications, qualified current prices, and Hardware Radar-observed history for this product.", "Specifications, current item prices, and price history for this product.")
+        .replace("Price pages cover broader tracked categories and do not establish an offer for this exact product.", "Category price pages cover more products and do not show an offer for this exact item.");
     const analytics = `<script async src="https://www.googletagmanager.com/gtag/js?id=G-QF6XJ8GCMY"></script>\n<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-QF6XJ8GCMY");</script>\n`;
     return page.replace('<script type="application/ld+json">', `${analytics}<script type="application/ld+json">`);
 }
