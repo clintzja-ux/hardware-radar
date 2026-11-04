@@ -1,60 +1,60 @@
 {
   "schemaVersion": "1.0",
   "policyVersion": "CERTIFIED-STATIC-PUBLICATION-RELEASE-CONTROL-P1-1.0",
-  "releaseId": "pubrel_587073988fdaa0897e465e8d",
+  "releaseId": "pubrel_90d8803c08cb82df641286c4",
   "releaseState": "ON",
   "targetEnvironment": "PRODUCTION",
   "targetSurface": "PUBLIC_RAM_INTELLIGENCE_PORTFOLIO",
   "reason": "governed recurring publication candidate promotion",
-  "createdAt": "2026-10-26T22:20:43.120Z",
+  "createdAt": "2026-11-04T22:13:39.135Z",
   "reviewedBy": "operator:JRVR",
   "artifact": {
-    "artifactId": "mer_ramreleaseart_368d1056ee5969b19a5d7a07",
-    "candidateId": "mer_ramreleasecand_368d1056ee5969b19a5d7a07",
-    "relativePath": "artifacts/mer_ramreleasecand_368d1056ee5969b19a5d7a07.json",
+    "artifactId": "mer_ramreleaseart_19f2d271702bce9ddaecbfe1",
+    "candidateId": "mer_ramreleasecand_19f2d271702bce9ddaecbfe1",
+    "relativePath": "artifacts/mer_ramreleasecand_19f2d271702bce9ddaecbfe1.json",
     "schemaVersion": "1.1",
     "policyVersion": "RAM-PUBLIC-INTELLIGENCE-RELEASE-P1-1.1",
-    "digestSha256": "e620705707c7dd1b9ed64b66ce0afe4b7bffef29d209bb6fe485b1e2e71e2128",
-    "bindingDigest": "368d1056ee5969b19a5d7a0711d04a74665389e8721ed470cde0cb4d5df806b4",
-    "certificationId": "sent_ramreleasecert_15c4dfd3e81ada95431d306f",
-    "evaluatedAt": "2026-10-26T22:14:00.928Z",
-    "expiresAt": "2026-10-28T03:24:50.000Z",
+    "digestSha256": "3651121bef3d0dca380e0077dabc1a94877ff07c4262f197644decafdfeea686",
+    "bindingDigest": "19f2d271702bce9ddaecbfe144095745a9d65fdff64e6d7f5cb5516e3e02468b",
+    "certificationId": "sent_ramreleasecert_9806c88740f311fe65e314ea",
+    "evaluatedAt": "2026-11-04T22:02:15.087Z",
+    "expiresAt": "2026-11-05T02:57:13.000Z",
     "routesDigest": "e1c29a42d4c7d92a39dd619f3cfb851479130ff9a5a53438ef5470d4c392d2f8"
   },
   "certification": {
     "state": "CERTIFIED",
     "certifiedBy": "operator:JRVR",
-    "certifiedAt": "2026-10-26T22:20:43.120Z",
+    "certifiedAt": "2026-11-04T22:13:39.135Z",
     "authorityType": "RAM_INTELLIGENCE_PORTFOLIO_CERTIFICATION",
-    "authorityReference": "sent_ramreleasecert_15c4dfd3e81ada95431d306f",
-    "bindingDigest": "cc9b24d8bb8cb3eebf72979dea1696be810216748f67a09d6d6bd7a104b04987"
+    "authorityReference": "sent_ramreleasecert_9806c88740f311fe65e314ea",
+    "bindingDigest": "e39e1c038d7da6078f4d6fa040edd1d856d11c2ec3fc6afd924b7cf706f55013"
   },
   "rollback": {
-    "previousReleaseId": "pubrel_dab5ab6aab7d2c881e5df47a",
+    "previousReleaseId": "pubrel_587073988fdaa0897e465e8d",
     "previousRelease": {
-      "releaseId": "pubrel_dab5ab6aab7d2c881e5df47a",
+      "releaseId": "pubrel_587073988fdaa0897e465e8d",
       "targetEnvironment": "PRODUCTION",
       "targetSurface": "PUBLIC_RAM_INTELLIGENCE_PORTFOLIO",
       "artifact": {
-        "artifactId": "mer_ramreleaseart_eab6a949a8a76618824037b2",
-        "candidateId": "mer_ramreleasecand_eab6a949a8a76618824037b2",
-        "relativePath": "artifacts/mer_ramreleasecand_eab6a949a8a76618824037b2.json",
+        "artifactId": "mer_ramreleaseart_368d1056ee5969b19a5d7a07",
+        "candidateId": "mer_ramreleasecand_368d1056ee5969b19a5d7a07",
+        "relativePath": "artifacts/mer_ramreleasecand_368d1056ee5969b19a5d7a07.json",
         "schemaVersion": "1.1",
         "policyVersion": "RAM-PUBLIC-INTELLIGENCE-RELEASE-P1-1.1",
-        "digestSha256": "1ec98a9df06cd3cabf9a7a609a9153560e0f0b41fded63826df882515216fefa",
-        "bindingDigest": "eab6a949a8a76618824037b20460963b45652c397c762fb324f1f6ac3e200ae5",
-        "certificationId": "sent_ramreleasecert_68a737a5a6e5ddc344669beb",
-        "evaluatedAt": "2026-10-26T03:09:47.710Z",
-        "expiresAt": "2026-10-27T07:13:21.000Z",
+        "digestSha256": "e620705707c7dd1b9ed64b66ce0afe4b7bffef29d209bb6fe485b1e2e71e2128",
+        "bindingDigest": "368d1056ee5969b19a5d7a0711d04a74665389e8721ed470cde0cb4d5df806b4",
+        "certificationId": "sent_ramreleasecert_15c4dfd3e81ada95431d306f",
+        "evaluatedAt": "2026-10-26T22:14:00.928Z",
+        "expiresAt": "2026-10-28T03:24:50.000Z",
         "routesDigest": "e1c29a42d4c7d92a39dd619f3cfb851479130ff9a5a53438ef5470d4c392d2f8"
       },
       "certification": {
         "state": "CERTIFIED",
         "certifiedBy": "operator:JRVR",
-        "certifiedAt": "2026-10-26T03:18:59.256Z",
+        "certifiedAt": "2026-10-26T22:20:43.120Z",
         "authorityType": "RAM_INTELLIGENCE_PORTFOLIO_CERTIFICATION",
-        "authorityReference": "sent_ramreleasecert_68a737a5a6e5ddc344669beb",
-        "bindingDigest": "44169360f8553fbe4688cf8287a055ebcf30b66d01d8c0204e659b1b436275c4"
+        "authorityReference": "sent_ramreleasecert_15c4dfd3e81ada95431d306f",
+        "bindingDigest": "cc9b24d8bb8cb3eebf72979dea1696be810216748f67a09d6d6bd7a104b04987"
       }
     }
   }
