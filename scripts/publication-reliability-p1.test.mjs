@@ -13,4 +13,3 @@ const forge=createPricePublicationGeneratedPathInventory({changedPaths:["public/
 const atlas=createPricePublicationGeneratedPathInventory({changedPaths:["public/data/atlas/index.js"],authorizedPaths:DEFAULT_LIVE_PRICE_GENERATED_PATHS});assert.equal(atlas.valid,false);
 const source=createPricePublicationGeneratedPathInventory({changedPaths:["scripts/build-public.mjs"],authorizedPaths:DEFAULT_LIVE_PRICE_GENERATED_PATHS});assert.equal(source.valid,false);assert.deepEqual(source.unauthorizedPaths,["scripts/build-public.mjs"]);
 console.log("Publication Reliability P1 contract tests passed: registered price-only build, three-root composition, allowlist, and application-packaging exclusion.");
-
