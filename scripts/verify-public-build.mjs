@@ -10,6 +10,10 @@ import { createEmptyPublicCurrentRetailProjection } from "../packages/mercury/cu
 import { loadStaticPublicationRelease } from "./static-publication-release-runtime.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const scopeArgument = process.argv.slice(2).find(value => value.startsWith("--scope="))?.slice("--scope=".length);
+const verificationScope = String(scopeArgument ?? process.env.HARDWARE_RADAR_PUBLIC_BUILD_SCOPE ?? "FULL").toUpperCase();
+if (!["FULL", "PRICE_PUBLICATION"].includes(verificationScope)) throw new Error(`PUBLIC_VERIFICATION_SCOPE_INVALID:${verificationScope}`);
+const pricePublication = verificationScope === "PRICE_PUBLICATION";
 const canonicalText = (contents) => contents.toString("utf8").replaceAll("\r\n", "\n");
 async function snapshot(directory, { exclude = [] } = {}, prefix = "") {
     const result = new Map();
@@ -33,7 +37,7 @@ async function verifyProjection(label, source, destination, options) {
     for (const file of actual.keys()) if (!expected.has(file)) errors.push(`${label}: unexpected public artifact ${file}`);
     return errors;
 }
-const errors = [
+const errors = pricePublication ? [] : [
     ...(await verifyProjection("Atlas", path.join(root, "packages", "atlas"), path.join(root, "public", "data", "atlas"), { exclude: ["tests", "README.md"] })),
     ...(await verifyProjection("Forge", path.join(root, "apps", "forge"), path.join(root, "public", "forge"), { exclude: ["README.md"] }))
 ];
@@ -50,7 +54,7 @@ try {
     const actualSitemap = await readFile(path.join(root, "public", "sitemap.xml"), "utf8");
     if (expectedSitemap !== actualSitemap) errors.push("Editorial: sitemap.xml is stale or not deterministically generated.");
     if (/fixture-memory-notation|scripts\/fixtures\/editorial/.test(actualSitemap)) errors.push("Editorial: fixture content leaked into the production sitemap.");
-    for (const article of articles) {
+    if (!pricePublication) for (const article of articles) {
         const output = path.join(root, "public", article.metadata.canonicalPath.slice(1), "index.html");
         const actual = await readFile(output, "utf8");
         const expected = renderArticle(article);
@@ -60,9 +64,11 @@ try {
         if (!actual.includes('aria-label="Breadcrumb"')) errors.push(`Editorial: ${article.metadata.canonicalPath} is missing visible breadcrumbs.`);
         if (/<script[^>]*>\s*alert\(|javascript:/i.test(actual)) errors.push(`Editorial: unsafe output in ${article.metadata.canonicalPath}.`);
     }
-    const guidesMetadata = JSON.parse(await readFile(path.join(root, "content", "guides-index.json"), "utf8"));
-    const guidesOutput = await readFile(path.join(root, "public", "guides", "index.html"), "utf8");
-    if (guidesOutput !== renderGuidesIndex(guidesMetadata, articles)) errors.push("Editorial: stale generated Guides index.");
+    if (!pricePublication) {
+        const guidesMetadata = JSON.parse(await readFile(path.join(root, "content", "guides-index.json"), "utf8"));
+        const guidesOutput = await readFile(path.join(root, "public", "guides", "index.html"), "utf8");
+        if (guidesOutput !== renderGuidesIndex(guidesMetadata, articles)) errors.push("Editorial: stale generated Guides index.");
+    }
     const editorialRoutes = [...actualSitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/guides\/[^<]*)<\/loc>/g)].map((match) => match[1]);
     const expectedEditorialRoutes = ["/guides/", "/guides/ram/", "/guides/ram/16gb-vs-32gb/", "/guides/ram/check-ram-compatibility/", "/guides/ram/ddr4-vs-ddr5/", "/guides/ram/ram-speed-cas-latency/"];
     if (editorialRoutes.length !== expectedEditorialRoutes.length || expectedEditorialRoutes.some((route) => !editorialRoutes.includes(route))) errors.push("Editorial: production sitemap must contain exactly the Guides index, RAM hub, and four approved RAM spokes.");
@@ -124,4 +130,6 @@ try {
     for (const scope of ["overall", "ddr5", "ddr4", "sodimm"]) if (!published.scopes?.[scope]) errors.push(`Publication: missing ${scope} scope.`);
 } catch (error) { errors.push(`Publication: market-snapshot.json missing or invalid (${error.message}).`); }
 if (errors.length) { console.error(errors.join("\n")); process.exitCode = 1; }
-else console.log("Public deployment artifacts match canonical platform sources and publication boundary.");
+else console.log(pricePublication
+    ? "Price-publication artifacts match the certified release and scoped publication boundary."
+    : "Public deployment artifacts match canonical platform sources and publication boundary.");

@@ -11,6 +11,7 @@ const fixtureRoot = await mkdtemp(path.join(os.tmpdir(), "hr-live-publication-")
 try {
   const sourceManifest = JSON.parse(await readFile("config/publication-release.json", "utf8"));
   const sourceArtifact = await readFile(path.join("config", sourceManifest.artifact.relativePath), "utf8");
+  const fixtureNow = sourceManifest.createdAt;
   await mkdir(path.join(fixtureRoot, "config", "artifacts"), { recursive: true });
   await writeFile(path.join(fixtureRoot, "config", "publication-release.json"), `${JSON.stringify(sourceManifest, null, 2)}\n`);
   await writeFile(path.join(fixtureRoot, "config", sourceManifest.artifact.relativePath), sourceArtifact);
@@ -21,20 +22,20 @@ try {
     certificationId: sourceManifest.artifact.certificationId, certificationDigest: sha(JSON.stringify(bundle.certification)),
     targetEnvironment: "PRODUCTION", predecessorReleaseId: sourceManifest.rollback.previousReleaseId,
     freshUntil: bundle.manifest.currentValidUntil, authorizedPaths: ["public/", "config/publication-release.json", "config/artifacts/"],
-    authorizedBy: "operator:fixture", authorizedAt: "2026-10-17T00:00:00.000Z"
+    authorizedBy: "operator:fixture", authorizedAt: sourceManifest.artifact.evaluatedAt
   });
   const repository = new FileLivePricePublicationAuthorizationRepository({ statePath: path.join(fixtureRoot, ".state", "publication.json") });
   await repository.record(authorization);
   let builds = 0, verifications = 0, inspections = 0, changedPaths = ["public/ram/index.html"], buildEnvironment, verificationEnvironment;
   const service = new GovernedLivePricePublicationCoordinator({ authorizationRepository: repository,
     buildRunner: { run: async ({ environment }) => { builds += 1; buildEnvironment = environment; } }, verificationRunner: { run: async ({ authorization: verifiedAuthorization }) => { verifications += 1; verificationEnvironment = verifiedAuthorization.targetEnvironment; } },
-    gitInspector: { inspect: async () => (++inspections % 2) ? { clean: true, changedPaths: [] } : { clean: false, changedPaths } }, now: () => "2026-10-17T00:30:00.000Z" });
+    gitInspector: { inspect: async () => (++inspections % 2) ? { clean: true, changedPaths: [] } : { clean: false, changedPaths } }, now: () => fixtureNow });
   const result = await service.prepare({ authorizationId: authorization.authorizationId, checkoutRoot: fixtureRoot });
   assert.equal(result.status, "READY_FOR_RELEASE_ONLY_CHECKPOINT"); assert.equal(result.mergeAuthorized, false); assert.equal(result.deploymentAuthorized, false); assert.equal(builds, 1); assert.equal(verifications, 1); assert.equal(buildEnvironment, "PRODUCTION"); assert.equal(verificationEnvironment, buildEnvironment);
   const replay = await service.prepare({ authorizationId: authorization.authorizationId, checkoutRoot: fixtureRoot }); assert.equal(replay.replay, true); assert.equal(replay.recovery, true);
   changedPaths = ["scripts/unrelated.mjs"]; await assert.rejects(() => service.prepare({ authorizationId: authorization.authorizationId, checkoutRoot: fixtureRoot }), /UNAUTHORIZED_PATHS/);
-  const promotionPaths=[`config/artifacts/${authorization.candidateId}.json`,"config/publication-release.json"].sort(), promotionEvidence={schemaVersion:"1.0",candidateId:authorization.candidateId,artifactId:authorization.artifactId,certificationId:authorization.certificationId,predecessorReleaseId:authorization.predecessorReleaseId,predecessorCommit:"fixture-base",originalCleanCheckout:{clean:true,localCommit:"fixture-base",remoteCommit:"fixture-base",verifiedAt:"2026-10-17T00:29:00.000Z"},promotionPaths};
-  const createPromotionService=async(name,firstPaths)=>{const state=new FileLivePricePublicationAuthorizationRepository({statePath:path.join(fixtureRoot,".state",`${name}.json`)});await state.record(authorization);let runs=0,checks=0;return{state,runs:()=>runs,service:new GovernedLivePricePublicationCoordinator({authorizationRepository:state,buildRunner:{run:async()=>{runs++;}},verificationRunner:{run:async()=>{}},gitInspector:{inspect:async()=>({clean:false,changedPaths:checks++===0?firstPaths:promotionPaths})},now:()=>"2026-10-17T00:30:00.000Z"})};};
+  const promotionPaths=[`config/artifacts/${authorization.candidateId}.json`,"config/publication-release.json"].sort(), promotionEvidence={schemaVersion:"1.0",candidateId:authorization.candidateId,artifactId:authorization.artifactId,certificationId:authorization.certificationId,predecessorReleaseId:authorization.predecessorReleaseId,predecessorCommit:"fixture-base",originalCleanCheckout:{clean:true,localCommit:"fixture-base",remoteCommit:"fixture-base",verifiedAt:sourceManifest.artifact.evaluatedAt},promotionPaths};
+  const createPromotionService=async(name,firstPaths)=>{const state=new FileLivePricePublicationAuthorizationRepository({statePath:path.join(fixtureRoot,".state",`${name}.json`)});await state.record(authorization);let runs=0,checks=0;return{state,runs:()=>runs,service:new GovernedLivePricePublicationCoordinator({authorizationRepository:state,buildRunner:{run:async()=>{runs++;}},verificationRunner:{run:async()=>{}},gitInspector:{inspect:async()=>({clean:false,changedPaths:checks++===0?firstPaths:promotionPaths})},now:()=>fixtureNow})};};
   const promoted=await createPromotionService("promoted",promotionPaths);assert.equal((await promoted.service.prepare({authorizationId:authorization.authorizationId,checkoutRoot:fixtureRoot,promotionEvidence})).status,"READY_FOR_RELEASE_ONLY_CHECKPOINT");assert.equal(promoted.runs(),1);
   const thirdFile=await createPromotionService("third-file",[...promotionPaths,"scripts/unrelated.mjs"]);await assert.rejects(()=>thirdFile.service.prepare({authorizationId:authorization.authorizationId,checkoutRoot:fixtureRoot,promotionEvidence}),/CHECKOUT_NOT_CLEAN/);assert.equal(thirdFile.runs(),0);
   const missingEvidence=await createPromotionService("missing-evidence",promotionPaths);await assert.rejects(()=>missingEvidence.service.prepare({authorizationId:authorization.authorizationId,checkoutRoot:fixtureRoot}),/CHECKOUT_NOT_CLEAN/);

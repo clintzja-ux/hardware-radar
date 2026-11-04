@@ -4,11 +4,11 @@
   "workingDirectory": "C:\\Projects\\hardware-radar\\hardware-radar",
   "documentation": "docs/operations/HARDWARE-RADAR-OPERATOR-RUNBOOK.md",
   "inventory": {
-    "packageScriptDeclarations": 229,
-    "topLevelMjsFiles": 215,
+    "packageScriptDeclarations": 232,
+    "topLevelMjsFiles": 217,
     "windowsPowerShellFiles": 17,
     "operatorEligibleEntries": 31,
-    "nonOperatorDeclarations": 412,
+    "nonOperatorDeclarations": 417,
     "note": "Declaration counts intentionally include package aliases to script files. Non-operator surfaces are TEST_DEVELOPMENT or ENGINEERING_DIAGNOSTIC and are not promoted into this runbook registry."
   },
   "classifications": ["ROUTINE_OPERATOR", "EXCEPTION_REVIEW", "PAID_OPERATOR", "SCHEDULER_CONTROL", "RELEASE_OPERATOR", "READ_ONLY_INSPECTION", "ENGINEERING_DIAGNOSTIC", "TEST_DEVELOPMENT", "DEPRECATED_DO_NOT_USE"],

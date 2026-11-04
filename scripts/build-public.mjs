@@ -15,7 +15,7 @@ import { adapterRegistry } from "../packages/mercury/adapters/index.js";
 import { ProductRepository } from "../packages/atlas/ProductRepository.js";
 import { RetailerRepository } from "../packages/atlas/RetailerRepository.js";
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
-import { generateEditorialSite, generateSitemap } from "./editorial-publishing.mjs";
+import { generateEditorialSite, generateSitemap, loadEditorialArticles } from "./editorial-publishing.mjs";
 import { generateRamProductPages } from "./ram-product-publishing.mjs";
 import { createPublicRetailerDestinationProjection, loadRetailerDestinationSource } from "../packages/mercury/destinations/RetailerDestinationSource.js";
 import { FileCurrentDisplaySnapshotRepository, createEmptyPublicCurrentRetailProjection, createPublicCurrentRetailProjection } from "../packages/mercury/current-display/index.js";
@@ -25,14 +25,23 @@ import { createPublicChronologicalPriceSeries } from "../packages/mercury/histor
 import { generateRamTerminalPage } from "./ram-terminal-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const scopeArgument = process.argv.slice(2).find(value => value.startsWith("--scope="))?.slice("--scope=".length);
+const buildScope = String(scopeArgument ?? process.env.HARDWARE_RADAR_PUBLIC_BUILD_SCOPE ?? "FULL").toUpperCase();
+if (!["FULL", "PRICE_PUBLICATION"].includes(buildScope)) throw new Error(`PUBLIC_BUILD_SCOPE_INVALID:${buildScope}`);
+const pricePublication = buildScope === "PRICE_PUBLICATION";
 
-const editorial = await generateEditorialSite({
+const editorialInput = {
     sourceDir: path.join(root, "content", "guides"),
-    outputDir: path.join(root, "public"),
-    sitemapPath: path.join(root, "public", "sitemap.xml"),
-    routeManifestPath: path.join(root, "content", "site-routes.json"),
-    guidesIndexPath: path.join(root, "content", "guides-index.json")
-});
+    routeManifestPath: path.join(root, "content", "site-routes.json")
+};
+const editorial = pricePublication
+    ? await loadEditorialArticles(editorialInput)
+    : await generateEditorialSite({
+        ...editorialInput,
+        outputDir: path.join(root, "public"),
+        sitemapPath: path.join(root, "public", "sitemap.xml"),
+        guidesIndexPath: path.join(root, "content", "guides-index.json")
+    });
 
 async function copyDirectory(source, destination, { exclude = [] } = {}) {
     await rm(destination, { recursive: true, force: true });
@@ -62,13 +71,15 @@ async function normalizeGeneratedText(directory) {
 async function json(file) { return JSON.parse(await readFile(file, "utf8")); }
 async function loadManifestRecords(packageRoot, entries) { return Promise.all(entries.map((entry) => json(path.resolve(packageRoot, entry.path)))); }
 
-await copyDirectory(path.join(root, "packages", "atlas"), path.join(root, "public", "data", "atlas"), { exclude: ["tests", "README.md"] });
-await normalizeGeneratedText(path.join(root, "public", "data", "atlas"));
-await copyDirectory(path.join(root, "apps", "forge"), path.join(root, "public", "forge"), { exclude: ["README.md"] });
-await rm(path.join(root, "public", "data", "mercury"), { recursive: true, force: true });
-await rm(path.join(root, "public", "data", "sentinel"), { recursive: true, force: true });
-await rm(path.join(root, "public", "js", "atlasAdapter.js"), { force: true });
-await rm(path.join(root, "public", "js", "atlasSmokeTest.js"), { force: true });
+if (!pricePublication) {
+    await copyDirectory(path.join(root, "packages", "atlas"), path.join(root, "public", "data", "atlas"), { exclude: ["tests", "README.md"] });
+    await normalizeGeneratedText(path.join(root, "public", "data", "atlas"));
+    await copyDirectory(path.join(root, "apps", "forge"), path.join(root, "public", "forge"), { exclude: ["README.md"] });
+    await rm(path.join(root, "public", "data", "mercury"), { recursive: true, force: true });
+    await rm(path.join(root, "public", "data", "sentinel"), { recursive: true, force: true });
+    await rm(path.join(root, "public", "js", "atlasAdapter.js"), { force: true });
+    await rm(path.join(root, "public", "js", "atlasSmokeTest.js"), { force: true });
+}
 
 const atlasRoot = path.join(root, "packages", "atlas");
 const atlasManifest = await json(path.join(atlasRoot, "atlas-manifest.json"));
@@ -150,4 +161,6 @@ if (acceptanceStatePath && reviewStatePath && publicationStatePath) {
 }
 
 await writeFile(path.join(root, "public", "data", "market-snapshot.json"), `${JSON.stringify(snapshot, null, 2)}\n`);
-console.log("Public deployment artifacts built from canonical packages and governed published intelligence.");
+console.log(pricePublication
+    ? "Price-publication artifacts built from the certified release without unrelated application packaging."
+    : "Public deployment artifacts built from canonical packages and governed published intelligence.");

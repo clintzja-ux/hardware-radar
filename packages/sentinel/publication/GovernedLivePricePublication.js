@@ -3,6 +3,7 @@ import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { evaluateStaticPublicationRelease, staticPublicationArtifactDigest } from "../validators/StaticPublicationReleaseControl.js";
 import { FileSingleWriterRunLock, SINGLE_WRITER_LOCK_STATUSES } from "../../mercury/runtime/FileSingleWriterRunLock.js";
+import { createPricePublicationGeneratedPathInventory } from "../../../scripts/lib/publication-generated-path-inventory.mjs";
 
 const VERSION = "GOVERNED-LIVE-PRICE-PUBLICATION-001-1.0";
 const clone = value => structuredClone(value);
@@ -78,8 +79,9 @@ export class GovernedLivePricePublicationCoordinator {
     const operation = await this.authorizationRepository.begin({ authorizationId, checkoutRoot: root, startedAt: priorOperation?.startedAt ?? evaluatedAt });
     await this.buildRunner.run({ root, generatedAt: manifest.createdAt, environment: "PRODUCTION" }); await this.verificationRunner.run({ root, authorization, release });
     if (Date.parse(this.now()) >= Date.parse(authorization.freshUntil)) throw new Error("LIVE_PRICE_PUBLICATION_FRESHNESS_EXPIRED");
-    const after = await this.gitInspector.inspect({ root }), unauthorized = after.changedPaths.filter(file => !pathAllowed(file, authorization.authorizedPaths));
-    if (unauthorized.length) throw new Error(`LIVE_PRICE_PUBLICATION_UNAUTHORIZED_PATHS:${unauthorized.join(",")}`);
+    const after = await this.gitInspector.inspect({ root }), inventory = createPricePublicationGeneratedPathInventory({ changedPaths: after.changedPaths, authorizedPaths: authorization.authorizedPaths });
+    if (inventory.unauthorizedPaths.length) throw new Error(`LIVE_PRICE_PUBLICATION_UNAUTHORIZED_PATHS:${inventory.unauthorizedPaths.join(",")}`);
+    if (inventory.applicationPackagingPaths.length) throw new Error(`LIVE_PRICE_PUBLICATION_APPLICATION_PACKAGING_PATHS:${inventory.applicationPackagingPaths.join(",")}`);
     const checkpoint = { schemaVersion:"1.0",status:"READY_FOR_RELEASE_ONLY_CHECKPOINT",authorizationId,releaseId:manifest.releaseId,candidateId:authorization.candidateId,predecessorReleaseId:authorization.predecessorReleaseId,evaluatedAt:operation.operation.startedAt,freshUntil:authorization.freshUntil,changedPaths:[...after.changedPaths].sort(),recovery:operation.status==="RECOVERED",mergeAuthorized:false,deploymentAuthorized:false,rollbackAuthorized:false };
     const checkpointIdentity = { ...checkpoint }; delete checkpointIdentity.recovery;
     const checkpointDigest=digest(checkpointIdentity), consumption=await this.authorizationRepository.consume({authorizationId,checkpointDigest,consumedAt:checkpoint.evaluatedAt}); return freeze({...checkpoint,checkpointDigest,replay:consumption.status==="ALREADY_CONSUMED"});

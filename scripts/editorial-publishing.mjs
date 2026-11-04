@@ -148,7 +148,7 @@ export function generateSitemap({ staticRoutes, articles, additionalRoutes = [] 
     return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.map((entry)=>`  <url>\n    <loc>${SITE_ORIGIN}${entry.path}</loc>\n    <lastmod>${entry.lastmod}</lastmod>\n    <changefreq>${entry.changefreq}</changefreq>\n    <priority>${entry.priority}</priority>\n  </url>`).join("\n")}\n</urlset>\n`;
 }
 
-export async function generateEditorialSite({ sourceDir, outputDir, sitemapPath, routeManifestPath, guidesIndexPath }) {
+export async function loadEditorialArticles({ sourceDir, routeManifestPath }) {
     const staticRoutes = JSON.parse(await readFile(routeManifestPath, "utf8"));
     const knownRoutes = staticRoutes.map((item)=>item.path); const sources=[];
     try { for (const name of (await readdir(sourceDir)).filter((name)=>name.endsWith(".md") && name !== "README.md").sort()) sources.push({ name, source:await readFile(path.join(sourceDir,name),"utf8") }); } catch (error) { if (error.code !== "ENOENT") throw error; }
@@ -156,6 +156,11 @@ export async function generateEditorialSite({ sourceDir, outputDir, sitemapPath,
     const allRoutes = [...knownRoutes,...articles.map((article)=>article.metadata.canonicalPath)];
     const identities = new Set(); const routes = new Set();
     for (const article of articles) { article.metadata=validateArticleMetadata(article.metadata,{knownRoutes:allRoutes}); if (identities.has(article.metadata.slug)) fail("EDITORIAL_IDENTITY_DUPLICATE",article.metadata.slug); if(routes.has(article.metadata.canonicalPath)) fail("EDITORIAL_ROUTE_DUPLICATE",article.metadata.canonicalPath); identities.add(article.metadata.slug);routes.add(article.metadata.canonicalPath); }
+    return { articles, staticRoutes };
+}
+
+export async function generateEditorialSite({ sourceDir, outputDir, sitemapPath, routeManifestPath, guidesIndexPath }) {
+    const { articles, staticRoutes } = await loadEditorialArticles({ sourceDir, routeManifestPath });
     for (const article of articles) { const destination=path.join(outputDir,article.metadata.canonicalPath.slice(1),"index.html"); await mkdir(path.dirname(destination),{recursive:true}); await writeFile(destination,renderArticle(article)); }
     if (guidesIndexPath) {
         const indexMetadata = JSON.parse(await readFile(guidesIndexPath, "utf8"));
