@@ -96,7 +96,6 @@ function replaceDiscoveryBlock(html, contents) {
 
 export async function generateRamDiscoveryLinks({ catalog, outputDir }) {
     const surfaces = [
-        ["index.html", catalog.products],
         ["ram/index.html", catalog.products],
         ["ddr4.html", catalog.products.filter(product => product.memoryType === "DDR4" && product.formFactor === "DIMM")],
         ["ddr5.html", catalog.products.filter(product => product.memoryType === "DDR5" && product.formFactor === "DIMM")],

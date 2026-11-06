@@ -131,7 +131,6 @@ for (const product of publicCatalog.products) {
 const discoveryBlock = html => html.match(/<!-- RAM_PRODUCT_DISCOVERY_START -->([\s\S]*?)<!-- RAM_PRODUCT_DISCOVERY_END -->/)?.[1] ?? "";
 const discoveryLinks = html => [...discoveryBlock(html).matchAll(/href="(\/ram\/[a-z0-9-]+\/)"/g)].map(match => match[1]);
 const discoverySurfaces = new Map([
-    ["public/index.html", publicCatalog.products],
     ["public/ram/index.html", publicCatalog.products],
     ["public/ddr4.html", publicCatalog.products.filter(product => product.memoryType === "DDR4" && product.formFactor === "DIMM")],
     ["public/ddr5.html", publicCatalog.products.filter(product => product.memoryType === "DDR5" && product.formFactor === "DIMM")],
@@ -142,6 +141,25 @@ for (const [surface, expectedProducts] of discoverySurfaces) {
     assert.equal(links.length, expectedProducts.length, `${surface} must expose every relevant product in server-rendered HTML.`);
     assert.deepEqual(new Set(links), new Set(expectedProducts.map(product => product.publicPath)));
 }
+const homepageHtml = await read("public/index.html");
+const catalogPage = await read("public/ram/index.html");
+assert.equal(discoveryLinks(homepageHtml).length, 0, "Homepage must not duplicate the complete product catalog.");
+assert.doesNotMatch(homepageHtml, /ram-catalog-card--discovery/, "Homepage must not render catalog product cards.");
+assert.doesNotMatch(homepageHtml, /home-product-directory|RAM_PRODUCT_DISCOVERY_(?:START|END)/, "Homepage must preserve its original presentation without an injected catalog callout.");
+assert.match(homepageHtml, /<section id="overallSection" aria-live="polite"><\/section>/, "Homepage must retain the featured-offer mount.");
+assert.match(homepageHtml, /<section class="category-grid">[\s\S]*?<section id="ddr5Section"><\/section>[\s\S]*?<section id="ddr4Section"><\/section>[\s\S]*?<section id="sodimmSection"><\/section>[\s\S]*?<\/section>/, "Homepage must retain all three comparison-card mounts in their original order.");
+assert.match(homepageHtml, /<p class="current-retail-disclosure">Prices shown exclude applicable shipping, taxes, and fees\.<\/p>/, "Homepage must retain its price disclosure.");
+assert.match(homepageHtml, /<section id="trustSection"><\/section>/, "Homepage must retain the trust section mount.");
+assert.match(homepageHtml, /<footer id="footerContainer"><\/footer>/, "Homepage must retain the four-column footer mount.");
+assert.match(homepageHtml, /<script type="module" src="js\/main\.js"><\/script>/, "Homepage must retain the comparison runtime.");
+assert.match(homepageHtml, /<title>Compare RAM Prices \| Hardware Radar<\/title>/);
+assert.match(homepageHtml, /<link rel="canonical" href="https:\/\/cheapestram\.com\/">/);
+assert.match(homepageHtml, /<h1>Compare RAM Prices<\/h1>/);
+assert.match(catalogPage, /<title>Browse RAM by Specification \| Hardware Radar<\/title>/);
+assert.match(catalogPage, /<link rel="canonical" href="https:\/\/cheapestram\.com\/ram\/">/);
+assert.match(catalogPage, /<h1>Browse RAM by specification<\/h1>/);
+assert.notEqual(homepageHtml.match(/<title>([^<]+)/)?.[1], catalogPage.match(/<title>([^<]+)/)?.[1]);
+assert.notEqual(homepageHtml.match(/<h1>([^<]+)/)?.[1], catalogPage.match(/<h1>([^<]+)/)?.[1]);
 assert.match(await read("public/js/modules/ramCatalog.js"), /results\.innerHTML = ordered\.length/, "JavaScript must replace, rather than duplicate, the server-rendered catalog fallback.");
 
 const optionalMissing = catalog.products.find((product) => !product.casLatency && !product.primaryTimings && !product.ratedVoltage);
