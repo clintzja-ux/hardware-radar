@@ -25,7 +25,7 @@
                     <a href="${basePath}ram/compare/">Compare</a>
                     <a href="${basePath}ram/terminal/">Market Terminal</a>
                     <a href="${basePath}guides/">Guides</a>
-                    <a href="${basePath}about.html">About</a>
+                    <a href="${basePath}about">About</a>
                 </nav>
 
             </div>

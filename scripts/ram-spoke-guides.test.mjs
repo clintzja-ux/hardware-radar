@@ -5,10 +5,10 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const definitions = [
-    { file:"ddr4-vs-ddr5.md", route:"/guides/ram/ddr4-vs-ddr5/", title:"DDR4 vs DDR5: Which Should You Buy?", ctas:["/ddr5.html","/ddr4.html"] },
-    { file:"16gb-vs-32gb.md", route:"/guides/ram/16gb-vs-32gb/", title:"16GB vs 32GB RAM: How Much Do You Actually Need?", ctas:["/ddr5.html","/ddr4.html","/sodimm.html"] },
-    { file:"check-ram-compatibility.md", route:"/guides/ram/check-ram-compatibility/", title:"How to Check What RAM Is Compatible With Your PC", ctas:["/sodimm.html","/ddr4.html","/ddr5.html"] },
-    { file:"ram-speed-cas-latency.md", route:"/guides/ram/ram-speed-cas-latency/", title:"RAM Speed and CAS Latency Explained", ctas:["/ddr5.html","/ddr4.html"] }
+    { file:"ddr4-vs-ddr5.md", route:"/guides/ram/ddr4-vs-ddr5/", title:"DDR4 vs DDR5: Which Should You Buy?", ctas:["/ddr5","/ddr4"] },
+    { file:"16gb-vs-32gb.md", route:"/guides/ram/16gb-vs-32gb/", title:"16GB vs 32GB RAM: How Much Do You Actually Need?", ctas:["/ddr5","/ddr4","/sodimm"] },
+    { file:"check-ram-compatibility.md", route:"/guides/ram/check-ram-compatibility/", title:"How to Check What RAM Is Compatible With Your PC", ctas:["/sodimm","/ddr4","/ddr5"] },
+    { file:"ram-speed-cas-latency.md", route:"/guides/ram/ram-speed-cas-latency/", title:"RAM Speed and CAS Latency Explained", ctas:["/ddr5","/ddr4"] }
 ];
 const outputs=[]; const titles=new Set(); const descriptions=new Set();
 for (const item of definitions) {

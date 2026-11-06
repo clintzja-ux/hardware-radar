@@ -43,11 +43,11 @@ assert.match(output, /<table>[\s\S]*<th scope="col">/);
 assert.match(output, /aria-label="note"/);
 assert.match(output, /aria-label="compatibility"/);
 
-for (const route of ["/ddr5.html", "/ddr4.html", "/sodimm.html"]) {
+for (const route of ["/ddr5", "/ddr4", "/sodimm"]) {
     assert.match(output, new RegExp(`href="${route.replace(".", "\\.")}"`));
 }
 assert.equal((output.match(/article-price-cta/g) ?? []).length, 3);
-assert.match(output, /href="\/how-we-choose\.html"/);
+assert.match(output, /href="\/how-we-choose"/);
 
 for (const sourceUrl of [
     "https://www.crucial.com/articles/about-memory/is-my-ram-compatible-with-my-motherboard",

@@ -11,7 +11,7 @@ publisher: "Mirabelle Labs"
 publishedAt: "2026-09-02"
 updatedAt: "2026-09-02"
 relatedGuides: []
-relevantPricePages: ["/sodimm.html", "/ddr4.html", "/ddr5.html"]
+relevantPricePages: ["/sodimm", "/ddr4", "/ddr5"]
 references: [{"classification":"FACT","label":"Crucial: Is my RAM compatible with my motherboard?","url":"https://www.crucial.com/articles/about-memory/is-my-ram-compatible-with-my-motherboard"},{"classification":"FACT","label":"Kingston: Memory population rules","url":"https://www.kingston.com/en/memory/memory-population-rules"},{"classification":"FACT","label":"Intel: Extreme Memory Profile (XMP)","url":"https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html"},{"classification":"FACT","label":"AMD: Extended Profiles for Overclocking (EXPO)","url":"https://www.amd.com/en/products/processors/technologies/expo.html"},{"classification":"EXPLANATION","label":"Hardware Radar: RAM Buying Guide","url":"https://cheapestram.com/guides/ram/"}]
 dek: "Identify the exact system first, then eliminate incompatible memory one requirement at a time."
 tableOfContents: true
@@ -141,8 +141,8 @@ Return to the [RAM Buying Guide](/guides/ram/) for capacity and value guidance o
 
 ## Compare compatible RAM prices
 
-[[price-cta: Browse Laptop RAM prices | /sodimm.html]]
+[[price-cta: Browse Laptop RAM prices | /sodimm]]
 
-[[price-cta: Compare DDR4 prices | /ddr4.html]]
+[[price-cta: Compare DDR4 prices | /ddr4]]
 
-[[price-cta: Compare DDR5 prices | /ddr5.html]]
+[[price-cta: Compare DDR5 prices | /ddr5]]

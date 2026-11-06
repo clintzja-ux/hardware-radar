@@ -16,6 +16,8 @@ export {
     loadProduct,
     listProductEntries
 } from "./ProductRepository.js";
+export { FileAtlasCatalogAdministrationRepository, deriveAtlasRamProductId } from "./FileAtlasCatalogAdministrationRepository.js";
+export { ATLAS_DRAFT_ACTIVATION_POLICY_VERSION, assessAtlasDraftActivationReadiness, createActivatedAtlasProduct } from "./AtlasDraftActivation.js";
 export {
     PRODUCT_VALIDATOR_VERSION,
     validateProduct,

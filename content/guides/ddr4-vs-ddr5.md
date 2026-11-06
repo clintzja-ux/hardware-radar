@@ -11,7 +11,7 @@ publisher: "Mirabelle Labs"
 publishedAt: "2026-09-02"
 updatedAt: "2026-09-02"
 relatedGuides: []
-relevantPricePages: ["/ddr5.html", "/ddr4.html"]
+relevantPricePages: ["/ddr5", "/ddr4"]
 references: [{"classification":"FACT","label":"Crucial: DDR memory generations explained","url":"https://www.crucial.com/articles/about-memory/difference-among-ddr2-ddr3-ddr4-and-ddr5-memory"},{"classification":"FACT","label":"Intel: Extreme Memory Profile (XMP)","url":"https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html"},{"classification":"FACT","label":"AMD: Extended Profiles for Overclocking (EXPO)","url":"https://www.amd.com/en/products/processors/technologies/expo.html"},{"classification":"EXPLANATION","label":"Hardware Radar: RAM Buying Guide","url":"https://cheapestram.com/guides/ram/"}]
 dek: "Choose the generation your platform supports; then compare the whole upgrade, not one specification in isolation."
 tableOfContents: true
@@ -117,6 +117,6 @@ For the wider buying process, return to the [RAM Buying Guide](/guides/ram/).
 
 ## Compare compatible RAM prices
 
-[[price-cta: Compare DDR5 prices | /ddr5.html]]
+[[price-cta: Compare DDR5 prices | /ddr5]]
 
-[[price-cta: Compare DDR4 prices | /ddr4.html]]
+[[price-cta: Compare DDR4 prices | /ddr4]]

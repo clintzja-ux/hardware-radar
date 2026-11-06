@@ -11,7 +11,7 @@ publisher: "Mirabelle Labs"
 publishedAt: "2026-09-02"
 updatedAt: "2026-09-02"
 relatedGuides: []
-relevantPricePages: ["/ddr5.html", "/ddr4.html", "/sodimm.html"]
+relevantPricePages: ["/ddr5", "/ddr4", "/sodimm"]
 references: [{"classification":"EXPLANATION","label":"Microsoft: Windows 11 specifications","url":"https://www.microsoft.com/en-us/windows/windows-11-specifications"},{"classification":"FACT","label":"Crucial: How much RAM does my computer need?","url":"https://www.crucial.com/articles/about-memory/how-much-ram-does-my-computer-need"},{"classification":"EXPLANATION","label":"Hardware Radar: RAM Buying Guide","url":"https://cheapestram.com/guides/ram/"}]
 dek: "16GB is a practical baseline for many buyers; 32GB buys headroom when workloads, background apps, or limited upgradeability justify it."
 tableOfContents: true
@@ -130,8 +130,8 @@ Return to the [RAM Buying Guide](/guides/ram/) for generation, form-factor, spee
 
 ## Compare RAM prices by platform
 
-[[price-cta: Compare DDR5 prices | /ddr5.html]]
+[[price-cta: Compare DDR5 prices | /ddr5]]
 
-[[price-cta: Compare DDR4 prices | /ddr4.html]]
+[[price-cta: Compare DDR4 prices | /ddr4]]
 
-[[price-cta: Browse Laptop RAM prices | /sodimm.html]]
+[[price-cta: Browse Laptop RAM prices | /sodimm]]

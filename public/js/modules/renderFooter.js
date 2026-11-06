@@ -21,9 +21,9 @@ export function renderFooter(containerId, { basePath = "" } = {}) {
                 <div>
                     <h4>Browse</h4>
 
-                    <a href="${basePath}ddr5.html">DDR5</a>
-                    <a href="${basePath}ddr4.html">DDR4</a>
-                    <a href="${basePath}sodimm.html">Laptop RAM</a>
+                    <a href="${basePath}ddr5">DDR5</a>
+                    <a href="${basePath}ddr4">DDR4</a>
+                    <a href="${basePath}sodimm">Laptop RAM</a>
                     <a href="${basePath}ram/">RAM Catalog</a>
                     <a href="${basePath}ram/compare/">Compare RAM</a>
                     <a href="${basePath}ram/terminal/">RAM Market Terminal</a>
@@ -33,23 +33,23 @@ export function renderFooter(containerId, { basePath = "" } = {}) {
                 <div>
                     <h4>Company</h4>
 
-                    <a href="${basePath}about.html">About</a>
-                    <a href="${basePath}how-we-choose.html">How We Choose</a>
-                    <a href="${basePath}contact.html">Contact</a>
+                    <a href="${basePath}about">About</a>
+                    <a href="${basePath}how-we-choose">How We Choose</a>
+                    <a href="${basePath}contact">Contact</a>
                 </div>
 
                 <div>
                     <h4>Legal</h4>
 
-                    <a href="${basePath}affiliate-disclosure.html">
+                    <a href="${basePath}affiliate-disclosure">
                         Affiliate Disclosure
                     </a>
 
-                    <a href="${basePath}privacy-policy.html">
+                    <a href="${basePath}privacy-policy">
                         Privacy Policy
                     </a>
 
-                    <a href="${basePath}terms.html">
+                    <a href="${basePath}terms">
                         Terms of Use
                     </a>
                 </div>

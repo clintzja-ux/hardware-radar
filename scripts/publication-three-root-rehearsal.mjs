@@ -15,22 +15,37 @@ const args = new Map(process.argv.slice(2).map(value => { const index=value.inde
 const implementationRoot = path.resolve(path.join(import.meta.dirname,".."));
 const runtimeRoot = path.resolve(String(args.get("--runtime-root") ?? implementationRoot));
 const checkoutSource = path.resolve(String(args.get("--checkout-source") ?? runtimeRoot));
+const checkoutRef = args.get("--checkout-ref") ? String(args.get("--checkout-ref")) : null;
 const promotionRoot = path.resolve(String(args.get("--promotion-root") ?? checkoutSource));
 const keep = args.has("--keep");
 const fixtureRoot = await mkdtemp(path.join(os.tmpdir(),"hardware-radar-publication-rehearsal-"));
 const operationalRoot = path.join(fixtureRoot,"operational"), checkoutRoot = path.join(fixtureRoot,"checkout");
 const sha = bytes => createHash("sha256").update(bytes).digest("hex");
 const npmEntryPoint = path.join(path.dirname(process.execPath),"node_modules","npm","bin","npm-cli.js");
-const implementationPaths = [
+const requiredImplementationPaths = [
   "package.json",
+  "content/guides/16gb-vs-32gb.md",
+  "content/guides/check-ram-compatibility.md",
+  "content/guides/ddr4-vs-ddr5.md",
+  "content/guides/ram-hub.md",
+  "content/guides/ram-speed-cas-latency.md",
+  "content/site-routes.json",
   "scripts/build-public.mjs",
   "scripts/verify-public-build.mjs",
   "scripts/editorial-publishing.mjs",
+  "scripts/ram-product-publishing.mjs",
+  "scripts/ram-product-pages.test.mjs",
+  "scripts/retailer-destination-publishing.test.mjs",
   "scripts/governed-live-price-publication.mjs",
   "scripts/lib/publication-generated-path-inventory.mjs",
   "packages/sentinel/publication/GovernedLivePricePublication.js",
   "packages/sentinel/publication/ProductionUnattendedPublicationFactory.js"
 ];
+const workingCandidatePaths = (await run("git", ["-C", implementationRoot, "diff", "--name-only", "HEAD"], { windowsHide: true, maxBuffer: 32 * 1024 * 1024 })).stdout
+  .split(/\r?\n/).map(value => value.trim()).filter(Boolean);
+const untrackedCandidatePaths = (await run("git", ["-C", implementationRoot, "ls-files", "--others", "--exclude-standard"], { windowsHide: true, maxBuffer: 32 * 1024 * 1024 })).stdout
+  .split(/\r?\n/).map(value => value.trim()).filter(Boolean);
+const implementationPaths = [...new Set([...requiredImplementationPaths, ...workingCandidatePaths, ...untrackedCandidatePaths])].sort();
 const git = async values => (await run("git",["-c","core.longpaths=true","-C",checkoutRoot,...values],{windowsHide:true,maxBuffer:32*1024*1024})).stdout.trimEnd();
 const treeDigest = async target => {
   const records=[];
@@ -48,6 +63,7 @@ try {
   }
   await run("git",["-c","core.longpaths=true","clone","--no-local",checkoutSource,checkoutRoot],{windowsHide:true,maxBuffer:32*1024*1024});
   await git(["config","core.longpaths","true"]);
+  if (checkoutRef) await git(["checkout","--detach",checkoutRef]);
   // The rehearsal can certify an uncommitted review candidate without changing its source
   // worktree. Its implementation is first checkpointed inside the disposable checkout so
   // the later generated-path inventory contains publication artifacts only.

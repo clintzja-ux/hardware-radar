@@ -12,7 +12,7 @@ import { FileHistoricalComparabilityReassessmentRepository } from "../packages/m
 import { createRamTerminalPublicIntelligence } from "../packages/mercury/historical-admission/RamTerminalPublicIntelligence.js";
 import { createPublicChronologicalPriceSeries } from "../packages/mercury/historical-admission/PublicChronologicalPriceSeries.js";
 import { createRamPublicIntelligencePortfolioManifest, certifyRamPublicIntelligencePortfolio, portfolioFileDigest, validateRamPublicIntelligencePortfolio } from "../packages/mercury/publication/RamPublicIntelligenceReleasePortfolio.js";
-import { generateRamProductPages } from "./ram-product-publishing.mjs";
+import { generateRamDiscoveryLinks, generateRamProductPages } from "./ram-product-publishing.mjs";
 import { generateRamTerminalPage } from "./ram-terminal-publishing.mjs";
 import { generateEditorialSite, generateSitemap } from "./editorial-publishing.mjs";
 import { loadStaticPublicationContinuityProjection } from "./static-publication-release-runtime.mjs";
@@ -109,6 +109,7 @@ if (action === "prepare") {
     const products = await new ProductRepository({ readJson: json }).getAll();
     const editorial = await generateEditorialSite({ sourceDir: path.join(root, "content/guides"), outputDir: output, sitemapPath: path.join(output, "sitemap.xml"), routeManifestPath: path.join(root, "content/site-routes.json"), guidesIndexPath: path.join(root, "content/guides-index.json") });
     const productPages = await generateRamProductPages({ catalog, products, destinations, currentRetailByProduct: new Map(current.products.map(x => [x.atlasProductId, x])), terminalByProduct: new Map(terminal.lenses.ALL_RAM.productRows.map(x => [x.atlasProductId, x])), chronologicalSeriesByProduct: new Map(chronology.products.map(x => [x.atlasProductId, x])), disclosure: current.disclosure, outputDir: output });
+    await generateRamDiscoveryLinks({ catalog, outputDir: output });
     await generateRamTerminalPage({ artifact: terminal, outputDir: output });
     const staticRoutes = await json(path.join(root, "content/site-routes.json"));
     if (productPages.routes.length !== loaded.manifest.routes.productRoutes || staticRoutes.length + editorial.articles.length + productPages.routes.length !== loaded.manifest.routes.total) throw new Error("RAM_PUBLIC_INTELLIGENCE_PREVIEW_ROUTE_COUNT_MISMATCH");
