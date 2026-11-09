@@ -8,6 +8,7 @@ panel.csrf="fixture-csrf";panel.refreshing=false;panel.model={operations:{status
 panel.root={querySelector:selector=>selector==="[data-refresh-status]"?status:null};
 panel.routine={querySelector:selector=>selector==="[data-refresh]"?button:null};
 panel.render=()=>{};
+panel.renderOperations=()=>{};
 
 let calls=[];
 globalThis.fetch=async(path,options)=>{calls.push({path,options});return response(panel.model);};
@@ -15,10 +16,11 @@ await panel.refresh({feedback:true});
 assert.equal(status.textContent,"No newer routine progress was found.");
 assert.equal(status.dataset.state,"success");
 assert.equal(calls[0].path,"/operator-api/newegg-mandates");
+assert.equal(calls[1].path,"/operator-api/newegg-operations");
 assert.equal(calls[0].options.cache,"no-store");
 assert.equal(calls[0].options.headers["X-Forge-Csrf"],"fixture-csrf");
 
-globalThis.fetch=async()=>response({...panel.model,operations:{status:"SUCCESS"}});
+globalThis.fetch=async path=>response(path.endsWith("newegg-mandates")?{...panel.model,operations:{status:"SUCCESS"}}:{current:null,recent:[]});
 await panel.refresh({feedback:true});
 assert.equal(status.textContent,"Live routine progress updated.");
 
@@ -27,13 +29,13 @@ await panel.refresh({feedback:true});
 assert.equal(status.textContent,"Refresh failed. Live routine progress is temporarily unavailable.");
 assert.doesNotMatch(status.textContent,/PRIVATE_BACKEND_DETAIL/);
 
-let release,concurrentCalls=0;
-globalThis.fetch=async()=>{concurrentCalls+=1;await new Promise(resolve=>{release=resolve;});return response(panel.model);};
+let releases=[],concurrentCalls=0;
+globalThis.fetch=async()=>{concurrentCalls+=1;await new Promise(resolve=>{releases.push(resolve);});return response(panel.model);};
 const first=panel.refresh({feedback:true}),second=panel.refresh({feedback:true});
-assert.equal(concurrentCalls,1);
+assert.equal(concurrentCalls,2);
 assert.equal(button.disabled,true);
 assert.equal(button.textContent,"Refreshing…");
-release();await Promise.all([first,second]);
+releases.forEach(resolve=>resolve());await Promise.all([first,second]);
 assert.equal(button.disabled,false);
 assert.equal(button.textContent,"Refresh progress");
 
@@ -64,7 +66,7 @@ assert.equal(confirm.disabled,true);
 assert.equal(cancel.disabled,true);
 releaseSubmission();await submission;
 assert.equal(confirmationPanel.confirmDialog.open,true);
-assert.match(confirmationStatus.textContent,/Completed\. Audit audit-fixture/);
+assert.match(confirmationStatus.textContent,/Recorded\. Audit audit-fixture/);
 assert.equal(confirm.hidden,true);
 assert.equal(cancel.textContent,"Close");
 
@@ -87,6 +89,7 @@ confirmationPanel.render=()=>{};
 confirmationPanel.model={operations:{status:"READY"},readiness:{status:"READY"},execution:null};
 confirmationPanel.csrf="fixture-csrf";confirmationPanel.refreshing=false;
 confirmationPanel.root={querySelector:()=>null};confirmationPanel.routine={querySelector:()=>null};
+confirmationPanel.renderOperations=()=>{};
 globalThis.fetch=async()=>response(confirmationPanel.model);
 await confirmationPanel.refresh();
 assert.equal(confirmationPanel.confirmDialog,priorDialog);
