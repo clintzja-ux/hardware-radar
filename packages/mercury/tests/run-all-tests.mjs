@@ -283,6 +283,8 @@ const testModules = [
     ,"./ForgeCommandOutcomeJournal.test.mjs"
     ,"./ForgeOperationalVisibilityUi.test.mjs"
     ,"./ForgeNeweggProgressRefresh.test.mjs"
+    ,"./UniversalAcquisitionProgressMonitor.test.mjs"
+    ,"./UniversalAcquisitionProgressUi.test.mjs"
     ,"./ProductionRakutenFullCurrentPreparationService.test.mjs"
     ,"./ProductionRakutenCurrentQaService.test.mjs"
     ,"./NeweggRoutineSourceStageOwners.test.mjs"

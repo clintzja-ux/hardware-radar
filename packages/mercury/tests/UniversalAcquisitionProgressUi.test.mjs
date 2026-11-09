@@ -1,0 +1,7 @@
+import assert from "node:assert/strict";
+import {readFile} from "node:fs/promises";
+const canonical=await readFile(new URL("../../../apps/forge/components/AcquisitionProgressMonitor.js",import.meta.url),"utf8"),published=await readFile(new URL("../../../public/forge/components/AcquisitionProgressMonitor.js",import.meta.url),"utf8"),panel=await readFile(new URL("../../../apps/forge/components/NeweggMandatePanel.js",import.meta.url),"utf8"),styles=await readFile(new URL("../../../apps/forge/styles.css",import.meta.url),"utf8");
+assert.equal(canonical,published,"canonical and public acquisition monitors must match");
+for(const text of ["Acquisition Progress Monitor","Execution origin","Scheduled / Automatic","Origin evidence","Recent Operations","total unavailable","Stage count is not an overall percentage","/operator-api/acquisition-progress"])assert.match(canonical,new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")));
+assert.match(canonical,/5000:30000/);assert.match(canonical,/visibilitychange/);assert.doesNotMatch(canonical,/Math\.round\([^\n]*100|workflow\.percentage/);assert.match(panel,/new AcquisitionProgressMonitor/);assert.match(styles,/acquisition-stage-list/);assert.match(styles,/@media \(max-width:560px\)/);
+console.log("Universal acquisition progress UI tests passed: origin visibility, bounded polling, responsive stages, and canonical/public synchronization.");
