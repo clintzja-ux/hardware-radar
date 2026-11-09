@@ -23,5 +23,6 @@ try{
  await assert.rejects(()=>service.activateProduct(context,{...request,requestId:"activate-stale-0002",payload:{...request.payload,expectedRevision:prior.identity.recordRevision}}),/ALREADY_ACTIVE|STALE/);
  await assert.rejects(()=>service.activateProduct({authenticated:false},request),/UNAUTHORIZED/);
  assert.equal(JSON.parse(await readFile(path.join(atlasRoot,"atlas-manifest.json"),"utf8")).generatedAt,at);
+ const panel=await readFile(path.join(repositoryRoot,"apps","forge","components","ProductManagerPanel.js"),"utf8");assert.doesNotMatch(panel,/setTimeout\(\(\)=>this\.activationDialog\.close/);assert.match(panel,/activationCompleted=true;confirmButton\.hidden=true;cancelButton\.textContent="Close"/);
  console.log("Forge governed DRAFT activation production-shaped tests passed.");
 }finally{await rm(root,{recursive:true,force:true});}
