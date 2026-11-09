@@ -36,3 +36,5 @@ export * from "./ForgeNeweggRoutineExecutionSupervisor.js";
 export * from "./FileForgeCommandOutcomeRepository.js";
 export * from "./ForgeCommandOutcomeReconciler.js";
 export * from "./NeweggFailedAcquisitionDisposition.js";
+export * from "./AcquisitionProgressProjection.js";
+export * from "./ProductionNeweggAcquisitionProgressProvider.js";
