@@ -8,6 +8,7 @@ import {bindProductionNeweggRoutineSourceOwners} from "./NeweggRoutineSourceStag
 import {bindProductionNeweggRoutineP1BOwners} from "./NeweggRoutineP1BStageOwners.js";
 import {bindProductionNeweggRoutineDownstreamOwners} from "./NeweggRoutineDownstreamStageOwners.js";
 import {bindProductionNeweggRoutinePreflightBindingQualificationOwners} from "./NeweggRoutinePreflightBindingQualificationOwners.js";
+import {replaceFileWithWindowsRetry} from "./WindowsAtomicFileReplacement.js";
 
 const terminal=new Set(["SUCCESS_RELEASE_READY","SUCCESS_NO_CHANGE"]);
 const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
@@ -37,10 +38,10 @@ export class CanonicalNeweggRoutineStageAdapter{
 }
 
 export class FileNeweggRoutineRunRepository{
- constructor({statePath,lock}={}){if(!statePath)throw new TypeError("NEWEGG_ROUTINE_RUN_STATE_PATH_REQUIRED");this.path=resolve(statePath);this.lock=lock??new FileSingleWriterRunLock({lockPath:`${this.path}.lock`});}
+ constructor({statePath,lock,fileSystem={rename},sleep}={}){if(!statePath||typeof fileSystem?.rename!=="function")throw new TypeError("NEWEGG_ROUTINE_RUN_STATE_PATH_REQUIRED");this.path=resolve(statePath);this.lock=lock??new FileSingleWriterRunLock({lockPath:`${this.path}.lock`});this.rename=fileSystem.rename;this.sleep=sleep;}
  async getState(){try{const state=JSON.parse(await readFile(this.path,"utf8"));if(state?.schemaVersion!=="1.0"||!Array.isArray(state.runs))throw new Error();return state;}catch(error){if(error?.code==="ENOENT")return{schemaVersion:"1.0",runs:[]};throw new Error("NEWEGG_ROUTINE_RUN_STATE_INVALID");}}
  async loadActive(){const state=await this.getState();return clone([...state.runs].reverse().find(run=>!terminal.has(run.status))??null);}
- async save(run){const outcome=await this.lock.runExclusive(async()=>{const state=await this.getState(),index=state.runs.findIndex(value=>value.runId===run.runId),runs=[...state.runs];if(index>=0)runs[index]=clone(run);else runs.push(clone(run));const next={schemaVersion:"1.0",runs};await mkdir(dirname(this.path),{recursive:true});const temp=`${this.path}.tmp-${process.pid}-${crypto.randomUUID()}`;try{await writeFile(temp,`${JSON.stringify(next,null,2)}\n`,{flag:"wx"});await rename(temp,this.path);}finally{await rm(temp,{force:true}).catch(()=>{});}return clone(run);});if(outcome.status!==SINGLE_WRITER_LOCK_STATUSES.COMPLETED)throw new Error("NEWEGG_ROUTINE_RUN_BUSY");return outcome.result;}
+ async save(run){const outcome=await this.lock.runExclusive(async()=>{const state=await this.getState(),index=state.runs.findIndex(value=>value.runId===run.runId),runs=[...state.runs];if(index>=0)runs[index]=clone(run);else runs.push(clone(run));const next={schemaVersion:"1.0",runs};await mkdir(dirname(this.path),{recursive:true});const temp=`${this.path}.tmp-${process.pid}-${crypto.randomUUID()}`;try{await writeFile(temp,`${JSON.stringify(next,null,2)}\n`,{flag:"wx"});await replaceFileWithWindowsRetry({source:temp,destination:this.path,rename:this.rename,sleep:this.sleep});}finally{await rm(temp,{force:true}).catch(()=>{});}return clone(run);});if(outcome.status!==SINGLE_WRITER_LOCK_STATUSES.COMPLETED)throw new Error("NEWEGG_ROUTINE_RUN_BUSY");return outcome.result;}
 }
 
 export function createProductionNeweggRoutineStageOwners({owners}={}){

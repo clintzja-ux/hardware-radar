@@ -33,7 +33,7 @@ export class NeweggRoutineProductionCommand{
     const stageResult=await owner.execute({mode,input:copy(input),run:copy(run),priorResults:copy(run.stageResults)});
     if(stageResult?.status==="REVIEW_REQUIRED")return await this.stop(run,stage,"QUALIFICATION_REVIEW_REQUIRED",stageResult);
     run={...run,completedStages:[...run.completedStages,stage],stageResults:{...run.stageResults,[stage]:copy(stageResult??{})},updatedAt:this.now()};await this.runRepository.save(run);await this.afterStage(stage,copy(run));await this.progress("ROUTINE_STAGE_COMPLETED",{runId:run.runId,stage,status:stageResult?.status??"COMPLETED"});
-   }catch(error){const outcome=classify(stage,error);await this.progress("ROUTINE_STAGE_FAILED",{runId:run.runId,stage,outcome,code:error?.code??error?.message??"UNKNOWN_ERROR"});return await this.stop(run,stage,outcome,{code:error?.code??error?.message??"UNKNOWN_ERROR"});}
+   }catch(error){const outcome=classify(stage,error),failure={code:error?.code??error?.message??"UNKNOWN_ERROR",...(error?.atomicReplacement?{atomicReplacement:copy(error.atomicReplacement)}:{})};await this.progress("ROUTINE_STAGE_FAILED",{runId:run.runId,stage,outcome,...failure});return await this.stop(run,stage,outcome,failure);}
   }
   const unchanged=Object.values(run.stageResults).some(value=>value?.status==="NO_CHANGE"||value?.status==="REPLAY");const outcome=unchanged?"SUCCESS_NO_CHANGE":"SUCCESS_RELEASE_READY";
   run={...run,status:outcome,completedAt:this.now(),updatedAt:this.now()};await this.runRepository.save(run);return this.result(outcome,run,0);
