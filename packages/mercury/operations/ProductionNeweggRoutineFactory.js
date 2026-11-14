@@ -2,7 +2,7 @@ import crypto from "node:crypto";
 import {mkdir,readFile,rename,rm,writeFile} from "node:fs/promises";
 import {dirname,resolve} from "node:path";
 import {FileSingleWriterRunLock,SINGLE_WRITER_LOCK_STATUSES} from "../runtime/FileSingleWriterRunLock.js";
-import {NeweggRoutineProductionCommand,NEWEGG_ROUTINE_COMMAND_STAGES} from "./NeweggRoutineProductionCommand.js";
+import {NeweggRoutineProductionCommand,NEWEGG_ROUTINE_COMMAND_OUTCOMES,NEWEGG_ROUTINE_COMMAND_STAGES} from "./NeweggRoutineProductionCommand.js";
 import {createRakutenFullCurrentRoutineOwner,createRetainedCommerceHistoryRoutineOwner} from "./NeweggRoutineAuthorityAdapters.js";
 import {bindProductionNeweggRoutineSourceOwners} from "./NeweggRoutineSourceStageOwners.js";
 import {bindProductionNeweggRoutineP1BOwners} from "./NeweggRoutineP1BStageOwners.js";
@@ -10,7 +10,7 @@ import {bindProductionNeweggRoutineDownstreamOwners} from "./NeweggRoutineDownst
 import {bindProductionNeweggRoutinePreflightBindingQualificationOwners} from "./NeweggRoutinePreflightBindingQualificationOwners.js";
 import {replaceFileWithWindowsRetry} from "./WindowsAtomicFileReplacement.js";
 
-const terminal=new Set(["SUCCESS_RELEASE_READY","SUCCESS_NO_CHANGE"]);
+const terminal=new Set(NEWEGG_ROUTINE_COMMAND_OUTCOMES.filter(value=>value!=="BLOCKED_ACTIVE_RUN"));
 const stable=value=>Array.isArray(value)?`[${value.map(stable).join(",")}]`:value&&typeof value==="object"?`{${Object.keys(value).sort().map(key=>`${JSON.stringify(key)}:${stable(value[key])}`).join(",")}}`:JSON.stringify(value);
 const digest=value=>crypto.createHash("sha256").update(stable(value)).digest("hex");
 const clone=value=>structuredClone(value);
@@ -56,7 +56,7 @@ export function createProductionNeweggRoutineCommand({statePath,owners,afterStag
  const runRepository=new FileNeweggRoutineRunRepository({statePath}),stageOwners=createProductionNeweggRoutineStageOwners({owners});
  const overlapOwner={assess:async({activeRun})=>activeRun&&!terminal.has(activeRun.status)?{state:"BLOCKED_ACTIVE_RUN"}:{state:"DUE"}};
  const command=new NeweggRoutineProductionCommand({runRepository,overlapOwner,stageOwners,afterStage,progress,now}),executionLock=new FileSingleWriterRunLock({lockPath:`${resolve(statePath)}.execution.lock`});
- return Object.freeze({runRepository,stageOwners,async execute(input){const outcome=await executionLock.runExclusive(()=>command.execute(input));if(outcome.status!==SINGLE_WRITER_LOCK_STATUSES.COMPLETED)return Object.freeze({schemaVersion:"1.0",command:"mercury:newegg:routine",outcome:"BLOCKED_ACTIVE_RUN",success:false,exitCode:2,providerCalls:0,paidTasks:0,actualSpendUsd:0,releaseAuthority:false,deploymentAuthority:false});return outcome.result;}});
+ return Object.freeze({runRepository,stageOwners,async execute(input){const outcome=await executionLock.runExclusive(()=>command.execute(input));if(outcome.status!==SINGLE_WRITER_LOCK_STATUSES.COMPLETED)return Object.freeze({schemaVersion:"1.0",command:"mercury:newegg:routine",outcome:"BLOCKED_ACTIVE_RUN",success:false,exitCode:2,providerCalls:0,paidTasks:0,actualSpendUsd:0,releaseAuthority:false,deploymentAuthority:false,blockingReason:"ROUTINE_EXECUTION_LOCK_HELD",blockingOwner:outcome.owner??null});return outcome.result;}});
 }
 
 export function bindProductionNeweggRoutineMarketAuthorities({owners,currentSnapshotRepository,historicalRepository,historyStateReader,historyExecutionService}={}){

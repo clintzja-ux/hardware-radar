@@ -4,6 +4,8 @@ import path from "node:path";
 import process from "node:process";
 import { createRecurringPublicationMandate, projectUnattendedPublicationHealth } from "./UnattendedLivePricePublication.js";
 import { staticPublicationArtifactDigest } from "../validators/StaticPublicationReleaseControl.js";
+import { DEFAULT_LIVE_PRICE_GENERATED_PATHS } from "./GovernedLivePricePublication.js";
+import { createPricePublicationGeneratedPathInventory } from "../../../scripts/lib/publication-generated-path-inventory.mjs";
 
 const freeze = value => Object.freeze(structuredClone(value));
 const sha256 = value => createHash("sha256").update(value).digest("hex");
@@ -52,6 +54,14 @@ export class CertifiedRoutinePublicationCandidateOwner {
       trigger: { runId: health.lastSuccessfulRun.runId, certificationStageCompleted: true, releaseReadinessStageCompleted: true },
     });
   }
+  async discoverRecovery({candidateId,expected}={}) {
+    const healthEnvelope=await this.readJson(this.routineHealthPath),health=healthEnvelope.projection??healthEnvelope,readiness=health.releaseReadiness;if(readiness?.candidateId!==candidateId)throw new Error("PUBLICATION_RECOVERY_TRIGGER_BINDING_CONFLICT");
+    const directory=path.join(this.artifactRoot,candidateId),[manifest,certification,release]=await Promise.all([this.readJson(path.join(directory,"manifest.json")),this.readJson(path.join(directory,"certification.json")),this.readJson(this.releaseManifestPath)]);
+    if(manifest.candidateId!==candidateId||manifest.artifactId!==expected?.artifactId||certification.certificationId!==expected?.certificationId||certification.candidateId!==candidateId||certification.artifactBindingDigest!==expected?.bindingDigest)throw new Error("PUBLICATION_RECOVERY_CANDIDATE_BINDING_INVALID");
+    const releaseMatches=release.releaseState==="ON"&&release.targetEnvironment==="PRODUCTION"&&release.artifact?.candidateId===candidateId&&release.artifact?.artifactId===manifest.artifactId&&release.artifact?.certificationId===certification.certificationId&&release.artifact?.bindingDigest===manifest.bindingDigest;
+    if(!releaseMatches)throw new Error("PUBLICATION_RECOVERY_RELEASE_CHECKPOINT_BINDING_INVALID");
+    return freeze({candidateId,artifactId:manifest.artifactId,certificationId:certification.certificationId,bindingDigest:manifest.bindingDigest,artifactDigest:sha256(JSON.stringify(manifest)),certificationDigest:sha256(JSON.stringify(certification)),predecessorReleaseId:expected.predecessorReleaseId,freshUntil:manifest.currentValidUntil,sentinelStatus:certification.status,sourceRightsEligible:certification.status==="CERTIFIED",releaseId:release.releaseId,alreadyDeployed:false,trigger:{runId:health.lastSuccessfulRun?.runId??null,certificationStageCompleted:true,releaseReadinessStageCompleted:true}});
+  }
 }
 
 export function createSplitRootProductionPublicationCandidateOwner({evidenceRoot,checkoutRoot,readJson}={}) {
@@ -85,6 +95,17 @@ export class GitHubAppReleaseGitOwner {
     await this._remote(["push", "origin", `${commit}:refs/heads/main`]);
     return freeze({ commit });
   }
+  async inspectRecoveryCheckpoint({commit,expectedParent,candidate}) {
+    const [status,local,parent,remote,files]=await Promise.all([
+      this.runner("git",["status","--porcelain=v1","--untracked-files=all"],this.checkoutRoot),this.runner("git",["rev-parse","HEAD"],this.checkoutRoot),this.runner("git",["rev-parse",`${commit}^`],this.checkoutRoot),this._remote(["ls-remote","origin","refs/heads/main"]),this.runner("git",["diff-tree","--no-commit-id","--name-only","--diff-filter=ACMRT","-r",commit],this.checkoutRoot),
+    ]);
+    const localCommit=local.stdout.trim(),parentCommit=parent.stdout.trim(),remoteCommit=remote.stdout.trim().split(/\s+/)[0],changedPaths=files.stdout.split(/\r?\n/).map(value=>value.trim()).filter(Boolean).sort(),inventory=createPricePublicationGeneratedPathInventory({changedPaths,authorizedPaths:DEFAULT_LIVE_PRICE_GENERATED_PATHS});
+    if(status.stdout.trim()||localCommit!==commit||parentCommit!==expectedParent||remoteCommit!==expectedParent||!inventory.valid)throw new Error("PUBLICATION_RECOVERY_CHECKPOINT_INVALID");
+    const manifest=JSON.parse(await readFile(path.join(this.checkoutRoot,"config/publication-release.json"),"utf8")),artifactText=await readFile(path.join(this.checkoutRoot,"config",manifest.artifact?.relativePath??""),"utf8"),releaseArtifactDigest=staticPublicationArtifactDigest(artifactText);
+    const binding=validatePublishedReleaseBinding({manifest,artifactText,expected:{releaseId:manifest.releaseId,candidateId:candidate.candidateId,artifactId:candidate.artifactId,certificationId:candidate.certificationId,bindingDigest:candidate.bindingDigest,predecessorReleaseId:candidate.predecessorReleaseId,releaseArtifactDigest}});
+    if(!binding.valid)throw new Error("PUBLICATION_RECOVERY_RELEASE_BINDING_INVALID");
+    return freeze({valid:true,commit,localCommit,parentCommit,remoteCommit,releaseId:manifest.releaseId,releaseArtifactDigest,changedPaths,checkpointDigest:sha256(JSON.stringify({commit,parentCommit,releaseId:manifest.releaseId,releaseArtifactDigest,changedPaths}))});
+  }
   async inspectPublishedCheckpoint({commit,expectedParent,candidateId,artifactId,releaseArtifactDigest,certificationId,bindingDigest,predecessorReleaseId,releaseId}) {
     const [status,local,parent,remote,files]=await Promise.all([
       this.runner("git",["status","--porcelain=v1","--untracked-files=all"],this.checkoutRoot),this.runner("git",["rev-parse","HEAD"],this.checkoutRoot),this.runner("git",["rev-parse",`${commit}^`],this.checkoutRoot),this._remote(["ls-remote","origin","refs/heads/main"]),this.runner("git",["diff-tree","--no-commit-id","--name-only","--diff-filter=ACMRT","-r",commit,"--","public"],this.checkoutRoot),
@@ -110,6 +131,9 @@ export class CloudflarePagesDeploymentObserver {
     if (!deployment) return freeze({ status: "PENDING" });
     return freeze({ status: deployment.latest_stage?.status === "success" ? "SUCCESS" : deployment.latest_stage?.status === "failure" ? "FAILED" : "PENDING", commit, deploymentId:deployment.id??null, environment:deployment.environment??null, completedAt:deployment.latest_stage?.ended_on??deployment.modified_on??null });
   }
+  async inspectCommit({commit}) {
+    const token=await this.tokenProvider?.();if(!token||!this.accountId||!this.projectName)throw new Error("PUBLICATION_CLOUDFLARE_OBSERVER_CREDENTIAL_REQUIRED");const response=await this.fetchImpl(`https://api.cloudflare.com/client/v4/accounts/${this.accountId}/pages/projects/${this.projectName}/deployments`,{headers:{Authorization:`Bearer ${token}`}});if(!response.ok)throw new Error("PUBLICATION_CLOUDFLARE_OBSERVATION_FAILED");const body=await response.json(),matches=(body.result??[]).filter(item=>item.deployment_trigger?.metadata?.commit_hash===commit);if(matches.length>1)throw new Error("PUBLICATION_RECOVERY_DEPLOYMENT_STATE_AMBIGUOUS");if(matches.length===0)return freeze({status:"ABSENT",commit});const deployment=matches[0];return freeze({status:deployment.latest_stage?.status==="success"?"SUCCESS":deployment.latest_stage?.status==="failure"?"FAILED":"PENDING",commit,deploymentId:deployment.id??null,environment:deployment.environment??null,completedAt:deployment.latest_stage?.ended_on??deployment.modified_on??null});
+  }
 }
 
 export class PublicArtifactIntegrityVerifier {
@@ -129,6 +153,8 @@ export class ProductionUnattendedPublicationCommand {
   async inspect() { const state = await this.mandateService.inspect(), candidate = await this.candidateOwner.discover(); const operation = candidate ? await this.repository.getOperation(candidate.candidateId) : null, mandate = state.mandates.find(item => item.status === "ENABLED") ?? null; return freeze({ status: "INSPECTED", candidate, health: projectUnattendedPublicationHealth({ mandate, operation, asOf: this.now() }), networkOperation: "NONE", actionExecuted: false }); }
   async run({ mandateId }) { if (!mandateId) throw new Error("PUBLICATION_MANDATE_ID_REQUIRED"); const candidate=await this.candidateOwner.discover(),operation=candidate?await this.repository.getOperation(candidate.candidateId):null,coordinator=operation?.status==="DEPLOYMENT_PENDING"?await this.coordinatorFactory():null;if(operation?.status==="DEPLOYMENT_PENDING")return coordinator.continueObservation({mandateId,candidateId:candidate.candidateId});if(candidate?.alreadyDeployed)return freeze({status:"ALREADY_DEPLOYED_CANDIDATE",candidateId:candidate.candidateId,artifactId:candidate.artifactId,certificationId:candidate.certificationId,releaseId:candidate.releaseId,replay:true,authorityCreated:false,gitOperation:false,deploymentOperation:false,providerCalls:0,canonicalMarketMutation:false}); return (await this.coordinatorFactory()).run({ mandateId }); }
   async observe({mandateId,candidateId}) { if(!mandateId||!candidateId)throw new Error("PUBLICATION_OBSERVATION_SCOPE_REQUIRED");const coordinator=await this.coordinatorFactory();return coordinator.observe({mandateId,candidateId}); }
+  async inspectRecovery({mandateId,candidateId,checkpointCommit}) { const coordinator=await this.coordinatorFactory({recovery:true});if(!coordinator?.inspect)throw new Error("PUBLICATION_RECOVERY_OWNER_REQUIRED");return coordinator.inspect({mandateId,candidateId,checkpointCommit}); }
+  async recover({mandateId,candidateId,checkpointCommit,confirmation}) { const coordinator=await this.coordinatorFactory({recovery:true});if(!coordinator?.recover)throw new Error("PUBLICATION_RECOVERY_OWNER_REQUIRED");return coordinator.recover({mandateId,candidateId,checkpointCommit,confirmation}); }
 }
 
 export class ProductionForgeUnattendedPublicationProvider {

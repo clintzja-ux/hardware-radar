@@ -9,18 +9,21 @@ import { renderRamProductPage, selectRelatedRamProducts } from "./ram-product-pu
 import { createRamCatalogProjection } from "../packages/atlas/RamCatalogProjection.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const publicationWorkspaceRoot = path.resolve(process.env.HARDWARE_RADAR_PUBLICATION_WORKSPACE_ROOT || root);
+const publicationRoot = path.join(publicationWorkspaceRoot, "public");
 const json = async file => JSON.parse(await readFile(file, "utf8"));
 const manifest = await json(path.join(root, "packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(entry => json(path.join(root, "packages/atlas", entry.path))));
 const retailers = await Promise.all(manifest.retailers.map(entry => json(path.join(root, "packages/atlas", entry.path))));
 const catalog = createRamCatalogProjection(products);
-const currentRetail = await json(path.join(root, "public/data/ram-current-retail.json"));
+const currentRetail = await json(path.join(publicationRoot, "data/ram-current-retail.json"));
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
-const releasedCatalog = await json(path.join(root, "public/data/ram-catalog.json"));
-const certifiedTerminal = await json(path.join(root, "public/data/ram-terminal.json"));
+const releasedCatalog = await json(path.join(publicationRoot, "data/ram-catalog.json"));
+const certifiedTerminal = await json(path.join(publicationRoot, "data/ram-terminal.json"));
 const terminalByProduct = new Map(certifiedTerminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
-const releaseManifest = await json(path.join(root, "config/publication-release.json"));
-const releaseArtifact = await json(path.join(root, "config", releaseManifest.artifact.relativePath));
+const releaseManifestPath = path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config/publication-release.json"));
+const releaseManifest = await json(releaseManifestPath);
+const releaseArtifact = await json(path.resolve(path.dirname(releaseManifestPath), releaseManifest.artifact.relativePath));
 const certifiedChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
 const certifiedDestinations = JSON.parse(releaseArtifact.fileTexts.destinations);
 const chronologyByProduct = new Map(certifiedChronology.products.map(item => [item.atlasProductId, item]));
@@ -134,7 +137,7 @@ for (const productPage of releasedCatalog.products) {
     const currentOffer = currentRetailByProduct.get(productPage.atlasProductId) ?? null;
     const relatedProducts = selectRelatedRamProducts(productPage, releasedCatalog.products);
     const rendered = renderRamProductPage(productPage, destinations, currentOffer, currentRetail.disclosure, terminalByProduct.get(productPage.atlasProductId) ?? null, chronologyByProduct.get(productPage.atlasProductId) ?? null, relatedProducts);
-    const generated = await readFile(path.join(root, "public", productPage.publicPath.slice(1), "index.html"), "utf8");
+    const generated = await readFile(path.join(publicationRoot, productPage.publicPath.slice(1), "index.html"), "utf8");
     assert.equal(generated, rendered);
     assert.equal((rendered.match(/googletagmanager\.com\/gtag\/js/g) ?? []).length, 1);
     assert.equal((rendered.match(/gtag\("config","G-QF6XJ8GCMY"\)/g) ?? []).length, 1);

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import {mkdtemp,readFile,rm} from "node:fs/promises";
+import {mkdtemp,readFile,rm,writeFile} from "node:fs/promises";
 import {join} from "node:path";
 import {tmpdir} from "node:os";
 import {createProductionNeweggRoutineCommand,createNeweggRoutineBinding,NEWEGG_ROUTINE_COMMAND_STAGES} from "../index.js";
@@ -20,5 +20,11 @@ try{
  const conflict=await createProductionNeweggRoutineCommand({statePath:join(root,"conflict.json"),owners:conflictOwners,now:clock}).execute({mode:"FIXTURE",input});assert.equal(conflict.outcome,"CANONICAL_RECEIPT_CONFLICT");
  const emptyReceipts=new Map(),unauthorizedOwners=Object.fromEntries(NEWEGG_ROUTINE_COMMAND_STAGES.map(stage=>[stage,{mutating:true,authorityOwner:{validate:async()=>false},receiptOwner:{resolve:async()=>emptyReceipts.has(stage)?{state:"COMPLETED",receipt:emptyReceipts.get(stage)}:{state:"NOT_COMPLETED"}},executionOwner:{execute:async()=>{throw new Error("SHOULD_NOT_EXECUTE");}}}]));
  const unauthorized=await createProductionNeweggRoutineCommand({statePath:join(root,"unauthorized.json"),owners:unauthorizedOwners,now:clock}).execute({mode:"PRODUCTION",input:{bindingDigest,lineage}});assert.equal(unauthorized.outcome,"LOCAL_AUTHORITY_FAILURE");assert.equal(unauthorized.providerCalls,0);
- console.log("Production Newegg routine factory tests passed: 18 cases.");
+ // Terminal failures are not active owners and must not block a distinct, governed lineage.
+ const terminalPath=join(root,"terminal-failure.json"),terminalLineage={...lineage,artifactDigest:"e".repeat(64),catalogStateId:"rakuten_catalog_recovery"},terminalBinding=createNeweggRoutineBinding({lineage:terminalLineage,mode:"FIXTURE"}),terminalReceipts=new Map(),terminalCalls=[];
+ await writeFile(terminalPath,`${JSON.stringify({schemaVersion:"1.0",runs:[{schemaVersion:"1.0",commandVersion:"NEWEGG-ROUTINE-PRODUCTION-COMMAND-P1-1.0",runId:"mer_neweggroutinecmd_terminal",bindingDigest,status:"INTEGRITY_FAILURE",completedStages:["PREFLIGHT"],stageResults:{},startedAt:clock(),updatedAt:clock(),failedStage:"PREFLIGHT",failure:{code:"EPERM"}}]},null,2)}\n`);
+ const terminalOwners=Object.fromEntries(NEWEGG_ROUTINE_COMMAND_STAGES.map(stage=>[stage,{mutating:false,receiptOwner:{resolve:async()=>terminalReceipts.has(stage)?{state:"COMPLETED",receipt:terminalReceipts.get(stage)}:{state:"NOT_COMPLETED"}},executionOwner:{execute:async context=>{terminalCalls.push(stage);const receipt={stage,artifactDigest:context.input.lineage.artifactDigest};terminalReceipts.set(stage,receipt);return{status:"COMPLETED"};}}}]));
+ const afterTerminal=await createProductionNeweggRoutineCommand({statePath:terminalPath,owners:terminalOwners,now:clock}).execute({mode:"FIXTURE",input:{bindingDigest:terminalBinding,lineage:terminalLineage}});assert.equal(afterTerminal.success,true);assert.equal(afterTerminal.runId.startsWith("mer_neweggroutinecmd_"),true);assert.deepEqual(terminalCalls,NEWEGG_ROUTINE_COMMAND_STAGES);
+ const activePath=join(root,"active-run.json");await writeFile(activePath,`${JSON.stringify({schemaVersion:"1.0",runs:[{schemaVersion:"1.0",commandVersion:"NEWEGG-ROUTINE-PRODUCTION-COMMAND-P1-1.0",runId:"mer_neweggroutinecmd_active",bindingDigest,status:"RUNNING",completedStages:[],stageResults:{},startedAt:clock(),updatedAt:clock()}]},null,2)}\n`);const genuinelyBlocked=await createProductionNeweggRoutineCommand({statePath:activePath,owners:terminalOwners,now:clock}).execute({mode:"FIXTURE",input:{bindingDigest:terminalBinding,lineage:terminalLineage}});assert.equal(genuinelyBlocked.outcome,"BLOCKED_ACTIVE_RUN");assert.equal(genuinelyBlocked.runId,"mer_neweggroutinecmd_active");
+ console.log("Production Newegg routine factory tests passed: 24 cases.");
 }finally{await rm(root,{recursive:true,force:true});}

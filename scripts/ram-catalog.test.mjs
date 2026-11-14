@@ -5,7 +5,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { createRamCatalogProjection, RAM_CATALOG_ORDER } from "../packages/atlas/RamCatalogProjection.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
+const publicationWorkspaceRoot = path.resolve(process.env.HARDWARE_RADAR_PUBLICATION_WORKSPACE_ROOT || root);
+const read = (relativePath) => readFile(path.join(relativePath.startsWith("public/") ? publicationWorkspaceRoot : root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
 const catalog = createRamCatalogProjection(products);

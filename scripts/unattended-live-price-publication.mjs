@@ -1,11 +1,11 @@
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { FileRecurringPublicationAuthorityRepository } from "../packages/sentinel/publication/UnattendedLivePricePublication.js";
 import { createSplitRootProductionPublicationCandidateOwner, ProductionUnattendedPublicationCommand, RecurringPublicationMandateOperatorService } from "../packages/sentinel/publication/ProductionUnattendedPublicationBindings.js";
 import { createProductionUnattendedPublicationCoordinator } from "../packages/sentinel/publication/ProductionUnattendedPublicationFactory.js";
 
 const args = Object.fromEntries(process.argv.slice(2).filter(value => value.startsWith("--") && value.includes("=")).map(value => value.slice(2).split(/=(.*)/s).slice(0, 2)));
-const mode = String(args.mode ?? "INSPECT").toUpperCase(), root = path.resolve(args.root ?? "."), checkoutRoot = path.resolve(args["checkout-root"] ?? root);
+const runtimeRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),".."),mode = String(args.mode ?? "INSPECT").toUpperCase(), root = path.resolve(args.root ?? "."), checkoutRoot = path.resolve(args["checkout-root"] ?? root),publicOutputRoot=path.join(checkoutRoot,"public");
 const registryConfirmationDescriptor = "<STATUS>-UNATTENDED-PUBLICATION-MANDATE";
 void registryConfirmationDescriptor;
 const repository = new FileRecurringPublicationAuthorityRepository({ statePath: path.resolve(args["mandate-state"] ?? ".forge-review/publication/unattended-live-price.json") });
@@ -19,15 +19,12 @@ if (mode === "CREATE") {
   const result = await mandateService.transition({ mandateId: args["mandate-id"], status: mode, operatorId: args["operator-id"], confirmation: args.confirmation });
   console.log(JSON.stringify({ status: `PUBLICATION_MANDATE_${mode}`, mandateId: result.mandateId, revision: result.revision, productionExecuted: false }, null, 2));
 } else {
-  const coordinatorFactory = async () => {
-    const modulePath = process.env.HARDWARE_RADAR_PUBLICATION_PRODUCTION_FACTORY;
-    if (!modulePath) return createProductionUnattendedPublicationCoordinator({ root:checkoutRoot, repository, candidateOwner });
-    const factory = await import(pathToFileURL(path.resolve(modulePath)).href);
-    if (typeof factory.createProductionUnattendedPublicationCoordinator !== "function") throw new Error("PUBLICATION_PRODUCTION_FACTORY_INVALID");
-    return factory.createProductionUnattendedPublicationCoordinator({ root:checkoutRoot, repository, candidateOwner });
+  const coordinatorFactory = async ({recovery=false}={}) => {
+    return createProductionUnattendedPublicationCoordinator({runtimeRoot,evidenceRoot:root,workspaceRoot:checkoutRoot,publicOutputRoot,repository,candidateOwner,recovery});
   };
   const command = new ProductionUnattendedPublicationCommand({ repository, mandateService, candidateOwner, coordinatorFactory });
   if(mode==="OBSERVE"&&args.confirmation!=="OBSERVE-UNATTENDED-PUBLICATION-DEPLOYMENT")throw new Error("PUBLICATION_OBSERVATION_CONFIRMATION_REQUIRED");
-  const result=mode==="RUN"?await command.run({mandateId:args["mandate-id"]}):mode==="OBSERVE"?await command.observe({mandateId:args["mandate-id"],candidateId:args["candidate-id"]}):await command.inspect();
+  const recoveryInput={mandateId:args["mandate-id"],candidateId:args["candidate-id"],checkpointCommit:args["checkpoint-commit"],confirmation:args.confirmation};
+  const result=mode==="RUN"?await command.run({mandateId:args["mandate-id"]}):mode==="OBSERVE"?await command.observe({mandateId:args["mandate-id"],candidateId:args["candidate-id"]}):mode==="RECOVERY_INSPECT"?await command.inspectRecovery(recoveryInput):mode==="RECOVER"?await command.recover(recoveryInput):await command.inspect();
   console.log(JSON.stringify(result, null, 2));
 }

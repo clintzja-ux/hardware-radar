@@ -33,6 +33,7 @@ export * from "./NeweggRoutineRecurringAuthority.js";
 export * from "./NeweggRoutineLiveLineageBootstrap.js";
 export * from "./ProductionNeweggRoutineOperationalOwners.js";
 export * from "./ForgeNeweggRoutineExecutionSupervisor.js";
+export * from "./StableNeweggRoutineCommand.js";
 export * from "./FileForgeCommandOutcomeRepository.js";
 export * from "./ForgeCommandOutcomeReconciler.js";
 export * from "./NeweggFailedAcquisitionDisposition.js";

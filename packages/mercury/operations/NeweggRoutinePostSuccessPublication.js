@@ -22,8 +22,10 @@ export class NeweggRoutinePostSuccessPublicationBinding{
   if(!this.mandateId||!this.productionCheckoutRoot)throw new Error("POST_SUCCESS_PUBLICATION_CONFIGURATION_REQUIRED");
   const health=await this.routineHealthRepository.get(),runId=health?.lastSuccessfulRun?.runId,completed=new Set(health?.lastSuccessfulRun?.completedStages??[]);
   if(!runId||schedulerResult.routineRunId!==runId||!["SUCCESS","SUCCESS_WITH_PRODUCT_EXCEPTIONS"].includes(health?.status)||requiredStages.some(stage=>!completed.has(stage))||health?.releaseReadiness?.state!=="CERTIFIED_ZERO_AUTHORITY")throw new Error("POST_SUCCESS_PUBLICATION_CANONICAL_COMPLETION_REQUIRED");
-  const bootstrap=await this.bootstrapRepository.read(),operations=Object.values(bootstrap.operations??{}),operation=operations.find(value=>value.routineResult?.runId===runId);
-  if(!operation||operation.status!=="ROUTINE_COMPLETED"||operations.some(value=>incompleteBootstrapStatuses.has(value.status)))throw new Error("POST_SUCCESS_PUBLICATION_BOOTSTRAP_INCOMPLETE");
+  const bootstrap=await this.bootstrapRepository.read(),operations=Object.values(bootstrap.operations??{}),correlated=operations.filter(value=>value.routineResult?.runId===runId);
+  if(correlated.length!==1)throw new Error("POST_SUCCESS_PUBLICATION_BOOTSTRAP_CONTRADICTORY");
+  const [operation]=correlated;
+  if(operation.status!=="ROUTINE_COMPLETED"||incompleteBootstrapStatuses.has(operation.status))throw new Error("POST_SUCCESS_PUBLICATION_BOOTSTRAP_INCOMPLETE");
   const candidate=await this.candidateOwner.discover();
   if(!candidate||candidate.trigger?.runId!==runId||candidate.sentinelStatus!=="CERTIFIED"||candidate.sourceRightsEligible!==true)throw new Error("POST_SUCCESS_PUBLICATION_CANDIDATE_INVALID");
   if(candidate.alreadyDeployed!==true&&Date.parse(this.now())>=Date.parse(candidate.freshUntil))throw new Error("PUBLICATION_CANDIDATE_EXPIRED");

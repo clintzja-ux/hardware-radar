@@ -9,7 +9,10 @@ import { validatePublicCurrentRetailProjection } from "../packages/mercury/curre
 import { createEmptyPublicCurrentRetailProjection } from "../packages/mercury/current-display/PublicCurrentRetailProjection.js";
 import { loadStaticPublicationRelease } from "./static-publication-release-runtime.mjs";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const runtimeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const workspaceRoot = path.resolve(process.env.HARDWARE_RADAR_PUBLICATION_WORKSPACE_ROOT || runtimeRoot);
+const publicOutputRoot = path.resolve(process.env.HARDWARE_RADAR_PUBLIC_OUTPUT_ROOT || path.join(workspaceRoot, "public"));
+if (publicOutputRoot !== path.join(workspaceRoot, "public")) throw new Error("PUBLIC_OUTPUT_ROOT_CONFLICT");
 const scopeArgument = process.argv.slice(2).find(value => value.startsWith("--scope="))?.slice("--scope=".length);
 const verificationScope = String(scopeArgument ?? process.env.HARDWARE_RADAR_PUBLIC_BUILD_SCOPE ?? "FULL").toUpperCase();
 if (!["FULL", "PRICE_PUBLICATION"].includes(verificationScope)) throw new Error(`PUBLIC_VERIFICATION_SCOPE_INVALID:${verificationScope}`);
@@ -38,29 +41,29 @@ async function verifyProjection(label, source, destination, options) {
     return errors;
 }
 const errors = pricePublication ? [] : [
-    ...(await verifyProjection("Atlas", path.join(root, "packages", "atlas"), path.join(root, "public", "data", "atlas"), { exclude: ["tests", "README.md"] })),
-    ...(await verifyProjection("Forge", path.join(root, "apps", "forge"), path.join(root, "public", "forge"), { exclude: ["README.md"] }))
+    ...(await verifyProjection("Atlas", path.join(runtimeRoot, "packages", "atlas"), path.join(publicOutputRoot, "data", "atlas"), { exclude: ["tests", "README.md"] })),
+    ...(await verifyProjection("Forge", path.join(runtimeRoot, "apps", "forge"), path.join(publicOutputRoot, "forge"), { exclude: ["README.md"] }))
 ];
 try {
-    const staticRoutes = JSON.parse(await readFile(path.join(root, "content", "site-routes.json"), "utf8"));
-    const sourceRoot = path.join(root, "content", "guides");
+    const staticRoutes = JSON.parse(await readFile(path.join(runtimeRoot, "content", "site-routes.json"), "utf8"));
+    const sourceRoot = path.join(runtimeRoot, "content", "guides");
     const names = (await readdir(sourceRoot)).filter((name) => name.endsWith(".md") && name !== "README.md").sort();
     const rawArticles = await Promise.all(names.map(async (name) => ({ name, ...parseEditorialSource(await readFile(path.join(sourceRoot, name), "utf8"), name) })));
     const knownRoutes = [...staticRoutes.map((route) => route.path), ...rawArticles.map((article) => article.metadata.canonicalPath)];
     const articles = rawArticles.map((article) => ({ ...article, metadata: validateArticleMetadata(article.metadata, { knownRoutes }) }));
-    const atlasManifest = JSON.parse(await readFile(path.join(root, "packages", "atlas", "atlas-manifest.json"), "utf8"));
-    const atlasProducts = await Promise.all(atlasManifest.products.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
-    const publicCurrent = JSON.parse(await readFile(path.join(root, "public", "data", "ram-current-retail.json"), "utf8"));
-    const releaseManifestPath = path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json"));
+    const atlasManifest = JSON.parse(await readFile(path.join(runtimeRoot, "packages", "atlas", "atlas-manifest.json"), "utf8"));
+    const atlasProducts = await Promise.all(atlasManifest.products.map(async (entry) => JSON.parse(await readFile(path.join(runtimeRoot, "packages", "atlas", entry.path), "utf8"))));
+    const publicCurrent = JSON.parse(await readFile(path.join(publicOutputRoot, "data", "ram-current-retail.json"), "utf8"));
+    const releaseManifestPath = path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(runtimeRoot, "config", "publication-release.json"));
     const releaseManifest = JSON.parse(await readFile(releaseManifestPath, "utf8"));
     const releaseArtifact = JSON.parse(await readFile(path.resolve(path.dirname(releaseManifestPath), releaseManifest.artifact.relativePath), "utf8"));
     const publicChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
     const expectedSitemap = generateSitemap({ staticRoutes, articles, additionalRoutes: createRamProductSitemapRoutes(atlasProducts, { currentRetailByProduct: new Map(publicCurrent.products.map(item => [item.atlasProductId, item])), chronologicalSeriesByProduct: new Map(publicChronology.products.map(item => [item.atlasProductId, item])) }) });
-    const actualSitemap = await readFile(path.join(root, "public", "sitemap.xml"), "utf8");
+    const actualSitemap = await readFile(path.join(publicOutputRoot, "sitemap.xml"), "utf8");
     if (expectedSitemap !== actualSitemap) errors.push("Editorial: sitemap.xml is stale or not deterministically generated.");
     if (/fixture-memory-notation|scripts\/fixtures\/editorial/.test(actualSitemap)) errors.push("Editorial: fixture content leaked into the production sitemap.");
     if (!pricePublication) for (const article of articles) {
-        const output = path.join(root, "public", article.metadata.canonicalPath.slice(1), "index.html");
+        const output = path.join(publicOutputRoot, article.metadata.canonicalPath.slice(1), "index.html");
         const actual = await readFile(output, "utf8");
         const expected = renderArticle(article);
         if (actual !== expected) errors.push(`Editorial: stale generated article ${article.metadata.canonicalPath}`);
@@ -70,8 +73,8 @@ try {
         if (/<script[^>]*>\s*alert\(|javascript:/i.test(actual)) errors.push(`Editorial: unsafe output in ${article.metadata.canonicalPath}.`);
     }
     if (!pricePublication) {
-        const guidesMetadata = JSON.parse(await readFile(path.join(root, "content", "guides-index.json"), "utf8"));
-        const guidesOutput = await readFile(path.join(root, "public", "guides", "index.html"), "utf8");
+        const guidesMetadata = JSON.parse(await readFile(path.join(workspaceRoot, "content", "guides-index.json"), "utf8"));
+        const guidesOutput = await readFile(path.join(publicOutputRoot, "guides", "index.html"), "utf8");
         if (guidesOutput !== renderGuidesIndex(guidesMetadata, articles)) errors.push("Editorial: stale generated Guides index.");
     }
     const editorialRoutes = [...actualSitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/guides\/[^<]*)<\/loc>/g)].map((match) => match[1]);
@@ -79,16 +82,16 @@ try {
     if (editorialRoutes.length !== expectedEditorialRoutes.length || expectedEditorialRoutes.some((route) => !editorialRoutes.includes(route))) errors.push("Editorial: production sitemap must contain exactly the Guides index, RAM hub, and four approved RAM spokes.");
 } catch (error) { errors.push(`Editorial: verification failed (${error.message}).`); }
 try {
-    const manifest = JSON.parse(await readFile(path.join(root, "packages", "atlas", "atlas-manifest.json"), "utf8"));
-    const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
-    const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await readFile(path.join(root, "packages", "atlas", entry.path), "utf8"))));
-    const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
+    const manifest = JSON.parse(await readFile(path.join(runtimeRoot, "packages", "atlas", "atlas-manifest.json"), "utf8"));
+    const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await readFile(path.join(runtimeRoot, "packages", "atlas", entry.path), "utf8"))));
+    const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await readFile(path.join(runtimeRoot, "packages", "atlas", entry.path), "utf8"))));
+    const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(runtimeRoot, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
     let destinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
-    const currentRetail = JSON.parse(await readFile(path.join(root, "public", "data", "ram-current-retail.json"), "utf8"));
+    const currentRetail = JSON.parse(await readFile(path.join(publicOutputRoot, "data", "ram-current-retail.json"), "utf8"));
     const currentRetailReport = validatePublicCurrentRetailProjection(currentRetail);
     if (!currentRetailReport.valid) errors.push(`Current retail: ${currentRetailReport.errors.join(",")}.`);
     const staticRelease = await loadStaticPublicationRelease({
-        manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json")),
+        manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(runtimeRoot, "config", "publication-release.json")),
         targetEnvironment: (process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT || "PREVIEW").toUpperCase(),
         evaluatedAt: currentRetail.asOf
     });
@@ -107,30 +110,30 @@ try {
     const currentRetailByProduct = new Map((currentRetail.products ?? []).map(item => [item.atlasProductId, item]));
     const catalog = portfolioFiles ? JSON.parse(portfolioFiles.catalog) : createRamCatalogProjection(products);
     const expected = `${JSON.stringify(catalog, null, 2)}\n`;
-    const actual = await readFile(path.join(root, "public", "data", "ram-catalog.json"), "utf8");
+    const actual = await readFile(path.join(publicOutputRoot, "data", "ram-catalog.json"), "utf8");
     if (actual !== expected) errors.push("Atlas catalog: ram-catalog.json is stale or not deterministically generated.");
-    await stat(path.join(root, "public", "ram", "index.html"));
+    await stat(path.join(publicOutputRoot, "ram", "index.html"));
     const terminal = portfolioFiles ? JSON.parse(portfolioFiles.terminal) : null;
     const chronology = portfolioFiles ? JSON.parse(portfolioFiles.chronology) : null;
     const terminalByProduct = new Map((terminal?.lenses?.ALL_RAM?.productRows ?? []).map(item => [item.atlasProductId, item]));
     const chronologyByProduct = new Map((chronology?.products ?? []).map(item => [item.atlasProductId, item]));
     if (portfolioFiles) {
-        const actualTerminal = await readFile(path.join(root, "public", "data", "ram-terminal.json"), "utf8");
+        const actualTerminal = await readFile(path.join(publicOutputRoot, "data", "ram-terminal.json"), "utf8");
         if (actualTerminal !== portfolioFiles.terminal) errors.push("RAM Terminal: public artifact does not match the certified portfolio.");
-        try { await stat(path.join(root, "public", "ram", "market-snapshots")); errors.push("RAM portfolio: excluded snapshot route is present."); } catch (error) { if (error.code !== "ENOENT") throw error; }
+        try { await stat(path.join(publicOutputRoot, "ram", "market-snapshots")); errors.push("RAM portfolio: excluded snapshot route is present."); } catch (error) { if (error.code !== "ENOENT") throw error; }
     }
     for (const product of catalog.products) {
-        const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
+        const output = path.join(publicOutputRoot, product.publicPath.slice(1), "index.html");
         const page = await readFile(output, "utf8");
         if (page !== renderRamProductPage(product, destinations.filter(item => item.atlasProductId === product.atlasProductId), currentRetailByProduct.get(product.atlasProductId) ?? null, currentRetail.disclosure, terminalByProduct.get(product.atlasProductId) ?? null, chronologyByProduct.get(product.atlasProductId) ?? null, selectRelatedRamProducts(product, catalog.products))) errors.push(`Atlas catalog: stale product page ${product.publicPath}`);
     }
 } catch (error) { errors.push(`Atlas catalog: projection missing or invalid (${error.message}).`); }
 for (const internal of ["sentinel", "mercury"]) {
-    try { await stat(path.join(root, "public", "data", internal)); errors.push(`${internal}: internal package must not be present in public/data.`); }
+    try { await stat(path.join(publicOutputRoot, "data", internal)); errors.push(`${internal}: internal package must not be present in public/data.`); }
     catch (error) { if (error.code !== "ENOENT") throw error; }
 }
 try {
-    const published = JSON.parse(await readFile(path.join(root, "public", "data", "market-snapshot.json"), "utf8"));
+    const published = JSON.parse(await readFile(path.join(publicOutputRoot, "data", "market-snapshot.json"), "utf8"));
     if (published.schemaVersion !== "1.0") errors.push("Publication: market snapshot schemaVersion must be 1.0.");
     for (const scope of ["overall", "ddr5", "ddr4", "sodimm"]) if (!published.scopes?.[scope]) errors.push(`Publication: missing ${scope} scope.`);
 } catch (error) { errors.push(`Publication: market-snapshot.json missing or invalid (${error.message}).`); }

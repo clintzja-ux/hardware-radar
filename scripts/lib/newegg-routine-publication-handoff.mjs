@@ -1,0 +1,12 @@
+import path from "node:path";
+import {execFile} from "node:child_process";
+import {promisify} from "node:util";
+import {FileNeweggRoutineLiveBootstrapRepository,FileNeweggRoutinePostSuccessPublicationRepository,FileProductionNeweggRoutineHealthRepository,NeweggRoutinePostSuccessPublicationBinding} from "../../packages/mercury/operations/index.js";
+import {CertifiedRoutinePublicationCandidateOwner} from "../../packages/sentinel/publication/ProductionUnattendedPublicationBindings.js";
+import {FileRecurringPublicationAuthorityRepository} from "../../packages/sentinel/publication/UnattendedLivePricePublication.js";
+import {createProductionPublicationRunner,resolveProductionPublicationCommand} from "./production-publication-command.mjs";
+
+export function createNeweggRoutinePublicationHandoff({runtimeRoot,operationalRoot,env=process.env,runFile=promisify(execFile)}={}){
+ const root=path.resolve(operationalRoot),runtime=path.resolve(runtimeRoot),stateRoot=path.join(root,".forge-review/mercury/newegg-routine"),command=resolveProductionPublicationCommand({runtimeRoot:runtime,operationalRoot:root,publicationCheckoutRoot:env.HARDWARE_RADAR_PUBLICATION_CHECKOUT_ROOT,env});
+ return new NeweggRoutinePostSuccessPublicationBinding({enabled:command.postSuccessEnabled,mandateId:command.mandateId,productionCheckoutRoot:command.publicationCheckoutRoot,routineHealthRepository:new FileProductionNeweggRoutineHealthRepository({statePath:path.join(stateRoot,"routine-health.json")}),bootstrapRepository:new FileNeweggRoutineLiveBootstrapRepository({statePath:path.join(stateRoot,"live-bootstrap.json")}),candidateOwner:new CertifiedRoutinePublicationCandidateOwner({routineHealthPath:path.join(stateRoot,"routine-health.json"),artifactRoot:path.join(root,".forge-review/publication/ram-intelligence"),releaseManifestPath:path.join(command.publicationCheckoutRoot,"config/publication-release.json")}),publicationAuthorityRepository:new FileRecurringPublicationAuthorityRepository({statePath:command.mandateStatePath}),receiptRepository:new FileNeweggRoutinePostSuccessPublicationRepository({statePath:path.join(stateRoot,"post-success-publication.json")}),publicationCommand:{run:createProductionPublicationRunner({execFile:runFile,nodeExecutable:command.nodeExecutable,runtimeRoot:command.runtimeRoot,operationalRoot:command.operationalRoot,publicationCheckoutRoot:command.publicationCheckoutRoot,env})}});
+}

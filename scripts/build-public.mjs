@@ -24,23 +24,26 @@ import { createRamTerminalPublicIntelligence } from "../packages/mercury/histori
 import { createPublicChronologicalPriceSeries } from "../packages/mercury/historical-admission/PublicChronologicalPriceSeries.js";
 import { generateRamTerminalPage } from "./ram-terminal-publishing.mjs";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const runtimeRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const workspaceRoot = path.resolve(process.env.HARDWARE_RADAR_PUBLICATION_WORKSPACE_ROOT || runtimeRoot);
+const publicOutputRoot = path.resolve(process.env.HARDWARE_RADAR_PUBLIC_OUTPUT_ROOT || path.join(workspaceRoot, "public"));
+if (publicOutputRoot !== path.join(workspaceRoot, "public")) throw new Error("PUBLIC_OUTPUT_ROOT_CONFLICT");
 const scopeArgument = process.argv.slice(2).find(value => value.startsWith("--scope="))?.slice("--scope=".length);
 const buildScope = String(scopeArgument ?? process.env.HARDWARE_RADAR_PUBLIC_BUILD_SCOPE ?? "FULL").toUpperCase();
 if (!["FULL", "PRICE_PUBLICATION"].includes(buildScope)) throw new Error(`PUBLIC_BUILD_SCOPE_INVALID:${buildScope}`);
 const pricePublication = buildScope === "PRICE_PUBLICATION";
 
 const editorialInput = {
-    sourceDir: path.join(root, "content", "guides"),
-    routeManifestPath: path.join(root, "content", "site-routes.json")
+    sourceDir: path.join(runtimeRoot, "content", "guides"),
+    routeManifestPath: path.join(runtimeRoot, "content", "site-routes.json")
 };
 const editorial = pricePublication
     ? await loadEditorialArticles(editorialInput)
     : await generateEditorialSite({
         ...editorialInput,
-        outputDir: path.join(root, "public"),
-        sitemapPath: path.join(root, "public", "sitemap.xml"),
-        guidesIndexPath: path.join(root, "content", "guides-index.json")
+        outputDir: publicOutputRoot,
+        sitemapPath: path.join(publicOutputRoot, "sitemap.xml"),
+        guidesIndexPath: path.join(workspaceRoot, "content", "guides-index.json")
     });
 
 async function copyDirectory(source, destination, { exclude = [] } = {}) {
@@ -72,33 +75,33 @@ async function json(file) { return JSON.parse(await readFile(file, "utf8")); }
 async function loadManifestRecords(packageRoot, entries) { return Promise.all(entries.map((entry) => json(path.resolve(packageRoot, entry.path)))); }
 
 if (!pricePublication) {
-    await copyDirectory(path.join(root, "packages", "atlas"), path.join(root, "public", "data", "atlas"), { exclude: ["tests", "README.md"] });
-    await normalizeGeneratedText(path.join(root, "public", "data", "atlas"));
-    await copyDirectory(path.join(root, "apps", "forge"), path.join(root, "public", "forge"), { exclude: ["README.md"] });
-    await rm(path.join(root, "public", "data", "mercury"), { recursive: true, force: true });
-    await rm(path.join(root, "public", "data", "sentinel"), { recursive: true, force: true });
-    await rm(path.join(root, "public", "js", "atlasAdapter.js"), { force: true });
-    await rm(path.join(root, "public", "js", "atlasSmokeTest.js"), { force: true });
+    await copyDirectory(path.join(runtimeRoot, "packages", "atlas"), path.join(publicOutputRoot, "data", "atlas"), { exclude: ["tests", "README.md"] });
+    await normalizeGeneratedText(path.join(publicOutputRoot, "data", "atlas"));
+    await copyDirectory(path.join(runtimeRoot, "apps", "forge"), path.join(publicOutputRoot, "forge"), { exclude: ["README.md"] });
+    await rm(path.join(publicOutputRoot, "data", "mercury"), { recursive: true, force: true });
+    await rm(path.join(publicOutputRoot, "data", "sentinel"), { recursive: true, force: true });
+    await rm(path.join(publicOutputRoot, "js", "atlasAdapter.js"), { force: true });
+    await rm(path.join(publicOutputRoot, "js", "atlasSmokeTest.js"), { force: true });
 }
 
-const atlasRoot = path.join(root, "packages", "atlas");
+const atlasRoot = path.join(runtimeRoot, "packages", "atlas");
 const atlasManifest = await json(path.join(atlasRoot, "atlas-manifest.json"));
 const [products, retailers] = await Promise.all([
     loadManifestRecords(atlasRoot, atlasManifest.products),
     loadManifestRecords(atlasRoot, atlasManifest.retailers)
 ]);
 let ramCatalog = createRamCatalogProjection(products);
-const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(root, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
+const destinationSource = await loadRetailerDestinationSource({ sourcePath: path.join(runtimeRoot, "packages", "mercury", "destinations", "production-destinations.json"), products, retailers });
 let publicDestinations = createPublicRetailerDestinationProjection({ source: destinationSource, retailers });
 const generatedAt = process.env.HARDWARE_RADAR_GENERATED_AT || new Date().toISOString();
 const staticRelease = await loadStaticPublicationRelease({
-    manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(root, "config", "publication-release.json")),
+    manifestPath: path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(runtimeRoot, "config", "publication-release.json")),
     targetEnvironment: (process.env.HARDWARE_RADAR_PUBLIC_RELEASE_ENVIRONMENT || "PREVIEW").toUpperCase(),
     evaluatedAt: generatedAt
 });
 let currentRetail, terminal, chronological;
 try {
-    const currentDisplayPath = process.env.HARDWARE_RADAR_CURRENT_DISPLAY_STATE || path.join(root, ".forge-review", "retail-display", "current-display-snapshots.json");
+    const currentDisplayPath = process.env.HARDWARE_RADAR_CURRENT_DISPLAY_STATE || path.join(runtimeRoot, ".forge-review", "retail-display", "current-display-snapshots.json");
     const currentDisplayState = await new FileCurrentDisplaySnapshotRepository({ statePath: currentDisplayPath }).getState();
     currentRetail = currentDisplayState.current
         ? createPublicCurrentRetailProjection({ products, retailers, destinations: publicDestinations, currentSnapshot: currentDisplayState.current, asOf: generatedAt })
@@ -114,31 +117,31 @@ if (staticRelease.exposed && staticRelease.portfolio) {
     terminal = JSON.parse(durableOnly ? files.staleTerminal : files.terminal);
     chronological = JSON.parse(files.chronology);
     publicDestinations = JSON.parse(files.destinations);
-    await rm(path.join(root, "public", "ram", "market-snapshots"), { recursive: true, force: true });
-    await rm(path.join(root, "public", "data", "ram-market-snapshot-2026-09-30.json"), { force: true });
+    await rm(path.join(publicOutputRoot, "ram", "market-snapshots"), { recursive: true, force: true });
+    await rm(path.join(publicOutputRoot, "data", "ram-market-snapshot-2026-09-30.json"), { force: true });
 } else {
     currentRetail = staticRelease.exposed ? staticRelease.projection : createEmptyPublicCurrentRetailProjection({ asOf: generatedAt, state: "NO_CURRENT_RETAIL_STATE" });
     terminal = await createRamTerminalPublicIntelligence({ catalog: ramCatalog, currentRetail, historicalRepository: { getAll: async () => [] }, asOf: generatedAt });
     chronological = await createPublicChronologicalPriceSeries({ catalog: ramCatalog, retailers, historicalRepository: { getAll: async () => [] } });
 }
-await writeFile(path.join(root, "public", "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
-await writeFile(path.join(root, "public", "data", "ram-current-retail.json"), `${JSON.stringify(currentRetail, null, 2)}\n`);
-await writeFile(path.join(root, "public", "data", "ram-terminal.json"), `${JSON.stringify(terminal, null, 2)}\n`);
+await writeFile(path.join(publicOutputRoot, "data", "ram-catalog.json"), `${JSON.stringify(ramCatalog, null, 2)}\n`);
+await writeFile(path.join(publicOutputRoot, "data", "ram-current-retail.json"), `${JSON.stringify(currentRetail, null, 2)}\n`);
+await writeFile(path.join(publicOutputRoot, "data", "ram-terminal.json"), `${JSON.stringify(terminal, null, 2)}\n`);
 const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.atlasProductId, item]));
 const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
 const chronologicalSeriesByProduct = new Map(chronological.products.map(item => [item.atlasProductId, item]));
-const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, terminalByProduct, chronologicalSeriesByProduct, disclosure: currentRetail.disclosure, outputDir: path.join(root, "public") });
-if (!pricePublication) await generateRamDiscoveryLinks({ catalog: ramCatalog, outputDir: path.join(root, "public") });
-await generateRamTerminalPage({ artifact: terminal, outputDir: path.join(root, "public") });
-const staticRoutes = await json(path.join(root, "content", "site-routes.json"));
-await writeFile(path.join(root, "public", "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
+const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, terminalByProduct, chronologicalSeriesByProduct, disclosure: currentRetail.disclosure, outputDir: publicOutputRoot });
+if (!pricePublication) await generateRamDiscoveryLinks({ catalog: ramCatalog, outputDir: publicOutputRoot });
+await generateRamTerminalPage({ artifact: terminal, outputDir: publicOutputRoot });
+const staticRoutes = await json(path.join(runtimeRoot, "content", "site-routes.json"));
+await writeFile(path.join(publicOutputRoot, "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
 const mercury = new Mercury();
 let snapshot;
 
 const acceptanceStatePath = process.env.HARDWARE_RADAR_ACCEPTANCE_STATE;
 const reviewStatePath = process.env.HARDWARE_RADAR_REVIEW_STATE;
 const publicationStatePath = process.env.HARDWARE_RADAR_PUBLICATION_STATE;
-const freshnessPolicyStatePath = process.env.HARDWARE_RADAR_FRESHNESS_POLICY_STATE || path.join(root, "packages", "mercury", "current-market", "policies", "production-policies.json");
+const freshnessPolicyStatePath = process.env.HARDWARE_RADAR_FRESHNESS_POLICY_STATE || path.join(runtimeRoot, "packages", "mercury", "current-market", "policies", "production-policies.json");
 
 if (acceptanceStatePath && reviewStatePath && publicationStatePath) {
     const acceptanceRepository = new FileObservationAcceptanceRepository({ statePath: path.resolve(acceptanceStatePath), environment: "production" });
@@ -161,7 +164,7 @@ if (acceptanceStatePath && reviewStatePath && publicationStatePath) {
     snapshot = await new MarketPublicationService({ mercury }).createSnapshot({ observations: [], products, retailers, generatedAt });
 }
 
-await writeFile(path.join(root, "public", "data", "market-snapshot.json"), `${JSON.stringify(snapshot, null, 2)}\n`);
+await writeFile(path.join(publicOutputRoot, "data", "market-snapshot.json"), `${JSON.stringify(snapshot, null, 2)}\n`);
 console.log(pricePublication
     ? "Price-publication artifacts built from the certified release without unrelated application packaging."
     : "Public deployment artifacts built from canonical packages and governed published intelligence.");

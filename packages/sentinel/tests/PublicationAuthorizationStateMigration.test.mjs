@@ -1,0 +1,22 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { mkdtemp, readFile, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { PublicationAuthorizationStateMigration } from "../publication/PublicationAuthorizationStateMigration.js";
+import { createProductionUnattendedPublicationCoordinator } from "../publication/ProductionUnattendedPublicationFactory.js";
+
+const root = await mkdtemp(path.join(tmpdir(), "publication-authorization-migration-"));
+const workspaceRoot=path.join(root,"workspace"),evidenceRoot=path.join(root,"evidence"),legacy = path.join(workspaceRoot, ".forge-review", "publication", "live-price-authorizations.json"), canonical = path.join(evidenceRoot, ".forge-review", "publication", "live-price-authorizations.json"), audit = path.join(evidenceRoot, ".forge-review", "publication", "live-price-authorizations.migration.json");
+const text = `${JSON.stringify({ schemaVersion: "1.0", authorizations: { retained: { status: "AUTHORIZED" } }, operations: { immutable: { status: "FAILED" } }, consumptions: { used: { checkpointDigest: "a".repeat(64) } } }, null, 2)}\n`;
+await import("node:fs/promises").then(({mkdir})=>mkdir(path.dirname(legacy),{recursive:true}));await writeFile(legacy,text);
+const digest=createHash("sha256").update(text).digest("hex"),migration=new PublicationAuthorizationStateMigration({legacyStatePath:legacy,canonicalStatePath:canonical,auditPath:audit,now:()=>"2026-11-13T22:00:00.000Z"});
+assert.deepEqual(await migration.inspect(),{status:"MIGRATION_READY",legacyDigest:digest,canonicalDigest:null,recoveryAllowed:true});
+await assert.rejects(()=>createProductionUnattendedPublicationCoordinator({runtimeRoot:root,evidenceRoot,workspaceRoot,publicOutputRoot:path.join(workspaceRoot,"public"),repository:{},candidateOwner:{}}),/MIGRATION_REQUIRED/);
+await assert.rejects(()=>migration.migrate({expectedLegacyDigest:"0".repeat(64),operatorId:"operator:test",confirmation:"MIGRATE-LIVE-PRICE-PUBLICATION-AUTHORIZATION-STATE"}),/NOT_READY/);
+const completed=await migration.migrate({expectedLegacyDigest:digest,operatorId:"operator:test",confirmation:"MIGRATE-LIVE-PRICE-PUBLICATION-AUTHORIZATION-STATE"});
+assert.equal(completed.status,"COMPLETED");assert.equal(await readFile(canonical,"utf8"),text);assert.equal(JSON.parse(await readFile(audit,"utf8")).canonicalDigest,digest);
+assert.equal((await migration.inspect()).status,"CANONICAL_STATE_MIGRATED");
+const evolved=`${JSON.stringify({schemaVersion:"1.0",authorizations:{retained:{status:"AUTHORIZED"},new:{status:"AUTHORIZED"}},operations:{immutable:{status:"FAILED"}},consumptions:{used:{checkpointDigest:"a".repeat(64)}}},null,2)}\n`;await writeFile(canonical,evolved);assert.equal((await migration.inspect()).status,"CANONICAL_STATE_MIGRATED");
+await writeFile(canonical,text.replace('"1.0"','"2.0"'));await assert.rejects(()=>migration.inspect(),/STATE_INVALID/);
+console.log("Publication authorization state migration tests passed: hash verification, immutable state preservation, audit receipt, replay and conflict safety.");

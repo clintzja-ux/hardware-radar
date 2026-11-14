@@ -9,6 +9,7 @@ import { formatProductName } from "../public/js/modules/ramTerminal.js";
 import { calculatePriceDisplayDomain, createRamProductSitemapRoutes, renderRamProductPage, selectChronologyTickIndexes, selectRelatedRamProducts } from "./ram-product-publishing.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const publicationWorkspaceRoot = path.resolve(process.env.HARDWARE_RADAR_PUBLICATION_WORKSPACE_ROOT || root);
 const APPROVED_MARKETPLACE_DISCLOSURE = "Observed seller and price are timestamped. Product and all-offers links may not preselect that seller or price. Cheapest uses item price plus known shipping and mandatory fees; taxes may apply.";
 const UNSUPPORTED_ENDORSEMENT_TERMINOLOGY = />[^<]*(?:\bPick\b|we tested|our testing|recommended|recommendation)[^<]*</i;
 const assertNoUnsupportedEndorsementClaims = (html) => assert.doesNotMatch(html, UNSUPPORTED_ENDORSEMENT_TERMINOLOGY);
@@ -18,7 +19,7 @@ const assertMarketplaceDisclosureFacts = (html) => {
     assert.match(html, /Cheapest[^<.]*item price[^<.]*shipping[^<.]*mandatory fees/i);
     assert.match(html, /taxes may apply/i);
 };
-const read = (relativePath) => readFile(path.join(root, relativePath), "utf8");
+const read = (relativePath) => readFile(path.join(relativePath.startsWith("public/") ? publicationWorkspaceRoot : root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
 const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
@@ -93,7 +94,7 @@ const canonicals = new Set();
 const headings = new Set();
 const descriptions = new Set();
 for (const product of publicCatalog.products) {
-    const output = path.join(root, "public", product.publicPath.slice(1), "index.html");
+    const output = path.join(publicationWorkspaceRoot, "public", product.publicPath.slice(1), "index.html");
     await stat(output);
     const html = await readFile(output, "utf8");
     const related = selectRelatedRamProducts(product, publicCatalog.products);
