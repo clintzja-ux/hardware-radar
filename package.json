@@ -65,6 +65,7 @@
     "publication:release:prepare": "node scripts/static-publication-release-prepare.mjs",
     "publication:live-price": "node scripts/governed-live-price-publication.mjs",
     "publication:unattended": "node --use-system-ca --env-file=.env scripts/unattended-live-price-publication.mjs",
+    "publication:authorization-reconciliation": "node scripts/publication-authorization-reconciliation.mjs",
     "publication:ram-intelligence:prepare": "node scripts/ram-public-intelligence-release.mjs --action=prepare",
     "publication:ram-intelligence:inspect": "node scripts/ram-public-intelligence-release.mjs --action=inspect",
     "publication:ram-intelligence:certify": "node scripts/ram-public-intelligence-release.mjs --action=certify",
