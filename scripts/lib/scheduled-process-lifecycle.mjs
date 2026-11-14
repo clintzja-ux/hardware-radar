@@ -3,6 +3,7 @@ const DEFAULT_FORCE_EXIT_MS=2_000;
 const BENIGN_RESOURCES=new Set(["PipeWrap","TTYWrap"]);
 
 const wait=value=>new Promise(resolve=>setTimeout(resolve,value));
+const scheduleFallback=(callback,value)=>{const timer=setTimeout(callback,value);timer.unref?.();return timer;};
 
 function write(stream,value){
   return new Promise((resolve,reject)=>{
@@ -25,7 +26,8 @@ export async function finalizeScheduledProcess({
   activeResources=()=>process.getActiveResourcesInfo?.()??[],
   exit=code=>process.exit(code),
   setExitCode=code=>{process.exitCode=code;},
-  delay=wait
+  delay=wait,
+  schedule=scheduleFallback
 }={}){
   if(!Number.isInteger(exitCode)||exitCode<0)throw new TypeError("SCHEDULED_PROCESS_EXIT_CODE_INVALID");
   if(typeof terminalOutput!=="string"||terminalOutput.length===0)throw new TypeError("SCHEDULED_PROCESS_TERMINAL_OUTPUT_REQUIRED");
@@ -36,7 +38,19 @@ export async function finalizeScheduledProcess({
   await delay(graceMs);
   await new Promise(resolve=>setImmediate(resolve));
   const inspection=inspectScheduledProcessResources({activeResources});
-  if(inspection.clean)return Object.freeze({exitCode,forced:false,resources:inspection.resources});
+  if(inspection.clean){
+    schedule(()=>{void (async()=>{
+      const observed=Object.freeze([...activeResources()]);
+      await write(stderr,JSON.stringify({
+        status:"TERMINAL_PROCESS_LIVENESS_FALLBACK",
+        exitCode,
+        activeResourceTypes:observed,
+        terminalEvidenceDurable:true
+      }));
+      exit(exitCode);
+    })().catch(()=>exit(exitCode));},forceExitMs-graceMs);
+    return Object.freeze({exitCode,forced:false,fallbackArmed:true,resources:inspection.resources});
+  }
 
   await write(stderr,JSON.stringify({
     status:"TERMINAL_PROCESS_CLEANUP_FALLBACK",
