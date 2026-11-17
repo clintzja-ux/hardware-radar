@@ -1,19 +1,14 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { ATLAS_PRE_EXPANSION_PRODUCT_IDS, reviewAtlasPreExpansionBatch } from "../AtlasPreExpansionLifecycleReview.js";
+import { loadHistoricalAtlasSnapshot } from "./fixtures/HistoricalAtlasGitFixtures.mjs";
 
-const manifest = JSON.parse(await readFile(new URL("../atlas-manifest.json", import.meta.url), "utf8"));
-const load = async entries => Promise.all(entries.map(async entry => JSON.parse(await readFile(new URL(`../${entry.path}`, import.meta.url), "utf8"))));
-const canonicalProducts = await load(manifest.products);
-const brands = await load(manifest.brands);
+const beforeActivation = loadHistoricalAtlasSnapshot("67861da70f042ed71396f3a6b0794266cdfc6dba");
+const afterActivation = loadHistoricalAtlasSnapshot("149d4fa44f2adf586379cd03e785b781ea193d8d");
+const canonicalProducts = afterActivation.products;
+const brands = beforeActivation.brands;
 const audit = JSON.parse(await readFile(new URL("../reviews/atlas-activation-002.json", import.meta.url), "utf8"));
-const products = structuredClone(canonicalProducts);
-for (const product of products.filter(item => ATLAS_PRE_EXPANSION_PRODUCT_IDS.includes(item.identity.atlasProductId))) {
-    product.identity.recordRevision -= 1;
-    product.identity.updatedAt = product.identity.createdAt;
-    product.identity.updatedBy = product.identity.createdBy;
-    product.governance = { ...product.governance, lifecycleStatus: "DRAFT", publicationStatus: "PENDING", humanReviewRequired: true, reviewedBy: null, reviewedAt: null, changeReason: "D-002 fixture candidate; production Atlas admission requires separate operator review." };
-}
+const products = structuredClone(beforeActivation.products);
 const before = structuredClone(products);
 const input = { products, brands, reviewedBy: "human:Clinton_Ramsook", reviewedAt: "2026-09-08T05:58:28.556Z", reason: "ATLAS-ACTIVATION-002 authorized pre-expansion RAM lifecycle review; no retail, acquisition, market, price, or publication authority implied." };
 const result = reviewAtlasPreExpansionBatch(input);

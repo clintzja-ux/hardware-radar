@@ -1,24 +1,14 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { reviewAtlasExpansionBatch } from "../AtlasBatchLifecycleReview.js";
+import { loadHistoricalAtlasSnapshot } from "./fixtures/HistoricalAtlasGitFixtures.mjs";
 
-const manifest = JSON.parse(await readFile(new URL("../atlas-manifest.json", import.meta.url), "utf8"));
-const load = async entries => Promise.all(entries.map(async entry => JSON.parse(await readFile(new URL(`../${entry.path}`, import.meta.url), "utf8"))));
-const canonicalProducts = await load(manifest.products);
-const brands = await load(manifest.brands);
+const beforeActivation = loadHistoricalAtlasSnapshot("0f6b3631ea82743b06c545b125e7c9fb4953e8c8");
+const afterActivation = loadHistoricalAtlasSnapshot("6a5a41b25534ddc075a67145efd8f19f2a1c4175");
+const canonicalProducts = afterActivation.products;
+const brands = beforeActivation.brands;
 const audit = JSON.parse(await readFile(new URL("../reviews/atlas-activation-001.json", import.meta.url), "utf8"));
-const products = structuredClone(canonicalProducts);
-for (const product of products.filter(item => item.identity.createdBy === "system:atlas-ram-expansion-002")) {
-    product.identity.recordRevision -= 1;
-    product.identity.updatedAt = product.identity.createdAt;
-    product.identity.updatedBy = product.identity.createdBy;
-    product.governance.lifecycleStatus = "DRAFT";
-    product.governance.publicationStatus = "PENDING";
-    product.governance.humanReviewRequired = true;
-    product.governance.reviewedBy = null;
-    product.governance.reviewedAt = null;
-    product.governance.changeReason = "ATLAS-RAM-EXPANSION-002 manufacturer-verified workbook admission; lifecycle activation requires separate review.";
-}
+const products = structuredClone(beforeActivation.products);
 const before = structuredClone(products);
 const input = { products, brands, reviewedBy: "human:Clinton_Ramsook", reviewedAt: "2026-09-04T18:00:00.000Z", reason: "ATLAS-ACTIVATION-001 authorized manufacturer-verified batch lifecycle review; no acquisition, market, price, or publication authority implied." };
 const result = reviewAtlasExpansionBatch(input);

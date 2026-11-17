@@ -14,6 +14,7 @@ import {
     createB002ActivationFixture
 } from "./fixtures/B002RamLaunchCohortActivationFixtures.mjs";
 import { ATLAS_PRE_EXPANSION_PRODUCT_IDS } from "../AtlasPreExpansionLifecycleReview.js";
+import { loadHistoricalAtlasSnapshot } from "./fixtures/HistoricalAtlasGitFixtures.mjs";
 
 const manifestUrl = new URL("../atlas-manifest.json", import.meta.url);
 const anchorUrl = new URL("../products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json", import.meta.url);
@@ -24,6 +25,8 @@ const records = D002_RAM_LAUNCH_CANDIDATES.map(({ record }) => record);
 const canonicalRecords = await Promise.all(manifest.products.map(async ({ path }) =>
     JSON.parse(await readFile(fileURLToPath(new URL(`../${path}`, import.meta.url)), "utf8"))
 ));
+const admittedSnapshot = loadHistoricalAtlasSnapshot("149d4fa44f2adf586379cd03e785b781ea193d8d");
+const admittedRecords = admittedSnapshot.products;
 const canonicalProductFiles = (await readdir(
     fileURLToPath(new URL("../products/ram/", import.meta.url)),
     { recursive: true }
@@ -37,7 +40,7 @@ assert.equal(canonicalRecords.length, manifest.counts.products);
 assert.equal(canonicalProductFiles.length, manifest.counts.products, "Every canonical RAM product file must be registered exactly once.");
 assert.equal(canonicalRecords[0].identity.atlasProductId, manifest.products[0].atlasProductId);
 for (const fixture of records) {
-    const canonical = canonicalRecords.find(
+    const canonical = admittedRecords.find(
         ({ identity }) => identity.atlasProductId === fixture.identity.atlasProductId
     );
     assert.ok(canonical, `Missing admitted product ${fixture.identity.atlasProductId}.`);
