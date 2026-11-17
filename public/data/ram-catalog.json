@@ -947,8 +947,11 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "PROFILE_INCLUDED"
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 30,
+      "primaryTimings": "30-38-38-96",
+      "ratedVoltage": 1.35
     },
     {
       "atlasProductId": "ram_g_skill_f5_6000j3636f16gx2_fx5",
@@ -1506,8 +1509,10 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN",
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 36,
+      "primaryTimings": "36-44-44-90",
       "ratedVoltage": 1.35
     },
     {
@@ -1527,8 +1532,10 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN",
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 36,
+      "primaryTimings": "36-44-44-90",
       "ratedVoltage": 1.35
     },
     {
@@ -1548,8 +1555,10 @@
       "dataRateMtps": 6400,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN",
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 32,
+      "primaryTimings": "32-39-39-80",
       "ratedVoltage": 1.4
     },
     {
@@ -1592,8 +1601,10 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN",
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 30,
+      "primaryTimings": "30-36-36-80",
       "ratedVoltage": 1.4
     },
     {
@@ -1613,8 +1624,10 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN",
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 30,
+      "primaryTimings": "30-36-36-80",
       "ratedVoltage": 1.4
     },
     {
@@ -1634,8 +1647,10 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN",
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 36,
+      "primaryTimings": "36-44-44-90",
       "ratedVoltage": 1.35
     },
     {
@@ -1699,8 +1714,10 @@
       "dataRateMtps": 6400,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN",
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 32,
+      "primaryTimings": "32-39-39-80",
       "ratedVoltage": 1.4
     },
     {
@@ -1930,8 +1947,8 @@
       "dataRateMtps": 6400,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED"
     },
     {
       "atlasProductId": "ram_klevv_kd5bgua80_60a300h",
@@ -1950,8 +1967,8 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED"
     },
     {
       "atlasProductId": "ram_klevv_kd5agsa80_48g400a",
@@ -2138,8 +2155,8 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED"
     },
     {
       "atlasProductId": "ram_klevv_kd5agu880_60a300l",
@@ -2158,8 +2175,8 @@
       "dataRateMtps": 6000,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED"
     },
     {
       "atlasProductId": "ram_lexar_ld5ds016g_b4800gsst",
@@ -2305,7 +2322,10 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "casLatency": 22,
+      "primaryTimings": "22-22-22-52",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_lexar_ld4as032g_b3200gsst",
@@ -2345,7 +2365,10 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "casLatency": 22,
+      "primaryTimings": "22-22-22-52",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_lexar_ld4s32g32c22st_hgn",
@@ -2365,7 +2388,10 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "casLatency": 22,
+      "primaryTimings": "22-22-22-52",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_patriot_psd416g24002s",
