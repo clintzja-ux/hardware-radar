@@ -12,6 +12,9 @@ import {
     createB002ActivationFixture
 } from "./fixtures/B002RamLaunchCohortActivationFixtures.mjs";
 import { ATLAS_PRE_EXPANSION_PRODUCT_IDS } from "../AtlasPreExpansionLifecycleReview.js";
+import { loadHistoricalAtlasSnapshot } from "./fixtures/HistoricalAtlasGitFixtures.mjs";
+
+const B002_ACTIVATION_REVISION = "0bbee6e92ffced38bb12571217f6a97135976936";
 
 const manifest = JSON.parse(await readFile(new URL("../atlas-manifest.json", import.meta.url), "utf8"));
 const readManifestRecords = async (entries) => Promise.all(entries.map(async ({ path }) =>
@@ -22,6 +25,8 @@ const brands = await readManifestRecords(manifest.brands);
 const categories = await readManifestRecords(manifest.categories);
 const retailers = await readManifestRecords(manifest.retailers);
 const canonicalById = new Map(canonicalProducts.map((product) => [product.identity.atlasProductId, product]));
+const historicalSnapshot = loadHistoricalAtlasSnapshot(B002_ACTIVATION_REVISION);
+const historicalById = new Map(historicalSnapshot.products.map((product) => [product.identity.atlasProductId, product]));
 const d002ById = new Map(D002_RAM_LAUNCH_CANDIDATES.map(({ record }) => [record.identity.atlasProductId, record]));
 const anchorId = "ram_corsair_cmk32gx5m2b6000z30";
 const anchorUrl = new URL("../products/ram/ddr5/HR-RAM-DDR5-000001-corsair-vengeance-32gb-6000-cl30.json", import.meta.url);
@@ -37,7 +42,7 @@ assert.equal(
 );
 
 for (const atlasProductId of B002_ACTIVATION_PRODUCT_IDS) {
-    const canonical = canonicalById.get(atlasProductId);
+    const canonical = historicalById.get(atlasProductId);
     const preTransition = d002ById.get(atlasProductId);
     assert.ok(canonical, `Missing canonical B-002A product ${atlasProductId}.`);
     assert.ok(preTransition, `Missing D-002 source fixture ${atlasProductId}.`);
@@ -71,7 +76,7 @@ for (const atlasProductId of B002_ACTIVATION_PRODUCT_IDS) {
 for (const [atlasProductId, preTransition] of d002ById) {
     if (B002_ACTIVATION_PRODUCT_IDS.includes(atlasProductId) || ATLAS_PRE_EXPANSION_PRODUCT_IDS.includes(atlasProductId)) continue;
     assert.deepEqual(
-        canonicalById.get(atlasProductId),
+        historicalById.get(atlasProductId),
         preTransition,
         `Out-of-batch product ${atlasProductId} must remain unchanged from D-002B.`
     );
@@ -97,7 +102,7 @@ function assertNoDownstreamAuthority(value, path = "$") {
         assertNoDownstreamAuthority(child, `${path}.${key}`);
     }
 }
-B002_ACTIVATION_PRODUCT_IDS.forEach((atlasProductId) => assertNoDownstreamAuthority(canonicalById.get(atlasProductId)));
+B002_ACTIVATION_PRODUCT_IDS.forEach((atlasProductId) => assertNoDownstreamAuthority(historicalById.get(atlasProductId)));
 
 assert.throws(
     () => createB002ActivationFixture(canonicalById.get(anchorId)),

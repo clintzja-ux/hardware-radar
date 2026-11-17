@@ -3,11 +3,11 @@
     "atlasProductId": "ram_g_skill_f4_3200c16d_32gvk",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 2,
+    "recordRevision": 3,
     "createdAt": "2026-09-01T00:00:00Z",
-    "updatedAt": "2026-09-01T16:18:29.377Z",
+    "updatedAt": "2026-11-17T00:00:00.000Z",
     "createdBy": "system:d002-fixture-certification",
-    "updatedBy": "human:Clinton_Ramsook",
+    "updatedBy": "system:atlas-spec-enrichment-batch-002",
     "brand": "G.SKILL",
     "manufacturer": "G.SKILL",
     "productFamily": "Ripjaws V",
@@ -30,8 +30,8 @@
     "humanReviewRequired": false,
     "reviewedBy": "human:Clinton_Ramsook",
     "reviewedAt": "2026-09-01T16:18:29.377Z",
-    "changeReason": "B-002A authorized lifecycle activation for the representative Mercury launch cohort; no market or publication authority implied.",
-    "supersedesRevision": null,
+    "changeReason": "ATLAS_SPEC_ENRICHMENT_BATCH_002 manufacturer-verified exact-SKU profile and voltage enrichment; no acquisition, market, price, or publication authority implied.",
+    "supersedesRevision": 2,
     "archivalReason": null,
     "launchDate": null,
     "discontinuedDate": null,
@@ -82,6 +82,17 @@
       ],
       "extension.data.performance": [
         {
+          "sourceId": "SRC-MFG-G-SKILL-F4-3200C16D-32GVK-PROFILE-B002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/cn/specification/204/218/1536110922/F4-3200C16D-32GVK-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-17T00:00:00Z",
+          "verifiedBy": "system:atlas-spec-enrichment-batch-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED_EXACT_MPN: Exact 32GB kit page documents Intel XMP 2.0 and tested voltage 1.35V."
+        },
+        {
           "sourceId": "SRC-MFG-G-SKILL-F4-3200C16D-32GVK-D002",
           "sourceType": "MANUFACTURER_PRODUCT_PAGE",
           "sourceLocator": "https://www.gskill.com/tw/specification/203/217/1536110922/F4-3200C16D-32GVK-Specification",
@@ -92,13 +103,26 @@
           "verificationStatus": "VERIFIED",
           "notes": "Manufacturer-controlled identity and specification evidence carried forward from D-001/D-001A research."
         }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-G-SKILL-F4-3200C16D-32GVK-VOLTAGE-B002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/cn/specification/204/218/1536110922/F4-3200C16D-32GVK-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-17T00:00:00Z",
+          "verifiedBy": "system:atlas-spec-enrichment-batch-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED_EXACT_MPN: Exact 32GB kit page documents tested voltage 1.35V."
+        }
       ]
     }
   },
   "validation": {
     "errors": [],
     "warnings": [],
-    "validatedAt": "2026-09-01T00:00:00Z",
+    "validatedAt": "2026-11-17T00:00:00.000Z",
     "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
   },
   "extension": {
@@ -134,7 +158,7 @@
         "tRp": 18,
         "tRas": 38,
         "primaryTimings": "16-18-18-38",
-        "xmpSupport": "UNKNOWN",
+        "xmpSupport": "PROFILE_INCLUDED",
         "expoSupport": "NONE",
         "jedecProfiles": [],
         "overclockProfiles": [],
@@ -143,7 +167,7 @@
         "bandwidthGbps": 25.6
       },
       "electrical": {
-        "ratedVoltage": null,
+        "ratedVoltage": 1.35,
         "baseVoltage": null,
         "pmicLocation": "UNKNOWN",
         "powerManagementNotes": null

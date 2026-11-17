@@ -3,11 +3,11 @@
     "atlasProductId": "ram_corsair_cmh64gx5m2d5600z40",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 2,
+    "recordRevision": 3,
     "createdAt": "2026-09-04T00:00:00Z",
-    "updatedAt": "2026-09-04T18:00:00.000Z",
+    "updatedAt": "2026-11-17T00:00:00.000Z",
     "createdBy": "system:atlas-ram-expansion-002",
-    "updatedBy": "human:Clinton_Ramsook",
+    "updatedBy": "system:atlas-spec-enrichment-batch-002",
     "brand": "Corsair",
     "manufacturer": "Corsair Gaming, Inc.",
     "productFamily": "Vengeance RGB",
@@ -30,8 +30,8 @@
     "humanReviewRequired": false,
     "reviewedBy": "human:Clinton_Ramsook",
     "reviewedAt": "2026-09-04T18:00:00.000Z",
-    "changeReason": "ATLAS-ACTIVATION-001 authorized manufacturer-verified batch lifecycle review; no acquisition, market, price, or publication authority implied.",
-    "supersedesRevision": null,
+    "changeReason": "ATLAS_SPEC_ENRICHMENT_BATCH_002 manufacturer-verified exact-SKU profile enrichment; no acquisition, market, price, or publication authority implied.",
+    "supersedesRevision": 2,
     "archivalReason": null,
     "launchDate": null,
     "discontinuedDate": null,
@@ -95,6 +95,17 @@
       ],
       "extension.data.performance": [
         {
+          "sourceId": "SRC-MFG-CORSAIR-CMH64GX5M2D5600Z40-PROFILE-B002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/ww/en/p/memory/cmh64gx5m2d5600z40/vengeance-rgb-64gb-2x32gb-ddr5-dram-5600mt-s-cl40-memory-kit-grey-cmh64gx5m2d5600z40",
+          "publisher": "CORSAIR",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-17T00:00:00Z",
+          "verifiedBy": "system:atlas-spec-enrichment-batch-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED_EXACT_MPN: Exact 64GB kit page documents AMD EXPO and Intel XMP support."
+        },
+        {
           "sourceId": "SRC-MFG-CORSAIR-CMH64GX5M2D5600Z40-ARE002",
           "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
           "sourceLocator": "https://www.corsair.com/us/en/c/memory",
@@ -124,7 +135,7 @@
   "validation": {
     "errors": [],
     "warnings": [],
-    "validatedAt": "2026-09-04T00:00:00Z",
+    "validatedAt": "2026-11-17T00:00:00.000Z",
     "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
   },
   "extension": {
@@ -160,8 +171,8 @@
         "tRp": 44,
         "tRas": 90,
         "primaryTimings": "40-44-44-90",
-        "xmpSupport": "UNKNOWN",
-        "expoSupport": "UNKNOWN",
+        "xmpSupport": "PROFILE_INCLUDED",
+        "expoSupport": "PROFILE_INCLUDED",
         "jedecProfiles": [],
         "overclockProfiles": [],
         "testedSpeedMtps": null,
