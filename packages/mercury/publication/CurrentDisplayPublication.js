@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { RIGHTS_STATES } from "../rights/SourceRightsPolicy.js";
 import { assessCurrentDisplayItemPriceEligibility } from "../current-display/CurrentDisplayEligibility.js";
-import { createPublicCurrentRetailProjection, PUBLIC_CURRENT_RETAIL_POLICY } from "../current-display/PublicCurrentRetailProjection.js";
+import { createPublicCurrentRetailProjection, isPublicCurrentRetailOfferFresh, PUBLIC_CURRENT_RETAIL_POLICY } from "../current-display/PublicCurrentRetailProjection.js";
 import { CURRENT_DISPLAY_MULTI_OFFER_SCHEMA_VERSION } from "../current-display/CurrentDisplaySnapshot.js";
 
 export const CURRENT_DISPLAY_PUBLICATION_POLICY_VERSION = "CURRENT-DISPLAY-PUBLICATION-CANDIDATE-AUTHORIZATION-P1-1.0";
@@ -20,21 +20,24 @@ export function deriveCurrentDisplayPublicationEligibleSnapshot({snapshot,rights
   return freeze({...snapshot,offers:adjusted});
 }
 
-export function deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot,predecessorSnapshot,publishedProjection=null,continuityTransitions=[]}={}){
+export function deriveLegacySingleOfferPublicationCompatibilitySnapshot({eligibleSnapshot,predecessorSnapshot,publishedProjection=null,continuityTransitions=[],evaluatedAt=null}={}){
   if(eligibleSnapshot?.schemaVersion!==CURRENT_DISPLAY_MULTI_OFFER_SCHEMA_VERSION||!Array.isArray(eligibleSnapshot?.offers)||!Array.isArray(predecessorSnapshot?.offers))throw new TypeError("CURRENT_DISPLAY_PUBLICATION_COMPATIBILITY_INPUT_INVALID");
+  if(evaluatedAt!==null&&!Number.isFinite(Date.parse(evaluatedAt)))throw new TypeError("CURRENT_DISPLAY_PUBLICATION_COMPATIBILITY_TIME_INVALID");
   const priorIdentities=new Set(predecessorSnapshot.offers.map(offer=>offer.offerIdentity).filter(Boolean)),groups=new Map();
   for(const offer of eligibleSnapshot.offers){const key=`${offer.atlasProductId}:${offer.retailerId}`;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(offer);}
   const offers=[];
   for(const group of groups.values()){
-    if(group.length===1){offers.push(group[0]);continue;}
-    const retained=group.filter(offer=>priorIdentities.has(offer.offerIdentity));
-    if(retained.length===1){offers.push(retained[0]);continue;}
+    const fresh=evaluatedAt===null?group:group.filter(offer=>isPublicCurrentRetailOfferFresh({offer,asOf:evaluatedAt})),stale=evaluatedAt===null?[]:group.filter(offer=>!isPublicCurrentRetailOfferFresh({offer,asOf:evaluatedAt}));
+    if(fresh.length===0){offers.push(...stale);continue;}
+    if(fresh.length===1){offers.push(...stale,fresh[0]);continue;}
+    const retained=fresh.filter(offer=>priorIdentities.has(offer.offerIdentity));
+    if(evaluatedAt===null&&retained.length===1){offers.push(retained[0]);continue;}
     const publicOffers=(publishedProjection?.products??[]).flatMap(product=>product.offers??[]);
-    const direct=group.filter(offer=>publicOffers.some(value=>value.atlasProductId===offer.atlasProductId&&value.retailerId===offer.retailerId&&value.destinationId===offer.destinationId&&value.itemPriceUsd===offer.priceUsd&&value.observedAt===offer.observedAt));
-    const transitioned=group.filter(offer=>continuityTransitions.some(value=>value?.offer?.offerIdentity===offer.offerIdentity&&publicOffers.some(publicOffer=>value?.priorOffer?.atlasProductId===publicOffer.atlasProductId&&value.priorOffer.retailerId===publicOffer.retailerId&&value.priorOffer.destinationId===publicOffer.destinationId&&value.priorOffer.priceUsd===publicOffer.itemPriceUsd&&value.priorOffer.observedAt===publicOffer.observedAt)));
-    const continuity=[...new Map([...direct,...transitioned].map(offer=>[offer.offerIdentity,offer])).values()];
+    const direct=fresh.filter(offer=>publicOffers.some(value=>value.atlasProductId===offer.atlasProductId&&value.retailerId===offer.retailerId&&value.destinationId===offer.destinationId&&value.itemPriceUsd===offer.priceUsd&&value.observedAt===offer.observedAt));
+    const transitioned=fresh.filter(offer=>continuityTransitions.some(value=>value?.offer?.offerIdentity===offer.offerIdentity&&publicOffers.some(publicOffer=>value?.priorOffer?.atlasProductId===publicOffer.atlasProductId&&value.priorOffer.retailerId===publicOffer.retailerId&&value.priorOffer.destinationId===publicOffer.destinationId&&value.priorOffer.priceUsd===publicOffer.itemPriceUsd&&value.priorOffer.observedAt===publicOffer.observedAt)));
+    const continuityCandidates=evaluatedAt===null?[...direct,...transitioned]:[...retained,...direct,...transitioned],continuity=[...new Map(continuityCandidates.map(offer=>[offer.offerIdentity,offer])).values()];
     if(continuity.length!==1)throw new Error("CURRENT_DISPLAY_PUBLICATION_SELECTION_POLICY_REQUIRED");
-    offers.push(continuity[0]);
+    offers.push(...stale,continuity[0]);
   }
   return freeze({...eligibleSnapshot,offers:offers.sort((a,b)=>a.atlasProductId.localeCompare(b.atlasProductId)||a.retailer.localeCompare(b.retailer)||a.offerIdentity.localeCompare(b.offerIdentity))});
 }

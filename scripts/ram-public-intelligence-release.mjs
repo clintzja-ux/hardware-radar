@@ -25,6 +25,7 @@ const canonicalText = value => `${JSON.stringify(value, null, 2)}\n`;
 const sha = text => createHash("sha256").update(text.replaceAll("\r\n", "\n"), "utf8").digest("hex");
 const stateRoot = path.resolve(argv.get("state-root") || ".forge-review");
 const portfolioRoot = path.resolve(argv.get("portfolio-root") || path.join(stateRoot, "publication", "ram-intelligence"));
+const continuityManifestArgument = argv.get("continuity-manifest");
 const candidateDirectory = id => path.join(portfolioRoot, id);
 const fileNames = { catalog: "ram-catalog.json", current: "ram-current-retail.json", terminal: "ram-terminal.json", staleCurrent: "ram-current-retail-stale.json", staleTerminal: "ram-terminal-stale.json", chronology: "ram-chronology.json", destinations: "retailer-destinations.json" };
 
@@ -41,10 +42,11 @@ async function canonicalInputs(asOf) {
   const currentState = await new FileCurrentDisplaySnapshotRepository({ statePath: currentStatePath }).getState();
   const snapshot = currentState.current ? { ...currentState.current, offers: currentState.current.offers.filter(offer => offer?.sourceIdentity?.sourceId) } : null;
   const eligibleSnapshot = snapshot ? deriveCurrentDisplayPublicationEligibleSnapshot({ snapshot, rightsRegistry: defaultSourceRightsRegistry }) : null;
-  let publishedProjection = null; try { publishedProjection = (await loadStaticPublicationContinuityProjection({ manifestPath: path.join(root, "config/publication-release.json") })).projection; } catch {}
+  if(typeof continuityManifestArgument!=="string"||!continuityManifestArgument.trim()||!path.isAbsolute(continuityManifestArgument))throw new Error("PUBLICATION_CONTINUITY_MANIFEST_REQUIRED");
+  let publishedProjection;try{publishedProjection=(await loadStaticPublicationContinuityProjection({manifestPath:path.resolve(continuityManifestArgument)})).projection;}catch(error){throw Object.assign(new Error("PUBLICATION_CONTINUITY_MANIFEST_INVALID"),{cause:error});}
   const continuityRoot=path.join(stateRoot,"mercury/rakuten-full-current-refresh"),continuityTransitions=[];
   try { for(const file of await readdir(continuityRoot)){if(!file.startsWith("mer_rakutenfullprep_")||!file.endsWith(".json"))continue;const preparation=await json(path.join(continuityRoot,file));for(const member of preparation.members??[])if(member?.priorOffer&&member?.offer)continuityTransitions.push({priorOffer:member.priorOffer,offer:member.offer});} } catch {}
-  const publicationSnapshot = eligibleSnapshot && currentState.previous ? deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot, predecessorSnapshot: currentState.previous, publishedProjection, continuityTransitions }) : eligibleSnapshot;
+  const publicationSnapshot = eligibleSnapshot && currentState.previous ? deriveLegacySingleOfferPublicationCompatibilitySnapshot({ eligibleSnapshot, predecessorSnapshot: currentState.previous, publishedProjection, continuityTransitions, evaluatedAt: asOf }) : eligibleSnapshot;
   const current = publicationSnapshot ? createPublicCurrentRetailProjection({ products, retailers, destinations, currentSnapshot: publicationSnapshot, asOf }) : createEmptyPublicCurrentRetailProjection({ asOf });
   const staleCurrent = createEmptyPublicCurrentRetailProjection({ asOf, state: "NO_QUALIFYING_CURRENT_PRICE" });
   const rawHistoryPath = path.join(stateRoot, "mercury/historical-observations.json");

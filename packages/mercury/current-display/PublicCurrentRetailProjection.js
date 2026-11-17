@@ -11,6 +11,12 @@ const HOUR_MS = 60 * 60 * 1000;
 const SCOPES = Object.freeze(["overall", "ddr5", "ddr4", "laptop"]);
 const freeze = value => { if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) freeze(child); } return value; };
 const validTime = value => typeof value === "string" && Number.isFinite(Date.parse(value));
+export const publicCurrentRetailOfferFreshnessMaximumAgeHours = offer => offer?.sourceIdentity?.sourceId === "AMAZON_MANUAL_PUBLISHER_OBSERVATION" ? 24 : PUBLIC_CURRENT_RETAIL_POLICY.maxAgeHours;
+export const isPublicCurrentRetailOfferFresh = ({ offer, asOf } = {}) => {
+    if (!validTime(asOf) || !validTime(offer?.observedAt)) return false;
+    const ageMs = Date.parse(asOf) - Date.parse(offer.observedAt);
+    return ageMs >= 0 && ageMs <= publicCurrentRetailOfferFreshnessMaximumAgeHours(offer) * HOUR_MS;
+};
 const activeProduct = product => product?.identity?.productType === "ram" && product?.governance?.lifecycleStatus === "ACTIVE" && product?.governance?.publicationStatus === "READY";
 const activeRetailer = retailer => retailer?.status === "active";
 const classification = product => product?.extension?.data?.classification ?? {};
@@ -32,7 +38,7 @@ const marketplaceComparable = offer => offer.deliveredCostEligible === true || (
 
 function publicOffer({ offer, product, retailer, destination, asOf }) {
     const ageHours = (Date.parse(asOf) - Date.parse(offer.observedAt)) / HOUR_MS;
-    const freshnessMaximumAgeHours = offer?.sourceIdentity?.sourceId === "AMAZON_MANUAL_PUBLISHER_OBSERVATION" ? 24 : PUBLIC_CURRENT_RETAIL_POLICY.maxAgeHours;
+    const freshnessMaximumAgeHours = publicCurrentRetailOfferFreshnessMaximumAgeHours(offer);
     return {
         atlasProductId: product.identity.atlasProductId,
         brand: product.identity.brand,
@@ -105,9 +111,8 @@ export function createPublicCurrentRetailProjection({ products, retailers, desti
             || destination.atlasProductId !== offer.atlasProductId || destination.retailerId !== offer.retailerId
             || !validTime(offer.observedAt) || !Number.isFinite(offer.priceUsd) || offer.priceUsd <= 0 || offer.currency !== "USD") continue;
         const ageMs = Date.parse(asOf) - Date.parse(offer.observedAt);
-        const maximumAgeHours = offer?.sourceIdentity?.sourceId === "AMAZON_MANUAL_PUBLISHER_OBSERVATION" ? 24 : PUBLIC_CURRENT_RETAIL_POLICY.maxAgeHours;
         if (ageMs < 0) continue;
-        if (ageMs > maximumAgeHours * HOUR_MS) { staleOffers += 1; continue; }
+        if (!isPublicCurrentRetailOfferFresh({offer,asOf})) { staleOffers += 1; continue; }
         eligible.push(publicOffer({ offer, product, retailer, destination, asOf }));
     }
     eligible.sort(orderOffers);
