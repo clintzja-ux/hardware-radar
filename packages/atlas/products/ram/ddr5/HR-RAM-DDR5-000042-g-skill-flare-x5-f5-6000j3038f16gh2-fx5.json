@@ -3,11 +3,11 @@
     "atlasProductId": "ram_g_skill_f5_6000j3038f16gh2_fx5",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 2,
+    "recordRevision": 3,
     "createdAt": "2026-09-04T00:00:00Z",
-    "updatedAt": "2026-09-04T18:00:00.000Z",
+    "updatedAt": "2026-11-17T00:00:00.000Z",
     "createdBy": "system:atlas-ram-expansion-002",
-    "updatedBy": "human:Clinton_Ramsook",
+    "updatedBy": "system:atlas-spec-enrichment-batch-002",
     "brand": "G.SKILL",
     "manufacturer": "G.SKILL International Enterprise Co., Ltd.",
     "productFamily": "Flare X5",
@@ -30,8 +30,8 @@
     "humanReviewRequired": false,
     "reviewedBy": "human:Clinton_Ramsook",
     "reviewedAt": "2026-09-04T18:00:00.000Z",
-    "changeReason": "ATLAS-ACTIVATION-001 authorized manufacturer-verified batch lifecycle review; no acquisition, market, price, or publication authority implied.",
-    "supersedesRevision": null,
+    "changeReason": "ATLAS_SPEC_ENRICHMENT_BATCH_002 manufacturer-verified exact-SKU profile enrichment; no acquisition, market, price, or publication authority implied.",
+    "supersedesRevision": 2,
     "archivalReason": null,
     "launchDate": null,
     "discontinuedDate": null,
@@ -95,6 +95,17 @@
       ],
       "extension.data.performance": [
         {
+          "sourceId": "SRC-MFG-G-SKILL-F5-6000J3038F16GH2-FX5-PROFILE-B002",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/165/396/1765260340/F5-6000J3038F16GH2-FX5-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-17T00:00:00Z",
+          "verifiedBy": "system:atlas-spec-enrichment-batch-002",
+          "verificationStatus": "VERIFIED",
+          "notes": "VERIFIED_EXACT_MPN: Exact 32GB kit page documents AMD EXPO, 6000 MT/s, 30-38-38-96, and 1.35V. XMP remains UNKNOWN."
+        },
+        {
           "sourceId": "SRC-MFG-G-SKILL-F5-6000J3038F16GH2-FX5-ARE002",
           "sourceType": "MANUFACTURER_CATALOG_OR_LOOKUP",
           "sourceLocator": "https://www.gskill.com/",
@@ -124,7 +135,7 @@
   "validation": {
     "errors": [],
     "warnings": [],
-    "validatedAt": "2026-09-04T00:00:00Z",
+    "validatedAt": "2026-11-17T00:00:00.000Z",
     "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
   },
   "extension": {
@@ -161,7 +172,7 @@
         "tRas": 96,
         "primaryTimings": "30-38-38-96",
         "xmpSupport": "UNKNOWN",
-        "expoSupport": "UNKNOWN",
+        "expoSupport": "PROFILE_INCLUDED",
         "jedecProfiles": [],
         "overclockProfiles": [],
         "testedSpeedMtps": null,
