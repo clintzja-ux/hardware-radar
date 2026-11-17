@@ -310,6 +310,7 @@ const testModules = [
     ,"./PublicCurrentRetailProjection.test.mjs"
     ,"./RamTerminalPublicIntelligence.test.mjs"
     ,"./CurrentDisplayPublicationMultiOfferCompatibility.test.mjs"
+    ,"./CurrentDisplayPublicationFreshnessContinuity.test.mjs"
     ,"./RamMarketSnapshotProjection.test.mjs"
     ,"./PublicChronologicalPriceSeries.test.mjs"
     ,"./ManualCurrentPriceQualification.test.mjs"
