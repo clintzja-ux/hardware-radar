@@ -3,14 +3,14 @@ import { promisify } from "node:util";
 import path from "node:path";
 import { CertifiedCandidateReleasePromotionOwner } from "./CertifiedCandidateReleasePromotion.js";
 import { FileLivePricePublicationAuthorizationRepository, GovernedLivePricePublicationCoordinator } from "./GovernedLivePricePublication.js";
-import { CloudflarePagesDeploymentObserver, GitHubAppReleaseGitOwner, PublicationRecoveryAdvancementApprovalService, PublicArtifactIntegrityVerifier } from "./ProductionUnattendedPublicationBindings.js";
-import { BoundedPreCheckpointPublicationDispositionCoordinator, BoundedPreCheckpointPublicationReconsiderationCoordinator, BoundedPrePushPublicationRecoveryCoordinator, UnattendedLivePricePublicationCoordinator } from "./UnattendedLivePricePublication.js";
+import { CloudflarePagesDeploymentObserver, GitHubAppReleaseGitOwner, ProductionPublishedRamPortfolioOwner, PublicationRecoveryAdvancementApprovalService, PublicArtifactIntegrityVerifier } from "./ProductionUnattendedPublicationBindings.js";
+import { BoundedPostDeploymentReconsiderationObservationRecoveryCoordinator, BoundedPreCheckpointPublicationDispositionCoordinator, BoundedPreCheckpointPublicationReconsiderationCoordinator, BoundedPrePushPublicationRecoveryCoordinator, UnattendedLivePricePublicationCoordinator } from "./UnattendedLivePricePublication.js";
 import { createPortableNpmRunner } from "../../../scripts/lib/portable-npm-runner.mjs";
 import { createGitHubAppInstallationTokenProviderFromEnvironment } from "./GitHubAppInstallationAuthentication.js";
 import { fileURLToPath } from "node:url";
 import { PublicationAuthorizationStateMigration } from "./PublicationAuthorizationStateMigration.js";
 
-export async function createProductionUnattendedPublicationCoordinator({runtimeRoot,evidenceRoot,workspaceRoot,publicOutputRoot,repository,candidateOwner,recovery=false,disposition=false,reconsideration=false,advancementApproval=false}={}) {
+export async function createProductionUnattendedPublicationCoordinator({runtimeRoot,evidenceRoot,workspaceRoot,publicOutputRoot,repository,candidateOwner,recovery=false,disposition=false,reconsideration=false,observationRecovery=false,advancementApproval=false}={}) {
   const roots={runtimeRoot,evidenceRoot,workspaceRoot,publicOutputRoot};
   for(const [name,value] of Object.entries(roots))if(typeof value!=="string"||!path.isAbsolute(value))throw new Error(`PUBLICATION_${name.replace(/[A-Z]/g,letter=>`_${letter}`).toUpperCase()}_INVALID`);
   if(path.resolve(publicOutputRoot)!==path.join(path.resolve(workspaceRoot),"public"))throw new Error("PUBLICATION_PUBLIC_OUTPUT_ROOT_CONFLICT");
@@ -25,6 +25,7 @@ export async function createProductionUnattendedPublicationCoordinator({runtimeR
   const askPassFile=process.platform==="win32"?"../../../scripts/lib/github-app-git-askpass.cmd":"../../../scripts/lib/github-app-git-askpass.mjs";
   const gitOwner=new GitHubAppReleaseGitOwner({runner:run,checkoutRoot:workspace,tokenProvider:createGitHubAppInstallationTokenProviderFromEnvironment(),askPassPath:fileURLToPath(new URL(askPassFile,import.meta.url))}), deploymentOwner=new CloudflarePagesDeploymentObserver({accountId:process.env.CLOUDFLARE_ACCOUNT_ID,projectName:process.env.CLOUDFLARE_PAGES_PROJECT_NAME,tokenProvider:async()=>process.env.CLOUDFLARE_API_TOKEN}), liveVerifier=new PublicArtifactIntegrityVerifier();
   if(advancementApproval)return new PublicationRecoveryAdvancementApprovalService({repository,gitOwner});
+  if(observationRecovery)return new BoundedPostDeploymentReconsiderationObservationRecoveryCoordinator({repository,candidateOwner,gitOwner,deploymentOwner,liveVerifier,portfolioOwner:new ProductionPublishedRamPortfolioOwner({checkoutRoot:workspace}),authorizationRepository:authorizations});
   if(reconsideration)return new BoundedPreCheckpointPublicationReconsiderationCoordinator({repository,candidateOwner,preparationOwner,gitOwner,deploymentOwner,liveVerifier,authorizationRepository:authorizations});
   if(disposition)return new BoundedPreCheckpointPublicationDispositionCoordinator({repository,candidateOwner,gitOwner,authorizationRepository:authorizations});
   if(recovery)return new BoundedPrePushPublicationRecoveryCoordinator({repository,candidateOwner,gitOwner,deploymentOwner,liveVerifier,authorizationRepository:authorizations});

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { createRecurringPublicationMandate, projectUnattendedPublicationHealth } from "./UnattendedLivePricePublication.js";
@@ -213,10 +213,25 @@ export class PublicArtifactIntegrityVerifier {
   }
 }
 
+export class ProductionPublishedRamPortfolioOwner {
+  constructor({ checkoutRoot } = {}) { if(!checkoutRoot)throw new Error("PUBLICATION_PORTFOLIO_CHECKOUT_REQUIRED");this.checkoutRoot=path.resolve(checkoutRoot); }
+  async _jsonFiles(directory){const output=[];for(const entry of await readdir(directory,{withFileTypes:true})){const resolved=path.join(directory,entry.name);if(entry.isDirectory())output.push(...await this._jsonFiles(resolved));else if(entry.isFile()&&entry.name.endsWith(".json"))output.push(resolved);}return output;}
+  async inspect({ commit, candidate } = {}) {
+    if(!commit||!candidate?.candidateId)throw new Error("PUBLICATION_PORTFOLIO_SCOPE_REQUIRED");
+    const catalogPath=path.join(this.checkoutRoot,"public","data","ram-catalog.json"),sitemapPath=path.join(this.checkoutRoot,"public","sitemap.xml"),catalog=JSON.parse(await readFile(catalogPath,"utf8"));
+    if(catalog?.productCount!==159||!Array.isArray(catalog.products)||catalog.products.length!==159)throw new Error("PUBLICATION_PORTFOLIO_PRODUCT_COUNT_INVALID");
+    const atlasFiles=await this._jsonFiles(path.join(this.checkoutRoot,"packages","atlas","products","ram")),batch=[];for(const file of atlasFiles){const record=JSON.parse(await readFile(file,"utf8"));if(record?.identity?.updatedBy==="system:atlas-spec-enrichment-batch-002")batch.push(record);}
+    if(batch.length!==22)throw new Error("PUBLICATION_PORTFOLIO_BATCH_002_COUNT_INVALID");const projected=new Map(catalog.products.map(value=>[value.atlasProductId,value]));
+    for(const record of batch){const actual=projected.get(record.identity.atlasProductId),data=record.extension?.data;if(!actual||actual.xmpSupport!==data?.performance?.xmpSupport||actual.expoSupport!==data?.performance?.expoSupport||actual.ratedVoltage!==data?.electrical?.ratedVoltage||actual.casLatency!==data?.performance?.casLatency||actual.primaryTimings!==data?.performance?.primaryTimings)throw new Error("PUBLICATION_PORTFOLIO_BATCH_002_SPECIFICATION_MISMATCH");}
+    const paths=["public/data/ram-catalog.json","public/sitemap.xml",...catalog.products.map(value=>`public${value.publicPath}index.html`)],publicArtifacts=[];for(const relativePath of paths){const bytes=await readFile(path.join(this.checkoutRoot,relativePath)),urlPath=relativePath.slice("public/".length).replace(/index\.html$/,"");publicArtifacts.push({relativePath,url:`https://cheapestram.com/${urlPath}`,sha256:sha256(bytes)});}
+    return freeze({commit,candidateId:candidate.candidateId,productCount:catalog.products.length,batch002SpecificationCount:batch.length,publicArtifacts,portfolioDigest:sha256(JSON.stringify(publicArtifacts.map(value=>({relativePath:value.relativePath,sha256:value.sha256}))))});
+  }
+}
+
 export class ProductionUnattendedPublicationCommand {
   constructor({ repository, mandateService, candidateOwner, coordinatorFactory, now = () => new Date().toISOString() } = {}) { Object.assign(this, { repository, mandateService, candidateOwner, coordinatorFactory, now }); }
-  async inspect() { const state = await this.mandateService.inspect(), candidate = await this.candidateOwner.discover(); const operation = candidate ? await this.repository.getOperation(candidate.candidateId) : null, mandate = state.mandates.find(item => item.status === "ENABLED") ?? null; return freeze({ status: "INSPECTED", candidate, health: projectUnattendedPublicationHealth({ mandate, operation, asOf: this.now() }), networkOperation: "NONE", actionExecuted: false }); }
-  async run({ mandateId }) { if (!mandateId) throw new Error("PUBLICATION_MANDATE_ID_REQUIRED"); const candidate=await this.candidateOwner.discover(),operation=candidate?await this.repository.getOperation(candidate.candidateId):null,coordinator=operation?.status==="DEPLOYMENT_PENDING"?await this.coordinatorFactory():null;if(operation?.status==="DEPLOYMENT_PENDING")return coordinator.continueObservation({mandateId,candidateId:candidate.candidateId});if(candidate?.alreadyDeployed)return freeze({status:"ALREADY_DEPLOYED_CANDIDATE",candidateId:candidate.candidateId,artifactId:candidate.artifactId,certificationId:candidate.certificationId,releaseId:candidate.releaseId,replay:true,authorityCreated:false,gitOperation:false,deploymentOperation:false,providerCalls:0,canonicalMarketMutation:false}); return (await this.coordinatorFactory()).run({ mandateId }); }
+  async inspect() { const state = await this.mandateService.inspect(), candidate = await this.candidateOwner.discover(); const operation = candidate ? await this.repository.getOperation(candidate.candidateId) : null, accepted=candidate&&this.repository.getAcceptedPublication?await this.repository.getAcceptedPublication(candidate.candidateId):null, mandate = state.mandates.find(item => item.status === "ENABLED") ?? null; return freeze({ status: "INSPECTED", candidate, acceptedPublication:accepted, health: projectUnattendedPublicationHealth({ mandate, operation:accepted??operation, asOf: this.now() }), networkOperation: "NONE", actionExecuted: false }); }
+  async run({ mandateId }) { if (!mandateId) throw new Error("PUBLICATION_MANDATE_ID_REQUIRED"); const candidate=await this.candidateOwner.discover(),accepted=candidate&&this.repository.getAcceptedPublication?await this.repository.getAcceptedPublication(candidate.candidateId):null,operation=candidate?await this.repository.getOperation(candidate.candidateId):null,coordinator=operation?.status==="DEPLOYMENT_PENDING"?await this.coordinatorFactory():null;if(accepted)return freeze({...accepted,replay:true,authorityCreated:false,gitOperation:false,deploymentOperation:false,providerCalls:0,canonicalMarketMutation:false});if(operation?.status==="DEPLOYMENT_PENDING")return coordinator.continueObservation({mandateId,candidateId:candidate.candidateId});if(candidate?.alreadyDeployed)return freeze({status:"ALREADY_DEPLOYED_CANDIDATE",candidateId:candidate.candidateId,artifactId:candidate.artifactId,certificationId:candidate.certificationId,releaseId:candidate.releaseId,replay:true,authorityCreated:false,gitOperation:false,deploymentOperation:false,providerCalls:0,canonicalMarketMutation:false}); return (await this.coordinatorFactory()).run({ mandateId }); }
   async observe({mandateId,candidateId}) { if(!mandateId||!candidateId)throw new Error("PUBLICATION_OBSERVATION_SCOPE_REQUIRED");const coordinator=await this.coordinatorFactory();return coordinator.observe({mandateId,candidateId}); }
   async inspectRecovery({mandateId,candidateId,checkpointCommit}) { const coordinator=await this.coordinatorFactory({recovery:true});if(!coordinator?.inspect)throw new Error("PUBLICATION_RECOVERY_OWNER_REQUIRED");return coordinator.inspect({mandateId,candidateId,checkpointCommit}); }
   async recover({mandateId,candidateId,checkpointCommit,confirmation}) { const coordinator=await this.coordinatorFactory({recovery:true});if(!coordinator?.recover)throw new Error("PUBLICATION_RECOVERY_OWNER_REQUIRED");return coordinator.recover({mandateId,candidateId,checkpointCommit,confirmation}); }
@@ -226,13 +241,15 @@ export class ProductionUnattendedPublicationCommand {
   async disposeFailedPreparation({candidateId,confirmation}) { const coordinator=await this.coordinatorFactory({disposition:true});if(!coordinator?.dispose)throw new Error("PUBLICATION_DISPOSITION_OWNER_REQUIRED");return coordinator.dispose({candidateId,confirmation}); }
   async inspectReconsideration({mandateId,candidateId}) { const coordinator=await this.coordinatorFactory({reconsideration:true});if(!coordinator?.inspect)throw new Error("PUBLICATION_RECONSIDERATION_OWNER_REQUIRED");return coordinator.inspect({mandateId,candidateId}); }
   async reconsiderFailedPreparation({mandateId,candidateId,confirmation}) { const coordinator=await this.coordinatorFactory({reconsideration:true});if(!coordinator?.run)throw new Error("PUBLICATION_RECONSIDERATION_OWNER_REQUIRED");return coordinator.run({mandateId,candidateId,confirmation}); }
+  async inspectReconsiderationObservationRecovery(input) { const coordinator=await this.coordinatorFactory({observationRecovery:true});if(!coordinator?.inspect)throw new Error("PUBLICATION_OBSERVATION_RECOVERY_OWNER_REQUIRED");return coordinator.inspect(input); }
+  async recoverReconsiderationObservation(input) { const coordinator=await this.coordinatorFactory({observationRecovery:true});if(!coordinator?.recover)throw new Error("PUBLICATION_OBSERVATION_RECOVERY_OWNER_REQUIRED");return coordinator.recover(input); }
 }
 
 export class ProductionForgeUnattendedPublicationProvider {
   constructor({ repository } = {}) { if (!repository) throw new Error("PUBLICATION_MANDATE_REPOSITORY_REQUIRED"); this.repository = repository; }
   async load({ asOf } = {}) {
     const state = await this.repository.inspect(), mandate = state.mandates.find(item => item.status === "ENABLED") ?? state.mandates.at(-1) ?? null;
-    const operations = [...state.operations].sort((left, right) => String(left.events?.at(-1)?.at ?? "").localeCompare(String(right.events?.at(-1)?.at ?? "")));
+    const operations = [...state.operations,...(state.recoveries??[]),...(state.reconsiderations??[])].sort((left, right) => String(left.acceptedAt??left.events?.at(-1)?.at ?? "").localeCompare(String(right.acceptedAt??right.events?.at(-1)?.at ?? "")));
     return projectUnattendedPublicationHealth({ mandate, operation: operations.at(-1) ?? null, asOf });
   }
 }
