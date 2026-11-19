@@ -186,8 +186,21 @@ assert.deepEqual(productRoutes, createRamProductSitemapRoutes(releasedProducts, 
 assert.equal(productRoutes.length, publicCatalog.productCount);
 for (const route of productRoutes) assert.equal((sitemap.match(new RegExp(`<loc>https://cheapestram\\.com${route.path}</loc>`, "g")) ?? []).length, 1);
 assert.doesNotMatch(sitemap, /<loc>[^<]+\.html<\/loc>/, "Sitemap must contain final HTTP-200 route identities, not redirecting .html aliases.");
-const changedRoutes = createRamProductSitemapRoutes(releasedProducts, { currentRetailByProduct: new Map([[releasedProducts[0].identity.atlasProductId, { offers: [{ observedAt: "2026-11-01T12:00:00.000Z" }] }]]) });
-assert.equal(changedRoutes.find(route => route.path === `/ram/${releasedProducts[0].identity.slug}/`).lastmod, "2026-11-01", "A meaningful published-offer change must advance lastmod.");
+const lastmodProductId = releasedProducts[0].identity.atlasProductId;
+const lastmodProduct = (updatedAt = "2026-11-10T00:00:00.000Z") => ({ ...releasedProducts[0], identity: { ...releasedProducts[0].identity, updatedAt } });
+const lastmod = ({ atlas = "2026-11-10T00:00:00.000Z", current = [], history = [] } = {}) => createRamProductSitemapRoutes(
+    [lastmodProduct(atlas)],
+    {
+        currentRetailByProduct: new Map([[lastmodProductId, { offers: current.map(observedAt => ({ observedAt })) }]]),
+        chronologicalSeriesByProduct: new Map([[lastmodProductId, { timestampGroups: history.map(observedAt => ({ observedAt })) }]])
+    }
+)[0].lastmod;
+assert.equal(lastmod({ atlas: "2026-11-17T00:00:00.000Z", current: ["2026-11-01T12:00:00.000Z"] }), "2026-11-17", "An older offer must not backdate newer Atlas modification evidence.");
+assert.equal(lastmod({ current: ["2026-11-18T12:00:00.000Z"] }), "2026-11-18", "A newer published Current offer must advance lastmod.");
+assert.equal(lastmod({ current: ["2026-11-12T12:00:00.000Z"], history: ["2026-11-19T12:00:00.000Z"] }), "2026-11-19", "A newer published History observation must advance lastmod.");
+assert.equal(lastmod({ atlas: "2026-11-18T01:00:00.000Z", current: ["2026-11-18T23:00:00.000Z"], history: ["2026-11-18T12:00:00.000Z"] }), "2026-11-18", "Same-day evidence must produce one stable calendar date.");
+assert.equal(lastmod({ current: ["invalid"], history: ["also-invalid"] }), "2026-11-10", "Invalid timestamps must not replace authoritative Atlas modification evidence.");
+assert.equal(lastmod({ current: ["2026-11-18T12:00:00.000Z"] }), lastmod({ current: ["2026-11-18T12:00:00.000Z"] }), "Repeated lastmod generation must be deterministic.");
 const ramChildRoutes = [...sitemap.matchAll(/<loc>https:\/\/cheapestram\.com(\/ram\/[^<]+\/)<\/loc>/g)].map((match) => match[1]);
 assert.equal(ramChildRoutes.filter((route) => !["/ram/compare/", "/ram/terminal/"].includes(route)).length, publicCatalog.productCount);
 

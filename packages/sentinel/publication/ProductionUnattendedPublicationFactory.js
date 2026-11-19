@@ -4,13 +4,13 @@ import path from "node:path";
 import { CertifiedCandidateReleasePromotionOwner } from "./CertifiedCandidateReleasePromotion.js";
 import { FileLivePricePublicationAuthorizationRepository, GovernedLivePricePublicationCoordinator } from "./GovernedLivePricePublication.js";
 import { CloudflarePagesDeploymentObserver, GitHubAppReleaseGitOwner, PublicArtifactIntegrityVerifier } from "./ProductionUnattendedPublicationBindings.js";
-import { BoundedPrePushPublicationRecoveryCoordinator, UnattendedLivePricePublicationCoordinator } from "./UnattendedLivePricePublication.js";
+import { BoundedPreCheckpointPublicationDispositionCoordinator, BoundedPreCheckpointPublicationReconsiderationCoordinator, BoundedPrePushPublicationRecoveryCoordinator, UnattendedLivePricePublicationCoordinator } from "./UnattendedLivePricePublication.js";
 import { createPortableNpmRunner } from "../../../scripts/lib/portable-npm-runner.mjs";
 import { createGitHubAppInstallationTokenProviderFromEnvironment } from "./GitHubAppInstallationAuthentication.js";
 import { fileURLToPath } from "node:url";
 import { PublicationAuthorizationStateMigration } from "./PublicationAuthorizationStateMigration.js";
 
-export async function createProductionUnattendedPublicationCoordinator({runtimeRoot,evidenceRoot,workspaceRoot,publicOutputRoot,repository,candidateOwner,recovery=false}={}) {
+export async function createProductionUnattendedPublicationCoordinator({runtimeRoot,evidenceRoot,workspaceRoot,publicOutputRoot,repository,candidateOwner,recovery=false,disposition=false,reconsideration=false}={}) {
   const roots={runtimeRoot,evidenceRoot,workspaceRoot,publicOutputRoot};
   for(const [name,value] of Object.entries(roots))if(typeof value!=="string"||!path.isAbsolute(value))throw new Error(`PUBLICATION_${name.replace(/[A-Z]/g,letter=>`_${letter}`).toUpperCase()}_INVALID`);
   if(path.resolve(publicOutputRoot)!==path.join(path.resolve(workspaceRoot),"public"))throw new Error("PUBLICATION_PUBLIC_OUTPUT_ROOT_CONFLICT");
@@ -24,6 +24,8 @@ export async function createProductionUnattendedPublicationCoordinator({runtimeR
   const preparationOwner={prepare:({candidate,child,originalCleanCheckout})=>new CertifiedCandidateReleasePromotionOwner({recurringAuthorityRepository:repository,publicationAuthorizationRepository:authorizations,preparationOwner:governed}).prepare({candidate,child,originalCleanCheckout,checkoutRoot:workspace,candidateDirectory:path.join(candidateOwner.artifactRoot,candidate.candidateId)})};
   const askPassFile=process.platform==="win32"?"../../../scripts/lib/github-app-git-askpass.cmd":"../../../scripts/lib/github-app-git-askpass.mjs";
   const gitOwner=new GitHubAppReleaseGitOwner({runner:run,checkoutRoot:workspace,tokenProvider:createGitHubAppInstallationTokenProviderFromEnvironment(),askPassPath:fileURLToPath(new URL(askPassFile,import.meta.url))}), deploymentOwner=new CloudflarePagesDeploymentObserver({accountId:process.env.CLOUDFLARE_ACCOUNT_ID,projectName:process.env.CLOUDFLARE_PAGES_PROJECT_NAME,tokenProvider:async()=>process.env.CLOUDFLARE_API_TOKEN}), liveVerifier=new PublicArtifactIntegrityVerifier();
+  if(reconsideration)return new BoundedPreCheckpointPublicationReconsiderationCoordinator({repository,candidateOwner,preparationOwner,gitOwner,deploymentOwner,liveVerifier,authorizationRepository:authorizations});
+  if(disposition)return new BoundedPreCheckpointPublicationDispositionCoordinator({repository,candidateOwner,gitOwner,authorizationRepository:authorizations});
   if(recovery)return new BoundedPrePushPublicationRecoveryCoordinator({repository,candidateOwner,gitOwner,deploymentOwner,liveVerifier,authorizationRepository:authorizations});
   return new UnattendedLivePricePublicationCoordinator({repository,candidateOwner,preparationOwner,gitOwner,deploymentOwner,liveVerifier,authorizationRepository:authorizations});
 }
