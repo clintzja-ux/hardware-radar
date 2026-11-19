@@ -82,6 +82,25 @@ export class GitHubAppReleaseGitOwner {
     const changedPaths=status.stdout.split(/\r?\n/).filter(Boolean).map(line=>line.slice(3).replace(/^"|"$/g,""));
     return freeze({ clean: changedPaths.length===0, changedPaths, localCommit: local.stdout.trim(), remoteCommit: remote.stdout.trim() });
   }
+  async inspectFailedPreparationWorkspace({expectedPredecessor,authorizedPaths,allowClean=false}={}) {
+    const [status,local,remote]=await Promise.all([this.runner("git",["status","--porcelain=v1","--untracked-files=all"],this.checkoutRoot),this.runner("git",["rev-parse","HEAD"],this.checkoutRoot),this._remote(["ls-remote","origin","refs/heads/main"])]),localCommit=local.stdout.trim(),remoteCommit=remote.stdout.trim().split(/\s+/)[0];
+    if(localCommit!==expectedPredecessor||remoteCommit!==expectedPredecessor)throw new Error("PUBLICATION_DISPOSITION_PREDECESSOR_CONFLICT");
+    const entries=status.stdout.split(/\r?\n/).filter(Boolean).map(line=>({status:line.slice(0,2),path:line.slice(3).replace(/^"|"$/g,"").replaceAll("\\","/")})).sort((a,b)=>a.path.localeCompare(b.path));
+    if(entries.some(entry=>![" M","??"].includes(entry.status)))throw new Error("PUBLICATION_DISPOSITION_WORKSPACE_STATE_AMBIGUOUS");
+    const changedPaths=entries.map(entry=>entry.path),inventory=createPricePublicationGeneratedPathInventory({changedPaths,authorizedPaths});
+    if((!entries.length&&!allowClean)||!inventory.valid)throw new Error("PUBLICATION_DISPOSITION_PATHS_INVALID");
+    return freeze({clean:entries.length===0,localCommit,remoteCommit,entries,changedPaths,workspaceDigest:sha256(JSON.stringify({localCommit,remoteCommit,entries}))});
+  }
+  async restoreFailedPreparationWorkspace({expectedPredecessor,expectedEntries,authorizedPaths}={}) {
+    const inspected=await this.inspectFailedPreparationWorkspace({expectedPredecessor,authorizedPaths});
+    if(JSON.stringify(inspected.entries)!==JSON.stringify(expectedEntries))throw new Error("PUBLICATION_DISPOSITION_WORKSPACE_CHANGED");
+    const tracked=expectedEntries.filter(entry=>entry.status===" M").map(entry=>entry.path),untracked=expectedEntries.filter(entry=>entry.status==="??").map(entry=>entry.path);
+    if(tracked.length)await this.runner("git",["restore",`--source=${expectedPredecessor}`,"--worktree","--",...tracked],this.checkoutRoot);
+    if(untracked.length)await this.runner("git",["clean","-f","--",...untracked],this.checkoutRoot);
+    const [status,local,remote]=await Promise.all([this.runner("git",["status","--porcelain=v1","--untracked-files=all"],this.checkoutRoot),this.runner("git",["rev-parse","HEAD"],this.checkoutRoot),this._remote(["ls-remote","origin","refs/heads/main"])]),localCommit=local.stdout.trim(),remoteCommit=remote.stdout.trim().split(/\s+/)[0];
+    if(status.stdout.trim()||localCommit!==expectedPredecessor||remoteCommit!==expectedPredecessor)throw new Error("PUBLICATION_DISPOSITION_RESTORE_INVALID");
+    return freeze({clean:true,localCommit,remoteCommit,workspaceDigest:sha256(JSON.stringify({localCommit,remoteCommit,entries:[]}))});
+  }
   async checkpoint({ prepared, expectedParent }) {
     if (prepared.allowlistValid !== true || !Array.isArray(prepared.changedPaths)) throw new Error("PUBLICATION_PREPARATION_INVALID");
     await this.runner("git", ["add", "--", ...prepared.changedPaths], this.checkoutRoot);
@@ -155,6 +174,10 @@ export class ProductionUnattendedPublicationCommand {
   async observe({mandateId,candidateId}) { if(!mandateId||!candidateId)throw new Error("PUBLICATION_OBSERVATION_SCOPE_REQUIRED");const coordinator=await this.coordinatorFactory();return coordinator.observe({mandateId,candidateId}); }
   async inspectRecovery({mandateId,candidateId,checkpointCommit}) { const coordinator=await this.coordinatorFactory({recovery:true});if(!coordinator?.inspect)throw new Error("PUBLICATION_RECOVERY_OWNER_REQUIRED");return coordinator.inspect({mandateId,candidateId,checkpointCommit}); }
   async recover({mandateId,candidateId,checkpointCommit,confirmation}) { const coordinator=await this.coordinatorFactory({recovery:true});if(!coordinator?.recover)throw new Error("PUBLICATION_RECOVERY_OWNER_REQUIRED");return coordinator.recover({mandateId,candidateId,checkpointCommit,confirmation}); }
+  async inspectDisposition({candidateId}) { const coordinator=await this.coordinatorFactory({disposition:true});if(!coordinator?.inspect)throw new Error("PUBLICATION_DISPOSITION_OWNER_REQUIRED");return coordinator.inspect({candidateId}); }
+  async disposeFailedPreparation({candidateId,confirmation}) { const coordinator=await this.coordinatorFactory({disposition:true});if(!coordinator?.dispose)throw new Error("PUBLICATION_DISPOSITION_OWNER_REQUIRED");return coordinator.dispose({candidateId,confirmation}); }
+  async inspectReconsideration({mandateId,candidateId}) { const coordinator=await this.coordinatorFactory({reconsideration:true});if(!coordinator?.inspect)throw new Error("PUBLICATION_RECONSIDERATION_OWNER_REQUIRED");return coordinator.inspect({mandateId,candidateId}); }
+  async reconsiderFailedPreparation({mandateId,candidateId,confirmation}) { const coordinator=await this.coordinatorFactory({reconsideration:true});if(!coordinator?.run)throw new Error("PUBLICATION_RECONSIDERATION_OWNER_REQUIRED");return coordinator.run({mandateId,candidateId,confirmation}); }
 }
 
 export class ProductionForgeUnattendedPublicationProvider {
