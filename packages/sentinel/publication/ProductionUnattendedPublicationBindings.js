@@ -10,6 +10,25 @@ import { createPricePublicationGeneratedPathInventory } from "../../../scripts/l
 const freeze = value => Object.freeze(structuredClone(value));
 const sha256 = value => createHash("sha256").update(value).digest("hex");
 const forbiddenRecoveryAdvancementPath = value => value.startsWith("public/")||value.startsWith("packages/atlas/")||value.startsWith(".forge-review/")||value==="config/publication-release.json"||value.startsWith("config/artifacts/");
+export const POST_DEPLOYMENT_OBSERVATION_RECOVERY_RUNTIME_PATHS=Object.freeze([
+  "packages/sentinel/publication/ProductionUnattendedPublicationBindings.js",
+  "packages/sentinel/publication/ProductionUnattendedPublicationFactory.js",
+  "packages/sentinel/publication/UnattendedLivePricePublication.js",
+  "packages/sentinel/tests/PostDeploymentReconsiderationObservationRecovery.test.mjs",
+  "packages/sentinel/tests/PreCheckpointPublicationDisposition.test.mjs",
+  "packages/sentinel/tests/run-all-tests.mjs",
+  "scripts/unattended-live-price-publication.mjs",
+].sort());
+export const POST_DEPLOYMENT_OBSERVATION_GIT_CONTRACT_PATHS=Object.freeze([
+  "docs/handoff/CURRENT-STATE.md",
+  "docs/implementation Contracts/IC-CERTIFIED-STATIC-PUBLICATION-RELEASE-CONTROL-P1.md",
+  "docs/operations/HARDWARE-RADAR-OPERATOR-RUNBOOK.md",
+  "packages/sentinel/publication/ProductionUnattendedPublicationBindings.js",
+  "packages/sentinel/publication/ProductionUnattendedPublicationFactory.js",
+  "packages/sentinel/publication/UnattendedLivePricePublication.js",
+  "packages/sentinel/tests/PostDeploymentReconsiderationObservationRecovery.test.mjs",
+  "packages/sentinel/tests/ProductionUnattendedPublicationBindings.test.mjs",
+].sort());
 
 export function validatePublishedReleaseBinding({manifest,artifactText,expected}={}) {
   const comparisons={releaseId:manifest?.releaseId===expected?.releaseId,candidateId:manifest?.artifact?.candidateId===expected?.candidateId,artifactId:manifest?.artifact?.artifactId===expected?.artifactId,certificationId:manifest?.artifact?.certificationId===expected?.certificationId,bindingDigest:manifest?.artifact?.bindingDigest===expected?.bindingDigest,predecessorReleaseId:manifest?.rollback?.previousReleaseId===expected?.predecessorReleaseId,releaseArtifactDigest:staticPublicationArtifactDigest(artifactText??"")===expected?.releaseArtifactDigest};
@@ -89,8 +108,9 @@ export function createSplitRootProductionPublicationCandidateOwner({evidenceRoot
 }
 
 export class GitHubAppReleaseGitOwner {
-  constructor({ runner, checkoutRoot, tokenProvider, askPassPath } = {}) {
+  constructor({ runner, checkoutRoot, tokenProvider, askPassPath, approvedObservationRecoveryRuntimeCommit=null } = {}) {
     if (!runner || !checkoutRoot || !tokenProvider?.getToken || !askPassPath) throw new Error("PUBLICATION_GIT_COMPOSITION_INCOMPLETE"); Object.assign(this, { runner, checkoutRoot, tokenProvider, askPassPath });
+    this.approvedObservationRecoveryRuntimeCommit=approvedObservationRecoveryRuntimeCommit;
   }
   async _remote(args){const credential=await this.tokenProvider.getToken(),env={...process.env,GIT_ASKPASS:this.askPassPath,GIT_TERMINAL_PROMPT:"0",GCM_INTERACTIVE:"Never",GIT_CONFIG_COUNT:"1",GIT_CONFIG_KEY_0:"credential.helper",GIT_CONFIG_VALUE_0:"",HARDWARE_RADAR_GITHUB_ASKPASS_NODE:process.execPath,HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL:credential.token};try{return await this.runner("git",args,this.checkoutRoot,{env});}finally{env.HARDWARE_RADAR_GITHUB_INSTALLATION_TOKEN_EPHEMERAL="";}}
   async inspectBase() {
@@ -171,17 +191,33 @@ export class GitHubAppReleaseGitOwner {
     if(!binding.valid)throw new Error("PUBLICATION_RECOVERY_RELEASE_BINDING_INVALID");
     return freeze({valid:true,commit,localCommit,parentCommit,remoteCommit,releaseId:manifest.releaseId,releaseArtifactDigest,changedPaths,checkpointDigest:sha256(JSON.stringify({commit,parentCommit,releaseId:manifest.releaseId,releaseArtifactDigest,changedPaths}))});
   }
-  async inspectPublishedCheckpoint({commit,expectedParent,candidateId,artifactId,releaseArtifactDigest,certificationId,bindingDigest,predecessorReleaseId,releaseId}) {
+  async _inspectObservationMainline({publishedCheckpoint,currentMain,allowApprovedRuntimeAdvancement=false}={}) {
+    if(currentMain===publishedCheckpoint)return freeze({publishedCheckpoint,currentMain,commits:[],changedPaths:[],mode:"EXACT_CHECKPOINT"});
+    const approved=this.approvedObservationRecoveryRuntimeCommit;
+    if(!allowApprovedRuntimeAdvancement||!/^[0-9a-f]{40}$/.test(approved??"")||currentMain!==approved)throw new Error("PUBLICATION_OBSERVATION_GIT_BINDING_INVALID");
+    try{await this.runner("git",["merge-base","--is-ancestor",publishedCheckpoint,currentMain],this.checkoutRoot);}catch{throw new Error("PUBLICATION_OBSERVATION_GIT_BINDING_INVALID");}
+    const [commitsResult,pathsResult]=await Promise.all([
+      this.runner("git",["rev-list","--reverse",`${publishedCheckpoint}..${currentMain}`],this.checkoutRoot),
+      this.runner("git",["diff","--name-only",publishedCheckpoint,currentMain],this.checkoutRoot),
+    ]),commits=commitsResult.stdout.split(/\r?\n/).filter(Boolean),changedPaths=pathsResult.stdout.split(/\r?\n/).filter(Boolean).map(value=>value.replaceAll("\\","/")).sort();
+    if(![1,2].includes(commits.length)||commits.at(-1)!==approved||changedPaths.some(forbiddenRecoveryAdvancementPath))throw new Error("PUBLICATION_OBSERVATION_GIT_BINDING_INVALID");
+    const expectedInventories=commits.length===1?[POST_DEPLOYMENT_OBSERVATION_RECOVERY_RUNTIME_PATHS]:[POST_DEPLOYMENT_OBSERVATION_RECOVERY_RUNTIME_PATHS,POST_DEPLOYMENT_OBSERVATION_GIT_CONTRACT_PATHS],commitInventories=[];
+    for(let index=0;index<commits.length;index++){const result=await this.runner("git",["diff-tree","--no-commit-id","--name-only","--diff-filter=ACMRT","-r",commits[index]],this.checkoutRoot),paths=result.stdout.split(/\r?\n/).filter(Boolean).map(value=>value.replaceAll("\\","/")).sort();if(JSON.stringify(paths)!==JSON.stringify(expectedInventories[index]))throw new Error("PUBLICATION_OBSERVATION_GIT_BINDING_INVALID");commitInventories.push({commit:commits[index],changedPaths:paths});}
+    const expectedChangedPaths=[...new Set(expectedInventories.flat())].sort();if(JSON.stringify(changedPaths)!==JSON.stringify(expectedChangedPaths))throw new Error("PUBLICATION_OBSERVATION_GIT_BINDING_INVALID");
+    return freeze({publishedCheckpoint,currentMain,commits,changedPaths,commitInventories,mode:"APPROVED_INSTALLED_RECOVERY_RUNTIME"});
+  }
+  async inspectPublishedCheckpoint({commit,expectedParent,candidateId,artifactId,releaseArtifactDigest,certificationId,bindingDigest,predecessorReleaseId,releaseId,allowApprovedRuntimeAdvancement=false}) {
     const [status,local,parent,remote,files]=await Promise.all([
       this.runner("git",["status","--porcelain=v1","--untracked-files=all"],this.checkoutRoot),this.runner("git",["rev-parse","HEAD"],this.checkoutRoot),this.runner("git",["rev-parse",`${commit}^`],this.checkoutRoot),this._remote(["ls-remote","origin","refs/heads/main"]),this.runner("git",["diff-tree","--no-commit-id","--name-only","--diff-filter=ACMRT","-r",commit,"--","public"],this.checkoutRoot),
     ]);
     const localCommit=local.stdout.trim(),remoteCommit=remote.stdout.trim().split(/\s+/)[0],parentCommit=parent.stdout.trim();
-    if(status.stdout.trim()||localCommit!==commit||remoteCommit!==commit||parentCommit!==expectedParent)throw new Error("PUBLICATION_OBSERVATION_GIT_BINDING_INVALID");
+    if(status.stdout.trim()||localCommit!==commit||parentCommit!==expectedParent)throw new Error("PUBLICATION_OBSERVATION_GIT_BINDING_INVALID");
+    const mainline=await this._inspectObservationMainline({publishedCheckpoint:commit,currentMain:remoteCommit,allowApprovedRuntimeAdvancement});
     const publicPaths=files.stdout.split(/\r?\n/).map(value=>value.trim()).filter(Boolean).sort();
     const publicArtifacts=[];for(const relativePath of publicPaths){const bytes=await readFile(path.join(this.checkoutRoot,relativePath));const urlPath=relativePath.slice("public/".length).replace(/index\.html$/,""),url=`https://cheapestram.com/${urlPath}`;publicArtifacts.push({relativePath,url,sha256:sha256(bytes)});}
     const manifest=JSON.parse(await readFile(path.join(this.checkoutRoot,"config/publication-release.json"),"utf8")),artifactText=await readFile(path.join(this.checkoutRoot,"config",manifest.artifact?.relativePath??""),"utf8");
     if(!validatePublishedReleaseBinding({manifest,artifactText,expected:{releaseId,candidateId,artifactId,certificationId,bindingDigest,predecessorReleaseId,releaseArtifactDigest}}).valid)throw new Error("PUBLICATION_OBSERVATION_RELEASE_BINDING_INVALID");
-    return freeze({localCommit,remoteCommit,parentCommit,releaseId:manifest.releaseId,candidateId:manifest.artifact.candidateId,publicArtifacts});
+    return freeze({localCommit,remoteCommit,parentCommit,releaseId:manifest.releaseId,candidateId:manifest.artifact.candidateId,publicArtifacts,mainline});
   }
 }
 

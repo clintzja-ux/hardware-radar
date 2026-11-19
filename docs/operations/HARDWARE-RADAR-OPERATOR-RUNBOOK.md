@@ -171,6 +171,8 @@ npm run publication:ram-intelligence:preview -- <GOVERNED_ARGUMENTS>
 
 Inspection is read-only. Preparation mutates release authority but is not deployment. Preview is not Production. On any artifact, binding, certification, or environment mismatch, stop rather than weakening validation.
 
+For a terminal post-deployment reconsideration observation failure, use only the registered observation-recovery inspection before any separately authorized recovery. The recorded publication checkpoint may be an ancestor of current `main` after the approved recovery-runtime installation. Eligibility requires a clean publication workspace at that exact recorded checkpoint, its exact recorded parent and release binding, byte-identical manifest and live artifacts, and current `main` equal either to the checkpoint or to the installed recovery runtime through the exact certified per-commit path inventories. Any extra commit, unexplained path, generated-public change, Atlas change, release-manifest change, operational-evidence change, divergent history, or live mismatch is a blocker. Do not align the data workspace to current `main`, fabricate acceptance, or run recovery after a failed inspection.
+
 ## Retention, pruning, and low-level commands
 
 Retention/pruning execution requires an immutable approved plan and a task-specific prompt/authorization. No general routine pruning command is currently promoted into this runbook. Never delete `RETAIN`, `HOLD_FOR_REVIEW`, `UNKNOWN`, current state, or the immediate predecessor.
