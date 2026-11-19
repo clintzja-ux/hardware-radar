@@ -61,6 +61,8 @@ Dependency direction is governed by the architecture bible: Mercury resolves aga
 
 Compass, Echo, and Aurora appear in long-term platform documentation as future recommendation, indexing/search, and explanation/intelligence concepts. They are not implemented packages in the current repository and must not be described as deployed systems.
 
+Publication state must distinguish the executable code head, the published data checkpoint, and the latest governed accepted data release. Code-only integration may advance the first while the latter two remain fixed. A successful deployment may advance the published checkpoint before acceptance. The canonical publication repositories remain authoritative; Forge and command inspection may project their combined status but must not create a second ledger. Atlas and Mercury are the implemented publication-producing domains, Sentinel owns certification and publication governance, and Compass, Echo, and Aurora remain planned.
+
 ## Technology stack
 
 - Node.js with modern JavaScript ES modules; npm scripts provide builds, tests, diagnostics, and controlled operator workflows. The root package currently declares no third-party runtime dependencies.

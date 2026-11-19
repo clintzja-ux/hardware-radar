@@ -5,7 +5,7 @@
 **Status:** Canonical  
 **Owner:** Mirabelle Labs  
 **Applies To:** Hardware Radar, Atlas, Mercury, Sentinel, Forge  
-**Last Updated:** 2026-07-18
+**Last Updated:** 2026-11-19
 
 ---
 
@@ -186,6 +186,20 @@ It owns page composition, editorial explanations, buying guides, recommendation 
 It must not own canonical specifications, mutable retailer observations, compliance logic, retailer data retrieval, or publication approval decisions.
 
 The homepage must immediately answer where the cheapest verified RAM option currently presented by Hardware Radar can be found.
+
+### 5.6 Publication identity and implemented module boundary
+
+Publication has three separate durable identities:
+
+```text
+current code head != published data checkpoint != accepted data release
+```
+
+They may temporarily or durably differ. Code-only mainline changes do not silently replace the published data checkpoint, and a live deployment does not become governed accepted until the canonical publication owner records acceptance. Status views are read-only projections over the existing publication evidence; they are not new authority.
+
+Atlas and Mercury are implemented publication producers through their existing canonical projections. Sentinel owns certification, publication safety, acceptance, and bounded recovery. Forge is the operator-facing coordinator and status surface. Hardware Radar generation materializes approved public artifacts; GitHub records checkpoints and Cloudflare deploys them. Compass, Echo, and Aurora remain planned capabilities rather than implemented publication producers. Future producers must enter through explicit producer and validation contracts and may not create a competing orchestrator.
+
+An exact, complete preparation comparison that finds no publishable byte difference is `NO_MEANINGFUL_CHANGE`. It terminates before checkpoint, push, deployment, or daily accepted-release consumption. Ambiguous comparison evidence fails closed.
 
 ## 6. Dependency Rules
 
