@@ -1,4 +1,6 @@
 import path from "node:path";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { FileRecurringPublicationAuthorityRepository } from "../packages/sentinel/publication/UnattendedLivePricePublication.js";
 import { createSplitRootProductionPublicationCandidateOwner, ProductionUnattendedPublicationCommand, RecurringPublicationMandateOperatorService } from "../packages/sentinel/publication/ProductionUnattendedPublicationBindings.js";
@@ -22,7 +24,8 @@ if (mode === "CREATE") {
   const coordinatorFactory = async ({recovery=false,disposition=false,reconsideration=false,observationRecovery=false,advancementApproval=false}={}) => {
     return createProductionUnattendedPublicationCoordinator({runtimeRoot,evidenceRoot:root,workspaceRoot:checkoutRoot,publicOutputRoot,repository,candidateOwner,recovery,disposition,reconsideration,observationRecovery,advancementApproval});
   };
-  const command = new ProductionUnattendedPublicationCommand({ repository, mandateService, candidateOwner, coordinatorFactory });
+  const run=promisify(execFile),statusContextOwner={inspect:async()=>{const {stdout}=await run("git",["rev-parse","HEAD"],{cwd:runtimeRoot,windowsHide:true});return{currentCodeHead:stdout.trim(),publishedCheckpoint:null};}};
+  const command = new ProductionUnattendedPublicationCommand({ repository, mandateService, candidateOwner, coordinatorFactory, statusContextOwner });
   if(mode==="OBSERVE"&&args.confirmation!=="OBSERVE-UNATTENDED-PUBLICATION-DEPLOYMENT")throw new Error("PUBLICATION_OBSERVATION_CONFIRMATION_REQUIRED");
   const recoveryInput={mandateId:args["mandate-id"],candidateId:args["candidate-id"],checkpointCommit:args["checkpoint-commit"],confirmation:args.confirmation};
   const dispositionInput={candidateId:args["candidate-id"],confirmation:args.confirmation};
