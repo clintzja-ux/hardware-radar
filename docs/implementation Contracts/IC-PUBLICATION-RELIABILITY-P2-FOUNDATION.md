@@ -1,6 +1,6 @@
 # Publication Reliability P2 foundation
 
-**Status:** Local implementation, not production installed
+**Status:** Foundation production-installed; exact-mandate projection correction locally implemented, not production-installed
 **Owner:** Sentinel publication boundary
 **Date:** 2026-11-19
 
@@ -10,9 +10,9 @@ This increment adds two reversible contracts to the existing publication lifecyc
 
 ## Read-only status projection
 
-`projectPublicationReliabilityStatus` consumes the existing mandate, operation, recovery, and reconsideration evidence plus an explicitly supplied current code head. It reports the latest accepted data release, published checkpoint, current code head, active stage, latest recovery status, Jamaica-day accepted-release allowance, live-but-not-accepted state, and next safe operator action. Missing time or code-head evidence fails closed. The projection never writes canonical state.
+`projectPublicationReliabilityStatus` consumes one explicitly selected existing mandate, operation, recovery, and reconsideration evidence plus an explicitly supplied current code head. It reports that exact mandate's identity, status, validity interval, and current validity separately from the Jamaica-day accepted-release allowance, as well as the latest accepted data release, published checkpoint, current code head, active stage, latest recovery status, live-but-not-accepted state, and next safe operator action. Missing time, code-head, mandate, or exact repository-mandate evidence fails closed. The projection never writes canonical state.
 
-The production `INSPECT` command supplies the installed runtime Git head and returns this projection alongside the established health view. Existing health fields remain compatible.
+The production `INSPECT` command requires `--mandate-id=<exact canonical mandate ID>`, supplies the installed runtime Git head, and returns this projection alongside the established health view. The health view and unified projection must name the same mandate and report the same status and validity interval. Missing or unknown mandate IDs fail closed; inspection never selects another historical mandate implicitly. Existing health fields remain compatible and add the selected mandate identity, validity start, and current-validity result.
 
 ## No-change classification
 
