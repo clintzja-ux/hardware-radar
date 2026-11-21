@@ -1,8 +1,8 @@
 # Publication Reliability P2 foundation
 
-**Status:** Foundation production-installed; exact-mandate projection correction locally implemented, not production-installed
+**Status:** `PRODUCTION_INSTALLED_AND_VERIFIED`
 **Owner:** Sentinel publication boundary
-**Date:** 2026-11-19
+**Date:** 2026-11-20
 
 ## Purpose
 
@@ -14,6 +14,12 @@ This increment adds two reversible contracts to the existing publication lifecyc
 
 The production `INSPECT` command requires `--mandate-id=<exact canonical mandate ID>`, supplies the installed runtime Git head, and returns this projection alongside the established health view. The health view and unified projection must name the same mandate and report the same status and validity interval. Missing or unknown mandate IDs fail closed; inspection never selects another historical mandate implicitly. Existing health fields remain compatible and add the selected mandate identity, validity start, and current-validity result.
 
+## Production verification
+
+PR #11 is integrated and the clean P2 executable runtime is installed at `b135380da18c2d0cff510c7e8596f7d8e48707ed`. Read-only production inspection against the canonical authority repository selected successor mandate `pubmandate_4cda9ead192f66240f223b38` in both health and `publicationStatus`, reported status `ENABLED`, validity `2026-11-19T01:31:24.948Z` through `2026-12-19T01:31:24.948Z`, and `currentlyValid: true` at the November 20 inspection. The projection retained accepted release `pubrel_a593d8a1d869597c25075e84`, recovery receipt `pubobsrecovery_a2f23448aff6528e2e6ddaaa`, and published checkpoint `77ed7d7e6ee7b3c420e20c51e27c169a1420f614`; it reported the installed code head separately, no active publication, and no live-but-unaccepted release.
+
+The Jamaica-day allowance is a time-dependent projection, not a property of mandate validity. The verified inspection calculated local day `2026-11-20`, maximum 1, consumed 0, and remaining 1. Every later operator decision must inspect again for its actual Jamaica calendar day. The disposable three-root rehearsal independently returned `NO_MEANINGFUL_CHANGE` with a complete empty generated-path inventory and no production mutation.
+
 ## No-change classification
 
 The governed preparation owner evaluates the exact normalized generated-path delta after build and verification. An empty delta is accepted only when the Git comparison is explicitly complete. The result is `NO_MEANINGFUL_CHANGE`; the inner publication authorization remains unconsumed and the unattended coordinator records a terminal no-change event before Git checkpoint creation. It performs no push or deployment and consumes no accepted-release allowance.
@@ -23,6 +29,8 @@ Non-empty deltas continue through the existing allowlist, packaging, checkpoint-
 ## Producer coverage
 
 The delta contract is producer-neutral and covers Atlas-only, Mercury Current-only, Mercury History-only, and combined generated changes. It does not infer producer authority from paths. Atlas and Mercury continue to own their canonical inputs; Sentinel continues to own validation and publication gating.
+
+Unified producer contracts and dependency-aware artifact planning remain the next engineering milestone. This foundation does not implement that future producer unification.
 
 ## Recovery and compatibility
 
