@@ -2,7 +2,7 @@
 
 **Status:** `PRODUCTION_INSTALLED_AND_VERIFIED`
 **Owner:** Sentinel publication boundary
-**Date:** 2026-11-20
+**Date:** 2026-11-21
 
 ## Purpose
 
@@ -32,15 +32,15 @@ The delta contract is producer-neutral and covers Atlas-only, Mercury Current-on
 
 Unified producer contracts and dependency-aware artifact planning remain the next engineering milestone. This foundation does not implement that future producer unification.
 
-### Local two-producer dependency shadow
+### Production-verified two-producer dependency shadow
 
-The locally validated shadow adds a pure, non-authoritative RAM impact plan for two representative input classes: `ATLAS_SPECIFICATION` and `MERCURY_CURRENT`. It requires exact canonical input identities and SHA-256 digests from the candidate and accepted-predecessor portfolios, derives affected product IDs and artifact paths, and compares the prediction with the existing complete normalized generated-path inventory. Missing identity/digest/comparison evidence becomes a deterministic diagnostic. Unexpected and missing dependent paths are reported separately. Replaying the same inputs and changed-path set produces the same plan and comparison digests.
+The shadow is production installed and verified at executable runtime commit `97a4fd7a81acd36120d6eef4dedf90d1ddb774ac`. It adds a pure, non-authoritative RAM impact plan for canonical Atlas specification inputs (`ATLAS_SPECIFICATION`) and qualified Mercury Current inputs (`MERCURY_CURRENT`). It requires exact canonical input identities and SHA-256 digests from the candidate and accepted-predecessor portfolios, derives affected product IDs and artifact paths, and compares the prediction with the existing complete normalized generated-path inventory. Missing identity/digest/comparison evidence becomes a deterministic diagnostic. Unexpected and missing dependent paths are reported separately. Replaying the same inputs and changed-path set produces the same plan and comparison digests.
 
-The existing `GovernedLivePricePublicationCoordinator` owns the hook: inspection occurs immediately before its unchanged build and verification runners, and comparison occurs after its existing path inventory is available. The result is returned in preparation evidence and recorded in the existing no-change or checkpoint event. Shadow evidence is explicitly excluded from checkpoint identity. It does not alter validation, eligibility, no-change classification, authority consumption, recovery, or operator commands. The unchanged full generator remains authoritative.
+The existing `GovernedLivePricePublicationCoordinator` owns the hook: inspection occurs immediately before its unchanged build and verification runners, and comparison occurs after its existing path inventory is available. The result is returned in existing preparation evidence and recorded in the existing no-change or checkpoint event. Shadow evidence is explicitly excluded from checkpoint identity. Diagnostics are non-authoritative, observer failure cannot independently block publication, and the shadow does not alter validation, eligibility, the authoritative P2 no-change classification, acceptance, authority consumption, recovery, or operator commands. The unchanged full generator remains authoritative.
 
 The Atlas rehearsal changed one synthetic specification value and modification time in a disposable checkout. The existing full generator changed exactly the mirrored Atlas record, RAM catalog, corresponding product page, and sitemap. The Current rehearsal used the existing qualified Current fixture path and production generator functions in an isolated preview root. Its core changes were Current JSON, Terminal JSON/page, and the affected product page; sitemap remained byte-identical because the offer timestamp did not advance the route's maximum authoritative `lastmod`. Three market-snapshot/development-preview artifacts were correctly identified as preview-only output outside the core plan.
 
-Mercury History and destination-only planning are intentionally unsupported in this slice and appear as diagnostics if their bound input digests change. There is no selective generation, producer registry, stateful producer service, persistent dependency database, or enforcement gate.
+Mercury History and destination-only planning are intentionally unsupported and appear as diagnostics if their bound input digests change. Selective generation remains unimplemented. There is no producer registry, stateful producer service, persistent dependency database, or enforcement gate. Production verification used read-only `INSPECT`, focused production-shaped matrices, and an isolated three-root rehearsal; no real governed publication has yet produced operational shadow observations.
 
 ## Recovery and compatibility
 
