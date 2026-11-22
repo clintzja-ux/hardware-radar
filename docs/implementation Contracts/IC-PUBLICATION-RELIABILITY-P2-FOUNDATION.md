@@ -2,7 +2,7 @@
 
 **Status:** `PRODUCTION_INSTALLED_AND_VERIFIED`
 **Owner:** Sentinel publication boundary
-**Date:** 2026-11-21
+**Date:** 2026-11-22
 
 ## Purpose
 
@@ -34,7 +34,7 @@ Unified producer contracts and dependency-aware artifact planning remain the nex
 
 ### Production-verified two-producer dependency shadow
 
-The shadow is production installed and verified at executable runtime commit `97a4fd7a81acd36120d6eef4dedf90d1ddb774ac`. It adds a pure, non-authoritative RAM impact plan for canonical Atlas specification inputs (`ATLAS_SPECIFICATION`) and qualified Mercury Current inputs (`MERCURY_CURRENT`). It requires exact canonical input identities and SHA-256 digests from the candidate and accepted-predecessor portfolios, derives affected product IDs and artifact paths, and compares the prediction with the existing complete normalized generated-path inventory. Missing identity/digest/comparison evidence becomes a deterministic diagnostic. Unexpected and missing dependent paths are reported separately. Replaying the same inputs and changed-path set produces the same plan and comparison digests.
+The shadow remains production installed and verified in executable runtime commit `408e0b66af8d7474a33eb8f5c3f1d2165f7adce1`. It adds a pure, non-authoritative RAM impact plan for canonical Atlas specification inputs (`ATLAS_SPECIFICATION`) and qualified Mercury Current inputs (`MERCURY_CURRENT`). It requires exact canonical input identities and SHA-256 digests from the candidate and accepted-predecessor portfolios, derives affected product IDs and artifact paths, and compares the prediction with the existing complete normalized generated-path inventory. Missing identity/digest/comparison evidence becomes a deterministic diagnostic. Unexpected and missing dependent paths are reported separately. Replaying the same inputs and changed-path set produces the same plan and comparison digests.
 
 The existing `GovernedLivePricePublicationCoordinator` owns the hook: inspection occurs immediately before its unchanged build and verification runners, and comparison occurs after its existing path inventory is available. The result is returned in existing preparation evidence and recorded in the existing no-change or checkpoint event. Shadow evidence is explicitly excluded from checkpoint identity. Diagnostics are non-authoritative, observer failure cannot independently block publication, and the shadow does not alter validation, eligibility, the authoritative P2 no-change classification, acceptance, authority consumption, recovery, or operator commands. The unchanged full generator remains authoritative.
 
@@ -44,9 +44,9 @@ Mercury History and destination-only planning are intentionally unsupported and 
 
 ### Shared RAM dependency calculation
 
-The next locally validated maintenance increment makes the existing generator's RAM route `lastmod` semantics reusable rather than reimplementing them in the shadow. `calculateRamProductLastmod` is the single pure owner for selecting the maximum calendar date from Atlas specification modification evidence, qualified Current offer observation evidence, and History chronology evidence. The public generator uses that result without changing sitemap formatting, and the shadow uses the same result when deciding whether a sitemap dependency should be claimed. Missing optional evidence retains the generator's established behavior; absence of all valid evidence fails closed.
+The shared-calculation refinement is production installed and verified in executable runtime commit `408e0b66af8d7474a33eb8f5c3f1d2165f7adce1`. `calculateRamProductLastmod` is the single pure owner for selecting the maximum calendar date from Atlas specification modification evidence, qualified Current offer observation evidence, and History chronology evidence. The public generator uses that result without changing sitemap formatting, and the shadow uses the same result when deciding whether a sitemap dependency should be claimed. Missing optional evidence retains the generator's established behavior; absence of all valid evidence fails closed.
 
-Minimal RAM artifact declarations and product-scoped path expansion are colocated with that calculation so the generator and shadow can share dependency vocabulary without a registry or producer framework. The generator remains the authoritative byte producer, the normalized generated-path comparison remains authoritative for no-change classification, and shadow diagnostics remain non-blocking and excluded from checkpoint identity. This local consolidation is not yet merged or production installed; History and destination changes remain unsupported planning inputs, and publication eligibility and freshness policy are unchanged.
+Minimal RAM artifact declarations and product-scoped path expansion are colocated with that calculation so the generator and shadow can share dependency vocabulary without a registry or producer framework. The full public generator remains the authoritative byte producer; Sentinel validation and certification, the P2 Foundation no-change classifier, Git checkpoint and accepted-release identities, and existing recovery owners remain authoritative and unchanged. Shadow diagnostics remain non-blocking and excluded from checkpoint identity. Production verification covered Atlas-, Current-, and History-newest dates, equal and same-day dates, missing and invalid evidence, stale Current, Atlas-only, Current-only, combined, exact no-change, and deterministic replay. The disposable three-root rehearsal returned `NO_MEANINGFUL_CHANGE` with zero generated paths and no protected-state mutation. History and destination changes remain unsupported planning inputs, selective generation remains unimplemented, and publication eligibility, freshness policy, and dependency enforcement remain unchanged.
 
 ## Recovery and compatibility
 
