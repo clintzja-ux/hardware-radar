@@ -1,36 +1,21 @@
 import { createHash } from "node:crypto";
+import { calculateRamProductLastmod, RAM_PUBLICATION_DEPENDENCIES, resolveRamPublicationArtifacts } from "./ram-publication-dependency-contract.mjs";
 
 const freeze = value => Object.freeze(structuredClone(value));
 const digest = value => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const required = (value, code) => { if (typeof value !== "string" || !value.trim()) throw new Error(code); return value; };
 
-export const RAM_PUBLICATION_DEPENDENCIES = Object.freeze({
-  ATLAS_SPECIFICATION: Object.freeze(["ATLAS_SOURCE_RECORD", "RAM_CATALOG", "RAM_PRODUCT_PAGE", "SITEMAP"]),
-  MERCURY_CURRENT: Object.freeze(["RAM_CURRENT_RETAIL", "RAM_TERMINAL", "RAM_TERMINAL_PAGE", "RAM_PRODUCT_PAGE", "SITEMAP"])
-});
+export { RAM_PUBLICATION_DEPENDENCIES };
 
 export function planRamPublicationDependencies({ changeType, atlasProductId, publicPath, atlasSourcePath = null, inputIdentity, inputDigest, sitemapLastmodAdvances = true, includeAtlasSourceRecord = true } = {}) {
-  const declaredFamilies = RAM_PUBLICATION_DEPENDENCIES[changeType];
-  const families = declaredFamilies?.filter(family => (family !== "SITEMAP" || sitemapLastmodAdvances === true) && (family !== "ATLAS_SOURCE_RECORD" || includeAtlasSourceRecord === true));
-  if (!families) throw new Error("PUBLICATION_DEPENDENCY_CHANGE_TYPE_INVALID");
+  if (!RAM_PUBLICATION_DEPENDENCIES[changeType]) throw new Error("PUBLICATION_DEPENDENCY_CHANGE_TYPE_INVALID");
   required(atlasProductId, "PUBLICATION_DEPENDENCY_PRODUCT_REQUIRED");
   required(publicPath, "PUBLICATION_DEPENDENCY_ROUTE_REQUIRED");
   required(inputIdentity, "PUBLICATION_DEPENDENCY_INPUT_IDENTITY_REQUIRED");
   if (!/^[a-f0-9]{64}$/.test(inputDigest ?? "")) throw new Error("PUBLICATION_DEPENDENCY_INPUT_DIGEST_REQUIRED");
-  const route = publicPath.replace(/^\//, "").replace(/\/$/, "");
   if (changeType === "ATLAS_SPECIFICATION" && includeAtlasSourceRecord) required(atlasSourcePath, "PUBLICATION_DEPENDENCY_ATLAS_SOURCE_PATH_REQUIRED");
-  const pathFor = family => {
-    if (family === "ATLAS_SOURCE_RECORD") return `public/data/atlas/${atlasSourcePath.replaceAll("\\", "/").replace(/^packages\/atlas\//, "")}`;
-    if (family === "RAM_CATALOG") return "public/data/ram-catalog.json";
-    if (family === "RAM_CURRENT_RETAIL") return "public/data/ram-current-retail.json";
-    if (family === "RAM_TERMINAL") return "public/data/ram-terminal.json";
-    if (family === "RAM_TERMINAL_PAGE") return "public/ram/terminal/index.html";
-    if (family === "RAM_PRODUCT_PAGE") return `public/${route}/index.html`;
-    if (family === "SITEMAP") return "public/sitemap.xml";
-    throw new Error("PUBLICATION_DEPENDENCY_ARTIFACT_FAMILY_INVALID");
-  };
-  const artifactPaths = families.map(pathFor);
-  const material = { schemaVersion: "1.0", changeType, atlasProductId, publicPath, atlasSourcePath, inputIdentity, inputDigest, sitemapLastmodAdvances, includeAtlasSourceRecord, artifactFamilies: families, artifactPaths };
+  const { artifactFamilies, artifactPaths } = resolveRamPublicationArtifacts({ changeType, publicPath, atlasSourcePath, sitemapLastmodAdvances, includeAtlasSourceRecord });
+  const material = { schemaVersion: "1.0", changeType, atlasProductId, publicPath, atlasSourcePath, inputIdentity, inputDigest, sitemapLastmodAdvances, includeAtlasSourceRecord, artifactFamilies, artifactPaths };
   return freeze({ ...material, planDigest: digest(material), comparisonComplete: true, mutationAuthorized: false });
 }
 
@@ -54,12 +39,11 @@ export function compareRamPublicationPlan({ plan, actualChangedPaths, comparison
 
 const byProduct = value => new Map((value?.products ?? []).map(product => [product.atlasProductId, product]));
 const changedIds = (next, prior) => [...new Set([...next.keys(), ...prior.keys()])].filter(id => JSON.stringify(next.get(id) ?? null) !== JSON.stringify(prior.get(id) ?? null)).sort();
-const latest = values => values.filter(value => Number.isFinite(Date.parse(value ?? ""))).sort().at(-1) ?? null;
-const routeLastmod = ({ product, current, chronology }) => latest([
-  product?.identity?.updatedAt,
-  ...(current?.offers ?? []).map(offer => offer.observedAt),
-  ...(chronology?.timestampGroups ?? []).map(group => group.observedAt)
-]);
+const routeLastmod = ({ product, current, chronology }) => calculateRamProductLastmod({
+  atlasModifiedAt: product?.identity?.updatedAt,
+  currentObservedAt: (current?.offers ?? []).map(offer => offer.observedAt),
+  historyObservedAt: (chronology?.timestampGroups ?? []).map(group => group.observedAt)
+});
 
 export function createRamPublicationShadowPlan({ candidateArtifact, predecessorArtifact, atlasProducts = [], atlasManifestEntries = [], scope = "PRICE_PUBLICATION" } = {}) {
   const candidate = candidateArtifact?.manifest, predecessor = predecessorArtifact?.manifest;
