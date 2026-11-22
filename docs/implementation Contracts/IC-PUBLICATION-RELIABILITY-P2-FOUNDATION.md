@@ -32,6 +32,16 @@ The delta contract is producer-neutral and covers Atlas-only, Mercury Current-on
 
 Unified producer contracts and dependency-aware artifact planning remain the next engineering milestone. This foundation does not implement that future producer unification.
 
+### Local two-producer dependency shadow
+
+The locally validated shadow adds a pure, non-authoritative RAM impact plan for two representative input classes: `ATLAS_SPECIFICATION` and `MERCURY_CURRENT`. It requires exact canonical input identities and SHA-256 digests from the candidate and accepted-predecessor portfolios, derives affected product IDs and artifact paths, and compares the prediction with the existing complete normalized generated-path inventory. Missing identity/digest/comparison evidence becomes a deterministic diagnostic. Unexpected and missing dependent paths are reported separately. Replaying the same inputs and changed-path set produces the same plan and comparison digests.
+
+The existing `GovernedLivePricePublicationCoordinator` owns the hook: inspection occurs immediately before its unchanged build and verification runners, and comparison occurs after its existing path inventory is available. The result is returned in preparation evidence and recorded in the existing no-change or checkpoint event. Shadow evidence is explicitly excluded from checkpoint identity. It does not alter validation, eligibility, no-change classification, authority consumption, recovery, or operator commands. The unchanged full generator remains authoritative.
+
+The Atlas rehearsal changed one synthetic specification value and modification time in a disposable checkout. The existing full generator changed exactly the mirrored Atlas record, RAM catalog, corresponding product page, and sitemap. The Current rehearsal used the existing qualified Current fixture path and production generator functions in an isolated preview root. Its core changes were Current JSON, Terminal JSON/page, and the affected product page; sitemap remained byte-identical because the offer timestamp did not advance the route's maximum authoritative `lastmod`. Three market-snapshot/development-preview artifacts were correctly identified as preview-only output outside the core plan.
+
+Mercury History and destination-only planning are intentionally unsupported in this slice and appear as diagnostics if their bound input digests change. There is no selective generation, producer registry, stateful producer service, persistent dependency database, or enforcement gate.
+
 ## Recovery and compatibility
 
 Existing pre-checkpoint, post-push, reconsideration, and observation-recovery records remain authoritative and immutable. A recovered acceptance participates in latest-release and daily-allowance projection exactly like ordinary `LIVE_ACCEPTED` evidence. Code-only mainline advancement is visible as a difference between code head and published checkpoint, not as an implicit data release.

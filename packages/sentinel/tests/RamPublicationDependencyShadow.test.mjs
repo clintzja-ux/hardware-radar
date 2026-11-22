@@ -1,0 +1,21 @@
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { createRamPublicationShadowPlan, observeRamPublicationShadow } from "../../../scripts/lib/ram-publication-dependency-plan.mjs";
+
+const hash = value => createHash("sha256").update(JSON.stringify(value)).digest("hex");
+const id="ram_fixture", route="/ram/fixture/", catalogProduct={atlasProductId:id,publicPath:route,ratedVoltage:1.2}, currentProduct=price=>({atlasProductId:id,offers:price==null?[]:[{itemPriceUsd:price,observedAt:"2026-11-21T12:00:00.000Z"}]}), chronologyProduct={atlasProductId:id,publicPath:route,timestampGroups:[{observedAt:"2026-11-20T12:00:00.000Z",observations:[]}]};
+const artifact=({catalog=catalogProduct,current=currentProduct(null),atlas="a",currentDigest="b",history="h"}={})=>({manifest:{inputs:{atlasManifest:hash("manifest"),atlasCatalog:hash(atlas),currentState:hash(currentDigest),currentSnapshotId:`snapshot-${currentDigest}`,history:hash(history),destinations:hash("destinations")}},fileTexts:{catalog:JSON.stringify({products:[catalog]}),current:JSON.stringify({products:[current]}),chronology:JSON.stringify({products:[chronologyProduct]})}});
+const atlasProducts=[{identity:{atlasProductId:id,updatedAt:"2026-11-21T10:00:00.000Z"}}],atlasManifestEntries=[{atlasProductId:id,path:"products/ram/fixture.json"}];
+const plan=(candidateArtifact,predecessorArtifact)=>createRamPublicationShadowPlan({candidateArtifact,predecessorArtifact,atlasProducts,atlasManifestEntries,scope:"PRICE_PUBLICATION"});
+
+const atlas=plan(artifact({catalog:{...catalogProduct,ratedVoltage:1.35},atlas:"next"}),artifact());assert.deepEqual(atlas.producerIds,["ATLAS"]);assert.deepEqual(atlas.artifactPaths,["public/data/ram-catalog.json","public/ram/fixture/index.html","public/sitemap.xml"]);
+const current=plan(artifact({current:currentProduct(99),currentDigest:"next"}),artifact());assert.deepEqual(current.producerIds,["MERCURY_CURRENT"]);assert.ok(current.artifactPaths.includes("public/data/ram-current-retail.json"));assert.ok(current.artifactPaths.includes("public/data/ram-terminal.json"));assert.ok(current.artifactPaths.includes("public/ram/terminal/index.html"));assert.ok(current.artifactPaths.includes("public/sitemap.xml"));
+const combined=plan(artifact({catalog:{...catalogProduct,ratedVoltage:1.35},current:currentProduct(99),atlas:"next",currentDigest:"next"}),artifact());assert.deepEqual(combined.producerIds,["ATLAS","MERCURY_CURRENT"]);assert.equal(new Set(combined.artifactPaths).size,combined.artifactPaths.length);
+const noChange=plan(artifact(),artifact());assert.deepEqual(noChange.producerIds,[]);assert.deepEqual(noChange.artifactPaths,[]);
+const stale=plan(artifact({current:currentProduct(null),currentDigest:"stale"}),artifact({current:currentProduct(99),currentDigest:"fresh"}));assert.deepEqual(stale.producerIds,["MERCURY_CURRENT"]);
+const conditional=plan(artifact({current:{atlasProductId:id,offers:[{itemPriceUsd:99,observedAt:"2026-11-20T11:00:00.000Z"}]},currentDigest:"older"}),artifact());assert.equal(conditional.artifactPaths.includes("public/sitemap.xml"),false);
+assert.throws(()=>plan({...artifact({current:currentProduct(99),currentDigest:"next"}),manifest:{inputs:{...artifact().manifest.inputs,currentState:null}}},artifact()),/INPUT_DIGEST_REQUIRED/);
+const observed=observeRamPublicationShadow({plan:current,changedPaths:[...current.artifactPaths,"public/unexpected.json","config/publication-release.json"],comparisonComplete:true});assert.deepEqual(observed.comparison.unexpectedPaths,["public/unexpected.json"]);assert.equal(observed.affectsEligibility,false);
+const missing=observeRamPublicationShadow({plan:current,changedPaths:current.artifactPaths.filter(value=>value!=="public/data/ram-terminal.json"),comparisonComplete:true});assert.deepEqual(missing.comparison.missingPaths,["public/data/ram-terminal.json"]);
+assert.equal(observeRamPublicationShadow({plan:combined,changedPaths:[...combined.artifactPaths].reverse(),comparisonComplete:true}).comparisonDigest,observeRamPublicationShadow({plan:combined,changedPaths:combined.artifactPaths,comparisonComplete:true}).comparisonDigest);
+console.log("RAM publication dependency shadow tests passed: Atlas, Current, combined, no-change, stale, conditional sitemap, negative evidence, and replay.");

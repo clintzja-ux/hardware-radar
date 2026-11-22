@@ -60,7 +60,7 @@ export class FileLivePricePublicationAuthorizationRepository {
 }
 
 export class GovernedLivePricePublicationCoordinator {
-  constructor({ authorizationRepository, buildRunner, verificationRunner, gitInspector, now = () => new Date().toISOString() } = {}) { if (!authorizationRepository || !buildRunner || !verificationRunner || !gitInspector) throw new Error("LIVE_PRICE_PUBLICATION_COMPOSITION_INCOMPLETE"); Object.assign(this, { authorizationRepository, buildRunner, verificationRunner, gitInspector, now }); }
+  constructor({ authorizationRepository, buildRunner, verificationRunner, gitInspector, dependencyObserver = null, now = () => new Date().toISOString() } = {}) { if (!authorizationRepository || !buildRunner || !verificationRunner || !gitInspector) throw new Error("LIVE_PRICE_PUBLICATION_COMPOSITION_INCOMPLETE"); Object.assign(this, { authorizationRepository, buildRunner, verificationRunner, gitInspector, dependencyObserver, now }); }
   async prepare({ authorizationId, checkoutRoot, releaseManifestPath = "config/publication-release.json", promotionEvidence = null } = {}) {
     const authorization = await this.authorizationRepository.get(authorizationId); if (!authorization) throw new Error("LIVE_PRICE_PUBLICATION_AUTHORIZATION_NOT_FOUND");
     const evaluatedAt = this.now(); if (Date.parse(evaluatedAt) >= Date.parse(authorization.freshUntil)) throw new Error("LIVE_PRICE_PUBLICATION_FRESHNESS_EXPIRED");
@@ -78,16 +78,19 @@ export class GovernedLivePricePublicationCoordinator {
       if(!exactPromotion&&!recoverableBuild)throw new Error("LIVE_PRICE_PUBLICATION_CHECKOUT_NOT_CLEAN");
     }
     const operation = await this.authorizationRepository.begin({ authorizationId, checkoutRoot: root, startedAt: priorOperation?.startedAt ?? evaluatedAt });
+    const dependencyInspection = this.dependencyObserver ? await this.dependencyObserver.inspect({ root, manifest, release, authorization }) : null;
     await this.buildRunner.run({ root, generatedAt: manifest.createdAt, environment: "PRODUCTION" }); await this.verificationRunner.run({ root, authorization, release });
     if (Date.parse(this.now()) >= Date.parse(authorization.freshUntil)) throw new Error("LIVE_PRICE_PUBLICATION_FRESHNESS_EXPIRED");
     const after = await this.gitInspector.inspect({ root }), change = classifyPublicationArtifactChange({ changedPaths: after.changedPaths, comparisonComplete: after.comparisonComplete }), inventory = createPricePublicationGeneratedPathInventory({ changedPaths: change.paths, authorizedPaths: authorization.authorizedPaths });
+    const dependencyObservation = this.dependencyObserver ? this.dependencyObserver.observe({ inspection:dependencyInspection, changedPaths:inventory.paths, comparisonComplete:after.comparisonComplete }) : null;
     if (inventory.unauthorizedPaths.length) throw new Error(`LIVE_PRICE_PUBLICATION_UNAUTHORIZED_PATHS:${inventory.unauthorizedPaths.join(",")}`);
     if (inventory.applicationPackagingPaths.length) throw new Error(`LIVE_PRICE_PUBLICATION_APPLICATION_PACKAGING_PATHS:${inventory.applicationPackagingPaths.join(",")}`);
     if (inventory.pathCount === 0) {
-      return freeze({ schemaVersion:"1.0", status:"NO_MEANINGFUL_CHANGE", authorizationId, releaseId:manifest.releaseId, candidateId:authorization.candidateId, predecessorReleaseId:authorization.predecessorReleaseId, evaluatedAt:operation.operation.startedAt, freshUntil:authorization.freshUntil, changedPaths:[], artifactInventory:inventory, comparison:change, recovery:operation.status==="RECOVERED", mergeAuthorized:false, deploymentAuthorized:false, rollbackAuthorized:false, replay:false });
+      return freeze({ schemaVersion:"1.0", status:"NO_MEANINGFUL_CHANGE", authorizationId, releaseId:manifest.releaseId, candidateId:authorization.candidateId, predecessorReleaseId:authorization.predecessorReleaseId, evaluatedAt:operation.operation.startedAt, freshUntil:authorization.freshUntil, changedPaths:[], artifactInventory:inventory, comparison:change, dependencyObservation, recovery:operation.status==="RECOVERED", mergeAuthorized:false, deploymentAuthorized:false, rollbackAuthorized:false, replay:false });
     }
-    const checkpoint = { schemaVersion:"1.0",status:"READY_FOR_RELEASE_ONLY_CHECKPOINT",authorizationId,releaseId:manifest.releaseId,candidateId:authorization.candidateId,predecessorReleaseId:authorization.predecessorReleaseId,evaluatedAt:operation.operation.startedAt,freshUntil:authorization.freshUntil,changedPaths:[...inventory.paths],recovery:operation.status==="RECOVERED",mergeAuthorized:false,deploymentAuthorized:false,rollbackAuthorized:false };
+    const checkpoint = { schemaVersion:"1.0",status:"READY_FOR_RELEASE_ONLY_CHECKPOINT",authorizationId,releaseId:manifest.releaseId,candidateId:authorization.candidateId,predecessorReleaseId:authorization.predecessorReleaseId,evaluatedAt:operation.operation.startedAt,freshUntil:authorization.freshUntil,changedPaths:[...inventory.paths],dependencyObservation,recovery:operation.status==="RECOVERED",mergeAuthorized:false,deploymentAuthorized:false,rollbackAuthorized:false };
     const checkpointIdentity = { ...checkpoint }; delete checkpointIdentity.recovery;
+    delete checkpointIdentity.dependencyObservation;
     const checkpointDigest=digest(checkpointIdentity), consumption=await this.authorizationRepository.consume({authorizationId,checkpointDigest,consumedAt:checkpoint.evaluatedAt}); return freeze({...checkpoint,checkpointDigest,replay:consumption.status==="ALREADY_CONSUMED"});
   }
 }

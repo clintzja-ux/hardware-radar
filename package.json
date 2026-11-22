@@ -53,6 +53,7 @@
     "test:operator-command-registry": "node scripts/operator-command-registry.test.mjs",
     "test:release-governance": "node scripts/release-governance.test.mjs",
     "test:publication-reliability-p1": "node scripts/publication-reliability-p1.test.mjs",
+    "test:publication-p2-dependency-pov": "node scripts/publication-p2-dependency-pov.test.mjs",
     "certify:mercury:cleanup": "node scripts/mercury-certification-cleanup.mjs",
     "review:export": "node scripts/export-observation-review.mjs",
     "review:record": "node scripts/record-observation-review.mjs",
