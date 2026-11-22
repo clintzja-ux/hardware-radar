@@ -42,13 +42,19 @@ The Atlas rehearsal changed one synthetic specification value and modification t
 
 Mercury History and destination-only planning are intentionally unsupported and appear as diagnostics if their bound input digests change. Selective generation remains unimplemented. There is no producer registry, stateful producer service, persistent dependency database, or enforcement gate. Production verification used read-only `INSPECT`, focused production-shaped matrices, and an isolated three-root rehearsal; no real governed publication has yet produced operational shadow observations.
 
+### Shared RAM dependency calculation
+
+The next locally validated maintenance increment makes the existing generator's RAM route `lastmod` semantics reusable rather than reimplementing them in the shadow. `calculateRamProductLastmod` is the single pure owner for selecting the maximum calendar date from Atlas specification modification evidence, qualified Current offer observation evidence, and History chronology evidence. The public generator uses that result without changing sitemap formatting, and the shadow uses the same result when deciding whether a sitemap dependency should be claimed. Missing optional evidence retains the generator's established behavior; absence of all valid evidence fails closed.
+
+Minimal RAM artifact declarations and product-scoped path expansion are colocated with that calculation so the generator and shadow can share dependency vocabulary without a registry or producer framework. The generator remains the authoritative byte producer, the normalized generated-path comparison remains authoritative for no-change classification, and shadow diagnostics remain non-blocking and excluded from checkpoint identity. This local consolidation is not yet merged or production installed; History and destination changes remain unsupported planning inputs, and publication eligibility and freshness policy are unchanged.
+
 ## Recovery and compatibility
 
 Existing pre-checkpoint, post-push, reconsideration, and observation-recovery records remain authoritative and immutable. A recovered acceptance participates in latest-release and daily-allowance projection exactly like ordinary `LIVE_ACCEPTED` evidence. Code-only mainline advancement is visible as a difference between code head and published checkpoint, not as an implicit data release.
 
 ## Architecture decision assessment
 
-No ADR is required for this foundation: canonical ownership, authority, lifecycle, and persistence do not change. A later increment that replaces the publication coordinator, changes authoritative state transitions, or introduces a new producer ownership boundary requires ADR review before implementation.
+No ADR is required for this foundation or the shared-calculation maintenance increment: canonical ownership, authority, lifecycle, and persistence do not change. EDR-028 remains the applicable engineering decision and records the observation-first parity strategy. A later increment that replaces the publication coordinator, changes authoritative state transitions, or introduces a new producer ownership boundary requires ADR review before implementation.
 
 ## Validation
 

@@ -2,6 +2,7 @@ import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { createRamPublicProductIdentity } from "../packages/atlas/RamCatalogProjection.js";
 import { formatProductName } from "../public/js/modules/ramTerminal.js";
+import { calculateRamProductLastmod } from "./lib/ram-publication-dependency-contract.mjs";
 
 const SITE_ORIGIN = "https://cheapestram.com";
 const DISCOVERY_START = "<!-- RAM_PRODUCT_DISCOVERY_START -->";
@@ -275,9 +276,11 @@ export function renderRamProductPage(product, destinations = [], currentRetail =
 export function createRamProductSitemapRoutes(products, { currentRetailByProduct = new Map(), chronologicalSeriesByProduct = new Map() } = {}) {
     return products.map((product) => {
         const identity = createRamPublicProductIdentity(product);
-        const timestamps = [identity.lastModified, ...(currentRetailByProduct.get(identity.atlasProductId)?.offers ?? []).map(offer => offer.observedAt), ...(chronologicalSeriesByProduct.get(identity.atlasProductId)?.timestampGroups ?? []).map(group => group.observedAt)]
-            .filter(value => typeof value === "string" && Number.isFinite(Date.parse(value)));
-        const lastmod = new Date(Math.max(...timestamps.map(value => Date.parse(value)))).toISOString().slice(0, 10);
+        const lastmod = calculateRamProductLastmod({
+            atlasModifiedAt: identity.lastModified,
+            currentObservedAt: (currentRetailByProduct.get(identity.atlasProductId)?.offers ?? []).map(offer => offer.observedAt),
+            historyObservedAt: (chronologicalSeriesByProduct.get(identity.atlasProductId)?.timestampGroups ?? []).map(group => group.observedAt)
+        });
         return { path: identity.publicPath, lastmod, changefreq: "weekly", priority: "0.70" };
     });
 }
