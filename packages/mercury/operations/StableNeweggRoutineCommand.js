@@ -12,7 +12,7 @@ export class StableNeweggRoutineCommand{
   if(!["INSPECT","READINESS","RUN_LIVE"].includes(mode))throw new Error("STABLE_NEWEGG_ROUTINE_MODE_UNSUPPORTED");
   if(["READINESS","RUN_LIVE"].includes(mode)&&!mandateId)throw new Error("NEWEGG_ROUTINE_RECURRING_MANDATE_ID_REQUIRED");
   const script=path.join(this.runtimeRoot,"scripts","newegg-routine.mjs"),environment=path.join(this.operationalRoot,".env");await Promise.all([access(script),access(environment)]);
-  const args=[`--env-file=${environment}`,script,`--mode=${mode}`,`--runtime-root=${this.runtimeRoot}`,`--operational-root=${this.operationalRoot}`];if(mandateId)args.push(`--mandate-id=${mandateId}`);if(mode==="RUN_LIVE")args.push("--post-success-publication");
+  const args=["--use-system-ca",`--env-file=${environment}`,script,`--mode=${mode}`,`--runtime-root=${this.runtimeRoot}`,`--operational-root=${this.operationalRoot}`];if(mandateId)args.push(`--mandate-id=${mandateId}`);
   try{const result=await this.runner(this.nodePath,args,{cwd:this.operationalRoot,env:this.env,windowsHide:true,maxBuffer:32*1024*1024});return freeze(parseOutput(result.stdout));}
   catch(error){let detail=null;try{detail=parseOutput(error?.stderr);}catch{}const failure=detail?.failure??error?.code??"STABLE_NEWEGG_ROUTINE_EXECUTION_FAILED";throw Object.assign(new Error(failure),{code:failure,detail});}
  }

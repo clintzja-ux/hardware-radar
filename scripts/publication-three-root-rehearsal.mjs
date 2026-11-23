@@ -45,9 +45,11 @@ const requiredImplementationPaths = [
 ];
 const workingCandidatePaths = (await run("git", ["-C", implementationRoot, "diff", "--name-only", "HEAD"], { windowsHide: true, maxBuffer: 32 * 1024 * 1024 })).stdout
   .split(/\r?\n/).map(value => value.trim()).filter(Boolean);
+const deletedCandidatePaths = (await run("git", ["-C", implementationRoot, "diff", "--diff-filter=D", "--name-only", "HEAD"], { windowsHide: true, maxBuffer: 32 * 1024 * 1024 })).stdout
+  .split(/\r?\n/).map(value => value.trim()).filter(Boolean);
 const untrackedCandidatePaths = (await run("git", ["-C", implementationRoot, "ls-files", "--others", "--exclude-standard"], { windowsHide: true, maxBuffer: 32 * 1024 * 1024 })).stdout
   .split(/\r?\n/).map(value => value.trim()).filter(Boolean);
-const implementationPaths = [...new Set([...requiredImplementationPaths, ...workingCandidatePaths, ...untrackedCandidatePaths])].sort();
+const deletedSet = new Set(deletedCandidatePaths), implementationPaths = [...new Set([...requiredImplementationPaths, ...workingCandidatePaths, ...untrackedCandidatePaths])].filter(value => !deletedSet.has(value)).sort();
 const git = async values => (await run("git",["-c","core.longpaths=true","-C",checkoutRoot,...values],{windowsHide:true,maxBuffer:32*1024*1024})).stdout.trimEnd();
 const treeDigest = async target => {
   const records=[];
@@ -58,7 +60,7 @@ const treeDigest = async target => {
 try {
   assert.notEqual(runtimeRoot, operationalRoot); assert.notEqual(runtimeRoot, checkoutRoot); assert.notEqual(operationalRoot, checkoutRoot);
   await mkdir(operationalRoot,{recursive:true});
-  await writeFile(path.join(operationalRoot,".env"),"NODE_USE_SYSTEM_CA=1\nHARDWARE_RADAR_UNATTENDED_PUBLICATION_POST_SUCCESS_ENABLED=false\n","utf8");
+  await writeFile(path.join(operationalRoot,".env"),"NODE_USE_SYSTEM_CA=1\n","utf8");
   if(process.platform === "win32") {
     const validation=await run("powershell.exe",["-NoProfile","-ExecutionPolicy","Bypass","-File",path.join(runtimeRoot,"scripts","windows","newegg-routine-task.ps1"),"-RuntimeRoot",runtimeRoot,"-OperationalRoot",operationalRoot,"-ValidateOnly"],{cwd:runtimeRoot,windowsHide:true});
     assert.match(validation.stdout,/"status"\s*:\s*"READY"/);
@@ -73,6 +75,7 @@ try {
     await mkdir(path.dirname(path.join(checkoutRoot,relative)),{recursive:true});
     await cp(path.join(implementationRoot,relative),path.join(checkoutRoot,relative));
   }
+  if (deletedCandidatePaths.length) await git(["rm","--",...deletedCandidatePaths]);
   await git(["add","--",...implementationPaths]);
   if (await git(["status","--porcelain=v1"])) await git(["-c","user.name=Hardware Radar Rehearsal","-c","user.email=rehearsal@invalid.local","commit","-m","test(publication): install reliability candidate"]);
   const modules=path.join(dependencyRoot,"node_modules");
