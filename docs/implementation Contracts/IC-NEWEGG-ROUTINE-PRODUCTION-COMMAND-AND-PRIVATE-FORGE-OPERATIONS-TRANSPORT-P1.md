@@ -10,7 +10,11 @@ Modes are `PRODUCTION`, `RETAINED_EVIDENCE`, and `FIXTURE`. Fixture and retained
 
 The service persists after every successful stage. Resume starts at the first incomplete stage. A run with a different active binding returns `BLOCKED_ACTIVE_RUN` before acquisition. Successful Current is not rolled back when History fails; successful History is not replayed when Current fails. Completed stages are skipped on restart. Release and deployment authority remain false.
 
-Machine outcomes are `SUCCESS_RELEASE_READY`, `SUCCESS_NO_CHANGE`, `BLOCKED_ACTIVE_RUN`, `PROVIDER_FAILURE`, `INTEGRITY_FAILURE`, `QUALIFICATION_REVIEW_REQUIRED`, `CURRENT_FAILURE`, `HISTORY_FAILURE`, `QA_FAILURE`, `RECOMPOSITION_FAILURE`, `CERTIFICATION_FAILURE`, and `FORGE_TRANSPORT_FAILURE`. Success uses exit code 0; blocks and failures use a nonzero exit code.
+Internal stage outcomes retain `SUCCESS_RELEASE_READY`, `SUCCESS_NO_CHANGE`, and the detailed failure classifications. Final change classification is derived from authoritative Current and History results: a meaningful Current mutation or admitted History observation is release-ready even when another completed stage is `REPLAY` or `NO_CHANGE`; only the absence of both is a genuine routine no-change.
+
+The locally validated simplification connects release readiness directly to the canonical Sentinel publication command. The routine reads the canonical publication authority repository, requires exactly one enabled and currently valid production mandate with available daily allowance, validates the certified candidate/run binding, and passes that mandate identity to Sentinel. Sentinel remains the owner of candidate freshness, authority issuance and consumption, predecessor, deterministic artifact comparison, checkpoint, fast-forward, deployment verification, acceptance, and recovery. The normal path no longer selects a fixed mandate from environment configuration and no longer writes a separate post-success publication receipt. Historical receipt evidence remains historical; failure-specific Sentinel recovery remains compatible.
+
+The operator-facing terminal outcome is one of `LIVE_ACCEPTED`, `SUCCESS_NO_CHANGE`, `RELEASE_READY_NOT_PUBLISHED`, `ACQUISITION_FAILED`, or `PUBLICATION_FAILED`. Detailed internal stage and recovery classifications remain durable. A publication failure is never reported as routine success. The stable Forge launcher and publication subprocess both use the canonical `.env` through Node `--env-file` and enable the system CA store with `--use-system-ca`.
 
 ## Private Forge transport
 
@@ -22,6 +26,6 @@ The existing explicit local projection file remains a diagnostic fallback. It is
 
 ## Deployment and activation boundary
 
-The composition and access boundary are certified without a provider call or canonical mutation. A concrete scheduler process adapter and authenticated internal-host deployment must bind the already-certified production stage owners and HTTP handler before unattended operation. Until that bounded activation/deployment increment, scheduling remains OFF and deployed Forge continues to use the diagnostic local-file path.
+The simplification is locally validated without provider calls or production mutation and is not yet production-installed. Scheduling remains OFF. Production activation requires separate merge and runtime-installation authorization.
 
 The next bounded increment is `NEWEGG_ROUTINE_SCHEDULER_AND_PRIVATE_FORGE_TRANSPORT_ACTIVATION_P1`: bind the production stage-owner factory to one scheduler invocation, deploy the internal authenticated handler through approved private infrastructure, verify Forge consumption, and activate the approximately 24-hour schedule without changing the data path.

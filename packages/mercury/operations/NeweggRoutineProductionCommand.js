@@ -35,7 +35,8 @@ export class NeweggRoutineProductionCommand{
     run={...run,completedStages:[...run.completedStages,stage],stageResults:{...run.stageResults,[stage]:copy(stageResult??{})},updatedAt:this.now()};await this.runRepository.save(run);await this.afterStage(stage,copy(run));await this.progress("ROUTINE_STAGE_COMPLETED",{runId:run.runId,stage,status:stageResult?.status??"COMPLETED"});
    }catch(error){const outcome=classify(stage,error),failure={code:error?.code??error?.message??"UNKNOWN_ERROR",...(error?.atomicReplacement?{atomicReplacement:copy(error.atomicReplacement)}:{})};await this.progress("ROUTINE_STAGE_FAILED",{runId:run.runId,stage,outcome,...failure});return await this.stop(run,stage,outcome,failure);}
   }
-  const unchanged=Object.values(run.stageResults).some(value=>value?.status==="NO_CHANGE"||value?.status==="REPLAY");const outcome=unchanged?"SUCCESS_NO_CHANGE":"SUCCESS_RELEASE_READY";
+  const current=run.stageResults.CURRENT??{},history=run.stageResults.HISTORY??{},currentEvidence=current.canonicalReceipt??current.receipt??current,historyEvidence=history.canonicalReceipt??history.receipt??history,currentChanged=current.currentChanged===true||currentEvidence.currentChanged===true||current.persistence?.status==="REPLACED"||currentEvidence.persistence?.status==="REPLACED",historyChanged=Number(history.admitted??historyEvidence.admitted??0)>0;
+  const outcome=currentChanged||historyChanged?"SUCCESS_RELEASE_READY":"SUCCESS_NO_CHANGE";
   run={...run,status:outcome,completedAt:this.now(),updatedAt:this.now()};await this.runRepository.save(run);return this.result(outcome,run,0);
  }
  async stop(run,stage,outcome,detail){const stopped={...run,status:outcome,failedStage:stage,failure:copy(detail),updatedAt:this.now()};await this.runRepository.save(stopped);return this.result(outcome,stopped,1);}

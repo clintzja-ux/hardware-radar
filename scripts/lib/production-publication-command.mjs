@@ -8,11 +8,11 @@ export function resolveProductionPublicationCommand({runtimeRoot,operationalRoot
  const runtime=path.resolve(runtimeRoot??""),operational=path.resolve(operationalRoot??""),checkout=path.resolve(publicationCheckoutRoot??"");
  if(!path.isAbsolute(runtime)||!path.isAbsolute(operational)||!path.isAbsolute(checkout))throw new Error("PUBLICATION_COMMAND_ROOT_INVALID");
  if(typeof nodeExecutable!=="string"||!path.isAbsolute(nodeExecutable))throw new Error("PUBLICATION_NODE_EXECUTABLE_INVALID");
- const command={schemaVersion:"1.0",nodeExecutable,runtimeRoot:runtime,operationalRoot:operational,publicationCheckoutRoot:checkout,scriptPath:path.join(runtime,"scripts","unattended-live-price-publication.mjs"),environmentPath:path.join(operational,".env"),mandateStatePath:path.join(operational,".forge-review","publication","unattended-live-price.json"),nodeOptions:["--use-system-ca"],postSuccessEnabled:env.HARDWARE_RADAR_UNATTENDED_PUBLICATION_POST_SUCCESS_ENABLED==="true",mandateId:env.HARDWARE_RADAR_UNATTENDED_PUBLICATION_MANDATE_ID??null};
+ const command={schemaVersion:"1.0",nodeExecutable,runtimeRoot:runtime,operationalRoot:operational,publicationCheckoutRoot:checkout,scriptPath:path.join(runtime,"scripts","unattended-live-price-publication.mjs"),environmentPath:path.join(operational,".env"),mandateStatePath:path.join(operational,".forge-review","publication","unattended-live-price.json"),nodeOptions:["--use-system-ca"]};
  command.fingerprint=createHash("sha256").update(JSON.stringify(command)).digest("hex");return freeze(command);
 }
 
-export function productionPublicationArguments(command,{mode="RUN",mandateId=command?.mandateId,candidateId=null,checkpointCommit=null}={}){
+export function productionPublicationArguments(command,{mode="RUN",mandateId,candidateId=null,checkpointCommit=null}={}){
  if(!command?.fingerprint)throw new Error("PUBLICATION_COMMAND_CONTRACT_REQUIRED");
  if(!["RUN","INSPECT","RECOVERY_INSPECT","RECOVER"].includes(mode))throw new Error("PUBLICATION_COMMAND_MODE_INVALID");
  if(!mandateId)throw new Error("PUBLICATION_MANDATE_ID_REQUIRED");
