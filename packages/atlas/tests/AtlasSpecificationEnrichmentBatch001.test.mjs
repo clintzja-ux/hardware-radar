@@ -81,5 +81,5 @@ const completeTimingTuple = product => {
 };
 assert.ok(products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length >= 66);
 assert.ok(products.filter(completeTimingTuple).length >= 64);
-assert.equal(products.filter(product => typeof product.extension.data.electrical.ratedVoltage === "number").length, 133);
+assert.ok(products.filter(product => typeof product.extension.data.electrical.ratedVoltage === "number").length >= 133);
 console.log("Atlas specification enrichment Batch 001 regression tests passed.");

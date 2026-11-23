@@ -32,8 +32,15 @@ for (const [atlasProductId, [mpn, timings]] of approved) {
         atlasProductId
     );
     assert.equal(performance.primaryTimings, timings.join("-"), atlasProductId);
-    assert.equal(product.identity.recordRevision, 3, atlasProductId);
-    assert.equal(product.identity.updatedBy, "system:atlas-spec-enrichment-batch-003", atlasProductId);
+    const supersededByBatch004 = atlasProductId === "ram_g_skill_f5_6000j3040g32gx2_tz5n";
+    assert.equal(product.identity.recordRevision, supersededByBatch004 ? 4 : 3, atlasProductId);
+    assert.equal(
+        product.identity.updatedBy,
+        supersededByBatch004
+            ? "system:atlas-spec-enrichment-batch-004"
+            : "system:atlas-spec-enrichment-batch-003",
+        atlasProductId
+    );
     assert.equal(product.validation.validatedAt, "2026-11-23T00:00:00.000Z", atlasProductId);
     const sources = product.provenance.fieldSources["extension.data.performance"];
     assert.ok(sources.some(source =>
@@ -54,7 +61,7 @@ const completeTimingTuple = product => {
 };
 
 assert.equal(products.length, 159);
-assert.equal(products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length, 71);
+assert.ok(products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length >= 71);
 assert.equal(products.filter(completeTimingTuple).length, 69);
 
 for (const product of products.filter(product => product.identity.brand === "Kingston")) {

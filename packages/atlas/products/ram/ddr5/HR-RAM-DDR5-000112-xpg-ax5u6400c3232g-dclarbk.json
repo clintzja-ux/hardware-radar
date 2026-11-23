@@ -3,11 +3,11 @@
     "atlasProductId": "ram_xpg_ax5u6400c3232g_dclarbk",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 2,
+    "recordRevision": 3,
     "createdAt": "2026-10-04T00:00:00Z",
-    "updatedAt": "2026-10-05T00:04:19.402Z",
+    "updatedAt": "2026-11-23T00:00:00.000Z",
     "createdBy": "system:atlas-ram-coverage-expansion-batch-a-p1",
-    "updatedBy": "human:Clinton_Ramsook",
+    "updatedBy": "system:atlas-spec-enrichment-batch-004",
     "brand": "XPG",
     "manufacturer": "ADATA Technology Co., Ltd.",
     "productFamily": "XPG LANCER",
@@ -30,8 +30,8 @@
     "humanReviewRequired": false,
     "reviewedBy": "human:Clinton_Ramsook",
     "reviewedAt": "2026-10-05T00:04:19.402Z",
-    "changeReason": "ATLAS_RAM_COVERAGE_EXPANSION_BATCH_A_LIFECYCLE_REVIEW_AND_ACTIVATION_P1 operator-approved lifecycle review; no acquisition, market, destination, publication, or release authority implied.",
-    "supersedesRevision": null,
+    "changeReason": "ATLAS_SPEC_ENRICHMENT_BATCH_004 exact-MPN manufacturer-verified voltage enrichment; no acquisition, market, price, or publication authority implied.",
+    "supersedesRevision": 2,
     "archivalReason": null,
     "launchDate": null,
     "discontinuedDate": null,
@@ -124,7 +124,7 @@
   "validation": {
     "errors": [],
     "warnings": [],
-    "validatedAt": "2026-10-04T00:00:00Z",
+    "validatedAt": "2026-11-23T00:00:00.000Z",
     "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
   },
   "extension": {
@@ -169,7 +169,7 @@
         "bandwidthGbps": 51.2
       },
       "electrical": {
-        "ratedVoltage": null,
+        "ratedVoltage": 1.35,
         "baseVoltage": null,
         "pmicLocation": "UNKNOWN",
         "powerManagementNotes": null

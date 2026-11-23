@@ -3,11 +3,11 @@
     "atlasProductId": "ram_g_skill_f5_5600s4040a16gx2_rs",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 2,
+    "recordRevision": 3,
     "createdAt": "2026-09-01T00:00:00Z",
-    "updatedAt": "2026-09-01T16:18:29.377Z",
+    "updatedAt": "2026-11-23T00:00:00.000Z",
     "createdBy": "system:d002-fixture-certification",
-    "updatedBy": "human:Clinton_Ramsook",
+    "updatedBy": "system:atlas-spec-enrichment-batch-004",
     "brand": "G.SKILL",
     "manufacturer": "G.SKILL",
     "productFamily": "Ripjaws",
@@ -30,8 +30,8 @@
     "humanReviewRequired": false,
     "reviewedBy": "human:Clinton_Ramsook",
     "reviewedAt": "2026-09-01T16:18:29.377Z",
-    "changeReason": "B-002A authorized lifecycle activation for the representative Mercury launch cohort; no market or publication authority implied.",
-    "supersedesRevision": null,
+    "changeReason": "ATLAS_SPEC_ENRICHMENT_BATCH_004 exact-MPN manufacturer-verified voltage and XMP profile enrichment; no acquisition, market, price, or publication authority implied.",
+    "supersedesRevision": 2,
     "archivalReason": null,
     "launchDate": null,
     "discontinuedDate": null,
@@ -98,7 +98,7 @@
   "validation": {
     "errors": [],
     "warnings": [],
-    "validatedAt": "2026-09-01T00:00:00Z",
+    "validatedAt": "2026-11-23T00:00:00.000Z",
     "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
   },
   "extension": {
@@ -134,7 +134,7 @@
         "tRp": 40,
         "tRas": 89,
         "primaryTimings": "40-40-40-89",
-        "xmpSupport": "UNKNOWN",
+        "xmpSupport": "PROFILE_INCLUDED",
         "expoSupport": "UNKNOWN",
         "jedecProfiles": [],
         "overclockProfiles": [],
@@ -143,7 +143,7 @@
         "bandwidthGbps": 44.8
       },
       "electrical": {
-        "ratedVoltage": null,
+        "ratedVoltage": 1.1,
         "baseVoltage": null,
         "pmicLocation": "UNKNOWN",
         "powerManagementNotes": null

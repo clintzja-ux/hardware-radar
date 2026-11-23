@@ -3,11 +3,11 @@
     "atlasProductId": "ram_g_skill_f5_6000j3040g32gx2_tz5n",
     "schemaVersion": "1.0",
     "productType": "ram",
-    "recordRevision": 3,
+    "recordRevision": 4,
     "createdAt": "2026-09-01T00:00:00Z",
     "updatedAt": "2026-11-23T00:00:00.000Z",
     "createdBy": "system:d002-fixture-certification",
-    "updatedBy": "system:atlas-spec-enrichment-batch-003",
+    "updatedBy": "system:atlas-spec-enrichment-batch-004",
     "brand": "G.SKILL",
     "manufacturer": "G.SKILL",
     "productFamily": "Trident Z5 Neo",
@@ -30,8 +30,8 @@
     "humanReviewRequired": false,
     "reviewedBy": "human:Clinton_Ramsook",
     "reviewedAt": "2026-09-08T05:58:28.556Z",
-    "changeReason": "ATLAS_SPEC_ENRICHMENT_BATCH_003 manufacturer-verified exact-MPN primary timing enrichment; no acquisition, market, price, or publication authority implied.",
-    "supersedesRevision": 2,
+    "changeReason": "ATLAS_SPEC_ENRICHMENT_BATCH_004 exact-MPN manufacturer-verified voltage enrichment; no acquisition, market, price, or publication authority implied.",
+    "supersedesRevision": 3,
     "archivalReason": null,
     "launchDate": null,
     "discontinuedDate": null,
@@ -154,7 +154,7 @@
         "bandwidthGbps": 48
       },
       "electrical": {
-        "ratedVoltage": null,
+        "ratedVoltage": 1.4,
         "baseVoltage": null,
         "pmicLocation": "UNKNOWN",
         "powerManagementNotes": null
