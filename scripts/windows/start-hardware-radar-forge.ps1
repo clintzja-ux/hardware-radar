@@ -4,14 +4,16 @@ param(
     [string]$StableNeweggRuntimeRoot = "C:\Users\JRVR\.codex\worktrees\newegg-production-runtime\hardware-radar"
 )
 $ErrorActionPreference = "Stop"
-$repositoryRoot = (Resolve-Path -LiteralPath $RuntimeRoot).Path
+$runtimeRoot = (Resolve-Path -LiteralPath $RuntimeRoot).Path
 $operationalRoot = (Resolve-Path -LiteralPath $OperationalRoot).Path
 $stableNeweggRuntimeRoot = (Resolve-Path -LiteralPath $StableNeweggRuntimeRoot).Path
 $operationalEnvironment = Join-Path $operationalRoot ".env"
 if (-not (Test-Path -LiteralPath $operationalEnvironment -PathType Leaf)) { throw "Forge operational environment is unavailable." }
 $url = "http://127.0.0.1:4174/"
 $health = "$url`operator-api/health"
-$expectedRevision = (& git -C $repositoryRoot rev-parse HEAD).Trim()
+$entryPoint = Join-Path $runtimeRoot "scripts\serve-forge-operator-preview.mjs"
+if (-not (Test-Path -LiteralPath $entryPoint -PathType Leaf)) { throw "Forge runtime entry point is unavailable." }
+$expectedRevision = (& git -C $runtimeRoot rev-parse HEAD).Trim()
 
 $status = $null
 try { $status = Invoke-RestMethod -Uri $health -TimeoutSec 1 } catch {}
@@ -38,14 +40,14 @@ if ($null -ne $status) {
 
 $node = (Get-Command node -ErrorAction Stop).Source
 $operator = "operator:$env:USERNAME"
-$logRoot = Join-Path $repositoryRoot ".forge-review\forge"
+$logRoot = Join-Path $operationalRoot ".forge-review\forge"
 New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
 $env:FORGE_OPERATOR_ID = $operator
 $env:FORGE_OPERATOR_TRUSTED_LAUNCH = "1"
 $env:FORGE_OPERATOR_PREVIEW_PORT = "4174"
 $env:FORGE_OPERATOR_OPERATIONAL_ROOT = $operationalRoot
 $env:FORGE_NEWEGG_STABLE_RUNTIME_ROOT = $stableNeweggRuntimeRoot
-Start-Process -FilePath $node -ArgumentList "--env-file=$operationalEnvironment", "scripts/serve-forge-operator-preview.mjs" -WorkingDirectory $repositoryRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $logRoot "operator-runtime.log") -RedirectStandardError (Join-Path $logRoot "operator-runtime-error.log")
+Start-Process -FilePath $node -ArgumentList "--env-file=$operationalEnvironment", $entryPoint -WorkingDirectory $runtimeRoot -WindowStyle Hidden -RedirectStandardOutput (Join-Path $logRoot "operator-runtime.log") -RedirectStandardError (Join-Path $logRoot "operator-runtime-error.log")
 
 $ready = $false
 for ($attempt = 0; $attempt -lt 40; $attempt++) {

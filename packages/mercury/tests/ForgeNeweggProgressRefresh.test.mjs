@@ -41,7 +41,7 @@ assert.equal(button.textContent,"Refresh progress");
 
 console.log("Forge Newegg progress refresh tests passed: 18 cases.");
 
-const field=()=>({textContent:"",disabled:false,hidden:false,value:"",focused:false,focus(){this.focused=true;}});
+const field=()=>({textContent:"",disabled:false,hidden:false,value:"",focused:false,dataset:{},focus(){this.focused=true;}});
 const title=field(),summary=field(),impact=field(),confirmationText=field(),confirmationInput=field(),confirmationStatus=field(),confirm=field(),cancel=field();
 const confirmationElements=new Map([["[data-title]",title],["[data-summary]",summary],["[data-impact]",impact],["[data-confirmation-text]",confirmationText],["[data-confirmation-input]",confirmationInput],["[data-status]",confirmationStatus],["[data-confirm]",confirm],["[data-cancel]",cancel]]);
 const confirmationPanel=Object.create(NeweggMandatePanel.prototype);
@@ -53,20 +53,34 @@ assert.equal(confirmationPanel.confirmDialog.open,true);
 assert.equal(confirmationText.textContent,"CONFIRM AUTHORIZE_NEWEGG_REATTEMPT");
 assert.equal(confirmationInput.focused,true);
 assert.equal(confirm.disabled,true);
+assert.equal(confirmationStatus.textContent,"Enter the exact confirmation phrase to continue.");
+
+let submitted=0;
+confirmationPanel.request=async()=>{submitted+=1;return{status:"ACCEPTED",auditId:"unexpected"};};
+confirmationInput.value="";confirmationPanel.syncConfirmation({announce:true});
+await confirmationPanel.submitConfirmation({preventDefault(){}});
+assert.equal(submitted,0);
+assert.equal(confirmationStatus.textContent,"Enter the exact confirmation phrase to continue.");
+confirmationInput.value="CONFIRM RUN_NEWEGG_ROUTINE ";confirmationPanel.syncConfirmation({announce:true});
+await confirmationPanel.submitConfirmation({preventDefault(){}});
+assert.equal(submitted,0);
+assert.equal(confirmationStatus.textContent,"Confirmation phrase does not match.");
 
 confirmationInput.value="CONFIRM AUTHORIZE_NEWEGG_REATTEMPT";confirmationPanel.syncConfirmation();
 assert.equal(confirm.disabled,false);
-let submitted=0,releaseSubmission;
-confirmationPanel.request=async(...input)=>{submitted+=1;assert.equal(input[3],"CONFIRM AUTHORIZE_NEWEGG_REATTEMPT");await new Promise(resolve=>{releaseSubmission=resolve;});return{auditId:"audit-fixture"};};
+let releaseSubmission;submitted=0;
+confirmationPanel.request=async(...input)=>{submitted+=1;assert.equal(input[3],"CONFIRM AUTHORIZE_NEWEGG_REATTEMPT");assert.match(input[4],/^[a-f0-9]{32}$/);await new Promise(resolve=>{releaseSubmission=resolve;});return{status:"ACCEPTED",auditId:"audit-fixture",result:{requestId:input[4]}};};
 confirmationPanel.refresh=async()=>{};
-const submission=confirmationPanel.executePending();
-await confirmationPanel.executePending();
+const submission=confirmationPanel.submitConfirmation({preventDefault(){}});
+await confirmationPanel.submitConfirmation({preventDefault(){}});
 assert.equal(submitted,1);
 assert.equal(confirm.disabled,true);
 assert.equal(cancel.disabled,true);
+assert.match(confirmationStatus.textContent,/Submitting governed request/);
 releaseSubmission();await submission;
 assert.equal(confirmationPanel.confirmDialog.open,true);
-assert.match(confirmationStatus.textContent,/Recorded\. Audit audit-fixture/);
+assert.match(confirmationStatus.textContent,/Accepted for governed dispatch\. Operation request/);
+assert.match(confirmationStatus.textContent,/Audit audit-fixture/);
 assert.equal(confirm.hidden,true);
 assert.equal(cancel.textContent,"Close");
 
@@ -80,9 +94,33 @@ confirmationInput.value="CONFIRM RUN_NEWEGG_ROUTINE";confirmationPanel.syncConfi
 confirmationPanel.request=async()=>{throw new Error("AUTHORIZATION_EXPIRED");};
 await confirmationPanel.executePending();
 assert.equal(confirmationPanel.confirmDialog.open,true);
-assert.equal(confirmationStatus.textContent,"Nothing changed: AUTHORIZATION_EXPIRED");
+assert.equal(confirmationStatus.textContent,"Submission rejected: AUTHORIZATION_EXPIRED");
 assert.equal(confirm.disabled,false);
 assert.equal(cancel.disabled,false);
+
+confirmationPanel.pendingRequestId=null;
+confirmationPanel.request=async()=>{throw Object.assign(new Error("FORGE_OPERATOR_NETWORK_FAILURE"),{ambiguous:true});};
+await confirmationPanel.executePending();
+assert.match(confirmationStatus.textContent,/Submission outcome is uncertain/);
+assert.match(confirmationStatus.textContent,/Inspect Current operation before resubmitting/);
+assert.equal(confirm.hidden,true);
+
+confirmationPanel.confirmButton.hidden=false;confirmationPanel.pendingRequestId=null;
+confirmationPanel.request=async()=>({status:"ACCEPTED",auditId:"audit-delayed",result:{requestId:"delayedrequest01"}});
+confirmationPanel.refresh=async()=>{throw new Error("REFRESH_FAILED");};
+await confirmationPanel.executePending();
+assert.match(confirmationStatus.textContent,/Accepted for governed dispatch\. Operation request delayedrequest01/);
+assert.match(confirmationStatus.textContent,/Live status refresh failed/);
+
+let requestOptions;
+globalThis.fetch=async(_path,options)=>{requestOptions=options;return{ok:false,status:401,json:async()=>({error:"FORGE_OPERATOR_UNAUTHORIZED"})};};
+await assert.rejects(()=>NeweggMandatePanel.prototype.request.call({csrf:"fixture-csrf"},"/operator-api/newegg-routine/execute","RUN_NEWEGG_ROUTINE",{intent:"TODAYS_ROUTINE"},"CONFIRM RUN_NEWEGG_ROUTINE","requestfixture01"),error=>error.message==="FORGE_OPERATOR_UNAUTHORIZED"&&error.httpStatus===401);
+assert.equal(requestOptions.headers["X-Forge-Csrf"],"fixture-csrf");
+assert.equal(JSON.parse(requestOptions.body).requestId,"requestfixture01");
+globalThis.fetch=async()=>{throw new TypeError("network unavailable");};
+await assert.rejects(()=>NeweggMandatePanel.prototype.request.call({csrf:"fixture-csrf"},"/operator-api/newegg-routine/execute","RUN_NEWEGG_ROUTINE",{},"CONFIRM RUN_NEWEGG_ROUTINE","requestfixture02"),error=>error.ambiguous===true&&error.message==="FORGE_OPERATOR_NETWORK_FAILURE");
+globalThis.fetch=async()=>({ok:true,status:200,json:async()=>{throw new SyntaxError("truncated");}});
+await assert.rejects(()=>NeweggMandatePanel.prototype.request.call({csrf:"fixture-csrf"},"/operator-api/newegg-routine/execute","RUN_NEWEGG_ROUTINE",{},"CONFIRM RUN_NEWEGG_ROUTINE","requestfixture03"),error=>error.ambiguous===true&&error.message==="FORGE_OPERATOR_RESPONSE_INVALID");
 
 const priorDialog=confirmationPanel.confirmDialog;
 confirmationPanel.render=()=>{};
@@ -91,9 +129,10 @@ confirmationPanel.csrf="fixture-csrf";confirmationPanel.refreshing=false;
 confirmationPanel.root={querySelector:()=>null};confirmationPanel.routine={querySelector:()=>null};
 confirmationPanel.renderOperations=()=>{};
 globalThis.fetch=async()=>response(confirmationPanel.model);
+delete confirmationPanel.refresh;
 await confirmationPanel.refresh();
 assert.equal(confirmationPanel.confirmDialog,priorDialog);
 assert.equal(confirmationPanel.confirmDialog.open,true);
 assert.equal(confirmationInput.value,"CONFIRM RUN_NEWEGG_ROUTINE");
 
-console.log("Forge governed confirmation lifecycle tests passed: 24 cases.");
+console.log("Forge governed confirmation lifecycle tests passed: 49 cases.");

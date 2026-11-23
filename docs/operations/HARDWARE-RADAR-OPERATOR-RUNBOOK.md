@@ -215,6 +215,8 @@ Any increment adding, changing, deprecating, superseding, or removing an operato
 
 ## Trusted Forge manual price entry
 
-Launch Forge by double-clicking `Launch Hardware Radar Forge.cmd` from the repository root, or run `npm run forge:operator`. The Windows launcher establishes the trusted JRVR operator bootstrap; running the preview server module directly does not establish an authenticated operator session.
+Launch Forge by double-clicking `Launch Hardware Radar Forge.cmd` from the repository root. The approved Windows launcher binds the installed application runtime separately from the canonical operational root, loads the operational root's private `.env`, writes runtime logs beneath that operational root, and establishes the trusted JRVR operator bootstrap. A production launch without an absolute `FORGE_OPERATOR_OPERATIONAL_ROOT` must stop; do not run the server directly or allow evidence to fall back into the runtime checkout.
+
+Each confirmation shows one stable request identity. If Forge reports an uncertain submission because the connection failed or the response was unreadable, do not click or submit again. Inspect **Current operation** and its durable audit outcome using that request identity. A definite rejection may be corrected and resubmitted only under the governing procedure; an accepted action remains accepted even if the live status refresh later fails.
 
 In Forge, use **Manual Price Entry** to select an existing Atlas RAM product and governed Amazon or Newegg destination, then enter item price, shipping, mandatory fees, seller, condition, availability, and observation time. One explicit confirmation invokes the existing Mercury manual Current and History processing owners. Unknown shipping or mandatory fees remain unknown and cannot qualify an offer for delivered-cost comparison. Current, History, Cheapest, Picks, affiliate, publication, and release decisions remain independently governed.
