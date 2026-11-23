@@ -16,6 +16,12 @@ The locally validated simplification connects release readiness directly to the 
 
 The operator-facing terminal outcome is one of `LIVE_ACCEPTED`, `SUCCESS_NO_CHANGE`, `RELEASE_READY_NOT_PUBLISHED`, `ACQUISITION_FAILED`, or `PUBLICATION_FAILED`. Detailed internal stage and recovery classifications remain durable. A publication failure is never reported as routine success. The stable Forge launcher and publication subprocess both use the canonical `.env` through Node `--env-file` and enable the system CA store with `--use-system-ca`.
 
+## Canonical Forge runtime composition
+
+The installed application checkout owns Forge code, static assets, retailer configuration, and canonical Atlas records. Mutable operator evidence is independently rooted by the required absolute `FORGE_OPERATOR_OPERATIONAL_ROOT`: audits, mandates, command outcomes, routine state, Current and History evidence, workbooks, and runtime logs resolve only beneath that operational root. A trusted production launch with a missing or relative operational root fails closed; it must not create an implicit evidence tree inside the application checkout. Fixture launches remain explicitly isolated by their fixture root.
+
+Every confirmation dialog assigns one stable request identity before transport. The same identity is sent to the existing audited, idempotent Forge command boundary. Definite HTTP rejections remain rejected; a network failure or unreadable response is reported as an uncertain submission and disables repeat submission until the operator inspects durable Current-operation evidence. A successful acceptance remains accepted even if the subsequent status refresh fails. This changes no authority or audit semantics and introduces no additional command owner.
+
 ## Private Forge transport
 
 `PrivateForgeOperationsTransport` transports only the certified `NEWEGG_ROUTINE_OPERATIONS` projection in a digest-bound, expiring envelope. Access requires a runtime bearer credential of at least 24 characters. The credential is never included in the envelope, source, logs, public artifacts, or Forge projection. The HTTP adapter serves only `/internal/forge/newegg-routine`, returns `Cache-Control: private, no-store` and `X-Robots-Tag: noindex, nofollow`, and returns 404 for public routes. It is read-only and has no provider, Mercury, publication, release, or deployment authority.
