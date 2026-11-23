@@ -22,6 +22,7 @@ const assertMarketplaceDisclosureFacts = (html) => {
 const read = (relativePath) => readFile(path.join(relativePath.startsWith("public/") ? publicationWorkspaceRoot : root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
+const publicProducts = products.filter(product => product.governance.lifecycleStatus === "ACTIVE" && product.governance.publicationStatus === "READY");
 const retailers = await Promise.all(manifest.retailers.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
 const releaseManifestPath = process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST
   ? path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST)
@@ -47,11 +48,12 @@ const releasedProductIds = new Set(publicCatalog.products.map((product) => produ
 const releasedProducts = products.filter((product) => releasedProductIds.has(product.identity.atlasProductId));
 const replay = createRamCatalogProjection([...products].reverse());
 
-assert.equal(catalog.productCount, manifest.products.length);
-assert.equal(catalog.products.length, manifest.products.length);
-assert.equal(new Set(catalog.products.map((product) => product.atlasProductId)).size, manifest.products.length);
-assert.equal(new Set(catalog.products.map((product) => product.publicSlug)).size, manifest.products.length);
-assert.equal(new Set(catalog.products.map((product) => product.publicPath)).size, manifest.products.length);
+assert.equal(catalog.productCount, publicProducts.length);
+assert.equal(catalog.products.length, publicProducts.length);
+assert.equal(new Set(catalog.products.map((product) => product.atlasProductId)).size, publicProducts.length);
+assert.equal(new Set(catalog.products.map((product) => product.publicSlug)).size, publicProducts.length);
+assert.equal(new Set(catalog.products.map((product) => product.publicPath)).size, publicProducts.length);
+assert.equal(products.filter(product => product.governance.lifecycleStatus === "DRAFT").every(product => !catalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true, "DRAFT products must not reach product-page generation.");
 assert.deepEqual(replay, catalog, "Public identity must be deterministic across input order.");
 assert.ok(catalog.products.every((product) => product.publicPath === `/ram/${product.publicSlug}/`));
 assert.ok(catalog.products.every((product) => product.capacityGb === product.moduleCount * product.capacityPerModuleGb));

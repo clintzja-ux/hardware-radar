@@ -78,7 +78,9 @@ export function createRamPublicProductIdentity(product) {
 
 export function createRamCatalogProjection(products) {
     if (!Array.isArray(products)) throw new TypeError("RAM_CATALOG_PRODUCTS_REQUIRED");
-    const projected = products.map(projectProduct).sort((left, right) =>
+    const projected = products
+        .filter(product => product?.governance?.lifecycleStatus === "ACTIVE" && product?.governance?.publicationStatus === "READY")
+        .map(projectProduct).sort((left, right) =>
         compareText(left.brand, right.brand) ||
         compareText(left.modelName, right.modelName) ||
         compareText(left.manufacturerPartNumber, right.manufacturerPartNumber) ||

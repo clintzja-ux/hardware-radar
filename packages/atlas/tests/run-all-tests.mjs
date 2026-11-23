@@ -32,6 +32,7 @@ const testModules = [
     ,"./AtlasSpecificationEnrichmentBatch002.test.mjs"
     ,"./AtlasSpecificationEnrichmentBatch003.test.mjs"
     ,"./AtlasSpecificationEnrichmentBatch004.test.mjs"
+    ,"./AtlasFeedDrivenExpansionBatch005.test.mjs"
 ];
 
 console.log("Running Atlas test suite...\n");

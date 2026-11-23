@@ -60,9 +60,10 @@ const completeTimingTuple = product => {
         performance.primaryTimings === values.join("-");
 };
 
-assert.equal(products.length, 159);
-assert.ok(products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length >= 71);
-assert.equal(products.filter(completeTimingTuple).length, 69);
+const preBatch005Products = products.filter(product => product.identity.createdBy !== "system:atlas-feed-expansion-batch-005");
+assert.equal(preBatch005Products.length, 159);
+assert.ok(preBatch005Products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length >= 71);
+assert.equal(preBatch005Products.filter(completeTimingTuple).length, 69);
 
 for (const product of products.filter(product => product.identity.brand === "Kingston")) {
     assert.notEqual(product.identity.updatedBy, "system:atlas-spec-enrichment-batch-003");

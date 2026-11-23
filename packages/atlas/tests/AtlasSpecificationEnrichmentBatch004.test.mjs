@@ -56,10 +56,11 @@ const completeTimingTuple = product => {
         performance.primaryTimings === values.join("-");
 };
 
-assert.equal(products.length, 159);
-assert.equal(products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length, 71);
-assert.equal(products.filter(completeTimingTuple).length, 69);
-assert.equal(products.filter(product => typeof product.extension.data.electrical.ratedVoltage === "number").length, 148);
+const preBatch005Products = products.filter(product => product.identity.createdBy !== "system:atlas-feed-expansion-batch-005");
+assert.equal(preBatch005Products.length, 159);
+assert.equal(preBatch005Products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length, 71);
+assert.equal(preBatch005Products.filter(completeTimingTuple).length, 69);
+assert.equal(preBatch005Products.filter(product => typeof product.extension.data.electrical.ratedVoltage === "number").length, 148);
 
 for (const product of products.filter(product => product.identity.brand === "Kingston")) {
     assert.notEqual(product.identity.updatedBy, "system:atlas-spec-enrichment-batch-004");
