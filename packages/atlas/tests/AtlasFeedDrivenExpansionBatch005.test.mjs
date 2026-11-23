@@ -40,20 +40,30 @@ for (const product of admitted) {
   const { classification, capacity, performance } = product.extension.data;
   assert.deepEqual([classification.memoryType, capacity.capacityGb, capacity.moduleCount, capacity.capacityPerModuleGb, performance.dataRateMtps, classification.formFactor], [memoryType, capacityGb, moduleCount, capacityPerModuleGb, dataRateMtps, formFactor], mpn);
   assert.equal(capacity.capacityGb, capacity.moduleCount * capacity.capacityPerModuleGb, mpn);
-  assert.equal(product.governance.lifecycleStatus, "DRAFT", mpn);
-  assert.equal(product.governance.publicationStatus, "PENDING", mpn);
-  assert.equal(product.governance.humanReviewRequired, true, mpn);
+  assert.equal(product.identity.recordRevision, 2, mpn);
+  assert.equal(product.governance.lifecycleStatus, "ACTIVE", mpn);
+  assert.equal(product.governance.publicationStatus, "READY", mpn);
+  assert.equal(product.governance.humanReviewRequired, false, mpn);
   const mpnEvidence = product.provenance.fieldSources["identity.manufacturerPartNumber"];
   assert.ok(mpnEvidence.some(source => source.sourceType.startsWith("MANUFACTURER_") && source.sourceLocator.startsWith("https://") && source.verificationStatus === "VERIFIED"), mpn);
   assert.ok(mpnEvidence.some(source => source.sourceType === "RETAILER_PAGE_REFERENCE_ONLY" && source.sourceLocator.includes("rakuten_catalog_5e9d63b2ce6fc0413a9f37bb")), mpn);
-  assert.equal(assessAtlasDraftActivationReadiness({ product, products, brands }).status, "READY_TO_ACTIVATE", mpn);
+  assert.equal(assessAtlasDraftActivationReadiness({ product, products, brands }).status, "ALREADY_ACTIVE", mpn);
   for (const rule of RamRuleSet.rules) assert.equal(rule.validate(product).result, "PASS", `${mpn}: ${rule.ruleId}`);
 }
 
 assert.equal(validateRepository(products).valid, true);
 const publicCatalog = createRamCatalogProjection(products);
-assert.equal(publicCatalog.productCount, 159);
-assert.equal(admitted.every(product => !publicCatalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
+const eligibleProducts = products.filter(product =>
+  product.governance.lifecycleStatus === "ACTIVE" &&
+  product.governance.publicationStatus === "READY"
+);
+assert.equal(publicCatalog.productCount, eligibleProducts.length);
+assert.equal(publicCatalog.productCount, 171);
+assert.equal(admitted.every(product => publicCatalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
+const draftLifecycle = structuredClone(admitted[0]);
+draftLifecycle.governance.lifecycleStatus = "DRAFT";
+draftLifecycle.governance.publicationStatus = "PENDING";
+assert.equal(createRamCatalogProjection([draftLifecycle]).productCount, 0);
 const unknownLifecycle = structuredClone(admitted[0]);
 unknownLifecycle.governance.lifecycleStatus = "UNKNOWN";
 unknownLifecycle.governance.publicationStatus = "UNKNOWN";
@@ -66,19 +76,15 @@ try {
     products,
     outputDir: generationRoot
   });
-  assert.equal(generation.productCount, 159);
-  assert.equal(generation.routes.length, 159);
+  assert.equal(generation.productCount, eligibleProducts.length);
+  assert.equal(generation.routes.length, eligibleProducts.length);
   for (const product of admitted) {
     assert.equal(
       generation.routes.some((route) => route.path === `/ram/${product.identity.slug}/`),
-      false,
-      `${product.identity.manufacturerPartNumber} must not receive a public route`
+      true,
+      `${product.identity.manufacturerPartNumber} must receive a public route after activation`
     );
-    await assert.rejects(
-      stat(path.join(generationRoot, "ram", product.identity.slug, "index.html")),
-      (error) => error?.code === "ENOENT",
-      `${product.identity.manufacturerPartNumber} must not receive a public page`
-    );
+    await stat(path.join(generationRoot, "ram", product.identity.slug, "index.html"));
   }
   const readyProduct = products.find((product) =>
     product.governance.lifecycleStatus === "ACTIVE" &&
@@ -88,4 +94,4 @@ try {
 } finally {
   await rm(generationRoot, { recursive: true, force: true });
 }
-console.log("Atlas feed-driven expansion Batch 005 regression tests passed (12 draft records).");
+console.log("Atlas feed-driven expansion Batch 005 regression tests passed (12 governed activations).");
