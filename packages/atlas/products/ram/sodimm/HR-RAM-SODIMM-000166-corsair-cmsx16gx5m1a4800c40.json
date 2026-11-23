@@ -1,0 +1,198 @@
+{
+  "identity": {
+    "atlasProductId": "ram_corsair_cmsx16gx5m1a4800c40",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-11-23T00:00:00.000Z",
+    "updatedAt": "2026-11-23T00:00:00.000Z",
+    "createdBy": "system:atlas-feed-expansion-batch-005",
+    "updatedBy": "system:atlas-feed-expansion-batch-005",
+    "brand": "Corsair",
+    "manufacturer": "Corsair",
+    "productFamily": "VENGEANCE SODIMM DDR5",
+    "series": null,
+    "modelName": "VENGEANCE SODIMM DDR5 CMSX16GX5M1A4800C40",
+    "manufacturerPartNumber": "CMSX16GX5M1A4800C40",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Corsair VENGEANCE SODIMM DDR5 DDR5 16GB (1×16GB) 4800 MT/s",
+    "slug": "corsair-vengeance-sodimm-ddr5-cmsx16gx5m1a4800c40"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_FEED_EXPANSION_BATCH_005 exact-MPN manufacturer-verified draft admission; retained feed evidence is discovery-only.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX16GX5M1A4800C40-B005",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmsx16gx5m1a4800c40/vengeance-ddr5-sodimm-16gb-1x16gb-ddr5-4800-pc5-38400-c40-1-1v-cmsx16gx5m1a4800c40",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        },
+        {
+          "sourceId": "SRC-FEED-NEWEGG-N82E16820236856-B005",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "rakuten:catalog-state:rakuten_catalog_5e9d63b2ce6fc0413a9f37bb:sku:N82E16820236856",
+          "publisher": "Rakuten/Newegg retained feed",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Discovery-only evidence preserving listing N82E16820236856 and feed product 4458313469109047173807963; historical feed availability is not current availability, seller identity, or manufacturer identity."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX16GX5M1A4800C40-B005",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmsx16gx5m1a4800c40/vengeance-ddr5-sodimm-16gb-1x16gb-ddr5-4800-pc5-38400-c40-1-1v-cmsx16gx5m1a4800c40",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX16GX5M1A4800C40-B005",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmsx16gx5m1a4800c40/vengeance-ddr5-sodimm-16gb-1x16gb-ddr5-4800-pc5-38400-c40-1-1v-cmsx16gx5m1a4800c40",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX16GX5M1A4800C40-B005",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmsx16gx5m1a4800c40/vengeance-ddr5-sodimm-16gb-1x16gb-ddr5-4800-pc5-38400-c40-1-1v-cmsx16gx5m1a4800c40",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX16GX5M1A4800C40-B005",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/us/en/p/memory/cmsx16gx5m1a4800c40/vengeance-ddr5-sodimm-16gb-1x16gb-ddr5-4800-pc5-38400-c40-1-1v-cmsx16gx5m1a4800c40",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-11-23T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": false,
+        "gamingPositioning": false,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 4800,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR5-4800",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": 4800,
+        "testedLatencyCl": 40,
+        "bandwidthGbps": 38.4
+      },
+      "electrical": {
+        "ratedVoltage": 1.1,
+        "baseVoltage": 1.1,
+        "pmicLocation": "ON_MODULE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

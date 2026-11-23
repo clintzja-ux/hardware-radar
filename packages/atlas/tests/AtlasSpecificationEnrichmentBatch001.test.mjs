@@ -73,13 +73,14 @@ for (const atlasProductId of [
     assert.equal(byId.get(atlasProductId).extension.data.performance.primaryTimings, null, atlasProductId);
 }
 
-assert.equal(products.length, 159);
+const preBatch005Products = products.filter(product => product.identity.createdBy !== "system:atlas-feed-expansion-batch-005");
+assert.equal(preBatch005Products.length, 159);
 const completeTimingTuple = product => {
     const performance = product.extension.data.performance;
     const values = [performance.casLatency, performance.tRcd, performance.tRp, performance.tRas];
     return values.every(value => Number.isInteger(value) && value > 0) && performance.primaryTimings === values.join("-");
 };
-assert.ok(products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length >= 66);
-assert.ok(products.filter(completeTimingTuple).length >= 64);
-assert.ok(products.filter(product => typeof product.extension.data.electrical.ratedVoltage === "number").length >= 133);
+assert.ok(preBatch005Products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length >= 66);
+assert.ok(preBatch005Products.filter(completeTimingTuple).length >= 64);
+assert.ok(preBatch005Products.filter(product => typeof product.extension.data.electrical.ratedVoltage === "number").length >= 133);
 console.log("Atlas specification enrichment Batch 001 regression tests passed.");

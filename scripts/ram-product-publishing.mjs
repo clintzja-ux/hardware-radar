@@ -287,7 +287,9 @@ export function createRamProductSitemapRoutes(products, { currentRetailByProduct
 
 export async function generateRamProductPages({ catalog, products, destinations = [], currentRetailByProduct = new Map(), terminalByProduct = new Map(), chronologicalSeriesByProduct = new Map(), disclosure = "", outputDir }) {
     if (!catalog || catalog.productCount !== catalog.products?.length) throw new Error("RAM_PRODUCT_CATALOG_INVALID");
-    const routes = createRamProductSitemapRoutes(products, { currentRetailByProduct, chronologicalSeriesByProduct });
+    const publicProductIds = new Set(catalog.products.map((product) => product.atlasProductId));
+    const publicProducts = products.filter((product) => publicProductIds.has(product.identity?.atlasProductId));
+    const routes = createRamProductSitemapRoutes(publicProducts, { currentRetailByProduct, chronologicalSeriesByProduct });
     const paths = new Set(routes.map((route) => route.path));
     if (routes.length !== catalog.productCount || catalog.products.some((product) => !paths.has(product.publicPath))) throw new Error("RAM_PRODUCT_ROUTE_BINDING_INVALID");
     const ramRoot = path.join(outputDir, "ram");

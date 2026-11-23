@@ -42,7 +42,7 @@ assert.equal(filteredProducts.find(value => value.identity.atlasProductId === pr
 assert.equal(Object.isFrozen(filteredProducts), true);
 
 const searchResults = await repository.search("vengeance");
-assert.equal(searchResults.length, 19);
+assert.equal(searchResults.length, 26);
 assert.equal(searchResults.includes(product), true);
 assert.equal(Object.isFrozen(searchResults), true);
 

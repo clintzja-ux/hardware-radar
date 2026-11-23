@@ -9,15 +9,21 @@ const publicationWorkspaceRoot = path.resolve(process.env.HARDWARE_RADAR_PUBLICA
 const read = (relativePath) => readFile(path.join(relativePath.startsWith("public/") ? publicationWorkspaceRoot : root, relativePath), "utf8");
 const manifest = JSON.parse(await read("packages/atlas/atlas-manifest.json"));
 const products = await Promise.all(manifest.products.map(async (entry) => JSON.parse(await read(path.join("packages/atlas", entry.path)))));
+const publicProducts = products.filter(product => product.governance.lifecycleStatus === "ACTIVE" && product.governance.publicationStatus === "READY");
 const catalog = createRamCatalogProjection(products);
 const replay = createRamCatalogProjection([...products].reverse());
 
 assert.equal(catalog.schemaVersion, "1.0");
 assert.equal(catalog.catalogType, "ATLAS_RAM_PRODUCT_CATALOG");
 assert.equal(catalog.defaultOrder, RAM_CATALOG_ORDER);
-assert.equal(catalog.productCount, manifest.products.length);
-assert.equal(catalog.products.length, manifest.products.length);
-assert.equal(new Set(catalog.products.map((item) => item.atlasProductId)).size, manifest.products.length);
+assert.equal(catalog.productCount, publicProducts.length);
+assert.equal(catalog.products.length, publicProducts.length);
+assert.equal(new Set(catalog.products.map((item) => item.atlasProductId)).size, publicProducts.length);
+assert.equal(products.filter(product => product.governance.lifecycleStatus === "DRAFT").every(product => !catalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
+const unknownLifecycle = structuredClone(products[0]);
+unknownLifecycle.governance.lifecycleStatus = "UNKNOWN";
+unknownLifecycle.governance.publicationStatus = "UNKNOWN";
+assert.equal(createRamCatalogProjection([unknownLifecycle]).productCount, 0);
 assert.deepEqual(replay, catalog, "Catalog projection must not depend on manifest input order.");
 assert.equal(Object.isFrozen(catalog), true);
 assert.ok(catalog.products.every((item) => item.capacityGb === item.moduleCount * item.capacityPerModuleGb));

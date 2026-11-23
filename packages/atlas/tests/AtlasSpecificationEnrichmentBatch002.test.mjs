@@ -78,10 +78,11 @@ const completeTimingTuple = product => {
     return values.every(value => Number.isInteger(value) && value > 0) &&
         performance.primaryTimings === values.join("-");
 };
-assert.equal(products.length, 159);
-assert.ok(products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length >= 66);
-assert.ok(products.filter(completeTimingTuple).length >= 64);
-assert.ok(products.filter(product => typeof product.extension.data.electrical.ratedVoltage === "number").length >= 133);
-assert.ok(products.filter(product => product.extension.data.performance.xmpSupport === "PROFILE_INCLUDED").length >= 38);
-assert.equal(products.filter(product => product.extension.data.performance.expoSupport === "PROFILE_INCLUDED").length, 25);
+const preBatch005Products = products.filter(product => product.identity.createdBy !== "system:atlas-feed-expansion-batch-005");
+assert.equal(preBatch005Products.length, 159);
+assert.ok(preBatch005Products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length >= 66);
+assert.ok(preBatch005Products.filter(completeTimingTuple).length >= 64);
+assert.ok(preBatch005Products.filter(product => typeof product.extension.data.electrical.ratedVoltage === "number").length >= 133);
+assert.ok(preBatch005Products.filter(product => product.extension.data.performance.xmpSupport === "PROFILE_INCLUDED").length >= 38);
+assert.equal(preBatch005Products.filter(product => product.extension.data.performance.expoSupport === "PROFILE_INCLUDED").length, 25);
 console.log("Atlas specification enrichment Batch 002 regression tests passed.");

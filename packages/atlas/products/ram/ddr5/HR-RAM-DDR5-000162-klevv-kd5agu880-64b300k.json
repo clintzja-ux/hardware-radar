@@ -1,0 +1,198 @@
+{
+  "identity": {
+    "atlasProductId": "ram_klevv_kd5agu880_64b300k",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-11-23T00:00:00.000Z",
+    "updatedAt": "2026-11-23T00:00:00.000Z",
+    "createdBy": "system:atlas-feed-expansion-batch-005",
+    "updatedBy": "system:atlas-feed-expansion-batch-005",
+    "brand": "KLEVV",
+    "manufacturer": "KLEVV",
+    "productFamily": "FIT V",
+    "series": null,
+    "modelName": "FIT V KD5AGU880-64B300K",
+    "manufacturerPartNumber": "KD5AGU880-64B300K",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": "4895194969020",
+    "countryOfOrigin": null,
+    "displayName": "KLEVV FIT V DDR5 16GB (1×16GB) 6400 MT/s",
+    "slug": "klevv-fit-v-kd5agu880-64b300k"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_FEED_EXPANSION_BATCH_005 exact-MPN manufacturer-verified draft admission; retained feed evidence is discovery-only.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGU880-64B300K-B005",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.klevv.com/HyAdmin/upload/goodFile/KLEVV_Product%20Sheet_MEMORY_FIT%20V_v2_EN.pdf",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        },
+        {
+          "sourceId": "SRC-FEED-NEWEGG-N82E16820101127-B005",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "rakuten:catalog-state:rakuten_catalog_5e9d63b2ce6fc0413a9f37bb:sku:N82E16820101127",
+          "publisher": "Rakuten/Newegg retained feed",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Discovery-only evidence preserving listing N82E16820101127 and feed product 445838609890540254288184; historical feed availability is not current availability, seller identity, or manufacturer identity."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGU880-64B300K-B005",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.klevv.com/HyAdmin/upload/goodFile/KLEVV_Product%20Sheet_MEMORY_FIT%20V_v2_EN.pdf",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGU880-64B300K-B005",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.klevv.com/HyAdmin/upload/goodFile/KLEVV_Product%20Sheet_MEMORY_FIT%20V_v2_EN.pdf",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGU880-64B300K-B005",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.klevv.com/HyAdmin/upload/goodFile/KLEVV_Product%20Sheet_MEMORY_FIT%20V_v2_EN.pdf",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-KLEVV-KD5AGU880-64B300K-B005",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://www.klevv.com/HyAdmin/upload/goodFile/KLEVV_Product%20Sheet_MEMORY_FIT%20V_v2_EN.pdf",
+          "publisher": "KLEVV",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-23T00:00:00.000Z",
+          "verifiedBy": "system:atlas-feed-expansion-batch-005",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact MPN, memory generation, capacity, module composition, form factor, and speed verified from first-party manufacturer evidence."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-11-23T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR5",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "ON_DIE_ONLY",
+        "isKit": false,
+        "gamingPositioning": true,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 6400,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR5-6400",
+        "casLatency": 30,
+        "tRcd": 38,
+        "tRp": 38,
+        "tRas": 78,
+        "primaryTimings": "30-38-38-78",
+        "xmpSupport": "SUPPORTED",
+        "expoSupport": "SUPPORTED",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": 6400,
+        "testedLatencyCl": 30,
+        "bandwidthGbps": 51.2
+      },
+      "electrical": {
+        "ratedVoltage": null,
+        "baseVoltage": 1.1,
+        "pmicLocation": "ON_MODULE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": "BLACK",
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": true,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}
