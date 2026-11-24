@@ -32,7 +32,7 @@ export function createNeweggRoutinePublicationExecution({runtimeRoot,operational
   if(routineResult?.outcome!=="SUCCESS_RELEASE_READY")throw Object.assign(new Error("PUBLICATION_ROUTINE_NOT_RELEASE_READY"),{operatorOutcome:"ACQUISITION_FAILED"});
   const candidate=await owner.discover(),runId=routineResult.runId;if(!candidate||candidate.trigger?.runId!==runId)throw Object.assign(new Error("PUBLICATION_CANDIDATE_ROUTINE_BINDING_INVALID"),{operatorOutcome:"RELEASE_READY_NOT_PUBLISHED"});
   const mandate=selectEligiblePublicationMandate({authority:await repository.inspect(),candidate,at:now()});
-  try{const result=await run({mandateId:mandate.mandateId,root:command.publicationCheckoutRoot});return{...result,mandateId:mandate.mandateId,publicationInvoked:true};}
+  try{const result=await run({mandateId:mandate.mandateId,candidateId:candidate.candidateId,root:command.publicationCheckoutRoot});return{...result,mandateId:mandate.mandateId,publicationInvoked:true};}
   catch(error){error.operatorOutcome="PUBLICATION_FAILED";throw error;}
  }});
 }
