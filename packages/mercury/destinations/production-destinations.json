@@ -6652,6 +6652,325 @@
       "createdAt": "2026-10-12T15:06:03.349Z",
       "createdBy": "operator:JRVR",
       "materialFingerprint": "6dddcb75b3810b99038d70b9ee2de349dd37991112fd295005f1a41f47a56544"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_7c100b4a15850430dbc932b9",
+      "atlasProductId": "ram_klevv_kd58gu880_60a300l",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820101093",
+      "retailerListingId": "N82E16820101093",
+      "binding": {
+        "manufacturerPartNumber": "KD58GU880-60A300L",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820101093"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T21:37:34.017Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T21:37:34.017Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "4c3c42611ba2189e4e9623b3de3ca928d42983b8e87c0aaa3134d4bbd476c7ea"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_e24d49ad8fb89479bd62879a",
+      "atlasProductId": "ram_klevv_kd5agu880_64b300k",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820101127",
+      "retailerListingId": "N82E16820101127",
+      "binding": {
+        "manufacturerPartNumber": "KD5AGU880-64B300K",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820101127"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T21:46:20.155Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T21:46:20.155Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "07804515cae9f64d3b2f915041d17a97441de5c94ac204f8c7a3430a6dca9d49"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_a0a7eab9b142930c3b0b76a5",
+      "atlasProductId": "ram_klevv_kd5agua80_64b300v",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820101129",
+      "retailerListingId": "N82E16820101129",
+      "binding": {
+        "manufacturerPartNumber": "KD5AGUA80-64B300V",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820101129"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T21:48:55.828Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T21:48:55.828Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "50a6b6ef34836499c661074038522e0ecaef6f3a96d9fafc6c69efefa9dd3973"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_50f7e70923f2384ad18236f2",
+      "atlasProductId": "ram_klevv_kd5bgua80_60a300i",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820101098",
+      "retailerListingId": "N82E16820101098",
+      "binding": {
+        "manufacturerPartNumber": "KD5BGUA80-60A300I",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820101098"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T21:52:01.518Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T21:52:01.518Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "ce9618d7a5dc9dcfccc66b724e54c74630136ec0fb5deea4c447120218974806"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_851ca37d89d3d43840ed5f37",
+      "atlasProductId": "ram_corsair_cmsx32gx4m2a3200c22",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820236681",
+      "retailerListingId": "N82E16820236681",
+      "binding": {
+        "manufacturerPartNumber": "CMSX32GX4M2A3200C22",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820236681"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T21:56:01.175Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T21:56:01.175Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "622743bdf844ea09f865e7c2a6b8030bd07f925928fa0fa7beb90aa6e78d1936"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_77dad7d742a00c6432c188d3",
+      "atlasProductId": "ram_corsair_cmsx16gx5m1a4800c40",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820236856",
+      "retailerListingId": "N82E16820236856",
+      "binding": {
+        "manufacturerPartNumber": "CMSX16GX5M1A4800C40",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820236856"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T22:02:22.965Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T22:02:22.965Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "c5bec008216c996c4c3402b344b9b8c01494c00f75171715ced9c395359dcfeb"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_42ea13436d2d22786937f902",
+      "atlasProductId": "ram_corsair_cmsx16gx5m1a5600c48",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820982145",
+      "retailerListingId": "N82E16820982145",
+      "binding": {
+        "manufacturerPartNumber": "CMSX16GX5M1A5600C48",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820982145"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T22:15:12.478Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T22:15:12.478Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "2d0698706dbbcfd5da258ac851aea638274b356aac63ff58b0833ac0ca4524bf"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_acf3eca47a74e8d4858263b6",
+      "atlasProductId": "ram_corsair_cmsx16gx5m2a4800c40",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820236863",
+      "retailerListingId": "N82E16820236863",
+      "binding": {
+        "manufacturerPartNumber": "CMSX16GX5M2A4800C40",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820236863"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T22:17:32.927Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T22:17:32.927Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "0401ec72746e53695871ec94f00f52aa3e861aedffc4864a5f2abfeda1dfe8bb"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_bc263094b2a9743999dc7408",
+      "atlasProductId": "ram_corsair_cmsx16gx4m1a3200c22",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820236850",
+      "retailerListingId": "N82E16820236850",
+      "binding": {
+        "manufacturerPartNumber": "CMSX16GX4M1A3200C22",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820236850"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T23:03:05.551Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T23:03:05.551Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "3bf74d36ed897c359eb02c15468f3700f1376ca4ed850db56ef9455394ad0a92"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_42a483d0566a8f9d003ebfb8",
+      "atlasProductId": "ram_corsair_cmsx16gx4m2a2666c18",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820233990",
+      "retailerListingId": "N82E16820233990",
+      "binding": {
+        "manufacturerPartNumber": "CMSX16GX4M2A2666C18",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820233990"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T23:03:48.077Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T23:03:48.077Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "8a0147c78ab44f0edf1ba85f14b722b183de8b251c18eb8480aad7d913282a41"
+    },
+    {
+      "schemaVersion": "1.0",
+      "destinationId": "mer_dest_32c2cddef84984c62f79cf30",
+      "atlasProductId": "ram_klevv_kd5agu880_60a300f",
+      "retailerId": "RETAILER-0004",
+      "marketplace": "newegg.com",
+      "destinationType": "PRODUCT_PAGE",
+      "destinationUrl": "https://newegg.com/p/N82E16820101124",
+      "retailerListingId": "N82E16820101124",
+      "binding": {
+        "manufacturerPartNumber": "KD5AGU880-60A300F",
+        "method": "OPERATOR_EXACT_PRODUCT_REVIEW",
+        "scope": "EXACT_STANDALONE_PRODUCT",
+        "evidenceReferences": [
+          "https://www.newegg.com/p/N82E16820101124?utm_source=chatgpt.com"
+        ]
+      },
+      "provenance": {
+        "sourceType": "OPERATOR_INSPECTED_PUBLIC_PAGE"
+      },
+      "reviewedBy": "forge:trusted-operator",
+      "reviewedAt": "2026-11-23T23:11:20.256Z",
+      "status": "ACTIVE",
+      "supersedesDestinationId": null,
+      "retirementReason": null,
+      "createdAt": "2026-11-23T23:11:20.256Z",
+      "createdBy": "forge:trusted-operator",
+      "materialFingerprint": "96a9ae8f0bcf47064a6e1defa1573a2118ef0806c258a0bf68e363330e530f00"
     }
   ]
 }
