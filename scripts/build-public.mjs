@@ -131,7 +131,7 @@ const currentRetailByProduct = new Map(currentRetail.products.map(item => [item.
 const terminalByProduct = new Map(terminal.lenses.ALL_RAM.productRows.map(item => [item.atlasProductId, item]));
 const chronologicalSeriesByProduct = new Map(chronological.products.map(item => [item.atlasProductId, item]));
 const productPages = await generateRamProductPages({ catalog: ramCatalog, products, destinations: publicDestinations, currentRetailByProduct, terminalByProduct, chronologicalSeriesByProduct, disclosure: currentRetail.disclosure, outputDir: publicOutputRoot });
-if (!pricePublication) await generateRamDiscoveryLinks({ catalog: ramCatalog, outputDir: publicOutputRoot });
+await generateRamDiscoveryLinks({ catalog: ramCatalog, outputDir: publicOutputRoot });
 await generateRamTerminalPage({ artifact: terminal, outputDir: publicOutputRoot });
 const staticRoutes = await json(path.join(runtimeRoot, "content", "site-routes.json"));
 await writeFile(path.join(publicOutputRoot, "sitemap.xml"), generateSitemap({ staticRoutes, articles: editorial.articles, additionalRoutes: productPages.routes }));
