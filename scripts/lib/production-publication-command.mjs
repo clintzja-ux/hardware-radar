@@ -25,7 +25,7 @@ export function createProductionPublicationRunner({execFile,env=process.env,...c
  return async function run({mandateId,root:checkoutRoot,mode="RUN",candidateId=null,checkpointCommit=null}={}){
   if(checkoutRoot&&command.publicationCheckoutRoot!==path.resolve(checkoutRoot))throw new Error("PUBLICATION_CHECKOUT_ROOT_CONFLICT");let result;
   try{result=await execFile(command.nodeExecutable,productionPublicationArguments(command,{mode,mandateId,candidateId,checkpointCommit}),{cwd:command.runtimeRoot,env,windowsHide:true,maxBuffer:32*1024*1024});}
-  catch(error){const detail=[error?.stderr,error?.message].find(value=>typeof value==="string"&&/PUBLICATION_[A-Z0-9_]+/.test(value)),classification=detail?.match(/PUBLICATION_[A-Z0-9_]+/)?.[0]??"PUBLICATION_COMMAND_FAILED",failure=new Error(classification);failure.code=classification;throw failure;}
+  catch(error){const detail=[error?.stderr,error?.message].find(value=>typeof value==="string"&&/PUBLICATION_[A-Z0-9_]+/.test(value)),classification=detail?.match(/PUBLICATION_[A-Z0-9_]+/)?.[0]??"PUBLICATION_COMMAND_FAILED",failure=new Error(classification),diagnosticText=detail?.match(/PUBLICATION_[A-Z0-9_]+:(\{[^\r\n]*\})/)?.[1];if(diagnosticText)try{failure.diagnostic=JSON.parse(diagnosticText);}catch{}failure.code=classification;throw failure;}
   const start=result.stdout.indexOf("{");if(start<0)throw new Error("PUBLICATION_COMMAND_OUTPUT_INVALID");return JSON.parse(result.stdout.slice(start));
  };
 }

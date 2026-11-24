@@ -1,5 +1,6 @@
 const testModules = [
   "./StaticPublicationReleaseControl.test.mjs",
+    "./IntegratedPublicationCandidateBinding.test.mjs",
     "./PublicationReliabilityP2Foundation.test.mjs",
     "./RamPublicationDependencyShadow.test.mjs",
     "./PostDeploymentReconsiderationObservationRecovery.test.mjs",
