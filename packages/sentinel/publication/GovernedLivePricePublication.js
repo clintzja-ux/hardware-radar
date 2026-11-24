@@ -16,7 +16,7 @@ const authorizationKeys = ["schemaVersion","policyVersion","authorizationId","ca
 export const DEFAULT_LIVE_PRICE_GENERATED_PATHS = Object.freeze([
   "config/publication-release.json", "config/artifacts/", "public/data/market-snapshot.json",
   "public/data/ram-catalog.json", "public/data/ram-current-retail.json", "public/data/ram-terminal.json",
-  "public/data/atlas/", "public/ram/", "public/sitemap.xml"
+  "public/data/atlas/", "public/ram/", "public/ddr4.html", "public/ddr5.html", "public/sodimm.html", "public/sitemap.xml"
 ]);
 
 function pathAllowed(file, allowed) {

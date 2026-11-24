@@ -24,7 +24,7 @@ The Jamaica-day allowance is a time-dependent projection, not a property of mand
 
 The governed preparation owner evaluates the exact normalized generated-path delta after build and verification. An empty delta is accepted only when the Git comparison is explicitly complete. The result is `NO_MEANINGFUL_CHANGE`; the inner publication authorization remains unconsumed and the unattended coordinator records a terminal no-change event before Git checkpoint creation. It performs no push or deployment and consumes no accepted-release allowance.
 
-Non-empty deltas continue through the existing allowlist, packaging, checkpoint-parent, fast-forward, deployment, verification, and acceptance controls. Missing, duplicated, malformed, or incomplete comparison evidence fails closed.
+Non-empty deltas continue through the existing allowlist, packaging, checkpoint-parent, fast-forward, deployment, verification, and acceptance controls. Governed RAM discovery generation is narrowly permitted to update `public/ram/index.html`, `public/ddr4.html`, `public/ddr5.html`, and `public/sodimm.html`; unrelated root HTML and protected application-packaging paths remain unauthorized. Missing, duplicated, malformed, or incomplete comparison evidence fails closed.
 
 ## Producer coverage
 
