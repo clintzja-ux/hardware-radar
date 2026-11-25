@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "catalogType": "ATLAS_RAM_PRODUCT_CATALOG",
-  "productCount": 159,
+  "productCount": 171,
   "defaultOrder": "BRAND_MODEL_MPN_ID_ASC",
   "products": [
     {
@@ -185,7 +185,8 @@
       "xmpSupport": "UNKNOWN",
       "expoSupport": "UNKNOWN",
       "casLatency": 48,
-      "primaryTimings": "48-48-48-90"
+      "primaryTimings": "48-48-48-90",
+      "ratedVoltage": 1.1
     },
     {
       "atlasProductId": "ram_corsair_cmk32gx5m2b6000z30",
@@ -229,7 +230,29 @@
       "buffering": "UNBUFFERED",
       "xmpSupport": "PROFILE_INCLUDED",
       "expoSupport": "NONE",
+      "casLatency": 16,
+      "primaryTimings": "16-20-20-38",
       "ratedVoltage": 1.35
+    },
+    {
+      "atlasProductId": "ram_corsair_cmh16gx5m1d6000z38",
+      "publicSlug": "corsair-vengeance-rgb-cmh16gx5m1d6000z38",
+      "publicPath": "/ram/corsair-vengeance-rgb-cmh16gx5m1d6000z38/",
+      "brand": "Corsair",
+      "productFamily": "VENGEANCE RGB",
+      "modelName": "VENGEANCE RGB CMH16GX5M1D6000Z38",
+      "displayName": "Corsair VENGEANCE RGB DDR5 16GB (1×16GB) 6000 MT/s",
+      "manufacturerPartNumber": "CMH16GX5M1D6000Z38",
+      "memoryType": "DDR5",
+      "capacityGb": 16,
+      "moduleCount": 1,
+      "capacityPerModuleGb": 16,
+      "formFactor": "DIMM",
+      "dataRateMtps": 6000,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "PROFILE_INCLUDED",
+      "expoSupport": "PROFILE_INCLUDED"
     },
     {
       "atlasProductId": "ram_corsair_cmh16gx5m2b5200z40",
@@ -437,6 +460,132 @@
       "casLatency": 32,
       "primaryTimings": "32-40-40-84",
       "ratedVoltage": 1.4
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx16gx4m1a3200c22",
+      "publicSlug": "corsair-vengeance-sodimm-cmsx16gx4m1a3200c22",
+      "publicPath": "/ram/corsair-vengeance-sodimm-cmsx16gx4m1a3200c22/",
+      "brand": "Corsair",
+      "productFamily": "VENGEANCE SODIMM",
+      "modelName": "VENGEANCE SODIMM CMSX16GX4M1A3200C22",
+      "displayName": "Corsair VENGEANCE SODIMM DDR4 16GB (1×16GB) 3200 MT/s",
+      "manufacturerPartNumber": "CMSX16GX4M1A3200C22",
+      "memoryType": "DDR4",
+      "capacityGb": 16,
+      "moduleCount": 1,
+      "capacityPerModuleGb": 16,
+      "formFactor": "SO_DIMM",
+      "dataRateMtps": 3200,
+      "eccType": "NONE",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "UNKNOWN",
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx16gx4m2a2666c18",
+      "publicSlug": "corsair-vengeance-sodimm-cmsx16gx4m2a2666c18",
+      "publicPath": "/ram/corsair-vengeance-sodimm-cmsx16gx4m2a2666c18/",
+      "brand": "Corsair",
+      "productFamily": "VENGEANCE SODIMM",
+      "modelName": "VENGEANCE SODIMM CMSX16GX4M2A2666C18",
+      "displayName": "Corsair VENGEANCE SODIMM DDR4 16GB (2×8GB) 2666 MT/s",
+      "manufacturerPartNumber": "CMSX16GX4M2A2666C18",
+      "memoryType": "DDR4",
+      "capacityGb": 16,
+      "moduleCount": 2,
+      "capacityPerModuleGb": 8,
+      "formFactor": "SO_DIMM",
+      "dataRateMtps": 2666,
+      "eccType": "NONE",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "UNKNOWN",
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx32gx4m2a3200c22",
+      "publicSlug": "corsair-vengeance-sodimm-cmsx32gx4m2a3200c22",
+      "publicPath": "/ram/corsair-vengeance-sodimm-cmsx32gx4m2a3200c22/",
+      "brand": "Corsair",
+      "productFamily": "VENGEANCE SODIMM",
+      "modelName": "VENGEANCE SODIMM CMSX32GX4M2A3200C22",
+      "displayName": "Corsair VENGEANCE SODIMM DDR4 32GB (2×16GB) 3200 MT/s",
+      "manufacturerPartNumber": "CMSX32GX4M2A3200C22",
+      "memoryType": "DDR4",
+      "capacityGb": 32,
+      "moduleCount": 2,
+      "capacityPerModuleGb": 16,
+      "formFactor": "SO_DIMM",
+      "dataRateMtps": 3200,
+      "eccType": "NONE",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "UNKNOWN",
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx16gx5m1a4800c40",
+      "publicSlug": "corsair-vengeance-sodimm-ddr5-cmsx16gx5m1a4800c40",
+      "publicPath": "/ram/corsair-vengeance-sodimm-ddr5-cmsx16gx5m1a4800c40/",
+      "brand": "Corsair",
+      "productFamily": "VENGEANCE SODIMM DDR5",
+      "modelName": "VENGEANCE SODIMM DDR5 CMSX16GX5M1A4800C40",
+      "displayName": "Corsair VENGEANCE SODIMM DDR5 DDR5 16GB (1×16GB) 4800 MT/s",
+      "manufacturerPartNumber": "CMSX16GX5M1A4800C40",
+      "memoryType": "DDR5",
+      "capacityGb": 16,
+      "moduleCount": 1,
+      "capacityPerModuleGb": 16,
+      "formFactor": "SO_DIMM",
+      "dataRateMtps": 4800,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "UNKNOWN",
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.1
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx16gx5m1a5600c48",
+      "publicSlug": "corsair-vengeance-sodimm-ddr5-cmsx16gx5m1a5600c48",
+      "publicPath": "/ram/corsair-vengeance-sodimm-ddr5-cmsx16gx5m1a5600c48/",
+      "brand": "Corsair",
+      "productFamily": "VENGEANCE SODIMM DDR5",
+      "modelName": "VENGEANCE SODIMM DDR5 CMSX16GX5M1A5600C48",
+      "displayName": "Corsair VENGEANCE SODIMM DDR5 DDR5 16GB (1×16GB) 5600 MT/s",
+      "manufacturerPartNumber": "CMSX16GX5M1A5600C48",
+      "memoryType": "DDR5",
+      "capacityGb": 16,
+      "moduleCount": 1,
+      "capacityPerModuleGb": 16,
+      "formFactor": "SO_DIMM",
+      "dataRateMtps": 5600,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "UNKNOWN",
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.1
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx16gx5m2a4800c40",
+      "publicSlug": "corsair-vengeance-sodimm-ddr5-cmsx16gx5m2a4800c40",
+      "publicPath": "/ram/corsair-vengeance-sodimm-ddr5-cmsx16gx5m2a4800c40/",
+      "brand": "Corsair",
+      "productFamily": "VENGEANCE SODIMM DDR5",
+      "modelName": "VENGEANCE SODIMM DDR5 CMSX16GX5M2A4800C40",
+      "displayName": "Corsair VENGEANCE SODIMM DDR5 DDR5 16GB (2×8GB) 4800 MT/s",
+      "manufacturerPartNumber": "CMSX16GX5M2A4800C40",
+      "memoryType": "DDR5",
+      "capacityGb": 16,
+      "moduleCount": 2,
+      "capacityPerModuleGb": 8,
+      "formFactor": "SO_DIMM",
+      "dataRateMtps": 4800,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "UNKNOWN",
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.1
     },
     {
       "atlasProductId": "ram_crucial_ct16g4dfra32a",
@@ -1018,6 +1167,8 @@
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
       "expoSupport": "NONE",
+      "casLatency": 22,
+      "primaryTimings": "22-22-22-52",
       "ratedVoltage": 1.2
     },
     {
@@ -1037,10 +1188,11 @@
       "dataRateMtps": 5600,
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
+      "xmpSupport": "PROFILE_INCLUDED",
       "expoSupport": "UNKNOWN",
       "casLatency": 40,
-      "primaryTimings": "40-40-40-89"
+      "primaryTimings": "40-40-40-89",
+      "ratedVoltage": 1.1
     },
     {
       "atlasProductId": "ram_g_skill_f5_5200j4040a16gx2_rs5k",
@@ -1382,7 +1534,10 @@
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
       "xmpSupport": "PROFILE_INCLUDED",
-      "expoSupport": "PROFILE_INCLUDED"
+      "expoSupport": "PROFILE_INCLUDED",
+      "casLatency": 30,
+      "primaryTimings": "30-40-40-96",
+      "ratedVoltage": 1.4
     },
     {
       "atlasProductId": "ram_g_skill_f5_6400j3239g32gx2_tz5rk",
@@ -1972,6 +2127,28 @@
       "expoSupport": "SUPPORTED"
     },
     {
+      "atlasProductId": "ram_klevv_kd5bgua80_60a300i",
+      "publicSlug": "klevv-bolt-v-kd5bgua80-60a300i",
+      "publicPath": "/ram/klevv-bolt-v-kd5bgua80-60a300i/",
+      "brand": "KLEVV",
+      "productFamily": "BOLT V",
+      "modelName": "BOLT V KD5BGUA80-60A300I",
+      "displayName": "KLEVV BOLT V DDR5 64GB (2×32GB) 6000 MT/s",
+      "manufacturerPartNumber": "KD5BGUA80-60A300I",
+      "memoryType": "DDR5",
+      "capacityGb": 64,
+      "moduleCount": 2,
+      "capacityPerModuleGb": 32,
+      "formFactor": "DIMM",
+      "dataRateMtps": 6000,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED",
+      "casLatency": 30,
+      "primaryTimings": "30-36-36-76"
+    },
+    {
       "atlasProductId": "ram_klevv_kd5agsa80_48g400a",
       "publicSlug": "klevv-kd5agsa80-48g400a",
       "publicPath": "/ram/klevv-kd5agsa80-48g400a/",
@@ -2160,6 +2337,50 @@
       "expoSupport": "SUPPORTED"
     },
     {
+      "atlasProductId": "ram_klevv_kd58gu880_60a300l",
+      "publicSlug": "klevv-fit-v-kd58gu880-60a300l",
+      "publicPath": "/ram/klevv-fit-v-kd58gu880-60a300l/",
+      "brand": "KLEVV",
+      "productFamily": "FIT V",
+      "modelName": "FIT V KD58GU880-60A300L",
+      "displayName": "KLEVV FIT V DDR5 16GB (2×8GB) 6000 MT/s",
+      "manufacturerPartNumber": "KD58GU880-60A300L",
+      "memoryType": "DDR5",
+      "capacityGb": 16,
+      "moduleCount": 2,
+      "capacityPerModuleGb": 8,
+      "formFactor": "DIMM",
+      "dataRateMtps": 6000,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED",
+      "casLatency": 30,
+      "primaryTimings": "30-36-36-76"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5agu880_60a300f",
+      "publicSlug": "klevv-fit-v-kd5agu880-60a300f",
+      "publicPath": "/ram/klevv-fit-v-kd5agu880-60a300f/",
+      "brand": "KLEVV",
+      "productFamily": "FIT V",
+      "modelName": "FIT V KD5AGU880-60A300F",
+      "displayName": "KLEVV FIT V DDR5 32GB (2×16GB) 6000 MT/s",
+      "manufacturerPartNumber": "KD5AGU880-60A300F",
+      "memoryType": "DDR5",
+      "capacityGb": 32,
+      "moduleCount": 2,
+      "capacityPerModuleGb": 16,
+      "formFactor": "DIMM",
+      "dataRateMtps": 6000,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED",
+      "casLatency": 30,
+      "primaryTimings": "30-36-36-76"
+    },
+    {
       "atlasProductId": "ram_klevv_kd5agu880_60a300l",
       "publicSlug": "klevv-kd5agu880-60a300l",
       "publicPath": "/ram/klevv-kd5agu880-60a300l/",
@@ -2178,6 +2399,50 @@
       "buffering": "UNBUFFERED",
       "xmpSupport": "SUPPORTED",
       "expoSupport": "SUPPORTED"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5agu880_64b300k",
+      "publicSlug": "klevv-fit-v-kd5agu880-64b300k",
+      "publicPath": "/ram/klevv-fit-v-kd5agu880-64b300k/",
+      "brand": "KLEVV",
+      "productFamily": "FIT V",
+      "modelName": "FIT V KD5AGU880-64B300K",
+      "displayName": "KLEVV FIT V DDR5 16GB (1×16GB) 6400 MT/s",
+      "manufacturerPartNumber": "KD5AGU880-64B300K",
+      "memoryType": "DDR5",
+      "capacityGb": 16,
+      "moduleCount": 1,
+      "capacityPerModuleGb": 16,
+      "formFactor": "DIMM",
+      "dataRateMtps": 6400,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED",
+      "casLatency": 30,
+      "primaryTimings": "30-38-38-78"
+    },
+    {
+      "atlasProductId": "ram_klevv_kd5agua80_64b300v",
+      "publicSlug": "klevv-urbane-v-rgb-kd5agua80-64b300v",
+      "publicPath": "/ram/klevv-urbane-v-rgb-kd5agua80-64b300v/",
+      "brand": "KLEVV",
+      "productFamily": "URBANE V RGB",
+      "modelName": "URBANE V RGB KD5AGUA80-64B300V",
+      "displayName": "KLEVV URBANE V RGB DDR5 32GB (2×16GB) 6400 MT/s",
+      "manufacturerPartNumber": "KD5AGUA80-64B300V",
+      "memoryType": "DDR5",
+      "capacityGb": 32,
+      "moduleCount": 2,
+      "capacityPerModuleGb": 16,
+      "formFactor": "DIMM",
+      "dataRateMtps": 6400,
+      "eccType": "ON_DIE_ONLY",
+      "buffering": "UNBUFFERED",
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "SUPPORTED",
+      "casLatency": 30,
+      "primaryTimings": "30-38-38-78"
     },
     {
       "atlasProductId": "ram_lexar_ld5ds016g_b4800gsst",
@@ -2412,7 +2677,8 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_patriot_psd416g26662s",
@@ -2432,7 +2698,8 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_patriot_psd416g320081s",
@@ -2452,7 +2719,8 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_patriot_psd432g26662s",
@@ -2472,7 +2740,8 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_patriot_psd432g32002s",
@@ -2492,7 +2761,8 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_patriot_psd48g240081s",
@@ -2512,7 +2782,8 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_patriot_psd48g266681s",
@@ -2532,7 +2803,8 @@
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_patriot_psd48g320081s",
@@ -2634,8 +2906,9 @@
       "dataRateMtps": 3200,
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "xmpSupport": "SUPPORTED",
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.35
     },
     {
       "atlasProductId": "ram_pny_md32gk2d5560046_tb",
@@ -2655,7 +2928,8 @@
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.1
     },
     {
       "atlasProductId": "ram_pny_mn64gk2d43200_tb",
@@ -2674,8 +2948,9 @@
       "dataRateMtps": 3200,
       "eccType": "NONE",
       "buffering": "UNBUFFERED",
-      "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "xmpSupport": "NONE",
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.2
     },
     {
       "atlasProductId": "ram_silicon_power_sp008gblfu240x02",
@@ -3243,6 +3518,8 @@
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
       "expoSupport": "UNKNOWN",
+      "casLatency": 16,
+      "primaryTimings": "16-20-20-40",
       "ratedVoltage": 1.35
     },
     {
@@ -3264,6 +3541,8 @@
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
       "expoSupport": "UNKNOWN",
+      "casLatency": 16,
+      "primaryTimings": "16-20-20-40",
       "ratedVoltage": 1.35
     },
     {
@@ -3427,7 +3706,8 @@
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.4
     },
     {
       "atlasProductId": "ram_xpg_ax5u6400c3232g_dclarbk",
@@ -3447,7 +3727,8 @@
       "eccType": "ON_DIE_ONLY",
       "buffering": "UNBUFFERED",
       "xmpSupport": "UNKNOWN",
-      "expoSupport": "UNKNOWN"
+      "expoSupport": "UNKNOWN",
+      "ratedVoltage": 1.35
     }
   ],
   "filters": {
