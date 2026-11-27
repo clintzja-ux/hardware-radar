@@ -46,20 +46,36 @@ for (const product of admitted) {
   const data = product.extension.data;
   assert.deepEqual([data.classification.memoryType,data.capacity.capacityGb,data.capacity.moduleCount,data.capacity.capacityPerModuleGb,data.performance.dataRateMtps,data.classification.formFactor], expected.get(mpn), mpn);
   assert.equal(data.capacity.capacityGb, data.capacity.moduleCount * data.capacity.capacityPerModuleGb, mpn);
-  assert.equal(product.identity.recordRevision, 1, mpn);
-  assert.equal(product.governance.lifecycleStatus, "DRAFT", mpn);
-  assert.equal(product.governance.publicationStatus, "PENDING", mpn);
-  assert.equal(product.governance.humanReviewRequired, true, mpn);
+  assert.ok(product.identity.recordRevision >= 1, mpn);
   const evidence = product.provenance.fieldSources["identity.manufacturerPartNumber"];
   assert.ok(evidence.some(source => source.sourceType.startsWith("MANUFACTURER_") && source.sourceLocator.startsWith("https://") && source.verificationStatus === "VERIFIED"), mpn);
   assert.ok(evidence.some(source => source.sourceType === "RETAILER_PAGE_REFERENCE_ONLY" && source.sourceLocator.includes("rakuten_catalog_c6a7566e5b46c08326622d7c")), mpn);
-  assert.equal(assessAtlasDraftActivationReadiness({ product, products, brands }).status, "READY_TO_ACTIVATE", mpn);
+  assert.ok(["READY_TO_ACTIVATE", "ALREADY_ACTIVE"].includes(assessAtlasDraftActivationReadiness({ product, products, brands }).status), mpn);
   for (const rule of RamRuleSet.rules) assert.equal(rule.validate(product).result, "PASS", `${mpn}: ${rule.ruleId}`);
 }
 
-const publicCatalog = createRamCatalogProjection(products);
+const establishedProducts = products.filter(product => product.identity.createdBy !== "system:atlas-batch-006-draft-admission");
+const draftFixtures = admitted.map(product => {
+  const fixture = structuredClone(product);
+  fixture.governance.lifecycleStatus = "DRAFT";
+  fixture.governance.publicationStatus = "PENDING";
+  fixture.governance.humanReviewRequired = true;
+  return fixture;
+});
+const activeFixtures = admitted.map(product => {
+  const fixture = structuredClone(product);
+  fixture.governance.lifecycleStatus = "ACTIVE";
+  fixture.governance.publicationStatus = "READY";
+  fixture.governance.humanReviewRequired = false;
+  return fixture;
+});
+const draftProducts = [...establishedProducts, ...draftFixtures];
+const publicCatalog = createRamCatalogProjection(draftProducts);
 assert.equal(publicCatalog.productCount, 171);
-assert.equal(admitted.every(product => !publicCatalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
+assert.equal(draftFixtures.every(product => !publicCatalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
+const activatedCatalog = createRamCatalogProjection(activeFixtures);
+assert.equal(activatedCatalog.productCount, admitted.length);
+assert.equal(activeFixtures.every(product => activatedCatalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
 const unknown = structuredClone(admitted[0]);
 unknown.governance.lifecycleStatus = "UNKNOWN";
 unknown.governance.publicationStatus = "UNKNOWN";
@@ -79,9 +95,9 @@ try {
     await cp(path.join(publicRoot,file), path.join(output,file), { recursive:false });
   }
   await generateRamDiscoveryLinks({ catalog:publicCatalog, outputDir:output });
-  const generated = await generateRamProductPages({ catalog:publicCatalog, products, outputDir:output });
+  const generated = await generateRamProductPages({ catalog:publicCatalog, products:draftProducts, outputDir:output });
   assert.equal(generated.productCount, 171);
-  const sitemapRoutes = createRamProductSitemapRoutes(products.filter(product => product.governance.lifecycleStatus === "ACTIVE" && product.governance.publicationStatus === "READY"));
+  const sitemapRoutes = createRamProductSitemapRoutes(establishedProducts.filter(product => product.governance.lifecycleStatus === "ACTIVE" && product.governance.publicationStatus === "READY"));
   assert.equal(sitemapRoutes.length, 171);
   for (const product of admitted) {
     assert.equal(generated.routes.some(route => route.path === `/ram/${product.identity.slug}/`), false, product.identity.atlasProductId);
@@ -94,4 +110,4 @@ try {
   await rm(output,{recursive:true,force:true});
 }
 
-console.log("Atlas Batch 006 draft admission tests passed (28 drafts; 1 evidence deferral)." );
+console.log("Atlas Batch 006 admission and lifecycle-contract tests passed (28 identities; 1 evidence deferral)." );

@@ -150,7 +150,12 @@ export class BrandRepository {
     async getByDisplayName(displayName) {
         const normalized = normalizeLookup(displayName, "displayName");
         const brands = await this.getAll();
-        return brands.find((brand) => brand.displayName.toLowerCase() === normalized) ?? null;
+        const matches = brands.filter((brand) => [brand.displayName, ...brand.aliases]
+            .some((name) => name.toLowerCase() === normalized));
+        if (matches.length > 1) {
+            throw new Error(`Atlas brand display name is ambiguous: ${displayName}`);
+        }
+        return matches[0] ?? null;
     }
 
     async exists(brandId) {

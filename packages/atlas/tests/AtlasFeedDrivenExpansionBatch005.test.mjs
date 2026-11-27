@@ -58,7 +58,11 @@ const eligibleProducts = products.filter(product =>
   product.governance.publicationStatus === "READY"
 );
 assert.equal(publicCatalog.productCount, eligibleProducts.length);
-assert.equal(publicCatalog.productCount, eligibleProducts.length);
+const historicalBatch005Products = products.filter(product => product.identity.createdBy !== "system:atlas-batch-006-draft-admission");
+const historicalBatch005Catalog = createRamCatalogProjection(historicalBatch005Products);
+assert.equal(historicalBatch005Products.length, 171);
+assert.equal(historicalBatch005Catalog.productCount, 171);
+assert.equal(admitted.every(product => historicalBatch005Catalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
 assert.equal(admitted.every(product => publicCatalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
 const draftLifecycle = structuredClone(admitted[0]);
 draftLifecycle.governance.lifecycleStatus = "DRAFT";

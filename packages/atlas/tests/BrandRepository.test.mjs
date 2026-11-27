@@ -49,6 +49,10 @@ assert.equal(Object.isFrozen(allBrands), true);
 
 assert.equal(await repository.getBySlug("CORSAIR"), brand);
 assert.equal(await repository.getByDisplayName("corsair"), brand);
+const xpg = await repository.getByDisplayName("XPG");
+assert.equal(xpg.brandId, "BRAND-XPG");
+assert.equal(await repository.getByDisplayName(" adata "), xpg);
+assert.equal(await repository.getByDisplayName("missing brand"), null);
 assert.equal(await repository.exists("brand-corsair"), true);
 assert.equal(await repository.exists("BRAND-MISSING"), false);
 
@@ -70,5 +74,20 @@ await assert.rejects(
 );
 
 await assert.rejects(repository.getBySlug(""), /slug must be a non-empty string/);
+
+const ambiguousManifestUrl = new URL("https://atlas.example/atlas-manifest.json");
+const ambiguousRecords = new Map([
+    [ambiguousManifestUrl.href, { brands: [
+        { brandId: "BRAND-ONE", path: "brands/one.json" },
+        { brandId: "BRAND-TWO", path: "brands/two.json" }
+    ] }],
+    ["https://atlas.example/brands/one.json", { brandId: "BRAND-ONE", displayName: "One", aliases: ["Shared"] }],
+    ["https://atlas.example/brands/two.json", { brandId: "BRAND-TWO", displayName: "Two", aliases: ["shared"] }]
+]);
+const ambiguousRepository = new BrandRepository({
+    manifestUrl: ambiguousManifestUrl,
+    readJson: async (resource) => structuredClone(ambiguousRecords.get(resource.href))
+});
+await assert.rejects(ambiguousRepository.getByDisplayName("SHARED"), /display name is ambiguous/);
 
 console.log("BrandRepository tests passed.");
