@@ -1,0 +1,211 @@
+{
+  "identity": {
+    "atlasProductId": "ram_g_skill_f4_3600c18d_16gvk",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-11-27T00:00:00.000Z",
+    "updatedAt": "2026-11-27T00:00:00.000Z",
+    "createdBy": "system:atlas-batch-006-draft-admission",
+    "updatedBy": "system:atlas-batch-006-draft-admission",
+    "brand": "G.SKILL",
+    "manufacturer": "G.SKILL",
+    "productFamily": "Ripjaws V",
+    "series": null,
+    "modelName": "Ripjaws V F4-3600C18D-16GVK",
+    "manufacturerPartNumber": "F4-3600C18D-16GVK",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "G.SKILL Ripjaws V DDR4 16GB (2×8GB) 3600 MT/s",
+    "slug": "g-skill-f4-3600c18d-16gvk"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_BATCH_006 exact-MPN manufacturer-verified draft admission; retained feed evidence is discovery-only.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3600C18D_16GVK-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/165/184/1562832515/F4-3600C18D-16GVK-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        },
+        {
+          "sourceId": "SRC-FEED-NEWEGG-N82E16820232882-B006",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "rakuten:catalog-state:rakuten_catalog_c6a7566e5b46c08326622d7c:sku:N82E16820232882",
+          "publisher": "Rakuten/Newegg retained feed",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Discovery-only listing evidence; not manufacturer identity, current availability, qualified price, seller identity, or a governed destination."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3600C18D_16GVK-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/165/184/1562832515/F4-3600C18D-16GVK-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3600C18D_16GVK-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/165/184/1562832515/F4-3600C18D-16GVK-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3600C18D_16GVK-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/165/184/1562832515/F4-3600C18D-16GVK-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3600C18D_16GVK-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/165/184/1562832515/F4-3600C18D-16GVK-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3600C18D_16GVK-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/165/184/1562832515/F4-3600C18D-16GVK-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-11-27T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true,
+        "gamingPositioning": true,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 8,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3600,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3600",
+        "casLatency": 18,
+        "tRcd": 22,
+        "tRp": 22,
+        "tRas": 42,
+        "primaryTimings": "18-22-22-42",
+        "xmpSupport": "SUPPORTED",
+        "expoSupport": "NONE",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": 3600,
+        "testedLatencyCl": 18,
+        "bandwidthGbps": 28.8
+      },
+      "electrical": {
+        "ratedVoltage": 1.35,
+        "baseVoltage": 1.2,
+        "pmicLocation": "NONE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

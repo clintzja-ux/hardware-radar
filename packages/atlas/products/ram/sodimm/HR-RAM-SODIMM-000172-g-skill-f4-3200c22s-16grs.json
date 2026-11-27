@@ -1,0 +1,211 @@
+{
+  "identity": {
+    "atlasProductId": "ram_g_skill_f4_3200c22s_16grs",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-11-27T00:00:00.000Z",
+    "updatedAt": "2026-11-27T00:00:00.000Z",
+    "createdBy": "system:atlas-batch-006-draft-admission",
+    "updatedBy": "system:atlas-batch-006-draft-admission",
+    "brand": "G.SKILL",
+    "manufacturer": "G.SKILL",
+    "productFamily": "Ripjaws SO-DIMM",
+    "series": null,
+    "modelName": "Ripjaws SO-DIMM F4-3200C22S-16GRS",
+    "manufacturerPartNumber": "F4-3200C22S-16GRS",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "G.SKILL Ripjaws SO-DIMM DDR4 16GB (1×16GB) 3200 MT/s",
+    "slug": "g-skill-f4-3200c22s-16grs"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_BATCH_006 exact-MPN manufacturer-verified draft admission; retained feed evidence is discovery-only.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3200C22S_16GRS-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594018997/F4-3200C22S-16GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        },
+        {
+          "sourceId": "SRC-FEED-NEWEGG-N82E16820374027-B006",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "rakuten:catalog-state:rakuten_catalog_c6a7566e5b46c08326622d7c:sku:N82E16820374027",
+          "publisher": "Rakuten/Newegg retained feed",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Discovery-only listing evidence; not manufacturer identity, current availability, qualified price, seller identity, or a governed destination."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3200C22S_16GRS-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594018997/F4-3200C22S-16GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3200C22S_16GRS-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594018997/F4-3200C22S-16GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3200C22S_16GRS-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594018997/F4-3200C22S-16GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3200C22S_16GRS-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594018997/F4-3200C22S-16GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-G_SKILL-F4_3200C22S_16GRS-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.gskill.com/specification/2/197/1594018997/F4-3200C22S-16GRS-Specification",
+          "publisher": "G.SKILL",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-11-27T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": false,
+        "gamingPositioning": false,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3200,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3200",
+        "casLatency": 22,
+        "tRcd": 22,
+        "tRp": 22,
+        "tRas": 52,
+        "primaryTimings": "22-22-22-52",
+        "xmpSupport": "NONE",
+        "expoSupport": "NONE",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": 3200,
+        "testedLatencyCl": 22,
+        "bandwidthGbps": 25.6
+      },
+      "electrical": {
+        "ratedVoltage": 1.2,
+        "baseVoltage": 1.2,
+        "pmicLocation": "NONE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

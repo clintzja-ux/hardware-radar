@@ -1,0 +1,273 @@
+{
+  "schemaVersion": "1.0.0",
+  "batch": "ATLAS_BATCH_006",
+  "generatedAt": "2026-11-27T00:00:00.000Z",
+  "sourceFeed": "rakuten_catalog_c6a7566e5b46c08326622d7c",
+  "readOnly": true,
+  "admittedProducts": [
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c22s_16grs",
+      "mpn": "F4-3200C22S-16GRS",
+      "listing": "N82E16820374027",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000172-g-skill-f4-3200c22s-16grs.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c16s_16gvk",
+      "mpn": "F4-3200C16S-16GVK",
+      "listing": "N82E16820232090",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000173-g-skill-f4-3200c16s-16gvk.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c16d_16gvkb",
+      "mpn": "F4-3200C16D-16GVKB",
+      "listing": "N82E16820231941",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000174-g-skill-f4-3200c16d-16gvkb.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3600c18d_16gvk",
+      "mpn": "F4-3600C18D-16GVK",
+      "listing": "N82E16820232882",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000175-g-skill-f4-3600c18d-16gvk.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3600c18d_32gvk",
+      "mpn": "F4-3600C18D-32GVK",
+      "listing": "N82E16820232928",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000176-g-skill-f4-3600c18d-32gvk.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_2666c19s_32grs",
+      "mpn": "F4-2666C19S-32GRS",
+      "listing": "N82E16820374123",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000177-g-skill-f4-2666c19s-32grs.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600j3636c8gh2_fx5",
+      "mpn": "F5-5600J3636C8GH2-FX5",
+      "listing": "N82E16820374782",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000178-g-skill-f5-5600j3636c8gh2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3038f8gh2_fx5",
+      "mpn": "F5-6000J3038F8GH2-FX5",
+      "listing": "N82E16820374781",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000179-g-skill-f5-6000j3038f8gh2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_4800s4039a16gx1_rs",
+      "mpn": "F5-4800S4039A16GX1-RS",
+      "listing": "N82E16820374393",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000180-g-skill-f5-4800s4039a16gx1-rs.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tlzgd416g3200hc16fdc01",
+      "mpn": "TLZGD416G3200HC16FDC01",
+      "listing": "N82E16820331616",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000181-teamgroup-tlzgd416g3200hc16fdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ted416g3200c22_s01",
+      "mpn": "TED416G3200C22-S01",
+      "listing": "N82E16820331501",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000182-teamgroup-ted416g3200c22-s01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_flbd516g5200hc40cdc01",
+      "mpn": "FLBD516G5200HC40CDC01",
+      "listing": "N82E16820331865",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000183-teamgroup-flbd516g5200hc40cdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ttced432g3200hc16fdc01",
+      "mpn": "TTCED432G3200HC16FDC01",
+      "listing": "N82E16820331998",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000184-teamgroup-ttced432g3200hc16fdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_flbd516g6000hc38adc01",
+      "mpn": "FLBD516G6000HC38ADC01",
+      "listing": "N82E16820985374",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000185-teamgroup-flbd516g6000hc38adc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tlzgd432g3600hc18jdc01",
+      "mpn": "TLZGD432G3600HC18JDC01",
+      "listing": "N82E16820331544",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000186-teamgroup-tlzgd432g3600hc18jdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ted48g3200c22_s01",
+      "mpn": "TED48G3200C22-S01",
+      "listing": "9SIA1K6JCC2814",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000187-teamgroup-ted48g3200c22-s01.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk16gx5m1d6000z38",
+      "mpn": "CMK16GX5M1D6000Z38",
+      "listing": "N82E16820982350",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000188-corsair-cmk16gx5m1d6000z38.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx32gx4m2a2666c18",
+      "mpn": "CMSX32GX4M2A2666C18",
+      "listing": "N82E16820233989",
+      "classification": "APPROVED_DIRECT_NEWEGG_CANDIDATE",
+      "revision": 1,
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000189-corsair-cmsx32gx4m2a2666c18.json"
+    },
+    {
+      "atlasProductId": "ram_agi_agi240008ud138",
+      "mpn": "AGI240008UD138",
+      "listing": "9SIBM90K5B4592",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000190-agi-agi240008ud138.json"
+    },
+    {
+      "atlasProductId": "ram_agi_agi320a08ud138_st",
+      "mpn": "AGI320A08UD138-ST",
+      "listing": "9SIBM90KFB0173",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000191-agi-agi320a08ud138-st.json"
+    },
+    {
+      "atlasProductId": "ram_agi_agi240016ud138",
+      "mpn": "AGI240016UD138",
+      "listing": "9SIBM90K5B4593",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000192-agi-agi240016ud138.json"
+    },
+    {
+      "atlasProductId": "ram_adata_ad4s26668g19_sgn",
+      "mpn": "AD4S26668G19-SGN",
+      "listing": "9SIAD7HFUZ7913",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000193-adata-ad4s26668g19-sgn.json"
+    },
+    {
+      "atlasProductId": "ram_transcend_jm3200hse_16g",
+      "mpn": "JM3200HSE-16G",
+      "listing": "9SIAMRUM5V4941",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000194-transcend-jm3200hse-16g.json"
+    },
+    {
+      "atlasProductId": "ram_transcend_jm3200hle_16g",
+      "mpn": "JM3200HLE-16G",
+      "listing": "9SIA4YUES41652",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000195-transcend-jm3200hle-16g.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp008gblfu320x02",
+      "mpn": "SP008GBLFU320X02",
+      "listing": "9SIBDGPKNA3622",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000196-silicon-power-sp008gblfu320x02.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp016gblfu320x02",
+      "mpn": "SP016GBLFU320X02",
+      "listing": "9SIBDGPKNA3629",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000197-silicon-power-sp016gblfu320x02.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp004gblfu240x02",
+      "mpn": "SP004GBLFU240X02",
+      "listing": "9SIA1K6KUS8113",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000198-silicon-power-sp004gblfu240x02.json"
+    },
+    {
+      "atlasProductId": "ram_lexar_ld4au008g_b3200gsst",
+      "mpn": "LD4AU008G-B3200GSST",
+      "listing": "9SIAGBAKSC4289",
+      "classification": "MARKETPLACE_DESTINATION_DEFERRED",
+      "revision": 1,
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000199-lexar-ld4au008g-b3200gsst.json"
+    }
+  ],
+  "deferredAdmission": [
+    {
+      "mpn": "F4-3200C16S-8GVKB",
+      "reason": "No manufacturer-controlled source located for the exact ordering code; retailer evidence cannot substitute for manufacturer identity verification."
+    }
+  ],
+  "existingProductCandidates": [
+    {
+      "atlasProductId": "ram_kingston_kf432c16bbk2_16",
+      "listingId": "N82E16820242832",
+      "status": "READY_FOR_GOVERNED_REVIEW"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c22d_32grs",
+      "listingId": "N82E16820374024",
+      "status": "READY_FOR_GOVERNED_REVIEW"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx32gx5m1a5600c48",
+      "listingId": "N82E16820982179",
+      "status": "READY_FOR_GOVERNED_REVIEW"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3040g32gx2_tz5n",
+      "listingId": "N82E16820374443",
+      "status": "READY_FOR_GOVERNED_REVIEW"
+    },
+    {
+      "atlasProductId": "ram_crucial_cp2k32g64c40u5w",
+      "listingId": "9SIAGBAM9U6166",
+      "status": "MARKETPLACE_DESTINATION_DEFERRED"
+    }
+  ],
+  "excluded": [
+    {
+      "atlasProductId": "ram_corsair_cmh16gx5m1d6000z38",
+      "listingId": "N82E16820982351",
+      "status": "IDENTITY_CONFLICT_UNBOUND"
+    }
+  ]
+}

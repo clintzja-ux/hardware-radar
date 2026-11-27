@@ -1,0 +1,198 @@
+{
+  "identity": {
+    "atlasProductId": "ram_corsair_cmsx32gx4m2a2666c18",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-11-27T00:00:00.000Z",
+    "updatedAt": "2026-11-27T00:00:00.000Z",
+    "createdBy": "system:atlas-batch-006-draft-admission",
+    "updatedBy": "system:atlas-batch-006-draft-admission",
+    "brand": "Corsair",
+    "manufacturer": "Corsair",
+    "productFamily": "VENGEANCE SO-DIMM",
+    "series": null,
+    "modelName": "VENGEANCE SO-DIMM CMSX32GX4M2A2666C18",
+    "manufacturerPartNumber": "CMSX32GX4M2A2666C18",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "Corsair VENGEANCE SO-DIMM DDR4 32GB (2×16GB) 2666 MT/s",
+    "slug": "corsair-cmsx32gx4m2a2666c18"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_BATCH_006 exact-MPN manufacturer-verified draft admission; retained feed evidence is discovery-only.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX32GX4M2A2666C18-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/ww/en/p/memory/cmsx32gx4m2a2666c18/vengeancea-series-32gb-2x16gb-ddr4-sodimm-2666mhz-cl18-memory-kit-cmsx32gx4m2a2666c18",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        },
+        {
+          "sourceId": "SRC-FEED-NEWEGG-N82E16820233989-B006",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "rakuten:catalog-state:rakuten_catalog_c6a7566e5b46c08326622d7c:sku:N82E16820233989",
+          "publisher": "Rakuten/Newegg retained feed",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Discovery-only listing evidence; not manufacturer identity, current availability, qualified price, seller identity, or a governed destination."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX32GX4M2A2666C18-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/ww/en/p/memory/cmsx32gx4m2a2666c18/vengeancea-series-32gb-2x16gb-ddr4-sodimm-2666mhz-cl18-memory-kit-cmsx32gx4m2a2666c18",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX32GX4M2A2666C18-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/ww/en/p/memory/cmsx32gx4m2a2666c18/vengeancea-series-32gb-2x16gb-ddr4-sodimm-2666mhz-cl18-memory-kit-cmsx32gx4m2a2666c18",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX32GX4M2A2666C18-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/ww/en/p/memory/cmsx32gx4m2a2666c18/vengeancea-series-32gb-2x16gb-ddr4-sodimm-2666mhz-cl18-memory-kit-cmsx32gx4m2a2666c18",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-CORSAIR-CMSX32GX4M2A2666C18-B006",
+          "sourceType": "MANUFACTURER_PRODUCT_PAGE",
+          "sourceLocator": "https://www.corsair.com/ww/en/p/memory/cmsx32gx4m2a2666c18/vengeancea-series-32gb-2x16gb-ddr4-sodimm-2666mhz-cl18-memory-kit-cmsx32gx4m2a2666c18",
+          "publisher": "Corsair",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-11-27T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "SO_DIMM",
+        "applicationClass": "LAPTOP",
+        "moduleType": "SO_DIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true,
+        "gamingPositioning": false,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 32,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 2666,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-2666",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "UNKNOWN",
+        "expoSupport": "UNKNOWN",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": 2666,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 21.328
+      },
+      "electrical": {
+        "ratedVoltage": null,
+        "baseVoltage": 1.2,
+        "pmicLocation": "NONE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

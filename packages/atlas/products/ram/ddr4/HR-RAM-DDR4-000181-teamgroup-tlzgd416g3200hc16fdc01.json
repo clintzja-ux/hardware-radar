@@ -1,0 +1,211 @@
+{
+  "identity": {
+    "atlasProductId": "ram_teamgroup_tlzgd416g3200hc16fdc01",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-11-27T00:00:00.000Z",
+    "updatedAt": "2026-11-27T00:00:00.000Z",
+    "createdBy": "system:atlas-batch-006-draft-admission",
+    "updatedBy": "system:atlas-batch-006-draft-admission",
+    "brand": "TEAMGROUP",
+    "manufacturer": "TEAMGROUP",
+    "productFamily": "T-FORCE VULCAN Z",
+    "series": null,
+    "modelName": "T-FORCE VULCAN Z TLZGD416G3200HC16FDC01",
+    "manufacturerPartNumber": "TLZGD416G3200HC16FDC01",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "TEAMGROUP T-FORCE VULCAN Z DDR4 16GB (2×8GB) 3200 MT/s",
+    "slug": "teamgroup-tlzgd416g3200hc16fdc01"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_BATCH_006 exact-MPN manufacturer-verified draft admission; retained feed evidence is discovery-only.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TLZGD416G3200HC16FDC01-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://images.teamgroupinc.com/products/memory/u-dimm/ddr4/vulcan-z/spec-sheet/vulcan-z-en.pdf",
+          "publisher": "TEAMGROUP",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        },
+        {
+          "sourceId": "SRC-FEED-NEWEGG-N82E16820331616-B006",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "rakuten:catalog-state:rakuten_catalog_c6a7566e5b46c08326622d7c:sku:N82E16820331616",
+          "publisher": "Rakuten/Newegg retained feed",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Discovery-only listing evidence; not manufacturer identity, current availability, qualified price, seller identity, or a governed destination."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TLZGD416G3200HC16FDC01-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://images.teamgroupinc.com/products/memory/u-dimm/ddr4/vulcan-z/spec-sheet/vulcan-z-en.pdf",
+          "publisher": "TEAMGROUP",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TLZGD416G3200HC16FDC01-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://images.teamgroupinc.com/products/memory/u-dimm/ddr4/vulcan-z/spec-sheet/vulcan-z-en.pdf",
+          "publisher": "TEAMGROUP",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TLZGD416G3200HC16FDC01-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://images.teamgroupinc.com/products/memory/u-dimm/ddr4/vulcan-z/spec-sheet/vulcan-z-en.pdf",
+          "publisher": "TEAMGROUP",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TLZGD416G3200HC16FDC01-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://images.teamgroupinc.com/products/memory/u-dimm/ddr4/vulcan-z/spec-sheet/vulcan-z-en.pdf",
+          "publisher": "TEAMGROUP",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-TEAMGROUP-TLZGD416G3200HC16FDC01-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://images.teamgroupinc.com/products/memory/u-dimm/ddr4/vulcan-z/spec-sheet/vulcan-z-en.pdf",
+          "publisher": "TEAMGROUP",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-11-27T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": true,
+        "gamingPositioning": true,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 2,
+        "capacityPerModuleGb": 8,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 3200,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-3200",
+        "casLatency": 16,
+        "tRcd": 20,
+        "tRp": 20,
+        "tRas": 40,
+        "primaryTimings": "16-20-20-40",
+        "xmpSupport": "SUPPORTED",
+        "expoSupport": "NONE",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": 3200,
+        "testedLatencyCl": 16,
+        "bandwidthGbps": 25.6
+      },
+      "electrical": {
+        "ratedVoltage": 1.35,
+        "baseVoltage": 1.2,
+        "pmicLocation": "NONE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": true,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

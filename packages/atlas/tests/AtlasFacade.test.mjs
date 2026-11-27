@@ -31,7 +31,7 @@ assert.equal((await atlas.getRetailer("retailer-0003")).name, "MemoryC");
 assert.equal((await atlas.getRetailer("retailer-0004")).name, "Newegg");
 
 const repositories = await atlas.loadRepositories();
-assert.equal(repositories.brands.length, 13);
+assert.equal(repositories.brands.length, (await atlas.getManifest()).counts.brands);
 assert.equal(repositories.categories.length, 1);
 assert.equal(repositories.products.length, (await atlas.getManifest()).counts.products);
 assert.equal(repositories.retailers.length, 4);

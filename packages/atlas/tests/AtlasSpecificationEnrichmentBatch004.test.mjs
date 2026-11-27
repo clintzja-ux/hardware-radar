@@ -56,7 +56,7 @@ const completeTimingTuple = product => {
         performance.primaryTimings === values.join("-");
 };
 
-const preBatch005Products = products.filter(product => product.identity.createdBy !== "system:atlas-feed-expansion-batch-005");
+const preBatch005Products = products.filter(product => !["system:atlas-feed-expansion-batch-005", "system:atlas-batch-006-draft-admission"].includes(product.identity.createdBy));
 assert.equal(preBatch005Products.length, 159);
 assert.equal(preBatch005Products.filter(product => Number.isInteger(product.extension.data.performance.casLatency)).length, 71);
 assert.equal(preBatch005Products.filter(completeTimingTuple).length, 69);
