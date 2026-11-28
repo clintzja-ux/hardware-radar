@@ -19,7 +19,7 @@ const admitted = [
 ];
 
 assert.ok(manifest.counts.products >= 26);
-assert.equal(manifest.counts.brands, 13, "Only governed canonical brands are registered; the later Timetec admission uses the ordinary brand owner.");
+assert.ok(manifest.counts.brands >= 13, "The governed launch brand cohort must remain registered after later admissions.");
 assert.equal(validateRepository(products).valid, true);
 assert.equal(new Set(products.map(({ identity }) => identity.atlasProductId)).size, products.length);
 assert.equal(new Set(products.map(({ identity }) => identity.manufacturerPartNumber.toLowerCase())).size, products.length);

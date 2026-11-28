@@ -1,0 +1,211 @@
+{
+  "identity": {
+    "atlasProductId": "ram_agi_agi240016ud138",
+    "schemaVersion": "1.0",
+    "productType": "ram",
+    "recordRevision": 1,
+    "createdAt": "2026-11-27T00:00:00.000Z",
+    "updatedAt": "2026-11-27T00:00:00.000Z",
+    "createdBy": "system:atlas-batch-006-draft-admission",
+    "updatedBy": "system:atlas-batch-006-draft-admission",
+    "brand": "AGI",
+    "manufacturer": "AGI",
+    "productFamily": "Desktop Memory",
+    "series": null,
+    "modelName": "Desktop Memory AGI240016UD138",
+    "manufacturerPartNumber": "AGI240016UD138",
+    "alternatePartNumbers": [],
+    "gtin": null,
+    "upc": null,
+    "ean": null,
+    "countryOfOrigin": null,
+    "displayName": "AGI Desktop Memory DDR4 16GB (1×16GB) 2400 MT/s",
+    "slug": "agi-agi240016ud138"
+  },
+  "governance": {
+    "publicationStatus": "PENDING",
+    "lifecycleStatus": "DRAFT",
+    "manufacturerStatus": "CURRENT",
+    "engineeringValidationStatus": "PASS",
+    "humanReviewRequired": true,
+    "reviewedBy": null,
+    "reviewedAt": null,
+    "changeReason": "ATLAS_BATCH_006 exact-MPN manufacturer-verified draft admission; retained feed evidence is discovery-only.",
+    "supersedesRevision": null,
+    "archivalReason": null,
+    "launchDate": null,
+    "discontinuedDate": null,
+    "replacementAtlasProductId": null,
+    "predecessorAtlasProductId": null,
+    "warranty": null
+  },
+  "provenance": {
+    "fieldSources": {
+      "identity.manufacturerPartNumber": [
+        {
+          "sourceId": "SRC-MFG-AGI-AGI240016UD138-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://agi-gear.com/wp-content/uploads/2023/11/Datasheet-AGI_DRAM-Module_DDR4-2400MHz_-UDIMM_v1.1_20231121.pdf",
+          "publisher": "AGI",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        },
+        {
+          "sourceId": "SRC-FEED-NEWEGG-9SIBM90K5B4593-B006",
+          "sourceType": "RETAILER_PAGE_REFERENCE_ONLY",
+          "sourceLocator": "rakuten:catalog-state:rakuten_catalog_c6a7566e5b46c08326622d7c:sku:9SIBM90K5B4593",
+          "publisher": "Rakuten/Newegg retained feed",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Discovery-only listing evidence; not manufacturer identity, current availability, qualified price, seller identity, or a governed destination."
+        }
+      ],
+      "identity.productFamily": [
+        {
+          "sourceId": "SRC-MFG-AGI-AGI240016UD138-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://agi-gear.com/wp-content/uploads/2023/11/Datasheet-AGI_DRAM-Module_DDR4-2400MHz_-UDIMM_v1.1_20231121.pdf",
+          "publisher": "AGI",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.classification": [
+        {
+          "sourceId": "SRC-MFG-AGI-AGI240016UD138-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://agi-gear.com/wp-content/uploads/2023/11/Datasheet-AGI_DRAM-Module_DDR4-2400MHz_-UDIMM_v1.1_20231121.pdf",
+          "publisher": "AGI",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.capacity": [
+        {
+          "sourceId": "SRC-MFG-AGI-AGI240016UD138-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://agi-gear.com/wp-content/uploads/2023/11/Datasheet-AGI_DRAM-Module_DDR4-2400MHz_-UDIMM_v1.1_20231121.pdf",
+          "publisher": "AGI",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.performance": [
+        {
+          "sourceId": "SRC-MFG-AGI-AGI240016UD138-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://agi-gear.com/wp-content/uploads/2023/11/Datasheet-AGI_DRAM-Module_DDR4-2400MHz_-UDIMM_v1.1_20231121.pdf",
+          "publisher": "AGI",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ],
+      "extension.data.electrical": [
+        {
+          "sourceId": "SRC-MFG-AGI-AGI240016UD138-B006",
+          "sourceType": "MANUFACTURER_DATASHEET",
+          "sourceLocator": "https://agi-gear.com/wp-content/uploads/2023/11/Datasheet-AGI_DRAM-Module_DDR4-2400MHz_-UDIMM_v1.1_20231121.pdf",
+          "publisher": "AGI",
+          "publishedDate": null,
+          "retrievedAt": "2026-11-27T00:00:00.000Z",
+          "verifiedBy": "system:atlas-batch-006-draft-admission",
+          "verificationStatus": "VERIFIED",
+          "notes": "Exact manufacturer ordering identity and populated canonical specifications verified from manufacturer-controlled evidence; unknown optional fields remain unpopulated."
+        }
+      ]
+    }
+  },
+  "validation": {
+    "errors": [],
+    "warnings": [],
+    "validatedAt": "2026-11-27T00:00:00.000Z",
+    "validatorVersion": "atlas-product-validator/1.0.0+sentinel-ram/1.0.0"
+  },
+  "extension": {
+    "extensionType": "ram",
+    "schemaVersion": "1.0",
+    "data": {
+      "classification": {
+        "memoryType": "DDR4",
+        "formFactor": "DIMM",
+        "applicationClass": "DESKTOP",
+        "moduleType": "UDIMM",
+        "buffering": "UNBUFFERED",
+        "eccType": "NONE",
+        "isKit": false,
+        "gamingPositioning": false,
+        "workstationPositioning": false,
+        "serverPositioning": false
+      },
+      "capacity": {
+        "capacityGb": 16,
+        "moduleCount": 1,
+        "capacityPerModuleGb": 16,
+        "rankConfiguration": "UNKNOWN",
+        "chipDensityGb": null,
+        "organization": null
+      },
+      "performance": {
+        "dataRateMtps": 2400,
+        "baseJedecDataRateMtps": null,
+        "speedLabel": "DDR4-2400",
+        "casLatency": null,
+        "tRcd": null,
+        "tRp": null,
+        "tRas": null,
+        "primaryTimings": null,
+        "xmpSupport": "NONE",
+        "expoSupport": "NONE",
+        "jedecProfiles": [],
+        "overclockProfiles": [],
+        "testedSpeedMtps": 2400,
+        "testedLatencyCl": null,
+        "bandwidthGbps": 19.2
+      },
+      "electrical": {
+        "ratedVoltage": 1.2,
+        "baseVoltage": 1.2,
+        "pmicLocation": "NONE",
+        "powerManagementNotes": null
+      },
+      "physical": {
+        "heatSpreader": false,
+        "heatSpreaderMaterial": null,
+        "heightMm": null,
+        "lengthMm": null,
+        "widthMm": null,
+        "color": null,
+        "rgbLighting": false,
+        "lightingEcosystem": [],
+        "lowProfile": null,
+        "moduleWeightGrams": null,
+        "kitWeightGrams": null
+      },
+      "compatibility": {
+        "platformCompatibility": [],
+        "chipsetCompatibility": [],
+        "cpuGenerationCompatibility": [],
+        "qvlReferences": [],
+        "requiresBiosSupport": null,
+        "compatibilityNotes": null
+      }
+    }
+  }
+}

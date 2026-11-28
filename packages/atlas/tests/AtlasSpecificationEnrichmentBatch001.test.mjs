@@ -73,7 +73,7 @@ for (const atlasProductId of [
     assert.equal(byId.get(atlasProductId).extension.data.performance.primaryTimings, null, atlasProductId);
 }
 
-const preBatch005Products = products.filter(product => product.identity.createdBy !== "system:atlas-feed-expansion-batch-005");
+const preBatch005Products = products.filter(product => !["system:atlas-feed-expansion-batch-005", "system:atlas-batch-006-draft-admission"].includes(product.identity.createdBy));
 assert.equal(preBatch005Products.length, 159);
 const completeTimingTuple = product => {
     const performance = product.extension.data.performance;

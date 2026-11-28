@@ -28,7 +28,7 @@ const expected = new Map([
   ["CMH16GX5M1D6000Z38", ["DDR5", 16, 1, 16, 6000, "DIMM"]]
 ]);
 
-assert.equal(manifest.counts.products, 171);
+assert.equal(manifest.counts.products, products.length);
 assert.equal(admitted.length, expected.size);
 assert.equal(new Set(admitted.map(product => product.identity.atlasProductId)).size, expected.size);
 assert.equal(new Set(products.map(product => product.identity.manufacturerPartNumber.toUpperCase())).size, products.length);
@@ -58,7 +58,11 @@ const eligibleProducts = products.filter(product =>
   product.governance.publicationStatus === "READY"
 );
 assert.equal(publicCatalog.productCount, eligibleProducts.length);
-assert.equal(publicCatalog.productCount, 171);
+const historicalBatch005Products = products.filter(product => product.identity.createdBy !== "system:atlas-batch-006-draft-admission");
+const historicalBatch005Catalog = createRamCatalogProjection(historicalBatch005Products);
+assert.equal(historicalBatch005Products.length, 171);
+assert.equal(historicalBatch005Catalog.productCount, 171);
+assert.equal(admitted.every(product => historicalBatch005Catalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
 assert.equal(admitted.every(product => publicCatalog.products.some(item => item.atlasProductId === product.identity.atlasProductId)), true);
 const draftLifecycle = structuredClone(admitted[0]);
 draftLifecycle.governance.lifecycleStatus = "DRAFT";

@@ -8,7 +8,9 @@
   "website": "https://www.adata.com/",
   "manufacturerType": "HARDWARE_MANUFACTURER",
   "status": "ACTIVE",
-  "aliases": [],
+  "aliases": [
+    "ADATA"
+  ],
   "supportedCategories": [
     "CAT-RAM"
   ],
@@ -20,6 +22,6 @@
   },
   "metadata": {
     "createdAt": "2026-10-04T00:00:00Z",
-    "updatedAt": "2026-10-04T00:00:00Z"
+    "updatedAt": "2026-11-27T00:00:00.000Z"
   }
 }

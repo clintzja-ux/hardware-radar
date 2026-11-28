@@ -60,7 +60,7 @@ assert.deepEqual(
     ["Crucial", "G.SKILL", "Kingston", "TeamGroup"],
     "Production admission must register the four non-Corsair brands through Atlas governance."
 );
-assert.deepEqual([...registeredBrandIds], [
+const originalLaunchBrandIds = [
     "BRAND-CORSAIR",
     "BRAND-CRUCIAL",
     "BRAND-GSKILL",
@@ -74,7 +74,8 @@ assert.deepEqual([...registeredBrandIds], [
     "BRAND-TRANSCEND",
     "BRAND-TIMETEC",
     "BRAND-XPG"
-]);
+];
+assert.deepEqual(originalLaunchBrandIds.filter((brandId) => registeredBrandIds.has(brandId)), originalLaunchBrandIds);
 assert.deepEqual(
     [...requiredBrands].filter((brand) => !registeredBrandIds.has(`BRAND-${brand.replaceAll(/[^A-Za-z0-9]+/g, "").toUpperCase()}`)),
     [],

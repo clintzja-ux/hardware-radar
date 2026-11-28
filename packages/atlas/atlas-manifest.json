@@ -2,7 +2,7 @@
   "atlasVersion": "1.0.0",
   "coreSchemaVersion": "1.0",
   "repositoryStatus": "stable",
-  "generatedAt": "2026-11-23T17:44:57.615Z",
+  "generatedAt": "2026-11-27T00:00:00.000Z",
   "products": [
     {
       "atlasProductId": "ram_corsair_cmh16gx5m2b5200z40",
@@ -858,11 +858,151 @@
       "atlasProductId": "ram_corsair_cmh16gx5m1d6000z38",
       "productType": "ram",
       "path": "products/ram/ddr5/HR-RAM-DDR5-000171-corsair-cmh16gx5m1d6000z38.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c22s_16grs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000172-g-skill-f4-3200c22s-16grs.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c16s_16gvk",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000173-g-skill-f4-3200c16s-16gvk.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3200c16d_16gvkb",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000174-g-skill-f4-3200c16d-16gvkb.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3600c18d_16gvk",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000175-g-skill-f4-3600c18d-16gvk.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_3600c18d_32gvk",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000176-g-skill-f4-3600c18d-32gvk.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f4_2666c19s_32grs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000177-g-skill-f4-2666c19s-32grs.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_5600j3636c8gh2_fx5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000178-g-skill-f5-5600j3636c8gh2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_6000j3038f8gh2_fx5",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000179-g-skill-f5-6000j3038f8gh2-fx5.json"
+    },
+    {
+      "atlasProductId": "ram_g_skill_f5_4800s4039a16gx1_rs",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000180-g-skill-f5-4800s4039a16gx1-rs.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tlzgd416g3200hc16fdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000181-teamgroup-tlzgd416g3200hc16fdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ted416g3200c22_s01",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000182-teamgroup-ted416g3200c22-s01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_flbd516g5200hc40cdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000183-teamgroup-flbd516g5200hc40cdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ttced432g3200hc16fdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000184-teamgroup-ttced432g3200hc16fdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_flbd516g6000hc38adc01",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000185-teamgroup-flbd516g6000hc38adc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_tlzgd432g3600hc18jdc01",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000186-teamgroup-tlzgd432g3600hc18jdc01.json"
+    },
+    {
+      "atlasProductId": "ram_teamgroup_ted48g3200c22_s01",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000187-teamgroup-ted48g3200c22-s01.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmk16gx5m1d6000z38",
+      "productType": "ram",
+      "path": "products/ram/ddr5/HR-RAM-DDR5-000188-corsair-cmk16gx5m1d6000z38.json"
+    },
+    {
+      "atlasProductId": "ram_corsair_cmsx32gx4m2a2666c18",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000189-corsair-cmsx32gx4m2a2666c18.json"
+    },
+    {
+      "atlasProductId": "ram_agi_agi240008ud138",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000190-agi-agi240008ud138.json"
+    },
+    {
+      "atlasProductId": "ram_agi_agi320a08ud138_st",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000191-agi-agi320a08ud138-st.json"
+    },
+    {
+      "atlasProductId": "ram_agi_agi240016ud138",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000192-agi-agi240016ud138.json"
+    },
+    {
+      "atlasProductId": "ram_adata_ad4s26668g19_sgn",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000193-adata-ad4s26668g19-sgn.json"
+    },
+    {
+      "atlasProductId": "ram_transcend_jm3200hse_16g",
+      "productType": "ram",
+      "path": "products/ram/sodimm/HR-RAM-SODIMM-000194-transcend-jm3200hse-16g.json"
+    },
+    {
+      "atlasProductId": "ram_transcend_jm3200hle_16g",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000195-transcend-jm3200hle-16g.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp008gblfu320x02",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000196-silicon-power-sp008gblfu320x02.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp016gblfu320x02",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000197-silicon-power-sp016gblfu320x02.json"
+    },
+    {
+      "atlasProductId": "ram_silicon_power_sp004gblfu240x02",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000198-silicon-power-sp004gblfu240x02.json"
+    },
+    {
+      "atlasProductId": "ram_lexar_ld4au008g_b3200gsst",
+      "productType": "ram",
+      "path": "products/ram/ddr4/HR-RAM-DDR4-000199-lexar-ld4au008g-b3200gsst.json"
     }
   ],
   "counts": {
-    "products": 171,
-    "brands": 13,
+    "products": 199,
+    "brands": 14,
     "categories": 1,
     "retailers": 4
   },
@@ -918,6 +1058,10 @@
     {
       "brandId": "BRAND-XPG",
       "path": "brands/xpg.json"
+    },
+    {
+      "brandId": "BRAND-AGI",
+      "path": "brands/agi.json"
     }
   ],
   "categories": [
