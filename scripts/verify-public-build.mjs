@@ -53,12 +53,14 @@ try {
     const articles = rawArticles.map((article) => ({ ...article, metadata: validateArticleMetadata(article.metadata, { knownRoutes }) }));
     const atlasManifest = JSON.parse(await readFile(path.join(runtimeRoot, "packages", "atlas", "atlas-manifest.json"), "utf8"));
     const atlasProducts = await Promise.all(atlasManifest.products.map(async (entry) => JSON.parse(await readFile(path.join(runtimeRoot, "packages", "atlas", entry.path), "utf8"))));
+    const publicAtlasProductIds = new Set(createRamCatalogProjection(atlasProducts).products.map((product) => product.atlasProductId));
+    const publicAtlasProducts = atlasProducts.filter((product) => publicAtlasProductIds.has(product.identity?.atlasProductId));
     const publicCurrent = JSON.parse(await readFile(path.join(publicOutputRoot, "data", "ram-current-retail.json"), "utf8"));
     const releaseManifestPath = path.resolve(process.env.HARDWARE_RADAR_STATIC_RELEASE_MANIFEST || path.join(runtimeRoot, "config", "publication-release.json"));
     const releaseManifest = JSON.parse(await readFile(releaseManifestPath, "utf8"));
     const releaseArtifact = JSON.parse(await readFile(path.resolve(path.dirname(releaseManifestPath), releaseManifest.artifact.relativePath), "utf8"));
     const publicChronology = JSON.parse(releaseArtifact.fileTexts.chronology);
-    const expectedSitemap = generateSitemap({ staticRoutes, articles, additionalRoutes: createRamProductSitemapRoutes(atlasProducts, { currentRetailByProduct: new Map(publicCurrent.products.map(item => [item.atlasProductId, item])), chronologicalSeriesByProduct: new Map(publicChronology.products.map(item => [item.atlasProductId, item])) }) });
+    const expectedSitemap = generateSitemap({ staticRoutes, articles, additionalRoutes: createRamProductSitemapRoutes(publicAtlasProducts, { currentRetailByProduct: new Map(publicCurrent.products.map(item => [item.atlasProductId, item])), chronologicalSeriesByProduct: new Map(publicChronology.products.map(item => [item.atlasProductId, item])) }) });
     const actualSitemap = await readFile(path.join(publicOutputRoot, "sitemap.xml"), "utf8");
     if (expectedSitemap !== actualSitemap) errors.push("Editorial: sitemap.xml is stale or not deterministically generated.");
     if (/fixture-memory-notation|scripts\/fixtures\/editorial/.test(actualSitemap)) errors.push("Editorial: fixture content leaked into the production sitemap.");
